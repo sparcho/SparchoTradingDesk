@@ -1,0 +1,308 @@
+# silver_holdings.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Family SilverBees position + full silver-desk operating state for the
+# Cowork silver dashboard artifact.
+#
+# UPSTREAM:  father's "My Stocks" Google Sheet (Drive) + operator narrative
+# DOWNSTREAM: silver_dashboard_emit.py → _state/silver_dashboard_aggregate.json
+# RELATED:   F260510-F98 silver post-trim redeployment (P1 open-urgent)
+#            CLAUDE_MODULES/01_SILVER_DOCTRINE.md  (V-13 floor, V-15 chart-tiebreaker)
+#            DASHBOARDS/SILVER_DASHBOARD.md  (Obsidian reference — source for sections)
+# ─────────────────────────────────────────────────────────────────────────────
+
+meta:
+  source_excel: "My Stocks (Google Sheets, father-maintained)"
+  source_excel_drive_id: "1L6QZtyhrCN198GuLWGmpBZTaCoEWMH54IrTT-ts630I"
+  source_excel_modified_utc: "2026-05-17T05:01:30Z"
+  source_excel_note: "Tracker-only — buy/sell history. NOT linked to live price; the 'Current Price' cell is a manual reference, not a live quote."
+  last_synced: "2026-05-17"
+  synced_by: "Claude (manual mirror v2)"
+  ticker: "SILVERBEES"
+  yahoo_symbol: "SILVERBEES.NS"
+  exchange: "NSE"
+  fund_name: "Nippon India Silver ETF"
+  related_flag: "F260510-F98_silver-post-trim-redeployment"
+  obsidian_reference_dashboard: "00_SYSTEM/DASHBOARDS/SILVER_DASHBOARD.md (v1.6)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 0. LIVE PRICE OVERRIDES — operator-set when Yahoo data is stale/wrong
+# ─────────────────────────────────────────────────────────────────────────────
+# WHY this exists:
+#   - Yahoo's SI=F (silver futures) is closed Sat-Sun → shows last Friday print
+#   - Yahoo doesn't have free XAGUSD spot ticker; XAGUSD=X 404s
+#   - Operator may see a LIVE OTC spot on TradingView / Kitco / phone app
+#     that's hours newer than Yahoo's futures-close print
+# USE:
+#   - When you see a live price you trust, set live_xagusd_override below
+#   - Set null / remove the line to fall back to Yahoo live fetch
+#   - Emitter precedence: override > Yahoo live > YAML estimate
+overrides:
+  live_xagusd_override: 75.80          # operator-pinned 2026-05-17 (Sun) — futures closed, OTC live
+  live_xagusd_override_at: "2026-05-17 IST (operator-supplied; replaces Yahoo SI=F Friday close)"
+  live_silverbees_override: null       # SBees NSE-traded; daily close is authoritative when markets closed
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 1. HOLDINGS
+# ─────────────────────────────────────────────────────────────────────────────
+accounts:
+  sparsh:
+    holder: "Sparsh"
+    account_type: "self-managed"
+    custodian: "Zerodha"
+    accent_color: "#22c55e"
+    emoji: "🎯"
+    tranches:
+      - { date: "2026-03-12", qty: 20000, buy_price: 242.82, invested: 4856400 }
+      - { date: "2026-04-16", qty: 10000, buy_price: 237.37, invested: 2373700 }
+      - { date: "2026-04-18", qty: 10000, buy_price: 231.52, invested: 2315200 }
+      - { date: "2026-04-24", qty:  2500, buy_price: 228.87, invested:  572175 }
+      - { date: "2026-04-24", qty:  2500, buy_price: 228.65, invested:  571625 }
+    sells: []
+
+  rajiv:
+    holder: "Rajiv (dad)"
+    account_type: "father-managed"
+    custodian: "Zerodha"
+    accent_color: "#3b82f6"
+    emoji: "👨"
+    tranches:
+      - { date: "2026-03-27", qty: 10000, buy_price: 224.5,  invested: 2245000 }
+      - { date: "2026-05-07", qty:  5000, buy_price: 233.0,  invested: 1165000 }
+      - { date: "2026-05-07", qty: 20000, buy_price: 239.4,  invested: 4788000 }
+    sells: []
+
+  shalu:
+    holder: "Shalini (mom)"
+    account_type: "father-managed"
+    custodian: "Zerodha"
+    accent_color: "#a855f7"
+    emoji: "👩"
+    tranches:
+      # operator 260517: "only 2 tranches in Shalini account, rest all had been
+      # sold at around 78 USD spot." Sell-side detail pending from father.
+      - { date: "2026-03-25", qty: 10000, buy_price: 216.19, invested: 2161900 }
+      - { date: "2026-04-23", qty: 10000, buy_price: 225.13, invested: 2251300 }
+    sells: []
+
+  yash:
+    holder: "Yash (brother)"
+    account_type: "father-managed"
+    custodian: "Zerodha"
+    accent_color: "#0891b2"
+    emoji: "🧑"
+    tranches: []
+    sells: []
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. SNAPSHOT TICKERS — TradingView single-quote widgets bento
+# ─────────────────────────────────────────────────────────────────────────────
+snapshot_tickers:
+  - { label: "Silver Spot",        tv_symbol: "TVC:SILVER",       category: "metals" }
+  - { label: "Gold Spot",          tv_symbol: "TVC:GOLD",         category: "metals" }
+  - { label: "Gold-Silver Ratio",  tv_symbol: "OANDA:XAUXAG",     category: "metals" }
+  - { label: "MCX Silver Front",   tv_symbol: "MCX:SILVER1!",     category: "metals" }
+  - { label: "SilverBees ETF",     tv_symbol: "NSE:SILVERBEES",   category: "metals" }
+  - { label: "Brent Crude",        tv_symbol: "TVC:UKOIL",        category: "energy" }
+  - { label: "WTI Oil",            tv_symbol: "TVC:USOIL",        category: "energy" }
+  - { label: "Dollar Index",       tv_symbol: "TVC:DXY",          category: "macro"  }
+  - { label: "USD/INR",            tv_symbol: "FX_IDC:USDINR",    category: "macro"  }
+  - { label: "10Y TIPS Yield",     tv_symbol: "FRED:DFII10",      category: "macro"  }
+  - { label: "Bitcoin",            tv_symbol: "COINBASE:BTCUSD",  category: "crypto" }
+
+tradingview_main_chart:
+  symbol: "NSE:SILVERBEES"
+  interval: "D"
+  height_px: 480
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 3. FORECAST + BULL/BEAR BIAS
+# ─────────────────────────────────────────────────────────────────────────────
+forecast:
+  composite_verdict: "🟢 MILDLY-TO-MODERATELY BULLISH"
+  composite_source: "260510 multi-agent synthesis v3 + 260511 chart-read tilt (V-15 ±3pp)"
+  consensus_state: "DIVERGENT-LEANING bull (4 bull / 5 neutral / 0 bear non-chart agents)"
+  v15_binding: "Charts contribute tiebreaker only; max ±3pp under LEANING consensus"
+  probability_mass:
+    - { scenario: "A — Continuation rally",      weight_pct: 30, note: "Break/hold >$84 → $93+ within 4-8w" }
+    - { scenario: "B — Chop $76-86 (modal)",     weight_pct: 33, note: "Range-bound 4-12w; trim ladder fires on time-decay" }
+    - { scenario: "C — Shallow retest $73-78",   weight_pct: 20, note: "F0.5/F1 zone test; R1/R2 adds fire" }
+    - { scenario: "D — Deeper retest $67-72",    weight_pct: 13, note: "F2 zone; R3 adds fire" }
+    - { scenario: "E — Tail $60-67 cascade",     weight_pct:  4, note: "Credit event + DXY breakout; abort if weekly close <$60" }
+  bullish_mass_a_plus_b: 63
+  last_synthesis_doc: "260510_XAG_MULTI-AGENT-SYNTHESIS_v3"
+  last_chart_read_doc: "260511_XAG_CHART-READ-TRANSCRIPT"
+  last_chart_read_date: "2026-05-11"
+  last_chart_read_verdict: "🟢 FRESH-BULL — multi-TF stack supportive, GSR compressing, $50 wedge break intact"
+
+bull_bear:
+  bull_case:
+    - "COMEX squeeze active — registered stocks +360% Feb→Apr (eligible→registered = pre-positioning for delivery)"
+    - "GSR compressing — was ~95-100 mid-2025, now ~54 (silver structurally outperforming gold; well below V-13 72-floor)"
+    - "Monthly $50-wedge breakout (2024) still intact — generational structural setup"
+    - "India duty-hike absorbed into SBees NAV; physical premium sticky"
+    - "COMEX MM net just breached FROTH (15.76K, 260516 pull) — directional re-engagement, not balanced add"
+  bear_case:
+    - "Fed on hold (3.50-3.75%); 95.9% no-cut next meeting per CME FedWatch → 'dovish-Fed' thesis IS NOT playing"
+    - "SLV ETF outflows 3m -$2.82B during rally → ETF demand isn't the marginal buyer"
+    - "FROTH threshold now BREACHED (15K MM-net) — asymmetric capitulation edge compressing; size-up window closing"
+    - "BDI -2% YoY signal weak (counterweighted by copper near ATH, but still a flag)"
+    - "Trim ladder timing compressed from weeks-to-months → days-to-weeks per 260511 chart-read"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. NEWS HEADLINES
+# ─────────────────────────────────────────────────────────────────────────────
+news:
+  last_updated: "2026-05-17"
+  curator: "operator + Claude"
+  headlines:
+    - { date: "2026-05-16", weight: "high",  source: "COT",   headline: "MM net +15.76K — FROTH threshold breached (first of cycle). G8 → 'rebuild accelerating'." }
+    - { date: "2026-05-14", weight: "high",  source: "India", headline: "Silver duty hike 6%→15% absorbed into SBees NAV; physical premium sticky." }
+    - { date: "2026-05-13", weight: "high",  source: "Geo",   headline: "Brent $107.77 (+3.4%) on Iran tightening despite Trump-Xi Hormuz commitment." }
+    - { date: "2026-05-13", weight: "med",   source: "Fed",   headline: "Warsh confirmed as next Fed Chair (54-45 vote). First FOMC June 16-17." }
+    - { date: "2026-05-14", weight: "med",   source: "Geo",   headline: "Trump-Xi Beijing Day 1: 3-year strategic-stability framework + Hormuz commitment." }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 5. CATALYST CALENDAR
+# ─────────────────────────────────────────────────────────────────────────────
+catalysts:
+  - { date: "2026-05-20", weight: "med",  kind: "data",    summary: "T-1 pre-FOMC Apr Minutes — pre-event trim window opens" }
+  - { date: "2026-05-21", weight: "high", kind: "fed",     summary: "FOMC April Minutes release (3:30pm ET) — read for dot-plot drift" }
+  - { date: "2026-05-23", weight: "med",  kind: "cot",     summary: "Weekly COT pull (Sat 1am IST) — watch FROTH continuation vs fade" }
+  - { date: "2026-05-30", weight: "med",  kind: "data",    summary: "US PCE deflator (core) — Fed-pivot pricing input" }
+  - { date: "2026-06-06", weight: "high", kind: "policy",  summary: "RBI MPC outcome — INR / duty-policy second-order" }
+  - { date: "2026-06-16", weight: "high", kind: "fed",     summary: "FOMC June 16-17 (first under Warsh) — dot plot + presser; trim discipline binding" }
+  - { date: "2026-06-30", weight: "high", kind: "f98",     summary: "F98 redeployment decision deadline (per flag target_date)" }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 6. S/R LEVELS (XAGUSD)
+# ─────────────────────────────────────────────────────────────────────────────
+sr_levels:
+  current_xagusd_estimate: 80.29
+  last_updated: "2026-05-11"
+  resistance:
+    - { price: 82.00, label: "Daily BB upper",            note: "Immediate resistance — price at upper band; squeeze breakout target" }
+    - { price: 84.00, label: "No-floor-hit threshold",    note: "V-13 P=18% — break above invalidates floor framework" }
+    - { price: 89.17, label: "5/14 intraday high",        note: "Recent rejection — sellers showed up at 2-month-high zone" }
+    - { price: 93.00, label: "F98 Tier 1 trim trigger",   note: "Round-number floor; intraday tag executes trim" }
+    - { price: 95.00, label: "F98 Tier 2 trim trigger",   note: "Wave-top zone; +20k units sold same rally" }
+  support:
+    - { price: 76.81, label: "76d EMA",                   note: "Daily 76-EMA — first dynamic support; held through Apr-May" }
+    - { price: 73.50, label: "F98 R1 add trigger",        note: "76 EMA breach zone; ₹50L deploy" }
+    - { price: 71.02, label: "Daily BB lower / F1",       note: "V-13 F1 zone P=35% — highest-prob support" }
+    - { price: 67.50, label: "F98 R2 / F2 zone",          note: "V-13 F2 P=18%; ₹17L final deploy" }
+    - { price: 64.14, label: "Weekly BB lower",           note: "V-13 F2 lower; secular trendline" }
+    - { price: 60.00, label: "🛑 ABORT — V-14 velocity",  note: "Capital preservation > opportunity" }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 7. TRIM LADDER
+# ─────────────────────────────────────────────────────────────────────────────
+trim_ladder:
+  - tier: "🟢 Tier 1"
+    trigger: "XAG ≥ $93 (intraday tag)"
+    action: "SELL 40,000 SBees units (40% of book)"
+    cash_freed_inr: 10400000
+    discipline: "FLOOR — even if XAG rolls before $95, Tier 1 still executes"
+  - tier: "🟢 Tier 2"
+    trigger: "XAG ≥ $95 (same rally)"
+    action: "SELL additional 20,000 units (60% cumulative)"
+    cash_freed_inr: 5500000
+    discipline: "If XAG pulls back before $95, Tier 2 forfeited (don't chase)"
+  - tier: "⏱ Time-trim"
+    trigger: "$87-92 for 3+ weeks no break"
+    action: "Tier 1 at prevailing price ($89-91 typical)"
+    cash_freed_inr: 9500000
+    discipline: "'Good enough' not 'exact level'"
+  - tier: "📅 Pre-FOMC"
+    trigger: "XAG ≥ $90 by 2026-05-20 (T-1 of FOMC Apr Minutes 5/21)"
+    action: "Tier 1 BEFORE 5/21"
+    cash_freed_inr: 10400000
+    discipline: "Locks pre-event; ~20% chance of hawkish surprise"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 8. ADD LADDER
+# ─────────────────────────────────────────────────────────────────────────────
+add_ladder:
+  dry_powder_inr: 11700000
+  rungs:
+    - rung: "🔵 R1"
+      trigger: "XAGUSD intraday $73-74 (76 EMA breach)"
+      deploy_inr: 5000000
+      units_approx: 25000
+      sbees_avg_approx: 220
+      conviction: "medium — Scenario C path"
+    - rung: "🔵 R2"
+      trigger: "XAG weekly close >$70 with intraday low $71 tested"
+      deploy_inr: 5000000
+      units_approx: 25000
+      sbees_avg_approx: 213
+      conviction: "high — V-13 F1 floor (P=35%)"
+    - rung: "🔵 R3"
+      trigger: "XAG weekly close $64-69 (F2 zone)"
+      deploy_inr: 1700000
+      units_approx: 8000
+      sbees_avg_approx: 190
+      conviction: "very high — 4th retest of Feb-6 capitulation low"
+  abort: "🛑 ABORT if XAG weekly close <$60 (V-14 velocity floor) — capital preservation > opportunity"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 9. FLOOR FRAMEWORK  (V-13)
+# ─────────────────────────────────────────────────────────────────────────────
+floor_framework:
+  v_id: "V-13"
+  status: "settled (5-agent consensus)"
+  velocity_note: "V-14 — physical demand creates a VELOCITY floor (silver can't STAY below $60-65 long), NOT a LEVEL floor (CAN touch $55-58 in cascade). Physical responds in 2-6 weeks; paper cascades in 2-6 days."
+  tiers:
+    - { tier: "No floor hit", band_low: 84, band_high: null, prob_pct: 18, mechanism: "Continuation rally, breakout sustains" }
+    - { tier: "F0.5",         band_low: 76, band_high: 78,   prob_pct: 10, mechanism: "Shallow retest of breakout" }
+    - { tier: "F1",           band_low: 72, band_high: 75,   prob_pct: 35, mechanism: "Consolidation at descending wedge upper — HIGHEST weight" }
+    - { tier: "F1.5",         band_low: 70, band_high: 72,   prob_pct: 8,  mechanism: "G:S 72 gate + prior structural" }
+    - { tier: "F2",           band_low: 67, band_high: 70,   prob_pct: 18, mechanism: "Secular trendline ($67.87) + physical procurement zone" }
+    - { tier: "F3",           band_low: 60, band_high: 67,   prob_pct:  7, mechanism: "Deep retest / 0.618 primary Fib" }
+    - { tier: "F4",           band_low: 52, band_high: 60,   prob_pct:  4, mechanism: "Tail-risk: credit event + DXY breakout + margin cascade" }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 10. STRATEGY OUTLOOK TIMELINE
+# ─────────────────────────────────────────────────────────────────────────────
+strategy_timeline:
+  - { date: "2026-05-02", version: "v6.25", title: "OFFENSIVE deployment",        verdict: "🟢 STRONG-BULLISH",      summary: "Front-load Rs.~3.5Cr between $75-80 spot; target $95 trim 40-60%; goal 20% blended gain. ~15k SBees deployed week of 5/2." }
+  - { date: "2026-05-10", version: "v3",    title: "V-15 doctrine recalibration", verdict: "🟢 MILDLY BULLISH",      summary: "4 bull / 5 neutral / 0 bear non-chart agents = LEANING. Same trim/add ladder. 4 gap data points filled (COMEX/SLV/Fed/copper). Fed-hold reality softened v2 stack." }
+  - { date: "2026-05-11", version: "ct-19", title: "Chart-read FRESH-BULL tilt",  verdict: "🟢 MILDLY-TO-MOD BULL",  summary: "19-chart drop. Daily MACD positive+expanding; weekly channel intact; monthly $50-wedge breakout. V-15 ±3pp shift A 27→30%, B 36→33%. Trim timing compressed days-to-weeks." }
+  - { date: "2026-05-14", version: "eod",   title: "India duty-hike sticky",      verdict: "🟢 MILDLY-TO-MOD BULL",  summary: "SBees held duty-hike gains at ₹270.93 even as XAGUSD pulled back from intraday $89.17 to $86.87. Physical premium sticky. F98 trim now dual-threshold." }
+  - { date: "2026-05-16", version: "cot",   title: "FROTH threshold breached",    verdict: "🟡 BULL-BUT-COMPRESSING", summary: "MM net +15.76K, W/W +4.92K — largest single-week move in 6-print sequence. OI +6.87K = first material expansion. Asymmetric capitulation edge COMPRESSED; size-up window closing." }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 11. GLOBAL INVENTORY  (COMEX / LBMA / SHFE / SLV ETF)
+# ─────────────────────────────────────────────────────────────────────────────
+global_inventory:
+  last_updated: "2026-05-10"
+  source_doc: "260510_XAG_MULTI-AGENT-SYNTHESIS_v3 §0"
+  items:
+    - { venue: "COMEX (Total)",           value: "440M oz", change: "−11% Feb→Apr",       bias: "🟢 bullish", note: "Total stocks shrinking" }
+    - { venue: "COMEX (Eligible)",        value: "316M oz", change: "−33% Feb→Apr",       bias: "🟢 bullish", note: "Industry locking inventory" }
+    - { venue: "COMEX (Registered)",      value: "124M oz", change: "+360% (27M→124M)",   bias: "🟢 bullish", note: "Active delivery capacity build" }
+    - { venue: "SLV ETF (AUM)",           value: "$39B",    change: "+422M 1y / −2.82B 3m", bias: "🟡 mixed",   note: "Holders monetized parabolic; not the marginal buyer" }
+    - { venue: "LBMA",                    value: "—",       change: "—",                  bias: "—",          note: "Stub — needs primary source feed" }
+    - { venue: "SHFE (Shanghai premium)", value: "—",       change: "—",                  bias: "—",          note: "GAP — methodology only; quant needs SHFE feed" }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 12. F98 — pulled-forward redeployment context
+# ─────────────────────────────────────────────────────────────────────────────
+f98_redeployment:
+  flag_id: "F260510-F98"
+  status: "open-urgent"
+  target_date: "2026-05-18"
+  trim_trigger_xagusd: { low: 93, high: 95 }
+  current_xagusd_estimate: 80.29
+  trim_pct_planned: { low: 40, high: 60 }
+  freed_cash_inr: { low: 14000000, high: 16000000 }
+  redeployment_buckets:
+    indian_equities_inr: 5000000
+    cash_hold_for_silver_dip_inr: 5000000
+    indian_fixed_income_inr: 4000000
+  operator_decisions_pending:
+    - "Confirm 50/50/40 allocation split"
+    - "Pick 3-5 specific equity tickers (Capital Goods T&D / Reserve list ex-IT)"
+    - "Pick cash-hold instrument (SBI Magnum Liquid / HDFC Cash / direct money-market)"
+    - "Pick fixed-income instrument (PSU bonds / corporate AAA / target-maturity fund)"
+    - "Pick execution timing (lump-sum at trim event vs staggered 4-6wk)"
