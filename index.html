@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🥈 Silver Dashboard — Family SilverBees</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext x=%2250%22 y=%2278%22 font-size=%2290%22 text-anchor=%22middle%22%3E%F0%9F%A5%88%3C/text%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #fafbfc;
+  --card: #ffffff;
+  --border: #e3e8ee;
+  --border-strong: #cbd3dc;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --text-soft: #9ca3af;
+  --accent: #3b6e8f;
+  --accent-soft: #eaf2f7;
+  --accent-strong: #2a526b;
+  --silver-gold: #c0a062;
+  --silver-gold-soft: #f5ebd6;
+  --positive: #0e7d3a;
+  --positive-soft: #e6f3ec;
+  --negative: #b91c1c;
+  --negative-soft: #fbe7e7;
+  --warning: #b45309;
+  --warning-soft: #fef3e1;
+  --warning-strong: #92400e;
+  --info-soft: #eef4f9;
+  --table-stripe: #f7f9fb;
+  --metals: #c0a062;
+  --energy: #f97316;
+  --macro: #3b82f6;
+  --crypto: #a855f7;
+}
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+body { padding:18px 22px 80px; max-width:1280px; margin:0 auto; }
+h1,h2,h3,h4 { font-weight:600; color:var(--text); margin:0; }
+h1 { font-size:22px; }
+h2 { font-size:16px; margin-bottom:10px; color:var(--accent-strong); letter-spacing:-0.01em; }
+h3 { font-size:13px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.04em; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px 16px; }
+section { margin-bottom:24px; }
+section .section-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; gap:12px; flex-wrap:wrap; }
+section .section-head .right { font-size:11px; color:var(--text-soft); }
+.pos { color:var(--positive); }
+.neg { color:var(--negative); }
+.mut { color:var(--text-muted); }
+
+/* HEADER */
+.app-header { display:flex; justify-content:space-between; align-items:flex-end; padding-bottom:14px; margin-bottom:18px; border-bottom:2px solid var(--silver-gold); }
+.app-header .title-wrap h1 { display:flex; align-items:center; gap:8px; }
+.app-header .badge { font-size:10px; padding:2px 8px; background:var(--silver-gold-soft); color:#7d6939; border-radius:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; }
+.app-header .subtitle { color:var(--text-muted); font-size:12px; margin-top:4px; }
+.app-header .meta-right { text-align:right; font-size:11px; color:var(--text-soft); line-height:1.6; }
+.app-header .meta-right .label { color:var(--text-muted); }
+
+/* BANNERS */
+.banner { display:flex; gap:12px; align-items:flex-start; padding:11px 14px; border-radius:6px; margin-bottom:14px; font-size:13px; border-left:4px solid; }
+.banner .icon { font-weight:700; font-size:14px; min-width:16px; }
+.banner.warn { background:var(--warning-soft); border-color:var(--warning); color:var(--warning-strong); }
+.banner.info { background:var(--info-soft); border-color:var(--accent); color:var(--accent-strong); }
+
+/* KPI TILES */
+.kpi-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:18px; }
+.kpi { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+.kpi .lbl { font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); font-weight:600; }
+.kpi .val { font-size:20px; font-weight:600; margin-top:4px; color:var(--text); font-variant-numeric:tabular-nums; }
+.kpi .sub { font-size:11px; color:var(--text-soft); margin-top:2px; font-variant-numeric:tabular-nums; }
+.kpi.accent .val { color:var(--accent-strong); }
+
+/* FORECAST */
+.forecast-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:14px; }
+.verdict-card { background:linear-gradient(135deg, #f7faf8 0%, #ffffff 100%); border:1px solid var(--border); border-radius:8px; padding:16px; }
+.verdict-card .v-label { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); font-weight:700; }
+.verdict-card .v-hero { font-size:22px; font-weight:700; margin-top:6px; color:var(--positive); line-height:1.2; }
+.verdict-card .v-sub { font-size:12px; color:var(--text-muted); margin-top:8px; line-height:1.5; }
+.verdict-card .v-binding { margin-top:10px; padding:8px 10px; background:var(--accent-soft); border-radius:4px; font-size:11px; color:var(--accent-strong); }
+.scenario-bars { display:flex; flex-direction:column; gap:6px; }
+.scenario-row { display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; }
+.scenario-row .sname { font-size:12px; font-weight:500; color:var(--text); }
+.scenario-row .sw { font-size:11px; font-weight:600; color:var(--accent-strong); font-variant-numeric:tabular-nums; }
+.scenario-row .sbar { grid-column:1 / -1; height:6px; background:#eef2f5; border-radius:3px; overflow:hidden; }
+.scenario-row .sbar .sfill { height:100%; background:linear-gradient(90deg, var(--silver-gold), #a08750); }
+.scenario-row .snote { grid-column:1 / -1; font-size:10.5px; color:var(--text-soft); }
+
+/* BULL/BEAR */
+.bb-wrap { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin-top:14px; }
+.bb-toggle { display:inline-flex; gap:4px; background:#f0f4f8; padding:3px; border-radius:6px; }
+.bb-toggle button { font-family:inherit; font-size:11px; padding:5px 12px; border:none; background:transparent; cursor:pointer; border-radius:4px; font-weight:600; color:var(--text-muted); }
+.bb-toggle button.active { background:var(--card); color:var(--text); box-shadow:0 1px 2px rgba(0,0,0,0.06); }
+.bb-cases { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px; }
+.bb-card { padding:10px 12px; border-radius:6px; border-left:3px solid; font-size:12.5px; line-height:1.55; }
+.bb-card.bull { background:var(--positive-soft); border-color:var(--positive); }
+.bb-card.bear { background:var(--negative-soft); border-color:var(--negative); }
+.bb-card h4 { font-size:11px; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; }
+.bb-card.bull h4 { color:var(--positive); }
+.bb-card.bear h4 { color:var(--negative); }
+.bb-card ul { margin:0; padding-left:18px; }
+.bb-card li { margin-bottom:4px; }
+
+/* SNAPSHOT TICKERS */
+.ticker-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:8px; }
+.ticker-card { background:var(--card); border:1px solid var(--border); border-left:3px solid; border-radius:6px; padding:10px 12px; text-decoration:none; color:inherit; transition:background 0.12s, transform 0.12s; }
+.ticker-card:hover { background:var(--accent-soft); transform:translateY(-1px); }
+.ticker-card .lbl { font-size:12.5px; font-weight:600; color:var(--text); }
+.ticker-card .sym { font-size:10.5px; color:var(--text-soft); font-family:Menlo,Monaco,Consolas,monospace; margin-top:2px; }
+.ticker-card .open { font-size:10px; color:var(--accent); margin-top:6px; }
+.ticker-card.metals { border-left-color:var(--metals); }
+.ticker-card.energy { border-left-color:var(--energy); }
+.ticker-card.macro  { border-left-color:var(--macro); }
+.ticker-card.crypto { border-left-color:var(--crypto); }
+
+/* TV CHART STUB */
+.tv-chart-stub { background:linear-gradient(135deg, #f7faf8 0%, #ffffff 60%); border:1px dashed var(--border-strong); border-radius:8px; padding:24px; text-align:center; }
+.tv-chart-stub .big { font-size:26px; font-weight:700; color:var(--silver-gold); margin-bottom:6px; }
+.tv-chart-stub a { display:inline-block; margin-top:8px; padding:7px 14px; background:var(--accent); color:white; text-decoration:none; border-radius:4px; font-size:12px; font-weight:600; }
+.tv-chart-stub a:hover { background:var(--accent-strong); }
+
+/* CALENDAR TIMELINE */
+.cal-timeline { display:flex; flex-direction:column; gap:6px; }
+.cal-row { display:grid; grid-template-columns:90px 60px 80px 1fr; gap:10px; align-items:baseline; padding:8px 12px; background:var(--card); border:1px solid var(--border); border-left:3px solid; border-radius:6px; font-size:12.5px; }
+.cal-row.high { border-left-color:var(--negative); }
+.cal-row.med  { border-left-color:var(--warning); }
+.cal-row.low  { border-left-color:var(--text-soft); }
+.cal-row .cdate { font-weight:600; color:var(--text); font-variant-numeric:tabular-nums; }
+.cal-row .ckind { font-size:10px; text-transform:uppercase; letter-spacing:0.04em; padding:2px 6px; background:var(--accent-soft); color:var(--accent-strong); border-radius:10px; font-weight:600; text-align:center; }
+.cal-row .cweight { font-size:10px; text-transform:uppercase; color:var(--text-muted); font-weight:600; }
+.cal-row .csum { color:var(--text); }
+
+/* ACCOUNT CARDS */
+.account-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; }
+.account-card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:13px 15px; display:flex; flex-direction:column; border-top:3px solid; }
+.account-card .holder { font-size:14.5px; font-weight:600; color:var(--text); }
+.account-card .type { font-size:10px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-soft); margin-top:2px; }
+.account-card.empty .holder { color:var(--text-soft); }
+.account-card .stats { margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
+.account-card .stats .row-stat .lbl { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.03em; }
+.account-card .stats .row-stat .v { font-size:13px; font-weight:500; color:var(--text); font-variant-numeric:tabular-nums; }
+.account-card .pnl { margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); display:flex; justify-content:space-between; align-items:baseline; }
+.account-card .pnl .pnl-abs { font-size:15px; font-weight:600; font-variant-numeric:tabular-nums; }
+.account-card .pnl .pnl-pct { font-size:12px; font-weight:600; font-variant-numeric:tabular-nums; }
+
+/* LADDER TABLES */
+.ladder-table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.ladder-table th { background:var(--accent-soft); color:var(--accent-strong); font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; font-weight:600; padding:8px 12px; text-align:left; border-bottom:1px solid var(--border-strong); }
+.ladder-table th.num, .ladder-table td.num { text-align:right; font-variant-numeric:tabular-nums; }
+.ladder-table tbody tr:nth-child(even) { background:var(--table-stripe); }
+.ladder-table td { padding:8px 12px; font-size:12.5px; border-bottom:1px solid var(--border); color:var(--text); }
+.ladder-table .tier-cell { font-weight:600; }
+.ladder-table .disc { font-size:11px; color:var(--text-soft); font-style:italic; }
+
+/* S/R LADDER */
+.sr-wrap { display:grid; grid-template-columns:1fr 80px 1fr; gap:0; align-items:stretch; }
+.sr-col { display:flex; flex-direction:column; }
+.sr-col.r { gap:4px; }
+.sr-col.s { gap:4px; }
+.sr-row { display:grid; grid-template-columns:60px 1fr auto; gap:8px; padding:7px 10px; background:var(--card); border:1px solid var(--border); border-radius:5px; font-size:11.5px; }
+.sr-row.r { border-left:3px solid var(--negative); }
+.sr-row.s { border-left:3px solid var(--positive); }
+.sr-row .px { font-weight:700; font-variant-numeric:tabular-nums; color:var(--text); }
+.sr-row .lab { color:var(--text); font-weight:500; font-size:11px; }
+.sr-row .dist { font-size:10.5px; font-variant-numeric:tabular-nums; font-weight:600; }
+.sr-row .nt { grid-column:1 / -1; font-size:10px; color:var(--text-soft); margin-top:2px; }
+.sr-center { display:flex; align-items:center; justify-content:center; padding:0 6px; }
+.sr-center .now-pill { background:var(--silver-gold); color:white; padding:8px 10px; border-radius:6px; font-weight:700; font-size:12px; font-variant-numeric:tabular-nums; box-shadow:0 1px 3px rgba(192,160,98,0.4); text-align:center; }
+.sr-center .now-lbl { font-size:9.5px; text-transform:uppercase; letter-spacing:0.04em; margin-top:2px; opacity:0.9; }
+
+/* TIMELINE */
+.tl-wrap { display:flex; gap:10px; overflow-x:auto; padding-bottom:8px; }
+.tl-card { min-width:220px; max-width:240px; background:var(--card); border:1px solid var(--border); border-top:3px solid var(--silver-gold); border-radius:6px; padding:10px 12px; }
+.tl-card .tl-date { font-size:10.5px; color:var(--text-muted); font-weight:600; }
+.tl-card .tl-title { font-size:13px; font-weight:600; color:var(--text); margin-top:3px; }
+.tl-card .tl-verdict { font-size:11px; margin-top:4px; padding:2px 6px; border-radius:10px; background:var(--positive-soft); color:var(--positive); display:inline-block; font-weight:600; }
+.tl-card .tl-verdict.warn { background:var(--warning-soft); color:var(--warning-strong); }
+.tl-card .tl-sum { font-size:11px; color:var(--text-muted); line-height:1.5; margin-top:6px; }
+
+/* FLOOR FRAMEWORK */
+.floor-wrap { display:flex; flex-direction:column; gap:5px; }
+.floor-row { display:grid; grid-template-columns:90px 100px 1fr 70px; gap:10px; align-items:center; padding:8px 12px; background:var(--card); border:1px solid var(--border); border-radius:6px; font-size:12px; }
+.floor-row.highlight { border-left:3px solid var(--accent); background:var(--info-soft); }
+.floor-row .ft { font-weight:700; color:var(--text); }
+.floor-row .fb { font-variant-numeric:tabular-nums; color:var(--text-muted); font-size:11.5px; }
+.floor-row .fm { color:var(--text); font-size:11px; }
+.floor-row .fp-wrap { display:flex; align-items:center; gap:6px; }
+.floor-row .fp-bar { flex:1; height:8px; background:#eef2f5; border-radius:4px; overflow:hidden; }
+.floor-row .fp-fill { height:100%; background:linear-gradient(90deg, var(--silver-gold), #8c6f35); }
+.floor-row .fp-pct { font-size:11px; font-weight:700; color:var(--accent-strong); font-variant-numeric:tabular-nums; min-width:36px; text-align:right; }
+
+/* COT CARDS */
+.cot-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:10px; }
+.cot-card { background:var(--card); border:1px solid var(--border); border-left:4px solid; border-radius:7px; padding:11px 14px; display:flex; flex-direction:column; gap:6px; }
+.cot-card .ct { font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; font-weight:700; color:var(--text-muted); }
+.cot-card .ch { font-size:20px; font-weight:700; line-height:1.15; font-variant-numeric:tabular-nums; }
+.cot-card .cs { font-size:11px; color:var(--text-muted); line-height:1.45; }
+.cot-card .cb { font-size:10px; padding:2px 6px; border-radius:10px; font-weight:600; display:inline-block; align-self:flex-start; }
+.cot-card .cliner { margin-top:4px; padding:6px 8px; border-radius:4px; border-left:2px solid; font-size:11px; line-height:1.45; }
+.cot-card .cliner.bull { background:var(--positive-soft); border-color:var(--positive); }
+.cot-card .cliner.bull strong { color:var(--positive); }
+.cot-card .cliner.bear { background:var(--negative-soft); border-color:var(--negative); }
+.cot-card .cliner.bear strong { color:var(--negative); }
+
+/* INVENTORY */
+.inv-table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.inv-table th, .inv-table td { padding:8px 12px; font-size:12.5px; border-bottom:1px solid var(--border); }
+.inv-table th { background:var(--accent-soft); color:var(--accent-strong); font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; font-weight:600; text-align:left; }
+.inv-table tbody tr:nth-child(even) { background:var(--table-stripe); }
+.inv-table .venue { font-weight:600; }
+
+/* TRANCHE TABLE */
+.tr-table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.tr-table th { background:var(--accent-soft); color:var(--accent-strong); font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; font-weight:600; padding:8px 12px; text-align:left; border-bottom:1px solid var(--border-strong); }
+.tr-table th.num, .tr-table td.num { text-align:right; font-variant-numeric:tabular-nums; }
+.tr-table tbody tr:nth-child(even) { background:var(--table-stripe); }
+.tr-table td { padding:7px 12px; font-size:12px; border-bottom:1px solid var(--border); }
+.tr-table .holder-tag { font-size:10px; padding:1px 6px; border-radius:8px; background:var(--accent-soft); color:var(--accent-strong); font-weight:600; }
+
+/* F98 BANNER */
+.f98 { background:linear-gradient(180deg, var(--warning-soft) 0%, #fffaf0 100%); border:1px solid var(--warning); border-radius:8px; padding:14px 16px; }
+.f98 .f98-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+.f98 .f98-head h2 { color:var(--warning-strong); margin:0; }
+.f98 .pill { font-size:10px; padding:2px 8px; background:var(--warning); color:white; border-radius:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; }
+.f98 .f98-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:10px; }
+.f98 .f98-grid .stat .lbl { font-size:10px; text-transform:uppercase; color:var(--warning-strong); letter-spacing:0.04em; font-weight:600; }
+.f98 .f98-grid .stat .v { font-size:15px; font-weight:600; color:var(--text); margin-top:2px; font-variant-numeric:tabular-nums; }
+.f98 ul { margin:6px 0 0; padding-left:20px; font-size:12px; color:var(--text); }
+.f98 ul li { margin-bottom:3px; }
+
+/* CHART */
+.chart-wrap { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px; }
+.chart-wrap canvas { max-height:220px; }
+
+/* FOOTER */
+.footer { margin-top:28px; padding-top:14px; border-top:1px solid var(--border); font-size:11px; color:var(--text-soft); line-height:1.6; }
+.footer code { background:var(--accent-soft); padding:1px 5px; border-radius:3px; color:var(--accent-strong); font-size:10.5px; }
+
+@media (max-width:1000px) {
+  .kpi-grid { grid-template-columns:repeat(2,1fr); }
+  .account-grid { grid-template-columns:repeat(2,1fr); }
+  .forecast-grid { grid-template-columns:1fr; }
+  .bb-cases { grid-template-columns:1fr; }
+  .f98 .f98-grid { grid-template-columns:repeat(2,1fr); }
+  .sr-wrap { grid-template-columns:1fr; }
+  .sr-center { padding:8px 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="title-wrap">
+    <h1>🥈 Silver Dashboard <span class="badge">live</span></h1>
+    <div class="subtitle">Family SilverBees position · F98 trim & redeployment context · live snapshot links to TradingView</div>
+  </div>
+  <div class="meta-right">
+    <div><span class="label">Emitted:</span> <span id="emit-ts">—</span></div>
+    <div><span class="label">Loaded:</span> <span id="loaded-ts">—</span></div>
+    <div><span class="label">Excel synced:</span> <span id="sync-ts">—</span></div>
+    <div><span class="label">SBees close:</span> <span id="price-ts">—</span></div>
+  </div>
+</div>
+
+<div id="banners"></div>
+
+<!-- KPI HEADER ROW -->
+<div class="kpi-grid" id="kpi-grid"></div>
+
+<!-- F98 -->
+<section>
+  <div class="f98">
+    <div class="f98-head">
+      <h2>F98 · Silver Post-Trim Redeployment</h2>
+      <span class="pill" id="f98-status">OPEN-URGENT</span>
+    </div>
+    <div class="f98-grid" id="f98-grid"></div>
+    <div><strong style="font-size:11.5px; color:var(--warning-strong);">OPERATOR DECISIONS PENDING:</strong></div>
+    <ul id="f98-decisions"></ul>
+  </div>
+</section>
+
+<!-- 1. FORECAST + BULL/BEAR -->
+<section>
+  <div class="section-head"><h2>1 · Forecast Indication</h2><div class="right" id="fc-meta">—</div></div>
+  <div class="forecast-grid">
+    <div class="verdict-card">
+      <div class="v-label">Composite verdict</div>
+      <div class="v-hero" id="v-hero">—</div>
+      <div class="v-sub" id="v-source">—</div>
+      <div class="v-binding" id="v-binding">—</div>
+      <div style="margin-top:12px; font-size:11px; color:var(--text-muted);">
+        <strong style="color:var(--text);" id="v-chartread">Latest chart-read</strong>
+        <span id="v-chartread-detail"></span>
+      </div>
+    </div>
+    <div class="card" style="padding:14px 16px;">
+      <div class="v-label" style="font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); font-weight:700; margin-bottom:8px;">Probability mass</div>
+      <div class="scenario-bars" id="scenarios"></div>
+      <div style="margin-top:10px; padding-top:8px; border-top:1px dashed var(--border); font-size:11.5px; color:var(--text);">
+        <strong>Bullish (A+B):</strong> <span id="ab-pct" style="color:var(--positive); font-weight:700;">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="bb-wrap">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <h3 style="margin:0;">Bull / Bear bias toggle</h3>
+      <div class="bb-toggle">
+        <button data-bias="both" class="active">🤝 Both</button>
+        <button data-bias="bull">🐂 Bull only</button>
+        <button data-bias="bear">🐻 Bear only</button>
+      </div>
+    </div>
+    <div class="bb-cases" id="bb-cases"></div>
+  </div>
+</section>
+
+<!-- 2. SNAPSHOT + TV CHART -->
+<section>
+  <div class="section-head"><h2>2 · Live Snapshot — silver complex + macro</h2><div class="right">Click any card to open in TradingView</div></div>
+  <div class="ticker-grid" id="ticker-grid"></div>
+  <div class="tv-chart-stub" style="margin-top:12px;">
+    <div class="big">📈 Live TradingView Chart — <span id="tv-sym">—</span></div>
+    <div style="color:var(--text-muted); font-size:12px;">Cowork's sandboxed view can't render TradingView iframes; click below to open the live advanced chart in your browser.</div>
+    <a id="tv-link" href="#" target="_blank" rel="noopener">Open SilverBees chart →</a>
+  </div>
+</section>
+
+<!-- 3. CATALYST CALENDAR -->
+<section>
+  <div class="section-head"><h2>3 · Catalyst Calendar</h2><div class="right" id="cal-meta">silver-relevant upcoming events</div></div>
+  <div class="cal-timeline" id="cal-timeline"></div>
+</section>
+
+<!-- 4. HOLDINGS + LADDERS + S/R -->
+<section>
+  <div class="section-head"><h2>4 · Holdings Breakdown</h2><div class="right" id="acc-meta">—</div></div>
+  <div class="account-grid" id="account-grid"></div>
+  <div class="chart-wrap" style="margin-top:12px;">
+    <canvas id="holdings-pie"></canvas>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><h2>Trim Ladder</h2><div class="right">Locked 260510 per synthesis §6.1 · distance vs current XAGUSD</div></div>
+  <table class="ladder-table">
+    <thead><tr><th>Tier</th><th>Trigger</th><th>Action</th><th class="num">Cash freed</th><th>Discipline</th><th class="num">Distance</th></tr></thead>
+    <tbody id="trim-body"></tbody>
+  </table>
+</section>
+
+<section>
+  <div class="section-head"><h2>Add Ladder</h2><div class="right" id="add-meta">Dry powder pre-allocated per synthesis §6.2</div></div>
+  <table class="ladder-table">
+    <thead><tr><th>Rung</th><th>Trigger</th><th class="num">Deploy</th><th class="num">Units</th><th>Conviction</th><th class="num">Distance</th></tr></thead>
+    <tbody id="add-body"></tbody>
+  </table>
+  <div style="margin-top:8px; padding:8px 12px; background:var(--negative-soft); border-left:3px solid var(--negative); border-radius:4px; font-size:12px; color:var(--negative);" id="abort-note">—</div>
+</section>
+
+<section>
+  <div class="section-head"><h2>S/R Levels (XAGUSD)</h2><div class="right" id="sr-meta">—</div></div>
+  <div class="sr-wrap">
+    <div class="sr-col r" id="sr-r"></div>
+    <div class="sr-center">
+      <div>
+        <div class="now-pill"><div id="now-px">—</div><div class="now-lbl">XAGUSD now</div></div>
+      </div>
+    </div>
+    <div class="sr-col s" id="sr-s"></div>
+  </div>
+</section>
+
+<!-- 5. STRATEGY + FLOOR -->
+<section>
+  <div class="section-head"><h2>5 · Strategy Outlook — concise timeline</h2><div class="right">Operator-curated; pulled from synthesis history</div></div>
+  <div class="tl-wrap" id="tl-wrap"></div>
+</section>
+
+<section>
+  <div class="section-head"><h2>Floor Framework (V-13)</h2><div class="right" id="floor-meta">Our working hypothesis — NOT consensus</div></div>
+  <div class="floor-wrap" id="floor-wrap"></div>
+  <div style="margin-top:8px; font-size:11.5px; color:var(--text-muted); padding:8px 10px; background:var(--info-soft); border-radius:4px;" id="velocity-note">—</div>
+</section>
+
+<!-- 6. COT -->
+<section>
+  <div class="section-head"><h2>6 · COT — latest pull (260516)</h2><div class="right">CFTC 12-May survey · MM rebuild accelerating; FROTH threshold breached</div></div>
+  <div class="cot-grid" id="cot-grid"></div>
+  <div style="margin-top:10px; font-size:11.5px; color:var(--text-muted); padding:8px 10px; background:var(--info-soft); border-radius:4px;">
+    Use the bias toggle in §1 to filter bull-case / bear-case liners on these cards. Source: <code>260516_XAG_COT-PULL.md</code>.
+  </div>
+</section>
+
+<!-- 7. INVENTORY -->
+<section>
+  <div class="section-head"><h2>7 · Global Inventory — COMEX / LBMA / SHFE / SLV</h2><div class="right" id="inv-meta">—</div></div>
+  <table class="inv-table">
+    <thead><tr><th>Venue</th><th>Value</th><th>Change</th><th>Bias</th><th>Note</th></tr></thead>
+    <tbody id="inv-body"></tbody>
+  </table>
+</section>
+
+<!-- TRANCHE DETAIL -->
+<section>
+  <div class="section-head"><h2>Tranche-level detail</h2><div class="right" id="tr-meta">—</div></div>
+  <table class="tr-table">
+    <thead><tr><th>Account</th><th>Date</th><th class="num">Qty</th><th class="num">Buy ₹</th><th class="num">Invested</th><th class="num">Current MV</th><th class="num">Unrealized ₹</th><th class="num">Unrealized %</th></tr></thead>
+    <tbody id="tr-body"></tbody>
+  </table>
+</section>
+
+<div class="footer">
+  <div><strong>Data path:</strong> <code>My Stocks (Drive)</code> → <code>_inputs/silver_holdings.yaml</code> → <code>silver_dashboard_emit.py</code> → <code>_state/silver_dashboard_aggregate.json</code> → this artifact</div>
+  <div style="margin-top:4px;"><strong>Refresh:</strong> Run <code>python3 00_SYSTEM/GENERATORS/silver_dashboard_emit.py</code>; ask Claude to rebuild artifact when YAML changes.</div>
+  <div style="margin-top:4px;"><strong>This page is live</strong> — re-fetches <code>data/silver_dashboard_aggregate.json</code> on every load. Refresh = upload new JSON to the GitHub repo (auto-redeploys within ~60s).</div>
+  <div style="margin-top:4px;"><strong>Related:</strong> <code>F260510-F98</code> · <code>CLAUDE_MODULES/01_SILVER_DOCTRINE</code> (V-13, V-15) · <code>DASHBOARDS/SILVER_DASHBOARD.md</code> (Obsidian v1.6 reference)</div>
+</div>
+
+<script>
+// ─── LIVE-LOAD silver_dashboard_aggregate.json on every page load ──
+let DATA = null;
+async function bootstrap() {
+  try {
+    const r = await fetch('data/silver_dashboard_aggregate.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    DATA = await r.json();
+    renderAll();
+    const loadedEl = document.getElementById('loaded-ts');
+    if (loadedEl) loadedEl.textContent = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+  } catch (e) {
+    document.body.innerHTML = `<div style="max-width:600px;margin:80px auto;padding:24px;background:#fef3e1;border:2px solid #b45309;border-radius:8px;font-family:-apple-system,sans-serif;color:#92400e;">
+      <h2 style="margin-top:0;">⚠ Could not load dashboard data</h2>
+      <p>Failed to fetch <code>data/silver_dashboard_aggregate.json</code>: <strong>${e.message}</strong></p>
+      <p>If you're the operator: re-run <code>silver_dashboard_emit.py --publish</code>, push the updated JSON, and refresh.</p>
+    </div>`;
+  }
+}
+function renderAll() {
+
+// ─── Formatters ────────────────────────────────────────────────
+const fmtINR = (n, opts = {}) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  const abs = Math.abs(n);
+  if (opts.compact) {
+    if (abs >= 1e7) return `₹${(n / 1e7).toFixed(2)} Cr`;
+    if (abs >= 1e5) return `₹${(n / 1e5).toFixed(2)} L`;
+    return `₹${n.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  }
+  return `₹${n.toLocaleString('en-IN', { maximumFractionDigits: opts.dp ?? 0 })}`;
+};
+const fmtNum = (n, dp = 0) => (n == null || isNaN(n)) ? '—' : n.toLocaleString('en-IN', { maximumFractionDigits: dp });
+const fmtPct = (n, dp = 2) => (n == null || isNaN(n)) ? '—' : `${n >= 0 ? '+' : ''}${n.toFixed(dp)}%`;
+const fmtSigned = (n, opts = {}) => {
+  if (n == null || isNaN(n)) return '—';
+  const sign = n > 0 ? '+' : (n < 0 ? '−' : '');
+  return `${sign}${fmtINR(Math.abs(n), opts)}`;
+};
+const pnlClass = (n) => (n == null) ? '' : (n >= 0 ? 'pos' : 'neg');
+
+// ─── Header timestamps ────────────────────────────────────────
+document.getElementById('emit-ts').textContent = (DATA.emitted_at_utc || '').replace('T', ' ').replace('+00:00', ' UTC');
+document.getElementById('sync-ts').textContent = DATA.meta?.last_synced || '—';
+const cp = DATA.current_price || {};
+document.getElementById('price-ts').textContent = cp.primary_date
+  ? `${cp.primary_date} · ${fmtPct(cp.primary_day_chg_pct, 2)} day`
+  : '—';
+
+// ─── Banners (sells pending + staleness) ──────────────────────
+const bEl = document.getElementById('banners');
+const banners = [];
+(DATA.warnings || []).forEach(w => {
+  if (w.toLowerCase().includes('sell-side')) {
+    banners.push(`<div class="banner info"><div class="icon">ℹ</div><div><strong>Sell-side data pending</strong> — father transmitting transaction history. Once <code>sells:</code> lists populate in <code>silver_holdings.yaml</code>, realized P&L appears automatically. Operator note 260517: most prior Shalini tranches sold at ~$78 XAGUSD spot.</div></div>`);
+  } else if (w.toLowerCase().includes('stale')) {
+    banners.push(`<div class="banner warn"><div class="icon">⏱</div><div>${w}</div></div>`);
+  }
+});
+bEl.innerHTML = banners.join('');
+
+// ─── KPI tiles ────────────────────────────────────────────────
+const ft = DATA.family_totals;
+const kpiData = [
+  { lbl: 'SilverBees (NSE close)', val: fmtINR(cp.primary_inr, { dp: 2 }), sub: `Prev ${fmtINR(cp.primary_intraday?.prev_close, { dp: 2 })} · ${fmtPct(cp.primary_day_chg_pct)} day`, accent: true },
+  { lbl: 'Family holdings', val: `${fmtNum(ft.holdings_qty)} u`, sub: `${ft.account_count_active} active · ${ft.tranche_count} tranches` },
+  { lbl: 'Invested', val: fmtINR(ft.invested_inr, { compact: true }), sub: fmtINR(ft.invested_inr) },
+  { lbl: 'Current MV', val: fmtINR(ft.current_value_inr, { compact: true }), sub: `@ ${fmtINR(cp.primary_inr, { dp: 2 })}/u` },
+  { lbl: 'Unrealized', val: fmtSigned(ft.unrealized_pnl_inr, { compact: true }), sub: fmtPct(ft.unrealized_pnl_pct), klass: pnlClass(ft.unrealized_pnl_inr) },
+];
+document.getElementById('kpi-grid').innerHTML = kpiData.map(k =>
+  `<div class="kpi ${k.accent ? 'accent' : ''}"><div class="lbl">${k.lbl}</div><div class="val ${k.klass || ''}">${k.val}</div><div class="sub">${k.sub}</div></div>`
+).join('');
+
+// ─── F98 ──────────────────────────────────────────────────────
+const f98 = DATA.f98_redeployment || {};
+document.getElementById('f98-status').textContent = (f98.status || 'open').toUpperCase();
+const xagTrim = f98.trim_trigger_xagusd || {}, xagCur = f98.current_xagusd_estimate;
+const distPct = (xagCur && xagTrim.low) ? ((xagTrim.low - xagCur) / xagCur * 100).toFixed(1) : '—';
+const cashLow = f98.freed_cash_inr?.low, cashHigh = f98.freed_cash_inr?.high;
+document.getElementById('f98-grid').innerHTML = `
+  <div class="stat"><div class="lbl">Trim trigger (XAGUSD)</div><div class="v">$${xagTrim.low}–$${xagTrim.high}</div></div>
+  <div class="stat"><div class="lbl">Current XAGUSD (est)</div><div class="v">$${xagCur} <span style="font-size:11px;color:var(--text-soft);">(+${distPct}% to trim)</span></div></div>
+  <div class="stat"><div class="lbl">Planned trim %</div><div class="v">${f98.trim_pct_planned?.low}–${f98.trim_pct_planned?.high}%</div></div>
+  <div class="stat"><div class="lbl">Freed cash (est)</div><div class="v">${fmtINR(cashLow, { compact: true })}–${fmtINR(cashHigh, { compact: true })}</div></div>`;
+document.getElementById('f98-decisions').innerHTML = (f98.operator_decisions_pending || []).map(d => `<li>${d}</li>`).join('');
+
+// ─── 1. FORECAST ──────────────────────────────────────────────
+const fc = DATA.forecast || {};
+document.getElementById('fc-meta').textContent = `${fc.consensus_state || '—'}`;
+document.getElementById('v-hero').textContent = fc.composite_verdict || '—';
+document.getElementById('v-source').textContent = fc.composite_source || '—';
+document.getElementById('v-binding').textContent = fc.v15_binding || '—';
+document.getElementById('v-chartread').textContent = `Chart-read ${fc.last_chart_read_date}:`;
+document.getElementById('v-chartread-detail').textContent = ` ${fc.last_chart_read_verdict || '—'}`;
+const maxScenario = Math.max(...((fc.probability_mass || []).map(p => p.weight_pct) || [0]));
+document.getElementById('scenarios').innerHTML = (fc.probability_mass || []).map(p => `
+  <div class="scenario-row">
+    <div class="sname">${p.scenario}</div>
+    <div class="sw">${p.weight_pct}%</div>
+    <div class="sbar"><div class="sfill" style="width:${(p.weight_pct / maxScenario * 100).toFixed(0)}%"></div></div>
+    <div class="snote">${p.note}</div>
+  </div>
+`).join('');
+document.getElementById('ab-pct').textContent = `${fc.bullish_mass_a_plus_b || 0}%`;
+
+// Bull/Bear cases
+const bb = DATA.bull_bear || {};
+document.getElementById('bb-cases').innerHTML = `
+  <div class="bb-card bull" id="bb-bull"><h4>🐂 Bull case</h4><ul>${(bb.bull_case || []).map(x => `<li>${x}</li>`).join('')}</ul></div>
+  <div class="bb-card bear" id="bb-bear"><h4>🐻 Bear case</h4><ul>${(bb.bear_case || []).map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+document.querySelectorAll('.bb-toggle button').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.bb-toggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const bias = btn.dataset.bias;
+    const bull = document.getElementById('bb-bull'), bear = document.getElementById('bb-bear');
+    bull.style.display = (bias === 'bear') ? 'none' : '';
+    bear.style.display = (bias === 'bull') ? 'none' : '';
+    document.querySelectorAll('.cot-card .cliner.bull').forEach(el => el.style.display = (bias === 'bear') ? 'none' : '');
+    document.querySelectorAll('.cot-card .cliner.bear').forEach(el => el.style.display = (bias === 'bull') ? 'none' : '');
+  };
+});
+
+// ─── 2. SNAPSHOT TICKERS ─────────────────────────────────────
+const tickers = DATA.snapshot_tickers || [];
+document.getElementById('ticker-grid').innerHTML = tickers.map(t => {
+  const sym = encodeURIComponent(t.tv_symbol);
+  return `<a class="ticker-card ${t.category}" href="https://www.tradingview.com/chart/?symbol=${sym}" target="_blank" rel="noopener">
+    <div class="lbl">${t.label}</div>
+    <div class="sym">${t.tv_symbol}</div>
+    <div class="open">↗ open in TradingView</div>
+  </a>`;
+}).join('');
+const main = DATA.tradingview_main_chart || {};
+document.getElementById('tv-sym').textContent = main.symbol || '—';
+document.getElementById('tv-link').href = `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(main.symbol || 'NSE:SILVERBEES')}`;
+
+// ─── 3. CATALYST CALENDAR ────────────────────────────────────
+const cats = DATA.catalysts || [];
+document.getElementById('cal-meta').textContent = `${cats.length} upcoming events`;
+document.getElementById('cal-timeline').innerHTML = cats.map(c => `
+  <div class="cal-row ${c.weight || 'low'}">
+    <div class="cdate">${c.date}</div>
+    <div class="ckind">${c.kind}</div>
+    <div class="cweight">${(c.weight || '').toUpperCase()}</div>
+    <div class="csum">${c.summary}</div>
+  </div>
+`).join('');
+
+// ─── 4. HOLDINGS ──────────────────────────────────────────────
+document.getElementById('acc-meta').textContent = `${ft.account_count_active} active · ${DATA.accounts.length - ft.account_count_active} empty`;
+document.getElementById('account-grid').innerHTML = DATA.accounts.map(a => {
+  const isEmpty = a.holdings_qty === 0;
+  const accent = a.accent_color || '#cbd3dc';
+  if (isEmpty) {
+    return `<div class="account-card empty" style="border-top-color:${accent};opacity:.6;"><div class="holder">${a.emoji || ''} ${a.holder}</div><div class="type">${a.account_type || ''}</div><div style="margin-top:14px;font-size:12px;color:var(--text-soft);">No active holdings</div></div>`;
+  }
+  return `<div class="account-card" style="border-top-color:${accent};">
+    <div class="holder">${a.emoji || ''} ${a.holder}</div>
+    <div class="type">${a.account_type || ''} · ${a.tranche_count} tranche${a.tranche_count > 1 ? 's' : ''}</div>
+    <div class="stats">
+      <div class="row-stat"><div class="lbl">Holdings</div><div class="v">${fmtNum(a.holdings_qty)} u</div></div>
+      <div class="row-stat"><div class="lbl">Avg buy</div><div class="v">${fmtINR(a.avg_buy_inr, { dp: 2 })}</div></div>
+      <div class="row-stat"><div class="lbl">Invested</div><div class="v">${fmtINR(a.invested_inr, { compact: true })}</div></div>
+      <div class="row-stat"><div class="lbl">MV</div><div class="v">${fmtINR(a.current_value_inr, { compact: true })}</div></div>
+    </div>
+    <div class="pnl">
+      <span class="pnl-abs ${pnlClass(a.unrealized_pnl_inr)}">${fmtSigned(a.unrealized_pnl_inr, { compact: true })}</span>
+      <span class="pnl-pct ${pnlClass(a.unrealized_pnl_inr)}">${fmtPct(a.unrealized_pnl_pct)}</span>
+    </div>
+  </div>`;
+}).join('');
+
+const activeAccts = DATA.accounts.filter(a => a.holdings_qty > 0);
+new Chart(document.getElementById('holdings-pie'), {
+  type: 'doughnut',
+  data: {
+    labels: activeAccts.map(a => `${a.holder} — ${fmtNum(a.holdings_qty)} u`),
+    datasets: [{
+      data: activeAccts.map(a => a.holdings_qty),
+      backgroundColor: activeAccts.map(a => a.accent_color || '#3b6e8f'),
+      borderColor: '#ffffff', borderWidth: 2,
+    }],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '60%',
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 12 }, color: '#1f2937', boxWidth: 12 } },
+      tooltip: { callbacks: { label: (ctx) => {
+        const total = activeAccts.reduce((s, a) => s + a.holdings_qty, 0);
+        return `${ctx.label}: ${(ctx.parsed / total * 100).toFixed(1)}%`;
+      } } },
+    },
+  },
+});
+
+// ─── Trim / Add ladders ──────────────────────────────────────
+const trim = DATA.trim_ladder || [];
+document.getElementById('trim-body').innerHTML = trim.map(t => `
+  <tr>
+    <td class="tier-cell">${t.tier}</td>
+    <td>${t.trigger}</td>
+    <td>${t.action}</td>
+    <td class="num">${fmtINR(t.cash_freed_inr, { compact: true })}</td>
+    <td class="disc">${t.discipline}</td>
+    <td class="num">${t.distance_label || '—'}</td>
+  </tr>`).join('');
+
+const add = DATA.add_ladder || {};
+document.getElementById('add-meta').textContent = `Dry powder: ${fmtINR(add.dry_powder_inr, { compact: true })}`;
+document.getElementById('add-body').innerHTML = (add.rungs || []).map(r => `
+  <tr>
+    <td class="tier-cell">${r.rung}</td>
+    <td>${r.trigger}</td>
+    <td class="num">${fmtINR(r.deploy_inr, { compact: true })}</td>
+    <td class="num">${fmtNum(r.units_approx)} @ ~₹${r.sbees_avg_approx}</td>
+    <td class="disc">${r.conviction}</td>
+    <td class="num">${r.distance_label || '—'}</td>
+  </tr>`).join('');
+document.getElementById('abort-note').textContent = add.abort || '';
+
+// ─── S/R Levels ──────────────────────────────────────────────
+const sr = DATA.sr_levels || {};
+document.getElementById('sr-meta').textContent = `Last updated ${sr.last_updated || '—'} · XAGUSD ${sr.current_xagusd_estimate || '—'}`;
+document.getElementById('now-px').textContent = sr.current_xagusd_estimate ? `$${sr.current_xagusd_estimate}` : '—';
+document.getElementById('sr-r').innerHTML = (sr.resistance || []).map(r => `
+  <div class="sr-row r">
+    <div class="px">$${r.price.toFixed(2)}</div>
+    <div class="lab">${r.label}</div>
+    <div class="dist neg">${r.distance_label || '—'}</div>
+    <div class="nt">${r.note}</div>
+  </div>`).join('');
+document.getElementById('sr-s').innerHTML = (sr.support || []).map(s => `
+  <div class="sr-row s">
+    <div class="px">$${s.price.toFixed(2)}</div>
+    <div class="lab">${s.label}</div>
+    <div class="dist pos">${s.distance_label || '—'}</div>
+    <div class="nt">${s.note}</div>
+  </div>`).join('');
+
+// ─── 5. STRATEGY TIMELINE ────────────────────────────────────
+const tl = DATA.strategy_timeline || [];
+document.getElementById('tl-wrap').innerHTML = tl.map(t => `
+  <div class="tl-card">
+    <div class="tl-date">${t.date} · ${t.version}</div>
+    <div class="tl-title">${t.title}</div>
+    <div class="tl-verdict ${t.verdict && t.verdict.includes('COMPRESS') ? 'warn' : ''}">${t.verdict}</div>
+    <div class="tl-sum">${t.summary}</div>
+  </div>`).join('');
+
+// ─── Floor framework ─────────────────────────────────────────
+const fr = DATA.floor_framework || {};
+const xagNow = sr.current_xagusd_estimate;
+const tiers = fr.tiers || [];
+const maxProb = Math.max(...tiers.map(t => t.prob_pct), 1);
+document.getElementById('floor-meta').textContent = `${fr.v_id || '—'} · ${fr.status || ''}`;
+document.getElementById('floor-wrap').innerHTML = tiers.map(t => {
+  const inRange = xagNow != null && t.band_low != null
+    && (t.band_high == null ? xagNow >= t.band_low : (xagNow >= t.band_low && xagNow <= t.band_high));
+  const band = t.band_high == null ? `>$${t.band_low}` : `$${t.band_low}–$${t.band_high}`;
+  return `<div class="floor-row ${inRange ? 'highlight' : ''}">
+    <div class="ft">${t.tier}${inRange ? ' ← now' : ''}</div>
+    <div class="fb">${band}</div>
+    <div class="fm">${t.mechanism}</div>
+    <div class="fp-wrap">
+      <div class="fp-bar"><div class="fp-fill" style="width:${(t.prob_pct / maxProb * 100).toFixed(0)}%"></div></div>
+      <div class="fp-pct">${t.prob_pct}%</div>
+    </div>
+  </div>`;
+}).join('');
+document.getElementById('velocity-note').textContent = fr.velocity_note || '';
+
+// ─── 6. COT (hard-coded from 260516 pull for v2; wire to YAML in v3) ───
+const cotCards = [
+  {
+    title: "Managed Money Net", subtitle: "(survey 12-May)",
+    hero: "+15,761", sub: "W/W Δ +4,918 · largest single-week move in 6-print sequence",
+    status: "FROTH BREACHED", accent: "#b45309",
+    bull: "FROTH threshold breach is a regime shift — directional re-engagement (gross longs +5.5K vs shorts +0.6K, ~9.5:1) confirms the bullish thesis is being priced in.",
+    bear: "Asymmetric capitulation edge is now COMPRESSED. Size-up window that was open since 260502 has effectively closed; further long-deploys carry less edge."
+  },
+  {
+    title: "COT Threshold Ladder", subtitle: "DICTIONARY ladder",
+    hero: "🟡 FROTH proximity", sub: "🟢 COT-CAPITULATION cleared\n🟡 COT-FROTH (>15K) JUST BREACHED",
+    status: "TRIM-PROXIMITY", accent: "#b45309",
+    bull: "Capitulation cleared = doctrine said 'size-up' for weeks. Even at FROTH, structural rally setup remains; just lighter add-sizes from here.",
+    bear: "FROTH breach = the doctrine's tactical signal to PREPARE for trim, not deploy. Mechanical doctrine says front-load was completed; next move is reduce, not add."
+  },
+  {
+    title: "Open Interest", subtitle: "total contracts",
+    hero: "103,800", sub: "W/W Δ +6,868 · first material expansion since cycle began compressing",
+    status: "PAPER RE-ENGAGED", accent: "#22c55e",
+    bull: "OI expansion alongside MM long-add = real, broad re-engagement. Paper coming back ON during the rally is bullish confirmation (vs. base-cleansing-on-flat).",
+    bear: "Two-week deleveraging cushion (<100K) lasted exactly one week. Paper builds at higher prices = late-cycle pattern; vulnerable to fast unwinds on bad data."
+  },
+  {
+    title: "G8 Capitulation Lens", subtitle: "silver doctrine §G8",
+    hero: "✅ MET", sub: "Descriptor: 'rebuild accelerating; froth threshold breached'\n(upgraded from 'deep-and-stalling')",
+    status: "BULLISH TRANSITION", accent: "#22c55e",
+    bull: "G8 descriptor upgrade = the rebuild that was stalled has now broken decisively higher. Confirms the V-15 chart-led tilt from 260511.",
+    bear: "G8-MET with FROTH-BREACHED-too = strategic dilemma. Continue holding for trim trigger or partial-trim now to lock the asymmetric advantage already earned?"
+  },
+  {
+    title: "Producer / Swap counter-flow", subtitle: "physical + commercial",
+    hero: "−1,092 SD", sub: "Producer net −2,019 W/W (+1,878 short adds)\nSwap dealer adding shorts into spec long-bid",
+    status: "CONFIRMATORY", accent: "#3b6e8f",
+    bull: "Producer hedge-shorts ramping = physical hedgers see higher prices coming. Counter-party flow is rational; confirms an underlying real price move is being absorbed.",
+    bear: "Heavy producer + swap-dealer short adds at THIS level may cap further upside near-term. The shorts being added are at $86-89 zone, not $93+; trim ladder may run into supply."
+  },
+];
+document.getElementById('cot-grid').innerHTML = cotCards.map(c => `
+  <div class="cot-card" style="border-left-color:${c.accent};">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <div class="ct">${c.title}</div>
+      <div style="font-size:10px;color:var(--text-soft);font-style:italic;">${c.subtitle}</div>
+    </div>
+    <div class="ch" style="color:${c.accent};">${c.hero}</div>
+    <div class="cs" style="white-space:pre-line;">${c.sub}</div>
+    <div class="cb" style="background:${c.accent}20;color:${c.accent};border:1px solid ${c.accent}40;">${c.status}</div>
+    <div class="cliner bull"><strong>🐂 Bull: </strong>${c.bull}</div>
+    <div class="cliner bear"><strong>🐻 Bear: </strong>${c.bear}</div>
+  </div>`).join('');
+
+// ─── 7. INVENTORY ────────────────────────────────────────────
+const inv = DATA.global_inventory || {};
+document.getElementById('inv-meta').textContent = `Source: ${inv.source_doc || '—'} · last updated ${inv.last_updated || '—'}`;
+document.getElementById('inv-body').innerHTML = (inv.items || []).map(it => `
+  <tr>
+    <td class="venue">${it.venue}</td>
+    <td>${it.value}</td>
+    <td>${it.change}</td>
+    <td>${it.bias}</td>
+    <td class="mut">${it.note}</td>
+  </tr>`).join('');
+
+// ─── Tranche detail ──────────────────────────────────────────
+const tranchesFlat = [];
+DATA.accounts.forEach(a => (a.tranches || []).forEach(t => tranchesFlat.push({ ...t, holder: a.holder })));
+tranchesFlat.sort((a, b) => a.date.localeCompare(b.date));
+document.getElementById('tr-meta').textContent = `${tranchesFlat.length} buy-tranches · sells pending`;
+document.getElementById('tr-body').innerHTML = tranchesFlat.map(t => `
+  <tr>
+    <td><span class="holder-tag">${t.holder}</span></td>
+    <td>${t.date}</td>
+    <td class="num">${fmtNum(t.qty)}</td>
+    <td class="num">${fmtINR(t.buy_price, { dp: 2 })}</td>
+    <td class="num">${fmtINR(t.invested_inr)}</td>
+    <td class="num">${fmtINR(t.current_value_inr)}</td>
+    <td class="num ${pnlClass(t.unrealized_pnl_inr)}">${fmtSigned(t.unrealized_pnl_inr)}</td>
+    <td class="num ${pnlClass(t.unrealized_pnl_pct)}">${fmtPct(t.unrealized_pnl_pct)}</td>
+  </tr>`).join('');
+}
+bootstrap();
+</script>
+</body>
+</html>
