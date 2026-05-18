@@ -8,7 +8,7 @@
 :root { color-scheme: light; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: linear-gradient(135deg, #ede9f5 0%, #e3edf5 35%, #f5ebe1 65%, #ece4f0 100%);
   min-height: 100vh; color: #0f172a; -webkit-font-smoothing: antialiased;
 }
@@ -18,30 +18,70 @@ body::before, body::after {
 body::before { top: -15%; left: -8%; width: 720px; height: 720px; background: radial-gradient(circle, rgba(168,85,247,0.22), transparent 70%); }
 body::after  { bottom: -25%; right: -12%; width: 820px; height: 820px; background: radial-gradient(circle, rgba(59,130,246,0.18), transparent 70%); }
 .shell {
-  position: relative; z-index: 1; max-width: 920px; margin: 0 auto;
-  padding: 60px 24px; display: flex; flex-direction: column; gap: 30px;
+  position: relative; z-index: 1; max-width: 980px; margin: 0 auto;
+  padding: 60px 24px 40px; display: flex; flex-direction: column; gap: 30px;
 }
 .brand { display: flex; align-items: baseline; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid rgba(15,23,42,0.08); }
 .brand .mark { width: 32px; height: 32px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #0d1117, #1f2937 60%, #4f46e5 110%); box-shadow: 0 0 18px rgba(79,70,229,0.35); }
 .brand h1 { font-size: 28px; font-weight: 200; letter-spacing: -0.025em; color: #0f172a; }
 .brand .pill { font-size: 10px; padding: 3px 9px; background: rgba(15,23,42,0.92); color: #d8edf6; border-radius: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
-.tag { font-size: 11px; color: #64748b; }
+.tag { font-size: 11px; color: #64748b; margin-left: auto; }
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
 .card {
   background: rgba(255,255,255,0.55); backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(255,255,255,0.7); border-radius: 18px;
-  padding: 28px 28px 26px; text-decoration: none; color: #0f172a; display: block;
+  padding: 24px 28px; text-decoration: none; color: #0f172a; display: block;
   box-shadow: 0 8px 32px rgba(67,56,122,0.10), 0 1px 0 rgba(255,255,255,0.6) inset;
-  transition: transform .15s, box-shadow .15s;
+  transition: transform .15s, box-shadow .15s; position: relative; overflow: hidden;
 }
 .card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(67,56,122,0.16); }
-.card .icon { font-size: 30px; margin-bottom: 14px; }
-.card h2 { font-size: 22px; font-weight: 200; letter-spacing: -0.02em; margin-bottom: 6px; }
-.card .sub { font-size: 12px; color: #64748b; line-height: 1.5; }
-.card .arrow { margin-top: 18px; font-size: 11px; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
-.foot { font-size: 10px; color: #94a3b8; text-align: center; padding-top: 20px; border-top: 1px solid rgba(15,23,42,0.06); }
+.card-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+.card-head .icon { font-size: 30px; }
+.card-head .live-stat { text-align: right; }
+.card-head .live-stat .mv {
+  font-family: "Inter"; font-weight: 200; font-size: 30px; letter-spacing: -0.025em;
+  line-height: 1; font-variant-numeric: tabular-nums; color: #0f172a;
+}
+.card-head .live-stat .pnl {
+  font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 4px;
+}
+.card-head .live-stat .pnl.pos { color: #0e7d3a; }
+.card-head .live-stat .pnl.neg { color: #b91c1c; }
+.card-head .live-stat .pnl .day { font-size: 11px; color: #64748b; font-weight: 500; margin-left: 6px; }
+.card-head .live-stat .pnl .day.pos { color: #0e7d3a; }
+.card-head .live-stat .pnl .day.neg { color: #b91c1c; }
+.card h2 { font-size: 20px; font-weight: 200; letter-spacing: -0.02em; margin-bottom: 6px; }
+.card .sub { font-size: 12px; color: #64748b; line-height: 1.5; margin-top: 8px; }
+.card .meta-row {
+  display: flex; justify-content: space-between; align-items: center; margin-top: 18px;
+  padding-top: 12px; border-top: 1px dashed rgba(15,23,42,0.08);
+}
+.card .meta-row .refreshed { font-size: 10px; color: #94a3b8; }
+.card .meta-row .arrow { font-size: 11px; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+
+.activity { margin-top: 8px; }
+.activity-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-bottom: 8px; margin-bottom: 8px; border-bottom: 1px solid rgba(15,23,42,0.08);
+}
+.activity-head .lbl { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; }
+.activity-head .src { font-size: 10px; color: #94a3b8; }
+.activity-head .src a { color: #4f46e5; text-decoration: none; }
+.activity-list { display: flex; flex-direction: column; gap: 3px; }
+.activity-row {
+  display: grid; grid-template-columns: 110px 1fr 80px; gap: 12px;
+  padding: 6px 12px; border-radius: 7px; background: rgba(255,255,255,0.4);
+  font-size: 11px; align-items: baseline;
+}
+.activity-row .when { font-size: 10px; color: #64748b; font-variant-numeric: tabular-nums; }
+.activity-row .msg { color: #1f2937; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.activity-row .who { font-size: 9.5px; color: #94a3b8; text-align: right; }
+.activity-row .who.bot { color: #7c3aed; font-weight: 700; }
+.activity-loading { font-size: 11px; color: #94a3b8; font-style: italic; padding: 8px 12px; }
+
+.foot { font-size: 10px; color: #94a3b8; text-align: center; padding-top: 16px; }
 </style>
 </head>
 <body>
@@ -50,23 +90,156 @@ body::after  { bottom: -25%; right: -12%; width: 820px; height: 820px; backgroun
     <span class="mark"></span>
     <h1>Sparcho Trading Desk</h1>
     <span class="pill">LIVE</span>
-    <span class="tag" style="margin-left:auto;">private family book · live dashboards</span>
+    <span class="tag">private family book · live dashboards</span>
   </div>
+
   <div class="cards">
     <a class="card" href="silver/">
-      <div class="icon">🥈</div>
+      <div class="card-head">
+        <div class="icon">🥈</div>
+        <div class="live-stat">
+          <div class="mv" id="silver-mv">—</div>
+          <div class="pnl" id="silver-pnl">loading…</div>
+        </div>
+      </div>
       <h2>Silver Desk</h2>
       <div class="sub">Family SilverBees book + F98 redeployment context · auto-refresh prices every 20 min during trading hours via GH Actions + goldapi.io</div>
-      <div class="arrow">Open →</div>
+      <div class="meta-row">
+        <span class="refreshed" id="silver-refreshed">refresh —</span>
+        <span class="arrow">Open →</span>
+      </div>
     </a>
     <a class="card" href="stocks/">
-      <div class="icon">📈</div>
+      <div class="card-head">
+        <div class="icon">📈</div>
+        <div class="live-stat">
+          <div class="mv" id="equity-mv">—</div>
+          <div class="pnl" id="equity-pnl">loading…</div>
+        </div>
+      </div>
       <h2>Equity Desk</h2>
       <div class="sub">SPARCHO-HDFC equity book · 4 holdings · screener verse · DR cross-thesis · risk gate ladders · manual refresh via Actions tab "Refresh stocks dashboard"</div>
-      <div class="arrow">Open →</div>
+      <div class="meta-row">
+        <span class="refreshed" id="equity-refreshed">refresh —</span>
+        <span class="arrow">Open →</span>
+      </div>
     </a>
   </div>
+
+  <div class="activity">
+    <div class="activity-head">
+      <span class="lbl">Recent activity</span>
+      <span class="src">from <a href="https://github.com/sparcho/SparchoTradingDesk/commits/main" target="_blank">SparchoTradingDesk · main</a></span>
+    </div>
+    <div class="activity-list" id="activity-list">
+      <div class="activity-loading">fetching commits…</div>
+    </div>
+  </div>
+
   <div class="foot">SparchoTradingDesk · doctrine V-31/V-32/V-33 · F107 silver + F108 equity</div>
 </div>
+
+<script type="module">
+"use strict";
+
+const fmtINR = (n) => {
+  if (n == null || isNaN(n)) return "—";
+  const a = Math.abs(n);
+  if (a >= 10000000) return "₹" + (n/10000000).toFixed(2) + "Cr";
+  if (a >= 100000) return "₹" + (n/100000).toFixed(2) + "L";
+  return "₹" + Math.round(n).toLocaleString("en-IN");
+};
+const fmtPct = (n, d=2) => (n == null || isNaN(n)) ? "—" : (n >= 0 ? "+" : "") + Number(n).toFixed(d) + "%";
+
+function ago(iso) {
+  if (!iso) return "—";
+  const t = new Date(iso).getTime();
+  if (isNaN(t)) return "—";
+  const s = Math.floor((Date.now() - t) / 1000);
+  if (s < 60) return `${s}s ago`;
+  if (s < 3600) return `${Math.floor(s/60)}m ago`;
+  if (s < 86400) return `${Math.floor(s/3600)}h ago`;
+  return `${Math.floor(s/86400)}d ago`;
+}
+
+// ─── populate silver card ───
+try {
+  const r = await fetch("silver/data/silver_dashboard_aggregate.json", {cache: "no-store"});
+  if (r.ok) {
+    const d = await r.json();
+    const ft = d.family_totals || {};
+    const mv = ft.current_value_inr ?? ft.market_value_inr;
+    const invested = ft.invested_inr;
+    const realized = ft.realized_pnl_inr || 0;
+    const unrealAbs = (mv != null && invested != null) ? (mv - invested) : null;
+    const unrealPct = (unrealAbs != null && invested) ? (unrealAbs / invested * 100) : null;
+    document.getElementById("silver-mv").textContent = fmtINR(mv);
+    const p = document.getElementById("silver-pnl");
+    p.textContent = (unrealPct != null) ? fmtPct(unrealPct) + " unreal" : "—";
+    p.className = "pnl " + ((unrealPct || 0) >= 0 ? "pos" : "neg");
+    document.getElementById("silver-refreshed").textContent =
+      "refreshed " + ago(d.emitted_at_utc || d.meta?.last_synced);
+  } else {
+    document.getElementById("silver-pnl").textContent = "—";
+  }
+} catch (e) {
+  console.error("silver fetch:", e);
+  document.getElementById("silver-pnl").textContent = "—";
+}
+
+// ─── populate equity card ───
+try {
+  const r = await fetch("stocks/data/equity_dashboard_aggregate.json", {cache: "no-store"});
+  if (r.ok) {
+    const d = await r.json();
+    const tot = d.book?.totals || {};
+    document.getElementById("equity-mv").textContent = fmtINR(tot.current_value);
+    const p = document.getElementById("equity-pnl");
+    const unreal = tot.unrealized_pnl_pct;
+    const day = tot.change_today_pct;
+    let html = "";
+    if (unreal != null && !isNaN(unreal)) html += fmtPct(unreal) + " unreal";
+    if (day != null && !isNaN(day)) {
+      const dayCls = day >= 0 ? "pos" : "neg";
+      html += ` <span class="day ${dayCls}">· ${fmtPct(day)} today</span>`;
+    }
+    p.innerHTML = html || "—";
+    p.className = "pnl " + ((unreal || 0) >= 0 ? "pos" : "neg");
+    document.getElementById("equity-refreshed").textContent =
+      "refreshed " + ago(d.emitted_at_utc || d.meta?.last_price_refresh);
+  } else {
+    document.getElementById("equity-pnl").textContent = "—";
+  }
+} catch (e) {
+  console.error("equity fetch:", e);
+  document.getElementById("equity-pnl").textContent = "—";
+}
+
+// ─── recent commits feed ───
+try {
+  const r = await fetch("https://api.github.com/repos/sparcho/SparchoTradingDesk/commits?per_page=8", {cache: "no-store"});
+  if (!r.ok) throw new Error("commits api " + r.status);
+  const commits = await r.json();
+  const wrap = document.getElementById("activity-list");
+  wrap.innerHTML = "";
+  for (const c of commits) {
+    const row = document.createElement("div");
+    row.className = "activity-row";
+    const msg = (c.commit.message || "").split("\n")[0];
+    const author = c.commit.author?.name || c.author?.login || "—";
+    const isBot = /\[bot\]|github-actions/i.test(author);
+    row.innerHTML = `
+      <div class="when">${ago(c.commit.author?.date)}</div>
+      <div class="msg" title="${msg.replace(/"/g,'&quot;')}">${msg}</div>
+      <div class="who ${isBot?'bot':''}">${isBot ? '🤖 bot' : author}</div>
+    `;
+    wrap.appendChild(row);
+  }
+} catch (e) {
+  console.error("commits fetch:", e);
+  document.getElementById("activity-list").innerHTML =
+    '<div class="activity-loading">unable to fetch recent commits</div>';
+}
+</script>
 </body>
 </html>
