@@ -1,7 +1,7 @@
 {
   "schema_version": "v2",
   "doc_type": "silver_dashboard_aggregate",
-  "emitted_at_utc": "2026-05-18T18:46:30+00:00",
+  "emitted_at_utc": "2026-05-18T18:58:15+00:00",
   "meta": {
     "source_excel": "My Stocks (Google Sheets, father-maintained)",
     "source_excel_drive_id": "1L6QZtyhrCN198GuLWGmpBZTaCoEWMH54IrTT-ts630I",
@@ -59,10 +59,10 @@
       "yahoo_symbol": "DX-Y.NYB",
       "currency": "USD",
       "market_state": null,
-      "price": 99.12,
+      "price": 99.139,
       "prev_close": 99.284,
-      "day_chg_pct": -0.16518270819064648,
-      "as_of_utc": "2026-05-18T18:36:27+00:00"
+      "day_chg_pct": -0.1460456871197879,
+      "as_of_utc": "2026-05-18T18:48:11+00:00"
     },
     "xagusd": {
       "status": "ok",
@@ -71,27 +71,27 @@
       "currency": "USD",
       "market_state": "OPERATOR-PINNED",
       "price": 75.8,
-      "prev_close": 76.8445,
+      "prev_close": 76.628,
       "day_chg_pct": null,
-      "as_of_utc": "2026-05-18T18:46:30+00:00",
+      "as_of_utc": "2026-05-18T18:58:15+00:00",
       "source_note": "2026-05-17 IST (operator-supplied; replaces Yahoo SI=F Friday close)"
     },
     "gold": {
       "status": "ok",
       "ticker": "GOLD",
       "yahoo_symbol": "GC=F",
-      "price": 4546.1,
+      "price": 4546.4,
       "prev_close": 4561.9,
-      "as_of_utc": "2026-05-18T18:36:22+00:00",
+      "as_of_utc": "2026-05-18T18:48:13+00:00",
       "currency": "USD"
     },
     "gsr": {
       "status": "ok",
       "ticker": "GSR",
-      "value": 59.15973166589672,
+      "value": 59.330792921647436,
       "derivation": "GOLD / XAGUSD (spot/spot)"
     },
-    "fetched_at_utc": "2026-05-18T18:46:30+00:00"
+    "fetched_at_utc": "2026-05-18T18:58:15+00:00"
   },
   "live_xagusd_used_for_ladders": 75.8,
   "family_totals": {
@@ -820,6 +820,185 @@
       "Pick fixed-income instrument (PSU bonds / corporate AAA / target-maturity fund)",
       "Pick execution timing (lump-sum at trim event vs staggered 4-6wk)"
     ]
+  },
+  "deployment_plan": {
+    "version": "F109-v1",
+    "authored": "2026-05-18",
+    "approved": "2026-05-19",
+    "status": "active",
+    "envelope_inr": 12500000,
+    "envelope_basis": "25% of active book through Jun FOMC; extends to 35%-of-active (17.5L) post-Warsh-dovish-signal",
+    "total_book_inr": 100000000,
+    "reserve_split": {
+      "war_overlay_inr": 25000000,
+      "credit_crisis_inr": 25000000,
+      "active_total_inr": 50000000
+    },
+    "doctrine_refs": [
+      "V-13",
+      "V-18",
+      "V-20",
+      "V-21",
+      "V-23",
+      "section_5.2",
+      "section_8.1",
+      "section_8.4.1"
+    ],
+    "source_docs": {
+      "main_deliverable": "01_DAILY/2605/260518/260518_XAG_SILV-TA-v7.md",
+      "chart_transcript": "01_DAILY/2605/260518/260518_XAG_CHART-READ-TRANSCRIPT.md",
+      "macro_state": "01_DAILY/2605/260518/260518_XAG_MACRO-STATE_P2.md",
+      "agent_synthesis": "01_DAILY/2605/260518/260518_XAG_MULTI-AGENT-SYNTHESIS.md",
+      "open_questions": "OPEN_QUESTIONS_F109.md"
+    },
+    "tranches": [
+      {
+        "id": "T1",
+        "label": "starter (gate-blocked)",
+        "size_inr": 0,
+        "pct_envelope": 0,
+        "fire_condition": "section_5.2 strict - fires only when at least one of [TNX<4.45%, USDINR weekly-close<96, Brent<$100] clears",
+        "cumulative_pct_after": 0,
+        "invalidation": "(no position; nothing to invalidate)",
+        "expected_fire": "TBD",
+        "status": "pending"
+      },
+      {
+        "id": "T1.5",
+        "label": "gate-clear optionality starter",
+        "size_inr": 100000,
+        "pct_envelope": 8,
+        "fire_condition": "Brent rolls <$100 OR TNX rolls <4.45% OR USDINR Fri-close <96",
+        "cumulative_pct_after": 8,
+        "invalidation": "XAG daily close > $82",
+        "expected_fire": "early-mid Jun 2026",
+        "operator_pre_authorized": true,
+        "status": "armed"
+      },
+      {
+        "id": "T2",
+        "label": "main starter - V-13 daily floor",
+        "size_inr": 312500,
+        "pct_envelope": 25,
+        "fire_condition": "XAG in $69-72 zone + COT MM <=0 + Brent <$110",
+        "cumulative_pct_after": 33,
+        "invalidation": "XAG daily close > $80 (thesis-broken-up) OR daily close <$67.87 (F2 breach; suspend + trim to T3)",
+        "expected_fire": "Jun 16-17 FOMC plus/minus 1 week",
+        "operator_pre_authorized": false,
+        "status": "armed"
+      },
+      {
+        "id": "T3",
+        "label": "modal slug - quadruple-conditional asymmetric",
+        "size_inr": 500000,
+        "pct_envelope": 40,
+        "fire_condition": "XAG in $65-69 zone + COT MM negative (deep capitulation) + Warsh Jun-17 dovish-signal + Brent rolling <$100",
+        "cumulative_pct_after": 73,
+        "invalidation": "XAG daily close < $58 (T3-specific stop; V-18 $52 still binding portfolio-level)",
+        "expected_fire": "late Jun - mid Jul 2026",
+        "operator_pre_authorized": false,
+        "status": "armed"
+      },
+      {
+        "id": "T4",
+        "label": "cascade-tail entry",
+        "size_inr": 250000,
+        "pct_envelope": 20,
+        "fire_condition": "XAG in $55-59 cascade zone + V-18 $52 NOT triggered + at least 1 gate clearing post-Warsh",
+        "cumulative_pct_after": 93,
+        "invalidation": "XAG daily close < $52 (V-18 abort-all)",
+        "expected_fire": "Q3 2026 conditional",
+        "operator_pre_authorized": false,
+        "status": "armed"
+      },
+      {
+        "id": "HOLD_residual",
+        "label": "post-V-18 re-engagement reserve",
+        "size_inr": 87500,
+        "pct_envelope": 7,
+        "fire_condition": "Post-V-18-retest IF COT MM < -30K AND GSR > 75 (double-confirmation washout)",
+        "cumulative_pct_after": 100,
+        "invalidation": "Per re-engagement decision frame",
+        "expected_fire": "Q3-Q4 2026 conditional",
+        "operator_pre_authorized": false,
+        "status": "reserved"
+      }
+    ],
+    "hard_stops": {
+      "portfolio_level_xagusd": 52,
+      "portfolio_derivation": "7-ATR + 1.5-sigma war-vol war-regime (section_10.2) + $50 prior consolidation top (SILVER_2026-05-18_16-02-32.png) + cost-curve high-$20s ultimate backstop",
+      "abort_all_trigger_xagusd": 67.87,
+      "abort_all_basis": "daily close - suspends active deployment per section_5.3",
+      "t3_specific_invalidation_xagusd": 58,
+      "t3_invalidation_basis": "above F2 buffer, below F1.5 daily-floor; T3-only cut (V-18 still binding portfolio-level)"
+    },
+    "probability_distribution": {
+      "note": "7-bucket distribution per F109 mandate; modal at $65-69 (27%); cascade tail $52-59 (16%)",
+      "buckets": [
+        {
+          "range": "$78+",
+          "weight": 0.08,
+          "path": "reflation / Warsh dovish"
+        },
+        {
+          "range": "$72-78",
+          "weight": 0.12,
+          "path": "V-13 holds + range chop"
+        },
+        {
+          "range": "$69-72",
+          "weight": 0.22,
+          "path": "V-13 daily-floor zone"
+        },
+        {
+          "range": "$65-69",
+          "weight": 0.27,
+          "path": "modal - measured-move retest of mid-cycle Fib"
+        },
+        {
+          "range": "$59-65",
+          "weight": 0.15,
+          "path": "intermediate cascade"
+        },
+        {
+          "range": "$55-59",
+          "weight": 0.1,
+          "path": "operator cascade tail"
+        },
+        {
+          "range": "$52-55",
+          "weight": 0.06,
+          "path": "cascade tail / V-18 retest"
+        }
+      ]
+    },
+    "watch_list_alerts": {
+      "activation": "top-3",
+      "top_3": [
+        "T2 fire-watch: XAG enters $69-72 zone (check COT MM <=0 + Brent <$110)",
+        "T3 fire-watch: XAG enters $65-69 zone (check quadruple-conditional)",
+        "V-18 abort-all: XAG daily close < $52"
+      ],
+      "optional_extended": [
+        "Brent daily close < $100 (T1.5 first-condition; T1.5 auto-fires per pre-authorization)",
+        "TNX daily close < 4.45% (T1.5 alt-trigger)",
+        "USDINR Fri weekly close < 96 (T1.5 alt-trigger)",
+        "Jun 17 FOMC (Warsh first signal - T3 directional decision)",
+        "XAG daily close < $67.87 (F2 abort-all suspend)",
+        "XAG enters $55-59 zone (T4 fire-watch)",
+        "XAG daily close < $58 (T3 invalidation)"
+      ]
+    },
+    "scenarios_alt": {
+      "axis_b_gold_catchup": {
+        "description": "If primary axis flips to gold-catch-up correlation",
+        "reweight": "+10pp into $72-82 / -10pp from $59-65; keep tranche structure but reduce T4 size"
+      },
+      "axis_d_hybrid": {
+        "description": "If primary axis flips to absolute + GSR-mean-reversion hybrid",
+        "reweight": "Cap T1+T2 cumulative at 60% of axis-a sizing; T3+T4 unchanged"
+      }
+    }
   },
   "warnings": [
     "Sell-side data PENDING across all accounts \u2014 realized P&L not yet computed."
