@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🥈 Silver Desk — Sparcho/Rajiv Family</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext x=%2250%22 y=%2278%22 font-size=%2290%22 text-anchor=%22middle%22%3E%F0%9F%A5%88%3C/text%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #faf6ed;
+  --bg-grain: #f5efdf;
+  --card: #ffffff;
+  --border: rgba(0,0,0,0.09);
+  --border-strong: rgba(0,0,0,0.18);
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --text-soft: #9ca3af;
+  --forest: #1f4d3a;
+  --forest-soft: #e6efe9;
+  --silver-gold: #c0a062;
+  --silver-gold-soft: #f5ebd6;
+  --silver-gold-dark: #8c6f35;
+  --positive: #0e7d3a;
+  --positive-soft: #e0f0e6;
+  --negative: #b91c1c;
+  --negative-soft: #fbe3e3;
+  --warning: #b45309;
+  --warning-soft: #fdecd6;
+  --warning-strong: #92400e;
+  --info-soft: #eaf2f7;
+  --slate-bg: #1e3a52;
+  --slate-bg-2: #2a526b;
+  --tab-stripe: #f7f3e8;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  padding: 14px 16px 14px;
+  min-height: 100vh;
+  max-width: 1640px;
+  margin: 0 auto;
+  display: flex; flex-direction: column;
+  gap: 10px;
+}
+.mono { font-family: "JetBrains Mono", "SF Mono", Menlo, Monaco, Consolas, monospace; font-variant-numeric: tabular-nums; }
+.num { font-variant-numeric: tabular-nums; }
+.pos { color: var(--positive); }
+.neg { color: var(--negative); }
+.mut { color: var(--text-muted); }
+
+/* ─── 1. TITLE STRIP ─────────────────────────────────────────────── */
+.title-strip {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px; align-items: center;
+  padding: 6px 0 6px;
+  border-bottom: 1px solid var(--silver-gold);
+}
+.brand h1 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.01em; color: var(--forest); display: flex; align-items: baseline; gap: 8px; }
+.brand .badge { font-size: 9.5px; padding: 2px 7px; background: var(--silver-gold-soft); color: var(--silver-gold-dark); border-radius: 8px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.brand .sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.title-meta { font-size: 10.5px; color: var(--text-soft); text-align: right; line-height: 1.5; }
+.title-meta .label { color: var(--text-muted); }
+.title-meta .val { color: var(--text); font-weight: 500; }
+
+/* ─── 2. LIVE TICKER BAR (sticky) ─────────────────────────────── */
+.ticker-bar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--slate-bg);
+  border-radius: 6px;
+  padding: 1px;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.tk-label { padding: 6px 12px; background: linear-gradient(135deg, var(--slate-bg) 0%, var(--slate-bg-2) 100%); display: flex; flex-direction: column; justify-content: center; }
+.tk-label .l1 { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+.tk-label .l2 { font-size: 9px; opacity: 0.65; font-weight: 500; margin-top: 1px; }
+.tk-cell { padding: 6px 11px; display: flex; flex-direction: column; justify-content: center; background: rgba(255,255,255,0.04); border-left: 1px solid rgba(255,255,255,0.08); }
+.tk-cell .tk-name { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.65; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+.tk-cell .tk-name .dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 #22c55e; animation: pulse 2.4s infinite; }
+.tk-cell .tk-name .dot.stale { background: #fbbf24; animation: none; }
+.tk-cell .tk-name .dot.pinned { background: #a855f7; animation: none; box-shadow: 0 0 4px #a855f7; }
+.tk-cell .tk-val { font-size: 16px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; margin-top: 1px; }
+.tk-cell .tk-chg { font-size: 10px; font-weight: 600; font-variant-numeric: tabular-nums; opacity: 0.95; }
+.tk-cell .tk-chg.pos { color: #86efac; }
+.tk-cell .tk-chg.neg { color: #fda4a4; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.7); } 70% { box-shadow: 0 0 0 5px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+
+/* ─── 3. MAIN BENTO GRID ─────────────────────────────────────────── */
+.bento {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 10px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  position: relative;
+  display: flex; flex-direction: column;
+}
+.card .accent-top { position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 6px 6px 0 0; background: var(--silver-gold); }
+.card-title { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+.card-title h2 { margin: 0; font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+.card-title .meta { font-size: 9.5px; color: var(--text-soft); font-style: italic; }
+.card-title .pill { font-size: 9px; padding: 1px 7px; border-radius: 8px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.pill-warn { background: var(--warning-soft); color: var(--warning-strong); }
+.pill-info { background: var(--info-soft); color: var(--forest); }
+.pill-ok   { background: var(--positive-soft); color: var(--positive); }
+
+/* ─── HERO CARD A — VERDICT ─────────────────────────────── */
+.hero-verdict { grid-column: span 1; }
+.verdict-hero { font-size: 18px; font-weight: 800; line-height: 1.15; color: var(--positive); letter-spacing: -0.01em; }
+.verdict-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+.verdict-binding { margin-top: 7px; padding: 5px 8px; background: var(--info-soft); border-radius: 4px; font-size: 10.5px; color: var(--forest); }
+.scenario-rows { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
+.sc-row { display: grid; grid-template-columns: 1.2fr auto; gap: 6px; align-items: center; font-size: 11px; }
+.sc-row .sc-name { color: var(--text); }
+.sc-row .sc-pct  { color: var(--silver-gold-dark); font-weight: 700; font-variant-numeric: tabular-nums; }
+.sc-row .sc-bar  { grid-column: 1 / -1; height: 4px; background: #f0ece0; border-radius: 2px; overflow: hidden; }
+.sc-row .sc-fill { height: 100%; background: linear-gradient(90deg, var(--silver-gold), var(--silver-gold-dark)); }
+.ab-total { margin-top: 7px; font-size: 11px; color: var(--text); border-top: 1px dashed var(--border); padding-top: 6px; }
+
+/* ─── HERO CARD B — FAMILY BOOK ─────────────────────────────── */
+.book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 4px; }
+.book-stat { }
+.book-stat .lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600; }
+.book-stat .val { font-size: 17px; font-weight: 700; margin-top: 2px; line-height: 1.1; color: var(--text); font-variant-numeric: tabular-nums; }
+.book-stat .val.accent { color: var(--forest); }
+.book-stat .sub { font-size: 10px; color: var(--text-soft); margin-top: 1px; font-variant-numeric: tabular-nums; }
+.book-pnl { margin-top: 8px; padding-top: 7px; border-top: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: baseline; }
+.book-pnl .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600; }
+.book-pnl .v   { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.book-pnl .p   { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ─── HERO CARD C — F98 ─────────────────────────────── */
+.f98-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 12px; }
+.f98-stat .lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--warning-strong); font-weight: 700; }
+.f98-stat .val { font-size: 14px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; margin-top: 1px; }
+.f98-decisions { margin-top: 8px; padding-top: 7px; border-top: 1px dashed var(--border); }
+.f98-decisions .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--warning-strong); font-weight: 700; margin-bottom: 3px; }
+.f98-decisions ul { margin: 0; padding-left: 14px; font-size: 10.5px; color: var(--text); line-height: 1.5; }
+.f98-decisions li { margin-bottom: 1px; }
+
+/* ─── ROW 2 — LADDERS + S/R ─────────────────────────────── */
+.ladder-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.ladder-table th { background: var(--tab-stripe); color: var(--silver-gold-dark); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; padding: 4px 6px; text-align: left; border-bottom: 1px solid var(--border-strong); }
+.ladder-table th.num, .ladder-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.ladder-table td { padding: 5px 6px; border-bottom: 1px solid var(--border); }
+.ladder-table tbody tr:last-child td { border-bottom: none; }
+.ladder-table .tcell { font-weight: 700; white-space: nowrap; }
+.ladder-table .disc { font-size: 10px; color: var(--text-soft); font-style: italic; }
+.ladder-table .dist { font-weight: 700; }
+.ladder-meta { font-size: 10px; color: var(--text-soft); margin-top: 5px; }
+
+.sr-wrap { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.sr-row { display: grid; grid-template-columns: 52px 1fr auto; gap: 6px; align-items: center; padding: 3px 6px; font-size: 10.5px; border-radius: 3px; border-left: 2px solid; background: rgba(0,0,0,0.015); }
+.sr-row.r { border-left-color: var(--negative); }
+.sr-row.s { border-left-color: var(--positive); }
+.sr-row .px { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text); }
+.sr-row .lab { color: var(--text); }
+.sr-row .dist { font-size: 10px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sr-now { padding: 5px 8px; margin: 5px 0; background: var(--silver-gold); color: white; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; box-shadow: 0 1px 3px rgba(192,160,98,0.35); }
+.sr-now .lab { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.9; }
+.sr-now .val { font-size: 14px; font-variant-numeric: tabular-nums; }
+
+/* ─── ROW 3 — ACCOUNTS (4-col) ─────────────────────────────── */
+.accounts-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.acc-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 9px 11px; border-top: 2px solid; position: relative; min-height: 110px; display: flex; flex-direction: column; }
+.acc-card .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+.acc-card .holder { font-size: 12.5px; font-weight: 700; color: var(--text); }
+.acc-card .qty { font-size: 10.5px; color: var(--text-muted); font-variant-numeric: tabular-nums; font-weight: 600; }
+.acc-card .type { font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-soft); margin-bottom: 6px; }
+.acc-card .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; font-size: 10.5px; }
+.acc-card .stats .lbl { color: var(--text-muted); }
+.acc-card .stats .v { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.acc-card .pnl-row { margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: baseline; }
+.acc-card .pnl-row .v { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.acc-card .pnl-row .p { font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.acc-card.empty { opacity: 0.6; }
+.acc-card.empty .holder { color: var(--text-soft); }
+
+/* ─── ROW 4 — TAB BLOCK ─────────────────────────────── */
+.tabs-shell { background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.tabs-nav { display: flex; gap: 0; background: var(--tab-stripe); padding: 4px 6px 0; border-bottom: 1px solid var(--border); align-items: end; flex-wrap: wrap; }
+.tab-btn { font-family: inherit; font-size: 10.5px; padding: 5px 11px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); font-weight: 600; letter-spacing: 0.03em; border-radius: 4px 4px 0 0; border-bottom: 2px solid transparent; transition: color 0.1s, border-color 0.1s; }
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--forest); border-bottom-color: var(--silver-gold); background: var(--card); }
+.tab-body { padding: 10px 12px; max-height: 280px; overflow-y: auto; }
+
+/* tab-specific content */
+.tab-news { display: flex; flex-direction: column; gap: 6px; }
+.tab-news .item { display: grid; grid-template-columns: 80px 50px 50px 1fr; gap: 10px; align-items: baseline; padding: 5px 8px; background: var(--tab-stripe); border-left: 2px solid; border-radius: 3px; font-size: 11px; }
+.tab-news .item.high { border-left-color: var(--negative); }
+.tab-news .item.med  { border-left-color: var(--warning); }
+.tab-news .item.low  { border-left-color: var(--text-soft); }
+.tab-news .item .dt { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text); }
+.tab-news .item .src { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 700; }
+.tab-news .item .wt { font-size: 9px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+
+.tab-cal { display: flex; flex-direction: column; gap: 5px; }
+.tab-cal .row { display: grid; grid-template-columns: 90px 70px 50px 1fr; gap: 10px; padding: 5px 8px; background: var(--tab-stripe); border-left: 2px solid; border-radius: 3px; font-size: 11px; align-items: baseline; }
+.tab-cal .row.high { border-left-color: var(--negative); }
+.tab-cal .row.med  { border-left-color: var(--warning); }
+.tab-cal .row.low  { border-left-color: var(--text-soft); }
+.tab-cal .row .dt { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text); }
+.tab-cal .row .kind { font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 6px; background: var(--card); color: var(--forest); border-radius: 8px; font-weight: 700; text-align: center; border: 1px solid var(--border); }
+.tab-cal .row .wt { font-size: 9px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+
+.tab-cot { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
+.cot-card { background: var(--tab-stripe); border: 1px solid var(--border); border-left: 3px solid; border-radius: 4px; padding: 7px 9px; display: flex; flex-direction: column; gap: 4px; }
+.cot-card .ct { font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; color: var(--text-muted); }
+.cot-card .ch { font-size: 16px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.cot-card .cs { font-size: 10px; color: var(--text-muted); line-height: 1.4; }
+.cot-card .cb { font-size: 8.5px; padding: 1px 6px; border-radius: 8px; font-weight: 700; display: inline-block; align-self: flex-start; }
+.cot-card .cliner { margin-top: 2px; padding: 4px 6px; border-radius: 3px; border-left: 2px solid; font-size: 10px; line-height: 1.4; }
+.cot-card .cliner.bull { background: var(--positive-soft); border-color: var(--positive); }
+.cot-card .cliner.bull strong { color: var(--positive); }
+.cot-card .cliner.bear { background: var(--negative-soft); border-color: var(--negative); }
+.cot-card .cliner.bear strong { color: var(--negative); }
+.cot-bias-bar { display: flex; gap: 4px; margin-bottom: 8px; }
+.cot-bias-bar .b { font-family: inherit; font-size: 10px; padding: 3px 9px; border: 1px solid var(--border); background: var(--card); cursor: pointer; border-radius: 3px; color: var(--text-muted); font-weight: 600; }
+.cot-bias-bar .b.active { background: var(--forest); color: white; border-color: var(--forest); }
+
+.tab-tl { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.tab-tl .tl { min-width: 200px; max-width: 220px; background: var(--tab-stripe); border: 1px solid var(--border); border-top: 2px solid var(--silver-gold); border-radius: 4px; padding: 7px 9px; flex-shrink: 0; }
+.tab-tl .tl .dt { font-size: 9.5px; color: var(--text-muted); font-weight: 700; }
+.tab-tl .tl .tt { font-size: 12px; font-weight: 700; color: var(--text); margin-top: 1px; }
+.tab-tl .tl .vd { font-size: 9.5px; margin-top: 2px; padding: 1px 6px; border-radius: 8px; background: var(--positive-soft); color: var(--positive); display: inline-block; font-weight: 700; }
+.tab-tl .tl .vd.warn { background: var(--warning-soft); color: var(--warning-strong); }
+.tab-tl .tl .sm { font-size: 10px; color: var(--text-muted); line-height: 1.45; margin-top: 4px; }
+
+.tab-floor { display: flex; flex-direction: column; gap: 3px; }
+.floor-row { display: grid; grid-template-columns: 90px 90px 1fr 60px; gap: 10px; align-items: center; padding: 4px 8px; background: var(--tab-stripe); border-radius: 3px; font-size: 11px; }
+.floor-row.now { background: var(--silver-gold-soft); border-left: 2px solid var(--silver-gold); }
+.floor-row .ft { font-weight: 700; }
+.floor-row .fb { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.floor-row .fm { color: var(--text); font-size: 10.5px; }
+.floor-row .fpw { display: flex; align-items: center; gap: 4px; }
+.floor-row .fpb { flex: 1; height: 6px; background: #ece6d3; border-radius: 3px; overflow: hidden; }
+.floor-row .fpf { height: 100%; background: linear-gradient(90deg, var(--silver-gold), var(--silver-gold-dark)); }
+.floor-row .fpc { font-size: 10px; font-weight: 700; color: var(--forest); min-width: 30px; text-align: right; font-variant-numeric: tabular-nums; }
+.velocity { margin-top: 7px; padding: 5px 9px; background: var(--info-soft); border-radius: 3px; font-size: 10px; color: var(--forest); }
+
+.tab-inv table { width: 100%; border-collapse: collapse; }
+.tab-inv th, .tab-inv td { padding: 5px 7px; font-size: 11px; border-bottom: 1px solid var(--border); text-align: left; }
+.tab-inv th { background: var(--tab-stripe); color: var(--silver-gold-dark); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+.tab-inv .venue { font-weight: 700; }
+.tab-inv .nt { color: var(--text-soft); font-size: 10px; }
+
+.tab-tr table { width: 100%; border-collapse: collapse; }
+.tab-tr th, .tab-tr td { padding: 4px 7px; font-size: 10.5px; border-bottom: 1px solid var(--border); text-align: left; }
+.tab-tr th { background: var(--tab-stripe); color: var(--silver-gold-dark); font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+.tab-tr th.num, .tab-tr td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.tab-tr .htag { font-size: 9px; padding: 1px 5px; background: var(--info-soft); color: var(--forest); border-radius: 6px; font-weight: 700; }
+
+.tab-bb-cases { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tab-bb-cases .bb-c { padding: 8px 10px; border-radius: 4px; border-left: 3px solid; font-size: 11px; line-height: 1.5; }
+.tab-bb-cases .bb-c.bull { background: var(--positive-soft); border-color: var(--positive); }
+.tab-bb-cases .bb-c.bear { background: var(--negative-soft); border-color: var(--negative); }
+.tab-bb-cases .bb-c h4 { margin: 0 0 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+.tab-bb-cases .bb-c.bull h4 { color: var(--positive); }
+.tab-bb-cases .bb-c.bear h4 { color: var(--negative); }
+.tab-bb-cases .bb-c ul { margin: 0; padding-left: 16px; }
+.tab-bb-cases .bb-c li { margin-bottom: 2px; }
+
+/* ─── FOOTER ─────────────────────────────── */
+.foot { font-size: 9.5px; color: var(--text-soft); padding-top: 6px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.foot code { background: var(--silver-gold-soft); color: var(--silver-gold-dark); padding: 1px 4px; border-radius: 3px; font-size: 9.5px; }
+.foot a { color: var(--forest); text-decoration: none; font-weight: 600; }
+.foot a:hover { text-decoration: underline; }
+
+/* ─── RESPONSIVE ─────────────────────────────── */
+@media (max-width: 1200px) {
+  .bento { grid-template-columns: 1fr 1fr; }
+  .accounts-row { grid-template-columns: 1fr 1fr; }
+  .ticker-bar { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .bento, .accounts-row, .ticker-bar { grid-template-columns: 1fr; }
+  body { padding: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. TITLE STRIP -->
+<div class="title-strip">
+  <div class="brand">
+    <h1>🥈 Silver Desk <span class="badge">live</span></h1>
+    <div class="sub">Family SilverBees · F98 trim & redeployment context</div>
+  </div>
+  <div></div>
+  <div class="title-meta">
+    <div style="margin-bottom:3px;"><span class="label">Data age:</span> <span id="age-pill" style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;letter-spacing:0.04em;background:#e5e7eb;color:#4b5563;">—</span></div>
+    <div><span class="label">Emitted:</span> <span class="val" id="emit-ts">—</span></div>
+    <div><span class="label">YAML synced:</span> <span class="val" id="sync-ts">—</span></div>
+    <div><span class="label">SBees close:</span> <span class="val" id="price-ts">—</span></div>
+  </div>
+</div>
+
+<div id="render-errors" style="display:none;background:#fef3e1;border:2px solid #b45309;border-radius:6px;padding:8px 14px;margin-bottom:10px;color:#92400e;font-size:11.5px;font-family:Menlo,Monaco,Consolas,monospace;"></div>
+
+<!-- 2. LIVE TICKER BAR -->
+<div class="ticker-bar" id="ticker-bar"></div>
+
+<!-- 3. HERO ROW (verdict + book + F98) -->
+<div class="bento">
+  <div class="card hero-verdict">
+    <div class="accent-top" style="background: var(--positive);"></div>
+    <div class="card-title">
+      <h2>Composite Verdict</h2>
+      <span class="meta" id="fc-meta">—</span>
+    </div>
+    <div class="verdict-hero" id="v-hero">—</div>
+    <div class="verdict-sub" id="v-source">—</div>
+    <div class="verdict-binding" id="v-binding">—</div>
+    <div class="scenario-rows" id="scenarios"></div>
+    <div class="ab-total"><strong>Bullish (A+B):</strong> <span id="ab-pct" class="pos" style="font-weight:700;">—</span></div>
+  </div>
+
+  <div class="card">
+    <div class="accent-top"></div>
+    <div class="card-title">
+      <h2>Family Book</h2>
+      <span class="meta" id="book-meta">—</span>
+    </div>
+    <div class="book-grid" id="book-grid"></div>
+    <div style="margin-top:8px;padding-top:7px;border-top:1px dashed var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);font-weight:700;">Realized</div>
+        <div class="num" id="book-realized-v" style="font-size:15px;font-weight:700;">—</div>
+        <div class="num" id="book-realized-p" style="font-size:10.5px;font-weight:700;">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);font-weight:700;">Unreal · Shalu</div>
+        <div class="num" id="book-pnl-v" style="font-size:15px;font-weight:700;">—</div>
+        <div class="num" id="book-pnl-p" style="font-size:10.5px;font-weight:700;">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--forest);font-weight:700;">Combined</div>
+        <div class="num" id="book-combined-v" style="font-size:15px;font-weight:700;">—</div>
+        <div class="num" id="book-combined-p" style="font-size:10.5px;font-weight:700;">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="f98-card">
+    <div class="accent-top" style="background: var(--warning);"></div>
+    <div class="card-title">
+      <h2 style="color: var(--warning-strong);">F98 · Post-Trim Redeployment</h2>
+      <!-- status now reflects defensive trim already executed -->
+      <span class="pill pill-warn" id="f98-status">OPEN-URGENT</span>
+    </div>
+    <div class="f98-stat-grid" id="f98-stats"></div>
+    <div class="f98-decisions">
+      <div class="lbl">Operator decisions pending</div>
+      <ul id="f98-decisions"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- 4. ROW 2 — Trim / Add / S/R -->
+<div class="bento">
+  <div class="card">
+    <div class="accent-top" style="background: var(--negative);"></div>
+    <div class="card-title">
+      <h2>Trim Ladder · sell discipline</h2>
+      <span class="meta">distance vs live XAGUSD</span>
+    </div>
+    <table class="ladder-table">
+      <thead><tr><th>Tier</th><th>Trigger</th><th>Action</th><th class="num">₹ freed</th><th class="num">Dist</th></tr></thead>
+      <tbody id="trim-body"></tbody>
+    </table>
+    <div class="ladder-meta">Locked 2026-05-10 per synthesis §6.1 · 60k SBees max sold cumulatively at completion</div>
+  </div>
+
+  <div class="card">
+    <div class="accent-top" style="background: var(--positive);"></div>
+    <div class="card-title">
+      <h2>Add Ladder · buy discipline</h2>
+      <span class="meta" id="add-meta">—</span>
+    </div>
+    <table class="ladder-table">
+      <thead><tr><th>Rung</th><th>Trigger</th><th class="num">Deploy</th><th class="num">Units</th><th class="num">Dist</th></tr></thead>
+      <tbody id="add-body"></tbody>
+    </table>
+    <div class="ladder-meta" id="abort-note">—</div>
+  </div>
+
+  <div class="card">
+    <div class="accent-top"></div>
+    <div class="card-title">
+      <h2>S/R Levels · XAGUSD</h2>
+      <span class="meta" id="sr-meta">—</span>
+    </div>
+    <div class="sr-wrap" id="sr-r"></div>
+    <div class="sr-now"><span class="lab">live</span><span class="val" id="sr-now">—</span></div>
+    <div class="sr-wrap" id="sr-s"></div>
+  </div>
+</div>
+
+<!-- 5. ROW 3 — ACCOUNTS -->
+<div class="accounts-row" id="accounts-row"></div>
+
+<!-- 6. ROW 4 — MARKET CONTEXT (news / catalysts / COT) -->
+<div class="bento" style="grid-template-columns: 1fr 1fr 1.5fr;">
+  <div class="card">
+    <div class="accent-top" style="background: var(--negative);"></div>
+    <div class="card-title"><h2>News · last 5</h2><span class="meta">operator + Claude curated</span></div>
+    <div class="tab-news" id="news-list"></div>
+  </div>
+  <div class="card">
+    <div class="accent-top" style="background: var(--warning);"></div>
+    <div class="card-title"><h2>Catalyst Calendar</h2><span class="meta">silver-relevant upcoming</span></div>
+    <div class="tab-cal" id="cal-list"></div>
+  </div>
+  <div class="card">
+    <div class="accent-top" style="background: var(--silver-gold);"></div>
+    <div class="card-title">
+      <h2>COT · 260516 pull</h2>
+      <div class="cot-bias-bar" style="margin:0;">
+        <button class="b active" data-bias="both">🤝 Both</button>
+        <button class="b" data-bias="bull">🐂 Bull</button>
+        <button class="b" data-bias="bear">🐻 Bear</button>
+      </div>
+    </div>
+    <div class="tab-cot" id="cot-grid"></div>
+  </div>
+</div>
+
+<!-- 7. ROW 5 — THESIS LAYER (bull/bear + floor + inventory) -->
+<div class="bento" style="grid-template-columns: 1.4fr 1.2fr 1fr;">
+  <div class="card">
+    <div class="accent-top" style="background: var(--forest);"></div>
+    <div class="card-title"><h2>Bull / Bear case</h2><span class="meta">non-chart consensus inputs</span></div>
+    <div class="tab-bb-cases" id="bb-cases"></div>
+  </div>
+  <div class="card">
+    <div class="accent-top"></div>
+    <div class="card-title"><h2>Floor Framework · V-13</h2><span class="meta" id="floor-meta">—</span></div>
+    <div class="tab-floor" id="floor-list"></div>
+    <div class="velocity" id="velocity-note" style="margin-top:6px;">—</div>
+  </div>
+  <div class="card">
+    <div class="accent-top" style="background: var(--accent);"></div>
+    <div class="card-title"><h2>Global Inventory</h2><span class="meta" id="inv-meta">—</span></div>
+    <div class="tab-inv"><table>
+      <thead><tr><th>Venue</th><th>Value</th><th>Δ</th><th>Bias</th></tr></thead>
+      <tbody id="inv-body"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- 8. ROW 6 — TIMELINE (full width horizontal scroll) -->
+<div class="card">
+  <div class="accent-top" style="background: var(--silver-gold);"></div>
+  <div class="card-title"><h2>Strategy outlook · concise timeline</h2><span class="meta">past + current synthesis verdicts</span></div>
+  <div class="tab-tl" id="tl-list"></div>
+</div>
+
+<!-- 9. ROW 7 — DETAIL TABLES (tranches + sells side-by-side) -->
+<div class="bento" style="grid-template-columns: 1fr 1.6fr;">
+  <div class="card">
+    <div class="accent-top" style="background: var(--positive);"></div>
+    <div class="card-title"><h2>Remaining tranches</h2><span class="meta" id="tr-meta">—</span></div>
+    <div class="tab-tr"><table>
+      <thead><tr><th>Acct</th><th>Date</th><th class="num">Qty</th><th class="num">Buy ₹</th><th class="num">MV</th><th class="num">Unreal ₹</th><th class="num">%</th></tr></thead>
+      <tbody id="tr-body"></tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="accent-top" style="background: var(--negative);"></div>
+    <div class="card-title"><h2>Realized sells · FIFO matched</h2><span class="meta" id="sells-meta">—</span></div>
+    <div class="tab-tr" style="max-height:280px;overflow-y:auto;"><table>
+      <thead><tr><th>Acct</th><th>Date</th><th class="num">Qty</th><th class="num">Sell ₹</th><th class="num">Proceeds</th><th class="num">Cost</th><th class="num">Realized ₹</th><th class="num">%</th></tr></thead>
+      <tbody id="sells-body"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+  <div><strong>Data:</strong> <code>silver_holdings.yaml</code> → <code>silver_dashboard_emit.py</code> → <code>data/silver_dashboard_aggregate.json</code> · auto-refresh every 20min via GH Actions · goldapi.io spot + Yahoo intermarket</div>
+  <div>F98 · CLAUDE_MODULES/01_SILVER_DOCTRINE V-13/V-15</div>
+</div>
+
+<script>
+
+// ─── Permanent: surface ANY render error inline (never silent again) ──
+window.__renderErrors = [];
+window.onerror = function(msg, src, line, col, err) {
+  window.__renderErrors.push(`L${line}:${col} ${msg}`);
+  const el = document.getElementById('render-errors');
+  if (el) {
+    el.style.display = 'block';
+    el.textContent = '⚠ Render errors: ' + window.__renderErrors.join(' | ');
+  }
+  return false;
+};
+
+let DATA = null;
+async function bootstrap() {
+  try {
+    const r = await fetch('data/silver_dashboard_aggregate.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    DATA = await r.json();
+    renderAll();
+  } catch (e) {
+    document.body.innerHTML = `<div style="max-width:600px;margin:80px auto;padding:24px;background:#fef3e1;border:2px solid #b45309;border-radius:8px;font-family:-apple-system,sans-serif;color:#92400e;"><h2 style="margin-top:0;">⚠ Could not load data</h2><p>${e.message}</p></div>`;
+  }
+}
+function renderAll() {
+
+// ─── Formatters ───────────────────────────────────────
+const fmtINR = (n, opts = {}) => {
+  if (n == null || isNaN(n)) return '—';
+  const abs = Math.abs(n);
+  if (opts.compact) {
+    if (abs >= 1e7) return `₹${(n / 1e7).toFixed(2)}Cr`;
+    if (abs >= 1e5) return `₹${(n / 1e5).toFixed(2)}L`;
+    return `₹${n.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  }
+  return `₹${n.toLocaleString('en-IN', { maximumFractionDigits: opts.dp ?? 0 })}`;
+};
+const fmtNum = (n, dp = 0) => (n == null || isNaN(n)) ? '—' : n.toLocaleString('en-IN', { maximumFractionDigits: dp });
+const fmtPct = (n, dp = 2) => (n == null || isNaN(n)) ? '—' : `${n >= 0 ? '+' : ''}${n.toFixed(dp)}%`;
+const fmtSigned = (n, opts = {}) => {
+  if (n == null || isNaN(n)) return '—';
+  const sign = n > 0 ? '+' : (n < 0 ? '−' : '');
+  return `${sign}${fmtINR(Math.abs(n), opts)}`;
+};
+const pnlClass = (n) => (n == null) ? '' : (n >= 0 ? 'pos' : 'neg');
+
+// ─── PREAMBLE — shared state across all section try-blocks ────────
+// Declared OUTSIDE try blocks so const-scoping doesn't break later sections.
+const cp = DATA.current_price || {};
+const cm = DATA.current_market || {};
+const fc = DATA.forecast || {};
+const ft = DATA.family_totals || {};
+const bb = DATA.bull_bear || {};
+const f98 = DATA.f98_redeployment || {};
+const sr = DATA.sr_levels || {};
+const add = DATA.add_ladder || {};
+const liveXag = (cm.xagusd && cm.xagusd.status === 'ok' && cm.xagusd.price) ? cm.xagusd.price : f98.current_xagusd_estimate;
+const xagNow = liveXag;
+let sellsFlat = [], tranchesFlat = [];
+
+function __reportErr(section, e) {
+  console.error(section + ' render failed:', e);
+  window.__renderErrors = window.__renderErrors || [];
+  window.__renderErrors.push(section + ': ' + e.message);
+  const el = document.getElementById('render-errors');
+  if (el) { el.style.display = 'block'; el.textContent = '⚠ ' + window.__renderErrors.join(' | '); }
+}
+
+// ─── 1. TIMESTAMPS ────────────────────────────────────
+try {
+  document.getElementById('emit-ts').textContent = (DATA.emitted_at_utc || '').replace('T', ' ').replace('+00:00', ' UTC');
+  document.getElementById('sync-ts').textContent = DATA.meta?.last_synced || '—';
+  document.getElementById('price-ts').textContent = cp.primary_date ? `${cp.primary_date} · ${fmtPct(cp.primary_day_chg_pct, 2)}` : '—';
+} catch (e) { __reportErr('timestamps', e); }
+
+// ─── HEADER · Data-age pill (auto-updates every 30s) ───────
+try {
+  function renderAgePill() {
+    const pill = document.getElementById('age-pill');
+    if (!pill || !DATA?.emitted_at_utc) return;
+    const ageMs = Date.now() - new Date(DATA.emitted_at_utc).getTime();
+    const ageMin = Math.floor(ageMs / 60000);
+    const ageHr  = Math.floor(ageMin / 60);
+    const ageDay = Math.floor(ageHr / 24);
+    let label, bg, fg;
+    if (ageMin < 1)       { label = 'just now';                bg = '#dcfce7'; fg = '#0e7d3a'; }
+    else if (ageMin < 30) { label = ageMin + ' min ago';       bg = '#dcfce7'; fg = '#0e7d3a'; }
+    else if (ageMin < 90) { label = ageMin + ' min ago';       bg = '#fef9c3'; fg = '#854d0e'; }
+    else if (ageHr  < 24) { label = ageHr  + ' h ago';         bg = '#fef3e1'; fg = '#92400e'; }
+    else                  { label = ageDay + 'd ago — STALE';  bg = '#fbe7e7'; fg = '#b91c1c'; }
+    pill.textContent = label;
+    pill.style.background = bg;
+    pill.style.color = fg;
+  }
+  renderAgePill();
+  setInterval(renderAgePill, 30000);  // refresh pill every 30s
+} catch (e) { __reportErr('age-pill', e); }
+try {
+  // ─── 2. LIVE TICKER BAR ───────────────────────────────
+  function tickerCell(key, label, opts={}) {
+    const q = cm[key] || {};
+    if (q.status !== 'ok') return `<div class="tk-cell"><div class="tk-name"><span class="dot stale"></span>${label}</div><div class="tk-val mut">—</div><div class="tk-chg mut">unavailable</div></div>`;
+    const v = key === 'gsr' ? q.value : q.price;
+    const dp = opts.dp ?? 2;
+    const valStr = v != null ? (opts.prefix || '') + v.toFixed(dp) : '—';
+    const chg = q.day_chg_pct;
+    const chgStr = chg != null ? `${chg >= 0 ? '+' : ''}${chg.toFixed(2)}%` : '';
+    const chgClass = chg == null ? '' : (chg >= 0 ? 'pos' : 'neg');
+    let dotCls = '';
+    if (q.market_state === 'OPERATOR-PINNED') dotCls = 'pinned';
+    else if (q.as_of_utc) {
+      const age = (Date.now() - new Date(q.as_of_utc).getTime()) / 3600000;
+      if (age > 36) dotCls = 'stale';
+    }
+    const tip = q.source_note || q.yahoo_symbol || '';
+    return `<div class="tk-cell" title="${tip}"><div class="tk-name"><span class="dot ${dotCls}"></span>${label}${dotCls === 'pinned' ? ' 📌' : ''}</div><div class="tk-val">${valStr}</div><div class="tk-chg ${chgClass}">${chgStr || '—'}</div></div>`;
+  }
+  document.getElementById('ticker-bar').innerHTML = `
+    <div class="tk-label"><div class="l1">🥈 LIVE</div><div class="l2">silver complex + macro</div></div>
+    ${tickerCell('xagusd',    'XAGUSD',   { prefix: '$' })}
+    ${tickerCell('silverbees','SBees',    { prefix: '₹' })}
+    ${tickerCell('gold',      'Gold',     { prefix: '$', dp: 1 })}
+    ${tickerCell('gsr',       'GSR' )}
+    ${tickerCell('usdinr',    'USDINR',   { prefix: '₹' })}
+    ${tickerCell('dxy',       'DXY' )}
+  `;
+} catch (e) { __reportErr('ticker', e); }
+try {
+  // ─── 3. HERO A — VERDICT ────────────────────────────────
+  // (hoisted to preamble)
+  document.getElementById('fc-meta').textContent = fc.consensus_state || '—';
+  document.getElementById('v-hero').textContent = fc.composite_verdict || '—';
+  document.getElementById('v-source').textContent = fc.composite_source || '—';
+  document.getElementById('v-binding').textContent = fc.v15_binding || '—';
+  const probs = fc.probability_mass || [];
+  const maxP = Math.max(...probs.map(p => p.weight_pct), 1);
+  document.getElementById('scenarios').innerHTML = probs.map(p => `
+    <div class="sc-row">
+      <div class="sc-name">${p.scenario}</div>
+      <div class="sc-pct">${p.weight_pct}%</div>
+      <div class="sc-bar"><div class="sc-fill" style="width:${(p.weight_pct/maxP*100).toFixed(0)}%"></div></div>
+    </div>`).join('');
+  document.getElementById('ab-pct').textContent = `${fc.bullish_mass_a_plus_b || 0}%`;
+} catch (e) { __reportErr('verdict', e); }
+try {
+  // ─── 3. HERO B — FAMILY BOOK (realized + combined) ────────────────
+  document.getElementById('book-meta').textContent = `${ft.account_count_active}/${ft.account_count_active + ft.account_count_exited} active · ${ft.tranche_count} remaining tranches`;
+  document.getElementById('book-grid').innerHTML = `
+    <div class="book-stat"><div class="lbl">Active holdings</div><div class="val">${fmtNum(ft.holdings_qty)}<span style="font-size:11px;color:var(--text-muted);"> u</span></div></div>
+    <div class="book-stat"><div class="lbl">Cost basis live</div><div class="val">${fmtINR(ft.invested_inr, { compact: true })}</div></div>
+    <div class="book-stat"><div class="lbl">Current MV</div><div class="val accent">${fmtINR(ft.current_value_inr, { compact: true })}</div><div class="sub">@ ${fmtINR(cp.primary_inr, { dp: 2 })}/u</div></div>
+    <div class="book-stat"><div class="lbl">Lifetime invested</div><div class="val">${fmtINR(ft.total_invested_lifetime_inr, { compact: true })}</div><div class="sub">${fmtNum(ft.realized_qty)} u sold all-time</div></div>`;
+  document.getElementById('book-realized-v').textContent = fmtSigned(ft.realized_pnl_inr, { compact: true });
+  document.getElementById('book-realized-v').classList.add(pnlClass(ft.realized_pnl_inr));
+  document.getElementById('book-realized-p').textContent = fmtPct(ft.realized_pnl_pct);
+  document.getElementById('book-realized-p').classList.add(pnlClass(ft.realized_pnl_inr));
+  document.getElementById('book-pnl-v').textContent = fmtSigned(ft.unrealized_pnl_inr, { compact: true });
+  document.getElementById('book-pnl-v').classList.add(pnlClass(ft.unrealized_pnl_inr));
+  document.getElementById('book-pnl-p').textContent = fmtPct(ft.unrealized_pnl_pct);
+  document.getElementById('book-pnl-p').classList.add(pnlClass(ft.unrealized_pnl_inr));
+  document.getElementById('book-combined-v').textContent = fmtSigned(ft.combined_pnl_inr, { compact: true });
+  document.getElementById('book-combined-v').classList.add(pnlClass(ft.combined_pnl_inr));
+  document.getElementById('book-combined-p').textContent = fmtPct(ft.combined_pnl_pct);
+  document.getElementById('book-combined-p').classList.add(pnlClass(ft.combined_pnl_inr));
+} catch (e) { __reportErr('family-book', e); }
+try {
+  // ─── 3. HERO C — F98 ────────────────────────────────
+  // (hoisted to preamble)
+  // F98 status reflects realized state now — trim has FIRED defensively on Friday
+  document.getElementById('f98-status').textContent = 'TRIGGERED · 15-MAY';
+  document.getElementById('f98-status').className = 'pill pill-ok';
+  const xagTrim = f98.trim_trigger_xagusd || {};
+  // liveXag hoisted to preamble
+  const distPct = (liveXag && xagTrim.low) ? ((xagTrim.low - liveXag) / liveXag * 100).toFixed(1) : '—';
+  document.getElementById('f98-stats').innerHTML = `
+    <div class="f98-stat"><div class="lbl">Trim trigger</div><div class="val">$${xagTrim.low}–${xagTrim.high}</div></div>
+    <div class="f98-stat"><div class="lbl">XAGUSD now</div><div class="val">$${(+liveXag).toFixed(2)}<span style="font-size:10px;color:var(--text-soft);"> (+${distPct}%)</span></div></div>
+    <div class="f98-stat"><div class="lbl">Trim plan</div><div class="val">${f98.trim_pct_planned?.low}–${f98.trim_pct_planned?.high}%</div></div>
+    <div class="f98-stat"><div class="lbl">Cash freed est</div><div class="val">${fmtINR(f98.freed_cash_inr?.low, { compact: true })}–${fmtINR(f98.freed_cash_inr?.high, { compact: true })}</div></div>`;
+  document.getElementById('f98-decisions').innerHTML = (f98.operator_decisions_pending || []).slice(0, 4).map(d => `<li>${d}</li>`).join('');
+} catch (e) { __reportErr('f98', e); }
+try {
+  // ─── 4. TRIM / ADD / SR ────────────────────────────────
+  document.getElementById('trim-body').innerHTML = (DATA.trim_ladder || []).map(t => `
+    <tr>
+      <td class="tcell">${t.tier}</td>
+      <td>${t.trigger.replace('XAG ≥ ', '≥')}</td>
+      <td class="disc">${t.action}</td>
+      <td class="num">${fmtINR(t.cash_freed_inr, { compact: true })}</td>
+      <td class="num dist">${t.distance_label || '—'}</td>
+    </tr>`).join('');
+
+  // (hoisted to preamble)
+  document.getElementById('add-meta').textContent = `Dry powder: ${fmtINR(add.dry_powder_inr, { compact: true })}`;
+  document.getElementById('add-body').innerHTML = (add.rungs || []).map(r => `
+    <tr>
+      <td class="tcell">${r.rung}</td>
+      <td>${r.trigger.replace('XAGUSD', '').replace('XAG ', '')}</td>
+      <td class="num">${fmtINR(r.deploy_inr, { compact: true })}</td>
+      <td class="num">${fmtNum(r.units_approx)}@₹${r.sbees_avg_approx}</td>
+      <td class="num dist">${r.distance_label || '—'}</td>
+    </tr>`).join('');
+  document.getElementById('abort-note').textContent = add.abort || '';
+
+  // (hoisted to preamble)
+  document.getElementById('sr-meta').textContent = `chart ${sr.last_updated || '—'}`;
+  // xagNow hoisted to preamble
+  document.getElementById('sr-now').textContent = xagNow ? `$${(+xagNow).toFixed(2)}` : '—';
+  document.getElementById('sr-r').innerHTML = (sr.resistance || []).slice(0, 5).reverse().map(r => `
+    <div class="sr-row r"><span class="px">$${r.price.toFixed(2)}</span><span class="lab">${r.label}</span><span class="dist neg">${r.distance_label || ''}</span></div>`).join('');
+  document.getElementById('sr-s').innerHTML = (sr.support || []).slice(0, 5).map(s => `
+    <div class="sr-row s"><span class="px">$${s.price.toFixed(2)}</span><span class="lab">${s.label}</span><span class="dist pos">${s.distance_label || ''}</span></div>`).join('');
+} catch (e) { __reportErr('trim-add-sr', e); }
+try {
+  // ─── 5. ACCOUNTS — unified shape: status badge + always-show realized + unrealized only if active
+  document.getElementById('accounts-row').innerHTML = (DATA.accounts || []).map(a => {
+    const isActive = a.status === 'active';
+    const accent = a.accent_color || '#cbd3dc';
+    const statusBadge = isActive
+      ? `<span class="pill pill-ok" style="font-size:8.5px;">ACTIVE</span>`
+      : `<span class="pill" style="background:#e5e7eb;color:#4b5563;font-size:8.5px;">EXITED</span>`;
+    return `<div class="acc-card" style="border-top-color:${accent};${isActive ? '' : 'background:#fcfaf3;'}">
+      <div class="top">
+        <div class="holder">${a.emoji || ''} ${a.holder}</div>
+        ${statusBadge}
+      </div>
+      <div class="type">${a.account_type || ''} · ${fmtNum(a.total_buy_qty)} u traded · ${a.realized_sells.length} sells</div>
+      <div class="stats">
+        <div><span class="lbl">Hold </span><span class="v">${isActive ? fmtNum(a.holdings_qty) + ' u' : '—'}</span></div>
+        <div><span class="lbl">Avg </span><span class="v">${isActive ? fmtINR(a.avg_buy_inr, { dp: 2 }) : '—'}</span></div>
+        <div><span class="lbl">MV </span><span class="v">${isActive ? fmtINR(a.current_value_inr, { compact: true }) : '—'}</span></div>
+        <div><span class="lbl">Real </span><span class="v ${pnlClass(a.realized_pnl_inr)}">${fmtSigned(a.realized_pnl_inr, { compact: true })}</span></div>
+      </div>
+      <div class="pnl-row">
+        <div>
+          <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;">${isActive ? 'Unrealized' : 'Combined'}</div>
+          <div class="v ${pnlClass(isActive ? a.unrealized_pnl_inr : a.combined_pnl_inr)}">${fmtSigned(isActive ? a.unrealized_pnl_inr : a.combined_pnl_inr, { compact: true })}</div>
+        </div>
+        <div class="p ${pnlClass(isActive ? a.unrealized_pnl_inr : a.realized_pnl_inr)}" style="text-align:right;">${fmtPct(isActive ? a.unrealized_pnl_pct : a.realized_pnl_pct)}</div>
+      </div>
+    </div>`;
+  }).join('');
+} catch (e) { __reportErr('accounts', e); }
+// ─── 6. MARKET CONTEXT — News list ────────────────────────────
+try {
+  document.getElementById('news-list').innerHTML = ((DATA.news?.headlines) || []).map(n => `
+    <div class="item ${n.weight || 'low'}">
+      <span class="dt">${n.date}</span>
+      <span class="src">${n.source}</span>
+      <span class="wt">${(n.weight || '').toUpperCase()}</span>
+      <span>${n.headline}</span>
+    </div>`).join('');
+} catch (e) { console.error('news render failed:', e); }
+
+// ─── 6. MARKET CONTEXT — Catalyst calendar ──────────────────
+try {
+  document.getElementById('cal-list').innerHTML = (DATA.catalysts || []).map(c => `
+    <div class="row ${c.weight || 'low'}">
+      <span class="dt">${c.date}</span>
+      <span class="kind">${c.kind}</span>
+      <span class="wt">${(c.weight || '').toUpperCase()}</span>
+      <span>${c.summary}</span>
+    </div>`).join('');
+} catch (e) { console.error('catalyst render failed:', e); }
+
+// ─── 6. MARKET CONTEXT — COT cards + bias toggle ─────────────
+try {
+  const cotCards = [
+    { t: "MM Net Position", s: "12-May survey", h: "+15,761", sb: "W/W Δ +4,918 · largest weekly add in 6-print sequence", st: "FROTH BREACHED", a: "#b45309",
+      bull: "FROTH breach is regime shift — directional re-engagement (long-adds 9.5:1 vs shorts) confirms bullish thesis being priced in.",
+      bear: "Asymmetric capitulation edge now COMPRESSED. Size-up window open since 260502 has effectively closed; further long-deploys carry less edge." },
+    { t: "Threshold Ladder", s: "DICTIONARY", h: "🟡 FROTH proximity", sb: "🟢 CAPITULATION cleared\n🟡 FROTH (>15K) JUST BREACHED", st: "TRIM-PROXIMITY", a: "#b45309",
+      bull: "Capitulation cleared = doctrine said 'size-up' for weeks. Even at FROTH, structural rally setup remains; just lighter add-sizes from here.",
+      bear: "FROTH breach = doctrine's tactical signal to PREPARE for trim, not deploy. Mechanical doctrine says front-load was completed; next move is reduce." },
+    { t: "Open Interest", s: "total contracts", h: "103,800", sb: "W/W Δ +6,868 · first material expansion since cycle began compressing", st: "PAPER RE-ENGAGED", a: "#22c55e",
+      bull: "OI expansion alongside MM long-add = real, broad re-engagement. Paper coming back ON during rally is bullish confirmation.",
+      bear: "Two-week deleveraging cushion (<100K) lasted exactly one week. Paper builds at higher prices = late-cycle pattern; vulnerable to fast unwinds." },
+    { t: "G8 Capitulation", s: "silver doctrine §G8", h: "✅ MET", sb: "Descriptor: 'rebuild accelerating; froth threshold breached'\n(upgraded from 'deep-and-stalling')", st: "BULLISH TRANSITION", a: "#22c55e",
+      bull: "G8 descriptor upgrade = the rebuild that was stalled has now broken decisively higher. Confirms V-15 chart-led tilt from 260511.",
+      bear: "G8-MET with FROTH-BREACHED-too = strategic dilemma. Continue holding for trim trigger or partial-trim now to lock asymmetric advantage already earned?" },
+    { t: "Producer / Swap", s: "commercial counter-flow", h: "−1,092 SD", sb: "Producer net −2,019 W/W · Swap dealer adding shorts into spec long-bid", st: "CONFIRMATORY", a: "#3b6e8f",
+      bull: "Producer hedge-shorts ramping = physical hedgers see higher prices coming. Counter-party flow rational; confirms underlying real price move being absorbed.",
+      bear: "Heavy producer+swap-dealer short adds at THIS level may cap further upside near-term. Shorts being added at $86-89, not $93+; trim ladder may run into supply." },
+  ];
+  document.getElementById('cot-grid').innerHTML = cotCards.map(c => `
+    <div class="cot-card" style="border-left-color:${c.a};">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;"><div class="ct">${c.t}</div><div style="font-size:9px;color:var(--text-soft);font-style:italic;">${c.s}</div></div>
+      <div class="ch" style="color:${c.a};">${c.h}</div>
+      <div class="cs" style="white-space:pre-line;">${c.sb}</div>
+      <div class="cb" style="background:${c.a}25;color:${c.a};">${c.st}</div>
+      <div class="cliner bull"><strong>🐂 </strong>${c.bull}</div>
+      <div class="cliner bear"><strong>🐻 </strong>${c.bear}</div>
+    </div>`).join('');
+  document.querySelectorAll('.cot-bias-bar .b').forEach(b => {
+    b.onclick = () => {
+      document.querySelectorAll('.cot-bias-bar .b').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const bias = b.dataset.bias;
+      document.querySelectorAll('.cot-card .cliner.bull').forEach(el => el.style.display = (bias === 'bear') ? 'none' : '');
+      document.querySelectorAll('.cot-card .cliner.bear').forEach(el => el.style.display = (bias === 'bull') ? 'none' : '');
+    };
+  });
+} catch (e) { console.error('cot render failed:', e); }
+
+// ─── 7. THESIS — Bull / Bear ────────────────────────────────
+try {
+  // (hoisted to preamble)
+  document.getElementById('bb-cases').innerHTML = `
+    <div class="bb-c bull"><h4>🐂 Bull case</h4><ul>${(bb.bull_case || []).map(x => `<li>${x}</li>`).join('')}</ul></div>
+    <div class="bb-c bear"><h4>🐻 Bear case</h4><ul>${(bb.bear_case || []).map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+} catch (e) { console.error('bull-bear render failed:', e); }
+
+// ─── 7. THESIS — Floor framework ────────────────────────────
+try {
+  const fr = DATA.floor_framework || {};
+  const tiers = fr.tiers || [];
+  const maxProb = Math.max(...tiers.map(t => t.prob_pct), 1);
+  document.getElementById('floor-meta').textContent = `${fr.v_id || '—'} · ${fr.status || ''}`;
+  document.getElementById('floor-list').innerHTML = tiers.map(t => {
+    const inRange = xagNow != null && t.band_low != null
+      && (t.band_high == null ? xagNow >= t.band_low : (xagNow >= t.band_low && xagNow <= t.band_high));
+    const band = t.band_high == null ? `>$${t.band_low}` : `$${t.band_low}–$${t.band_high}`;
+    return `<div class="floor-row ${inRange ? 'now' : ''}">
+      <div class="ft">${t.tier}${inRange ? ' ← now' : ''}</div>
+      <div class="fb">${band}</div>
+      <div class="fm">${t.mechanism}</div>
+      <div class="fpw"><div class="fpb"><div class="fpf" style="width:${(t.prob_pct/maxProb*100).toFixed(0)}%"></div></div><div class="fpc">${t.prob_pct}%</div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('velocity-note').textContent = fr.velocity_note || '';
+} catch (e) { console.error('floor render failed:', e); }
+
+// ─── 7. THESIS — Global inventory ────────────────────────────
+try {
+  const inv = DATA.global_inventory || {};
+  document.getElementById('inv-meta').textContent = `${inv.source_doc || '—'}`;
+  document.getElementById('inv-body').innerHTML = (inv.items || []).map(it => `
+    <tr><td class="venue">${it.venue}</td><td>${it.value}</td><td>${it.change}</td><td>${it.bias}</td></tr>`).join('');
+} catch (e) { console.error('inventory render failed:', e); }
+
+// ─── 8. STRATEGY TIMELINE ───────────────────────────────────
+try {
+  document.getElementById('tl-list').innerHTML = (DATA.strategy_timeline || []).map(t => `
+    <div class="tl">
+      <div class="dt">${t.date} · ${t.version}</div>
+      <div class="tt">${t.title}</div>
+      <div class="vd ${t.verdict && t.verdict.includes('COMPRESS') ? 'warn' : ''}">${t.verdict}</div>
+      <div class="sm">${t.summary}</div>
+    </div>`).join('');
+} catch (e) { console.error('strategy timeline render failed:', e); }
+
+try {
+// Realized sells — flatten across accounts, sort by date desc
+sellsFlat = [];
+(DATA.accounts || []).forEach(a => (a.realized_sells || []).forEach(s => sellsFlat.push({ ...s, holder: a.holder })));
+sellsFlat.sort((a, b) => b.date.localeCompare(a.date));
+document.getElementById('sells-body').innerHTML = sellsFlat.map(s => `
+  <tr><td><span class="htag">${s.holder}</span></td><td>${s.date}</td><td class="num">${fmtNum(s.qty)}</td><td class="num">${fmtINR(s.sell_price, { dp: 2 })}</td><td class="num">${fmtINR(s.proceeds_inr)}</td><td class="num">${fmtINR(s.cost_basis_inr)}</td><td class="num ${pnlClass(s.realized_pnl_inr)}">${fmtSigned(s.realized_pnl_inr)}</td><td class="num ${pnlClass(s.realized_pnl_inr)}">${fmtPct(s.realized_pnl_pct)}</td></tr>`).join('');
+} catch (e) { __reportErr('realized-sells', e); }
+try {
+// Tranche detail — only remaining holdings now (used to be all buys)
+tranchesFlat = [];
+(DATA.accounts || []).forEach(a => (a.tranches || []).forEach(t => tranchesFlat.push({ ...t, holder: a.holder })));
+tranchesFlat.sort((a, b) => a.date.localeCompare(b.date));
+const trMetaEl = document.getElementById('tr-meta');
+if (trMetaEl) trMetaEl.textContent = `${tranchesFlat.length} active tranche${tranchesFlat.length !== 1 ? 's' : ''}`;
+document.getElementById('tr-body').innerHTML = tranchesFlat.map(t => `
+  <tr><td><span class="htag">${t.holder}</span></td><td>${t.date}</td><td class="num">${fmtNum(t.qty)}</td><td class="num">${fmtINR(t.buy_price, { dp: 2 })}</td><td class="num">${fmtINR(t.current_value_inr)}</td><td class="num ${pnlClass(t.unrealized_pnl_inr)}">${fmtSigned(t.unrealized_pnl_inr, { compact: true })}</td><td class="num ${pnlClass(t.unrealized_pnl_pct)}">${fmtPct(t.unrealized_pnl_pct)}</td></tr>`).join('');
+const sellsMetaEl = document.getElementById('sells-meta');
+if (sellsMetaEl) sellsMetaEl.textContent = `${sellsFlat.length} sell events · ${(sellsFlat.reduce((s, x) => s + x.qty, 0)).toLocaleString('en-IN')} u realized`;
+} catch (e) { __reportErr('tranches', e); }
+}
+bootstrap();
+</script>
+</body>
+</html>

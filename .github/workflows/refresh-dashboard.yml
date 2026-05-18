@@ -1,10 +1,6 @@
 name: Refresh silver dashboard
 
-# Runs on schedule + on manual trigger + on YAML edits.
-# Schedule chosen to stay safely under goldapi.io's 100/day free quota:
-#   - every 20 min Mon-Fri 03:00-22:00 UTC (covers Asia / London / NY trading)
-#   - hourly on weekends
-#   - ~85 calls/day weekday, ~24/day weekend → well under 100/day cap
+# Updated paths after silver/ subfolder restructure
 on:
   schedule:
     # Mon-Fri 03:00-22:00 UTC every 20 min
@@ -13,9 +9,9 @@ on:
     - cron: '0 * * * 0,6'
   push:
     paths:
-      - '_inputs/silver_holdings.yaml'
-      - 'generators/**'
-  workflow_dispatch:   # manual trigger from Actions tab
+      - 'silver/_inputs/silver_holdings.yaml'
+      - 'silver/generators/**'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -35,18 +31,18 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install PyYAML
+        run: pip install PyYAML requests
 
-      - name: Run emitter (fetches live prices, writes data/silver_dashboard_aggregate.json)
+      - name: Run emitter
         env:
           GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
-        run: python generators/silver_dashboard_emit.py
+        run: python silver/generators/silver_dashboard_emit.py
 
-      - name: Commit + push if data changed
+      - name: Commit + push if changed
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/silver_dashboard_aggregate.json
+          git add silver/data/silver_dashboard_aggregate.json
           if git diff --cached --quiet; then
             echo "No data changes — skipping commit"
           else
