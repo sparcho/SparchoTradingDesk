@@ -544,7 +544,7 @@ const fmtSigned = (n, opts = {}) => {
   const sign = n > 0 ? '+' : (n < 0 ? '−' : '');
   return `${sign}${fmtINR(Math.abs(n), opts)}`;
 };
-const pnlClass = (n) => (n == null) ? '' : (n >= 0 ? 'pos' : 'neg');
+const pnlClass = (n) => (n == null) ? 'mut' : (n >= 0 ? 'pos' : 'neg');
 
 // ─── PREAMBLE — shared state across all section try-blocks ────────
 // Declared OUTSIDE try blocks so const-scoping doesn't break later sections.
@@ -726,7 +726,7 @@ try {
         <div class="holder">${a.emoji || ''} ${a.holder}</div>
         ${statusBadge}
       </div>
-      <div class="type">${a.account_type || ''} · ${fmtNum(a.total_buy_qty)} u traded · ${a.realized_sells.length} sells</div>
+      <div class="type">${a.account_type || ''} · ${fmtNum(a.total_buy_qty)} u traded · ${(a.realized_sells || []).length} sells</div>
       <div class="stats">
         <div><span class="lbl">Hold </span><span class="v">${isActive ? fmtNum(a.holdings_qty) + ' u' : '—'}</span></div>
         <div><span class="lbl">Avg </span><span class="v">${isActive ? fmtINR(a.avg_buy_inr, { dp: 2 }) : '—'}</span></div>

@@ -354,6 +354,20 @@ def emit() -> Path:
         primary = live_sbees["price"]
     else:
         primary = price["price"]
+    # Display fields — when live SBees fetch is fresh, use its date / day_chg_pct
+    # so the dashboard headline matches the live price (else CSV). Fix 2026-05-18
+    # for stale-data display: previously `primary_inr` was live but `primary_date`
+    # + `primary_day_chg_pct` still came from the CSV (which trails by 1+ session).
+    if (live_sbees.get("status") == "ok"
+            and live_sbees.get("price")
+            and live_sbees.get("as_of_utc")):
+        display_date = live_sbees["as_of_utc"][:10]
+        display_day_chg_pct = live_sbees.get("day_chg_pct")
+        display_source = f"yahoo live ({live_sbees.get('yahoo_symbol', 'SILVERBEES.NS')})"
+    else:
+        display_date = price.get("date")
+        display_day_chg_pct = price.get("day_chg_pct")
+        display_source = price.get("source")
     # XAGUSD: prefer live fetch, fall back to YAML estimates
     live_xag = live.get("xagusd", {})
     if live_xag.get("status") == "ok" and live_xag.get("price"):
@@ -382,10 +396,10 @@ def emit() -> Path:
         # Price layer
         "current_price": {
             "primary_inr": primary,
-            "primary_date": price.get("date"),
-            "primary_source": price.get("source"),
-            "primary_staleness_days": _staleness_days(price.get("date")),
-            "primary_day_chg_pct": price.get("day_chg_pct"),
+            "primary_date": display_date,
+            "primary_source": display_source,
+            "primary_staleness_days": _staleness_days(display_date),
+            "primary_day_chg_pct": display_day_chg_pct,
             "primary_intraday": {
                 "open": price.get("open"),
                 "high": price.get("high"),
@@ -432,7 +446,7 @@ def emit() -> Path:
                 "Sell-side data PENDING across all accounts — realized P&L not yet computed."
                 if all(a["sells_summary"]["count"] == 0 for a in accounts_out) else None,
                 f"NSE SILVERBEES close is {_staleness_days(price.get('date'))} day(s) stale (weekend expected)."
-                if _staleness_days(price.get("date")) and _staleness_days(price.get("date")) > 1
+                if _staleness_days(display_date) and _staleness_days(display_date) > 1
                 else None,
             ] if w
         ],
