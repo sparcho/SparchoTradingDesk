@@ -439,6 +439,7 @@ def emit() -> Path:
         "strategy_timeline": cfg.get("strategy_timeline", []),
         "global_inventory": cfg.get("global_inventory", {}),
         "f98_redeployment": cfg.get("f98_redeployment", {}),
+        "deployment_plan": cfg.get("deployment_plan", {}),
 
         # Warnings (sells pending is the only one in v2)
         "warnings": [
