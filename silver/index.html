@@ -573,7 +573,7 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
 
 <!-- FOOTER -->
 <div class="foot">
-  <div><strong>Data:</strong> <code>silver_holdings.yaml</code> → <code>silver_dashboard_emit.py</code> → <code>data/silver_dashboard_aggregate.json</code> · auto-refresh every 20min via GH Actions · goldapi.io spot + Yahoo intermarket</div>
+  <div><strong>Data:</strong> <code>silver_holdings.yaml</code> → <code>silver_dashboard_emit.py</code> → <code>data/silver_dashboard_aggregate.json</code> · page auto-refreshes every 60s · server emits every 20min (24/7) via GH Actions · goldapi.io spot + Yahoo intermarket</div>
   <div>F98 · CLAUDE_MODULES/01_SILVER_DOCTRINE V-13/V-15</div>
 </div>
 
@@ -1037,6 +1037,12 @@ if (sellsMetaEl) sellsMetaEl.textContent = `${sellsFlat.length} sell events · $
 } catch (e) { __reportErr('tranches', e); }
 }
 bootstrap();
+// ─── AUTO-REFRESH ──────────────────────────────────────
+// Re-fetch the aggregate JSON every 60s so the dashboard stays live without
+// the user having to reload. Server-side emitter refreshes every 20min via
+// GH Actions (24/7); client just re-renders against whichever JSON is
+// freshest. Page reload not required.
+setInterval(() => { bootstrap().catch(() => {}); }, 60000);
 </script>
 </body>
 </html>
