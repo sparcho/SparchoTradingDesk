@@ -313,7 +313,9 @@ f98_redeployment:
 #     Source-of-truth: 01_DAILY/2605/260518/260518_XAG_SILV-TA-v7.md
 # -----------------------------------------------------------------------------
 deployment_plan:
-  version: F109-v1
+  version: F109-v1.1
+  revised: 2026-05-20
+  revision_note: "size_inr corrected to match pct_envelope; envelope unchanged; tranche % unchanged"
   authored: 2026-05-18
   approved: 2026-05-19
   status: active
@@ -343,7 +345,7 @@ deployment_plan:
       status: pending
     - id: T1.5
       label: "gate-clear optionality starter"
-      size_inr: 100000
+      size_inr: 1000000
       pct_envelope: 8
       fire_condition: "Brent rolls <$100 OR TNX rolls <4.45% OR USDINR Fri-close <96"
       cumulative_pct_after: 8
@@ -353,7 +355,7 @@ deployment_plan:
       status: armed
     - id: T2
       label: "main starter - V-13 daily floor"
-      size_inr: 312500
+      size_inr: 3125000
       pct_envelope: 25
       fire_condition: "XAG in $69-72 zone + COT MM <=0 + Brent <$110"
       cumulative_pct_after: 33
@@ -363,7 +365,7 @@ deployment_plan:
       status: armed
     - id: T3
       label: "modal slug - quadruple-conditional asymmetric"
-      size_inr: 500000
+      size_inr: 5000000
       pct_envelope: 40
       fire_condition: "XAG in $65-69 zone + COT MM negative (deep capitulation) + Warsh Jun-17 dovish-signal + Brent rolling <$100"
       cumulative_pct_after: 73
@@ -373,7 +375,7 @@ deployment_plan:
       status: armed
     - id: T4
       label: "cascade-tail entry"
-      size_inr: 250000
+      size_inr: 2500000
       pct_envelope: 20
       fire_condition: "XAG in $55-59 cascade zone + V-18 $52 NOT triggered + at least 1 gate clearing post-Warsh"
       cumulative_pct_after: 93
@@ -383,7 +385,7 @@ deployment_plan:
       status: armed
     - id: HOLD_residual
       label: "post-V-18 re-engagement reserve"
-      size_inr: 87500
+      size_inr: 875000
       pct_envelope: 7
       fire_condition: "Post-V-18-retest IF COT MM < -30K AND GSR > 75 (double-confirmation washout)"
       cumulative_pct_after: 100
