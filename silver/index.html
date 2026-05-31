@@ -432,6 +432,18 @@ body{ gap:3px; padding:10px 14px; }
 .kpi-mini .kpi .kl .dot{ width:5px; height:5px; border-radius:50%; background:var(--sig-pos); display:inline-block; flex:0 0 auto; }
 .kpi-mini .kpi .kl .dot.stale{ background:#fbbf24; } .kpi-mini .kpi .kl .dot.pinned{ background:#a855f7; box-shadow:0 0 4px #a855f7; }
 .sread3 .card{ min-width:0; }
+/* ── phase 6 · chart legends (fill space under gauge/radar; data-driven) ── */
+.chart-legend{ margin-top:9px; padding-top:9px; border-top:1px solid var(--border); }
+.chart-legend .cl-desc{ margin:0 0 7px; font-size:10.5px; line-height:1.5; color:var(--ink-mute); }
+.chart-legend .cl-desc b{ color:var(--ink); font-weight:700; }
+.chart-legend .cl-rows{ display:flex; flex-direction:column; gap:4px; }
+.chart-legend .cl-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:10px; }
+.chart-legend .cl-row .cl-key{ display:flex; align-items:center; gap:6px; color:var(--ink-mute); text-transform:uppercase; letter-spacing:0.04em; font-weight:600; font-size:9px; }
+.chart-legend .cl-row > span:last-child{ font-family:var(--mono); color:var(--ink); font-variant-numeric:tabular-nums; text-align:right; }
+.chart-legend .cl-row .pos{ color:var(--sig-pos); } .chart-legend .cl-row .neg{ color:var(--sig-neg); } .chart-legend .cl-row .mut{ color:var(--ink-soft); }
+.chart-legend .sw{ width:9px; height:9px; border-radius:2px; flex:0 0 auto; display:inline-block; }
+.chart-legend .sw-amber{ background:var(--amber); } .chart-legend .sw-track{ background:rgba(255,255,255,0.14); }
+.chart-legend .cl-foot{ margin:8px 0 0; font-size:8.5px; line-height:1.45; color:var(--ink-soft); font-style:italic; }
 </style>
 </head>
 <body>
@@ -479,10 +491,24 @@ body{ gap:3px; padding:10px 14px; }
         <div class="gauge-center"><div class="gv" id="gauge-val">—</div><div class="gz" id="gauge-zone">—</div></div>
         <div class="gauge-ends"><span id="gauge-lo">$52</span><span id="gauge-hi">$84</span></div>
       </div>
+    <div class="chart-legend">
+      <p class="cl-desc" id="gauge-desc">—</p>
+      <div class="cl-rows">
+        <div class="cl-row"><span class="cl-key"><i class="sw sw-amber"></i>Fill</span><span id="gauge-fill">—</span></div>
+        <div class="cl-row"><span class="cl-key"><i class="sw sw-track"></i>Headroom to ceiling</span><span id="gauge-head">—</span></div>
+        <div class="cl-row"><span class="cl-key">Floor-framework tier</span><span id="gauge-tier">—</span></div>
+      </div>
+      <p class="cl-foot">$52 = V-18 abort-all (daily close) · $84 = no-floor ceiling. Higher fill = closer to the ceiling, more downside cushion.</p>
+    </div>
   </div>
   <div class="card"><div class="accent-top"></div>
     <div class="card-title"><h2>Macro drivers · today</h2><span class="meta">outward = supportive</span></div>
     <div class="radar-wrap"><canvas id="radar-canvas"></canvas></div>
+    <div class="chart-legend">
+      <p class="cl-desc">Each axis = a macro driver's move today, scored for silver. <b>Outward = tailwind, inward = headwind</b>; the dashed ring is neutral (no move).</p>
+      <div class="cl-rows" id="radar-legend"></div>
+      <p class="cl-foot" id="radar-sum">—</p>
+    </div>
   </div>
 </div>
 
@@ -857,6 +883,11 @@ try {
   var _ghi=document.getElementById('gauge-hi'); if(_ghi) _ghi.textContent='$'+_hi+' · no-floor';
   var _zone='—'; ((DATA.floor_framework||{}).tiers||[]).forEach(function(ti){ if(_x!=null&&ti.band_low!=null&&(ti.band_high==null?_x>=ti.band_low:(_x>=ti.band_low&&_x<=ti.band_high))) _zone=ti.tier; });
   var _gz=document.getElementById('gauge-zone'); if(_gz) _gz.textContent=_zone;
+  var _posPct=(_x!=null)?Math.max(0,Math.min(100,(_x-_lo)/(_hi-_lo)*100)):null;
+  var _gd=document.getElementById('gauge-desc'); if(_gd) _gd.textContent=(_x!=null)?('XAGUSD $'+_x.toFixed(2)+' sits '+_posPct.toFixed(0)+'% of the way from the $'+_lo+' abort-all floor to the $'+_hi+' no-floor ceiling.'):'Awaiting live XAGUSD print.';
+  var _gf=document.getElementById('gauge-fill'); if(_gf) _gf.textContent=(_posPct!=null)?(_posPct.toFixed(0)+'% of range'):'—';
+  var _gh=document.getElementById('gauge-head'); if(_gh) _gh.textContent=(_x!=null)?('$'+(_hi-_x).toFixed(2)+' to ceiling · $'+(_x-_lo).toFixed(2)+' above floor'):'—';
+  var _gt=document.getElementById('gauge-tier'); if(_gt) _gt.textContent=_zone;
   var _gc=document.getElementById('gauge-canvas');
   if(_gc&&window.Chart&&_x!=null){ var _pos=Math.max(0,Math.min(1,(_x-_lo)/(_hi-_lo)));
     var _gx=Chart.getChart(_gc); if(_gx)_gx.destroy();
@@ -872,6 +903,19 @@ try {
       {label:'today',data:_vals,borderColor:'#e89143',backgroundColor:_rgrad,pointBackgroundColor:'#e89143',pointBorderColor:'#16161a',pointBorderWidth:1,borderWidth:2,pointRadius:3,pointHoverRadius:4,tension:0.1,order:1},
       {label:'neutral',data:[3,3,3,3,3],borderColor:'rgba(255,255,255,0.22)',backgroundColor:'transparent',borderWidth:1,borderDash:[3,3],pointRadius:0,fill:false,order:2}
     ]},options:{scales:{r:{min:0,max:6,ticks:{display:false,stepSize:1,backdropColor:'transparent'},grid:{color:'rgba(255,255,255,0.07)'},angleLines:{color:'rgba(255,255,255,0.07)'},pointLabels:{color:'#b7b8bf',font:{size:10,weight:'600'}}}},plugins:{legend:{display:false},tooltip:{enabled:false}},responsive:true,maintainAspectRatio:false,animation:false}}); }
+  // radar legend — per-driver tailwind/headwind from today's move (data-driven)
+  var _rsup=0,_rhead=0,_rrows='';
+  [['DXY','dxy',-1],['TNX','tnx',-1],['GSR','gsr',-1],['Gold','gold',1],['Oil','wti',-1]].forEach(function(cv){
+    var q=cm[cv[1]]||{}; var c=(q.status==='ok'&&q.day_chg_pct!=null)?q.day_chg_pct:null;
+    var score=(c!=null)?c*cv[2]:0;
+    var cls=(c==null)?'mut':(score>0.001?'pos':(score<-0.001?'neg':'mut'));
+    var verdict=(c==null)?'n/a':(score>0.001?'tailwind':(score<-0.001?'headwind':'neutral'));
+    if(score>0.001)_rsup++; if(score<-0.001)_rhead++;
+    var dir=(c==null)?'—':((c>=0?'+':'')+c.toFixed(2)+'%');
+    _rrows+='<div class="cl-row"><span class="cl-key">'+cv[0]+'</span><span class="'+cls+'">'+dir+' · '+verdict+'</span></div>';
+  });
+  var _rl=document.getElementById('radar-legend'); if(_rl) _rl.innerHTML=_rrows;
+  var _rsm=document.getElementById('radar-sum'); if(_rsm) _rsm.textContent=_rsup+' of 5 drivers supportive for silver today · '+_rhead+' headwind.';
   var _sm=document.getElementById('sread-meta'); if(_sm) _sm.textContent='$'+_lo+'–$'+_hi+' range';
 } catch (e) { __reportErr('silver-read', e); }
 try {
