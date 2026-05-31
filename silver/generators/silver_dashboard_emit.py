@@ -35,10 +35,20 @@ from typing import Any
 import yaml  # PyYAML
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parent  # → repo root
-INPUT_YAML = ROOT / "_inputs" / "silver_holdings.yaml"
-PRICE_CSV = ROOT / "_cache" / "daily_prices.csv"
-OUTPUT_JSON = ROOT / "data" / "silver_dashboard_aggregate.json"
+# Layout-flexible (F260531-F116): ONE emit serves both the vault (00_SYSTEM/GENERATORS/)
+# and the public repo (silver/generators/). Vault is the single source of truth; this file
+# + _inputs/silver_holdings.yaml are synced to the repo by sync_silver_to_repo.sh.
+if (HERE / "_inputs" / "silver_holdings.yaml").exists():
+    INPUT_YAML = HERE / "_inputs" / "silver_holdings.yaml"            # vault layout
+    PRICE_CSV  = HERE / "_cache" / "daily_prices.csv"
+    OUTPUT_JSON = HERE.parent.parent / "00_SYSTEM" / "_state" / "silver_dashboard_aggregate.json"
+    ROOT = HERE.parent.parent
+else:
+    _R = HERE.parent                                                 # repo layout: silver/
+    INPUT_YAML = _R / "_inputs" / "silver_holdings.yaml"
+    PRICE_CSV  = _R / "_cache" / "daily_prices.csv"
+    OUTPUT_JSON = _R / "data" / "silver_dashboard_aggregate.json"
+    ROOT = _R
 
 
 def _read_yaml(path: Path) -> dict[str, Any]:
@@ -90,47 +100,122 @@ def _staleness_days(date_str: str | None) -> int | None:
         return None
 
 
-def _compute_tranches(tranches: list[dict], price: float | None) -> list[dict]:
+def _fifo_match(buys: list[dict], sells: list[dict]) -> dict[str, Any]:
+    """FIFO-match sells against buys (both chronologically sorted).
+    Returns realized_sells (each sell + matched buy lots + realized_pnl) +
+    remaining_tranches (current holdings, derived from unconsumed buys)."""
+    # Sort both by date
+    buy_queue = sorted(
+        ({"date": b["date"], "qty_remaining": int(b["qty"]),
+          "buy_price": float(b["buy_price"]),
+          "invested": float(b.get("trade_value") or int(b["qty"]) * float(b["buy_price"])),
+          "brokerage": float(b.get("brokerage") or 0)}
+         for b in buys),
+        key=lambda x: x["date"]
+    )
+    sells_sorted = sorted(sells, key=lambda s: s["date"])
+
+    realized_sells = []
+    for s in sells_sorted:
+        s_qty = int(s["qty"])
+        s_price = float(s["sell_price"])
+        s_proceeds = float(s.get("trade_value") or s_qty * s_price)
+        s_brokerage = float(s.get("brokerage") or 0)
+        qty_remaining_to_match = s_qty
+        cost_basis = 0.0
+        matched_lots = []
+        while qty_remaining_to_match > 0 and buy_queue:
+            head = buy_queue[0]
+            take = min(head["qty_remaining"], qty_remaining_to_match)
+            lot_cost = take * head["buy_price"]
+            cost_basis += lot_cost
+            matched_lots.append({
+                "buy_date": head["date"],
+                "buy_price": head["buy_price"],
+                "qty_matched": take,
+                "lot_cost_inr": round(lot_cost, 2),
+            })
+            head["qty_remaining"] -= take
+            qty_remaining_to_match -= take
+            if head["qty_remaining"] == 0:
+                buy_queue.pop(0)
+        # Realized P&L = proceeds - cost_basis (GROSS; brokerage tracked separately)
+        realized_pnl = s_proceeds - cost_basis
+        realized_pct = (realized_pnl / cost_basis * 100.0) if cost_basis else None
+        realized_sells.append({
+            "date": s["date"],
+            "qty": s_qty,
+            "sell_price": s_price,
+            "proceeds_inr": round(s_proceeds, 2),
+            "cost_basis_inr": round(cost_basis, 2),
+            "realized_pnl_inr": round(realized_pnl, 2),
+            "realized_pnl_pct": round(realized_pct, 2) if realized_pct is not None else None,
+            "brokerage": s_brokerage,
+            "matched_lots": matched_lots,
+            "underflow": qty_remaining_to_match > 0,  # True if sell qty exceeded buy queue
+        })
+
+    # Remaining tranches = unconsumed entries in buy_queue
+    remaining_tranches = []
+    for b in buy_queue:
+        if b["qty_remaining"] > 0:
+            inv_remaining = b["qty_remaining"] * b["buy_price"]
+            remaining_tranches.append({
+                "date": b["date"],
+                "qty": b["qty_remaining"],
+                "buy_price": b["buy_price"],
+                "invested_inr": round(inv_remaining, 2),
+            })
+
+    return {
+        "realized_sells": realized_sells,
+        "remaining_tranches": remaining_tranches,
+    }
+
+
+def _mark_remaining(tranches: list[dict], price: float | None) -> list[dict]:
+    """Enrich remaining tranches with current MV + unrealized P&L."""
     out = []
     for t in tranches:
-        qty = float(t["qty"])
-        buy = float(t["buy_price"])
-        invested = float(t.get("invested") or qty * buy)
+        qty = t["qty"]; buy = t["buy_price"]; invested = t["invested_inr"]
         cv = qty * price if price else None
         pnl = (cv - invested) if cv is not None else None
         pct = (pnl / invested * 100.0) if (pnl is not None and invested) else None
         out.append({
-            "date": t["date"],
-            "qty": int(qty),
-            "buy_price": buy,
-            "invested_inr": invested,
-            "current_value_inr": cv,
-            "unrealized_pnl_inr": pnl,
-            "unrealized_pnl_pct": pct,
+            **t,
+            "current_value_inr": round(cv, 2) if cv is not None else None,
+            "unrealized_pnl_inr": round(pnl, 2) if pnl is not None else None,
+            "unrealized_pnl_pct": round(pct, 2) if pct is not None else None,
         })
     return out
 
 
-def _compute_sells(sells: list[dict]) -> dict[str, Any]:
-    if not sells:
-        return {"count": 0, "qty_sold": 0, "proceeds_inr": 0.0,
-                "realized_pnl_inr": 0.0, "details": []}
-    qty_sold = sum(int(s["qty"]) for s in sells)
-    proceeds = sum(float(s["qty"]) * float(s["sell_price"]) for s in sells)
-    realized = sum(float(s.get("realized_pnl_inr") or 0) for s in sells)
-    return {"count": len(sells), "qty_sold": qty_sold, "proceeds_inr": proceeds,
-            "realized_pnl_inr": realized, "details": sells}
-
-
 def _aggregate_account(key: str, data: dict, price: float | None) -> dict[str, Any]:
-    tranches = _compute_tranches(data.get("tranches") or [], price)
-    sells = _compute_sells(data.get("sells") or [])
-    qty = sum(t["qty"] for t in tranches)
-    invested = sum(t["invested_inr"] for t in tranches)
-    cv = sum(t["current_value_inr"] for t in tranches) if price is not None else None
-    pnl = (cv - invested) if cv is not None else None
-    pct = (pnl / invested * 100.0) if (pnl is not None and invested) else None
-    avg = invested / qty if qty else None
+    buys = data.get("buys") or data.get("tranches") or []   # backward-compat: 'tranches' meant 'buys'
+    sells = data.get("sells") or []
+    fifo = _fifo_match(buys, sells)
+    remaining = _mark_remaining(fifo["remaining_tranches"], price)
+    realized_sells = fifo["realized_sells"]
+
+    rem_qty = sum(t["qty"] for t in remaining)
+    rem_invested = sum(t["invested_inr"] for t in remaining)
+    rem_cv = sum((t["current_value_inr"] or 0) for t in remaining) if price is not None else None
+    rem_unrealized = (rem_cv - rem_invested) if rem_cv is not None else None
+    rem_unrealized_pct = (rem_unrealized / rem_invested * 100.0) if (rem_unrealized is not None and rem_invested) else None
+    avg_buy = (rem_invested / rem_qty) if rem_qty else None
+
+    realized_total = sum(s["realized_pnl_inr"] for s in realized_sells)
+    realized_proceeds = sum(s["proceeds_inr"] for s in realized_sells)
+    realized_cost_basis = sum(s["cost_basis_inr"] for s in realized_sells)
+    realized_brokerage = sum(s.get("brokerage", 0) for s in realized_sells)
+    realized_qty = sum(s["qty"] for s in realized_sells)
+    realized_pct_blended = (realized_total / realized_cost_basis * 100.0) if realized_cost_basis else None
+
+    total_buys_qty = sum(int(b["qty"]) for b in buys)
+    total_sells_qty = sum(int(s["qty"]) for s in sells)
+
+    status = "active" if rem_qty > 0 else "exited"
+
     return {
         "account_key": key,
         "holder": data.get("holder", key),
@@ -138,20 +223,31 @@ def _aggregate_account(key: str, data: dict, price: float | None) -> dict[str, A
         "custodian": data.get("custodian"),
         "accent_color": data.get("accent_color"),
         "emoji": data.get("emoji"),
-        "holdings_qty": qty,
-        "tranche_count": len(tranches),
-        "avg_buy_inr": avg,
-        "invested_inr": invested,
-        "current_value_inr": cv,
-        "unrealized_pnl_inr": pnl,
-        "unrealized_pnl_pct": pct,
-        "tranches": tranches,
-        "sells_summary": {
-            "count": sells["count"], "qty_sold": sells["qty_sold"],
-            "proceeds_inr": sells["proceeds_inr"], "realized_pnl_inr": sells["realized_pnl_inr"],
-        },
-        "sells_details": sells["details"],
-        "sell_data_status": "complete" if sells["count"] else "pending-from-father",
+        "status": status,
+        "source_file": data.get("source_file"),
+        # Activity totals
+        "total_buy_qty": total_buys_qty,
+        "total_sell_qty": total_sells_qty,
+        "trade_count": len(buys) + len(sells),
+        # Holdings (current)
+        "holdings_qty": rem_qty,
+        "tranche_count": len(remaining),
+        "avg_buy_inr": round(avg_buy, 2) if avg_buy is not None else None,
+        "invested_inr": round(rem_invested, 2),
+        "current_value_inr": round(rem_cv, 2) if rem_cv is not None else None,
+        "unrealized_pnl_inr": round(rem_unrealized, 2) if rem_unrealized is not None else None,
+        "unrealized_pnl_pct": round(rem_unrealized_pct, 2) if rem_unrealized_pct is not None else None,
+        "tranches": remaining,           # remaining tranches only (UI shows these as "holdings")
+        # Realized
+        "realized_pnl_inr": round(realized_total, 2),
+        "realized_pnl_pct": round(realized_pct_blended, 2) if realized_pct_blended is not None else None,
+        "realized_proceeds_inr": round(realized_proceeds, 2),
+        "realized_cost_basis_inr": round(realized_cost_basis, 2),
+        "realized_brokerage_inr": round(realized_brokerage, 2),
+        "realized_qty": realized_qty,
+        "realized_sells": realized_sells,
+        # Combined return
+        "combined_pnl_inr": round(realized_total + (rem_unrealized or 0), 2),
     }
 
 
@@ -239,51 +335,12 @@ def _fetch_live_quote(ticker: str) -> dict[str, Any]:
         return {"status": f"error: {e}"}
 
 
-
-
-def _fetch_goldapi_xagusd() -> dict[str, Any]:
-    """Pull live XAGUSD spot from goldapi.io. Free tier 100/day.
-    Requires GOLDAPI_KEY env var. Returns {} on absence/failure."""
-    import os, urllib.request, urllib.error  # noqa: PLC0415
-    key = os.environ.get("GOLDAPI_KEY")
-    if not key:
-        return {"status": "no_api_key"}
-    try:
-        req = urllib.request.Request(
-            "https://www.goldapi.io/api/XAG/USD",
-            headers={"x-access-token": key, "Content-Type": "application/json"},
-        )
-        with urllib.request.urlopen(req, timeout=10) as r:
-            data = json.loads(r.read())
-        # goldapi returns price per troy oz in USD
-        return {
-            "status": "ok",
-            "ticker": "XAGUSD",
-            "yahoo_symbol": "goldapi.io",
-            "currency": "USD",
-            "market_state": "LIVE-SPOT",
-            "price": float(data.get("price") or 0) or None,
-            "prev_close": float(data.get("prev_close_price") or 0) or None,
-            "day_chg_pct": float(data.get("ch_percent") or 0) or None,
-            "as_of_utc": datetime.fromtimestamp(int(data.get("timestamp", 0)), tz=timezone.utc).isoformat() if data.get("timestamp") else None,
-            "source_note": "goldapi.io free tier — 24/5 OTC spot",
-        }
-    except Exception as e:  # noqa: BLE001
-        return {"status": f"error: {e}"}
-
 def _fetch_live_market_snapshot() -> dict[str, Any]:
     """Pull live SILVERBEES + XAGUSD + GOLD + USDINR + DXY in one pass."""
-    tickers = ["SILVERBEES", "USDINR", "DXY"]
+    tickers = ["SILVERBEES", "XAGUSD", "USDINR", "DXY"]
     out = {}
     for t in tickers:
         out[t.lower()] = _fetch_live_quote(t)
-    # XAGUSD: try goldapi first (24/5 true spot), fall back to Yahoo SI=F (futures, closes weekends)
-    goldapi_xag = _fetch_goldapi_xagusd()
-    if goldapi_xag.get("status") == "ok" and goldapi_xag.get("price"):
-        out["xagusd"] = goldapi_xag
-    else:
-        out["xagusd"] = _fetch_live_quote("XAGUSD")
-        out["xagusd"]["source_note"] = "Yahoo SI=F (futures; closed weekends) — " + str(goldapi_xag.get("status", ""))
     # GOLD spot via GC=F (gold futures proxy) — manually since yahoo_common doesn't list it
     try:
         sys.path.insert(0, str(HERE))
@@ -354,20 +411,6 @@ def emit() -> Path:
         primary = live_sbees["price"]
     else:
         primary = price["price"]
-    # Display fields — when live SBees fetch is fresh, use its date / day_chg_pct
-    # so the dashboard headline matches the live price (else CSV). Fix 2026-05-18
-    # for stale-data display: previously `primary_inr` was live but `primary_date`
-    # + `primary_day_chg_pct` still came from the CSV (which trails by 1+ session).
-    if (live_sbees.get("status") == "ok"
-            and live_sbees.get("price")
-            and live_sbees.get("as_of_utc")):
-        display_date = live_sbees["as_of_utc"][:10]
-        display_day_chg_pct = live_sbees.get("day_chg_pct")
-        display_source = f"yahoo live ({live_sbees.get('yahoo_symbol', 'SILVERBEES.NS')})"
-    else:
-        display_date = price.get("date")
-        display_day_chg_pct = price.get("day_chg_pct")
-        display_source = price.get("source")
     # XAGUSD: prefer live fetch, fall back to YAML estimates
     live_xag = live.get("xagusd", {})
     if live_xag.get("status") == "ok" and live_xag.get("price"):
@@ -386,6 +429,16 @@ def emit() -> Path:
     family_cv = sum((a["current_value_inr"] or 0) for a in accounts_out) if primary is not None else None
     family_pnl = (family_cv - family_inv) if family_cv is not None else None
     family_pct = (family_pnl / family_inv * 100.0) if (family_pnl is not None and family_inv) else None
+    family_realized = sum(a["realized_pnl_inr"] for a in accounts_out)
+    family_realized_cost_basis = sum(a["realized_cost_basis_inr"] for a in accounts_out)
+    family_realized_proceeds = sum(a["realized_proceeds_inr"] for a in accounts_out)
+    family_realized_qty = sum(a["realized_qty"] for a in accounts_out)
+    family_realized_pct = (family_realized / family_realized_cost_basis * 100.0) if family_realized_cost_basis else None
+    family_combined_pnl = family_realized + (family_pnl or 0)
+    family_total_invested_lifetime = family_realized_cost_basis + family_inv   # everything ever bought (cost basis)
+    family_combined_pct = (family_combined_pnl / family_total_invested_lifetime * 100.0) if family_total_invested_lifetime else None
+    family_accounts_active = sum(1 for a in accounts_out if a["status"] == "active")
+    family_accounts_exited = sum(1 for a in accounts_out if a["status"] == "exited")
 
     out = {
         "schema_version": "v2",
@@ -396,10 +449,10 @@ def emit() -> Path:
         # Price layer
         "current_price": {
             "primary_inr": primary,
-            "primary_date": display_date,
-            "primary_source": display_source,
-            "primary_staleness_days": _staleness_days(display_date),
-            "primary_day_chg_pct": display_day_chg_pct,
+            "primary_date": price.get("date"),
+            "primary_source": price.get("source"),
+            "primary_staleness_days": _staleness_days(price.get("date")),
+            "primary_day_chg_pct": price.get("day_chg_pct"),
             "primary_intraday": {
                 "open": price.get("open"),
                 "high": price.get("high"),
@@ -420,7 +473,16 @@ def emit() -> Path:
             "current_value_inr": family_cv,
             "unrealized_pnl_inr": family_pnl,
             "unrealized_pnl_pct": family_pct,
-            "account_count_active": sum(1 for a in accounts_out if (a["holdings_qty"] or 0) > 0),
+            "realized_pnl_inr": family_realized,
+            "realized_pnl_pct": family_realized_pct,
+            "realized_proceeds_inr": family_realized_proceeds,
+            "realized_cost_basis_inr": family_realized_cost_basis,
+            "realized_qty": family_realized_qty,
+            "combined_pnl_inr": family_combined_pnl,
+            "combined_pnl_pct": family_combined_pct,
+            "total_invested_lifetime_inr": family_total_invested_lifetime,
+            "account_count_active": family_accounts_active,
+            "account_count_exited": family_accounts_exited,
             "tranche_count": sum(a["tranche_count"] for a in accounts_out),
         },
         "accounts": accounts_out,
@@ -440,14 +502,15 @@ def emit() -> Path:
         "global_inventory": cfg.get("global_inventory", {}),
         "f98_redeployment": cfg.get("f98_redeployment", {}),
         "deployment_plan": cfg.get("deployment_plan", {}),
+        "cot": cfg.get("cot", {}),
 
         # Warnings (sells pending is the only one in v2)
         "warnings": [
             w for w in [
-                "Sell-side data PENDING across all accounts — realized P&L not yet computed."
-                if all(a["sells_summary"]["count"] == 0 for a in accounts_out) else None,
+                f"{family_accounts_exited} of {len(accounts_out)} accounts EXITED — only {family_accounts_active} active holding (Shalu only post 15-May liquidation)."
+                if family_accounts_exited >= 2 else None,
                 f"NSE SILVERBEES close is {_staleness_days(price.get('date'))} day(s) stale (weekend expected)."
-                if _staleness_days(display_date) and _staleness_days(display_date) > 1
+                if _staleness_days(price.get("date")) and _staleness_days(price.get("date")) > 1
                 else None,
             ] if w
         ],

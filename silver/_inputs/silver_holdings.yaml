@@ -15,13 +15,16 @@ meta:
   source_excel_drive_id: "1L6QZtyhrCN198GuLWGmpBZTaCoEWMH54IrTT-ts630I"
   source_excel_modified_utc: "2026-05-17T05:01:30Z"
   source_excel_note: "Tracker-only — buy/sell history. NOT linked to live price; the 'Current Price' cell is a manual reference, not a live quote."
-  last_synced: "2026-05-17"
+  last_synced: "2026-05-17"  # accounts data NOT refreshed since; holdings PENDING per 260531
   synced_by: "Claude (manual mirror v2)"
   ticker: "SILVERBEES"
   yahoo_symbol: "SILVERBEES.NS"
   exchange: "NSE"
   fund_name: "Nippon India Silver ETF"
-  related_flag: "F260510-F98_silver-post-trim-redeployment"
+  related_flag: "F260518-F109_silver-re-entry-v2_lower-floor-thesis"  # F98 closed/superseded
+  last_regraded: "2026-05-31"
+  holdings_status: "LIVE per operator 260531. The ONLY current silver holding is the F109 re-entry: 14,000u SilverBees (4 lots 17-21 May, Rs.35,41,440 all-in, blended ~Rs.252.96). NO legacy holding (operator confirmed 260531 — prior Shalu 20k zeroed via reconciliation sell). Deployable envelope <=Rs.5Cr -> ~Rs.4.65Cr dry. ASSUMPTIONS: re-entry in Sparsh acct; lot4 date pending."
+  capital_pnl_banner: "LIVE-260531"
   obsidian_reference_dashboard: "00_SYSTEM/DASHBOARDS/SILVER_DASHBOARD.md (v1.6)"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -37,36 +40,128 @@ meta:
 #   - Set null / remove the line to fall back to Yahoo live fetch
 #   - Emitter precedence: override > Yahoo live > YAML estimate
 overrides:
-  live_xagusd_override: null           # was 75.80 (pinned Sun 2026-05-17 when futures closed); released 2026-05-19 so Yahoo SI=F live feed flows through
-  live_xagusd_override_at: null
+  live_xagusd_override: 75.62          # 260531 Sun: SI=F 5/30 close (markets weekend-closed); honest weekend pin per override doctrine
+  live_xagusd_override_at: "2026-05-30T22:26:37+0530"
   live_silverbees_override: null       # SBees NSE-traded; daily close is authoritative when markets closed
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 1. HOLDINGS
+# 1. HOLDINGS — full broker contract-note history (replaces prior hand-curated tranche list)
+# Source: 07_POSITIONS/RAJIV-MULTI_SILVER/260517/*.xls (TSV format; broker contract notes)
+# Emitter FIFO-matches buys↔sells per account → derives remaining_tranches + realized_pnl
 # ─────────────────────────────────────────────────────────────────────────────
 accounts:
-  sparsh:
-    holder: "Sparsh"
-    account_type: "self-managed"
-    custodian: "Zerodha"
-    accent_color: "#22c55e"
-    emoji: "🎯"
-    tranches:   # 260531: F109 re-entry — operator-confirmed ONLY current holding
-      - { date: "2026-05-17", qty: 4000, buy_price: 254.00, invested: 1016920 }
-      - { date: "2026-05-20", qty: 4000, buy_price: 256.00, invested: 1023720 }
-      - { date: "2026-05-21", qty: 2000, buy_price: 251.00, invested:  502400 }
-      - { date: "2026-05-21", qty: 4000, buy_price: 250.00, invested:  998400 }  # lot4 date pending
-    sells: []
-
-  rajiv:
-    holder: "Rajiv (dad)"
+  rajiv_huf:
+    holder: "Rajiv HUF"
     account_type: "father-managed"
     custodian: "Zerodha"
     accent_color: "#3b82f6"
     emoji: "👨"
-    tranches: []   # 260531: liquidated; no current holding (operator-confirmed)
-    sells: []
+    source_file: "07_POSITIONS/RAJIV-MULTI_SILVER/260517/Rajiv HUF Silver Trades.xls"
+    buys:  # 65 broker contract trades
+      - { date: "2025-08-28", qty:  10000, buy_price:  112.76, trade_value:    1127600.00, brokerage:   1227.57 }
+      - { date: "2025-08-28", qty:   5000, buy_price:  112.70, trade_value:     563500.00, brokerage:    486.53 }
+      - { date: "2025-08-29", qty:  10000, buy_price:  113.62, trade_value:    1136200.00, brokerage:   1151.40 }
+      - { date: "2025-09-01", qty:  10000, buy_price:  118.47, trade_value:    1184678.45, brokerage:   1556.02 }
+      - { date: "2025-09-01", qty:  10000, buy_price:  118.58, trade_value:    1185800.00, brokerage:   1023.83 }
+      - { date: "2025-09-01", qty:  10000, buy_price:  118.58, trade_value:    1185800.00, brokerage:   1023.86 }
+      - { date: "2025-09-04", qty:  10000, buy_price:  118.78, trade_value:    1187800.00, brokerage:   1203.58 }
+      - { date: "2025-09-05", qty:  10000, buy_price:  119.01, trade_value:    1190100.00, brokerage:   1027.54 }
+      - { date: "2025-09-05", qty:  10000, buy_price:  119.11, trade_value:    1191100.00, brokerage:   1564.03 }
+      - { date: "2025-09-05", qty:  10000, buy_price:  119.21, trade_value:    1192100.00, brokerage:   1029.27 }
+      - { date: "2025-11-06", qty:   3000, buy_price:  141.90, trade_value:     425700.00, brokerage:    559.55 }
+      - { date: "2025-11-06", qty:   3000, buy_price:  141.89, trade_value:     425679.66, brokerage:    367.53 }
+      - { date: "2025-11-06", qty:   3000, buy_price:  141.90, trade_value:     425700.00, brokerage:    367.55 }
+      - { date: "2025-11-26", qty:   5000, buy_price:  151.73, trade_value:     758650.00, brokerage:    769.01 }
+      - { date: "2025-11-27", qty:   5000, buy_price:  155.76, trade_value:     778800.00, brokerage:    789.43 }
+      - { date: "2025-12-08", qty:  10000, buy_price:  169.50, trade_value:    1695000.00, brokerage:   1463.49 }
+      - { date: "2025-12-08", qty:  10000, buy_price:  169.92, trade_value:    1699229.86, brokerage:   1467.13 }
+      - { date: "2025-12-08", qty:  10000, buy_price:  170.13, trade_value:    1701300.00, brokerage:   2232.91 }
+      - { date: "2025-12-11", qty:  10000, buy_price:  178.54, trade_value:    1785400.00, brokerage:   1541.53 }
+      - { date: "2025-12-11", qty:  20000, buy_price:  179.00, trade_value:    3579989.80, brokerage:   4432.99 }
+      - { date: "2025-12-11", qty:  10000, buy_price:  178.98, trade_value:    1789800.00, brokerage:   1545.32 }
+      - { date: "2025-12-11", qty:  10000, buy_price:  178.98, trade_value:    1789800.00, brokerage:   1545.32 }
+      - { date: "2025-12-26", qty:  20000, buy_price:  216.90, trade_value:    4337949.38, brokerage:   5209.41 }
+      - { date: "2025-12-26", qty:  20000, buy_price:  216.88, trade_value:    4337600.00, brokerage:   3745.10 }
+      - { date: "2025-12-26", qty:   5000, buy_price:  216.99, trade_value:    1084950.00, brokerage:    936.75 }
+      - { date: "2025-12-29", qty:   2000, buy_price:  216.08, trade_value:     432150.34, brokerage:    373.13 }
+      - { date: "2025-12-29", qty:   2000, buy_price:  214.78, trade_value:     429560.00, brokerage:    370.89 }
+      - { date: "2025-12-29", qty:  20000, buy_price:  216.99, trade_value:    4339780.45, brokerage:   3746.99 }
+      - { date: "2025-12-29", qty:  10000, buy_price:  217.00, trade_value:    2170000.00, brokerage:   3141.59 }
+      - { date: "2025-12-29", qty:   5000, buy_price:  217.00, trade_value:    1085000.00, brokerage:    936.79 }
+      - { date: "2025-12-31", qty:  20000, buy_price:  220.88, trade_value:    4417600.00, brokerage:   3814.18 }
+      - { date: "2025-12-31", qty:  20000, buy_price:  220.50, trade_value:    4410000.00, brokerage:   6788.62 }
+      - { date: "2025-12-31", qty:  20000, buy_price:  220.79, trade_value:    4415784.16, brokerage:   3812.62 }
+      - { date: "2025-12-31", qty:  20000, buy_price:  221.00, trade_value:    4419913.35, brokerage:   3816.18 }
+      - { date: "2025-12-31", qty:  10000, buy_price:  220.90, trade_value:    2209000.00, brokerage:   1907.27 }
+      - { date: "2026-01-01", qty:   6000, buy_price:  214.64, trade_value:    1287820.03, brokerage:   1304.91 }
+      - { date: "2026-01-21", qty:  10000, buy_price:  310.25, trade_value:    3102500.00, brokerage:   3143.73 }
+      - { date: "2026-02-01", qty:  10000, buy_price:  252.50, trade_value:    2525000.00, brokerage:   2180.08 }
+      - { date: "2026-02-01", qty:   7500, buy_price:  252.50, trade_value:    1893750.00, brokerage:   2298.07 }
+      - { date: "2026-02-11", qty:  23024, buy_price:  246.45, trade_value:    5674264.80, brokerage:   5750.41 }
+      - { date: "2026-02-20", qty:  10000, buy_price:  229.95, trade_value:    2299500.00, brokerage:    344.95 }
+      - { date: "2026-02-23", qty:  10000, buy_price:  252.96, trade_value:    2529600.00, brokerage:    379.56 }
+      - { date: "2026-02-26", qty:  10000, buy_price:  251.15, trade_value:    2511500.00, brokerage:    301.39 }
+      - { date: "2026-02-26", qty:  10000, buy_price:  251.90, trade_value:    2519003.99, brokerage:    453.31 }
+      - { date: "2026-03-02", qty:  20000, buy_price:  272.89, trade_value:    5457821.08, brokerage:   6139.33 }
+      - { date: "2026-03-02", qty:   5000, buy_price:  270.81, trade_value:    1354025.95, brokerage:   1169.09 }
+      - { date: "2026-03-02", qty:   5000, buy_price:  270.69, trade_value:    1353450.06, brokerage:   1168.57 }
+      - { date: "2026-03-02", qty:   5000, buy_price:  270.20, trade_value:    1351000.00, brokerage:   1166.44 }
+      - { date: "2026-03-04", qty:   5000, buy_price:  252.60, trade_value:    1262976.92, brokerage:    151.57 }
+      - { date: "2026-03-04", qty:    100, buy_price:  254.49, trade_value:      25449.00, brokerage:      3.06 }
+      - { date: "2026-03-04", qty:  10000, buy_price:  254.74, trade_value:    2547405.56, brokerage:    305.63 }
+      - { date: "2026-03-04", qty:  20000, buy_price:  254.10, trade_value:    5082000.00, brokerage:    609.87 }
+      - { date: "2026-03-04", qty:  20000, buy_price:  254.10, trade_value:    5082000.00, brokerage:   1181.87 }
+      - { date: "2026-03-04", qty:  20000, buy_price:  253.00, trade_value:    5060000.00, brokerage:    607.21 }
+      - { date: "2026-03-05", qty:  10000, buy_price:  253.89, trade_value:    2538900.00, brokerage:    304.68 }
+      - { date: "2026-03-05", qty:  10000, buy_price:  253.80, trade_value:    2538000.00, brokerage:    304.58 }
+      - { date: "2026-03-05", qty:  10000, buy_price:  253.67, trade_value:    2536700.00, brokerage:    304.42 }
+      - { date: "2026-03-05", qty:  10000, buy_price:  253.50, trade_value:    2535000.00, brokerage:    304.22 }
+      - { date: "2026-03-05", qty:  10000, buy_price:  251.50, trade_value:    2515000.00, brokerage:    681.82 }
+      - { date: "2026-03-06", qty:  10000, buy_price:  250.19, trade_value:    2501942.72, brokerage:   1455.24 }
+      - { date: "2026-04-01", qty:  10000, buy_price:  224.50, trade_value:    2245000.00, brokerage:   2275.35 }
+      - { date: "2026-05-06", qty:   5000, buy_price:  233.02, trade_value:    1165100.00, brokerage:   1180.94 }
+      - { date: "2026-05-07", qty:   5000, buy_price:  239.64, trade_value:    1198176.70, brokerage:   1034.47 }
+      - { date: "2026-05-07", qty:   5000, buy_price:  238.85, trade_value:    1194247.65, brokerage:   1749.17 }
+      - { date: "2026-05-07", qty:  10000, buy_price:  239.56, trade_value:    2395600.00, brokerage:   2068.30 }
+    sells: # 37 broker contract trades
+      - { date: "2025-09-02", qty:  15000, sell_price:  117.54, trade_value:    1763053.22, brokerage:   1522.23 }
+      - { date: "2025-09-02", qty:  10000, sell_price:  117.50, trade_value:    1175011.35, brokerage:   1014.52 }
+      - { date: "2025-09-02", qty:  30000, sell_price:  117.50, trade_value:    3525000.00, brokerage:   3043.55 }
+      - { date: "2025-09-12", qty:  10000, sell_price:  122.58, trade_value:    1225800.00, brokerage:   1058.36 }
+      - { date: "2025-09-12", qty:  30000, sell_price:  122.58, trade_value:    3677400.00, brokerage:   3175.09 }
+      - { date: "2025-12-24", qty:  20000, sell_price:  209.35, trade_value:    4187000.00, brokerage:   3615.08 }
+      - { date: "2025-12-24", qty:  20000, sell_price:  209.40, trade_value:    4188000.00, brokerage:   3615.88 }
+      - { date: "2025-12-30", qty:  30000, sell_price:  218.50, trade_value:    6555000.00, brokerage:   5659.61 }
+      - { date: "2025-12-30", qty:   5000, sell_price:  218.75, trade_value:    1093750.00, brokerage:    944.35 }
+      - { date: "2025-12-30", qty:   5000, sell_price:  218.75, trade_value:    1093750.00, brokerage:    944.35 }
+      - { date: "2025-12-30", qty:   9000, sell_price:  218.75, trade_value:    1968750.00, brokerage:   1699.83 }
+      - { date: "2026-01-30", qty:  10000, sell_price:  286.12, trade_value:    2861186.75, brokerage:   2470.36 }
+      - { date: "2026-01-30", qty:   6000, sell_price:  286.21, trade_value:    1717269.31, brokerage:   1482.71 }
+      - { date: "2026-01-30", qty:  10000, sell_price:  286.11, trade_value:    2861115.91, brokerage:   2470.38 }
+      - { date: "2026-02-02", qty:  67489, sell_price:  205.37, trade_value:   13860359.15, brokerage:  11967.16 }
+      - { date: "2026-02-10", qty:  45000, sell_price:  242.20, trade_value:   10899000.00, brokerage:   9410.27 }
+      - { date: "2026-02-12", qty:  39000, sell_price:  244.66, trade_value:    9541569.71, brokerage:   8238.19 }
+      - { date: "2026-02-12", qty:  22511, sell_price:  244.63, trade_value:    5506830.11, brokerage:   4754.61 }
+      - { date: "2026-02-20", qty:    813, sell_price:  231.25, trade_value:     188006.25, brokerage:     22.56 }
+      - { date: "2026-02-20", qty:   9187, sell_price:  231.29, trade_value:    2124861.23, brokerage:    255.00 }
+      - { date: "2026-02-23", qty:  10000, sell_price:  250.87, trade_value:    2508651.88, brokerage:    301.05 }
+      - { date: "2026-02-26", qty:  10000, sell_price:  252.13, trade_value:    2521255.26, brokerage:    302.55 }
+      - { date: "2026-02-26", qty:  10000, sell_price:  250.57, trade_value:    2505692.21, brokerage:    300.71 }
+      - { date: "2026-03-04", qty:   5100, sell_price:  255.39, trade_value:    1302501.46, brokerage:    156.31 }
+      - { date: "2026-03-04", qty:  10000, sell_price:  254.30, trade_value:    2543006.61, brokerage:    305.18 }
+      - { date: "2026-03-04", qty:  20000, sell_price:  254.30, trade_value:    5086000.00, brokerage:    610.33 }
+      - { date: "2026-03-04", qty:  40000, sell_price:  255.00, trade_value:   10200000.00, brokerage:   1224.06 }
+      - { date: "2026-03-05", qty:   6155, sell_price:  240.53, trade_value:    1480469.48, brokerage:    177.67 }
+      - { date: "2026-03-05", qty:  43845, sell_price:  248.66, trade_value:   10902465.47, brokerage:   1308.37 }
+      - { date: "2026-03-06", qty:   5000, sell_price:  249.62, trade_value:    1248104.56, brokerage:    149.76 }
+      - { date: "2026-03-09", qty:  17500, sell_price:  245.70, trade_value:    4299756.39, brokerage:   3712.42 }
+      - { date: "2026-03-09", qty:  23024, sell_price:  245.67, trade_value:    5656243.92, brokerage:   4883.72 }
+      - { date: "2026-03-09", qty:  35000, sell_price:  245.58, trade_value:    8595274.13, brokerage:   7421.14 }
+      - { date: "2026-03-09", qty:   5000, sell_price:  245.57, trade_value:    1227826.31, brokerage:   1060.10 }
+      - { date: "2026-05-15", qty:  20000, sell_price:  251.90, trade_value:    5038000.00, brokerage:   4349.84 }
+      - { date: "2026-05-15", qty:  10000, sell_price:  251.47, trade_value:    2514731.00, brokerage:   2171.24 }
+      - { date: "2026-05-15", qty:   5000, sell_price:  251.60, trade_value:    1258020.89, brokerage:   1086.19 }
 
   shalu:
     holder: "Shalini (mom)"
@@ -74,8 +169,108 @@ accounts:
     custodian: "Zerodha"
     accent_color: "#a855f7"
     emoji: "👩"
-    tranches: []   # 260531: operator confirmed no current holding (prior 20k not held)
-    sells: []
+    source_file: "07_POSITIONS/RAJIV-MULTI_SILVER/260517/Shalini Silver Trades.xls"
+    buys:  # 20 broker contract trades
+      - { date: "2025-07-28", qty:   1000, buy_price:  109.24, trade_value:     109240.00, brokerage:     94.32 }
+      - { date: "2025-07-28", qty:   1000, buy_price:  109.07, trade_value:     109070.00, brokerage:     94.17 }
+      - { date: "2025-07-28", qty:   1000, buy_price:  109.16, trade_value:     109160.00, brokerage:    143.25 }
+      - { date: "2025-07-30", qty:   1000, buy_price:  109.87, trade_value:     109870.00, brokerage:    110.86 }
+      - { date: "2025-08-05", qty:   1000, buy_price:  108.48, trade_value:     108476.14, brokerage:    110.08 }
+      - { date: "2025-08-22", qty:   1000, buy_price:  109.93, trade_value:     109930.00, brokerage:    111.40 }
+      - { date: "2025-08-25", qty:   5000, buy_price:  112.17, trade_value:     560850.00, brokerage:    484.24 }
+      - { date: "2025-08-25", qty:   5000, buy_price:  112.19, trade_value:     560950.00, brokerage:    652.33 }
+      - { date: "2025-08-26", qty:   5000, buy_price:  112.62, trade_value:     563100.00, brokerage:    570.19 }
+      - { date: "2025-11-19", qty:  10000, buy_price:  149.39, trade_value:    1493934.28, brokerage:   1513.87 }
+      - { date: "2025-12-01", qty:  10000, buy_price:  165.29, trade_value:    1652897.24, brokerage:   1427.11 }
+      - { date: "2025-12-01", qty:  10000, buy_price:  165.31, trade_value:    1653100.00, brokerage:   2421.29 }
+      - { date: "2025-12-01", qty:  10000, buy_price:  165.92, trade_value:    1659200.00, brokerage:   1432.56 }
+      - { date: "2025-12-01", qty:  10000, buy_price:  165.93, trade_value:    1659300.00, brokerage:   1432.65 }
+      - { date: "2025-12-24", qty:  20000, buy_price:  209.28, trade_value:    4185600.00, brokerage:   3613.88 }
+      - { date: "2025-12-24", qty:  20000, buy_price:  209.05, trade_value:    4180999.04, brokerage:   4864.90 }
+      - { date: "2026-01-13", qty:  30000, buy_price:  249.46, trade_value:    7483800.00, brokerage:   7584.57 }
+      - { date: "2026-03-30", qty:  10000, buy_price:  216.19, trade_value:    2161900.00, brokerage:   2190.60 }
+      - { date: "2026-04-28", qty:   5000, buy_price:  225.13, trade_value:    1125650.00, brokerage:    971.89 }
+      - { date: "2026-04-28", qty:   5000, buy_price:  225.13, trade_value:    1125650.00, brokerage:   1309.89 }
+    sells: # 10 broker contract trades
+      - { date: "2026-05-31", qty: 20000, sell_price: 220.66, trade_value: 4413200.00, brokerage: 0.00, note: "RECONCILIATION (NOT a market trade) — operator confirmed 260531 the ONLY current holding is the 14,000u F109 re-entry; this zeros the stale 20k legacy net at cost basis (realized ~0)" }
+      - { date: "2025-08-28", qty:   3000, sell_price:  112.35, trade_value:     337050.00, brokerage:    290.98 }
+      - { date: "2025-08-28", qty:   1000, sell_price:  112.34, trade_value:     112340.00, brokerage:     96.98 }
+      - { date: "2025-08-28", qty:   1000, sell_price:  112.37, trade_value:     112370.00, brokerage:     97.02 }
+      - { date: "2025-08-28", qty:   1000, sell_price:  112.37, trade_value:     112370.00, brokerage:     97.02 }
+      - { date: "2025-08-28", qty:  10000, sell_price:  112.37, trade_value:    1123700.00, brokerage:    970.12 }
+      - { date: "2025-08-28", qty:   5000, sell_price:  112.37, trade_value:     561850.00, brokerage:    485.10 }
+      - { date: "2025-12-30", qty:  40000, sell_price:  218.50, trade_value:    8740000.00, brokerage:   7546.20 }
+      - { date: "2025-12-30", qty:  10000, sell_price:  218.50, trade_value:    2185000.00, brokerage:   1886.54 }
+      - { date: "2026-02-02", qty:  30000, sell_price:  211.60, trade_value:    6348078.74, brokerage:   5481.00 }
+      - { date: "2026-02-27", qty:  40000, sell_price:  252.65, trade_value:   10106000.00, brokerage:   8725.59 }
+
+  sparsh:
+    holder: "Sparsh"
+    account_type: "self-managed"
+    custodian: "Zerodha"
+    accent_color: "#22c55e"
+    emoji: "🎯"
+    source_file: "07_POSITIONS/RAJIV-MULTI_SILVER/260517/Sparsh Silver Trades.xls"
+    buys:  # 35 broker contract trades
+      - { date: "2026-05-17", qty: 4000, buy_price: 254.00, trade_value: 1016920.00, brokerage: 0.00, note: "F109 re-entry lot1 (operator Excel 260531; trade_value=all-in authoritative)" }
+      - { date: "2026-05-20", qty: 4000, buy_price: 256.00, trade_value: 1023720.00, brokerage: 0.00, note: "F109 re-entry lot2" }
+      - { date: "2026-05-21", qty: 2000, buy_price: 251.00, trade_value: 502400.00, brokerage: 0.00, note: "F109 re-entry lot3" }
+      - { date: "2026-05-21", qty: 4000, buy_price: 250.00, trade_value: 998400.00, brokerage: 0.00, note: "F109 re-entry lot4 (DATE PENDING — operator to confirm; placed at/after 21-May)" }
+      - { date: "2025-11-06", qty:   2000, buy_price:  141.60, trade_value:     283200.00, brokerage:    244.52 }
+      - { date: "2025-11-06", qty:   2000, buy_price:  141.57, trade_value:     283140.00, brokerage:    329.47 }
+      - { date: "2025-11-07", qty:   5000, buy_price:  141.88, trade_value:     709400.00, brokerage:    612.51 }
+      - { date: "2025-11-07", qty:   5000, buy_price:  141.91, trade_value:     709550.00, brokerage:    825.63 }
+      - { date: "2025-12-17", qty:  10000, buy_price:  190.78, trade_value:    1907757.39, brokerage:   1647.18 }
+      - { date: "2025-12-17", qty:  10000, buy_price:  190.78, trade_value:    1907752.77, brokerage:   2219.17 }
+      - { date: "2025-12-22", qty:  10000, buy_price:  199.96, trade_value:    1999600.00, brokerage:   1726.47 }
+      - { date: "2025-12-22", qty:   5000, buy_price:  199.70, trade_value:     998500.00, brokerage:    862.11 }
+      - { date: "2025-12-22", qty:   5000, buy_price:  199.74, trade_value:     998700.00, brokerage:    862.28 }
+      - { date: "2025-12-22", qty:   5000, buy_price:  199.72, trade_value:     998600.00, brokerage:    862.19 }
+      - { date: "2025-12-22", qty:  15000, buy_price:  200.05, trade_value:    3000750.00, brokerage:   3789.91 }
+      - { date: "2025-12-31", qty:  60000, buy_price:  221.00, trade_value:   13260000.00, brokerage:  13437.77 }
+      - { date: "2026-01-01", qty:   9000, buy_price:  214.64, trade_value:    1931760.00, brokerage:   1957.89 }
+      - { date: "2026-01-21", qty:   8000, buy_price:  310.88, trade_value:    2487040.00, brokerage:   2520.33 }
+      - { date: "2026-02-01", qty:   4500, buy_price:  252.50, trade_value:    1136250.00, brokerage:   1151.04 }
+      - { date: "2026-02-09", qty:  10000, buy_price:  244.49, trade_value:    2444900.00, brokerage:   2110.95 }
+      - { date: "2026-02-09", qty:  10000, buy_price:  244.00, trade_value:    2440000.00, brokerage:   2839.71 }
+      - { date: "2026-02-10", qty:  45000, buy_price:  241.65, trade_value:   10874154.75, brokerage:  11019.79 }
+      - { date: "2026-03-17", qty:  10000, buy_price:  242.34, trade_value:    2423400.00, brokerage:   2820.36 }
+      - { date: "2026-03-17", qty:  10000, buy_price:  243.30, trade_value:    2432983.25, brokerage:   2100.67 }
+      - { date: "2026-03-19", qty:   5000, buy_price:  222.39, trade_value:    1111959.34, brokerage:    960.07 }
+      - { date: "2026-03-19", qty:  10000, buy_price:  222.83, trade_value:    2228297.03, brokerage:   2425.31 }
+      - { date: "2026-03-23", qty:   5000, buy_price:  201.47, trade_value:    1007350.00, brokerage:    869.74 }
+      - { date: "2026-03-23", qty:   5000, buy_price:  200.63, trade_value:    1003155.39, brokerage:    866.13 }
+      - { date: "2026-03-23", qty:   5000, buy_price:  200.00, trade_value:    1000000.00, brokerage:   1462.41 }
+      - { date: "2026-03-23", qty:   5000, buy_price:  196.91, trade_value:     984550.00, brokerage:    850.07 }
+      - { date: "2026-04-21", qty:  10000, buy_price:  237.37, trade_value:    2373700.00, brokerage:   2405.07 }
+      - { date: "2026-04-23", qty:   2500, buy_price:  231.40, trade_value:     578490.46, brokerage:    499.48 }
+      - { date: "2026-04-23", qty:   2500, buy_price:  231.82, trade_value:     579550.00, brokerage:    500.38 }
+      - { date: "2026-04-23", qty:   5000, buy_price:  231.43, trade_value:    1157150.00, brokerage:   1346.09 }
+      - { date: "2026-04-24", qty:   2500, buy_price:  228.65, trade_value:     571625.00, brokerage:    665.54 }
+      - { date: "2026-04-24", qty:   2500, buy_price:  228.87, trade_value:     572175.00, brokerage:    494.02 }
+      - { date: "2026-04-29", qty:   4500, buy_price:  224.21, trade_value:    1008949.60, brokerage:   1022.14 }
+      - { date: "2026-05-05", qty:   2500, buy_price:  228.54, trade_value:     571350.00, brokerage:    493.30 }
+      - { date: "2026-05-05", qty:   2500, buy_price:  228.99, trade_value:     572475.00, brokerage:    665.77 }
+    sells: # 19 broker contract trades
+      - { date: "2025-12-30", qty:  10000, sell_price:  218.50, trade_value:    2185000.00, brokerage:   1886.54 }
+      - { date: "2025-12-30", qty:   4000, sell_price:  218.50, trade_value:     874000.00, brokerage:    754.62 }
+      - { date: "2026-02-02", qty:  52805, sell_price:  210.63, trade_value:   11122320.74, brokerage:   9603.11 }
+      - { date: "2026-02-06", qty:  20000, sell_price:  224.14, trade_value:    4482896.93, brokerage:   3870.56 }
+      - { date: "2026-02-06", qty:  40000, sell_price:  224.10, trade_value:    8964108.56, brokerage:   7739.66 }
+      - { date: "2026-02-12", qty:   7195, sell_price:  245.01, trade_value:    1762826.08, brokerage:   1522.03 }
+      - { date: "2026-02-12", qty:   9000, sell_price:  244.98, trade_value:    2204784.97, brokerage:   1903.61 }
+      - { date: "2026-03-06", qty:  45000, sell_price:  250.15, trade_value:   11256808.68, brokerage:   9719.18 }
+      - { date: "2026-03-06", qty:   8000, sell_price:  250.10, trade_value:    2000800.00, brokerage:   1727.52 }
+      - { date: "2026-03-09", qty:   4500, sell_price:  246.24, trade_value:    1108085.90, brokerage:    956.74 }
+      - { date: "2026-03-09", qty:  20000, sell_price:  246.21, trade_value:    4924111.44, brokerage:   4251.52 }
+      - { date: "2026-04-15", qty:  20000, sell_price:  237.00, trade_value:    4740000.00, brokerage:   4092.55 }
+      - { date: "2026-04-15", qty:  15000, sell_price:  236.20, trade_value:    3543010.71, brokerage:   3059.07 }
+      - { date: "2026-05-15", qty:  20000, sell_price:  249.15, trade_value:    4983000.00, brokerage:   4302.35 }
+      - { date: "2026-05-15", qty:  10000, sell_price:  249.15, trade_value:    2491500.00, brokerage:   2151.17 }
+      - { date: "2026-05-15", qty:  10000, sell_price:  249.15, trade_value:    2491500.00, brokerage:   2151.18 }
+      - { date: "2026-05-15", qty:   5000, sell_price:  249.15, trade_value:    1245750.00, brokerage:   1075.59 }
+      - { date: "2026-05-15", qty:   4500, sell_price:  249.15, trade_value:    1121175.00, brokerage:    968.03 }
+      - { date: "2026-05-15", qty:   5000, sell_price:  249.15, trade_value:    1245750.00, brokerage:   1075.59 }
 
   yash:
     holder: "Yash (brother)"
@@ -83,8 +278,46 @@ accounts:
     custodian: "Zerodha"
     accent_color: "#0891b2"
     emoji: "🧑"
-    tranches: []
-    sells: []
+    source_file: "07_POSITIONS/RAJIV-MULTI_SILVER/260517/Yash Silver Trades.xls"
+    buys:  # 18 broker contract trades
+      - { date: "2025-11-13", qty:   3000, buy_price:  157.25, trade_value:     471750.00, brokerage:    478.31 }
+      - { date: "2025-12-08", qty:  10000, buy_price:  170.13, trade_value:    1701339.59, brokerage:   1978.95 }
+      - { date: "2025-12-08", qty:  10000, buy_price:  170.16, trade_value:    1701610.44, brokerage:   1469.18 }
+      - { date: "2025-12-19", qty:  10000, buy_price:  192.92, trade_value:    1929200.00, brokerage:   1665.69 }
+      - { date: "2025-12-19", qty:   5000, buy_price:  192.68, trade_value:     963400.00, brokerage:    831.81 }
+      - { date: "2025-12-19", qty:   5000, buy_price:  192.20, trade_value:     961000.00, brokerage:    829.73 }
+      - { date: "2025-12-19", qty:   5000, buy_price:  192.03, trade_value:     960150.00, brokerage:   1551.28 }
+      - { date: "2025-12-26", qty:  12000, buy_price:  217.15, trade_value:    2605800.00, brokerage:   2705.86 }
+      - { date: "2025-12-26", qty:   2000, buy_price:  217.17, trade_value:     434347.16, brokerage:    375.02 }
+      - { date: "2025-12-29", qty:  10000, buy_price:  235.88, trade_value:    2358816.66, brokerage:    374.60 }
+      - { date: "2025-12-29", qty:  10000, buy_price:  235.89, trade_value:    2358900.00, brokerage:   1522.00 }
+      - { date: "2025-12-29", qty:  10000, buy_price:  235.89, trade_value:    2358900.00, brokerage:   2036.69 }
+      - { date: "2025-12-29", qty:  10000, buy_price:  236.00, trade_value:    2360000.00, brokerage:   2995.11 }
+      - { date: "2025-12-31", qty:  20000, buy_price:  216.84, trade_value:    4336800.00, brokerage:   4395.42 }
+      - { date: "2026-01-01", qty:   4000, buy_price:  214.63, trade_value:     858520.00, brokerage:    870.23 }
+      - { date: "2026-01-21", qty:   6500, buy_price:  310.20, trade_value:    2016294.63, brokerage:   2042.89 }
+      - { date: "2026-02-01", qty:  13000, buy_price:  252.50, trade_value:    3282500.00, brokerage:   3326.14 }
+      - { date: "2026-02-09", qty:  25000, buy_price:  243.69, trade_value:    6092240.18, brokerage:   6174.06 }
+    sells: # 18 broker contract trades
+      - { date: "2025-11-17", qty:    401, sell_price:  148.33, trade_value:      59480.33, brokerage:     51.36 }
+      - { date: "2025-12-29", qty:   3118, sell_price:  227.12, trade_value:     708175.22, brokerage:     84.99 }
+      - { date: "2025-12-29", qty:   2866, sell_price:  219.11, trade_value:     627974.66, brokerage:     75.36 }
+      - { date: "2025-12-29", qty:   3030, sell_price:  210.00, trade_value:     636300.00, brokerage:     76.36 }
+      - { date: "2025-12-29", qty:   3921, sell_price:  197.20, trade_value:     773225.06, brokerage:     92.79 }
+      - { date: "2025-12-30", qty:  20000, sell_price:  218.50, trade_value:    4370000.00, brokerage:   3773.09 }
+      - { date: "2025-12-30", qty:   2599, sell_price:  218.50, trade_value:     567881.50, brokerage:    490.31 }
+      - { date: "2026-02-02", qty:  20000, sell_price:  210.10, trade_value:    4201978.90, brokerage:   3628.12 }
+      - { date: "2026-02-02", qty:  18553, sell_price:  208.00, trade_value:    3859024.00, brokerage:   3331.90 }
+      - { date: "2026-02-06", qty:   6447, sell_price:  224.40, trade_value:    1446728.95, brokerage:   1249.13 }
+      - { date: "2026-02-06", qty:  14000, sell_price:  224.40, trade_value:    3141600.00, brokerage:   2712.51 }
+      - { date: "2026-02-06", qty:   4000, sell_price:  224.40, trade_value:     897600.00, brokerage:    775.01 }
+      - { date: "2026-03-04", qty:   1300, sell_price:  255.07, trade_value:     331592.20, brokerage:    286.29 }
+      - { date: "2026-03-04", qty:   1600, sell_price:  255.00, trade_value:     408000.00, brokerage:    352.27 }
+      - { date: "2026-03-04", qty:   3600, sell_price:  255.00, trade_value:     918000.00, brokerage:    792.59 }
+      - { date: "2026-03-09", qty:  27065, sell_price:  245.48, trade_value:    6643845.86, brokerage:   5736.30 }
+      - { date: "2026-03-09", qty:  13000, sell_price:  245.38, trade_value:    3189994.18, brokerage:   2754.26 }
+      - { date: "2026-03-09", qty:  25000, sell_price:  245.32, trade_value:    6133068.56, brokerage:   5295.30 }
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. SNAPSHOT TICKERS — TradingView single-quote widgets bento
@@ -112,22 +345,22 @@ tradingview_main_chart:
 # ─────────────────────────────────────────────────────────────────────────────
 forecast:
   composite_verdict: "🟢 BASE-CONSTRUCTIVE (mild-bull tilt), gated — 260531 12-agent synthesis"
-  composite_source: "260510 multi-agent synthesis v3 + 260511 chart-read tilt (V-15 ±3pp)"
+  composite_source: "260531_SILVER_SYNTHESIS-FULL (12-agent FULL); macro+COT+industrial-metals aligned; authoritative level distribution = the 7-bucket in deployment_plan.probability_distribution (re-weighted 260531)"
   consensus_state: "DIVERGENT-LEANING bull (4 bull / 5 neutral / 0 bear non-chart agents)"
   v15_binding: "Charts contribute tiebreaker only; max ±3pp under LEANING consensus"
-  probability_mass:   # = 260531 7-bucket
+  probability_mass:   # = the 260531 7-bucket (single source; prior A-E retired)
     - { scenario: "$78+",   weight_pct: 12, note: "above-entry; no add" }
-    - { scenario: "$72-78", weight_pct: 20, note: "current; accumulate" }
+    - { scenario: "$72-78", weight_pct: 20, note: "current range; ACC accumulate" }
     - { scenario: "$69-72", weight_pct: 24, note: "F1 V-13 floor — largest add" }
     - { scenario: "$65-69", weight_pct: 18, note: "F2 add" }
-    - { scenario: "$59-65", weight_pct: 12, note: "intermediate" }
+    - { scenario: "$59-65", weight_pct: 12, note: "intermediate add" }
     - { scenario: "$55-59", weight_pct: 8,  note: "cascade tail" }
     - { scenario: "$52-55", weight_pct: 6,  note: "V-18 reserve" }
-  upper_half_69plus_pct: 56
-  last_synthesis_doc: "260510_XAG_MULTI-AGENT-SYNTHESIS_v3"
+  upper_half_69plus_pct: 56  # $69+ (260531 re-weight; was bullish_mass_a_plus_b 63)
+  last_synthesis_doc: "260531_SILVER_SYNTHESIS-FULL"
   last_chart_read_doc: "260511_XAG_CHART-READ-TRANSCRIPT"
-  last_chart_read_date: "2026-05-11"
-  last_chart_read_verdict: "🟢 FRESH-BULL — multi-TF stack supportive, GSR compressing, $50 wedge break intact"
+  last_chart_read_date: "2026-05-31"
+  last_chart_read_verdict: "🟡→🟢 STABILIZING — silver holding $75-76 above the lower-floor zones; GSR ~60 compressed; oil collapse + soft DXY supportive; legends low-res (V-01a, cache-anchored)"
 
 bull_bear:
   bull_case:
@@ -207,14 +440,14 @@ floor_framework:
   v_id: "V-13"
   status: "settled (5-agent consensus)"
   velocity_note: "V-14 — physical demand creates a VELOCITY floor (silver can't STAY below $60-65 long), NOT a LEVEL floor (CAN touch $55-58 in cascade). Physical responds in 2-6 weeks; paper cascades in 2-6 days."
-  tiers:   # aligned to 260531 7-bucket
-    - { tier: "$78+ no-add", band_low: 78, band_high: null, prob_pct: 12, mechanism: "reflation/$-down; above entry" }
-    - { tier: "$72-78",      band_low: 72, band_high: 78,   prob_pct: 20, mechanism: "current range — accumulate" }
-    - { tier: "F1 $69-72",   band_low: 69, band_high: 72,   prob_pct: 24, mechanism: "V-13 floor — highest weight" }
-    - { tier: "F2 $65-69",   band_low: 65, band_high: 69,   prob_pct: 18, mechanism: "secular trendline + physical" }
+  tiers:   # aligned to the 260531 7-bucket (single distribution); V-13 reaffirmed
+    - { tier: "$78+ no-add", band_low: 78, band_high: null, prob_pct: 12, mechanism: "reflation / dollar-down; above entry" }
+    - { tier: "$72-78",      band_low: 72, band_high: 78,   prob_pct: 20, mechanism: "current range — accumulate (ACC)" }
+    - { tier: "F1 $69-72",   band_low: 69, band_high: 72,   prob_pct: 24, mechanism: "V-13 daily floor — HIGHEST weight" }
+    - { tier: "F2 $65-69",   band_low: 65, band_high: 69,   prob_pct: 18, mechanism: "secular trendline + physical zone" }
     - { tier: "$59-65",      band_low: 59, band_high: 65,   prob_pct: 12, mechanism: "intermediate cascade" }
-    - { tier: "$55-59",      band_low: 55, band_high: 59,   prob_pct: 8,  mechanism: "cascade tail" }
-    - { tier: "V-18 $52-55", band_low: 52, band_high: 55,   prob_pct: 6,  mechanism: "tail; V-18 hard stop" }
+    - { tier: "$55-59",      band_low: 55, band_high: 59,   prob_pct: 8,  mechanism: "operator cascade tail" }
+    - { tier: "V-18 $52-55", band_low: 52, band_high: 55,   prob_pct: 6,  mechanism: "tail; V-18 $52 hard stop" }
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 10. STRATEGY OUTLOOK TIMELINE
@@ -231,7 +464,9 @@ strategy_timeline:
 # 11. GLOBAL INVENTORY  (COMEX / LBMA / SHFE / SLV ETF)
 # ─────────────────────────────────────────────────────────────────────────────
 global_inventory:
-  last_updated: "2026-05-10"  # ⚠️ carry-forward (3+ wks); inventory not re-pulled 260531 — do not treat as fresh
+  last_updated: "2026-05-10"
+  freshness: "⚠️ CARRY-FORWARD from 5/10 — physical-inventory venues not re-pulled 260531 (no live feed this session). Structural thesis intact per 260531 synthesis; treat figures as dated context, not live."
+  refresh_owner: "COMMODITIES agent — wire COMEX/LBMA/SHFE/SLV live feeds (F106/F116 follow-up)"
   source_doc: "260510_XAG_MULTI-AGENT-SYNTHESIS_v3 §0"
   items:
     - { venue: "COMEX (Total)",           value: "440M oz", change: "−11% Feb→Apr",       bias: "🟢 bullish", note: "Total stocks shrinking" }
@@ -242,11 +477,26 @@ global_inventory:
     - { venue: "SHFE (Shanghai premium)", value: "—",       change: "—",                  bias: "—",          note: "GAP — methodology only; quant needs SHFE feed" }
 
 # ─────────────────────────────────────────────────────────────────────────────
+# 11b. COT — CFTC Disaggregated (silver #084691)
+# ─────────────────────────────────────────────────────────────────────────────
+cot:
+  as_of: "26-May survey (29-May release; pulled 260530)"
+  source: "260530_XAG_COT-PULL.md (MetalCharts headline; CFTC static mirror lagged on the 19-May release)"
+  mm_net_k: 10.1
+  oi_k: 101.7
+  wow_delta_k: -1.46
+  ladder_rung: "COT-CAPITULATION (<30K)"
+  g8_status: "MET — clean & strengthening (froth pulse closed; deep-positioning base reasserted)"
+  percentile_heuristic: "~25-31st (lower half of recent cycle)"
+  read: "Low MM-net washed-out base = limited long-liquidation fuel for a cascade → supports the upward 7-bucket re-weight + the F1/F2 add zones. Gold MM +97.4K (crowded vs silver). Granular V-02/V-20 reconciliation pending CFTC mirror re-fire."
+
+# ─────────────────────────────────────────────────────────────────────────────
 # 12. F98 — pulled-forward redeployment context
 # ─────────────────────────────────────────────────────────────────────────────
 f98_redeployment:
-  status: "CLOSED — superseded by F109 (260531). Historical pointer only."
+  status: "CLOSED — superseded by F109 (per flag, closed 2026-05-18). Historical pointer only; do NOT render as active."
   superseded_by: "F260518-F109"
+  note: "The F98 50/50/40 post-trim redeployment framing is obsolete. Current silver plan = the F109 ₹5Cr re-entry ladder (deployment_plan)."
 
 # -----------------------------------------------------------------------------
 # 13. F109 - silver re-entry deployment plan (operator-approved 2026-05-19)
@@ -254,14 +504,16 @@ f98_redeployment:
 #     Source-of-truth: 01_DAILY/2605/260518/260518_XAG_SILV-TA-v7.md
 # -----------------------------------------------------------------------------
 deployment_plan:
-  version: F109-v1.1
+  version: F109-v2-260531
   revised: 2026-05-20
   revision_note: "size_inr corrected to match pct_envelope; envelope unchanged; tranche % unchanged"
+  v32_respec_log_260531: "COT-gate ambiguity resolved by operator 260531: T2/T3 'COT MM <=0' re-spec'd from literal net-short to WASHED-OUT-POSITIONING spirit (DICTIONARY COT-THRESHOLD-LADDER: low-percentile / below COT-CASCADE-DONE / W-W not crowding). Currently MET (+10.1K, froth-closed) — but does NOT fire T2/T3 today; price gates them ($75-76 above the $65-72 zones). The COT leg simply stops being a near-impossible blocker for when price arrives."
+  strategic_finding_260531: "PRIMARY LIVE RISK = UNDER-DEPLOYMENT. The ladder was built to deploy into a cascade to $65-69 that the 260531 re-weight now judges LESS likely (silver holding $75-76; macro/COT/metals supportive; lower-floor thesis weakening; V-13 reaffirmed). T1.5 (Rs.10L, CLEARED-but-HELD) is the partial hedge. OPEN OPERATOR DECISION: whether to add a RE-SPECIFIED HIGHER-ENTRY TRANCHE (deploy some at/near current $75-76) rather than wait for a dip that may not come. Not yet specified — operator call."
   authored: 2026-05-18
   approved: 2026-05-19
   status: active
-  envelope_inr: 50000000  # ₹5Cr silver-specific (operator 260531)
-  envelope_basis: "25% of active book through Jun FOMC; extends to 35%-of-active (17.5L) post-Warsh-dovish-signal"
+  envelope_inr: 50000000  # ₹5Cr silver-specific deployable (operator ruling 260531) — was ₹1.25Cr
+  envelope_basis: "₹5Cr SILVER-SPECIFIC capacity (operator 260531). Conditional ladder, NOT a commitment — realistic fill far less (deep zones low-prob). Full fill = 50% of ₹10Cr book, exceeds §8.1 35% active cap → cap/tier-doctrine revision authorized 260531 (see CLAUDE.md §8.1.1)."
   total_book_inr: 100000000  # 10Cr operator-confirmed 2026-05-19
   reserve_split:
     war_overlay_inr: 25000000        # 2.5Cr - Iran/Hormuz parachute
@@ -274,14 +526,59 @@ deployment_plan:
     macro_state: "01_DAILY/2605/260518/260518_XAG_MACRO-STATE_P2.md"
     agent_synthesis: "01_DAILY/2605/260518/260518_XAG_MULTI-AGENT-SYNTHESIS.md"
     open_questions: "OPEN_QUESTIONS_F109.md"
-  tranches:   # ₹5Cr ladder sized by 260531 7-bucket probabilities
-    - { id: ACC,  zone_xagusd: "72-78", size_inr: 11400000, deployed_inr: 3541440, remaining_inr: 7858560, prob_pct: 20, status: in-progress, label: "current-zone accumulation (F109 re-entry)" }
-    - { id: F1,   zone_xagusd: "69-72", size_inr: 13700000, prob_pct: 24, status: armed, label: "V-13 daily-floor — largest slug" }
-    - { id: F2,   zone_xagusd: "65-69", size_inr: 10200000, prob_pct: 18, status: armed, label: "secular trendline / physical zone" }
-    - { id: INT,  zone_xagusd: "59-65", size_inr: 6800000,  prob_pct: 12, status: armed, label: "intermediate cascade" }
-    - { id: TAIL, zone_xagusd: "55-59", size_inr: 4500000,  prob_pct: 8,  status: armed, label: "cascade tail" }
-    - { id: V18,  zone_xagusd: "52-55", size_inr: 3400000,  prob_pct: 6,  status: reserved, label: "V-18 retest reserve" }
-  ladder_total_inr: 50000000
+  tranches:   # ₹5Cr ladder, sized by the 260531 7-bucket probabilities (deploy where price is likely)
+    - id: ACC
+      label: "current-zone accumulation $72-78 (F109 re-entry)"
+      zone_xagusd: "72-78"
+      target_xagusd: 75.5   # ideal entry point within the zone
+      size_inr: 11400000
+      deployed_inr: 3541440
+      remaining_inr: 7858560
+      prob_pct: 20
+      fire_condition: "accumulate at/near current $75-76; ~₹78.6L remaining (pace <=₹50L/day per §8.4)"
+      status: in-progress
+      note: "14,000u already in @ blended ~₹252.96 (4 lots 17-21 May)"
+    - id: F1
+      label: "V-13 daily-floor zone — largest slug"
+      zone_xagusd: "69-72"
+      target_xagusd: 70.5   # ideal entry point within the zone
+      size_inr: 13700000
+      prob_pct: 24
+      fire_condition: "XAG enters $69-72 + COT washed-out (V-32 re-spec) + Brent <$110"
+      status: armed
+    - id: F2
+      label: "secular-trendline / physical-procurement zone"
+      zone_xagusd: "65-69"
+      target_xagusd: 67.0   # ideal entry point within the zone
+      size_inr: 10200000
+      prob_pct: 18
+      fire_condition: "XAG enters $65-69 + COT washed-out + Warsh signal preferred"
+      status: armed
+    - id: INT
+      label: "intermediate cascade"
+      zone_xagusd: "59-65"
+      target_xagusd: 62.0   # ideal entry point within the zone
+      size_inr: 6800000
+      prob_pct: 12
+      fire_condition: "XAG enters $59-65 + V-18 $52 not triggered"
+      status: armed
+    - id: TAIL
+      label: "cascade tail"
+      zone_xagusd: "55-59"
+      target_xagusd: 57.0   # ideal entry point within the zone
+      size_inr: 4500000
+      prob_pct: 8
+      fire_condition: "XAG enters $55-59 + V-18 not triggered + >=1 gate clearing"
+      status: armed
+    - id: V18
+      label: "V-18 retest reserve"
+      zone_xagusd: "52-55"
+      target_xagusd: 53.0   # ideal entry point within the zone
+      size_inr: 3400000
+      prob_pct: 6
+      fire_condition: "post-V-18 retest IF deep washout (COT very low + GSR >75)"
+      status: reserved
+  ladder_total_inr: 50000000   # = ₹5Cr (ACC 11.4 + F1 13.7 + F2 10.2 + INT 6.8 + TAIL 4.5 + V18 3.4)
   hard_stops:
     portfolio_level_xagusd: 52   # V-18 hard stop on daily close
     portfolio_derivation: "7-ATR + 1.5-sigma war-vol war-regime (section_10.2) + $50 prior consolidation top (SILVER_2026-05-18_16-02-32.png) + cost-curve high-$20s ultimate backstop"
@@ -290,15 +587,16 @@ deployment_plan:
     t3_specific_invalidation_xagusd: 58
     t3_invalidation_basis: "above F2 buffer, below F1.5 daily-floor; T3-only cut (V-18 still binding portfolio-level)"
   probability_distribution:
-    note: "7-bucket distribution per F109 mandate; modal at $65-69 (27%); cascade tail $52-59 (16%)"
+    note: "RE-WEIGHTED 260531 (driver-reversal): modal moved UP from $65-69 to the $69-78 band; upper-half ($69+) 0.42->0.56; deep tail trimmed 0.16->0.14 (retained, not zeroed — unsigned-ceasefire fat tail). Confirmed by washed-out COT (~+10.1K). Prior 260518 weights in git history."
+    reweight_date: "2026-05-31"
     buckets:
-      - { range: "$78+",    weight: 0.08, path: "reflation / Warsh dovish" }
-      - { range: "$72-78",  weight: 0.12, path: "V-13 holds + range chop" }
-      - { range: "$69-72",  weight: 0.22, path: "V-13 daily-floor zone" }
-      - { range: "$65-69",  weight: 0.27, path: "modal - measured-move retest of mid-cycle Fib" }
-      - { range: "$59-65",  weight: 0.15, path: "intermediate cascade" }
-      - { range: "$55-59",  weight: 0.10, path: "operator cascade tail" }
-      - { range: "$52-55",  weight: 0.06, path: "cascade tail / V-18 retest" }
+      - { range: "$78+",    weight: 0.12, path: "reflation / dollar-down + gold-ATH pull" }
+      - { range: "$72-78",  weight: 0.20, path: "where price IS; macro-supportive range-chop" }
+      - { range: "$69-72",  weight: 0.24, path: "V-13 daily-floor zone (modal)" }
+      - { range: "$65-69",  weight: 0.18, path: "cascade-retest — drivers reversed, less likely" }
+      - { range: "$59-65",  weight: 0.12, path: "intermediate cascade reduced" }
+      - { range: "$55-59",  weight: 0.08, path: "operator cascade tail reduced" }
+      - { range: "$52-55",  weight: 0.06, path: "V-18 retest tail retained" }
   watch_list_alerts:
     activation: "top-3"  # per operator 2026-05-19; top-3 alerts only
     top_3:

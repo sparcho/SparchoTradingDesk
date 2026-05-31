@@ -433,10 +433,11 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
         <div class="f109-sect-title">Tranche ladder</div>
         <table class="f109-tranches">
           <thead>
-            <tr><th>Tier</th><th style="text-align:right;">Size</th><th>Fire condition</th><th>Status</th></tr>
+            <tr><th>Tier</th><th style="text-align:right;">Target</th><th style="text-align:right;">Size</th><th>Fire condition</th><th>Status</th></tr>
           </thead>
           <tbody id="f109-tranches"></tbody>
         </table>
+        <div id="f109-strategic" style="margin-top:7px;padding:6px 8px;border-left:3px solid var(--forest);background:var(--tab-stripe);border-radius:3px;font-size:10px;line-height:1.45;color:var(--text-soft);"></div>
 
         <div class="f109-stops" id="f109-stops"></div>
       </div>
@@ -510,7 +511,7 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
   <div class="card">
     <div class="accent-top" style="background: var(--silver-gold);"></div>
     <div class="card-title">
-      <h2>COT · 260516 pull</h2>
+      <h2 id="cot-hdr">COT</h2>
       <div class="cot-bias-bar" style="margin:0;">
         <button class="b active" data-bias="both">🤝 Both</button>
         <button class="b" data-bias="bull">🐂 Bull</button>
@@ -634,7 +635,7 @@ const bb = DATA.bull_bear || {};
 const f98 = DATA.f98_redeployment || {};
 const sr = DATA.sr_levels || {};
 const add = DATA.add_ladder || {};
-const liveXag = (cm.xagusd && cm.xagusd.status === 'ok' && cm.xagusd.price) ? cm.xagusd.price : f98.current_xagusd_estimate;
+const liveXag = (cm.xagusd && cm.xagusd.status === 'ok' && cm.xagusd.price) ? cm.xagusd.price : ((DATA.sr_levels && DATA.sr_levels.current_xagusd_estimate) || (f98 && f98.current_xagusd_estimate));
 const xagNow = liveXag;
 let sellsFlat = [], tranchesFlat = [];
 
@@ -790,16 +791,18 @@ try {
       const sLower = (t.status || 'pending').toLowerCase();
       const sCls = `f109-status-pill f109-status-${sLower}`;
       const sizeStr = (t.size_inr > 0)
-        ? fmtINR(t.size_inr, { compact: true }) + ` <span style="color:var(--text-muted);font-weight:400;">(${t.pct_envelope}%)</span>`
+        ? fmtINR(t.size_inr, { compact: true }) + ` <span style="color:var(--text-muted);font-weight:400;">(${t.prob_pct}%)</span>`
         : '<span style="color:var(--text-muted);">₹0</span>';
       const autoTag = t.operator_pre_authorized ? ' <span style="color:var(--positive);font-weight:700;font-size:8.5px;letter-spacing:0.03em;">[AUTO]</span>' : '';
       return `<tr>
         <td class="tier">${t.id}${autoTag}<div style="font-size:9px;color:var(--text-muted);font-weight:400;margin-top:1px;">${t.label || ''}</div></td>
+        <td class="size">${t.target_xagusd ? '$'+Number(t.target_xagusd).toFixed(2) : '—'}<div style="font-size:9px;color:var(--text-muted);font-weight:400;">${t.zone_xagusd ? '$'+t.zone_xagusd : ''}</div></td>
         <td class="size">${sizeStr}</td>
         <td class="cond">${t.fire_condition || ''}</td>
         <td><span class="${sCls}">${t.status || '—'}</span></td>
       </tr>`;
     }).join('');
+    { const sf=document.getElementById('f109-strategic'); if(sf) sf.innerHTML = dp.strategic_finding_260531 ? ('🧭 <strong>Strategic:</strong> ' + dp.strategic_finding_260531) : ''; }
 
     // Hard stops
     const stops = dp.hard_stops || {};
@@ -931,23 +934,19 @@ try {
 
 // ─── 6. MARKET CONTEXT — COT cards + bias toggle ─────────────
 try {
-  const cotCards = [
-    { t: "MM Net Position", s: "12-May survey", h: "+15,761", sb: "W/W Δ +4,918 · largest weekly add in 6-print sequence", st: "FROTH BREACHED", a: "#b45309",
-      bull: "FROTH breach is regime shift — directional re-engagement (long-adds 9.5:1 vs shorts) confirms bullish thesis being priced in.",
-      bear: "Asymmetric capitulation edge now COMPRESSED. Size-up window open since 260502 has effectively closed; further long-deploys carry less edge." },
-    { t: "Threshold Ladder", s: "DICTIONARY", h: "🟡 FROTH proximity", sb: "🟢 CAPITULATION cleared\n🟡 FROTH (>15K) JUST BREACHED", st: "TRIM-PROXIMITY", a: "#b45309",
-      bull: "Capitulation cleared = doctrine said 'size-up' for weeks. Even at FROTH, structural rally setup remains; just lighter add-sizes from here.",
-      bear: "FROTH breach = doctrine's tactical signal to PREPARE for trim, not deploy. Mechanical doctrine says front-load was completed; next move is reduce." },
-    { t: "Open Interest", s: "total contracts", h: "103,800", sb: "W/W Δ +6,868 · first material expansion since cycle began compressing", st: "PAPER RE-ENGAGED", a: "#22c55e",
-      bull: "OI expansion alongside MM long-add = real, broad re-engagement. Paper coming back ON during rally is bullish confirmation.",
-      bear: "Two-week deleveraging cushion (<100K) lasted exactly one week. Paper builds at higher prices = late-cycle pattern; vulnerable to fast unwinds." },
-    { t: "G8 Capitulation", s: "silver doctrine §G8", h: "✅ MET", sb: "Descriptor: 'rebuild accelerating; froth threshold breached'\n(upgraded from 'deep-and-stalling')", st: "BULLISH TRANSITION", a: "#22c55e",
-      bull: "G8 descriptor upgrade = the rebuild that was stalled has now broken decisively higher. Confirms V-15 chart-led tilt from 260511.",
-      bear: "G8-MET with FROTH-BREACHED-too = strategic dilemma. Continue holding for trim trigger or partial-trim now to lock asymmetric advantage already earned?" },
-    { t: "Producer / Swap", s: "commercial counter-flow", h: "−1,092 SD", sb: "Producer net −2,019 W/W · Swap dealer adding shorts into spec long-bid", st: "CONFIRMATORY", a: "#3b6e8f",
-      bull: "Producer hedge-shorts ramping = physical hedgers see higher prices coming. Counter-party flow rational; confirms underlying real price move being absorbed.",
-      bear: "Heavy producer+swap-dealer short adds at THIS level may cap further upside near-term. Shorts being added at $86-89, not $93+; trim ladder may run into supply." },
+  const c0 = DATA.cot || {};
+  const _rung = (c0.ladder_rung || '').split(' ')[0] || 'OK';
+  const cotCards = (c0.mm_net_k == null) ? [] : [
+    { t: "MM Net Position", s: c0.as_of || '', h: `+${c0.mm_net_k}K`, sb: `W/W Δ ${c0.wow_delta_k}K · froth pulse fully retraced`, st: _rung, a: "#22c55e",
+      bull: c0.read || 'Washed-out deep base.', bear: "Headline-only (CFTC mirror lagged); granular V-02/V-20 reconciliation pending re-fire." },
+    { t: "Open Interest", s: "total contracts", h: `${c0.oi_k}K`, sb: "flat — paper neither expanding nor compressing", st: "NEUTRAL", a: "#3b6e8f",
+      bull: "Stable OI on a washed-out base — no crowded long to unwind.", bear: "Not yet compressing toward the cycle low." },
+    { t: "Threshold Ladder", s: "DICTIONARY", h: c0.ladder_rung || '—', sb: `percentile ${c0.percentile_heuristic || '—'}`, st: "SIZE-UP OK", a: "#22c55e",
+      bull: "Deep inside CAPITULATION (<30K), below FROTH (15K) — size-up authorised on the COT lens.", bear: "Macro/price still gate the actual adds; COT is permissive, not a trigger." },
+    { t: "G8 Capitulation", s: "silver doctrine §G8", h: (c0.g8_status || '✅ MET').split('—')[0], sb: c0.g8_status || '', st: "WASHED-OUT BASE", a: "#22c55e",
+      bull: c0.read || '', bear: "Gold MM +97.4K crowded vs silver — relative, not absolute, edge." },
   ];
+  { const ch=document.getElementById('cot-hdr'); if(ch) ch.textContent = 'COT · ' + (c0.as_of || 'latest'); };
   document.getElementById('cot-grid').innerHTML = cotCards.map(c => `
     <div class="cot-card" style="border-left-color:${c.a};">
       <div style="display:flex;justify-content:space-between;align-items:baseline;"><div class="ct">${c.t}</div><div style="font-size:9px;color:var(--text-soft);font-style:italic;">${c.s}</div></div>
