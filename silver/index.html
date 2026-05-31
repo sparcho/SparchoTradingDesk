@@ -8,21 +8,22 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <style>
 :root {
-  color-scheme: light;
-  --paper: #fcfcfb; --paper-2: #f3f3f1;
-  --ink: #1a1a1c; --ink-soft: #44454a; --ink-mute: #76777e; --ink-faint: #a6a7ad;
-  --silver: #8b929c; --silver-lite: #c9cdd4; --silver-deep: #5e6571;
-  --silver-grad: linear-gradient(135deg, #d7dbe1 0%, #aab1bb 48%, #7c838f 100%);
-  --hero-bg: #16161a; --hero-bg-2: #232730;
-  --sig-pos: #3f7d57; --sig-pos-soft: #e7efe9; --sig-neg: #a8463c; --sig-neg-soft: #f2e6e4; --sig-warn: #9a6a24; --sig-warn-soft: #f1e9d9;
-  --bg: var(--paper); --bg-grain: var(--paper-2); --card: #eeeeeb;
-  --border: rgba(26,26,28,0.14); --border-strong: rgba(26,26,28,0.22);
+  color-scheme: dark;
+  --paper: #16161a; --paper-2: #1c1c20;
+  --ink: #ededf0; --ink-soft: #a6a7ae; --ink-mute: #7c7d85; --ink-faint: #5a5b62;
+  --silver: #8b929c; --silver-lite: #c9cdd4; --silver-deep: #b9bec6;
+  --silver-grad: linear-gradient(135deg, #e6e9ee 0%, #b9bec6 48%, #8b929c 100%);
+  --amber: #e89143; --amber-soft: rgba(232,145,67,0.16); --amber-deep: #c9762e;
+  --hero-bg: #101014; --hero-bg-2: #1e2128;
+  --sig-pos: #5fb87f; --sig-pos-soft: rgba(95,184,127,0.15); --sig-neg: #e07a6f; --sig-neg-soft: rgba(224,122,111,0.15); --sig-warn: #e89143; --sig-warn-soft: rgba(232,145,67,0.15);
+  --bg: var(--paper); --bg-grain: var(--paper-2); --card: #202127;
+  --border: rgba(255,255,255,0.09); --border-strong: rgba(255,255,255,0.17);
   --text: var(--ink); --text-muted: var(--ink-soft); --text-soft: var(--ink-mute);
-  --forest: var(--ink); --forest-soft: var(--paper-2);
-  --silver-gold: var(--silver-deep); --silver-gold-soft: #e9ebee; --silver-gold-dark: var(--silver-deep);
+  --forest: var(--ink); --forest-soft: #262830;
+  --silver-gold: var(--amber); --silver-gold-soft: var(--amber-soft); --silver-gold-dark: var(--amber);
   --positive: var(--sig-pos); --positive-soft: var(--sig-pos-soft); --negative: var(--sig-neg); --negative-soft: var(--sig-neg-soft);
-  --warning: var(--sig-warn); --warning-soft: var(--sig-warn-soft); --warning-strong: #7a4f12;
-  --info-soft: #eceef1; --slate-bg: var(--hero-bg); --slate-bg-2: var(--hero-bg-2); --tab-stripe: #e6e6e2; --accent: var(--silver-deep);
+  --warning: var(--sig-warn); --warning-soft: var(--sig-warn-soft); --warning-strong: #e89143;
+  --info-soft: rgba(255,255,255,0.05); --slate-bg: var(--hero-bg); --slate-bg-2: var(--hero-bg-2); --tab-stripe: #1b1c22; --accent: var(--amber);
 }
 * { box-sizing: border-box; }
 html, body {
@@ -352,6 +353,35 @@ details.zone3>summary::-webkit-details-marker{ display:none; } details.zone3>sum
 details.zone3>summary .chev{ margin-left:auto; font-size:10px; color:var(--silver-deep); font-family:var(--mono); }
 details.zone3[open]>summary .chev::after{ content:"collapse ▴"; } details.zone3:not([open])>summary .chev::after{ content:"expand ▾"; }
 details.zone3>.zone3-body{ display:flex; flex-direction:column; gap:8px; padding-top:6px; }
+/* ── dark #3 fixups + KPI (260601 phase 1) ── */
+.card{ box-shadow:0 1px 3px rgba(0,0,0,0.40); }
+.sc-row .sc-bar,.f109-bucket .bar,.floor-row .fpb{ background:rgba(255,255,255,0.09)!important; }
+.f109-stops .stop-cell{ background:rgba(255,255,255,0.04)!important; border-color:var(--border)!important; }
+.f109-status-pending{ background:rgba(255,255,255,0.10); color:#c2c4cc; }
+.f109-status-armed{ background:var(--amber-soft); color:var(--amber); }
+.f109-status-fired{ background:rgba(95,184,127,0.18); color:var(--sig-pos); }
+.f109-status-reserved{ background:rgba(255,255,255,0.08); color:#a6a7ae; }
+.acc-card.empty{ background:rgba(255,255,255,0.02)!important; }
+.sr-row{ background:rgba(255,255,255,0.03)!important; }
+.tab-cal .row .kind{ background:rgba(255,255,255,0.05); border-color:var(--border); }
+/* amber = the data accent (rings/bars/fills) */
+.sc-row .sc-fill,.f109-bucket .fill,.floor-row .fpf{ background:linear-gradient(90deg,var(--amber),var(--amber-deep))!important; }
+.f109-bucket.modal .bar .fill{ background:linear-gradient(90deg,#ededf0,#a6a7ae)!important; }
+.card .accent-top{ background:var(--amber)!important; opacity:0.85; }
+.section-hd{ border-bottom-color:var(--border-strong); } .section-hd .sn{ color:var(--amber); }
+details.zone3>summary{ border-bottom-color:var(--border-strong); } details.zone3>summary .zn{ color:var(--amber); }
+.sr-now{ background:var(--amber)!important; color:#16161a!important; box-shadow:0 1px 6px rgba(232,145,67,0.30)!important; }
+/* KPI hero strip */
+.kpi-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0 2px; }
+.kpi{ background:var(--card); border:1px solid var(--border); border-radius:7px; padding:10px 13px 11px; position:relative; overflow:hidden; }
+.kpi::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--amber); }
+.kpi .kl{ font-size:9.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-mute); font-weight:700; }
+.kpi .kv{ font-family:var(--mono); font-size:25px; font-weight:800; line-height:1.05; margin-top:4px; color:var(--ink); font-variant-numeric:tabular-nums; }
+.kpi .kv.kv-sm{ font-family:var(--serif); font-size:15px; font-weight:700; line-height:1.2; }
+.kpi .kv.pos{ color:var(--sig-pos); } .kpi .kv.neg{ color:var(--sig-neg); }
+.kpi .ks{ font-size:10px; color:var(--ink-mute); margin-top:3px; font-family:var(--mono); }
+.kpi .ks.pos{ color:var(--sig-pos); } .kpi .ks.neg{ color:var(--sig-neg); }
+@media(max-width:760px){ .kpi-strip{ grid-template-columns:repeat(2,1fr); } }
 </style>
 </head>
 <body>
@@ -380,6 +410,12 @@ details.zone3>.zone3-body{ display:flex; flex-direction:column; gap:8px; padding
   <div class="hero-r"><div class="lbl">XAGUSD spot</div><div class="hero-xag" id="hero-xag">—</div><div class="hero-xag-sub" id="hero-xag-sub">—</div></div>
 </div>
 
+<div class="kpi-strip">
+  <div class="kpi"><div class="kl">XAGUSD spot</div><div class="kv" id="kpi-xag">—</div><div class="ks" id="kpi-xag-s">—</div></div>
+  <div class="kpi"><div class="kl">Book P&L · unrealized</div><div class="kv" id="kpi-pnl">—</div><div class="ks" id="kpi-pnl-s">—</div></div>
+  <div class="kpi"><div class="kl">Dry powder</div><div class="kv" id="kpi-dry">—</div><div class="ks">of ≤₹5Cr envelope</div></div>
+  <div class="kpi"><div class="kl">Stance</div><div class="kv kv-sm" id="kpi-stance">—</div><div class="ks" id="kpi-stance-s">—</div></div>
+</div>
 <div class="section-hd"><span class="sn">§1</span> Silver <span class="sx">the price read · verdict · levels · indicators</span></div>
 <div class="ticker-bar" id="ticker-bar"></div>
 <div class="bento" style="grid-template-columns:1.3fr 1fr 1.3fr;">
@@ -728,6 +764,17 @@ try {
   const hx=document.getElementById('hero-xag'); if(hx) hx.textContent=hq!=null?('$'+(+hq).toFixed(2)):'—';
   const hxs=document.getElementById('hero-xag-sub'); if(hxs){ const ch=cm.xagusd&&cm.xagusd.day_chg_pct; hxs.textContent=(ch!=null?(ch>=0?'+':'')+(+ch).toFixed(2)+'% today':'')+(cp.primary_inr!=null?' · SBees ₹'+(+cp.primary_inr).toFixed(2):''); }
 } catch (e) { __reportErr('hero-band', e); }
+try {
+  const dpl=DATA.deployment_plan||{};
+  const xq=(cm.xagusd&&cm.xagusd.price!=null)?cm.xagusd.price:(xagNow!=null?+xagNow:null);
+  const kx=document.getElementById('kpi-xag'); if(kx) kx.textContent=xq!=null?('$'+(+xq).toFixed(2)):'—';
+  const kxs=document.getElementById('kpi-xag-s'); if(kxs){ const c=cm.xagusd&&cm.xagusd.day_chg_pct; kxs.textContent=c!=null?((c>=0?'+':'')+(+c).toFixed(2)+'% today'):''; kxs.className='ks '+(c==null?'':(c>=0?'pos':'neg')); }
+  const kp=document.getElementById('kpi-pnl'); if(kp){ kp.textContent=fmtSigned(ft.unrealized_pnl_inr,{compact:true}); kp.className='kv '+pnlClass(ft.unrealized_pnl_inr); }
+  const kps=document.getElementById('kpi-pnl-s'); if(kps){ kps.textContent=fmtPct(ft.unrealized_pnl_pct); kps.className='ks '+pnlClass(ft.unrealized_pnl_inr); }
+  const kd=document.getElementById('kpi-dry'); if(kd){ const env=dpl.envelope_inr||0; const dep=(dpl.tranches||[]).reduce((s,t)=>s+(+t.deployed_inr||0),0); kd.textContent=fmtINR(env-dep,{compact:true}); }
+  const kst=document.getElementById('kpi-stance'); if(kst) kst.textContent=(fc.composite_verdict||'—').split('—')[0].replace(/[🟢🟡🔴]/g,'').trim().slice(0,30);
+  const ksts=document.getElementById('kpi-stance-s'); if(ksts) ksts.textContent=fc.consensus_state||'';
+} catch (e) { __reportErr('kpi', e); }
 try {
   // ─── 3. HERO B — FAMILY BOOK (realized + combined) ────────────────
   document.getElementById('book-meta').textContent = `${ft.account_count_active}/${ft.account_count_active + ft.account_count_exited} active · ${ft.tranche_count} remaining tranches`;
