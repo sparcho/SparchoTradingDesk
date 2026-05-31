@@ -415,6 +415,16 @@ body{ gap:3px; padding:10px 14px; }
 .sread-grid{ gap:12px; } .gauge-wrap{ height:138px; } .gauge-center .gv{ font-size:25px; } .radar-wrap{ height:170px; }
 .tk-cell{ padding:4px 9px; } .tk-cell .tk-val{ font-size:13px; }
 .title-strip{ padding:4px 0; } .brand h1{ font-size:16px; }
+/* ── phase 4 · 3-panel Silver Read (mini-cards | gauge | radar) ── */
+.kpi-mini{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.kpi-mini .kpi{ padding:7px 9px; }
+.kpi-mini .kpi .kl{ font-size:8.5px; }
+.kpi-mini .kpi .kv{ font-size:18px; margin-top:2px; }
+.kpi-mini .kpi .kv.kv-sm{ font-size:11.5px; line-height:1.15; }
+.kpi-mini .kpi .ks{ font-size:9px; }
+.sread3 .gauge-wrap{ height:150px; } .sread3 .radar-wrap{ height:165px; }
+.sread3 .gauge-center .gv{ font-size:24px; }
+@media(max-width:900px){ .bento.sread3{ grid-template-columns:1fr!important; } .kpi-mini{ grid-template-columns:repeat(4,1fr); } }
 </style>
 </head>
 <body>
@@ -443,34 +453,34 @@ body{ gap:3px; padding:10px 14px; }
   <div class="hero-r"><div class="lbl">XAGUSD spot</div><div class="hero-xag" id="hero-xag">—</div><div class="hero-xag-sub" id="hero-xag-sub">—</div></div>
 </div>
 
-<div class="kpi-strip">
-  <div class="kpi"><div class="kl">XAGUSD spot</div><div class="kv" id="kpi-xag">—</div><div class="ks" id="kpi-xag-s">—</div></div>
-  <div class="kpi"><div class="kl">Book P&L · unrealized</div><div class="kv" id="kpi-pnl">—</div><div class="ks" id="kpi-pnl-s">—</div></div>
-  <div class="kpi"><div class="kl">Dry powder</div><div class="kv" id="kpi-dry">—</div><div class="ks">of ≤₹5Cr envelope</div></div>
-  <div class="kpi"><div class="kl">Stance</div><div class="kv kv-sm" id="kpi-stance">—</div><div class="ks" id="kpi-stance-s">—</div></div>
-</div>
+
 <details class="zone" open><summary class="zhd"><span class="sn">§1</span> Silver<span class="chev"></span></summary>
 <div class="zone-body">
 <div class="ticker-bar" id="ticker-bar"></div>
-<div class="bento" style="grid-template-columns:1.25fr 1fr;">
-  <div class="card">
-    <div class="accent-top"></div>
-    <div class="card-title"><h2>Silver Read · position &amp; drivers</h2><span class="meta" id="sread-meta">—</span></div>
-    <div class="sread-grid">
-      <div class="gauge-wrap">
+<div class="bento sread3" style="grid-template-columns:0.92fr 1.02fr 1.06fr;">
+  <div class="card"><div class="accent-top"></div>
+    <div class="card-title"><h2>Key</h2></div>
+    <div class="kpi-mini">
+<div class="kpi"><div class="kl">XAGUSD spot</div><div class="kv" id="kpi-xag">—</div><div class="ks" id="kpi-xag-s">—</div></div>
+  <div class="kpi"><div class="kl">Book P&L · unrealized</div><div class="kv" id="kpi-pnl">—</div><div class="ks" id="kpi-pnl-s">—</div></div>
+  <div class="kpi"><div class="kl">Dry powder</div><div class="kv" id="kpi-dry">—</div><div class="ks">of ≤₹5Cr envelope</div></div>
+  <div class="kpi"><div class="kl">Stance</div><div class="kv kv-sm" id="kpi-stance">—</div><div class="ks" id="kpi-stance-s">—</div></div>
+    </div>
+  </div>
+  <div class="card"><div class="accent-top"></div>
+    <div class="card-title"><h2>Position</h2><span class="meta" id="sread-meta">—</span></div>
+    <div class="gauge-wrap">
         <canvas id="gauge-canvas"></canvas>
         <div class="gauge-center"><div class="gv" id="gauge-val">—</div><div class="gz" id="gauge-zone">—</div></div>
         <div class="gauge-ends"><span id="gauge-lo">$52</span><span id="gauge-hi">$84</span></div>
       </div>
-      <div class="ind-points" id="ind-points"></div>
-    </div>
   </div>
-  <div class="card">
-    <div class="accent-top"></div>
-    <div class="card-title"><h2>Macro drivers · today</h2><span class="meta">outward = silver-supportive move</span></div>
+  <div class="card"><div class="accent-top"></div>
+    <div class="card-title"><h2>Macro drivers · today</h2><span class="meta">outward = supportive</span></div>
     <div class="radar-wrap"><canvas id="radar-canvas"></canvas></div>
   </div>
 </div>
+
 
 <div class="bento" style="grid-template-columns:1.3fr 1fr 1.3fr;">
 <div class="card hero-verdict">
@@ -833,13 +843,6 @@ try {
   const ksts=document.getElementById('kpi-stance-s'); if(ksts) ksts.textContent=fc.consensus_state||'';
 } catch (e) { __reportErr('kpi', e); }
 try {
-  // metric points
-  const _pts=[['XAGUSD','xagusd','$',2],['GSR','gsr','',1],['Gold','gold','$',0],['Oil','wti','$',1],['TNX','tnx','',2],['DXY','dxy','',2]];
-  const _ip=document.getElementById('ind-points');
-  if(_ip) _ip.innerHTML=_pts.map(function(p){ var lbl=p[0],key=p[1],pfx=p[2],dp=p[3]; var q=cm[key]||{};
-    if(q.status!=='ok') return '<div class="ind-pt"><span class="ipn">'+lbl+'</span><span class="ipv mut">—</span><span class="ipc"></span></div>';
-    var v=key==='gsr'?q.value:q.price; var c=q.day_chg_pct; var cc=c==null?'':(c>=0?'pos':'neg'); var cs=c==null?'':((c>=0?'+':'')+(+c).toFixed(2)+'%');
-    return '<div class="ind-pt"><span class="ipn">'+lbl+'</span><span class="ipv">'+pfx+(v!=null?(+v).toFixed(dp):'—')+'</span><span class="ipc '+cc+'">'+cs+'</span></div>'; }).join('');
   // gauge
   var _lo=(DATA.deployment_plan&&DATA.deployment_plan.hard_stops&&DATA.deployment_plan.hard_stops.portfolio_level_xagusd)||52, _hi=84;
   var _x=xagNow!=null?+xagNow:null;
