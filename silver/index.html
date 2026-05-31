@@ -382,6 +382,21 @@ details.zone3>summary{ border-bottom-color:var(--border-strong); } details.zone3
 .kpi .ks{ font-size:10px; color:var(--ink-mute); margin-top:3px; font-family:var(--mono); }
 .kpi .ks.pos{ color:var(--sig-pos); } .kpi .ks.neg{ color:var(--sig-neg); }
 @media(max-width:760px){ .kpi-strip{ grid-template-columns:repeat(2,1fr); } }
+/* ── phase 2 · Silver Read viz ── */
+.sread-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:center; }
+.gauge-wrap{ position:relative; height:165px; }
+.gauge-wrap canvas{ width:100%!important; height:100%!important; }
+.gauge-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding-top:30px; pointer-events:none; }
+.gauge-center .gv{ font-family:var(--mono); font-size:29px; font-weight:800; color:var(--ink); line-height:1; }
+.gauge-center .gz{ font-size:9.5px; color:var(--amber); font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-top:3px; }
+.gauge-ends{ position:absolute; bottom:6px; left:4px; right:4px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:9px; color:var(--ink-mute); }
+.ind-points{ display:flex; flex-direction:column; gap:4px; }
+.ind-pt{ display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:baseline; padding:4px 8px; background:rgba(255,255,255,0.03); border-left:2px solid var(--border-strong); border-radius:3px; }
+.ind-pt .ipn{ color:var(--ink-soft); text-transform:uppercase; font-size:9px; letter-spacing:0.04em; font-weight:700; }
+.ind-pt .ipv{ font-family:var(--mono); font-weight:700; color:var(--ink); font-size:11.5px; }
+.ind-pt .ipc{ font-family:var(--mono); font-size:9.5px; font-weight:700; min-width:46px; text-align:right; }
+.radar-wrap{ height:215px; position:relative; }
+.radar-wrap canvas{ width:100%!important; height:100%!important; }
 </style>
 </head>
 <body>
@@ -418,6 +433,26 @@ details.zone3>summary{ border-bottom-color:var(--border-strong); } details.zone3
 </div>
 <div class="section-hd"><span class="sn">§1</span> Silver <span class="sx">the price read · verdict · levels · indicators</span></div>
 <div class="ticker-bar" id="ticker-bar"></div>
+<div class="bento" style="grid-template-columns:1.25fr 1fr;">
+  <div class="card">
+    <div class="accent-top"></div>
+    <div class="card-title"><h2>Silver Read · position &amp; drivers</h2><span class="meta" id="sread-meta">—</span></div>
+    <div class="sread-grid">
+      <div class="gauge-wrap">
+        <canvas id="gauge-canvas"></canvas>
+        <div class="gauge-center"><div class="gv" id="gauge-val">—</div><div class="gz" id="gauge-zone">—</div></div>
+        <div class="gauge-ends"><span id="gauge-lo">$52</span><span id="gauge-hi">$84</span></div>
+      </div>
+      <div class="ind-points" id="ind-points"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="accent-top"></div>
+    <div class="card-title"><h2>Macro drivers · today</h2><span class="meta">outward = silver-supportive move</span></div>
+    <div class="radar-wrap"><canvas id="radar-canvas"></canvas></div>
+  </div>
+</div>
+
 <div class="bento" style="grid-template-columns:1.3fr 1fr 1.3fr;">
 <div class="card hero-verdict">
     <div class="accent-top" style="background: var(--positive);"></div>
@@ -775,6 +810,32 @@ try {
   const kst=document.getElementById('kpi-stance'); if(kst) kst.textContent=(fc.composite_verdict||'—').split('—')[0].replace(/[🟢🟡🔴]/g,'').trim().slice(0,30);
   const ksts=document.getElementById('kpi-stance-s'); if(ksts) ksts.textContent=fc.consensus_state||'';
 } catch (e) { __reportErr('kpi', e); }
+try {
+  // metric points
+  const _pts=[['XAGUSD','xagusd','$',2],['GSR','gsr','',1],['Gold','gold','$',0],['Oil','wti','$',1],['TNX','tnx','',2],['DXY','dxy','',2]];
+  const _ip=document.getElementById('ind-points');
+  if(_ip) _ip.innerHTML=_pts.map(function(p){ var lbl=p[0],key=p[1],pfx=p[2],dp=p[3]; var q=cm[key]||{};
+    if(q.status!=='ok') return '<div class="ind-pt"><span class="ipn">'+lbl+'</span><span class="ipv mut">—</span><span class="ipc"></span></div>';
+    var v=key==='gsr'?q.value:q.price; var c=q.day_chg_pct; var cc=c==null?'':(c>=0?'pos':'neg'); var cs=c==null?'':((c>=0?'+':'')+(+c).toFixed(2)+'%');
+    return '<div class="ind-pt"><span class="ipn">'+lbl+'</span><span class="ipv">'+pfx+(v!=null?(+v).toFixed(dp):'—')+'</span><span class="ipc '+cc+'">'+cs+'</span></div>'; }).join('');
+  // gauge
+  var _lo=(DATA.deployment_plan&&DATA.deployment_plan.hard_stops&&DATA.deployment_plan.hard_stops.portfolio_level_xagusd)||52, _hi=84;
+  var _x=xagNow!=null?+xagNow:null;
+  var _gv=document.getElementById('gauge-val'); if(_gv) _gv.textContent=_x!=null?('$'+_x.toFixed(2)):'—';
+  var _glo=document.getElementById('gauge-lo'); if(_glo) _glo.textContent='$'+_lo+' · V-18';
+  var _ghi=document.getElementById('gauge-hi'); if(_ghi) _ghi.textContent='$'+_hi+' · no-floor';
+  var _zone='—'; ((DATA.floor_framework||{}).tiers||[]).forEach(function(ti){ if(_x!=null&&ti.band_low!=null&&(ti.band_high==null?_x>=ti.band_low:(_x>=ti.band_low&&_x<=ti.band_high))) _zone=ti.tier; });
+  var _gz=document.getElementById('gauge-zone'); if(_gz) _gz.textContent=_zone;
+  var _gc=document.getElementById('gauge-canvas');
+  if(_gc&&window.Chart&&_x!=null){ var _pos=Math.max(0,Math.min(1,(_x-_lo)/(_hi-_lo)));
+    new Chart(_gc,{type:'doughnut',data:{datasets:[{data:[_pos,1-_pos],backgroundColor:['#e89143','rgba(255,255,255,0.07)'],borderWidth:0,circumference:180,rotation:270}]},options:{cutout:'74%',plugins:{legend:{display:false},tooltip:{enabled:false}},responsive:true,maintainAspectRatio:false,animation:false}}); }
+  // radar — silver-tailwind by today's move (sign convention: silver likes DXY/TNX/GSR/Oil down, Gold up)
+  var _rc=document.getElementById('radar-canvas');
+  if(_rc&&window.Chart){ var _conv=[['DXY','dxy',-1],['TNX','tnx',-1],['GSR','gsr',-1],['Gold','gold',1],['Oil','wti',-1]];
+    var _vals=_conv.map(function(cv){ var q=cm[cv[1]]||{}; var c=(q.day_chg_pct!=null)?q.day_chg_pct:0; return Math.max(-3,Math.min(3,c*cv[2]))+3; });
+    new Chart(_rc,{type:'radar',data:{labels:_conv.map(function(c){return c[0];}),datasets:[{data:_vals,borderColor:'#e89143',backgroundColor:'rgba(232,145,67,0.18)',pointBackgroundColor:'#e89143',borderWidth:1.5,pointRadius:2}]},options:{scales:{r:{min:0,max:6,ticks:{display:false,stepSize:1},grid:{color:'rgba(255,255,255,0.08)'},angleLines:{color:'rgba(255,255,255,0.08)'},pointLabels:{color:'#a6a7ae',font:{size:10}}}},plugins:{legend:{display:false},tooltip:{enabled:false}},responsive:true,maintainAspectRatio:false,animation:false}}); }
+  var _sm=document.getElementById('sread-meta'); if(_sm) _sm.textContent='$'+_lo+'–$'+_hi+' range';
+} catch (e) { __reportErr('silver-read', e); }
 try {
   // ─── 3. HERO B — FAMILY BOOK (realized + combined) ────────────────
   document.getElementById('book-meta').textContent = `${ft.account_count_active}/${ft.account_count_active + ft.account_count_exited} active · ${ft.tranche_count} remaining tranches`;
