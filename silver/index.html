@@ -425,6 +425,13 @@ body{ gap:3px; padding:10px 14px; }
 .sread3 .gauge-wrap{ height:150px; } .sread3 .radar-wrap{ height:165px; }
 .sread3 .gauge-center .gv{ font-size:24px; }
 @media(max-width:900px){ .bento.sread3{ grid-template-columns:1fr!important; } .kpi-mini{ grid-template-columns:repeat(4,1fr); } }
+/* ── phase 5 · macro tiles inside the Key card; collapse-on-open ── */
+.macro-tiles{ margin-top:6px; }
+.macro-tiles .ticker-bar{ grid-template-columns:repeat(3,1fr); background:transparent; box-shadow:none; padding:0; gap:5px; }
+.macro-tiles .tk-cell{ background:rgba(255,255,255,0.04); border:1px solid var(--border); border-left:1px solid var(--border); border-radius:4px; padding:4px 7px; }
+.macro-tiles .tk-cell .tk-val{ font-size:12px; }
+.sread3 .card{ min-width:0; }
+@media(max-width:900px){ .macro-tiles .ticker-bar{ grid-template-columns:repeat(3,1fr); } }
 </style>
 </head>
 <body>
@@ -454,12 +461,10 @@ body{ gap:3px; padding:10px 14px; }
 </div>
 
 
-<details class="zone" open><summary class="zhd"><span class="sn">§1</span> Silver<span class="chev"></span></summary>
-<div class="zone-body">
-<div class="ticker-bar" id="ticker-bar"></div>
 <div class="bento sread3" style="grid-template-columns:0.92fr 1.02fr 1.06fr;">
   <div class="card"><div class="accent-top"></div>
-    <div class="card-title"><h2>Key</h2></div>
+    <div class="card-title"><h2>Key &amp; macro</h2><div class="macro-tiles"><div class="ticker-bar" id="ticker-bar"></div></div>
+  </div>
     <div class="kpi-mini">
 <div class="kpi"><div class="kl">XAGUSD spot</div><div class="kv" id="kpi-xag">—</div><div class="ks" id="kpi-xag-s">—</div></div>
   <div class="kpi"><div class="kl">Book P&L · unrealized</div><div class="kv" id="kpi-pnl">—</div><div class="ks" id="kpi-pnl-s">—</div></div>
@@ -480,6 +485,10 @@ body{ gap:3px; padding:10px 14px; }
     <div class="radar-wrap"><canvas id="radar-canvas"></canvas></div>
   </div>
 </div>
+
+<details class="zone"><summary class="zhd"><span class="sn">§1</span> Silver<span class="chev"></span></summary>
+<div class="zone-body">
+
 
 
 <div class="bento" style="grid-template-columns:1.3fr 1fr 1.3fr;">
@@ -539,7 +548,7 @@ body{ gap:3px; padding:10px 14px; }
 </div>
 
 </div></details>
-<details class="zone" open><summary class="zhd"><span class="sn">§2</span> Operator<span class="chev"></span></summary>
+<details class="zone"><summary class="zhd"><span class="sn">§2</span> Operator<span class="chev"></span></summary>
 <div class="zone-body">
 <div class="bento" style="grid-template-columns:1fr;">
 <div class="card" id="f109-card">
@@ -794,17 +803,14 @@ try {
     const tip = q.source_note || q.yahoo_symbol || '';
     return `<div class="tk-cell" title="${tip}"><div class="tk-name"><span class="dot ${dotCls}"></span>${label}${dotCls === 'pinned' ? ' 📌' : ''}</div><div class="tk-val">${valStr}</div><div class="tk-chg ${chgClass}">${chgStr || '—'}</div></div>`;
   }
-  document.getElementById('ticker-bar').innerHTML = `
-    <div class="tk-label"><div class="l1">🥈 LIVE</div><div class="l2">silver complex + macro</div></div>
-    ${tickerCell('xagusd',    'XAGUSD',   { prefix: '$' })}
-    ${tickerCell('silverbees','SBees',    { prefix: '₹' })}
-    ${tickerCell('gold',      'Gold',     { prefix: '$', dp: 1 })}
+  { const _tb=document.getElementById('ticker-bar'); if(_tb) _tb.innerHTML = `
     ${tickerCell('gsr',       'GSR' )}
-    ${tickerCell('usdinr',    'USDINR',   { prefix: '₹' })}
-    ${tickerCell('wti',       'Oil',  { prefix: '$', dp: 1 })}
-    ${tickerCell('tnx',       'TNX',  { dp: 2 })}
+    ${tickerCell('gold',      'Gold',     { prefix: '$', dp: 1 })}
+    ${tickerCell('wti',       'Oil',      { prefix: '$', dp: 1 })}
+    ${tickerCell('tnx',       'TNX',      { dp: 2 })}
     ${tickerCell('dxy',       'DXY' )}
-  `;
+    ${tickerCell('usdinr',    'USDINR',   { prefix: '₹' })}
+  `; }
 } catch (e) { __reportErr('ticker', e); }
 try {
   // ─── 3. HERO A — VERDICT ────────────────────────────────
