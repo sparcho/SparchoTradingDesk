@@ -359,6 +359,24 @@ def _fetch_live_market_snapshot() -> dict[str, Any]:
     except Exception as e:  # noqa: BLE001
         out["gold"] = {"status": f"error: {e}"}
 
+    # WTI crude (CL=F) + US 10Y yield (^TNX) — added 260531 per operator (indicator tiles)
+    for _key, _sym, _tk in [("wti", "CL=F", "WTI"), ("tnx", "^TNX", "TNX")]:
+        try:
+            sys.path.insert(0, str(HERE))
+            from yahoo_common import fetch_chart  # noqa: PLC0415
+            _pl = fetch_chart(_sym, interval="1m", range_="1d", timeout=10)
+            _m = _pl["chart"]["result"][0]["meta"]
+            _rmp = _m.get("regularMarketPrice"); _prev = _m.get("chartPreviousClose") or _m.get("previousClose")
+            out[_key] = {
+                "status": "ok", "ticker": _tk, "yahoo_symbol": _sym,
+                "price": _rmp, "prev_close": _prev,
+                "day_chg_pct": ((_rmp - _prev) / _prev * 100) if (_rmp and _prev) else None,
+                "as_of_utc": datetime.fromtimestamp(_m["regularMarketTime"], tz=timezone.utc).isoformat() if _m.get("regularMarketTime") else None,
+                "currency": _m.get("currency"),
+            }
+        except Exception as _e:  # noqa: BLE001
+            out[_key] = {"status": f"error: {_e}"}
+
     # GSR = Gold / Silver (spot-spot derivation)
     g = out.get("gold", {}).get("price")
     s = out.get("xagusd", {}).get("price")

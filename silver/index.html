@@ -9,54 +9,20 @@
 <style>
 :root {
   color-scheme: light;
-  /* ── POLISHED CANVAS (260531 reskin) — B&W editorial + metallic silver ── */
-  /* 60 · warm paper base */
-  --paper: #f4f1ea;
-  --paper-2: #efe9dd;
-  /* 30 · ink + card surfaces */
-  --ink: #1a1a1c;
-  --ink-soft: #44454a;
-  --ink-mute: #76777e;
-  --ink-faint: #a6a7ad;
-  /* 10 · metallic silver accent (cool platinum/grey) */
-  --silver: #8b929c;
-  --silver-lite: #c9cdd4;
-  --silver-deep: #5e6571;
+  --paper: #fcfcfb; --paper-2: #f3f3f1;
+  --ink: #1a1a1c; --ink-soft: #44454a; --ink-mute: #76777e; --ink-faint: #a6a7ad;
+  --silver: #8b929c; --silver-lite: #c9cdd4; --silver-deep: #5e6571;
   --silver-grad: linear-gradient(135deg, #d7dbe1 0%, #aab1bb 48%, #7c838f 100%);
-  /* dark hero band */
-  --hero-bg: #16161a;
-  --hero-bg-2: #232730;
-  /* desaturated semantic signals (state only) */
-  --sig-pos: #3f7d57; --sig-pos-soft: #e7efe9;
-  --sig-neg: #a8463c; --sig-neg-soft: #f2e6e4;
-  --sig-warn: #9a6a24; --sig-warn-soft: #f1e9d9;
-
-  /* ── compatibility aliases (existing classes keep working, recolored) ── */
-  --bg: var(--paper);
-  --bg-grain: var(--paper-2);
-  --card: #fbf9f4;
-  --border: rgba(26,26,28,0.10);
-  --border-strong: rgba(26,26,28,0.20);
-  --text: var(--ink);
-  --text-muted: var(--ink-soft);
-  --text-soft: var(--ink-mute);
-  --forest: var(--ink);                 /* headings/active → editorial ink, not green */
-  --forest-soft: var(--paper-2);
-  --silver-gold: var(--silver-deep);    /* the 10% accent → metallic silver */
-  --silver-gold-soft: #e9ebee;
-  --silver-gold-dark: var(--silver-deep);
-  --positive: var(--sig-pos);
-  --positive-soft: var(--sig-pos-soft);
-  --negative: var(--sig-neg);
-  --negative-soft: var(--sig-neg-soft);
-  --warning: var(--sig-warn);
-  --warning-soft: var(--sig-warn-soft);
-  --warning-strong: #7a4f12;
-  --info-soft: #eceef1;
-  --slate-bg: var(--hero-bg);
-  --slate-bg-2: var(--hero-bg-2);
-  --tab-stripe: #f1ede4;
-  --accent: var(--silver-deep);
+  --hero-bg: #16161a; --hero-bg-2: #232730;
+  --sig-pos: #3f7d57; --sig-pos-soft: #e7efe9; --sig-neg: #a8463c; --sig-neg-soft: #f2e6e4; --sig-warn: #9a6a24; --sig-warn-soft: #f1e9d9;
+  --bg: var(--paper); --bg-grain: var(--paper-2); --card: #eeeeeb;
+  --border: rgba(26,26,28,0.14); --border-strong: rgba(26,26,28,0.22);
+  --text: var(--ink); --text-muted: var(--ink-soft); --text-soft: var(--ink-mute);
+  --forest: var(--ink); --forest-soft: var(--paper-2);
+  --silver-gold: var(--silver-deep); --silver-gold-soft: #e9ebee; --silver-gold-dark: var(--silver-deep);
+  --positive: var(--sig-pos); --positive-soft: var(--sig-pos-soft); --negative: var(--sig-neg); --negative-soft: var(--sig-neg-soft);
+  --warning: var(--sig-warn); --warning-soft: var(--sig-warn-soft); --warning-strong: #7a4f12;
+  --info-soft: #eceef1; --slate-bg: var(--hero-bg); --slate-bg-2: var(--hero-bg-2); --tab-stripe: #e6e6e2; --accent: var(--silver-deep);
 }
 * { box-sizing: border-box; }
 html, body {
@@ -359,67 +325,36 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
   .bento, .accounts-row, .ticker-bar { grid-template-columns: 1fr; }
   body { padding: 10px; }
 }
-
-/* ════════════ POLISHED CANVAS — typography + hero + zones (260531) ════════════ */
-:root { --serif: Georgia, "Times New Roman", "Source Serif Pro", serif;
-        --mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace; }
-/* Serif display for headlines/titles; sans stays for body + eyebrow labels */
-.brand h1, .verdict-hero, .hero-verdict, .hero-xag, .zone-label, .f98-decisions .lbl { font-family: var(--serif); }
-.brand h1 { font-weight: 700; letter-spacing: 0; }
-/* Mono for all numerics — digits line up */
-.tk-cell .tk-val, .verdict-hero, .book-stat .val, .book-pnl .v, .book-pnl .p, .num, .mono,
-.sr-row .px, .sr-now .val, .f109-bucket .pct, .f109-bucket .range, table.f109-tranches td.size,
-.f109-stops .v, .floor-row .fb, .acc-card .pnl-row .v, .acc-card .pnl-row .p, .hero-xag,
-.sc-row .sc-pct, .f109-summary .v, .hero-xag-sub { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-
-/* metallic-silver accent applied sparingly (the 10) */
-.card .accent-top { background: var(--silver-grad) !important; height: 2.5px; }
-.title-strip { border-bottom: 1px solid var(--silver); }
-.sc-row .sc-fill, .f109-bucket .fill, .floor-row .fpf { background: var(--silver-grad) !important; }
-.f109-bucket.modal .bar .fill { background: linear-gradient(90deg, var(--ink), var(--ink-soft)) !important; }
-
-/* ── ONE dark hero band ── */
-.hero-band {
-  background: linear-gradient(135deg, var(--hero-bg) 0%, var(--hero-bg-2) 100%);
-  color: #f1ede4; border-radius: 9px; padding: 16px 22px; margin-bottom: 4px;
-  display: grid; grid-template-columns: 1fr auto; gap: 14px 26px; align-items: center;
-  box-shadow: 0 2px 14px rgba(22,22,26,0.22); position: relative; overflow: hidden;
-}
-.hero-band::after { content:""; position:absolute; inset:0; background: radial-gradient(120% 140% at 88% 0%, rgba(170,177,187,0.16), transparent 60%); pointer-events:none; }
-.hero-l { min-width: 0; }
-.hero-regime { display:inline-block; font-size: 9.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
-  padding: 3px 10px; border-radius: 20px; background: rgba(241,237,228,0.10); border: 1px solid rgba(241,237,228,0.22); color: #d7dbe1; margin-bottom: 9px; }
-.hero-verdict { font-size: 23px; line-height: 1.16; font-weight: 700; letter-spacing: -0.01em;
-  background: var(--silver-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero-sub { font-size: 11px; color: rgba(241,237,228,0.62); margin-top: 7px; line-height: 1.5; max-width: 70ch; }
-.hero-r { text-align: right; }
-.hero-r .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(241,237,228,0.55); font-weight: 700; }
-.hero-xag { font-size: 42px; font-weight: 800; line-height: 1; margin-top: 2px;
-  background: var(--silver-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero-xag-sub { font-size: 12px; color: rgba(241,237,228,0.72); margin-top: 3px; font-weight: 600; }
-
-/* ── zone labels ── */
-.zone-label { display:flex; align-items:baseline; gap:10px; font-size: 14px; font-weight: 700; color: var(--ink);
-  letter-spacing: 0.01em; margin: 16px 0 8px; padding-bottom: 5px; border-bottom: 1.5px solid var(--silver); }
-.zone-label .zn { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; color: var(--silver-deep); text-transform: uppercase; }
-.zone-label .zh { font-size: 10px; font-weight: 500; color: var(--ink-mute); font-family: var(--mono); margin-left: auto; }
-
-/* ── collapsible Zone 3 ── */
-details.zone3 { margin-top: 4px; }
-details.zone3 > summary { list-style: none; cursor: pointer; display:flex; align-items:baseline; gap:10px;
-  font-size: 14px; font-weight: 700; font-family: var(--serif); color: var(--ink); letter-spacing: 0.01em;
-  margin: 16px 0 4px; padding-bottom: 5px; border-bottom: 1.5px solid var(--silver); }
-details.zone3 > summary::-webkit-details-marker { display:none; }
-details.zone3 > summary .zn { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; color: var(--silver-deep); text-transform: uppercase; font-family: var(--mono); }
-details.zone3 > summary .chev { margin-left: auto; font-size: 11px; color: var(--silver-deep); font-family: var(--mono); }
-details.zone3[open] > summary .chev::after { content: "collapse ▴"; }
-details.zone3:not([open]) > summary .chev::after { content: "expand ▾"; }
-details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; padding-top: 6px; }
+:root{ --serif:Georgia,"Times New Roman",serif; --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace; }
+.brand h1,.verdict-hero,.hero-verdict,.hero-xag,.section-hd{ font-family:var(--serif); }
+.tk-cell .tk-val,.verdict-hero,.book-stat .val,.book-pnl .v,.book-pnl .p,.num,.mono,.sr-row .px,.sr-now .val,.f109-bucket .pct,.f109-bucket .range,table.f109-tranches td.size,.f109-stops .v,.floor-row .fb,.acc-card .pnl-row .v,.hero-xag,.sc-row .sc-pct,.f109-summary .v,.hero-xag-sub{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
+.card .accent-top{ background:var(--silver-grad)!important; height:2.5px; }
+.title-strip{ border-bottom:1px solid var(--silver); }
+.sc-row .sc-fill,.f109-bucket .fill,.floor-row .fpf{ background:var(--silver-grad)!important; }
+.f109-bucket.modal .bar .fill{ background:linear-gradient(90deg,var(--ink),var(--ink-soft))!important; }
+body{ gap:5px; } .card{ padding:9px 11px; border-radius:5px; box-shadow:0 1px 2px rgba(26,26,28,0.05); } .bento{ gap:8px; } .card-title{ margin-bottom:5px; }
+.hero-band{ background:linear-gradient(135deg,var(--hero-bg),var(--hero-bg-2)); color:#f1ede4; border-radius:9px; padding:15px 22px; margin:4px 0 2px; display:grid; grid-template-columns:1fr auto; gap:12px 26px; align-items:center; box-shadow:0 2px 14px rgba(22,22,26,0.22); position:relative; overflow:hidden; }
+.hero-band::after{ content:""; position:absolute; inset:0; background:radial-gradient(120% 140% at 88% 0%,rgba(170,177,187,0.16),transparent 60%); pointer-events:none; }
+.hero-regime{ display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; padding:3px 10px; border-radius:20px; background:rgba(241,237,228,0.10); border:1px solid rgba(241,237,228,0.22); color:#d7dbe1; margin-bottom:8px; }
+.hero-verdict{ font-size:22px; line-height:1.16; font-weight:700; background:var(--silver-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero-sub{ font-size:11px; color:rgba(241,237,228,0.62); margin-top:6px; line-height:1.5; max-width:74ch; }
+.hero-r{ text-align:right; } .hero-r .lbl{ font-size:9px; text-transform:uppercase; letter-spacing:0.1em; color:rgba(241,237,228,0.55); font-weight:700; }
+.hero-xag{ font-size:40px; font-weight:800; line-height:1; margin-top:2px; background:var(--silver-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero-xag-sub{ font-size:12px; color:rgba(241,237,228,0.72); margin-top:3px; font-weight:600; }
+.section-hd{ display:flex; align-items:baseline; gap:10px; font-size:15px; font-weight:700; color:var(--ink); margin:13px 0 7px; padding-bottom:5px; border-bottom:2px solid var(--ink); }
+.section-hd .sn{ font-family:var(--mono); font-size:11px; font-weight:800; color:var(--silver-deep); letter-spacing:0.05em; }
+.section-hd .sx{ margin-left:auto; font-size:10px; font-weight:500; color:var(--ink-mute); font-family:var(--mono); }
+.ticker-bar{ grid-template-columns:repeat(8,1fr); } .tk-cell{ padding:5px 9px; } .tk-cell .tk-val{ font-size:14px; }
+@media(max-width:1100px){ .ticker-bar{ grid-template-columns:repeat(4,1fr); } }
+@media(max-width:640px){ .ticker-bar{ grid-template-columns:repeat(2,1fr); } }
+details.zone3{ margin-top:6px; } details.zone3>summary{ list-style:none; cursor:pointer; display:flex; align-items:baseline; gap:10px; font-family:var(--serif); font-size:15px; font-weight:700; color:var(--ink); margin:13px 0 4px; padding-bottom:5px; border-bottom:2px solid var(--ink); }
+details.zone3>summary::-webkit-details-marker{ display:none; } details.zone3>summary .zn{ font-family:var(--mono); font-size:11px; font-weight:800; color:var(--silver-deep); }
+details.zone3>summary .chev{ margin-left:auto; font-size:10px; color:var(--silver-deep); font-family:var(--mono); }
+details.zone3[open]>summary .chev::after{ content:"collapse ▴"; } details.zone3:not([open])>summary .chev::after{ content:"expand ▾"; }
+details.zone3>.zone3-body{ display:flex; flex-direction:column; gap:8px; padding-top:6px; }
 </style>
 </head>
 <body>
-
-<!-- 1. TITLE STRIP -->
 <div class="title-strip">
   <div class="brand">
     <h1>🥈 Silver Desk <span class="badge">live</span></h1>
@@ -436,27 +371,19 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
 
 <div id="render-errors" style="display:none;background:#fef3e1;border:2px solid #b45309;border-radius:6px;padding:8px 14px;margin-bottom:10px;color:#92400e;font-size:11.5px;font-family:Menlo,Monaco,Consolas,monospace;"></div>
 
-<!-- HERO BAND · Zone 1 -->
 <div class="hero-band">
   <div class="hero-l">
     <span class="hero-regime" id="hero-regime">—</span>
     <div class="hero-verdict" id="hero-verdict">—</div>
     <div class="hero-sub" id="hero-sub">—</div>
   </div>
-  <div class="hero-r">
-    <div class="lbl">XAGUSD spot</div>
-    <div class="hero-xag" id="hero-xag">—</div>
-    <div class="hero-xag-sub" id="hero-xag-sub">—</div>
-  </div>
+  <div class="hero-r"><div class="lbl">XAGUSD spot</div><div class="hero-xag" id="hero-xag">—</div><div class="hero-xag-sub" id="hero-xag-sub">—</div></div>
 </div>
-<div class="zone-label"><span class="zn">Zone 1</span> Silver Now <span class="zh">spot · macro · price discipline</span></div>
 
-<!-- 2. LIVE TICKER BAR -->
+<div class="section-hd"><span class="sn">§1</span> Silver <span class="sx">the price read · verdict · levels · indicators</span></div>
 <div class="ticker-bar" id="ticker-bar"></div>
-
-<!-- 3. SILVER NOW (verdict + book) -->
-<div class="bento" style="grid-template-columns: 1.4fr 1fr;">
-  <div class="card hero-verdict">
+<div class="bento" style="grid-template-columns:1.3fr 1fr 1.3fr;">
+<div class="card hero-verdict">
     <div class="accent-top" style="background: var(--positive);"></div>
     <div class="card-title">
       <h2>Composite Verdict</h2>
@@ -468,39 +395,24 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
     <div class="scenario-rows" id="scenarios"></div>
     <div class="ab-total"><strong>Bullish (A+B):</strong> <span id="ab-pct" class="pos" style="font-weight:700;">—</span></div>
   </div>
-
-  <div class="card">
+<div class="card">
     <div class="accent-top"></div>
     <div class="card-title">
-      <h2>Family Book</h2>
-      <span class="meta" id="book-meta">—</span>
+      <h2>S/R Levels · XAGUSD</h2>
+      <span class="meta" id="sr-meta">—</span>
     </div>
-    <div class="book-grid" id="book-grid"></div>
-    <div style="margin-top:8px;padding-top:7px;border-top:1px dashed var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-      <div>
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);font-weight:700;">Realized</div>
-        <div class="num" id="book-realized-v" style="font-size:15px;font-weight:700;">—</div>
-        <div class="num" id="book-realized-p" style="font-size:10.5px;font-weight:700;">—</div>
-      </div>
-      <div>
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);font-weight:700;">Unreal · Shalu</div>
-        <div class="num" id="book-pnl-v" style="font-size:15px;font-weight:700;">—</div>
-        <div class="num" id="book-pnl-p" style="font-size:10.5px;font-weight:700;">—</div>
-      </div>
-      <div>
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--forest);font-weight:700;">Combined</div>
-        <div class="num" id="book-combined-v" style="font-size:15px;font-weight:700;">—</div>
-        <div class="num" id="book-combined-p" style="font-size:10.5px;font-weight:700;">—</div>
-      </div>
-    </div>
+    <div class="sr-wrap" id="sr-r"></div>
+    <div class="sr-now"><span class="lab">live</span><span class="val" id="sr-now">—</span></div>
+    <div class="sr-wrap" id="sr-s"></div>
   </div>
-
+<div class="card">
+    <div class="accent-top" style="background: var(--forest);"></div>
+    <div class="card-title"><h2>Bull / Bear case</h2><span class="meta">non-chart consensus inputs</span></div>
+    <div class="tab-bb-cases" id="bb-cases"></div>
+  </div>
 </div>
-
-
-<!-- 4. ROW 2 — Trim / Add / S/R -->
-<div class="bento">
-  <div class="card">
+<div class="bento" style="grid-template-columns:1fr 1fr;">
+<div class="card">
     <div class="accent-top" style="background: var(--negative);"></div>
     <div class="card-title">
       <h2>Trim Ladder · sell discipline</h2>
@@ -512,8 +424,7 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
     </table>
     <div class="ladder-meta">Locked 2026-05-10 per synthesis §6.1 · 60k SBees max sold cumulatively at completion</div>
   </div>
-
-  <div class="card">
+<div class="card">
     <div class="accent-top" style="background: var(--positive);"></div>
     <div class="card-title">
       <h2>Add Ladder · buy discipline</h2>
@@ -525,24 +436,11 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
     </table>
     <div class="ladder-meta" id="abort-note">—</div>
   </div>
-
-  <div class="card">
-    <div class="accent-top"></div>
-    <div class="card-title">
-      <h2>S/R Levels · XAGUSD</h2>
-      <span class="meta" id="sr-meta">—</span>
-    </div>
-    <div class="sr-wrap" id="sr-r"></div>
-    <div class="sr-now"><span class="lab">live</span><span class="val" id="sr-now">—</span></div>
-    <div class="sr-wrap" id="sr-s"></div>
-  </div>
 </div>
 
-<div class="zone-label"><span class="zn">Zone 2</span> The Plan <span class="zh">F109 re-entry · ₹5Cr ladder</span></div>
-
-<!-- 3.5 — F109 SILVER RE-ENTRY (active deployment plan, approved 2026-05-19) -->
-<div class="bento" style="grid-template-columns: 1fr;">
-  <div class="card" id="f109-card">
+<div class="section-hd"><span class="sn">§2</span> Operator <span class="sx">your book · F109 ladder · floor · outlook</span></div>
+<div class="bento" style="grid-template-columns:1fr;">
+<div class="card" id="f109-card">
     <div class="accent-top" style="background: var(--forest);"></div>
     <div class="card-title">
       <h2 style="color: var(--forest);">F109 · Silver Re-Entry Ladder</h2>
@@ -576,28 +474,60 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
     </div>
   </div>
 </div>
+<div class="bento" style="grid-template-columns:1fr 1fr;">
+<div class="card">
+    <div class="accent-top"></div>
+    <div class="card-title">
+      <h2>Family Book</h2>
+      <span class="meta" id="book-meta">—</span>
+    </div>
+    <div class="book-grid" id="book-grid"></div>
+    <div style="margin-top:8px;padding-top:7px;border-top:1px dashed var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);font-weight:700;">Realized</div>
+        <div class="num" id="book-realized-v" style="font-size:15px;font-weight:700;">—</div>
+        <div class="num" id="book-realized-p" style="font-size:10.5px;font-weight:700;">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);font-weight:700;">Unreal · Shalu</div>
+        <div class="num" id="book-pnl-v" style="font-size:15px;font-weight:700;">—</div>
+        <div class="num" id="book-pnl-p" style="font-size:10.5px;font-weight:700;">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--forest);font-weight:700;">Combined</div>
+        <div class="num" id="book-combined-v" style="font-size:15px;font-weight:700;">—</div>
+        <div class="num" id="book-combined-p" style="font-size:10.5px;font-weight:700;">—</div>
+      </div>
+    </div>
+  </div>
+<div class="card">
+    <div class="accent-top"></div>
+    <div class="card-title"><h2>Floor Framework · V-13</h2><span class="meta" id="floor-meta">—</span></div>
+    <div class="tab-floor" id="floor-list"></div>
+    <div class="velocity" id="velocity-note" style="margin-top:6px;">—</div>
+  </div>
+</div>
+<div class="card">
+  <div class="accent-top" style="background: var(--silver-gold);"></div>
+  <div class="card-title"><h2>Strategy outlook · concise timeline</h2><span class="meta">past + current synthesis verdicts</span></div>
+  <div class="tab-tl" id="tl-list"></div>
+</div>
 
-<!-- ZONE 3 · INTEL (collapsed) -->
-<details class="zone3">
-  <summary><span class="zn">Zone 3</span> Intel — news · catalysts · COT · floor · inventory · book detail <span class="chev"></span></summary>
-  <div class="zone3-body">
-
-<!-- 5. ROW 3 — ACCOUNTS -->
+<details class="zone3"><summary><span class="zn">§3</span> Intel — news · catalysts · COT · accounts · inventory · sells <span class="chev"></span></summary>
+<div class="zone3-body">
 <div class="accounts-row" id="accounts-row"></div>
-
-<!-- 6. ROW 4 — MARKET CONTEXT (news / catalysts / COT) -->
-<div class="bento" style="grid-template-columns: 1fr 1fr 1.5fr;">
-  <div class="card">
+<div class="bento" style="grid-template-columns:1fr 1fr 1.4fr;">
+<div class="card">
     <div class="accent-top" style="background: var(--negative);"></div>
     <div class="card-title"><h2>News · last 5</h2><span class="meta">operator + Claude curated</span></div>
     <div class="tab-news" id="news-list"></div>
   </div>
-  <div class="card">
+<div class="card">
     <div class="accent-top" style="background: var(--warning);"></div>
     <div class="card-title"><h2>Catalyst Calendar</h2><span class="meta">silver-relevant upcoming</span></div>
     <div class="tab-cal" id="cal-list"></div>
   </div>
-  <div class="card">
+<div class="card">
     <div class="accent-top" style="background: var(--silver-gold);"></div>
     <div class="card-title">
       <h2 id="cot-hdr">COT</h2>
@@ -610,21 +540,7 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
     <div class="tab-cot" id="cot-grid"></div>
   </div>
 </div>
-
-<!-- 7. ROW 5 — THESIS LAYER (bull/bear + floor + inventory) -->
-<div class="bento" style="grid-template-columns: 1.4fr 1.2fr 1fr;">
-  <div class="card">
-    <div class="accent-top" style="background: var(--forest);"></div>
-    <div class="card-title"><h2>Bull / Bear case</h2><span class="meta">non-chart consensus inputs</span></div>
-    <div class="tab-bb-cases" id="bb-cases"></div>
-  </div>
-  <div class="card">
-    <div class="accent-top"></div>
-    <div class="card-title"><h2>Floor Framework · V-13</h2><span class="meta" id="floor-meta">—</span></div>
-    <div class="tab-floor" id="floor-list"></div>
-    <div class="velocity" id="velocity-note" style="margin-top:6px;">—</div>
-  </div>
-  <div class="card">
+<div class="card">
     <div class="accent-top" style="background: var(--accent);"></div>
     <div class="card-title"><h2>Global Inventory</h2><span class="meta" id="inv-meta">—</span></div>
     <div class="tab-inv"><table>
@@ -632,18 +548,8 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
       <tbody id="inv-body"></tbody>
     </table></div>
   </div>
-</div>
-
-<!-- 8. ROW 6 — TIMELINE (full width horizontal scroll) -->
+<div class="bento" style="grid-template-columns:1fr 1.5fr;">
 <div class="card">
-  <div class="accent-top" style="background: var(--silver-gold);"></div>
-  <div class="card-title"><h2>Strategy outlook · concise timeline</h2><span class="meta">past + current synthesis verdicts</span></div>
-  <div class="tab-tl" id="tl-list"></div>
-</div>
-
-<!-- 9. ROW 7 — DETAIL TABLES (tranches + sells side-by-side) -->
-<div class="bento" style="grid-template-columns: 1fr 1.6fr;">
-  <div class="card">
     <div class="accent-top" style="background: var(--positive);"></div>
     <div class="card-title"><h2>Remaining tranches</h2><span class="meta" id="tr-meta">—</span></div>
     <div class="tab-tr"><table>
@@ -651,7 +557,7 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
       <tbody id="tr-body"></tbody>
     </table></div>
   </div>
-  <div class="card">
+<div class="card">
     <div class="accent-top" style="background: var(--negative);"></div>
     <div class="card-title"><h2>Realized sells · FIFO matched</h2><span class="meta" id="sells-meta">—</span></div>
     <div class="tab-tr" style="max-height:280px;overflow-y:auto;"><table>
@@ -660,11 +566,8 @@ details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; 
     </table></div>
   </div>
 </div>
+</div></details>
 
-  </div>
-</details>
-
-<!-- FOOTER -->
 <div class="foot">
   <div><strong>Data:</strong> <code>silver_holdings.yaml</code> → <code>silver_dashboard_emit.py</code> → <code>data/silver_dashboard_aggregate.json</code> · page auto-refreshes every 60s · server emits every 20min (24/7) via GH Actions · goldapi.io spot + Yahoo intermarket</div>
   <div>F98 · CLAUDE_MODULES/01_SILVER_DOCTRINE V-13/V-15</div>
@@ -795,6 +698,8 @@ try {
     ${tickerCell('gold',      'Gold',     { prefix: '$', dp: 1 })}
     ${tickerCell('gsr',       'GSR' )}
     ${tickerCell('usdinr',    'USDINR',   { prefix: '₹' })}
+    ${tickerCell('wti',       'Oil',  { prefix: '$', dp: 1 })}
+    ${tickerCell('tnx',       'TNX',  { dp: 2 })}
     ${tickerCell('dxy',       'DXY' )}
   `;
 } catch (e) { __reportErr('ticker', e); }
@@ -816,16 +721,12 @@ try {
   document.getElementById('ab-pct').textContent = `${fc.bullish_mass_a_plus_b || 0}%`;
 } catch (e) { __reportErr('verdict', e); }
 try {
-  // ─── HERO BAND (Zone 1) ───────────────────────────────
-  const hv = document.getElementById('hero-verdict'); if (hv) hv.textContent = fc.composite_verdict || '—';
-  const hreg = document.getElementById('hero-regime'); if (hreg) hreg.textContent = (fc.consensus_state || 'Silver Desk').toUpperCase();
-  const hsub = document.getElementById('hero-sub'); if (hsub) hsub.textContent = fc.composite_source || '';
-  const hq = (cm.xagusd && cm.xagusd.price != null) ? cm.xagusd.price : (xagNow != null ? +xagNow : null);
-  const hx = document.getElementById('hero-xag'); if (hx) hx.textContent = hq != null ? ('$' + (+hq).toFixed(2)) : '—';
-  const hxs = document.getElementById('hero-xag-sub');
-  if (hxs) { const ch = cm.xagusd && cm.xagusd.day_chg_pct;
-    hxs.textContent = (ch != null ? (ch>=0?'+':'')+(+ch).toFixed(2)+'% today' : '')
-      + (cp.primary_inr != null ? ' · SBees ₹'+(+cp.primary_inr).toFixed(2) : ''); }
+  const hv=document.getElementById('hero-verdict'); if(hv) hv.textContent=fc.composite_verdict||'—';
+  const hreg=document.getElementById('hero-regime'); if(hreg) hreg.textContent=(fc.consensus_state||'Silver Desk').toUpperCase();
+  const hsub=document.getElementById('hero-sub'); if(hsub) hsub.textContent=fc.composite_source||'';
+  const hq=(cm.xagusd&&cm.xagusd.price!=null)?cm.xagusd.price:(xagNow!=null?+xagNow:null);
+  const hx=document.getElementById('hero-xag'); if(hx) hx.textContent=hq!=null?('$'+(+hq).toFixed(2)):'—';
+  const hxs=document.getElementById('hero-xag-sub'); if(hxs){ const ch=cm.xagusd&&cm.xagusd.day_chg_pct; hxs.textContent=(ch!=null?(ch>=0?'+':'')+(+ch).toFixed(2)+'% today':'')+(cp.primary_inr!=null?' · SBees ₹'+(+cp.primary_inr).toFixed(2):''); }
 } catch (e) { __reportErr('hero-band', e); }
 try {
   // ─── 3. HERO B — FAMILY BOOK (realized + combined) ────────────────
