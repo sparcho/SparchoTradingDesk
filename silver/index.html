@@ -9,30 +9,54 @@
 <style>
 :root {
   color-scheme: light;
-  --bg: #faf6ed;
-  --bg-grain: #f5efdf;
-  --card: #ffffff;
-  --border: rgba(0,0,0,0.09);
-  --border-strong: rgba(0,0,0,0.18);
-  --text: #1f2937;
-  --text-muted: #6b7280;
-  --text-soft: #9ca3af;
-  --forest: #1f4d3a;
-  --forest-soft: #e6efe9;
-  --silver-gold: #c0a062;
-  --silver-gold-soft: #f5ebd6;
-  --silver-gold-dark: #8c6f35;
-  --positive: #0e7d3a;
-  --positive-soft: #e0f0e6;
-  --negative: #b91c1c;
-  --negative-soft: #fbe3e3;
-  --warning: #b45309;
-  --warning-soft: #fdecd6;
-  --warning-strong: #92400e;
-  --info-soft: #eaf2f7;
-  --slate-bg: #1e3a52;
-  --slate-bg-2: #2a526b;
-  --tab-stripe: #f7f3e8;
+  /* ── POLISHED CANVAS (260531 reskin) — B&W editorial + metallic silver ── */
+  /* 60 · warm paper base */
+  --paper: #f4f1ea;
+  --paper-2: #efe9dd;
+  /* 30 · ink + card surfaces */
+  --ink: #1a1a1c;
+  --ink-soft: #44454a;
+  --ink-mute: #76777e;
+  --ink-faint: #a6a7ad;
+  /* 10 · metallic silver accent (cool platinum/grey) */
+  --silver: #8b929c;
+  --silver-lite: #c9cdd4;
+  --silver-deep: #5e6571;
+  --silver-grad: linear-gradient(135deg, #d7dbe1 0%, #aab1bb 48%, #7c838f 100%);
+  /* dark hero band */
+  --hero-bg: #16161a;
+  --hero-bg-2: #232730;
+  /* desaturated semantic signals (state only) */
+  --sig-pos: #3f7d57; --sig-pos-soft: #e7efe9;
+  --sig-neg: #a8463c; --sig-neg-soft: #f2e6e4;
+  --sig-warn: #9a6a24; --sig-warn-soft: #f1e9d9;
+
+  /* ── compatibility aliases (existing classes keep working, recolored) ── */
+  --bg: var(--paper);
+  --bg-grain: var(--paper-2);
+  --card: #fbf9f4;
+  --border: rgba(26,26,28,0.10);
+  --border-strong: rgba(26,26,28,0.20);
+  --text: var(--ink);
+  --text-muted: var(--ink-soft);
+  --text-soft: var(--ink-mute);
+  --forest: var(--ink);                 /* headings/active → editorial ink, not green */
+  --forest-soft: var(--paper-2);
+  --silver-gold: var(--silver-deep);    /* the 10% accent → metallic silver */
+  --silver-gold-soft: #e9ebee;
+  --silver-gold-dark: var(--silver-deep);
+  --positive: var(--sig-pos);
+  --positive-soft: var(--sig-pos-soft);
+  --negative: var(--sig-neg);
+  --negative-soft: var(--sig-neg-soft);
+  --warning: var(--sig-warn);
+  --warning-soft: var(--sig-warn-soft);
+  --warning-strong: #7a4f12;
+  --info-soft: #eceef1;
+  --slate-bg: var(--hero-bg);
+  --slate-bg-2: var(--hero-bg-2);
+  --tab-stripe: #f1ede4;
+  --accent: var(--silver-deep);
 }
 * { box-sizing: border-box; }
 html, body {
@@ -335,6 +359,62 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
   .bento, .accounts-row, .ticker-bar { grid-template-columns: 1fr; }
   body { padding: 10px; }
 }
+
+/* ════════════ POLISHED CANVAS — typography + hero + zones (260531) ════════════ */
+:root { --serif: Georgia, "Times New Roman", "Source Serif Pro", serif;
+        --mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace; }
+/* Serif display for headlines/titles; sans stays for body + eyebrow labels */
+.brand h1, .verdict-hero, .hero-verdict, .hero-xag, .zone-label, .f98-decisions .lbl { font-family: var(--serif); }
+.brand h1 { font-weight: 700; letter-spacing: 0; }
+/* Mono for all numerics — digits line up */
+.tk-cell .tk-val, .verdict-hero, .book-stat .val, .book-pnl .v, .book-pnl .p, .num, .mono,
+.sr-row .px, .sr-now .val, .f109-bucket .pct, .f109-bucket .range, table.f109-tranches td.size,
+.f109-stops .v, .floor-row .fb, .acc-card .pnl-row .v, .acc-card .pnl-row .p, .hero-xag,
+.sc-row .sc-pct, .f109-summary .v, .hero-xag-sub { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* metallic-silver accent applied sparingly (the 10) */
+.card .accent-top { background: var(--silver-grad) !important; height: 2.5px; }
+.title-strip { border-bottom: 1px solid var(--silver); }
+.sc-row .sc-fill, .f109-bucket .fill, .floor-row .fpf { background: var(--silver-grad) !important; }
+.f109-bucket.modal .bar .fill { background: linear-gradient(90deg, var(--ink), var(--ink-soft)) !important; }
+
+/* ── ONE dark hero band ── */
+.hero-band {
+  background: linear-gradient(135deg, var(--hero-bg) 0%, var(--hero-bg-2) 100%);
+  color: #f1ede4; border-radius: 9px; padding: 16px 22px; margin-bottom: 4px;
+  display: grid; grid-template-columns: 1fr auto; gap: 14px 26px; align-items: center;
+  box-shadow: 0 2px 14px rgba(22,22,26,0.22); position: relative; overflow: hidden;
+}
+.hero-band::after { content:""; position:absolute; inset:0; background: radial-gradient(120% 140% at 88% 0%, rgba(170,177,187,0.16), transparent 60%); pointer-events:none; }
+.hero-l { min-width: 0; }
+.hero-regime { display:inline-block; font-size: 9.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px; background: rgba(241,237,228,0.10); border: 1px solid rgba(241,237,228,0.22); color: #d7dbe1; margin-bottom: 9px; }
+.hero-verdict { font-size: 23px; line-height: 1.16; font-weight: 700; letter-spacing: -0.01em;
+  background: var(--silver-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-sub { font-size: 11px; color: rgba(241,237,228,0.62); margin-top: 7px; line-height: 1.5; max-width: 70ch; }
+.hero-r { text-align: right; }
+.hero-r .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(241,237,228,0.55); font-weight: 700; }
+.hero-xag { font-size: 42px; font-weight: 800; line-height: 1; margin-top: 2px;
+  background: var(--silver-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-xag-sub { font-size: 12px; color: rgba(241,237,228,0.72); margin-top: 3px; font-weight: 600; }
+
+/* ── zone labels ── */
+.zone-label { display:flex; align-items:baseline; gap:10px; font-size: 14px; font-weight: 700; color: var(--ink);
+  letter-spacing: 0.01em; margin: 16px 0 8px; padding-bottom: 5px; border-bottom: 1.5px solid var(--silver); }
+.zone-label .zn { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; color: var(--silver-deep); text-transform: uppercase; }
+.zone-label .zh { font-size: 10px; font-weight: 500; color: var(--ink-mute); font-family: var(--mono); margin-left: auto; }
+
+/* ── collapsible Zone 3 ── */
+details.zone3 { margin-top: 4px; }
+details.zone3 > summary { list-style: none; cursor: pointer; display:flex; align-items:baseline; gap:10px;
+  font-size: 14px; font-weight: 700; font-family: var(--serif); color: var(--ink); letter-spacing: 0.01em;
+  margin: 16px 0 4px; padding-bottom: 5px; border-bottom: 1.5px solid var(--silver); }
+details.zone3 > summary::-webkit-details-marker { display:none; }
+details.zone3 > summary .zn { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; color: var(--silver-deep); text-transform: uppercase; font-family: var(--mono); }
+details.zone3 > summary .chev { margin-left: auto; font-size: 11px; color: var(--silver-deep); font-family: var(--mono); }
+details.zone3[open] > summary .chev::after { content: "collapse ▴"; }
+details.zone3:not([open]) > summary .chev::after { content: "expand ▾"; }
+details.zone3 > .zone3-body { display: flex; flex-direction: column; gap: 10px; padding-top: 6px; }
 </style>
 </head>
 <body>
@@ -356,11 +436,26 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
 
 <div id="render-errors" style="display:none;background:#fef3e1;border:2px solid #b45309;border-radius:6px;padding:8px 14px;margin-bottom:10px;color:#92400e;font-size:11.5px;font-family:Menlo,Monaco,Consolas,monospace;"></div>
 
+<!-- HERO BAND · Zone 1 -->
+<div class="hero-band">
+  <div class="hero-l">
+    <span class="hero-regime" id="hero-regime">—</span>
+    <div class="hero-verdict" id="hero-verdict">—</div>
+    <div class="hero-sub" id="hero-sub">—</div>
+  </div>
+  <div class="hero-r">
+    <div class="lbl">XAGUSD spot</div>
+    <div class="hero-xag" id="hero-xag">—</div>
+    <div class="hero-xag-sub" id="hero-xag-sub">—</div>
+  </div>
+</div>
+<div class="zone-label"><span class="zn">Zone 1</span> Silver Now <span class="zh">spot · macro · price discipline</span></div>
+
 <!-- 2. LIVE TICKER BAR -->
 <div class="ticker-bar" id="ticker-bar"></div>
 
-<!-- 3. HERO ROW (verdict + book + F98) -->
-<div class="bento">
+<!-- 3. SILVER NOW (verdict + book) -->
+<div class="bento" style="grid-template-columns: 1.4fr 1fr;">
   <div class="card hero-verdict">
     <div class="accent-top" style="background: var(--positive);"></div>
     <div class="card-title">
@@ -400,58 +495,8 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
     </div>
   </div>
 
-  <div class="card" id="f98-card">
-    <div class="accent-top" style="background: var(--warning);"></div>
-    <div class="card-title">
-      <h2 style="color: var(--warning-strong);">F98 · Post-Trim Redeployment</h2>
-      <!-- status now reflects defensive trim already executed -->
-      <span class="pill pill-warn" id="f98-status">OPEN-URGENT</span>
-    </div>
-    <div class="f98-stat-grid" id="f98-stats"></div>
-    <div class="f98-decisions">
-      <div class="lbl">Operator decisions pending</div>
-      <ul id="f98-decisions"></ul>
-    </div>
-  </div>
 </div>
 
-
-<!-- 3.5 — F109 SILVER RE-ENTRY (active deployment plan, approved 2026-05-19) -->
-<div class="bento" style="grid-template-columns: 1fr;">
-  <div class="card" id="f109-card">
-    <div class="accent-top" style="background: var(--forest);"></div>
-    <div class="card-title">
-      <h2 style="color: var(--forest);">F109 · Silver Re-Entry Ladder</h2>
-      <span class="meta" id="f109-meta">—</span>
-      <span class="pill pill-ok" id="f109-status">ACTIVE</span>
-    </div>
-
-    <div class="f109-summary" id="f109-summary"></div>
-
-    <div class="f109-grid">
-      <div>
-        <div class="f109-sect-title">Tranche ladder</div>
-        <table class="f109-tranches">
-          <thead>
-            <tr><th>Tier</th><th style="text-align:right;">Target</th><th style="text-align:right;">Size</th><th>Fire condition</th><th>Status</th></tr>
-          </thead>
-          <tbody id="f109-tranches"></tbody>
-        </table>
-        <div id="f109-strategic" style="margin-top:7px;padding:6px 8px;border-left:3px solid var(--forest);background:var(--tab-stripe);border-radius:3px;font-size:10px;line-height:1.45;color:var(--text-soft);"></div>
-
-        <div class="f109-stops" id="f109-stops"></div>
-      </div>
-
-      <div>
-        <div class="f109-sect-title">Probability distribution (modal = ★)</div>
-        <div class="f109-buckets" id="f109-buckets"></div>
-
-        <div class="f109-sect-title" style="margin-top:14px;">Watch-list (active)</div>
-        <div class="f109-watchlist" id="f109-watchlist"></div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- 4. ROW 2 — Trim / Add / S/R -->
 <div class="bento">
@@ -492,6 +537,50 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
     <div class="sr-wrap" id="sr-s"></div>
   </div>
 </div>
+
+<div class="zone-label"><span class="zn">Zone 2</span> The Plan <span class="zh">F109 re-entry · ₹5Cr ladder</span></div>
+
+<!-- 3.5 — F109 SILVER RE-ENTRY (active deployment plan, approved 2026-05-19) -->
+<div class="bento" style="grid-template-columns: 1fr;">
+  <div class="card" id="f109-card">
+    <div class="accent-top" style="background: var(--forest);"></div>
+    <div class="card-title">
+      <h2 style="color: var(--forest);">F109 · Silver Re-Entry Ladder</h2>
+      <span class="meta" id="f109-meta">—</span>
+      <span class="pill pill-ok" id="f109-status">ACTIVE</span>
+    </div>
+
+    <div class="f109-summary" id="f109-summary"></div>
+
+    <div class="f109-grid">
+      <div>
+        <div class="f109-sect-title">Tranche ladder</div>
+        <table class="f109-tranches">
+          <thead>
+            <tr><th>Tier</th><th style="text-align:right;">Target</th><th style="text-align:right;">Size</th><th>Fire condition</th><th>Status</th></tr>
+          </thead>
+          <tbody id="f109-tranches"></tbody>
+        </table>
+        <div id="f109-strategic" style="margin-top:7px;padding:6px 8px;border-left:3px solid var(--forest);background:var(--tab-stripe);border-radius:3px;font-size:10px;line-height:1.45;color:var(--text-soft);"></div>
+
+        <div class="f109-stops" id="f109-stops"></div>
+      </div>
+
+      <div>
+        <div class="f109-sect-title">Probability distribution (modal = ★)</div>
+        <div class="f109-buckets" id="f109-buckets"></div>
+
+        <div class="f109-sect-title" style="margin-top:14px;">Watch-list (active)</div>
+        <div class="f109-watchlist" id="f109-watchlist"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ZONE 3 · INTEL (collapsed) -->
+<details class="zone3">
+  <summary><span class="zn">Zone 3</span> Intel — news · catalysts · COT · floor · inventory · book detail <span class="chev"></span></summary>
+  <div class="zone3-body">
 
 <!-- 5. ROW 3 — ACCOUNTS -->
 <div class="accounts-row" id="accounts-row"></div>
@@ -571,6 +660,9 @@ table.f109-tranches tbody td.cond { color: var(--text-soft); font-size: 10px; li
     </table></div>
   </div>
 </div>
+
+  </div>
+</details>
 
 <!-- FOOTER -->
 <div class="foot">
@@ -724,6 +816,18 @@ try {
   document.getElementById('ab-pct').textContent = `${fc.bullish_mass_a_plus_b || 0}%`;
 } catch (e) { __reportErr('verdict', e); }
 try {
+  // ─── HERO BAND (Zone 1) ───────────────────────────────
+  const hv = document.getElementById('hero-verdict'); if (hv) hv.textContent = fc.composite_verdict || '—';
+  const hreg = document.getElementById('hero-regime'); if (hreg) hreg.textContent = (fc.consensus_state || 'Silver Desk').toUpperCase();
+  const hsub = document.getElementById('hero-sub'); if (hsub) hsub.textContent = fc.composite_source || '';
+  const hq = (cm.xagusd && cm.xagusd.price != null) ? cm.xagusd.price : (xagNow != null ? +xagNow : null);
+  const hx = document.getElementById('hero-xag'); if (hx) hx.textContent = hq != null ? ('$' + (+hq).toFixed(2)) : '—';
+  const hxs = document.getElementById('hero-xag-sub');
+  if (hxs) { const ch = cm.xagusd && cm.xagusd.day_chg_pct;
+    hxs.textContent = (ch != null ? (ch>=0?'+':'')+(+ch).toFixed(2)+'% today' : '')
+      + (cp.primary_inr != null ? ' · SBees ₹'+(+cp.primary_inr).toFixed(2) : ''); }
+} catch (e) { __reportErr('hero-band', e); }
+try {
   // ─── 3. HERO B — FAMILY BOOK (realized + combined) ────────────────
   document.getElementById('book-meta').textContent = `${ft.account_count_active}/${ft.account_count_active + ft.account_count_exited} active · ${ft.tranche_count} remaining tranches`;
   document.getElementById('book-grid').innerHTML = `
@@ -744,22 +848,7 @@ try {
   document.getElementById('book-combined-p').textContent = fmtPct(ft.combined_pnl_pct);
   document.getElementById('book-combined-p').classList.add(pnlClass(ft.combined_pnl_inr));
 } catch (e) { __reportErr('family-book', e); }
-try {
-  // ─── 3. HERO C — F98 ────────────────────────────────
-  // (hoisted to preamble)
-  // F98 status reflects realized state now — trim has FIRED defensively on Friday
-  document.getElementById('f98-status').textContent = 'TRIGGERED · 15-MAY';
-  document.getElementById('f98-status').className = 'pill pill-ok';
-  const xagTrim = f98.trim_trigger_xagusd || {};
-  // liveXag hoisted to preamble
-  const distPct = (liveXag && xagTrim.low) ? ((xagTrim.low - liveXag) / liveXag * 100).toFixed(1) : '—';
-  document.getElementById('f98-stats').innerHTML = `
-    <div class="f98-stat"><div class="lbl">Trim trigger</div><div class="val">$${xagTrim.low}–${xagTrim.high}</div></div>
-    <div class="f98-stat"><div class="lbl">XAGUSD now</div><div class="val">$${(+liveXag).toFixed(2)}<span style="font-size:10px;color:var(--text-soft);"> (+${distPct}%)</span></div></div>
-    <div class="f98-stat"><div class="lbl">Trim plan</div><div class="val">${f98.trim_pct_planned?.low}–${f98.trim_pct_planned?.high}%</div></div>
-    <div class="f98-stat"><div class="lbl">Cash freed est</div><div class="val">${fmtINR(f98.freed_cash_inr?.low, { compact: true })}–${fmtINR(f98.freed_cash_inr?.high, { compact: true })}</div></div>`;
-  document.getElementById('f98-decisions').innerHTML = (f98.operator_decisions_pending || []).slice(0, 4).map(d => `<li>${d}</li>`).join('');
-} catch (e) { __reportErr('f98', e); }
+
 try {
   // ─── 3.5. HERO D — F109 Silver Re-Entry Ladder ────────────────────
   const dp = DATA.deployment_plan;
