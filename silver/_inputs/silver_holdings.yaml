@@ -52,12 +52,11 @@ accounts:
     custodian: "Zerodha"
     accent_color: "#22c55e"
     emoji: "🎯"
-    tranches:
-      - { date: "2026-03-12", qty: 20000, buy_price: 242.82, invested: 4856400 }
-      - { date: "2026-04-16", qty: 10000, buy_price: 237.37, invested: 2373700 }
-      - { date: "2026-04-18", qty: 10000, buy_price: 231.52, invested: 2315200 }
-      - { date: "2026-04-24", qty:  2500, buy_price: 228.87, invested:  572175 }
-      - { date: "2026-04-24", qty:  2500, buy_price: 228.65, invested:  571625 }
+    tranches:   # 260531: F109 re-entry — operator-confirmed ONLY current holding
+      - { date: "2026-05-17", qty: 4000, buy_price: 254.00, invested: 1016920 }
+      - { date: "2026-05-20", qty: 4000, buy_price: 256.00, invested: 1023720 }
+      - { date: "2026-05-21", qty: 2000, buy_price: 251.00, invested:  502400 }
+      - { date: "2026-05-21", qty: 4000, buy_price: 250.00, invested:  998400 }  # lot4 date pending
     sells: []
 
   rajiv:
@@ -66,10 +65,7 @@ accounts:
     custodian: "Zerodha"
     accent_color: "#3b82f6"
     emoji: "👨"
-    tranches:
-      - { date: "2026-03-27", qty: 10000, buy_price: 224.5,  invested: 2245000 }
-      - { date: "2026-05-07", qty:  5000, buy_price: 233.0,  invested: 1165000 }
-      - { date: "2026-05-07", qty: 20000, buy_price: 239.4,  invested: 4788000 }
+    tranches: []   # 260531: liquidated; no current holding (operator-confirmed)
     sells: []
 
   shalu:
@@ -78,11 +74,7 @@ accounts:
     custodian: "Zerodha"
     accent_color: "#a855f7"
     emoji: "👩"
-    tranches:
-      # operator 260517: "only 2 tranches in Shalini account, rest all had been
-      # sold at around 78 USD spot." Sell-side detail pending from father.
-      - { date: "2026-03-25", qty: 10000, buy_price: 216.19, invested: 2161900 }
-      - { date: "2026-04-23", qty: 10000, buy_price: 225.13, invested: 2251300 }
+    tranches: []   # 260531: operator confirmed no current holding (prior 20k not held)
     sells: []
 
   yash:
@@ -119,7 +111,7 @@ tradingview_main_chart:
 # 3. FORECAST + BULL/BEAR BIAS
 # ─────────────────────────────────────────────────────────────────────────────
 forecast:
-  composite_verdict: "🟢 MILDLY-TO-MODERATELY BULLISH"
+  composite_verdict: "🟢 BASE-CONSTRUCTIVE (mild-bull tilt), gated — 260531 12-agent synthesis"
   composite_source: "260510 multi-agent synthesis v3 + 260511 chart-read tilt (V-15 ±3pp)"
   consensus_state: "DIVERGENT-LEANING bull (4 bull / 5 neutral / 0 bear non-chart agents)"
   v15_binding: "Charts contribute tiebreaker only; max ±3pp under LEANING consensus"
