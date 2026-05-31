@@ -1,33 +1,36 @@
 {
   "schema_version": "v2",
   "doc_type": "silver_dashboard_aggregate",
-  "emitted_at_utc": "2026-05-31T10:25:51+00:00",
+  "emitted_at_utc": "2026-05-31T11:11:36+00:00",
   "meta": {
     "source_excel": "My Stocks (Google Sheets, father-maintained)",
     "source_excel_drive_id": "1L6QZtyhrCN198GuLWGmpBZTaCoEWMH54IrTT-ts630I",
     "source_excel_modified_utc": "2026-05-17T05:01:30Z",
-    "source_excel_note": "Tracker-only \u2014 buy/sell history. NOT linked to live price; the 'Current Price' cell is a manual reference, not a live quote.",
+    "source_excel_note": "Tracker-only — buy/sell history. NOT linked to live price; the 'Current Price' cell is a manual reference, not a live quote.",
     "last_synced": "2026-05-17",
     "synced_by": "Claude (manual mirror v2)",
     "ticker": "SILVERBEES",
     "yahoo_symbol": "SILVERBEES.NS",
     "exchange": "NSE",
     "fund_name": "Nippon India Silver ETF",
-    "related_flag": "F260510-F98_silver-post-trim-redeployment",
+    "related_flag": "F260518-F109_silver-re-entry-v2_lower-floor-thesis",
+    "last_regraded": "2026-05-31",
+    "holdings_status": "LIVE per operator Excel update 260531. Book = Shalu 20,000u (legacy kept, avg ~Rs.220.66) + Sparsh F109 re-entry 14,000u (4 lots 17-21 May, Rs.35,41,440 all-in, blended ~Rs.252.96). Family ~34,000u. Up to Rs.5Cr deployable envelope. ASSUMPTIONS (operator confirm): re-entry lots assigned to Sparsh acct + additive to Shalu 20k; lot4 date pending.",
+    "capital_pnl_banner": "LIVE-260531",
     "obsidian_reference_dashboard": "00_SYSTEM/DASHBOARDS/SILVER_DASHBOARD.md (v1.6)"
   },
   "current_price": {
     "primary_inr": 249.37,
-    "primary_date": "2026-05-29",
-    "primary_source": "yahoo live (SILVERBEES.NS)",
-    "primary_staleness_days": 2,
-    "primary_day_chg_pct": -0.20010405410813623,
+    "primary_date": "2026-05-30",
+    "primary_source": "00_SYSTEM\\GENERATORS\\_cache\\daily_prices.csv",
+    "primary_staleness_days": 1,
+    "primary_day_chg_pct": -2.601,
     "primary_intraday": {
-      "open": 262.6,
-      "high": 262.6,
-      "low": 248.0,
-      "prev_close": 270.93,
-      "volume": 66458497
+      "open": 250.55,
+      "high": 251.4,
+      "low": 247.4,
+      "prev_close": 256.03,
+      "volume": 19010653
     }
   },
   "current_market": {
@@ -41,6 +44,18 @@
       "prev_close": 249.87,
       "day_chg_pct": -0.20010405410813623,
       "as_of_utc": "2026-05-29T10:00:03+00:00"
+    },
+    "xagusd": {
+      "status": "ok",
+      "ticker": "XAGUSD",
+      "yahoo_symbol": "operator-override",
+      "currency": "USD",
+      "market_state": "OPERATOR-PINNED",
+      "price": 75.62,
+      "prev_close": 75.875,
+      "day_chg_pct": null,
+      "as_of_utc": "2026-05-31T11:11:36+00:00",
+      "source_note": "2026-05-30T22:26:37+0530"
     },
     "usdinr": {
       "status": "ok",
@@ -64,18 +79,6 @@
       "day_chg_pct": 0.03437537914020283,
       "as_of_utc": "2026-05-29T20:59:59+00:00"
     },
-    "xagusd": {
-      "status": "ok",
-      "ticker": "XAGUSD",
-      "yahoo_symbol": "goldapi.io",
-      "currency": "USD",
-      "market_state": "LIVE-SPOT",
-      "price": 75.293,
-      "prev_close": 75.6485,
-      "day_chg_pct": null,
-      "as_of_utc": "2026-05-31T10:25:49+00:00",
-      "source_note": "goldapi.io free tier \u2014 24/5 OTC spot"
-    },
     "gold": {
       "status": "ok",
       "ticker": "GOLD",
@@ -88,194 +91,905 @@
     "gsr": {
       "status": "ok",
       "ticker": "GSR",
-      "value": 61.001686743787594,
+      "value": 60.5337726523888,
       "derivation": "GOLD / XAGUSD (spot/spot)"
     },
-    "fetched_at_utc": "2026-05-31T10:25:51+00:00"
+    "fetched_at_utc": "2026-05-31T11:11:36+00:00"
   },
-  "live_xagusd_used_for_ladders": 75.293,
+  "live_xagusd_used_for_ladders": 75.62,
   "family_totals": {
-    "holdings_qty": 100000,
-    "invested_inr": 23300300.0,
-    "current_value_inr": 24937000.0,
-    "unrealized_pnl_inr": 1636700.0,
-    "unrealized_pnl_pct": 7.024373076741501,
-    "account_count_active": 3,
-    "tranche_count": 10
+    "holdings_qty": 34000,
+    "invested_inr": 7955200.0,
+    "current_value_inr": 8478580.0,
+    "unrealized_pnl_inr": 523380.0,
+    "unrealized_pnl_pct": 6.5790929203539825,
+    "realized_pnl_inr": 15320055.93,
+    "realized_pnl_pct": 5.571307998456438,
+    "realized_proceeds_inr": 290301369.73,
+    "realized_cost_basis_inr": 274981313.8,
+    "realized_qty": 1291124,
+    "combined_pnl_inr": 15843435.93,
+    "combined_pnl_pct": 5.5996434384567575,
+    "total_invested_lifetime_inr": 282936513.8,
+    "account_count_active": 2,
+    "account_count_exited": 2,
+    "tranche_count": 7
   },
   "accounts": [
-    {
-      "account_key": "sparsh",
-      "holder": "Sparsh",
-      "account_type": "self-managed",
-      "custodian": "Zerodha",
-      "accent_color": "#22c55e",
-      "emoji": "\ud83c\udfaf",
-      "holdings_qty": 45000,
-      "tranche_count": 5,
-      "avg_buy_inr": 237.53555555555556,
-      "invested_inr": 10689100.0,
-      "current_value_inr": 11221650.0,
-      "unrealized_pnl_inr": 532550.0,
-      "unrealized_pnl_pct": 4.982178106669411,
-      "tranches": [
-        {
-          "date": "2026-03-12",
-          "qty": 20000,
-          "buy_price": 242.82,
-          "invested_inr": 4856400.0,
-          "current_value_inr": 4987400.0,
-          "unrealized_pnl_inr": 131000.0,
-          "unrealized_pnl_pct": 2.697471377975455
-        },
-        {
-          "date": "2026-04-16",
-          "qty": 10000,
-          "buy_price": 237.37,
-          "invested_inr": 2373700.0,
-          "current_value_inr": 2493700.0,
-          "unrealized_pnl_inr": 120000.0,
-          "unrealized_pnl_pct": 5.055398744575978
-        },
-        {
-          "date": "2026-04-18",
-          "qty": 10000,
-          "buy_price": 231.52,
-          "invested_inr": 2315200.0,
-          "current_value_inr": 2493700.0,
-          "unrealized_pnl_inr": 178500.0,
-          "unrealized_pnl_pct": 7.709917069799585
-        },
-        {
-          "date": "2026-04-24",
-          "qty": 2500,
-          "buy_price": 228.87,
-          "invested_inr": 572175.0,
-          "current_value_inr": 623425.0,
-          "unrealized_pnl_inr": 51250.0,
-          "unrealized_pnl_pct": 8.957049853628698
-        },
-        {
-          "date": "2026-04-24",
-          "qty": 2500,
-          "buy_price": 228.65,
-          "invested_inr": 571625.0,
-          "current_value_inr": 623425.0,
-          "unrealized_pnl_inr": 51800.0,
-          "unrealized_pnl_pct": 9.061884977039144
-        }
-      ],
-      "sells_summary": {
-        "count": 0,
-        "qty_sold": 0,
-        "proceeds_inr": 0.0,
-        "realized_pnl_inr": 0.0
-      },
-      "sells_details": [],
-      "sell_data_status": "pending-from-father"
-    },
-    {
-      "account_key": "rajiv",
-      "holder": "Rajiv (dad)",
-      "account_type": "father-managed",
-      "custodian": "Zerodha",
-      "accent_color": "#3b82f6",
-      "emoji": "\ud83d\udc68",
-      "holdings_qty": 35000,
-      "tranche_count": 3,
-      "avg_buy_inr": 234.22857142857143,
-      "invested_inr": 8198000.0,
-      "current_value_inr": 8727950.0,
-      "unrealized_pnl_inr": 529950.0,
-      "unrealized_pnl_pct": 6.464381556477189,
-      "tranches": [
-        {
-          "date": "2026-03-27",
-          "qty": 10000,
-          "buy_price": 224.5,
-          "invested_inr": 2245000.0,
-          "current_value_inr": 2493700.0,
-          "unrealized_pnl_inr": 248700.0,
-          "unrealized_pnl_pct": 11.07795100222717
-        },
-        {
-          "date": "2026-05-07",
-          "qty": 5000,
-          "buy_price": 233.0,
-          "invested_inr": 1165000.0,
-          "current_value_inr": 1246850.0,
-          "unrealized_pnl_inr": 81850.0,
-          "unrealized_pnl_pct": 7.025751072961374
-        },
-        {
-          "date": "2026-05-07",
-          "qty": 20000,
-          "buy_price": 239.4,
-          "invested_inr": 4788000.0,
-          "current_value_inr": 4987400.0,
-          "unrealized_pnl_inr": 199400.0,
-          "unrealized_pnl_pct": 4.1645781119465335
-        }
-      ],
-      "sells_summary": {
-        "count": 0,
-        "qty_sold": 0,
-        "proceeds_inr": 0.0,
-        "realized_pnl_inr": 0.0
-      },
-      "sells_details": [],
-      "sell_data_status": "pending-from-father"
-    },
     {
       "account_key": "shalu",
       "holder": "Shalini (mom)",
       "account_type": "father-managed",
       "custodian": "Zerodha",
       "accent_color": "#a855f7",
-      "emoji": "\ud83d\udc69",
+      "emoji": "👩",
+      "status": "active",
+      "source_file": "07_POSITIONS/RAJIV-MULTI_SILVER/260517/Shalini Silver Trades.xls",
+      "total_buy_qty": 161000,
+      "total_sell_qty": 141000,
+      "trade_count": 30,
       "holdings_qty": 20000,
-      "tranche_count": 2,
+      "tranche_count": 3,
       "avg_buy_inr": 220.66,
       "invested_inr": 4413200.0,
       "current_value_inr": 4987400.0,
       "unrealized_pnl_inr": 574200.0,
-      "unrealized_pnl_pct": 13.010967098703889,
+      "unrealized_pnl_pct": 13.01,
       "tranches": [
         {
-          "date": "2026-03-25",
+          "date": "2026-03-30",
           "qty": 10000,
           "buy_price": 216.19,
           "invested_inr": 2161900.0,
           "current_value_inr": 2493700.0,
           "unrealized_pnl_inr": 331800.0,
-          "unrealized_pnl_pct": 15.347610897821362
+          "unrealized_pnl_pct": 15.35
         },
         {
-          "date": "2026-04-23",
-          "qty": 10000,
+          "date": "2026-04-28",
+          "qty": 5000,
           "buy_price": 225.13,
-          "invested_inr": 2251300.0,
-          "current_value_inr": 2493700.0,
-          "unrealized_pnl_inr": 242400.0,
-          "unrealized_pnl_pct": 10.767112335095279
+          "invested_inr": 1125650.0,
+          "current_value_inr": 1246850.0,
+          "unrealized_pnl_inr": 121200.0,
+          "unrealized_pnl_pct": 10.77
+        },
+        {
+          "date": "2026-04-28",
+          "qty": 5000,
+          "buy_price": 225.13,
+          "invested_inr": 1125650.0,
+          "current_value_inr": 1246850.0,
+          "unrealized_pnl_inr": 121200.0,
+          "unrealized_pnl_pct": 10.77
         }
       ],
-      "sells_summary": {
-        "count": 0,
-        "qty_sold": 0,
-        "proceeds_inr": 0.0,
-        "realized_pnl_inr": 0.0
-      },
-      "sells_details": [],
-      "sell_data_status": "pending-from-father"
+      "realized_pnl_inr": 3429308.74,
+      "realized_pnl_pct": 13.03,
+      "realized_proceeds_inr": 29738758.74,
+      "realized_cost_basis_inr": 26309450.0,
+      "realized_brokerage_inr": 25676.55,
+      "realized_qty": 141000,
+      "realized_sells": [
+        {
+          "date": "2025-08-28",
+          "qty": 3000,
+          "sell_price": 112.35,
+          "proceeds_inr": 337050.0,
+          "cost_basis_inr": 327470.0,
+          "realized_pnl_inr": 9580.0,
+          "realized_pnl_pct": 2.93,
+          "brokerage": 290.98,
+          "matched_lots": [
+            {
+              "buy_date": "2025-07-28",
+              "buy_price": 109.24,
+              "qty_matched": 1000,
+              "lot_cost_inr": 109240.0
+            },
+            {
+              "buy_date": "2025-07-28",
+              "buy_price": 109.07,
+              "qty_matched": 1000,
+              "lot_cost_inr": 109070.0
+            },
+            {
+              "buy_date": "2025-07-28",
+              "buy_price": 109.16,
+              "qty_matched": 1000,
+              "lot_cost_inr": 109160.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-08-28",
+          "qty": 1000,
+          "sell_price": 112.34,
+          "proceeds_inr": 112340.0,
+          "cost_basis_inr": 109870.0,
+          "realized_pnl_inr": 2470.0,
+          "realized_pnl_pct": 2.25,
+          "brokerage": 96.98,
+          "matched_lots": [
+            {
+              "buy_date": "2025-07-30",
+              "buy_price": 109.87,
+              "qty_matched": 1000,
+              "lot_cost_inr": 109870.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-08-28",
+          "qty": 1000,
+          "sell_price": 112.37,
+          "proceeds_inr": 112370.0,
+          "cost_basis_inr": 108480.0,
+          "realized_pnl_inr": 3890.0,
+          "realized_pnl_pct": 3.59,
+          "brokerage": 97.02,
+          "matched_lots": [
+            {
+              "buy_date": "2025-08-05",
+              "buy_price": 108.48,
+              "qty_matched": 1000,
+              "lot_cost_inr": 108480.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-08-28",
+          "qty": 1000,
+          "sell_price": 112.37,
+          "proceeds_inr": 112370.0,
+          "cost_basis_inr": 109930.0,
+          "realized_pnl_inr": 2440.0,
+          "realized_pnl_pct": 2.22,
+          "brokerage": 97.02,
+          "matched_lots": [
+            {
+              "buy_date": "2025-08-22",
+              "buy_price": 109.93,
+              "qty_matched": 1000,
+              "lot_cost_inr": 109930.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-08-28",
+          "qty": 10000,
+          "sell_price": 112.37,
+          "proceeds_inr": 1123700.0,
+          "cost_basis_inr": 1121800.0,
+          "realized_pnl_inr": 1900.0,
+          "realized_pnl_pct": 0.17,
+          "brokerage": 970.12,
+          "matched_lots": [
+            {
+              "buy_date": "2025-08-25",
+              "buy_price": 112.17,
+              "qty_matched": 5000,
+              "lot_cost_inr": 560850.0
+            },
+            {
+              "buy_date": "2025-08-25",
+              "buy_price": 112.19,
+              "qty_matched": 5000,
+              "lot_cost_inr": 560950.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-08-28",
+          "qty": 5000,
+          "sell_price": 112.37,
+          "proceeds_inr": 561850.0,
+          "cost_basis_inr": 563100.0,
+          "realized_pnl_inr": -1250.0,
+          "realized_pnl_pct": -0.22,
+          "brokerage": 485.1,
+          "matched_lots": [
+            {
+              "buy_date": "2025-08-26",
+              "buy_price": 112.62,
+              "qty_matched": 5000,
+              "lot_cost_inr": 563100.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 40000,
+          "sell_price": 218.5,
+          "proceeds_inr": 8740000.0,
+          "cost_basis_inr": 6459100.0,
+          "realized_pnl_inr": 2280900.0,
+          "realized_pnl_pct": 35.31,
+          "brokerage": 7546.2,
+          "matched_lots": [
+            {
+              "buy_date": "2025-11-19",
+              "buy_price": 149.39,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1493900.0
+            },
+            {
+              "buy_date": "2025-12-01",
+              "buy_price": 165.29,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1652900.0
+            },
+            {
+              "buy_date": "2025-12-01",
+              "buy_price": 165.31,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1653100.0
+            },
+            {
+              "buy_date": "2025-12-01",
+              "buy_price": 165.92,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1659200.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 10000,
+          "sell_price": 218.5,
+          "proceeds_inr": 2185000.0,
+          "cost_basis_inr": 1659300.0,
+          "realized_pnl_inr": 525700.0,
+          "realized_pnl_pct": 31.68,
+          "brokerage": 1886.54,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-01",
+              "buy_price": 165.93,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1659300.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-02",
+          "qty": 30000,
+          "sell_price": 211.6,
+          "proceeds_inr": 6348078.74,
+          "cost_basis_inr": 6276100.0,
+          "realized_pnl_inr": 71978.74,
+          "realized_pnl_pct": 1.15,
+          "brokerage": 5481.0,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-24",
+              "buy_price": 209.28,
+              "qty_matched": 20000,
+              "lot_cost_inr": 4185600.0
+            },
+            {
+              "buy_date": "2025-12-24",
+              "buy_price": 209.05,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2090500.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-27",
+          "qty": 40000,
+          "sell_price": 252.65,
+          "proceeds_inr": 10106000.0,
+          "cost_basis_inr": 9574300.0,
+          "realized_pnl_inr": 531700.0,
+          "realized_pnl_pct": 5.55,
+          "brokerage": 8725.59,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-24",
+              "buy_price": 209.05,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2090500.0
+            },
+            {
+              "buy_date": "2026-01-13",
+              "buy_price": 249.46,
+              "qty_matched": 30000,
+              "lot_cost_inr": 7483800.0
+            }
+          ],
+          "underflow": false
+        }
+      ],
+      "combined_pnl_inr": 4003508.74
     },
     {
-      "account_key": "yash",
-      "holder": "Yash (brother)",
+      "account_key": "sparsh",
+      "holder": "Sparsh",
+      "account_type": "self-managed",
+      "custodian": "Zerodha",
+      "accent_color": "#22c55e",
+      "emoji": "🎯",
+      "status": "active",
+      "source_file": "07_POSITIONS/RAJIV-MULTI_SILVER/260517/Sparsh Silver Trades.xls",
+      "total_buy_qty": 324000,
+      "total_sell_qty": 310000,
+      "trade_count": 58,
+      "holdings_qty": 14000,
+      "tranche_count": 4,
+      "avg_buy_inr": 253.0,
+      "invested_inr": 3542000.0,
+      "current_value_inr": 3491180.0,
+      "unrealized_pnl_inr": -50820.0,
+      "unrealized_pnl_pct": -1.43,
+      "tranches": [
+        {
+          "date": "2026-05-17",
+          "qty": 4000,
+          "buy_price": 254.0,
+          "invested_inr": 1016000.0,
+          "current_value_inr": 997480.0,
+          "unrealized_pnl_inr": -18520.0,
+          "unrealized_pnl_pct": -1.82
+        },
+        {
+          "date": "2026-05-20",
+          "qty": 4000,
+          "buy_price": 256.0,
+          "invested_inr": 1024000.0,
+          "current_value_inr": 997480.0,
+          "unrealized_pnl_inr": -26520.0,
+          "unrealized_pnl_pct": -2.59
+        },
+        {
+          "date": "2026-05-21",
+          "qty": 2000,
+          "buy_price": 251.0,
+          "invested_inr": 502000.0,
+          "current_value_inr": 498740.0,
+          "unrealized_pnl_inr": -3260.0,
+          "unrealized_pnl_pct": -0.65
+        },
+        {
+          "date": "2026-05-21",
+          "qty": 4000,
+          "buy_price": 250.0,
+          "invested_inr": 1000000.0,
+          "current_value_inr": 997480.0,
+          "unrealized_pnl_inr": -2520.0,
+          "unrealized_pnl_pct": -0.25
+        }
+      ],
+      "realized_pnl_inr": 4199019.01,
+      "realized_pnl_pct": 6.13,
+      "realized_proceeds_inr": 72747429.01,
+      "realized_cost_basis_inr": 68548410.0,
+      "realized_brokerage_inr": 62810.62,
+      "realized_qty": 310000,
+      "realized_sells": [
+        {
+          "date": "2025-12-30",
+          "qty": 10000,
+          "sell_price": 218.5,
+          "proceeds_inr": 2185000.0,
+          "cost_basis_inr": 1417650.0,
+          "realized_pnl_inr": 767350.0,
+          "realized_pnl_pct": 54.13,
+          "brokerage": 1886.54,
+          "matched_lots": [
+            {
+              "buy_date": "2025-11-06",
+              "buy_price": 141.6,
+              "qty_matched": 2000,
+              "lot_cost_inr": 283200.0
+            },
+            {
+              "buy_date": "2025-11-06",
+              "buy_price": 141.57,
+              "qty_matched": 2000,
+              "lot_cost_inr": 283140.0
+            },
+            {
+              "buy_date": "2025-11-07",
+              "buy_price": 141.88,
+              "qty_matched": 5000,
+              "lot_cost_inr": 709400.0
+            },
+            {
+              "buy_date": "2025-11-07",
+              "buy_price": 141.91,
+              "qty_matched": 1000,
+              "lot_cost_inr": 141910.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 4000,
+          "sell_price": 218.5,
+          "proceeds_inr": 874000.0,
+          "cost_basis_inr": 567640.0,
+          "realized_pnl_inr": 306360.0,
+          "realized_pnl_pct": 53.97,
+          "brokerage": 754.62,
+          "matched_lots": [
+            {
+              "buy_date": "2025-11-07",
+              "buy_price": 141.91,
+              "qty_matched": 4000,
+              "lot_cost_inr": 567640.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-02",
+          "qty": 52805,
+          "sell_price": 210.63,
+          "proceeds_inr": 11122320.74,
+          "cost_basis_inr": 10372390.25,
+          "realized_pnl_inr": 749930.49,
+          "realized_pnl_pct": 7.23,
+          "brokerage": 9603.11,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-17",
+              "buy_price": 190.78,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1907800.0
+            },
+            {
+              "buy_date": "2025-12-17",
+              "buy_price": 190.78,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1907800.0
+            },
+            {
+              "buy_date": "2025-12-22",
+              "buy_price": 199.96,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1999600.0
+            },
+            {
+              "buy_date": "2025-12-22",
+              "buy_price": 199.7,
+              "qty_matched": 5000,
+              "lot_cost_inr": 998500.0
+            },
+            {
+              "buy_date": "2025-12-22",
+              "buy_price": 199.74,
+              "qty_matched": 5000,
+              "lot_cost_inr": 998700.0
+            },
+            {
+              "buy_date": "2025-12-22",
+              "buy_price": 199.72,
+              "qty_matched": 5000,
+              "lot_cost_inr": 998600.0
+            },
+            {
+              "buy_date": "2025-12-22",
+              "buy_price": 200.05,
+              "qty_matched": 7805,
+              "lot_cost_inr": 1561390.25
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-06",
+          "qty": 20000,
+          "sell_price": 224.14,
+          "proceeds_inr": 4482896.93,
+          "cost_basis_inr": 4269264.75,
+          "realized_pnl_inr": 213632.18,
+          "realized_pnl_pct": 5.0,
+          "brokerage": 3870.56,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-22",
+              "buy_price": 200.05,
+              "qty_matched": 7195,
+              "lot_cost_inr": 1439359.75
+            },
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 221.0,
+              "qty_matched": 12805,
+              "lot_cost_inr": 2829905.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-06",
+          "qty": 40000,
+          "sell_price": 224.1,
+          "proceeds_inr": 8964108.56,
+          "cost_basis_inr": 8840000.0,
+          "realized_pnl_inr": 124108.56,
+          "realized_pnl_pct": 1.4,
+          "brokerage": 7739.66,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 221.0,
+              "qty_matched": 40000,
+              "lot_cost_inr": 8840000.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-12",
+          "qty": 7195,
+          "sell_price": 245.01,
+          "proceeds_inr": 1762826.08,
+          "cost_basis_inr": 1590095.0,
+          "realized_pnl_inr": 172731.08,
+          "realized_pnl_pct": 10.86,
+          "brokerage": 1522.03,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 221.0,
+              "qty_matched": 7195,
+              "lot_cost_inr": 1590095.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-12",
+          "qty": 9000,
+          "sell_price": 244.98,
+          "proceeds_inr": 2204784.97,
+          "cost_basis_inr": 1931760.0,
+          "realized_pnl_inr": 273024.97,
+          "realized_pnl_pct": 14.13,
+          "brokerage": 1903.61,
+          "matched_lots": [
+            {
+              "buy_date": "2026-01-01",
+              "buy_price": 214.64,
+              "qty_matched": 9000,
+              "lot_cost_inr": 1931760.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-06",
+          "qty": 45000,
+          "sell_price": 250.15,
+          "proceeds_inr": 11256808.68,
+          "cost_basis_inr": 11528815.0,
+          "realized_pnl_inr": -272006.32,
+          "realized_pnl_pct": -2.36,
+          "brokerage": 9719.18,
+          "matched_lots": [
+            {
+              "buy_date": "2026-01-21",
+              "buy_price": 310.88,
+              "qty_matched": 8000,
+              "lot_cost_inr": 2487040.0
+            },
+            {
+              "buy_date": "2026-02-01",
+              "buy_price": 252.5,
+              "qty_matched": 4500,
+              "lot_cost_inr": 1136250.0
+            },
+            {
+              "buy_date": "2026-02-09",
+              "buy_price": 244.49,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2444900.0
+            },
+            {
+              "buy_date": "2026-02-09",
+              "buy_price": 244.0,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2440000.0
+            },
+            {
+              "buy_date": "2026-02-10",
+              "buy_price": 241.65,
+              "qty_matched": 12500,
+              "lot_cost_inr": 3020625.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-06",
+          "qty": 8000,
+          "sell_price": 250.1,
+          "proceeds_inr": 2000800.0,
+          "cost_basis_inr": 1933200.0,
+          "realized_pnl_inr": 67600.0,
+          "realized_pnl_pct": 3.5,
+          "brokerage": 1727.52,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-10",
+              "buy_price": 241.65,
+              "qty_matched": 8000,
+              "lot_cost_inr": 1933200.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 4500,
+          "sell_price": 246.24,
+          "proceeds_inr": 1108085.9,
+          "cost_basis_inr": 1087425.0,
+          "realized_pnl_inr": 20660.9,
+          "realized_pnl_pct": 1.9,
+          "brokerage": 956.74,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-10",
+              "buy_price": 241.65,
+              "qty_matched": 4500,
+              "lot_cost_inr": 1087425.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 20000,
+          "sell_price": 246.21,
+          "proceeds_inr": 4924111.44,
+          "cost_basis_inr": 4833000.0,
+          "realized_pnl_inr": 91111.44,
+          "realized_pnl_pct": 1.89,
+          "brokerage": 4251.52,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-10",
+              "buy_price": 241.65,
+              "qty_matched": 20000,
+              "lot_cost_inr": 4833000.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-04-15",
+          "qty": 20000,
+          "sell_price": 237.0,
+          "proceeds_inr": 4740000.0,
+          "cost_basis_inr": 4856400.0,
+          "realized_pnl_inr": -116400.0,
+          "realized_pnl_pct": -2.4,
+          "brokerage": 4092.55,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-17",
+              "buy_price": 242.34,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2423400.0
+            },
+            {
+              "buy_date": "2026-03-17",
+              "buy_price": 243.3,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2433000.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-04-15",
+          "qty": 15000,
+          "sell_price": 236.2,
+          "proceeds_inr": 3543010.71,
+          "cost_basis_inr": 3340250.0,
+          "realized_pnl_inr": 202760.71,
+          "realized_pnl_pct": 6.07,
+          "brokerage": 3059.07,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-19",
+              "buy_price": 222.39,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1111950.0
+            },
+            {
+              "buy_date": "2026-03-19",
+              "buy_price": 222.83,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2228300.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 20000,
+          "sell_price": 249.15,
+          "proceeds_inr": 4983000.0,
+          "cost_basis_inr": 3995050.0,
+          "realized_pnl_inr": 987950.0,
+          "realized_pnl_pct": 24.73,
+          "brokerage": 4302.35,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-23",
+              "buy_price": 201.47,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1007350.0
+            },
+            {
+              "buy_date": "2026-03-23",
+              "buy_price": 200.63,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1003150.0
+            },
+            {
+              "buy_date": "2026-03-23",
+              "buy_price": 200.0,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1000000.0
+            },
+            {
+              "buy_date": "2026-03-23",
+              "buy_price": 196.91,
+              "qty_matched": 5000,
+              "lot_cost_inr": 984550.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 10000,
+          "sell_price": 249.15,
+          "proceeds_inr": 2491500.0,
+          "cost_basis_inr": 2373700.0,
+          "realized_pnl_inr": 117800.0,
+          "realized_pnl_pct": 4.96,
+          "brokerage": 2151.17,
+          "matched_lots": [
+            {
+              "buy_date": "2026-04-21",
+              "buy_price": 237.37,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2373700.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 10000,
+          "sell_price": 249.15,
+          "proceeds_inr": 2491500.0,
+          "cost_basis_inr": 2315200.0,
+          "realized_pnl_inr": 176300.0,
+          "realized_pnl_pct": 7.61,
+          "brokerage": 2151.18,
+          "matched_lots": [
+            {
+              "buy_date": "2026-04-23",
+              "buy_price": 231.4,
+              "qty_matched": 2500,
+              "lot_cost_inr": 578500.0
+            },
+            {
+              "buy_date": "2026-04-23",
+              "buy_price": 231.82,
+              "qty_matched": 2500,
+              "lot_cost_inr": 579550.0
+            },
+            {
+              "buy_date": "2026-04-23",
+              "buy_price": 231.43,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1157150.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 5000,
+          "sell_price": 249.15,
+          "proceeds_inr": 1245750.0,
+          "cost_basis_inr": 1143800.0,
+          "realized_pnl_inr": 101950.0,
+          "realized_pnl_pct": 8.91,
+          "brokerage": 1075.59,
+          "matched_lots": [
+            {
+              "buy_date": "2026-04-24",
+              "buy_price": 228.65,
+              "qty_matched": 2500,
+              "lot_cost_inr": 571625.0
+            },
+            {
+              "buy_date": "2026-04-24",
+              "buy_price": 228.87,
+              "qty_matched": 2500,
+              "lot_cost_inr": 572175.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 4500,
+          "sell_price": 249.15,
+          "proceeds_inr": 1121175.0,
+          "cost_basis_inr": 1008945.0,
+          "realized_pnl_inr": 112230.0,
+          "realized_pnl_pct": 11.12,
+          "brokerage": 968.03,
+          "matched_lots": [
+            {
+              "buy_date": "2026-04-29",
+              "buy_price": 224.21,
+              "qty_matched": 4500,
+              "lot_cost_inr": 1008945.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 5000,
+          "sell_price": 249.15,
+          "proceeds_inr": 1245750.0,
+          "cost_basis_inr": 1143825.0,
+          "realized_pnl_inr": 101925.0,
+          "realized_pnl_pct": 8.91,
+          "brokerage": 1075.59,
+          "matched_lots": [
+            {
+              "buy_date": "2026-05-05",
+              "buy_price": 228.54,
+              "qty_matched": 2500,
+              "lot_cost_inr": 571350.0
+            },
+            {
+              "buy_date": "2026-05-05",
+              "buy_price": 228.99,
+              "qty_matched": 2500,
+              "lot_cost_inr": 572475.0
+            }
+          ],
+          "underflow": false
+        }
+      ],
+      "combined_pnl_inr": 4148199.01
+    },
+    {
+      "account_key": "rajiv_huf",
+      "holder": "Rajiv HUF",
       "account_type": "father-managed",
       "custodian": "Zerodha",
-      "accent_color": "#0891b2",
-      "emoji": "\ud83e\uddd1",
+      "accent_color": "#3b82f6",
+      "emoji": "👨",
+      "status": "exited",
+      "source_file": "07_POSITIONS/RAJIV-MULTI_SILVER/260517/Rajiv HUF Silver Trades.xls",
+      "total_buy_qty": 669624,
+      "total_sell_qty": 669624,
+      "trade_count": 102,
       "holdings_qty": 0,
       "tranche_count": 0,
       "avg_buy_inr": null,
@@ -284,14 +998,1492 @@
       "unrealized_pnl_inr": 0,
       "unrealized_pnl_pct": null,
       "tranches": [],
-      "sells_summary": {
-        "count": 0,
-        "qty_sold": 0,
-        "proceeds_inr": 0.0,
-        "realized_pnl_inr": 0.0
-      },
-      "sells_details": [],
-      "sell_data_status": "pending-from-father"
+      "realized_pnl_inr": 6528768.76,
+      "realized_pnl_pct": 4.59,
+      "realized_proceeds_inr": 148900712.56,
+      "realized_cost_basis_inr": 142371943.8,
+      "realized_brokerage_inr": 96884.73,
+      "realized_qty": 669624,
+      "realized_sells": [
+        {
+          "date": "2025-09-02",
+          "qty": 15000,
+          "sell_price": 117.54,
+          "proceeds_inr": 1763053.22,
+          "cost_basis_inr": 1691100.0,
+          "realized_pnl_inr": 71953.22,
+          "realized_pnl_pct": 4.25,
+          "brokerage": 1522.23,
+          "matched_lots": [
+            {
+              "buy_date": "2025-08-28",
+              "buy_price": 112.76,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1127600.0
+            },
+            {
+              "buy_date": "2025-08-28",
+              "buy_price": 112.7,
+              "qty_matched": 5000,
+              "lot_cost_inr": 563500.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-09-02",
+          "qty": 10000,
+          "sell_price": 117.5,
+          "proceeds_inr": 1175011.35,
+          "cost_basis_inr": 1136200.0,
+          "realized_pnl_inr": 38811.35,
+          "realized_pnl_pct": 3.42,
+          "brokerage": 1014.52,
+          "matched_lots": [
+            {
+              "buy_date": "2025-08-29",
+              "buy_price": 113.62,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1136200.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-09-02",
+          "qty": 30000,
+          "sell_price": 117.5,
+          "proceeds_inr": 3525000.0,
+          "cost_basis_inr": 3556300.0,
+          "realized_pnl_inr": -31300.0,
+          "realized_pnl_pct": -0.88,
+          "brokerage": 3043.55,
+          "matched_lots": [
+            {
+              "buy_date": "2025-09-01",
+              "buy_price": 118.47,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1184700.0
+            },
+            {
+              "buy_date": "2025-09-01",
+              "buy_price": 118.58,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1185800.0
+            },
+            {
+              "buy_date": "2025-09-01",
+              "buy_price": 118.58,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1185800.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-09-12",
+          "qty": 10000,
+          "sell_price": 122.58,
+          "proceeds_inr": 1225800.0,
+          "cost_basis_inr": 1187800.0,
+          "realized_pnl_inr": 38000.0,
+          "realized_pnl_pct": 3.2,
+          "brokerage": 1058.36,
+          "matched_lots": [
+            {
+              "buy_date": "2025-09-04",
+              "buy_price": 118.78,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1187800.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-09-12",
+          "qty": 30000,
+          "sell_price": 122.58,
+          "proceeds_inr": 3677400.0,
+          "cost_basis_inr": 3573300.0,
+          "realized_pnl_inr": 104100.0,
+          "realized_pnl_pct": 2.91,
+          "brokerage": 3175.09,
+          "matched_lots": [
+            {
+              "buy_date": "2025-09-05",
+              "buy_price": 119.01,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1190100.0
+            },
+            {
+              "buy_date": "2025-09-05",
+              "buy_price": 119.11,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1191100.0
+            },
+            {
+              "buy_date": "2025-09-05",
+              "buy_price": 119.21,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1192100.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-24",
+          "qty": 20000,
+          "sell_price": 209.35,
+          "proceeds_inr": 4187000.0,
+          "cost_basis_inr": 2984020.0,
+          "realized_pnl_inr": 1202980.0,
+          "realized_pnl_pct": 40.31,
+          "brokerage": 3615.08,
+          "matched_lots": [
+            {
+              "buy_date": "2025-11-06",
+              "buy_price": 141.9,
+              "qty_matched": 3000,
+              "lot_cost_inr": 425700.0
+            },
+            {
+              "buy_date": "2025-11-06",
+              "buy_price": 141.89,
+              "qty_matched": 3000,
+              "lot_cost_inr": 425670.0
+            },
+            {
+              "buy_date": "2025-11-06",
+              "buy_price": 141.9,
+              "qty_matched": 3000,
+              "lot_cost_inr": 425700.0
+            },
+            {
+              "buy_date": "2025-11-26",
+              "buy_price": 151.73,
+              "qty_matched": 5000,
+              "lot_cost_inr": 758650.0
+            },
+            {
+              "buy_date": "2025-11-27",
+              "buy_price": 155.76,
+              "qty_matched": 5000,
+              "lot_cost_inr": 778800.0
+            },
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 169.5,
+              "qty_matched": 1000,
+              "lot_cost_inr": 169500.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-24",
+          "qty": 20000,
+          "sell_price": 209.4,
+          "proceeds_inr": 4188000.0,
+          "cost_basis_inr": 3394830.0,
+          "realized_pnl_inr": 793170.0,
+          "realized_pnl_pct": 23.36,
+          "brokerage": 3615.88,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 169.5,
+              "qty_matched": 9000,
+              "lot_cost_inr": 1525500.0
+            },
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 169.92,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1699200.0
+            },
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 170.13,
+              "qty_matched": 1000,
+              "lot_cost_inr": 170130.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 30000,
+          "sell_price": 218.5,
+          "proceeds_inr": 6555000.0,
+          "cost_basis_inr": 5285570.0,
+          "realized_pnl_inr": 1269430.0,
+          "realized_pnl_pct": 24.02,
+          "brokerage": 5659.61,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 170.13,
+              "qty_matched": 9000,
+              "lot_cost_inr": 1531170.0
+            },
+            {
+              "buy_date": "2025-12-11",
+              "buy_price": 178.54,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1785400.0
+            },
+            {
+              "buy_date": "2025-12-11",
+              "buy_price": 179.0,
+              "qty_matched": 11000,
+              "lot_cost_inr": 1969000.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 5000,
+          "sell_price": 218.75,
+          "proceeds_inr": 1093750.0,
+          "cost_basis_inr": 895000.0,
+          "realized_pnl_inr": 198750.0,
+          "realized_pnl_pct": 22.21,
+          "brokerage": 944.35,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-11",
+              "buy_price": 179.0,
+              "qty_matched": 5000,
+              "lot_cost_inr": 895000.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 5000,
+          "sell_price": 218.75,
+          "proceeds_inr": 1093750.0,
+          "cost_basis_inr": 894980.0,
+          "realized_pnl_inr": 198770.0,
+          "realized_pnl_pct": 22.21,
+          "brokerage": 944.35,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-11",
+              "buy_price": 179.0,
+              "qty_matched": 4000,
+              "lot_cost_inr": 716000.0
+            },
+            {
+              "buy_date": "2025-12-11",
+              "buy_price": 178.98,
+              "qty_matched": 1000,
+              "lot_cost_inr": 178980.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 9000,
+          "sell_price": 218.75,
+          "proceeds_inr": 1968750.0,
+          "cost_basis_inr": 1610820.0,
+          "realized_pnl_inr": 357930.0,
+          "realized_pnl_pct": 22.22,
+          "brokerage": 1699.83,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-11",
+              "buy_price": 178.98,
+              "qty_matched": 9000,
+              "lot_cost_inr": 1610820.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-01-30",
+          "qty": 10000,
+          "sell_price": 286.12,
+          "proceeds_inr": 2861186.75,
+          "cost_basis_inr": 1789800.0,
+          "realized_pnl_inr": 1071386.75,
+          "realized_pnl_pct": 59.86,
+          "brokerage": 2470.36,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-11",
+              "buy_price": 178.98,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1789800.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-01-30",
+          "qty": 6000,
+          "sell_price": 286.21,
+          "proceeds_inr": 1717269.31,
+          "cost_basis_inr": 1301400.0,
+          "realized_pnl_inr": 415869.31,
+          "realized_pnl_pct": 31.96,
+          "brokerage": 1482.71,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-26",
+              "buy_price": 216.9,
+              "qty_matched": 6000,
+              "lot_cost_inr": 1301400.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-01-30",
+          "qty": 10000,
+          "sell_price": 286.11,
+          "proceeds_inr": 2861115.91,
+          "cost_basis_inr": 2169000.0,
+          "realized_pnl_inr": 692115.91,
+          "realized_pnl_pct": 31.91,
+          "brokerage": 2470.38,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-26",
+              "buy_price": 216.9,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2169000.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-02",
+          "qty": 67489,
+          "sell_price": 205.37,
+          "proceeds_inr": 13860359.15,
+          "cost_basis_inr": 14635783.0,
+          "realized_pnl_inr": -775423.85,
+          "realized_pnl_pct": -5.3,
+          "brokerage": 11967.16,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-26",
+              "buy_price": 216.9,
+              "qty_matched": 4000,
+              "lot_cost_inr": 867600.0
+            },
+            {
+              "buy_date": "2025-12-26",
+              "buy_price": 216.88,
+              "qty_matched": 20000,
+              "lot_cost_inr": 4337600.0
+            },
+            {
+              "buy_date": "2025-12-26",
+              "buy_price": 216.99,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1084950.0
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 216.08,
+              "qty_matched": 2000,
+              "lot_cost_inr": 432160.0
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 214.78,
+              "qty_matched": 2000,
+              "lot_cost_inr": 429560.0
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 216.99,
+              "qty_matched": 20000,
+              "lot_cost_inr": 4339800.0
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 217.0,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2170000.0
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 217.0,
+              "qty_matched": 4489,
+              "lot_cost_inr": 974113.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-10",
+          "qty": 45000,
+          "sell_price": 242.2,
+          "proceeds_inr": 10899000.0,
+          "cost_basis_inr": 9929613.31,
+          "realized_pnl_inr": 969386.69,
+          "realized_pnl_pct": 9.76,
+          "brokerage": 9410.27,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 217.0,
+              "qty_matched": 511,
+              "lot_cost_inr": 110887.0
+            },
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 220.88,
+              "qty_matched": 20000,
+              "lot_cost_inr": 4417600.0
+            },
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 220.5,
+              "qty_matched": 20000,
+              "lot_cost_inr": 4410000.0
+            },
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 220.79,
+              "qty_matched": 4489,
+              "lot_cost_inr": 991126.31
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-12",
+          "qty": 39000,
+          "sell_price": 244.66,
+          "proceeds_inr": 9541569.71,
+          "cost_basis_inr": 8615393.79,
+          "realized_pnl_inr": 926175.92,
+          "realized_pnl_pct": 10.75,
+          "brokerage": 8238.19,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 220.79,
+              "qty_matched": 15511,
+              "lot_cost_inr": 3424673.69
+            },
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 221.0,
+              "qty_matched": 20000,
+              "lot_cost_inr": 4420000.0
+            },
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 220.9,
+              "qty_matched": 3489,
+              "lot_cost_inr": 770720.1
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-12",
+          "qty": 22511,
+          "sell_price": 244.63,
+          "proceeds_inr": 5506830.11,
+          "cost_basis_inr": 5828619.9,
+          "realized_pnl_inr": -321789.79,
+          "realized_pnl_pct": -5.52,
+          "brokerage": 4754.61,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 220.9,
+              "qty_matched": 6511,
+              "lot_cost_inr": 1438279.9
+            },
+            {
+              "buy_date": "2026-01-01",
+              "buy_price": 214.64,
+              "qty_matched": 6000,
+              "lot_cost_inr": 1287840.0
+            },
+            {
+              "buy_date": "2026-01-21",
+              "buy_price": 310.25,
+              "qty_matched": 10000,
+              "lot_cost_inr": 3102500.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-20",
+          "qty": 813,
+          "sell_price": 231.25,
+          "proceeds_inr": 188006.25,
+          "cost_basis_inr": 205282.5,
+          "realized_pnl_inr": -17276.25,
+          "realized_pnl_pct": -8.42,
+          "brokerage": 22.56,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-01",
+              "buy_price": 252.5,
+              "qty_matched": 813,
+              "lot_cost_inr": 205282.5
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-20",
+          "qty": 9187,
+          "sell_price": 231.29,
+          "proceeds_inr": 2124861.23,
+          "cost_basis_inr": 2319717.5,
+          "realized_pnl_inr": -194856.27,
+          "realized_pnl_pct": -8.4,
+          "brokerage": 255.0,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-01",
+              "buy_price": 252.5,
+              "qty_matched": 9187,
+              "lot_cost_inr": 2319717.5
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-23",
+          "qty": 10000,
+          "sell_price": 250.87,
+          "proceeds_inr": 2508651.88,
+          "cost_basis_inr": 2509875.0,
+          "realized_pnl_inr": -1223.12,
+          "realized_pnl_pct": -0.05,
+          "brokerage": 301.05,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-01",
+              "buy_price": 252.5,
+              "qty_matched": 7500,
+              "lot_cost_inr": 1893750.0
+            },
+            {
+              "buy_date": "2026-02-11",
+              "buy_price": 246.45,
+              "qty_matched": 2500,
+              "lot_cost_inr": 616125.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-26",
+          "qty": 10000,
+          "sell_price": 252.13,
+          "proceeds_inr": 2521255.26,
+          "cost_basis_inr": 2464500.0,
+          "realized_pnl_inr": 56755.26,
+          "realized_pnl_pct": 2.3,
+          "brokerage": 302.55,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-11",
+              "buy_price": 246.45,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2464500.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-26",
+          "qty": 10000,
+          "sell_price": 250.57,
+          "proceeds_inr": 2505692.21,
+          "cost_basis_inr": 2464500.0,
+          "realized_pnl_inr": 41192.21,
+          "realized_pnl_pct": 1.67,
+          "brokerage": 300.71,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-11",
+              "buy_price": 246.45,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2464500.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-04",
+          "qty": 5100,
+          "sell_price": 255.39,
+          "proceeds_inr": 1302501.46,
+          "cost_basis_inr": 1181391.0,
+          "realized_pnl_inr": 121110.46,
+          "realized_pnl_pct": 10.25,
+          "brokerage": 156.31,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-11",
+              "buy_price": 246.45,
+              "qty_matched": 524,
+              "lot_cost_inr": 129139.8
+            },
+            {
+              "buy_date": "2026-02-20",
+              "buy_price": 229.95,
+              "qty_matched": 4576,
+              "lot_cost_inr": 1052251.2
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-04",
+          "qty": 10000,
+          "sell_price": 254.3,
+          "proceeds_inr": 2543006.61,
+          "cost_basis_inr": 2404793.76,
+          "realized_pnl_inr": 138212.85,
+          "realized_pnl_pct": 5.75,
+          "brokerage": 305.18,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-20",
+              "buy_price": 229.95,
+              "qty_matched": 5424,
+              "lot_cost_inr": 1247248.8
+            },
+            {
+              "buy_date": "2026-02-23",
+              "buy_price": 252.96,
+              "qty_matched": 4576,
+              "lot_cost_inr": 1157544.96
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-04",
+          "qty": 20000,
+          "sell_price": 254.3,
+          "proceeds_inr": 5086000.0,
+          "cost_basis_inr": 5036249.44,
+          "realized_pnl_inr": 49750.56,
+          "realized_pnl_pct": 0.99,
+          "brokerage": 610.33,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-23",
+              "buy_price": 252.96,
+              "qty_matched": 5424,
+              "lot_cost_inr": 1372055.04
+            },
+            {
+              "buy_date": "2026-02-26",
+              "buy_price": 251.15,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2511500.0
+            },
+            {
+              "buy_date": "2026-02-26",
+              "buy_price": 251.9,
+              "qty_matched": 4576,
+              "lot_cost_inr": 1152694.4
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-04",
+          "qty": 40000,
+          "sell_price": 255.0,
+          "proceeds_inr": 10200000.0,
+          "cost_basis_inr": 10768040.8,
+          "realized_pnl_inr": -568040.8,
+          "realized_pnl_pct": -5.28,
+          "brokerage": 1224.06,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-26",
+              "buy_price": 251.9,
+              "qty_matched": 5424,
+              "lot_cost_inr": 1366305.6
+            },
+            {
+              "buy_date": "2026-03-02",
+              "buy_price": 272.89,
+              "qty_matched": 20000,
+              "lot_cost_inr": 5457800.0
+            },
+            {
+              "buy_date": "2026-03-02",
+              "buy_price": 270.81,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1354050.0
+            },
+            {
+              "buy_date": "2026-03-02",
+              "buy_price": 270.69,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1353450.0
+            },
+            {
+              "buy_date": "2026-03-02",
+              "buy_price": 270.2,
+              "qty_matched": 4576,
+              "lot_cost_inr": 1236435.2
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-05",
+          "qty": 6155,
+          "sell_price": 240.53,
+          "proceeds_inr": 1480469.48,
+          "cost_basis_inr": 1563754.74,
+          "realized_pnl_inr": -83285.26,
+          "realized_pnl_pct": -5.33,
+          "brokerage": 177.67,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-02",
+              "buy_price": 270.2,
+              "qty_matched": 424,
+              "lot_cost_inr": 114564.8
+            },
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 252.6,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1263000.0
+            },
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 254.49,
+              "qty_matched": 100,
+              "lot_cost_inr": 25449.0
+            },
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 254.74,
+              "qty_matched": 631,
+              "lot_cost_inr": 160740.94
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-05",
+          "qty": 43845,
+          "sell_price": 248.66,
+          "proceeds_inr": 10902465.47,
+          "cost_basis_inr": 11147010.66,
+          "realized_pnl_inr": -244545.19,
+          "realized_pnl_pct": -2.19,
+          "brokerage": 1308.37,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 254.74,
+              "qty_matched": 9369,
+              "lot_cost_inr": 2386659.06
+            },
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 254.1,
+              "qty_matched": 20000,
+              "lot_cost_inr": 5082000.0
+            },
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 254.1,
+              "qty_matched": 14476,
+              "lot_cost_inr": 3678351.6
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-06",
+          "qty": 5000,
+          "sell_price": 249.62,
+          "proceeds_inr": 1248104.56,
+          "cost_basis_inr": 1270500.0,
+          "realized_pnl_inr": -22395.44,
+          "realized_pnl_pct": -1.76,
+          "brokerage": 149.76,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 254.1,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1270500.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 17500,
+          "sell_price": 245.7,
+          "proceeds_inr": 4299756.39,
+          "cost_basis_inr": 4428076.4,
+          "realized_pnl_inr": -128320.01,
+          "realized_pnl_pct": -2.9,
+          "brokerage": 3712.42,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 254.1,
+              "qty_matched": 524,
+              "lot_cost_inr": 133148.4
+            },
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 253.0,
+              "qty_matched": 16976,
+              "lot_cost_inr": 4294928.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 23024,
+          "sell_price": 245.67,
+          "proceeds_inr": 5656243.92,
+          "cost_basis_inr": 5841972.0,
+          "realized_pnl_inr": -185728.08,
+          "realized_pnl_pct": -3.18,
+          "brokerage": 4883.72,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-04",
+              "buy_price": 253.0,
+              "qty_matched": 3024,
+              "lot_cost_inr": 765072.0
+            },
+            {
+              "buy_date": "2026-03-05",
+              "buy_price": 253.89,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2538900.0
+            },
+            {
+              "buy_date": "2026-03-05",
+              "buy_price": 253.8,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2538000.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 35000,
+          "sell_price": 245.58,
+          "proceeds_inr": 8595274.13,
+          "cost_basis_inr": 8837650.0,
+          "realized_pnl_inr": -242375.87,
+          "realized_pnl_pct": -2.74,
+          "brokerage": 7421.14,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-05",
+              "buy_price": 253.67,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2536700.0
+            },
+            {
+              "buy_date": "2026-03-05",
+              "buy_price": 253.5,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2535000.0
+            },
+            {
+              "buy_date": "2026-03-05",
+              "buy_price": 251.5,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2515000.0
+            },
+            {
+              "buy_date": "2026-03-06",
+              "buy_price": 250.19,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1250950.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 5000,
+          "sell_price": 245.57,
+          "proceeds_inr": 1227826.31,
+          "cost_basis_inr": 1250950.0,
+          "realized_pnl_inr": -23123.69,
+          "realized_pnl_pct": -1.85,
+          "brokerage": 1060.1,
+          "matched_lots": [
+            {
+              "buy_date": "2026-03-06",
+              "buy_price": 250.19,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1250950.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 20000,
+          "sell_price": 251.9,
+          "proceeds_inr": 5038000.0,
+          "cost_basis_inr": 4608300.0,
+          "realized_pnl_inr": 429700.0,
+          "realized_pnl_pct": 9.32,
+          "brokerage": 4349.84,
+          "matched_lots": [
+            {
+              "buy_date": "2026-04-01",
+              "buy_price": 224.5,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2245000.0
+            },
+            {
+              "buy_date": "2026-05-06",
+              "buy_price": 233.02,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1165100.0
+            },
+            {
+              "buy_date": "2026-05-07",
+              "buy_price": 239.64,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1198200.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 10000,
+          "sell_price": 251.47,
+          "proceeds_inr": 2514731.0,
+          "cost_basis_inr": 2392050.0,
+          "realized_pnl_inr": 122681.0,
+          "realized_pnl_pct": 5.13,
+          "brokerage": 2171.24,
+          "matched_lots": [
+            {
+              "buy_date": "2026-05-07",
+              "buy_price": 238.85,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1194250.0
+            },
+            {
+              "buy_date": "2026-05-07",
+              "buy_price": 239.56,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1197800.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-05-15",
+          "qty": 5000,
+          "sell_price": 251.6,
+          "proceeds_inr": 1258020.89,
+          "cost_basis_inr": 1197800.0,
+          "realized_pnl_inr": 60220.89,
+          "realized_pnl_pct": 5.03,
+          "brokerage": 1086.19,
+          "matched_lots": [
+            {
+              "buy_date": "2026-05-07",
+              "buy_price": 239.56,
+              "qty_matched": 5000,
+              "lot_cost_inr": 1197800.0
+            }
+          ],
+          "underflow": false
+        }
+      ],
+      "combined_pnl_inr": 6528768.76
+    },
+    {
+      "account_key": "yash",
+      "holder": "Yash (brother)",
+      "account_type": "father-managed",
+      "custodian": "Zerodha",
+      "accent_color": "#0891b2",
+      "emoji": "🧑",
+      "status": "exited",
+      "source_file": "07_POSITIONS/RAJIV-MULTI_SILVER/260517/Yash Silver Trades.xls",
+      "total_buy_qty": 170500,
+      "total_sell_qty": 170500,
+      "trade_count": 36,
+      "holdings_qty": 0,
+      "tranche_count": 0,
+      "avg_buy_inr": null,
+      "invested_inr": 0,
+      "current_value_inr": 0,
+      "unrealized_pnl_inr": 0,
+      "unrealized_pnl_pct": null,
+      "tranches": [],
+      "realized_pnl_inr": 1162959.42,
+      "realized_pnl_pct": 3.08,
+      "realized_proceeds_inr": 38914469.42,
+      "realized_cost_basis_inr": 37751510.0,
+      "realized_brokerage_inr": 31557.94,
+      "realized_qty": 170500,
+      "realized_sells": [
+        {
+          "date": "2025-11-17",
+          "qty": 401,
+          "sell_price": 148.33,
+          "proceeds_inr": 59480.33,
+          "cost_basis_inr": 63057.25,
+          "realized_pnl_inr": -3576.92,
+          "realized_pnl_pct": -5.67,
+          "brokerage": 51.36,
+          "matched_lots": [
+            {
+              "buy_date": "2025-11-13",
+              "buy_price": 157.25,
+              "qty_matched": 401,
+              "lot_cost_inr": 63057.25
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-29",
+          "qty": 3118,
+          "sell_price": 227.12,
+          "proceeds_inr": 708175.22,
+          "cost_basis_inr": 496990.22,
+          "realized_pnl_inr": 211185.0,
+          "realized_pnl_pct": 42.49,
+          "brokerage": 84.99,
+          "matched_lots": [
+            {
+              "buy_date": "2025-11-13",
+              "buy_price": 157.25,
+              "qty_matched": 2599,
+              "lot_cost_inr": 408692.75
+            },
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 170.13,
+              "qty_matched": 519,
+              "lot_cost_inr": 88297.47
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-29",
+          "qty": 2866,
+          "sell_price": 219.11,
+          "proceeds_inr": 627974.66,
+          "cost_basis_inr": 487592.58,
+          "realized_pnl_inr": 140382.08,
+          "realized_pnl_pct": 28.79,
+          "brokerage": 75.36,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 170.13,
+              "qty_matched": 2866,
+              "lot_cost_inr": 487592.58
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-29",
+          "qty": 3030,
+          "sell_price": 210.0,
+          "proceeds_inr": 636300.0,
+          "cost_basis_inr": 515493.9,
+          "realized_pnl_inr": 120806.1,
+          "realized_pnl_pct": 23.44,
+          "brokerage": 76.36,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 170.13,
+              "qty_matched": 3030,
+              "lot_cost_inr": 515493.9
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-29",
+          "qty": 3921,
+          "sell_price": 197.2,
+          "proceeds_inr": 773225.06,
+          "cost_basis_inr": 667089.81,
+          "realized_pnl_inr": 106135.25,
+          "realized_pnl_pct": 15.91,
+          "brokerage": 92.79,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 170.13,
+              "qty_matched": 3585,
+              "lot_cost_inr": 609916.05
+            },
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 170.16,
+              "qty_matched": 336,
+              "lot_cost_inr": 57173.76
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 20000,
+          "sell_price": 218.5,
+          "proceeds_inr": 4370000.0,
+          "cost_basis_inr": 3638366.72,
+          "realized_pnl_inr": 731633.28,
+          "realized_pnl_pct": 20.11,
+          "brokerage": 3773.09,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-08",
+              "buy_price": 170.16,
+              "qty_matched": 9664,
+              "lot_cost_inr": 1644426.24
+            },
+            {
+              "buy_date": "2025-12-19",
+              "buy_price": 192.92,
+              "qty_matched": 10000,
+              "lot_cost_inr": 1929200.0
+            },
+            {
+              "buy_date": "2025-12-19",
+              "buy_price": 192.68,
+              "qty_matched": 336,
+              "lot_cost_inr": 64740.48
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2025-12-30",
+          "qty": 2599,
+          "sell_price": 218.5,
+          "proceeds_inr": 567881.5,
+          "cost_basis_inr": 500775.32,
+          "realized_pnl_inr": 67106.18,
+          "realized_pnl_pct": 13.4,
+          "brokerage": 490.31,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-19",
+              "buy_price": 192.68,
+              "qty_matched": 2599,
+              "lot_cost_inr": 500775.32
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-02",
+          "qty": 20000,
+          "sell_price": 210.1,
+          "proceeds_inr": 4201978.9,
+          "cost_basis_inr": 4042119.45,
+          "realized_pnl_inr": 159859.45,
+          "realized_pnl_pct": 3.95,
+          "brokerage": 3628.12,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-19",
+              "buy_price": 192.68,
+              "qty_matched": 2065,
+              "lot_cost_inr": 397884.2
+            },
+            {
+              "buy_date": "2025-12-19",
+              "buy_price": 192.2,
+              "qty_matched": 5000,
+              "lot_cost_inr": 961000.0
+            },
+            {
+              "buy_date": "2025-12-19",
+              "buy_price": 192.03,
+              "qty_matched": 5000,
+              "lot_cost_inr": 960150.0
+            },
+            {
+              "buy_date": "2025-12-26",
+              "buy_price": 217.15,
+              "qty_matched": 7935,
+              "lot_cost_inr": 1723085.25
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-02",
+          "qty": 18553,
+          "sell_price": 208.0,
+          "proceeds_inr": 3859024.0,
+          "cost_basis_inr": 4262749.07,
+          "realized_pnl_inr": -403725.07,
+          "realized_pnl_pct": -9.47,
+          "brokerage": 3331.9,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-26",
+              "buy_price": 217.15,
+              "qty_matched": 4065,
+              "lot_cost_inr": 882714.75
+            },
+            {
+              "buy_date": "2025-12-26",
+              "buy_price": 217.17,
+              "qty_matched": 2000,
+              "lot_cost_inr": 434340.0
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 235.88,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2358800.0
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 235.89,
+              "qty_matched": 2488,
+              "lot_cost_inr": 586894.32
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-06",
+          "qty": 6447,
+          "sell_price": 224.4,
+          "proceeds_inr": 1446728.95,
+          "cost_basis_inr": 1520782.83,
+          "realized_pnl_inr": -74053.88,
+          "realized_pnl_pct": -4.87,
+          "brokerage": 1249.13,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 235.89,
+              "qty_matched": 6447,
+              "lot_cost_inr": 1520782.83
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-06",
+          "qty": 14000,
+          "sell_price": 224.4,
+          "proceeds_inr": 3141600.0,
+          "cost_basis_inr": 3302782.85,
+          "realized_pnl_inr": -161182.85,
+          "realized_pnl_pct": -4.88,
+          "brokerage": 2712.51,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 235.89,
+              "qty_matched": 1065,
+              "lot_cost_inr": 251222.85
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 235.89,
+              "qty_matched": 10000,
+              "lot_cost_inr": 2358900.0
+            },
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 236.0,
+              "qty_matched": 2935,
+              "lot_cost_inr": 692660.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-02-06",
+          "qty": 4000,
+          "sell_price": 224.4,
+          "proceeds_inr": 897600.0,
+          "cost_basis_inr": 944000.0,
+          "realized_pnl_inr": -46400.0,
+          "realized_pnl_pct": -4.92,
+          "brokerage": 775.01,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 236.0,
+              "qty_matched": 4000,
+              "lot_cost_inr": 944000.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-04",
+          "qty": 1300,
+          "sell_price": 255.07,
+          "proceeds_inr": 331592.2,
+          "cost_basis_inr": 306800.0,
+          "realized_pnl_inr": 24792.2,
+          "realized_pnl_pct": 8.08,
+          "brokerage": 286.29,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 236.0,
+              "qty_matched": 1300,
+              "lot_cost_inr": 306800.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-04",
+          "qty": 1600,
+          "sell_price": 255.0,
+          "proceeds_inr": 408000.0,
+          "cost_basis_inr": 377600.0,
+          "realized_pnl_inr": 30400.0,
+          "realized_pnl_pct": 8.05,
+          "brokerage": 352.27,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 236.0,
+              "qty_matched": 1600,
+              "lot_cost_inr": 377600.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-04",
+          "qty": 3600,
+          "sell_price": 255.0,
+          "proceeds_inr": 918000.0,
+          "cost_basis_inr": 783785.4,
+          "realized_pnl_inr": 134214.6,
+          "realized_pnl_pct": 17.12,
+          "brokerage": 792.59,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-29",
+              "buy_price": 236.0,
+              "qty_matched": 165,
+              "lot_cost_inr": 38940.0
+            },
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 216.84,
+              "qty_matched": 3435,
+              "lot_cost_inr": 744845.4
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 27065,
+          "sell_price": 245.48,
+          "proceeds_inr": 6643845.86,
+          "cost_basis_inr": 6466774.6,
+          "realized_pnl_inr": 177071.26,
+          "realized_pnl_pct": 2.74,
+          "brokerage": 5736.3,
+          "matched_lots": [
+            {
+              "buy_date": "2025-12-31",
+              "buy_price": 216.84,
+              "qty_matched": 16565,
+              "lot_cost_inr": 3591954.6
+            },
+            {
+              "buy_date": "2026-01-01",
+              "buy_price": 214.63,
+              "qty_matched": 4000,
+              "lot_cost_inr": 858520.0
+            },
+            {
+              "buy_date": "2026-01-21",
+              "buy_price": 310.2,
+              "qty_matched": 6500,
+              "lot_cost_inr": 2016300.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 13000,
+          "sell_price": 245.38,
+          "proceeds_inr": 3189994.18,
+          "cost_basis_inr": 3282500.0,
+          "realized_pnl_inr": -92505.82,
+          "realized_pnl_pct": -2.82,
+          "brokerage": 2754.26,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-01",
+              "buy_price": 252.5,
+              "qty_matched": 13000,
+              "lot_cost_inr": 3282500.0
+            }
+          ],
+          "underflow": false
+        },
+        {
+          "date": "2026-03-09",
+          "qty": 25000,
+          "sell_price": 245.32,
+          "proceeds_inr": 6133068.56,
+          "cost_basis_inr": 6092250.0,
+          "realized_pnl_inr": 40818.56,
+          "realized_pnl_pct": 0.67,
+          "brokerage": 5295.3,
+          "matched_lots": [
+            {
+              "buy_date": "2026-02-09",
+              "buy_price": 243.69,
+              "qty_matched": 25000,
+              "lot_cost_inr": 6092250.0
+            }
+          ],
+          "underflow": false
+        }
+      ],
+      "combined_pnl_inr": 1162959.42
     }
   ],
   "snapshot_tickers": [
@@ -357,57 +2549,57 @@
     "height_px": 480
   },
   "forecast": {
-    "composite_verdict": "\ud83d\udfe2 MILDLY-TO-MODERATELY BULLISH",
-    "composite_source": "260510 multi-agent synthesis v3 + 260511 chart-read tilt (V-15 \u00b13pp)",
+    "composite_verdict": "🟢 BASE-CONSTRUCTIVE (mild-bull tilt), gated — 260531 12-agent synthesis",
+    "composite_source": "260531_SILVER_SYNTHESIS-FULL (12-agent FULL); macro+COT+industrial-metals aligned; authoritative level distribution = the 7-bucket in deployment_plan.probability_distribution (re-weighted 260531)",
     "consensus_state": "DIVERGENT-LEANING bull (4 bull / 5 neutral / 0 bear non-chart agents)",
-    "v15_binding": "Charts contribute tiebreaker only; max \u00b13pp under LEANING consensus",
+    "v15_binding": "Charts contribute tiebreaker only; max ±3pp under LEANING consensus",
     "probability_mass": [
       {
-        "scenario": "A \u2014 Continuation rally",
+        "scenario": "A — Continuation rally",
         "weight_pct": 30,
-        "note": "Break/hold >$84 \u2192 $93+ within 4-8w"
+        "note": "Break/hold >$84 → $93+ within 4-8w"
       },
       {
-        "scenario": "B \u2014 Chop $76-86 (modal)",
+        "scenario": "B — Chop $76-86 (modal)",
         "weight_pct": 33,
         "note": "Range-bound 4-12w; trim ladder fires on time-decay"
       },
       {
-        "scenario": "C \u2014 Shallow retest $73-78",
+        "scenario": "C — Shallow retest $73-78",
         "weight_pct": 20,
         "note": "F0.5/F1 zone test; R1/R2 adds fire"
       },
       {
-        "scenario": "D \u2014 Deeper retest $67-72",
+        "scenario": "D — Deeper retest $67-72",
         "weight_pct": 13,
         "note": "F2 zone; R3 adds fire"
       },
       {
-        "scenario": "E \u2014 Tail $60-67 cascade",
+        "scenario": "E — Tail $60-67 cascade",
         "weight_pct": 4,
         "note": "Credit event + DXY breakout; abort if weekly close <$60"
       }
     ],
     "bullish_mass_a_plus_b": 63,
-    "last_synthesis_doc": "260510_XAG_MULTI-AGENT-SYNTHESIS_v3",
+    "last_synthesis_doc": "260531_SILVER_SYNTHESIS-FULL",
     "last_chart_read_doc": "260511_XAG_CHART-READ-TRANSCRIPT",
-    "last_chart_read_date": "2026-05-11",
-    "last_chart_read_verdict": "\ud83d\udfe2 FRESH-BULL \u2014 multi-TF stack supportive, GSR compressing, $50 wedge break intact"
+    "last_chart_read_date": "2026-05-31",
+    "last_chart_read_verdict": "🟡→🟢 STABILIZING — silver holding $75-76 above the lower-floor zones; GSR ~60 compressed; oil collapse + soft DXY supportive; legends low-res (V-01a, cache-anchored)"
   },
   "bull_bear": {
     "bull_case": [
-      "COMEX squeeze active \u2014 registered stocks +360% Feb\u2192Apr (eligible\u2192registered = pre-positioning for delivery)",
-      "GSR compressing \u2014 was ~95-100 mid-2025, now ~54 (silver structurally outperforming gold; well below V-13 72-floor)",
-      "Monthly $50-wedge breakout (2024) still intact \u2014 generational structural setup",
+      "COMEX squeeze active — registered stocks +360% Feb→Apr (eligible→registered = pre-positioning for delivery)",
+      "GSR compressing — was ~95-100 mid-2025, now ~54 (silver structurally outperforming gold; well below V-13 72-floor)",
+      "Monthly $50-wedge breakout (2024) still intact — generational structural setup",
       "India duty-hike absorbed into SBees NAV; physical premium sticky",
-      "COMEX MM net just breached FROTH (15.76K, 260516 pull) \u2014 directional re-engagement, not balanced add"
+      "COMEX MM net just breached FROTH (15.76K, 260516 pull) — directional re-engagement, not balanced add"
     ],
     "bear_case": [
-      "Fed on hold (3.50-3.75%); 95.9% no-cut next meeting per CME FedWatch \u2192 'dovish-Fed' thesis IS NOT playing",
-      "SLV ETF outflows 3m -$2.82B during rally \u2192 ETF demand isn't the marginal buyer",
-      "FROTH threshold now BREACHED (15K MM-net) \u2014 asymmetric capitulation edge compressing; size-up window closing",
+      "Fed on hold (3.50-3.75%); 95.9% no-cut next meeting per CME FedWatch → 'dovish-Fed' thesis IS NOT playing",
+      "SLV ETF outflows 3m -$2.82B during rally → ETF demand isn't the marginal buyer",
+      "FROTH threshold now BREACHED (15K MM-net) — asymmetric capitulation edge compressing; size-up window closing",
       "BDI -2% YoY signal weak (counterweighted by copper near ATH, but still a flag)",
-      "Trim ladder timing compressed from weeks-to-months \u2192 days-to-weeks per 260511 chart-read"
+      "Trim ladder timing compressed from weeks-to-months → days-to-weeks per 260511 chart-read"
     ]
   },
   "news": {
@@ -418,13 +2610,13 @@
         "date": "2026-05-16",
         "weight": "high",
         "source": "COT",
-        "headline": "MM net +15.76K \u2014 FROTH threshold breached (first of cycle). G8 \u2192 'rebuild accelerating'."
+        "headline": "MM net +15.76K — FROTH threshold breached (first of cycle). G8 → 'rebuild accelerating'."
       },
       {
         "date": "2026-05-14",
         "weight": "high",
         "source": "India",
-        "headline": "Silver duty hike 6%\u219215% absorbed into SBees NAV; physical premium sticky."
+        "headline": "Silver duty hike 6%→15% absorbed into SBees NAV; physical premium sticky."
       },
       {
         "date": "2026-05-13",
@@ -451,37 +2643,37 @@
       "date": "2026-05-20",
       "weight": "med",
       "kind": "data",
-      "summary": "T-1 pre-FOMC Apr Minutes \u2014 pre-event trim window opens"
+      "summary": "T-1 pre-FOMC Apr Minutes — pre-event trim window opens"
     },
     {
       "date": "2026-05-21",
       "weight": "high",
       "kind": "fed",
-      "summary": "FOMC April Minutes release (3:30pm ET) \u2014 read for dot-plot drift"
+      "summary": "FOMC April Minutes release (3:30pm ET) — read for dot-plot drift"
     },
     {
       "date": "2026-05-23",
       "weight": "med",
       "kind": "cot",
-      "summary": "Weekly COT pull (Sat 1am IST) \u2014 watch FROTH continuation vs fade"
+      "summary": "Weekly COT pull (Sat 1am IST) — watch FROTH continuation vs fade"
     },
     {
       "date": "2026-05-30",
       "weight": "med",
       "kind": "data",
-      "summary": "US PCE deflator (core) \u2014 Fed-pivot pricing input"
+      "summary": "US PCE deflator (core) — Fed-pivot pricing input"
     },
     {
       "date": "2026-06-06",
       "weight": "high",
       "kind": "policy",
-      "summary": "RBI MPC outcome \u2014 INR / duty-policy second-order"
+      "summary": "RBI MPC outcome — INR / duty-policy second-order"
     },
     {
       "date": "2026-06-16",
       "weight": "high",
       "kind": "fed",
-      "summary": "FOMC June 16-17 (first under Warsh) \u2014 dot plot + presser; trim discipline binding"
+      "summary": "FOMC June 16-17 (first under Warsh) — dot plot + presser; trim discipline binding"
     },
     {
       "date": "2026-06-30",
@@ -491,169 +2683,169 @@
     }
   ],
   "sr_levels": {
-    "current_xagusd_estimate": 80.29,
+    "current_xagusd_estimate": 75.62,
     "last_updated": "2026-05-11",
     "resistance": [
       {
         "price": 82.0,
         "label": "Daily BB upper",
-        "note": "Immediate resistance \u2014 price at upper band; squeeze breakout target",
-        "distance_pct": 8.907866601144852,
-        "distance_label": "+8.9%"
+        "note": "Immediate resistance — price at upper band; squeeze breakout target",
+        "distance_pct": 8.436921449352017,
+        "distance_label": "+8.4%"
       },
       {
         "price": 84.0,
         "label": "No-floor-hit threshold",
-        "note": "V-13 P=18% \u2014 break above invalidates floor framework",
-        "distance_pct": 11.564156030441067,
-        "distance_label": "+11.6%"
+        "note": "V-13 P=18% — break above invalidates floor framework",
+        "distance_pct": 11.081724411531333,
+        "distance_label": "+11.1%"
       },
       {
         "price": 89.17,
         "label": "5/14 intraday high",
-        "note": "Recent rejection \u2014 sellers showed up at 2-month-high zone",
-        "distance_pct": 18.430664205171787,
-        "distance_label": "+18.4%"
+        "note": "Recent rejection — sellers showed up at 2-month-high zone",
+        "distance_pct": 17.91854006876487,
+        "distance_label": "+17.9%"
       },
       {
         "price": 93.0,
         "label": "F98 Tier 1 trim trigger",
         "note": "Round-number floor; intraday tag executes trim",
-        "distance_pct": 23.51745846227404,
-        "distance_label": "+23.5%"
+        "distance_pct": 22.983337741338264,
+        "distance_label": "+23.0%"
       },
       {
         "price": 95.0,
         "label": "F98 Tier 2 trim trigger",
         "note": "Wave-top zone; +20k units sold same rally",
-        "distance_pct": 26.173747891570255,
-        "distance_label": "+26.2%"
+        "distance_pct": 25.628140703517584,
+        "distance_label": "+25.6%"
       }
     ],
     "support": [
       {
         "price": 76.81,
         "label": "76d EMA",
-        "note": "Daily 76-EMA \u2014 first dynamic support; held through Apr-May",
-        "distance_pct": 2.014795532121174,
-        "distance_label": "+2.0%"
+        "note": "Daily 76-EMA — first dynamic support; held through Apr-May",
+        "distance_pct": 1.573657762496691,
+        "distance_label": "+1.6%"
       },
       {
         "price": 73.5,
         "label": "F98 R1 add trigger",
-        "note": "76 EMA breach zone; \u20b950L deploy",
-        "distance_pct": -2.381363473364066,
-        "distance_label": "-2.4%"
+        "note": "76 EMA breach zone; ₹50L deploy",
+        "distance_pct": -2.8034911399100824,
+        "distance_label": "-2.8%"
       },
       {
         "price": 71.02,
         "label": "Daily BB lower / F1",
-        "note": "V-13 F1 zone P=35% \u2014 highest-prob support",
-        "distance_pct": -5.675162365691379,
-        "distance_label": "-5.7%"
+        "note": "V-13 F1 zone P=35% — highest-prob support",
+        "distance_pct": -6.083046813012442,
+        "distance_label": "-6.1%"
       },
       {
         "price": 67.5,
         "label": "F98 R2 / F2 zone",
-        "note": "V-13 F2 P=18%; \u20b917L final deploy",
-        "distance_pct": -10.350231761252713,
-        "distance_label": "-10.4%"
+        "note": "V-13 F2 P=18%; ₹17L final deploy",
+        "distance_pct": -10.737900026448036,
+        "distance_label": "-10.7%"
       },
       {
         "price": 64.14,
         "label": "Weekly BB lower",
         "note": "V-13 F2 lower; secular trendline",
-        "distance_pct": -14.812798002470357,
-        "distance_label": "-14.8%"
+        "distance_pct": -15.181169002909286,
+        "distance_label": "-15.2%"
       },
       {
         "price": 60.0,
-        "label": "\ud83d\uded1 ABORT \u2014 V-14 velocity",
+        "label": "🛑 ABORT — V-14 velocity",
         "note": "Capital preservation > opportunity",
-        "distance_pct": -20.31131712111352,
-        "distance_label": "-20.3%"
+        "distance_pct": -20.655911134620474,
+        "distance_label": "-20.7%"
       }
     ]
   },
   "trim_ladder": [
     {
-      "tier": "\ud83d\udfe2 Tier 1",
-      "trigger": "XAG \u2265 $93 (intraday tag)",
+      "tier": "🟢 Tier 1",
+      "trigger": "XAG ≥ $93 (intraday tag)",
       "action": "SELL 40,000 SBees units (40% of book)",
       "cash_freed_inr": 10400000,
-      "discipline": "FLOOR \u2014 even if XAG rolls before $95, Tier 1 still executes",
-      "distance_pct": 23.51745846227404,
-      "distance_label": "+23.5% from 75.293"
+      "discipline": "FLOOR — even if XAG rolls before $95, Tier 1 still executes",
+      "distance_pct": 22.983337741338264,
+      "distance_label": "+23.0% from 75.62"
     },
     {
-      "tier": "\ud83d\udfe2 Tier 2",
-      "trigger": "XAG \u2265 $95 (same rally)",
+      "tier": "🟢 Tier 2",
+      "trigger": "XAG ≥ $95 (same rally)",
       "action": "SELL additional 20,000 units (60% cumulative)",
       "cash_freed_inr": 5500000,
       "discipline": "If XAG pulls back before $95, Tier 2 forfeited (don't chase)",
-      "distance_pct": 26.173747891570255,
-      "distance_label": "+26.2% from 75.293"
+      "distance_pct": 25.628140703517584,
+      "distance_label": "+25.6% from 75.62"
     },
     {
-      "tier": "\u23f1 Time-trim",
+      "tier": "⏱ Time-trim",
       "trigger": "$87-92 for 3+ weeks no break",
       "action": "Tier 1 at prevailing price ($89-91 typical)",
       "cash_freed_inr": 9500000,
       "discipline": "'Good enough' not 'exact level'",
-      "distance_pct": 15.54859017438539,
-      "distance_label": "+15.5% from 75.293"
+      "distance_pct": 15.04892885480031,
+      "distance_label": "+15.0% from 75.62"
     },
     {
-      "tier": "\ud83d\udcc5 Pre-FOMC",
-      "trigger": "XAG \u2265 $90 by 2026-05-20 (T-1 of FOMC Apr Minutes 5/21)",
+      "tier": "📅 Pre-FOMC",
+      "trigger": "XAG ≥ $90 by 2026-05-20 (T-1 of FOMC Apr Minutes 5/21)",
       "action": "Tier 1 BEFORE 5/21",
       "cash_freed_inr": 10400000,
       "discipline": "Locks pre-event; ~20% chance of hawkish surprise",
-      "distance_pct": 19.533024318329716,
-      "distance_label": "+19.5% from 75.293"
+      "distance_pct": 19.01613329806929,
+      "distance_label": "+19.0% from 75.62"
     }
   ],
   "add_ladder": {
     "dry_powder_inr": 11700000,
     "rungs": [
       {
-        "rung": "\ud83d\udd35 R1",
+        "rung": "🔵 R1",
         "trigger": "XAGUSD intraday $73-74 (76 EMA breach)",
         "deploy_inr": 5000000,
         "units_approx": 25000,
         "sbees_avg_approx": 220,
-        "conviction": "medium \u2014 Scenario C path",
-        "distance_pct": -3.04543583068812,
-        "distance_label": "-3.0% from 75.293"
+        "conviction": "medium — Scenario C path",
+        "distance_pct": -3.464691880454912,
+        "distance_label": "-3.5% from 75.62"
       },
       {
-        "rung": "\ud83d\udd35 R2",
+        "rung": "🔵 R2",
         "trigger": "XAG weekly close >$70 with intraday low $71 tested",
         "deploy_inr": 5000000,
         "units_approx": 25000,
         "sbees_avg_approx": 213,
-        "conviction": "high \u2014 V-13 F1 floor (P=35%)",
-        "distance_pct": -7.029869974632444,
-        "distance_label": "-7.0% from 75.293"
+        "conviction": "high — V-13 F1 floor (P=35%)",
+        "distance_pct": -7.431896323723889,
+        "distance_label": "-7.4% from 75.62"
       },
       {
-        "rung": "\ud83d\udd35 R3",
+        "rung": "🔵 R3",
         "trigger": "XAG weekly close $64-69 (F2 zone)",
         "deploy_inr": 1700000,
         "units_approx": 8000,
         "sbees_avg_approx": 190,
-        "conviction": "very high \u2014 4th retest of Feb-6 capitulation low",
-        "distance_pct": -14.99873826252109,
-        "distance_label": "-15.0% from 75.293"
+        "conviction": "very high — 4th retest of Feb-6 capitulation low",
+        "distance_pct": -15.36630521026184,
+        "distance_label": "-15.4% from 75.62"
       }
     ],
-    "abort": "\ud83d\uded1 ABORT if XAG weekly close <$60 (V-14 velocity floor) \u2014 capital preservation > opportunity",
+    "abort": "🛑 ABORT if XAG weekly close <$60 (V-14 velocity floor) — capital preservation > opportunity",
     "total_capacity_inr": 11700000.0
   },
   "floor_framework": {
     "v_id": "V-13",
     "status": "settled (5-agent consensus)",
-    "velocity_note": "V-14 \u2014 physical demand creates a VELOCITY floor (silver can't STAY below $60-65 long), NOT a LEVEL floor (CAN touch $55-58 in cascade). Physical responds in 2-6 weeks; paper cascades in 2-6 days.",
+    "velocity_note": "V-14 — physical demand creates a VELOCITY floor (silver can't STAY below $60-65 long), NOT a LEVEL floor (CAN touch $55-58 in cascade). Physical responds in 2-6 weeks; paper cascades in 2-6 days.",
     "tiers": [
       {
         "tier": "No floor hit",
@@ -674,7 +2866,7 @@
         "band_low": 72,
         "band_high": 75,
         "prob_pct": 35,
-        "mechanism": "Consolidation at descending wedge upper \u2014 HIGHEST weight"
+        "mechanism": "Consolidation at descending wedge upper — HIGHEST weight"
       },
       {
         "tier": "F1.5",
@@ -711,83 +2903,83 @@
       "date": "2026-05-02",
       "version": "v6.25",
       "title": "OFFENSIVE deployment",
-      "verdict": "\ud83d\udfe2 STRONG-BULLISH",
+      "verdict": "🟢 STRONG-BULLISH",
       "summary": "Front-load Rs.~3.5Cr between $75-80 spot; target $95 trim 40-60%; goal 20% blended gain. ~15k SBees deployed week of 5/2."
     },
     {
       "date": "2026-05-10",
       "version": "v3",
       "title": "V-15 doctrine recalibration",
-      "verdict": "\ud83d\udfe2 MILDLY BULLISH",
+      "verdict": "🟢 MILDLY BULLISH",
       "summary": "4 bull / 5 neutral / 0 bear non-chart agents = LEANING. Same trim/add ladder. 4 gap data points filled (COMEX/SLV/Fed/copper). Fed-hold reality softened v2 stack."
     },
     {
       "date": "2026-05-11",
       "version": "ct-19",
       "title": "Chart-read FRESH-BULL tilt",
-      "verdict": "\ud83d\udfe2 MILDLY-TO-MOD BULL",
-      "summary": "19-chart drop. Daily MACD positive+expanding; weekly channel intact; monthly $50-wedge breakout. V-15 \u00b13pp shift A 27\u219230%, B 36\u219233%. Trim timing compressed days-to-weeks."
+      "verdict": "🟢 MILDLY-TO-MOD BULL",
+      "summary": "19-chart drop. Daily MACD positive+expanding; weekly channel intact; monthly $50-wedge breakout. V-15 ±3pp shift A 27→30%, B 36→33%. Trim timing compressed days-to-weeks."
     },
     {
       "date": "2026-05-14",
       "version": "eod",
       "title": "India duty-hike sticky",
-      "verdict": "\ud83d\udfe2 MILDLY-TO-MOD BULL",
-      "summary": "SBees held duty-hike gains at \u20b9270.93 even as XAGUSD pulled back from intraday $89.17 to $86.87. Physical premium sticky. F98 trim now dual-threshold."
+      "verdict": "🟢 MILDLY-TO-MOD BULL",
+      "summary": "SBees held duty-hike gains at ₹270.93 even as XAGUSD pulled back from intraday $89.17 to $86.87. Physical premium sticky. F98 trim now dual-threshold."
     },
     {
       "date": "2026-05-16",
       "version": "cot",
       "title": "FROTH threshold breached",
-      "verdict": "\ud83d\udfe1 BULL-BUT-COMPRESSING",
-      "summary": "MM net +15.76K, W/W +4.92K \u2014 largest single-week move in 6-print sequence. OI +6.87K = first material expansion. Asymmetric capitulation edge COMPRESSED; size-up window closing."
+      "verdict": "🟡 BULL-BUT-COMPRESSING",
+      "summary": "MM net +15.76K, W/W +4.92K — largest single-week move in 6-print sequence. OI +6.87K = first material expansion. Asymmetric capitulation edge COMPRESSED; size-up window closing."
     }
   ],
   "global_inventory": {
     "last_updated": "2026-05-10",
-    "source_doc": "260510_XAG_MULTI-AGENT-SYNTHESIS_v3 \u00a70",
+    "source_doc": "260510_XAG_MULTI-AGENT-SYNTHESIS_v3 §0",
     "items": [
       {
         "venue": "COMEX (Total)",
         "value": "440M oz",
-        "change": "\u221211% Feb\u2192Apr",
-        "bias": "\ud83d\udfe2 bullish",
+        "change": "−11% Feb→Apr",
+        "bias": "🟢 bullish",
         "note": "Total stocks shrinking"
       },
       {
         "venue": "COMEX (Eligible)",
         "value": "316M oz",
-        "change": "\u221233% Feb\u2192Apr",
-        "bias": "\ud83d\udfe2 bullish",
+        "change": "−33% Feb→Apr",
+        "bias": "🟢 bullish",
         "note": "Industry locking inventory"
       },
       {
         "venue": "COMEX (Registered)",
         "value": "124M oz",
-        "change": "+360% (27M\u2192124M)",
-        "bias": "\ud83d\udfe2 bullish",
+        "change": "+360% (27M→124M)",
+        "bias": "🟢 bullish",
         "note": "Active delivery capacity build"
       },
       {
         "venue": "SLV ETF (AUM)",
         "value": "$39B",
-        "change": "+422M 1y / \u22122.82B 3m",
-        "bias": "\ud83d\udfe1 mixed",
+        "change": "+422M 1y / −2.82B 3m",
+        "bias": "🟡 mixed",
         "note": "Holders monetized parabolic; not the marginal buyer"
       },
       {
         "venue": "LBMA",
-        "value": "\u2014",
-        "change": "\u2014",
-        "bias": "\u2014",
-        "note": "Stub \u2014 needs primary source feed"
+        "value": "—",
+        "change": "—",
+        "bias": "—",
+        "note": "Stub — needs primary source feed"
       },
       {
         "venue": "SHFE (Shanghai premium)",
-        "value": "\u2014",
-        "change": "\u2014",
-        "bias": "\u2014",
-        "note": "GAP \u2014 methodology only; quant needs SHFE feed"
+        "value": "—",
+        "change": "—",
+        "bias": "—",
+        "note": "GAP — methodology only; quant needs SHFE feed"
       }
     ]
   },
@@ -799,7 +2991,7 @@
       "low": 93,
       "high": 95
     },
-    "current_xagusd_estimate": 80.29,
+    "current_xagusd_estimate": 75.62,
     "trim_pct_planned": {
       "low": 40,
       "high": 60
@@ -825,6 +3017,8 @@
     "version": "F109-v1.1",
     "revised": "2026-05-20",
     "revision_note": "size_inr corrected to match pct_envelope; envelope unchanged; tranche % unchanged",
+    "v32_respec_log_260531": "COT-gate ambiguity resolved by operator 260531: T2/T3 'COT MM <=0' re-spec'd from literal net-short to WASHED-OUT-POSITIONING spirit (DICTIONARY COT-THRESHOLD-LADDER: low-percentile / below COT-CASCADE-DONE / W-W not crowding). Currently MET (+10.1K, froth-closed) — but does NOT fire T2/T3 today; price gates them ($75-76 above the $65-72 zones). The COT leg simply stops being a near-impossible blocker for when price arrives.",
+    "strategic_finding_260531": "PRIMARY LIVE RISK = UNDER-DEPLOYMENT. The ladder was built to deploy into a cascade to $65-69 that the 260531 re-weight now judges LESS likely (silver holding $75-76; macro/COT/metals supportive; lower-floor thesis weakening; V-13 reaffirmed). T1.5 (Rs.10L, CLEARED-but-HELD) is the partial hedge. OPEN OPERATOR DECISION: whether to add a RE-SPECIFIED HIGHER-ENTRY TRANCHE (deploy some at/near current $75-76) rather than wait for a dip that may not come. Not yet specified — operator call.",
     "authored": "2026-05-18",
     "approved": "2026-05-19",
     "status": "active",
@@ -875,14 +3069,16 @@
         "invalidation": "XAG daily close > $82",
         "expected_fire": "early-mid Jun 2026",
         "operator_pre_authorized": true,
-        "status": "armed"
+        "status": "cleared-held",
+        "held_note": "2026-05-31 — OR-trigger CLEARED (Brent $92<$100 + USDINR Fri 94.87<96); operator HELD pending (a) holdings figures + (b) Phase-3 bucket re-weight. Pre-auth NOT actioned (Phase-2 analysis-only + holdings PENDING)."
       },
       {
         "id": "T2",
         "label": "main starter - V-13 daily floor",
         "size_inr": 3125000,
         "pct_envelope": 25,
-        "fire_condition": "XAG in $69-72 zone + COT MM <=0 + Brent <$110",
+        "fire_condition": "XAG in $69-72 zone + COT washed-out (MM-net low-percentile / below COT-CASCADE-DONE per DICTIONARY COT-THRESHOLD-LADDER + not froth-crowding: <COT-FROTH 15K / W-W not rising) + Brent <$110",
+        "cot_leg_respec_v32": "260531 operator ruling: original 'COT MM <=0' was a near-impossible net-short bar; re-spec'd to washed-out-positioning spirit. Currently MET (+10.1K, froth-closed). Does NOT fire T2 today — price still gates ($75-76 above $69-72).",
         "cumulative_pct_after": 33,
         "invalidation": "XAG daily close > $80 (thesis-broken-up) OR daily close <$67.87 (F2 breach; suspend + trim to T3)",
         "expected_fire": "Jun 16-17 FOMC plus/minus 1 week",
@@ -894,7 +3090,8 @@
         "label": "modal slug - quadruple-conditional asymmetric",
         "size_inr": 5000000,
         "pct_envelope": 40,
-        "fire_condition": "XAG in $65-69 zone + COT MM negative (deep capitulation) + Warsh Jun-17 dovish-signal + Brent rolling <$100",
+        "fire_condition": "XAG in $65-69 zone + COT washed-out / low-percentile deep base (per DICTIONARY COT-THRESHOLD-LADDER; froth episode closed) + Warsh Jun-17 dovish-signal + Brent rolling <$100",
+        "cot_leg_respec_v32": "260531 operator ruling — see T2; washed-out spirit, currently MET; price still gates ($75-76 above $65-69).",
         "cumulative_pct_after": 73,
         "invalidation": "XAG daily close < $58 (T3-specific stop; V-18 $52 still binding portfolio-level)",
         "expected_fire": "late Jun - mid Jul 2026",
@@ -935,42 +3132,43 @@
       "t3_invalidation_basis": "above F2 buffer, below F1.5 daily-floor; T3-only cut (V-18 still binding portfolio-level)"
     },
     "probability_distribution": {
-      "note": "7-bucket distribution per F109 mandate; modal at $65-69 (27%); cascade tail $52-59 (16%)",
+      "note": "RE-WEIGHTED 260531 (driver-reversal): modal moved UP from $65-69 to the $69-78 band; upper-half ($69+) 0.42->0.56; deep tail trimmed 0.16->0.14 (retained, not zeroed — unsigned-ceasefire fat tail). Confirmed by washed-out COT (~+10.1K). Prior 260518 weights in git history.",
+      "reweight_date": "2026-05-31",
       "buckets": [
         {
           "range": "$78+",
-          "weight": 0.08,
-          "path": "reflation / Warsh dovish"
+          "weight": 0.12,
+          "path": "reflation / dollar-down + gold-ATH pull"
         },
         {
           "range": "$72-78",
-          "weight": 0.12,
-          "path": "V-13 holds + range chop"
+          "weight": 0.2,
+          "path": "where price IS; macro-supportive range-chop"
         },
         {
           "range": "$69-72",
-          "weight": 0.22,
-          "path": "V-13 daily-floor zone"
+          "weight": 0.24,
+          "path": "V-13 daily-floor zone (modal)"
         },
         {
           "range": "$65-69",
-          "weight": 0.27,
-          "path": "modal - measured-move retest of mid-cycle Fib"
+          "weight": 0.18,
+          "path": "cascade-retest — drivers reversed, less likely"
         },
         {
           "range": "$59-65",
-          "weight": 0.15,
-          "path": "intermediate cascade"
+          "weight": 0.12,
+          "path": "intermediate cascade reduced"
         },
         {
           "range": "$55-59",
-          "weight": 0.1,
-          "path": "operator cascade tail"
+          "weight": 0.08,
+          "path": "operator cascade tail reduced"
         },
         {
           "range": "$52-55",
           "weight": 0.06,
-          "path": "cascade tail / V-18 retest"
+          "path": "V-18 retest tail retained"
         }
       ]
     },
@@ -1003,7 +3201,7 @@
     }
   },
   "warnings": [
-    "Sell-side data PENDING across all accounts \u2014 realized P&L not yet computed.",
-    "NSE SILVERBEES close is 16 day(s) stale (weekend expected)."
+    "🧭 STRATEGIC (260531): RE-ENTRY UNDERWAY — ₹35.4L / 14,000u SilverBees deployed at ₹250–256 (XAG ~$75–76); the higher-entry approach is already live (subsumes the ₹10L T1.5 starter). Of the ≤₹5Cr envelope ~₹4.65Cr remains dry. Macro/COT/industrial-metals support holding $75–76 (V-13 reaffirmed; deep-dip less likely). OPEN: pace of further deployment — add near $75–76 vs wait for a $69–72 dip that may not come.",
+    "2 of 4 accounts EXITED — only 2 active holding (Shalu only post 15-May liquidation)."
   ]
 }
