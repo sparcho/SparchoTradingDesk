@@ -397,6 +397,24 @@ details.zone3>summary{ border-bottom-color:var(--border-strong); } details.zone3
 .ind-pt .ipc{ font-family:var(--mono); font-size:9.5px; font-weight:700; min-width:46px; text-align:right; }
 .radar-wrap{ height:215px; position:relative; }
 .radar-wrap canvas{ width:100%!important; height:100%!important; }
+/* ── phase 3a · all-collapsible + compaction (260601) ── */
+details.zone{ margin-top:6px; }
+details.zone>summary, details.zone3>summary{ list-style:none; cursor:pointer; display:flex; align-items:baseline; gap:10px; font-family:var(--serif); font-size:13.5px; font-weight:700; color:var(--ink); margin:8px 0 4px; padding-bottom:4px; border-bottom:2px solid var(--border-strong); }
+details.zone>summary::-webkit-details-marker, details.zone3>summary::-webkit-details-marker{ display:none; }
+details.zone>summary .sn, details.zone3>summary .zn{ font-family:var(--mono); font-size:11px; font-weight:800; color:var(--amber); }
+details.zone>summary .chev, details.zone3>summary .chev{ margin-left:auto; font-size:10px; color:var(--silver-deep); font-family:var(--mono); font-weight:600; }
+details.zone[open]>summary .chev::after, details.zone3[open]>summary .chev::after{ content:"collapse ▴"; }
+details.zone:not([open])>summary .chev::after, details.zone3:not([open])>summary .chev::after{ content:"expand ▾"; }
+details.zone>.zone-body{ display:flex; flex-direction:column; gap:6px; }
+/* compaction — fit §1 above the fold */
+body{ gap:3px; padding:10px 14px; }
+.hero-band{ padding:11px 18px; margin:2px 0 1px; gap:8px 22px; }
+.hero-verdict{ font-size:19px; line-height:1.12; } .hero-xag{ font-size:34px; } .hero-sub{ font-size:10px; margin-top:4px; max-height:2.9em; overflow:hidden; }
+.kpi-strip{ margin:5px 0 1px; gap:7px; } .kpi{ padding:7px 12px; } .kpi .kv{ font-size:22px; } .kpi .kv.kv-sm{ font-size:13.5px; }
+.card{ padding:8px 10px; } .bento{ gap:7px; } .card-title{ margin-bottom:4px; }
+.sread-grid{ gap:12px; } .gauge-wrap{ height:138px; } .gauge-center .gv{ font-size:25px; } .radar-wrap{ height:170px; }
+.tk-cell{ padding:4px 9px; } .tk-cell .tk-val{ font-size:13px; }
+.title-strip{ padding:4px 0; } .brand h1{ font-size:16px; }
 </style>
 </head>
 <body>
@@ -431,7 +449,8 @@ details.zone3>summary{ border-bottom-color:var(--border-strong); } details.zone3
   <div class="kpi"><div class="kl">Dry powder</div><div class="kv" id="kpi-dry">—</div><div class="ks">of ≤₹5Cr envelope</div></div>
   <div class="kpi"><div class="kl">Stance</div><div class="kv kv-sm" id="kpi-stance">—</div><div class="ks" id="kpi-stance-s">—</div></div>
 </div>
-<div class="section-hd"><span class="sn">§1</span> Silver <span class="sx">the price read · verdict · levels · indicators</span></div>
+<details class="zone" open><summary class="zhd"><span class="sn">§1</span> Silver<span class="chev"></span></summary>
+<div class="zone-body">
 <div class="ticker-bar" id="ticker-bar"></div>
 <div class="bento" style="grid-template-columns:1.25fr 1fr;">
   <div class="card">
@@ -509,7 +528,9 @@ details.zone3>summary{ border-bottom-color:var(--border-strong); } details.zone3
   </div>
 </div>
 
-<div class="section-hd"><span class="sn">§2</span> Operator <span class="sx">your book · F109 ladder · floor · outlook</span></div>
+</div></details>
+<details class="zone" open><summary class="zhd"><span class="sn">§2</span> Operator<span class="chev"></span></summary>
+<div class="zone-body">
 <div class="bento" style="grid-template-columns:1fr;">
 <div class="card" id="f109-card">
     <div class="accent-top" style="background: var(--forest);"></div>
@@ -584,6 +605,7 @@ details.zone3>summary{ border-bottom-color:var(--border-strong); } details.zone3
   <div class="tab-tl" id="tl-list"></div>
 </div>
 
+</div></details>
 <details class="zone3"><summary><span class="zn">§3</span> Intel — news · catalysts · COT · accounts · inventory · sells <span class="chev"></span></summary>
 <div class="zone3-body">
 <div class="accounts-row" id="accounts-row"></div>
