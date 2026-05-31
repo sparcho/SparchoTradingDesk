@@ -464,17 +464,15 @@ strategy_timeline:
 # 11. GLOBAL INVENTORY  (COMEX / LBMA / SHFE / SLV ETF)
 # ─────────────────────────────────────────────────────────────────────────────
 global_inventory:
-  last_updated: "2026-05-10"
-  freshness: "⚠️ CARRY-FORWARD from 5/10 — physical-inventory venues not re-pulled 260531 (no live feed this session). Structural thesis intact per 260531 synthesis; treat figures as dated context, not live."
-  refresh_owner: "COMMODITIES agent — wire COMEX/LBMA/SHFE/SLV live feeds (F106/F116 follow-up)"
-  source_doc: "260510_XAG_MULTI-AGENT-SYNTHESIS_v3 §0"
+  last_updated: "2026-05-29"
+  source: "web pull 260531 — goldsilver.ai / metalcharts (COMEX), iShares/SEC 10-Q (SLV), SGE/SHFE (Shanghai)"
   items:
-    - { venue: "COMEX (Total)",           value: "440M oz", change: "−11% Feb→Apr",       bias: "🟢 bullish", note: "Total stocks shrinking" }
-    - { venue: "COMEX (Eligible)",        value: "316M oz", change: "−33% Feb→Apr",       bias: "🟢 bullish", note: "Industry locking inventory" }
-    - { venue: "COMEX (Registered)",      value: "124M oz", change: "+360% (27M→124M)",   bias: "🟢 bullish", note: "Active delivery capacity build" }
-    - { venue: "SLV ETF (AUM)",           value: "$39B",    change: "+422M 1y / −2.82B 3m", bias: "🟡 mixed",   note: "Holders monetized parabolic; not the marginal buyer" }
-    - { venue: "LBMA",                    value: "—",       change: "—",                  bias: "—",          note: "Stub — needs primary source feed" }
-    - { venue: "SHFE (Shanghai premium)", value: "—",       change: "—",                  bias: "—",          note: "GAP — methodology only; quant needs SHFE feed" }
+    - { venue: "COMEX (reg+elig total)", value: "~316.5M oz", change: "−28% vs Apr ~440M", bias: "🟢 bullish", note: "Vault drain continues — ~34% off cycle highs (29-May)" }
+    - { venue: "COMEX (Registered)",      value: "~84.1M oz",  change: "−32% vs Apr ~124M", bias: "🟢 bullish", note: "Immediately-deliverable inventory draining (28-May)" }
+    - { venue: "COMEX (Eligible)",        value: "~232.4M oz", change: "derived (total − registered)", bias: "🟡 mixed", note: "Bulk of stock; not pledged for delivery" }
+    - { venue: "SLV ETF (AUM)",           value: "~$35.5–36.8B", change: "−~$3B vs $39B", bias: "🟡 mixed", note: "Holders trimming; not the marginal buyer (29-May)" }
+    - { venue: "Shanghai premium (SGE)",  value: "+$8.15/oz (+10.78%)", change: "SGE $83.74 vs West $75.59", bias: "🟢 bullish", note: "Physical tightness / demand pull in Asia (29-May)" }
+    - { venue: "LBMA",                    value: "—", change: "—", bias: "—", note: "No clean public figure this pull" }
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 11b. COT — CFTC Disaggregated (silver #084691)
