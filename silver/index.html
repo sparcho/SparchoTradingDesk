@@ -418,20 +418,20 @@ body{ gap:3px; padding:10px 14px; }
 /* ── phase 4 · 3-panel Silver Read (mini-cards | gauge | radar) ── */
 .kpi-mini{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
 .kpi-mini .kpi{ padding:7px 9px; }
-.kpi-mini .kpi .kl{ font-size:8.5px; }
-.kpi-mini .kpi .kv{ font-size:18px; margin-top:2px; }
+.kpi-mini .kpi .kl{ font-size:8.5px; display:flex; align-items:center; gap:4px; }
+.kpi-mini .kpi .kv{ font-size:16.5px; margin-top:2px; }
 .kpi-mini .kpi .kv.kv-sm{ font-size:11.5px; line-height:1.15; }
 .kpi-mini .kpi .ks{ font-size:9px; }
 .sread3 .gauge-wrap{ height:150px; } .sread3 .radar-wrap{ height:165px; }
 .sread3 .gauge-center .gv{ font-size:24px; }
 @media(max-width:900px){ .bento.sread3{ grid-template-columns:1fr!important; } .kpi-mini{ grid-template-columns:repeat(4,1fr); } }
-/* ── phase 5 · macro tiles inside the Key card; collapse-on-open ── */
-.macro-tiles{ margin-top:6px; }
-.macro-tiles .ticker-bar{ grid-template-columns:repeat(3,1fr); background:transparent; box-shadow:none; padding:0; gap:5px; }
-.macro-tiles .tk-cell{ background:rgba(255,255,255,0.04); border:1px solid var(--border); border-left:1px solid var(--border); border-radius:4px; padding:4px 7px; }
-.macro-tiles .tk-cell .tk-val{ font-size:12px; }
+/* ── phase 5/6 · macro tiles flow into the SAME Key grid (one unified grid) ── */
+.kpi-mini .ticker-bar{ display:contents; }            /* children become direct grid items */
+.kpi-mini .kpi.kpi-mac{ }                              /* macro tile: identical chrome to KPI */
+.kpi-mini .kpi.kpi-mac::before{ background:var(--ink-mute); opacity:0.5; }  /* muted accent vs amber */
+.kpi-mini .kpi .kl .dot{ width:5px; height:5px; border-radius:50%; background:var(--sig-pos); display:inline-block; flex:0 0 auto; }
+.kpi-mini .kpi .kl .dot.stale{ background:#fbbf24; } .kpi-mini .kpi .kl .dot.pinned{ background:#a855f7; box-shadow:0 0 4px #a855f7; }
 .sread3 .card{ min-width:0; }
-@media(max-width:900px){ .macro-tiles .ticker-bar{ grid-template-columns:repeat(3,1fr); } }
 </style>
 </head>
 <body>
@@ -463,13 +463,13 @@ body{ gap:3px; padding:10px 14px; }
 
 <div class="bento sread3" style="grid-template-columns:0.92fr 1.02fr 1.06fr;">
   <div class="card"><div class="accent-top"></div>
-    <div class="card-title"><h2>Key &amp; macro</h2><div class="macro-tiles"><div class="ticker-bar" id="ticker-bar"></div></div>
-  </div>
+    <div class="card-title"><h2>Key &amp; macro</h2></div>
     <div class="kpi-mini">
 <div class="kpi"><div class="kl">XAGUSD spot</div><div class="kv" id="kpi-xag">—</div><div class="ks" id="kpi-xag-s">—</div></div>
   <div class="kpi"><div class="kl">Book P&L · unrealized</div><div class="kv" id="kpi-pnl">—</div><div class="ks" id="kpi-pnl-s">—</div></div>
   <div class="kpi"><div class="kl">Dry powder</div><div class="kv" id="kpi-dry">—</div><div class="ks">of ≤₹5Cr envelope</div></div>
   <div class="kpi"><div class="kl">Stance</div><div class="kv kv-sm" id="kpi-stance">—</div><div class="ks" id="kpi-stance-s">—</div></div>
+  <div class="ticker-bar" id="ticker-bar"></div>
     </div>
   </div>
   <div class="card"><div class="accent-top"></div>
@@ -787,7 +787,7 @@ try {
   // ─── 2. LIVE TICKER BAR ───────────────────────────────
   function tickerCell(key, label, opts={}) {
     const q = cm[key] || {};
-    if (q.status !== 'ok') return `<div class="tk-cell"><div class="tk-name"><span class="dot stale"></span>${label}</div><div class="tk-val mut">—</div><div class="tk-chg mut">unavailable</div></div>`;
+    if (q.status !== 'ok') return `<div class="kpi kpi-mac"><div class="kl"><span class="dot stale"></span>${label}</div><div class="kv">—</div><div class="ks">unavailable</div></div>`;
     const v = key === 'gsr' ? q.value : q.price;
     const dp = opts.dp ?? 2;
     const valStr = v != null ? (opts.prefix || '') + v.toFixed(dp) : '—';
@@ -801,7 +801,7 @@ try {
       if (age > 36) dotCls = 'stale';
     }
     const tip = q.source_note || q.yahoo_symbol || '';
-    return `<div class="tk-cell" title="${tip}"><div class="tk-name"><span class="dot ${dotCls}"></span>${label}${dotCls === 'pinned' ? ' 📌' : ''}</div><div class="tk-val">${valStr}</div><div class="tk-chg ${chgClass}">${chgStr || '—'}</div></div>`;
+    return `<div class="kpi kpi-mac" title="${tip}"><div class="kl"><span class="dot ${dotCls}"></span>${label}${dotCls === 'pinned' ? ' 📌' : ''}</div><div class="kv">${valStr}</div><div class="ks ${chgClass}">${chgStr || 'today'}</div></div>`;
   }
   { const _tb=document.getElementById('ticker-bar'); if(_tb) _tb.innerHTML = `
     ${tickerCell('gsr',       'GSR' )}
@@ -860,13 +860,18 @@ try {
   var _gc=document.getElementById('gauge-canvas');
   if(_gc&&window.Chart&&_x!=null){ var _pos=Math.max(0,Math.min(1,(_x-_lo)/(_hi-_lo)));
     var _gx=Chart.getChart(_gc); if(_gx)_gx.destroy();
-    new Chart(_gc,{type:'doughnut',data:{datasets:[{data:[_pos,1-_pos],backgroundColor:['#e89143','rgba(255,255,255,0.07)'],borderWidth:0,circumference:180,rotation:270}]},options:{cutout:'74%',plugins:{legend:{display:false},tooltip:{enabled:false}},responsive:true,maintainAspectRatio:false,animation:false}}); }
+    var _gctx=_gc.getContext('2d'); var _ggrad=_gctx.createLinearGradient(0,0,(_gc.width||300),0); _ggrad.addColorStop(0,'#f3b06a'); _ggrad.addColorStop(1,'#d4761f');
+    new Chart(_gc,{type:'doughnut',data:{datasets:[{data:[_pos,1-_pos],backgroundColor:[_ggrad,'rgba(255,255,255,0.06)'],borderColor:'transparent',borderWidth:0,borderRadius:[7,0],circumference:180,rotation:270,spacing:1}]},options:{cutout:'76%',plugins:{legend:{display:false},tooltip:{enabled:false}},responsive:true,maintainAspectRatio:false,animation:false}}); }
   // radar — silver-tailwind by today's move (sign convention: silver likes DXY/TNX/GSR/Oil down, Gold up)
   var _rc=document.getElementById('radar-canvas');
   if(_rc&&window.Chart){ var _conv=[['DXY','dxy',-1],['TNX','tnx',-1],['GSR','gsr',-1],['Gold','gold',1],['Oil','wti',-1]];
     var _vals=_conv.map(function(cv){ var q=cm[cv[1]]||{}; var c=(q.day_chg_pct!=null)?q.day_chg_pct:0; return Math.max(-3,Math.min(3,c*cv[2]))+3; });
     var _rx=Chart.getChart(_rc); if(_rx)_rx.destroy();
-    new Chart(_rc,{type:'radar',data:{labels:_conv.map(function(c){return c[0];}),datasets:[{data:_vals,borderColor:'#e89143',backgroundColor:'rgba(232,145,67,0.18)',pointBackgroundColor:'#e89143',borderWidth:1.5,pointRadius:2}]},options:{scales:{r:{min:0,max:6,ticks:{display:false,stepSize:1},grid:{color:'rgba(255,255,255,0.08)'},angleLines:{color:'rgba(255,255,255,0.08)'},pointLabels:{color:'#a6a7ae',font:{size:10}}}},plugins:{legend:{display:false},tooltip:{enabled:false}},responsive:true,maintainAspectRatio:false,animation:false}}); }
+    var _rctx=_rc.getContext('2d'); var _rgrad=_rctx.createLinearGradient(0,0,0,(_rc.height||220)); _rgrad.addColorStop(0,'rgba(232,145,67,0.34)'); _rgrad.addColorStop(1,'rgba(232,145,67,0.05)');
+    new Chart(_rc,{type:'radar',data:{labels:_conv.map(function(c){return c[0];}),datasets:[
+      {label:'today',data:_vals,borderColor:'#e89143',backgroundColor:_rgrad,pointBackgroundColor:'#e89143',pointBorderColor:'#16161a',pointBorderWidth:1,borderWidth:2,pointRadius:3,pointHoverRadius:4,tension:0.1,order:1},
+      {label:'neutral',data:[3,3,3,3,3],borderColor:'rgba(255,255,255,0.22)',backgroundColor:'transparent',borderWidth:1,borderDash:[3,3],pointRadius:0,fill:false,order:2}
+    ]},options:{scales:{r:{min:0,max:6,ticks:{display:false,stepSize:1,backdropColor:'transparent'},grid:{color:'rgba(255,255,255,0.07)'},angleLines:{color:'rgba(255,255,255,0.07)'},pointLabels:{color:'#b7b8bf',font:{size:10,weight:'600'}}}},plugins:{legend:{display:false},tooltip:{enabled:false}},responsive:true,maintainAspectRatio:false,animation:false}}); }
   var _sm=document.getElementById('sread-meta'); if(_sm) _sm.textContent='$'+_lo+'–$'+_hi+' range';
 } catch (e) { __reportErr('silver-read', e); }
 try {
