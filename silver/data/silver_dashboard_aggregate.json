@@ -1,7 +1,7 @@
 {
   "schema_version": "v2",
   "doc_type": "silver_dashboard_aggregate",
-  "emitted_at_utc": "2026-05-31T12:24:57+00:00",
+  "emitted_at_utc": "2026-05-31T14:08:07+00:00",
   "meta": {
     "source_excel": "My Stocks (Google Sheets, father-maintained)",
     "source_excel_drive_id": "1L6QZtyhrCN198GuLWGmpBZTaCoEWMH54IrTT-ts630I",
@@ -67,14 +67,14 @@
     "xagusd": {
       "status": "ok",
       "ticker": "XAGUSD",
-      "yahoo_symbol": "goldapi.io",
+      "yahoo_symbol": "SI=F",
       "currency": "USD",
-      "market_state": "LIVE-SPOT",
-      "price": 75.293,
-      "prev_close": 75.6485,
-      "day_chg_pct": null,
-      "as_of_utc": "2026-05-31T12:24:23+00:00",
-      "source_note": "goldapi.io free tier \u2014 24/5 OTC spot"
+      "market_state": null,
+      "price": 75.875,
+      "prev_close": 75.912,
+      "day_chg_pct": -0.04874064706503074,
+      "as_of_utc": "2026-05-29T20:59:35+00:00",
+      "source_note": "Yahoo SI=F (futures; closed weekends) \u2014 no_api_key"
     },
     "gold": {
       "status": "ok",
@@ -88,12 +88,12 @@
     "gsr": {
       "status": "ok",
       "ticker": "GSR",
-      "value": 61.001686743787594,
+      "value": 60.5337726523888,
       "derivation": "GOLD / XAGUSD (spot/spot)"
     },
-    "fetched_at_utc": "2026-05-31T12:24:57+00:00"
+    "fetched_at_utc": "2026-05-31T14:08:07+00:00"
   },
-  "live_xagusd_used_for_ladders": 75.293,
+  "live_xagusd_used_for_ladders": 75.875,
   "family_totals": {
     "holdings_qty": 14000,
     "invested_inr": 3541440.0,
@@ -307,32 +307,42 @@
     "v15_binding": "Charts contribute tiebreaker only; max \u00b13pp under LEANING consensus",
     "probability_mass": [
       {
-        "scenario": "A \u2014 Continuation rally",
-        "weight_pct": 30,
-        "note": "Break/hold >$84 \u2192 $93+ within 4-8w"
+        "scenario": "$78+",
+        "weight_pct": 12,
+        "note": "above-entry; no add"
       },
       {
-        "scenario": "B \u2014 Chop $76-86 (modal)",
-        "weight_pct": 33,
-        "note": "Range-bound 4-12w; trim ladder fires on time-decay"
-      },
-      {
-        "scenario": "C \u2014 Shallow retest $73-78",
+        "scenario": "$72-78",
         "weight_pct": 20,
-        "note": "F0.5/F1 zone test; R1/R2 adds fire"
+        "note": "current; accumulate"
       },
       {
-        "scenario": "D \u2014 Deeper retest $67-72",
-        "weight_pct": 13,
-        "note": "F2 zone; R3 adds fire"
+        "scenario": "$69-72",
+        "weight_pct": 24,
+        "note": "F1 V-13 floor \u2014 largest add"
       },
       {
-        "scenario": "E \u2014 Tail $60-67 cascade",
-        "weight_pct": 4,
-        "note": "Credit event + DXY breakout; abort if weekly close <$60"
+        "scenario": "$65-69",
+        "weight_pct": 18,
+        "note": "F2 add"
+      },
+      {
+        "scenario": "$59-65",
+        "weight_pct": 12,
+        "note": "intermediate"
+      },
+      {
+        "scenario": "$55-59",
+        "weight_pct": 8,
+        "note": "cascade tail"
+      },
+      {
+        "scenario": "$52-55",
+        "weight_pct": 6,
+        "note": "V-18 reserve"
       }
     ],
-    "bullish_mass_a_plus_b": 63,
+    "upper_half_69plus_pct": 56,
     "last_synthesis_doc": "260510_XAG_MULTI-AGENT-SYNTHESIS_v3",
     "last_chart_read_doc": "260511_XAG_CHART-READ-TRANSCRIPT",
     "last_chart_read_date": "2026-05-11",
@@ -354,245 +364,157 @@
       "Trim ladder timing compressed from weeks-to-months \u2192 days-to-weeks per 260511 chart-read"
     ]
   },
-  "news": {
-    "last_updated": "2026-05-17",
-    "curator": "operator + Claude",
-    "headlines": [
-      {
-        "date": "2026-05-16",
-        "weight": "high",
-        "source": "COT",
-        "headline": "MM net +15.76K \u2014 FROTH threshold breached (first of cycle). G8 \u2192 'rebuild accelerating'."
-      },
-      {
-        "date": "2026-05-14",
-        "weight": "high",
-        "source": "India",
-        "headline": "Silver duty hike 6%\u219215% absorbed into SBees NAV; physical premium sticky."
-      },
-      {
-        "date": "2026-05-13",
-        "weight": "high",
-        "source": "Geo",
-        "headline": "Brent $107.77 (+3.4%) on Iran tightening despite Trump-Xi Hormuz commitment."
-      },
-      {
-        "date": "2026-05-13",
-        "weight": "med",
-        "source": "Fed",
-        "headline": "Warsh confirmed as next Fed Chair (54-45 vote). First FOMC June 16-17."
-      },
-      {
-        "date": "2026-05-14",
-        "weight": "med",
-        "source": "Geo",
-        "headline": "Trump-Xi Beijing Day 1: 3-year strategic-stability framework + Hormuz commitment."
-      }
-    ]
-  },
-  "catalysts": [
+  "news": [
     {
-      "date": "2026-05-20",
-      "weight": "med",
-      "kind": "data",
-      "summary": "T-1 pre-FOMC Apr Minutes \u2014 pre-event trim window opens"
-    },
-    {
-      "date": "2026-05-21",
+      "date": "2026-05-30",
       "weight": "high",
-      "kind": "fed",
-      "summary": "FOMC April Minutes release (3:30pm ET) \u2014 read for dot-plot drift"
-    },
-    {
-      "date": "2026-05-23",
-      "weight": "med",
-      "kind": "cot",
-      "summary": "Weekly COT pull (Sat 1am IST) \u2014 watch FROTH continuation vs fade"
+      "source": "Geo",
+      "headline": "Brent ~$92 (\u221217% MTD) \u2014 US\u2013Iran ceasefire / Hormuz easing crushed the oil bid; ceasefire UNSIGNED."
     },
     {
       "date": "2026-05-30",
-      "weight": "med",
-      "kind": "data",
-      "summary": "US PCE deflator (core) \u2014 Fed-pivot pricing input"
+      "weight": "high",
+      "source": "Flow",
+      "headline": "Silver COT MM-net ~+10.1K (26-May survey) \u2014 washed-out deep base; 12-May froth pulse fully closed."
     },
     {
-      "date": "2026-06-06",
+      "date": "2026-05-31",
+      "weight": "high",
+      "source": "Macro",
+      "headline": "Regime re-graded YELLOW (from YELLOW_TRANSITIONING_RED): USDINR 94.99, TNX 4.45% at-gate, DXY 98.9, VIX 15.3."
+    },
+    {
+      "date": "2026-05-29",
+      "weight": "med",
+      "source": "Fed",
+      "headline": "April PCE broadly in-line \u2014 first non-hot inflation print in weeks; gold firm ~$4,543."
+    }
+  ],
+  "catalysts": [
+    {
+      "date": "2026-06-05",
+      "weight": "high",
+      "kind": "data",
+      "summary": "US NFP / Employment Situation (first Friday) \u2014 rates + USD; hot read re-arms TNX off the 4.45% gate"
+    },
+    {
+      "date": "2026-06-05",
       "weight": "high",
       "kind": "policy",
-      "summary": "RBI MPC outcome \u2014 INR / duty-policy second-order"
+      "summary": "RBI MPC resolution + Governor address \u2014 INR / reserves / duty-policy read"
+    },
+    {
+      "date": "2026-06-11",
+      "weight": "high",
+      "kind": "data",
+      "summary": "US May CPI \u2014 vs the 3.9% auto-RED ceiling"
     },
     {
       "date": "2026-06-16",
       "weight": "high",
       "kind": "fed",
-      "summary": "FOMC June 16-17 (first under Warsh) \u2014 dot plot + presser; trim discipline binding"
+      "summary": "FOMC Jun 16-17 (first under Warsh) \u2014 dot plot + presser; T3/F2 directional decision"
     },
     {
       "date": "2026-06-30",
-      "weight": "high",
-      "kind": "f98",
-      "summary": "F98 redeployment decision deadline (per flag target_date)"
+      "weight": "low",
+      "kind": "geo",
+      "summary": "Ongoing: US\u2013Iran ceasefire UNSIGNED \u2014 reversal re-spikes oil + re-arms the \u00a710.1 cascade"
     }
   ],
   "sr_levels": {
-    "current_xagusd_estimate": 80.29,
-    "last_updated": "2026-05-11",
+    "current_xagusd_estimate": 75.62,
+    "last_updated": "2026-05-31",
+    "thesis": "F109 ACCUMULATE \u2014 adds on dips into the ladder zones; trims only far higher (>$90) post-fill",
     "resistance": [
+      {
+        "price": 78.0,
+        "label": "F0.5 / range top",
+        "note": "Upper edge of the $72-78 accumulation range",
+        "distance_pct": 2.800658978583196,
+        "distance_label": "+2.8%"
+      },
       {
         "price": 82.0,
         "label": "Daily BB upper",
-        "note": "Immediate resistance \u2014 price at upper band; squeeze breakout target",
-        "distance_pct": 8.907866601144852,
-        "distance_label": "+8.9%"
+        "note": "Squeeze breakout target; reduces add-conviction above",
+        "distance_pct": 8.072487644151565,
+        "distance_label": "+8.1%"
       },
       {
         "price": 84.0,
         "label": "No-floor-hit threshold",
-        "note": "V-13 P=18% \u2014 break above invalidates floor framework",
-        "distance_pct": 11.564156030441067,
-        "distance_label": "+11.6%"
+        "note": "7-bucket $78+ (12%) \u2014 break invalidates the dip thesis",
+        "distance_pct": 10.70840197693575,
+        "distance_label": "+10.7%"
       },
       {
         "price": 89.17,
         "label": "5/14 intraday high",
-        "note": "Recent rejection \u2014 sellers showed up at 2-month-high zone",
-        "distance_pct": 18.430664205171787,
-        "distance_label": "+18.4%"
-      },
-      {
-        "price": 93.0,
-        "label": "F98 Tier 1 trim trigger",
-        "note": "Round-number floor; intraday tag executes trim",
-        "distance_pct": 23.51745846227404,
-        "distance_label": "+23.5%"
-      },
-      {
-        "price": 95.0,
-        "label": "F98 Tier 2 trim trigger",
-        "note": "Wave-top zone; +20k units sold same rally",
-        "distance_pct": 26.173747891570255,
-        "distance_label": "+26.2%"
+        "note": "Prior rejection; trim consideration only post-ladder-fill",
+        "distance_pct": 17.52224052718287,
+        "distance_label": "+17.5%"
       }
     ],
     "support": [
       {
-        "price": 76.81,
-        "label": "76d EMA",
-        "note": "Daily 76-EMA \u2014 first dynamic support; held through Apr-May",
-        "distance_pct": 2.014795532121174,
-        "distance_label": "+2.0%"
+        "price": 75.0,
+        "label": "ACC \u2014 current accumulation",
+        "note": "Re-entry @ ~\u20b9252.96; ~\u20b978.6L remaining to deploy here",
+        "distance_pct": -1.1532125205930808,
+        "distance_label": "-1.2%"
       },
       {
-        "price": 73.5,
-        "label": "F98 R1 add trigger",
-        "note": "76 EMA breach zone; \u20b950L deploy",
-        "distance_pct": -2.381363473364066,
-        "distance_label": "-2.4%"
+        "price": 72.0,
+        "label": "F1 upper / V-13 floor",
+        "note": "Top of $69-72 V-13 daily-floor (24% \u2014 largest add slug \u20b91.37Cr)",
+        "distance_pct": -5.107084019769357,
+        "distance_label": "-5.1%"
       },
       {
-        "price": 71.02,
-        "label": "Daily BB lower / F1",
-        "note": "V-13 F1 zone P=35% \u2014 highest-prob support",
-        "distance_pct": -5.675162365691379,
-        "distance_label": "-5.7%"
+        "price": 69.0,
+        "label": "F1 lower",
+        "note": "Base of the F1 tranche zone",
+        "distance_pct": -9.060955518945635,
+        "distance_label": "-9.1%"
       },
       {
-        "price": 67.5,
-        "label": "F98 R2 / F2 zone",
-        "note": "V-13 F2 P=18%; \u20b917L final deploy",
-        "distance_pct": -10.350231761252713,
-        "distance_label": "-10.4%"
+        "price": 67.87,
+        "label": "F2 / abort-suspend (V-13)",
+        "note": "Secular trendline; daily close below suspends per \u00a75.3",
+        "distance_pct": -10.550247116968693,
+        "distance_label": "-10.6%"
       },
       {
-        "price": 64.14,
-        "label": "Weekly BB lower",
-        "note": "V-13 F2 lower; secular trendline",
-        "distance_pct": -14.812798002470357,
-        "distance_label": "-14.8%"
+        "price": 65.0,
+        "label": "F2 lower",
+        "note": "\u20b91.02Cr F2 tranche zone",
+        "distance_pct": -14.332784184514002,
+        "distance_label": "-14.3%"
       },
       {
-        "price": 60.0,
-        "label": "\ud83d\uded1 ABORT \u2014 V-14 velocity",
-        "note": "Capital preservation > opportunity",
-        "distance_pct": -20.31131712111352,
-        "distance_label": "-20.3%"
+        "price": 52.0,
+        "label": "\ud83d\uded1 V-18 hard stop",
+        "note": "Unconditional abort-all on daily close",
+        "distance_pct": -31.466227347611202,
+        "distance_label": "-31.5%"
       }
     ]
   },
   "trim_ladder": [
     {
-      "tier": "\ud83d\udfe2 Tier 1",
-      "trigger": "XAG \u2265 $93 (intraday tag)",
-      "action": "SELL 40,000 SBees units (40% of book)",
-      "cash_freed_inr": 10400000,
-      "discipline": "FLOOR \u2014 even if XAG rolls before $95, Tier 1 still executes",
-      "distance_pct": 23.51745846227404,
-      "distance_label": "+23.5% from 75.293"
-    },
-    {
-      "tier": "\ud83d\udfe2 Tier 2",
-      "trigger": "XAG \u2265 $95 (same rally)",
-      "action": "SELL additional 20,000 units (60% cumulative)",
-      "cash_freed_inr": 5500000,
-      "discipline": "If XAG pulls back before $95, Tier 2 forfeited (don't chase)",
-      "distance_pct": 26.173747891570255,
-      "distance_label": "+26.2% from 75.293"
-    },
-    {
-      "tier": "\u23f1 Time-trim",
-      "trigger": "$87-92 for 3+ weeks no break",
-      "action": "Tier 1 at prevailing price ($89-91 typical)",
-      "cash_freed_inr": 9500000,
-      "discipline": "'Good enough' not 'exact level'",
-      "distance_pct": 15.54859017438539,
-      "distance_label": "+15.5% from 75.293"
-    },
-    {
-      "tier": "\ud83d\udcc5 Pre-FOMC",
-      "trigger": "XAG \u2265 $90 by 2026-05-20 (T-1 of FOMC Apr Minutes 5/21)",
-      "action": "Tier 1 BEFORE 5/21",
-      "cash_freed_inr": 10400000,
-      "discipline": "Locks pre-event; ~20% chance of hawkish surprise",
-      "distance_pct": 19.533024318329716,
-      "distance_label": "+19.5% from 75.293"
+      "tier": "\u23f8 ACCUMULATION \u2014 NO TRIM",
+      "trigger": "n/a (book 14,000u, far below \u20b95Cr target)",
+      "action": "No trim until the \u20b95Cr ladder is substantially filled AND XAG > $90",
+      "cash_freed_inr": 0,
+      "discipline": "260531: F98-era trim ladder (sell 40k/20k of a ~100k book) RETIRED"
     }
   ],
   "add_ladder": {
-    "dry_powder_inr": 11700000,
-    "rungs": [
-      {
-        "rung": "\ud83d\udd35 R1",
-        "trigger": "XAGUSD intraday $73-74 (76 EMA breach)",
-        "deploy_inr": 5000000,
-        "units_approx": 25000,
-        "sbees_avg_approx": 220,
-        "conviction": "medium \u2014 Scenario C path",
-        "distance_pct": -3.04543583068812,
-        "distance_label": "-3.0% from 75.293"
-      },
-      {
-        "rung": "\ud83d\udd35 R2",
-        "trigger": "XAG weekly close >$70 with intraday low $71 tested",
-        "deploy_inr": 5000000,
-        "units_approx": 25000,
-        "sbees_avg_approx": 213,
-        "conviction": "high \u2014 V-13 F1 floor (P=35%)",
-        "distance_pct": -7.029869974632444,
-        "distance_label": "-7.0% from 75.293"
-      },
-      {
-        "rung": "\ud83d\udd35 R3",
-        "trigger": "XAG weekly close $64-69 (F2 zone)",
-        "deploy_inr": 1700000,
-        "units_approx": 8000,
-        "sbees_avg_approx": 190,
-        "conviction": "very high \u2014 4th retest of Feb-6 capitulation low",
-        "distance_pct": -14.99873826252109,
-        "distance_label": "-15.0% from 75.293"
-      }
-    ],
-    "abort": "\ud83d\uded1 ABORT if XAG weekly close <$60 (V-14 velocity floor) \u2014 capital preservation > opportunity",
-    "total_capacity_inr": 11700000.0
+    "status": "SUPERSEDED 260531 \u2014 merged into deployment_plan \u20b95Cr ladder (F109-v2); old \u20b91.17Cr R1/R2/R3 retired.",
+    "dry_powder_inr": 46458560,
+    "rungs": [],
+    "total_capacity_inr": 0
   },
   "floor_framework": {
     "v_id": "V-13",
@@ -600,53 +522,53 @@
     "velocity_note": "V-14 \u2014 physical demand creates a VELOCITY floor (silver can't STAY below $60-65 long), NOT a LEVEL floor (CAN touch $55-58 in cascade). Physical responds in 2-6 weeks; paper cascades in 2-6 days.",
     "tiers": [
       {
-        "tier": "No floor hit",
-        "band_low": 84,
+        "tier": "$78+ no-add",
+        "band_low": 78,
         "band_high": null,
-        "prob_pct": 18,
-        "mechanism": "Continuation rally, breakout sustains"
+        "prob_pct": 12,
+        "mechanism": "reflation/$-down; above entry"
       },
       {
-        "tier": "F0.5",
-        "band_low": 76,
-        "band_high": 78,
-        "prob_pct": 10,
-        "mechanism": "Shallow retest of breakout"
-      },
-      {
-        "tier": "F1",
+        "tier": "$72-78",
         "band_low": 72,
-        "band_high": 75,
-        "prob_pct": 35,
-        "mechanism": "Consolidation at descending wedge upper \u2014 HIGHEST weight"
+        "band_high": 78,
+        "prob_pct": 20,
+        "mechanism": "current range \u2014 accumulate"
       },
       {
-        "tier": "F1.5",
-        "band_low": 70,
+        "tier": "F1 $69-72",
+        "band_low": 69,
         "band_high": 72,
-        "prob_pct": 8,
-        "mechanism": "G:S 72 gate + prior structural"
+        "prob_pct": 24,
+        "mechanism": "V-13 floor \u2014 highest weight"
       },
       {
-        "tier": "F2",
-        "band_low": 67,
-        "band_high": 70,
+        "tier": "F2 $65-69",
+        "band_low": 65,
+        "band_high": 69,
         "prob_pct": 18,
-        "mechanism": "Secular trendline ($67.87) + physical procurement zone"
+        "mechanism": "secular trendline + physical"
       },
       {
-        "tier": "F3",
-        "band_low": 60,
-        "band_high": 67,
-        "prob_pct": 7,
-        "mechanism": "Deep retest / 0.618 primary Fib"
+        "tier": "$59-65",
+        "band_low": 59,
+        "band_high": 65,
+        "prob_pct": 12,
+        "mechanism": "intermediate cascade"
       },
       {
-        "tier": "F4",
+        "tier": "$55-59",
+        "band_low": 55,
+        "band_high": 59,
+        "prob_pct": 8,
+        "mechanism": "cascade tail"
+      },
+      {
+        "tier": "V-18 $52-55",
         "band_low": 52,
-        "band_high": 60,
-        "prob_pct": 4,
-        "mechanism": "Tail-risk: credit event + DXY breakout + margin cascade"
+        "band_high": 55,
+        "prob_pct": 6,
+        "mechanism": "tail; V-18 hard stop"
       }
     ]
   },
@@ -685,6 +607,13 @@
       "title": "FROTH threshold breached",
       "verdict": "\ud83d\udfe1 BULL-BUT-COMPRESSING",
       "summary": "MM net +15.76K, W/W +4.92K \u2014 largest single-week move in 6-print sequence. OI +6.87K = first material expansion. Asymmetric capitulation edge COMPRESSED; size-up window closing."
+    },
+    {
+      "date": "2026-05-31",
+      "version": "v7-260531",
+      "title": "Regime re-grade + F109 re-entry live + \u20b95Cr ladder",
+      "verdict": "\ud83d\udfe2 BASE-CONSTRUCTIVE",
+      "summary": "Regime YELLOW (from RED-transitioning); oil \u221217%, COT washed-out, V-13 reaffirmed; 7-bucket modal up to $69-78. Re-entry LIVE 14,000u @ ~\u20b9252.96 (\u20b935.4L). Ladder re-sized to \u20b95Cr; ~\u20b94.65Cr dry. Under-deployment = live posture."
     }
   ],
   "global_inventory": {
@@ -736,34 +665,8 @@
     ]
   },
   "f98_redeployment": {
-    "flag_id": "F260510-F98",
-    "status": "open-urgent",
-    "target_date": "2026-05-18",
-    "trim_trigger_xagusd": {
-      "low": 93,
-      "high": 95
-    },
-    "current_xagusd_estimate": 80.29,
-    "trim_pct_planned": {
-      "low": 40,
-      "high": 60
-    },
-    "freed_cash_inr": {
-      "low": 14000000,
-      "high": 16000000
-    },
-    "redeployment_buckets": {
-      "indian_equities_inr": 5000000,
-      "cash_hold_for_silver_dip_inr": 5000000,
-      "indian_fixed_income_inr": 4000000
-    },
-    "operator_decisions_pending": [
-      "Confirm 50/50/40 allocation split",
-      "Pick 3-5 specific equity tickers (Capital Goods T&D / Reserve list ex-IT)",
-      "Pick cash-hold instrument (SBI Magnum Liquid / HDFC Cash / direct money-market)",
-      "Pick fixed-income instrument (PSU bonds / corporate AAA / target-maturity fund)",
-      "Pick execution timing (lump-sum at trim event vs staggered 4-6wk)"
-    ]
+    "status": "CLOSED \u2014 superseded by F109 (260531). Historical pointer only.",
+    "superseded_by": "F260518-F109"
   },
   "deployment_plan": {
     "version": "F109-v1.1",
@@ -772,7 +675,7 @@
     "authored": "2026-05-18",
     "approved": "2026-05-19",
     "status": "active",
-    "envelope_inr": 12500000,
+    "envelope_inr": 50000000,
     "envelope_basis": "25% of active book through Jun FOMC; extends to 35%-of-active (17.5L) post-Warsh-dovish-signal",
     "total_book_inr": 100000000,
     "reserve_split": {
@@ -799,77 +702,57 @@
     },
     "tranches": [
       {
-        "id": "T1",
-        "label": "starter (gate-blocked)",
-        "size_inr": 0,
-        "pct_envelope": 0,
-        "fire_condition": "section_5.2 strict - fires only when at least one of [TNX<4.45%, USDINR weekly-close<96, Brent<$100] clears",
-        "cumulative_pct_after": 0,
-        "invalidation": "(no position; nothing to invalidate)",
-        "expected_fire": "TBD",
-        "status": "pending"
+        "id": "ACC",
+        "zone_xagusd": "72-78",
+        "size_inr": 11400000,
+        "deployed_inr": 3541440,
+        "remaining_inr": 7858560,
+        "prob_pct": 20,
+        "status": "in-progress",
+        "label": "current-zone accumulation (F109 re-entry)"
       },
       {
-        "id": "T1.5",
-        "label": "gate-clear optionality starter",
-        "size_inr": 1000000,
-        "pct_envelope": 8,
-        "fire_condition": "Brent rolls <$100 OR TNX rolls <4.45% OR USDINR Fri-close <96",
-        "cumulative_pct_after": 8,
-        "invalidation": "XAG daily close > $82",
-        "expected_fire": "early-mid Jun 2026",
-        "operator_pre_authorized": true,
-        "status": "armed"
+        "id": "F1",
+        "zone_xagusd": "69-72",
+        "size_inr": 13700000,
+        "prob_pct": 24,
+        "status": "armed",
+        "label": "V-13 daily-floor \u2014 largest slug"
       },
       {
-        "id": "T2",
-        "label": "main starter - V-13 daily floor",
-        "size_inr": 3125000,
-        "pct_envelope": 25,
-        "fire_condition": "XAG in $69-72 zone + COT MM <=0 + Brent <$110",
-        "cumulative_pct_after": 33,
-        "invalidation": "XAG daily close > $80 (thesis-broken-up) OR daily close <$67.87 (F2 breach; suspend + trim to T3)",
-        "expected_fire": "Jun 16-17 FOMC plus/minus 1 week",
-        "operator_pre_authorized": false,
-        "status": "armed"
+        "id": "F2",
+        "zone_xagusd": "65-69",
+        "size_inr": 10200000,
+        "prob_pct": 18,
+        "status": "armed",
+        "label": "secular trendline / physical zone"
       },
       {
-        "id": "T3",
-        "label": "modal slug - quadruple-conditional asymmetric",
-        "size_inr": 5000000,
-        "pct_envelope": 40,
-        "fire_condition": "XAG in $65-69 zone + COT MM negative (deep capitulation) + Warsh Jun-17 dovish-signal + Brent rolling <$100",
-        "cumulative_pct_after": 73,
-        "invalidation": "XAG daily close < $58 (T3-specific stop; V-18 $52 still binding portfolio-level)",
-        "expected_fire": "late Jun - mid Jul 2026",
-        "operator_pre_authorized": false,
-        "status": "armed"
+        "id": "INT",
+        "zone_xagusd": "59-65",
+        "size_inr": 6800000,
+        "prob_pct": 12,
+        "status": "armed",
+        "label": "intermediate cascade"
       },
       {
-        "id": "T4",
-        "label": "cascade-tail entry",
-        "size_inr": 2500000,
-        "pct_envelope": 20,
-        "fire_condition": "XAG in $55-59 cascade zone + V-18 $52 NOT triggered + at least 1 gate clearing post-Warsh",
-        "cumulative_pct_after": 93,
-        "invalidation": "XAG daily close < $52 (V-18 abort-all)",
-        "expected_fire": "Q3 2026 conditional",
-        "operator_pre_authorized": false,
-        "status": "armed"
+        "id": "TAIL",
+        "zone_xagusd": "55-59",
+        "size_inr": 4500000,
+        "prob_pct": 8,
+        "status": "armed",
+        "label": "cascade tail"
       },
       {
-        "id": "HOLD_residual",
-        "label": "post-V-18 re-engagement reserve",
-        "size_inr": 875000,
-        "pct_envelope": 7,
-        "fire_condition": "Post-V-18-retest IF COT MM < -30K AND GSR > 75 (double-confirmation washout)",
-        "cumulative_pct_after": 100,
-        "invalidation": "Per re-engagement decision frame",
-        "expected_fire": "Q3-Q4 2026 conditional",
-        "operator_pre_authorized": false,
-        "status": "reserved"
+        "id": "V18",
+        "zone_xagusd": "52-55",
+        "size_inr": 3400000,
+        "prob_pct": 6,
+        "status": "reserved",
+        "label": "V-18 retest reserve"
       }
     ],
+    "ladder_total_inr": 50000000,
     "hard_stops": {
       "portfolio_level_xagusd": 52,
       "portfolio_derivation": "7-ATR + 1.5-sigma war-vol war-regime (section_10.2) + $50 prior consolidation top (SILVER_2026-05-18_16-02-32.png) + cost-curve high-$20s ultimate backstop",
