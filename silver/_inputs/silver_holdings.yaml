@@ -115,13 +115,15 @@ forecast:
   composite_source: "260510 multi-agent synthesis v3 + 260511 chart-read tilt (V-15 ±3pp)"
   consensus_state: "DIVERGENT-LEANING bull (4 bull / 5 neutral / 0 bear non-chart agents)"
   v15_binding: "Charts contribute tiebreaker only; max ±3pp under LEANING consensus"
-  probability_mass:
-    - { scenario: "A — Continuation rally",      weight_pct: 30, note: "Break/hold >$84 → $93+ within 4-8w" }
-    - { scenario: "B — Chop $76-86 (modal)",     weight_pct: 33, note: "Range-bound 4-12w; trim ladder fires on time-decay" }
-    - { scenario: "C — Shallow retest $73-78",   weight_pct: 20, note: "F0.5/F1 zone test; R1/R2 adds fire" }
-    - { scenario: "D — Deeper retest $67-72",    weight_pct: 13, note: "F2 zone; R3 adds fire" }
-    - { scenario: "E — Tail $60-67 cascade",     weight_pct:  4, note: "Credit event + DXY breakout; abort if weekly close <$60" }
-  bullish_mass_a_plus_b: 63
+  probability_mass:   # = 260531 7-bucket
+    - { scenario: "$78+",   weight_pct: 12, note: "above-entry; no add" }
+    - { scenario: "$72-78", weight_pct: 20, note: "current; accumulate" }
+    - { scenario: "$69-72", weight_pct: 24, note: "F1 V-13 floor — largest add" }
+    - { scenario: "$65-69", weight_pct: 18, note: "F2 add" }
+    - { scenario: "$59-65", weight_pct: 12, note: "intermediate" }
+    - { scenario: "$55-59", weight_pct: 8,  note: "cascade tail" }
+    - { scenario: "$52-55", weight_pct: 6,  note: "V-18 reserve" }
+  upper_half_69plus_pct: 56
   last_synthesis_doc: "260510_XAG_MULTI-AGENT-SYNTHESIS_v3"
   last_chart_read_doc: "260511_XAG_CHART-READ-TRANSCRIPT"
   last_chart_read_date: "2026-05-11"
@@ -190,52 +192,14 @@ sr_levels:
 # 7. TRIM LADDER
 # ─────────────────────────────────────────────────────────────────────────────
 trim_ladder:
-  - tier: "🟢 Tier 1"
-    trigger: "XAG ≥ $93 (intraday tag)"
-    action: "SELL 40,000 SBees units (40% of book)"
-    cash_freed_inr: 10400000
-    discipline: "FLOOR — even if XAG rolls before $95, Tier 1 still executes"
-  - tier: "🟢 Tier 2"
-    trigger: "XAG ≥ $95 (same rally)"
-    action: "SELL additional 20,000 units (60% cumulative)"
-    cash_freed_inr: 5500000
-    discipline: "If XAG pulls back before $95, Tier 2 forfeited (don't chase)"
-  - tier: "⏱ Time-trim"
-    trigger: "$87-92 for 3+ weeks no break"
-    action: "Tier 1 at prevailing price ($89-91 typical)"
-    cash_freed_inr: 9500000
-    discipline: "'Good enough' not 'exact level'"
-  - tier: "📅 Pre-FOMC"
-    trigger: "XAG ≥ $90 by 2026-05-20 (T-1 of FOMC Apr Minutes 5/21)"
-    action: "Tier 1 BEFORE 5/21"
-    cash_freed_inr: 10400000
-    discipline: "Locks pre-event; ~20% chance of hawkish surprise"
+  phase: "ACCUMULATION — NO TRIM (book 14,000u, far below ₹5Cr target)."
+  retired_note: "260531: F98-era trim ladder retired."
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 8. ADD LADDER
 # ─────────────────────────────────────────────────────────────────────────────
 add_ladder:
-  dry_powder_inr: 11700000
-  rungs:
-    - rung: "🔵 R1"
-      trigger: "XAGUSD intraday $73-74 (76 EMA breach)"
-      deploy_inr: 5000000
-      units_approx: 25000
-      sbees_avg_approx: 220
-      conviction: "medium — Scenario C path"
-    - rung: "🔵 R2"
-      trigger: "XAG weekly close >$70 with intraday low $71 tested"
-      deploy_inr: 5000000
-      units_approx: 25000
-      sbees_avg_approx: 213
-      conviction: "high — V-13 F1 floor (P=35%)"
-    - rung: "🔵 R3"
-      trigger: "XAG weekly close $64-69 (F2 zone)"
-      deploy_inr: 1700000
-      units_approx: 8000
-      sbees_avg_approx: 190
-      conviction: "very high — 4th retest of Feb-6 capitulation low"
-  abort: "🛑 ABORT if XAG weekly close <$60 (V-14 velocity floor) — capital preservation > opportunity"
+  status: "SUPERSEDED 260531 — merged into deployment_plan ₹5Cr ladder."
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 9. FLOOR FRAMEWORK  (V-13)
@@ -244,14 +208,14 @@ floor_framework:
   v_id: "V-13"
   status: "settled (5-agent consensus)"
   velocity_note: "V-14 — physical demand creates a VELOCITY floor (silver can't STAY below $60-65 long), NOT a LEVEL floor (CAN touch $55-58 in cascade). Physical responds in 2-6 weeks; paper cascades in 2-6 days."
-  tiers:
-    - { tier: "No floor hit", band_low: 84, band_high: null, prob_pct: 18, mechanism: "Continuation rally, breakout sustains" }
-    - { tier: "F0.5",         band_low: 76, band_high: 78,   prob_pct: 10, mechanism: "Shallow retest of breakout" }
-    - { tier: "F1",           band_low: 72, band_high: 75,   prob_pct: 35, mechanism: "Consolidation at descending wedge upper — HIGHEST weight" }
-    - { tier: "F1.5",         band_low: 70, band_high: 72,   prob_pct: 8,  mechanism: "G:S 72 gate + prior structural" }
-    - { tier: "F2",           band_low: 67, band_high: 70,   prob_pct: 18, mechanism: "Secular trendline ($67.87) + physical procurement zone" }
-    - { tier: "F3",           band_low: 60, band_high: 67,   prob_pct:  7, mechanism: "Deep retest / 0.618 primary Fib" }
-    - { tier: "F4",           band_low: 52, band_high: 60,   prob_pct:  4, mechanism: "Tail-risk: credit event + DXY breakout + margin cascade" }
+  tiers:   # aligned to 260531 7-bucket
+    - { tier: "$78+ no-add", band_low: 78, band_high: null, prob_pct: 12, mechanism: "reflation/$-down; above entry" }
+    - { tier: "$72-78",      band_low: 72, band_high: 78,   prob_pct: 20, mechanism: "current range — accumulate" }
+    - { tier: "F1 $69-72",   band_low: 69, band_high: 72,   prob_pct: 24, mechanism: "V-13 floor — highest weight" }
+    - { tier: "F2 $65-69",   band_low: 65, band_high: 69,   prob_pct: 18, mechanism: "secular trendline + physical" }
+    - { tier: "$59-65",      band_low: 59, band_high: 65,   prob_pct: 12, mechanism: "intermediate cascade" }
+    - { tier: "$55-59",      band_low: 55, band_high: 59,   prob_pct: 8,  mechanism: "cascade tail" }
+    - { tier: "V-18 $52-55", band_low: 52, band_high: 55,   prob_pct: 6,  mechanism: "tail; V-18 hard stop" }
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 10. STRATEGY OUTLOOK TIMELINE
@@ -281,23 +245,8 @@ global_inventory:
 # 12. F98 — pulled-forward redeployment context
 # ─────────────────────────────────────────────────────────────────────────────
 f98_redeployment:
-  flag_id: "F260510-F98"
-  status: "open-urgent"
-  target_date: "2026-05-18"
-  trim_trigger_xagusd: { low: 93, high: 95 }
-  current_xagusd_estimate: 80.29
-  trim_pct_planned: { low: 40, high: 60 }
-  freed_cash_inr: { low: 14000000, high: 16000000 }
-  redeployment_buckets:
-    indian_equities_inr: 5000000
-    cash_hold_for_silver_dip_inr: 5000000
-    indian_fixed_income_inr: 4000000
-  operator_decisions_pending:
-    - "Confirm 50/50/40 allocation split"
-    - "Pick 3-5 specific equity tickers (Capital Goods T&D / Reserve list ex-IT)"
-    - "Pick cash-hold instrument (SBI Magnum Liquid / HDFC Cash / direct money-market)"
-    - "Pick fixed-income instrument (PSU bonds / corporate AAA / target-maturity fund)"
-    - "Pick execution timing (lump-sum at trim event vs staggered 4-6wk)"
+  status: "CLOSED — superseded by F109 (260531). Historical pointer only."
+  superseded_by: "F260518-F109"
 
 # -----------------------------------------------------------------------------
 # 13. F109 - silver re-entry deployment plan (operator-approved 2026-05-19)
@@ -311,7 +260,7 @@ deployment_plan:
   authored: 2026-05-18
   approved: 2026-05-19
   status: active
-  envelope_inr: 12500000  # 1.25Cr = 25% of 5Cr active = 12.5% of 10Cr total
+  envelope_inr: 50000000  # ₹5Cr silver-specific (operator 260531)
   envelope_basis: "25% of active book through Jun FOMC; extends to 35%-of-active (17.5L) post-Warsh-dovish-signal"
   total_book_inr: 100000000  # 10Cr operator-confirmed 2026-05-19
   reserve_split:
@@ -325,66 +274,14 @@ deployment_plan:
     macro_state: "01_DAILY/2605/260518/260518_XAG_MACRO-STATE_P2.md"
     agent_synthesis: "01_DAILY/2605/260518/260518_XAG_MULTI-AGENT-SYNTHESIS.md"
     open_questions: "OPEN_QUESTIONS_F109.md"
-  tranches:
-    - id: T1
-      label: "starter (gate-blocked)"
-      size_inr: 0
-      pct_envelope: 0
-      fire_condition: "section_5.2 strict - fires only when at least one of [TNX<4.45%, USDINR weekly-close<96, Brent<$100] clears"
-      cumulative_pct_after: 0
-      invalidation: "(no position; nothing to invalidate)"
-      expected_fire: "TBD"
-      status: pending
-    - id: T1.5
-      label: "gate-clear optionality starter"
-      size_inr: 1000000
-      pct_envelope: 8
-      fire_condition: "Brent rolls <$100 OR TNX rolls <4.45% OR USDINR Fri-close <96"
-      cumulative_pct_after: 8
-      invalidation: "XAG daily close > $82"
-      expected_fire: "early-mid Jun 2026"
-      operator_pre_authorized: true   # auto-fire on first gate-clear; no further confirmation needed
-      status: armed
-    - id: T2
-      label: "main starter - V-13 daily floor"
-      size_inr: 3125000
-      pct_envelope: 25
-      fire_condition: "XAG in $69-72 zone + COT MM <=0 + Brent <$110"
-      cumulative_pct_after: 33
-      invalidation: "XAG daily close > $80 (thesis-broken-up) OR daily close <$67.87 (F2 breach; suspend + trim to T3)"
-      expected_fire: "Jun 16-17 FOMC plus/minus 1 week"
-      operator_pre_authorized: false  # requires operator confirmation at fire-watch
-      status: armed
-    - id: T3
-      label: "modal slug - quadruple-conditional asymmetric"
-      size_inr: 5000000
-      pct_envelope: 40
-      fire_condition: "XAG in $65-69 zone + COT MM negative (deep capitulation) + Warsh Jun-17 dovish-signal + Brent rolling <$100"
-      cumulative_pct_after: 73
-      invalidation: "XAG daily close < $58 (T3-specific stop; V-18 $52 still binding portfolio-level)"
-      expected_fire: "late Jun - mid Jul 2026"
-      operator_pre_authorized: false
-      status: armed
-    - id: T4
-      label: "cascade-tail entry"
-      size_inr: 2500000
-      pct_envelope: 20
-      fire_condition: "XAG in $55-59 cascade zone + V-18 $52 NOT triggered + at least 1 gate clearing post-Warsh"
-      cumulative_pct_after: 93
-      invalidation: "XAG daily close < $52 (V-18 abort-all)"
-      expected_fire: "Q3 2026 conditional"
-      operator_pre_authorized: false
-      status: armed
-    - id: HOLD_residual
-      label: "post-V-18 re-engagement reserve"
-      size_inr: 875000
-      pct_envelope: 7
-      fire_condition: "Post-V-18-retest IF COT MM < -30K AND GSR > 75 (double-confirmation washout)"
-      cumulative_pct_after: 100
-      invalidation: "Per re-engagement decision frame"
-      expected_fire: "Q3-Q4 2026 conditional"
-      operator_pre_authorized: false
-      status: reserved
+  tranches:   # ₹5Cr ladder sized by 260531 7-bucket probabilities
+    - { id: ACC,  zone_xagusd: "72-78", size_inr: 11400000, deployed_inr: 3541440, remaining_inr: 7858560, prob_pct: 20, status: in-progress, label: "current-zone accumulation (F109 re-entry)" }
+    - { id: F1,   zone_xagusd: "69-72", size_inr: 13700000, prob_pct: 24, status: armed, label: "V-13 daily-floor — largest slug" }
+    - { id: F2,   zone_xagusd: "65-69", size_inr: 10200000, prob_pct: 18, status: armed, label: "secular trendline / physical zone" }
+    - { id: INT,  zone_xagusd: "59-65", size_inr: 6800000,  prob_pct: 12, status: armed, label: "intermediate cascade" }
+    - { id: TAIL, zone_xagusd: "55-59", size_inr: 4500000,  prob_pct: 8,  status: armed, label: "cascade tail" }
+    - { id: V18,  zone_xagusd: "52-55", size_inr: 3400000,  prob_pct: 6,  status: reserved, label: "V-18 retest reserve" }
+  ladder_total_inr: 50000000
   hard_stops:
     portfolio_level_xagusd: 52   # V-18 hard stop on daily close
     portfolio_derivation: "7-ATR + 1.5-sigma war-vol war-regime (section_10.2) + $50 prior consolidation top (SILVER_2026-05-18_16-02-32.png) + cost-curve high-$20s ultimate backstop"
