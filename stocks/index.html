@@ -308,6 +308,16 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 .tvl{ color:inherit; text-decoration:none; border-bottom:1px dotted rgba(255,255,255,0.28); }
 .tvl:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 @media(max-width:1100px){ .bento.s1-top{ grid-template-columns:1fr!important; } .bubble-wrap{ height:340px; } }
+/* ── 260601 v2.6: day-trade pager + radial rundown ── */
+.dt-pager{ display:flex; align-items:center; gap:5px; font-size:9px; color:var(--ink-mute); font-family:var(--mono); }
+.dt-pager button{ font-family:inherit; font-size:10px; padding:0 6px; border:1px solid var(--border); background:transparent; color:var(--ink-soft); cursor:pointer; border-radius:4px; }
+.dt-pager button:hover{ color:var(--accent); border-color:var(--accent); }
+.rg-svg{ width:100%; height:330px; display:block; }
+.rg-ll{ font-size:2.6px; fill:var(--ink-soft); font-family:var(--mono); letter-spacing:0.03em; font-weight:700; }
+.rg-svg circle{ cursor:pointer; transition:fill-opacity .1s; }
+.rg-svg circle:hover{ fill-opacity:1!important; stroke:#e8eaf2!important; stroke-width:0.5!important; }
+.rg-foot{ margin-top:5px; font-size:8.5px; color:var(--ink-faint); line-height:1.4; }
+@media(max-width:1100px){ .rg-svg{ height:300px; } }
 </style>
 </head>
 <body>
@@ -340,7 +350,7 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 <div class="zone-body">
   <div class="bento s1-top" style="grid-template-columns:1fr 1.18fr 0.95fr;">
     <div class="card dt-card"><div class="accent-top"></div>
-      <div class="card-title"><h2>⚡ Day-Trade Fires</h2><span class="meta">cold 2-3% intraday</span></div>
+      <div class="card-title"><h2>⚡ Day-Trade Fires</h2><span class="dt-pager" id="dt-pager"></span></div>
       <div class="dt-list" id="daytrade"></div>
       <p class="dt-foot"><b>Long-only.</b> Bearish-lean + falling-knife names excluded. Ranked by range + momentum + volume + <b>confirmation candle</b> + composite. ✓ = green confirmation candle today; ⏳ = wait. Low-beta (e.g. TCS) excluded. <b>Not advice — confirm the chart.</b></p>
     </div>
@@ -378,7 +388,7 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
     <div class="card"><div class="accent-top"></div>
       <div class="card-title"><h2>Full Watchlist Rundown</h2>
         <span style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;">
-          <span class="run-toggle" id="run-toggle"><button data-mode="group" class="active">by group</button><button data-mode="movers">by movers</button></span>
+          <span class="run-toggle" id="run-toggle"><button data-mode="radial" class="active">radial</button><button data-mode="group">group</button><button data-mode="movers">movers</button></span>
           <span class="run-toggle" id="win-toggle"><button data-win="d1" class="active">1d</button><button data-win="d3">3d</button><button data-win="d5">5d</button></span>
           <span class="meta" id="run-meta">composite + move %</span>
         </span>
@@ -614,12 +624,12 @@ function renderAll(){
   // ── §1.0 DAY-TRADE FIRES (intraday-tradeable ranking) ──
   try{
     const dt = sc.daytrade_panel || [];
-    if (!dt.length){
-      $('daytrade').innerHTML = '<div class="mut" style="font-size:10px;padding:6px;">No intraday-tradeable fires today (no names with stddev ≥1.5% scoring in).</div>';
-    } else {
-      $('daytrade').innerHTML = dt.map((r,i)=>{
-        const d1=r.d1, dc=d1==null?'mut':(d1>=0?'pos':'neg');
-        return `<div class="dt-row ${r.confirmed?'conf':''}">
+    const DT_PER = 5;
+    if (window.__dtPage == null) window.__dtPage = 0;
+    const dtPages = Math.max(1, Math.ceil(dt.length / DT_PER));
+    const dtRow = (r,i)=>{
+      const d1=r.d1, dc=d1==null?'mut':(d1>=0?'pos':'neg');
+      return `<div class="dt-row ${r.confirmed?'conf':''}">
           <div class="dt-head">
             <span class="dt-rank">${i+1}</span>
             <span class="dt-tk">${tvLink(r.ticker)}${r.held?' <span style="color:var(--accent)">★</span>':''}${r.fresh?' <span class="pos" style="font-size:7px;font-weight:700;">NEW</span>':''}</span>
@@ -633,8 +643,24 @@ function renderAll(){
             <span class="${r.vol_spike?'volon':'voloff'}"><i>vol</i>${r.vol_spike?'spike ●':'—'}</span>
           </div>
         </div>`;
-      }).join('');
+    };
+    function renderDT(){
+      const host=$('daytrade'); if(!host) return;
+      if (!dt.length){ host.innerHTML='<div class="mut" style="font-size:10px;padding:6px;">No long setups today (no bullish names cleared the filters).</div>'; }
+      else {
+        if (window.__dtPage>=dtPages) window.__dtPage=0;
+        const pg=window.__dtPage;
+        host.innerHTML = dt.slice(pg*DT_PER, pg*DT_PER+DT_PER).map((r,ii)=>dtRow(r, pg*DT_PER+ii)).join('');
+      }
+      const pgEl=$('dt-pager');
+      if(pgEl){
+        pgEl.innerHTML = (dt.length>DT_PER)
+          ? `<button data-dt="prev">◀</button><span>${(window.__dtPage||0)+1}/${dtPages}</span><button data-dt="next">▶</button>`
+          : `<span>${dt.length} fires</span>`;
+        pgEl.querySelectorAll('button').forEach(b=> b.onclick=()=>{ const p=window.__dtPage||0; window.__dtPage=(b.dataset.dt==='next')?(p+1)%dtPages:(p-1+dtPages)%dtPages; renderDT(); });
+      }
     }
+    renderDT();
   } catch(e){ __reportErr('daytrade', e); }
 
   // ── §1.a BUBBLE MAP ──
@@ -743,7 +769,7 @@ function renderAll(){
 
   // ── §1.f WATCHLIST RUNDOWN (5LC layer -> cluster; toggle group/movers + 1d/3d/5d) ──
   try{
-    if (window.__runMode == null) window.__runMode = 'group';
+    if (window.__runMode == null) window.__runMode = 'radial';
     if (window.__moveWin == null) window.__moveWin = 'd1';
     const order = sc.layer_order || [];
     const lnames = sc.layer_names || {};
@@ -759,9 +785,28 @@ function renderAll(){
       </div>`;
     };
     const cellGrid = (rows)=> `<div class="run">` + rows.map(cell).join('') + `</div>`;
+    function radialSVG(){
+      const byLayer={}; rundown.forEach(r=>{ (byLayer[r.layer]=byLayer[r.layer]||[]).push(r); });
+      const layers=(order.length?order:Object.keys(byLayer)).filter(l=>byLayer[l]&&byLayer[l].length);
+      const N=layers.length, cx=50, cy=49, R=31, sub=12; let s='';
+      layers.forEach((l,li)=>{
+        const a=(-90+li*360/N)*Math.PI/180, lx=cx+R*Math.cos(a), ly=cy+R*Math.sin(a);
+        s+=`<text x="${lx.toFixed(1)}" y="${(ly<cy?ly-8:ly+9).toFixed(1)}" class="rg-ll" text-anchor="middle">${esc(l)}</text>`;
+        byLayer[l].forEach(r=>{
+          const nx=lx+_jit(r.ticker+'x')*sub, ny=ly+_jit(r.ticker+'y')*sub;
+          const rad=(1.0+(r.composite||0)/42).toFixed(2), mv=mvOf(r);
+          const fill=r.tag==='held'?'#36c5b0':(mv==null?'#525873':(mv>=0?'#5fb87f':'#e07a6f'));
+          const op=mv==null?0.5:Math.min(1,0.45+Math.abs(mv)/8);
+          s+=`<line x1="${lx.toFixed(1)}" y1="${ly.toFixed(1)}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="rgba(255,255,255,0.05)" stroke-width="0.2"/>`;
+          s+=`<a href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(tvSymbol(r.ticker))}" target="_blank" rel="noopener"><circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="${rad}" fill="${fill}" fill-opacity="${op.toFixed(2)}" stroke="${fill}" stroke-width="0.25"><title>${esc(r.ticker)} · ${esc(r.cluster||'')} · comp ${(r.composite||0).toFixed(0)} · ${mv!=null?(mv>=0?'+':'')+mv.toFixed(1)+'%':'—'}${r.tag==='held'?' · HELD':''}</title></circle></a>`;
+        });
+      });
+      return `<svg viewBox="0 0 100 100" class="rg-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`+`<div class="rg-foot">Clustered by 5LC layer · dot size = composite · colour = ${winLbl()} move (green up / red down), teal = held · click a node → TradingView.</div>`;
+    }
     function renderRun(){
       const host=$('rundown'); if(!host) return;
-      if (window.__runMode === 'movers'){
+      if (window.__runMode === 'radial'){ host.innerHTML = radialSVG(); }
+      else if (window.__runMode === 'movers'){
         const scored = rundown.filter(r=>mvOf(r)!=null).sort((a,b)=>mvOf(b)-mvOf(a));
         const rest = rundown.filter(r=>mvOf(r)==null);
         host.innerHTML = `<div class="run-movers">` + scored.concat(rest).map(r=>{
