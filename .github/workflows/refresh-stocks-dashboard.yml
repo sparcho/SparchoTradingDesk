@@ -44,11 +44,16 @@ jobs:
       - name: Prepare dirs
         run: mkdir -p stocks/engine/_cache stocks/03_SCREENERS/LAYERS stocks/03_SCREENERS/WATCHLIST
 
-      - name: Fetch caches (historical + fundamentals + daily close)
-        run: |
-          python stocks/engine/fetch_historical.py --range 1y
-          python stocks/engine/fetch_fundamentals.py
-          python stocks/engine/fetch_daily_ohlc.py --pull close
+      # Fundamentals come from screener.in, which blocks GitHub runner IPs. They change
+      # quarterly, so we use a committed snapshot (seed_fundamentals.csv) refreshed vault-side.
+      - name: Seed fundamentals (screener.in unreachable from CI; quarterly-stable)
+        run: cp stocks/engine/seed_fundamentals.csv stocks/engine/_cache/fundamentals.csv
+
+      - name: Fetch historical closes (Yahoo)
+        run: python stocks/engine/fetch_historical.py --range 1y
+
+      - name: Fetch daily close (Yahoo)
+        run: python stocks/engine/fetch_daily_ohlc.py --pull close
 
       - name: Run screener lenses (4)
         run: python stocks/engine/screener_runner.py
