@@ -1,30 +1,33 @@
 name: Refresh stocks dashboard
 
-# Triggers:
-#   - schedule: weekday IST pre-open / post-open / post-close (server-side; laptop can be off)
-#   - workflow_dispatch: manual "Run workflow" button in Actions tab
-#   - push to stocks/generators/**: if you edit the refresh script
+# Full server-side refresh (runs in GitHub's cloud — operator's laptop can be off):
+#   fetch caches (yfinance/urllib) -> run the 4 screener lenses -> rebuild the screener
+#   section of the published aggregate (ci_screener_emit, merge-preserving the
+#   operator/intel sections) -> overlay live held+universe prices/moves (refresh_prices).
+# This makes the screener FIRES + prices/moves both cloud-fresh (closes the F117 gap).
 #
-# refresh_prices.py pulls live NSE prices for held names + the full screener universe,
-# recomputes 1d/3d/5d moves, re-ranks the Day-Trade Fires panel, and updates book/concentration.
-# Lens composites/fires come from the vault pipeline (not refreshed here) — see F117.
+# Triggers: weekday cron (pre-open + post-close IST) · manual · on engine/script edits.
 
 on:
   schedule:
     - cron: '20 3 * * 1-5'    # ~08:50 IST (pre-open) weekdays
-    - cron: '10 4 * * 1-5'    # ~09:40 IST (just after open) weekdays
     - cron: '45 10 * * 1-5'   # ~16:15 IST (post-close) weekdays
   workflow_dispatch:
   push:
     paths:
+      - 'stocks/engine/**'
       - 'stocks/generators/**'
       - '.github/workflows/refresh-stocks-dashboard.yml'
 
 permissions:
   contents: write
 
+concurrency:
+  group: stocks-refresh
+  cancel-in-progress: false
+
 jobs:
-  refresh-prices:
+  refresh:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,10 +38,25 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install yfinance
-        run: pip install yfinance
+      - name: Install deps
+        run: pip install --quiet yfinance numpy pyyaml TA-Lib
 
-      - name: Refresh NSE live prices in aggregate JSON
+      - name: Prepare dirs
+        run: mkdir -p stocks/engine/_cache stocks/03_SCREENERS/LAYERS stocks/03_SCREENERS/WATCHLIST
+
+      - name: Fetch caches (historical + fundamentals + daily close)
+        run: |
+          python stocks/engine/fetch_historical.py --range 1y
+          python stocks/engine/fetch_fundamentals.py
+          python stocks/engine/fetch_daily_ohlc.py --pull close
+
+      - name: Run screener lenses (4)
+        run: python stocks/engine/screener_runner.py
+
+      - name: Rebuild screener section (merge into aggregate, sanity-gated)
+        run: python stocks/engine/ci_screener_emit.py
+
+      - name: Overlay live prices + moves + day-trade re-rank
         run: python stocks/generators/refresh_prices.py
 
       - name: Commit + push if changed
@@ -47,8 +65,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add stocks/data/equity_dashboard_aggregate.json
           if git diff --cached --quiet; then
-            echo "No price changes — skipping commit"
+            echo "No changes — skipping commit"
           else
-            git commit -m "refresh equity prices $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git commit -m "auto: screener fires + prices refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git pull --rebase --autostash origin main || true
             git push
           fi
