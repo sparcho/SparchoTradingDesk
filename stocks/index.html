@@ -787,21 +787,52 @@ function renderAll(){
     const cellGrid = (rows)=> `<div class="run">` + rows.map(cell).join('') + `</div>`;
     function radialSVG(){
       const byLayer={}; rundown.forEach(r=>{ (byLayer[r.layer]=byLayer[r.layer]||[]).push(r); });
-      const layers=(order.length?order:Object.keys(byLayer)).filter(l=>byLayer[l]&&byLayer[l].length);
-      const N=layers.length, cx=50, cy=49, R=31, sub=12; let s='';
-      layers.forEach((l,li)=>{
-        const a=(-90+li*360/N)*Math.PI/180, lx=cx+R*Math.cos(a), ly=cy+R*Math.sin(a);
-        s+=`<text x="${lx.toFixed(1)}" y="${(ly<cy?ly-8:ly+9).toFixed(1)}" class="rg-ll" text-anchor="middle">${esc(l)}</text>`;
-        byLayer[l].forEach(r=>{
-          const nx=lx+_jit(r.ticker+'x')*sub, ny=ly+_jit(r.ticker+'y')*sub;
-          const rad=(1.0+(r.composite||0)/42).toFixed(2), mv=mvOf(r);
-          const fill=r.tag==='held'?'#36c5b0':(mv==null?'#525873':(mv>=0?'#5fb87f':'#e07a6f'));
-          const op=mv==null?0.5:Math.min(1,0.45+Math.abs(mv)/8);
-          s+=`<line x1="${lx.toFixed(1)}" y1="${ly.toFixed(1)}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="rgba(255,255,255,0.05)" stroke-width="0.2"/>`;
-          s+=`<a href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(tvSymbol(r.ticker))}" target="_blank" rel="noopener"><circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="${rad}" fill="${fill}" fill-opacity="${op.toFixed(2)}" stroke="${fill}" stroke-width="0.25"><title>${esc(r.ticker)} · ${esc(r.cluster||'')} · comp ${(r.composite||0).toFixed(0)} · ${mv!=null?(mv>=0?'+':'')+mv.toFixed(1)+'%':'—'}${r.tag==='held'?' · HELD':''}</title></circle></a>`;
-        });
+      const ord=(order.length?order:Object.keys(byLayer));
+      const layers=ord.filter(l=>byLayer[l]&&byLayer[l].length);
+      const N=layers.length;
+      const cc={}, lab={};
+      layers.forEach((l,i)=>{ const a=(-90+i*360/N)*Math.PI/180;
+        cc[l]={x:50+25*Math.cos(a), y:50+25*Math.sin(a)};
+        lab[l]={x:50+37*Math.cos(a), y:50+37*Math.sin(a)};
       });
-      return `<svg viewBox="0 0 100 100" class="rg-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`+`<div class="rg-foot">Clustered by 5LC layer · dot size = composite · colour = ${winLbl()} move (green up / red down), teal = held · click a node → TradingView.</div>`;
+      const radOf=(r)=> 1.0 + (r.composite||0)/40;
+      // ── force-directed sim (cached by universe signature; stable across 60s re-renders) ──
+      const sig=rundown.map(r=>r.ticker).slice().sort().join(',');
+      let cache=window.__radialPos;
+      if(!cache || cache.sig!==sig){
+        const nodes=rundown.map(r=>{ const c=cc[r.layer]||{x:50,y:50};
+          return {tk:r.ticker, layer:r.layer, rad:radOf(r),
+                  x:c.x+_jit(r.ticker+'x')*10, y:c.y+_jit(r.ticker+'y')*10, vx:0, vy:0}; });
+        const ITER=230;
+        for(let it=0; it<ITER; it++){
+          const alpha=Math.max(0.02, 1-it/ITER);
+          for(let i=0;i<nodes.length;i++){ const a=nodes[i];
+            for(let j=i+1;j<nodes.length;j++){ const b=nodes[j];
+              let dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy)||0.01; const ux=dx/d, uy=dy/d;
+              if(d<28){ const f=(3.6/d)*alpha; a.vx+=ux*f; a.vy+=uy*f; b.vx-=ux*f; b.vy-=uy*f; }
+              const minD=a.rad+b.rad+1.1;
+              if(d<minD){ const pu=(minD-d)*0.5; a.x+=ux*pu; a.y+=uy*pu; b.x-=ux*pu; b.y-=uy*pu; }
+            }
+          }
+          for(const n of nodes){ const c=cc[n.layer]||{x:50,y:50};
+            n.vx += (c.x-n.x)*0.10*alpha + (50-n.x)*0.012*alpha;
+            n.vy += (c.y-n.y)*0.10*alpha + (50-n.y)*0.012*alpha;
+            n.vx*=0.55; n.vy*=0.55; n.x+=n.vx; n.y+=n.vy;
+            n.x=Math.max(5,Math.min(95,n.x)); n.y=Math.max(6,Math.min(94,n.y));
+          }
+        }
+        cache={sig, p:{}}; nodes.forEach(n=>{ cache.p[n.tk]={x:n.x,y:n.y}; }); window.__radialPos=cache;
+      }
+      // ── draw: labels (behind) then nodes ──
+      let s='';
+      layers.forEach(l=>{ s+=`<text x="${lab[l].x.toFixed(1)}" y="${lab[l].y.toFixed(1)}" class="rg-ll" text-anchor="middle">${esc(l)}</text>`; });
+      rundown.forEach(r=>{ const p=cache.p[r.ticker]; if(!p) return; const mv=mvOf(r);
+        const rad=radOf(r).toFixed(2);
+        const fill=r.tag==='held'?'#36c5b0':(mv==null?'#525873':(mv>=0?'#5fb87f':'#e07a6f'));
+        const op=mv==null?0.5:Math.min(1,0.5+Math.abs(mv)/8);
+        s+=`<a href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(tvSymbol(r.ticker))}" target="_blank" rel="noopener"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${rad}" fill="${fill}" fill-opacity="${op.toFixed(2)}" stroke="${fill}" stroke-width="0.25"><title>${esc(r.ticker)} · ${esc(r.cluster||'')} · comp ${(r.composite||0).toFixed(0)} · ${mv!=null?(mv>=0?'+':'')+mv.toFixed(1)+'%':'—'}${r.tag==='held'?' · HELD':''}</title></circle></a>`;
+      });
+      return `<svg viewBox="0 0 100 100" class="rg-svg" preserveAspectRatio="xMidYMid meet">${s}</svg><div class="rg-foot">Force-directed: nodes repel, each 5LC layer pulled together by gravity · dot size = composite · colour = ${winLbl()} move (green up / red down), teal = held · click → TradingView.</div>`;
     }
     function renderRun(){
       const host=$('rundown'); if(!host) return;

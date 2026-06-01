@@ -45,6 +45,7 @@ DR_DIR = ROOT / "09_DEEP_RESEARCH"
 DR_CROSS = DR_DIR / "260512_DR-CROSS-BRIEF-STITCHING.md"
 REGIME_YAML = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / "regime_state.yaml"
 TAXONOMY_YAML = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / "equity_taxonomy.yaml"
+PW_FILE = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / ".dashboard_pw"  # local-only operator password (gitignored, never pushed)
 # Primary output = the web dashboard's own data folder (what the page + deploy read).
 # Mirror to 00_SYSTEM/_state for parity. WEB_DATA only written if its parent exists
 # (true when the web/generators copy runs; the GENERATORS copy just writes _state).
@@ -795,6 +796,59 @@ def _read_regime():
     return out
 
 
+def _apply_privacy(out):
+    """If a local operator password is set, encrypt the sensitive block + strip plaintext.
+    Public aggregate then carries holdings only as AES-GCM ciphertext (browser-decryptable
+    with the password). No password file -> plaintext (unchanged). The encrypted payload is
+    PBKDF2-SHA256(200k) -> AES-256-GCM, matching the dashboard's WebCrypto unlock."""
+    if not PW_FILE.exists():
+        return
+    try:
+        pw = PW_FILE.read_text(encoding="utf-8").strip()
+    except Exception:
+        return
+    if not pw:
+        return
+    try:
+        import os as _os, base64 as _b64, hashlib as _hl
+        from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    except Exception as e:  # pragma: no cover
+        print(f"[privacy] cryptography unavailable ({e}) -> PLAINTEXT emit", file=sys.stderr)
+        return
+    HELD_MONEY = ("qty", "avg_cost", "invested", "current_value", "unreal_inr", "unreal_pct",
+                  "concentration_pct", "friday_trade", "sr_levels", "risk_gates", "rajiv_verdict_latest")
+    held_private = [{k: h.get(k) for k in ("ticker",) + HELD_MONEY} for h in out.get("held", [])]
+    book = out.get("book", {}) or {}
+    sensitive = {
+        "book_totals": book.get("totals", {}),
+        "book_ledger": book.get("ledger", {}),
+        "held_private": held_private,
+        "risk_gates": out.get("risk_gates", []),
+        "recent_trades": out.get("recent_trades", []),
+        "recent_closed": out.get("recent_closed", []),
+    }
+    payload = json.dumps(sensitive, ensure_ascii=False, default=str).encode("utf-8")
+    salt = _os.urandom(16)
+    iv = _os.urandom(12)
+    key = _hl.pbkdf2_hmac("sha256", pw.encode("utf-8"), salt, 200000, 32)
+    ct = AESGCM(key).encrypt(iv, payload, None)
+    out["sensitive_enc"] = {"v": 1, "iter": 200000,
+                            "salt": _b64.b64encode(salt).decode(),
+                            "iv": _b64.b64encode(iv).decode(),
+                            "ct": _b64.b64encode(ct).decode()}
+    out["privacy"] = {"locked": True, "hidden": ["operator_section", "book_pnl_hero"]}
+    # strip plaintext sensitive from the public aggregate
+    book.pop("totals", None)
+    book.pop("ledger", None)
+    PUB_HELD = ("ticker", "name", "sector", "cluster", "current_price", "day_chg_pct",
+                "ltp_date", "tv_symbol", "tv_exchange")
+    out["held"] = [{k: h.get(k) for k in PUB_HELD} for h in out.get("held", [])]
+    out["risk_gates"] = []
+    out["recent_trades"] = []
+    out["recent_closed"] = []
+    print(f"[privacy] LOCKED: sensitive block encrypted ({len(ct)}b ct); plaintext stripped")
+
+
 def main():
     now_utc = datetime.now(timezone.utc)
     out = {
@@ -892,6 +946,7 @@ def main():
     } for t, pos in positions.items() if pos.get("friday_trade")]
     out["recent_closed"] = _read_recently_closed()
 
+    _apply_privacy(out)
     def _jd(o):
         if hasattr(o, "isoformat"):
             return o.isoformat()
