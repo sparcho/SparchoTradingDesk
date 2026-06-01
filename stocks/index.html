@@ -235,6 +235,30 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 
 @media(max-width:1100px){ .hero-row{ grid-template-columns:1fr; } .ticker-bar{ grid-template-columns:repeat(4,1fr); } .book-grid{ grid-template-columns:repeat(2,1fr); } }
 @media(max-width:640px){ .ticker-bar{ grid-template-columns:repeat(2,1fr); } body{ padding:8px; } }
+/* ── 260601 v2.1: 2-tile hero · operator book-lead · legends · rundown toggle ── */
+.hero-row.hero-2{ grid-template-columns:repeat(2,1fr); }
+.op-hero{ display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:9px; padding-bottom:8px; border-bottom:1px dashed var(--border); }
+.op-pnl .ht-lbl{ font-size:9px; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); font-weight:700; }
+.op-pnl .ht-big{ font-family:var(--mono); font-size:30px; font-weight:800; line-height:1.05; margin-top:2px; font-variant-numeric:tabular-nums; }
+.op-pnl .ht-sub{ font-size:10.5px; color:var(--ink-soft); margin-top:4px; }
+.op-meta{ font-size:9.5px; color:var(--ink-mute); font-style:italic; text-align:right; max-width:42%; line-height:1.4; }
+.legend{ display:flex; flex-wrap:wrap; gap:5px 14px; margin-top:8px; padding-top:7px; border-top:1px solid var(--border); font-size:8.5px; color:var(--ink-mute); }
+.legend .lg{ display:flex; align-items:center; gap:4px; }
+.legend .lchip{ width:9px; height:9px; border-radius:2px; }
+.legend .lb-lean{ font-size:7.5px; padding:0 5px; border-radius:6px; }
+.spark-leg{ margin:8px 0 0; padding-top:7px; border-top:1px solid var(--border); font-size:9px; line-height:1.55; color:var(--ink-mute); }
+.spark-leg b{ color:var(--ink-soft); }
+.run-toggle{ display:inline-flex; border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+.run-toggle button{ font-family:inherit; font-size:8.5px; padding:2px 9px; border:none; background:transparent; color:var(--ink-mute); cursor:pointer; }
+.run-toggle button.active{ background:var(--accent-soft); color:var(--accent); font-weight:700; }
+.run-group{ margin-bottom:8px; }
+.run-group .gh{ display:flex; justify-content:space-between; font-size:8.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); font-weight:700; margin:0 0 3px; padding-bottom:2px; border-bottom:1px solid var(--border); }
+.run-group .gh .gc{ color:var(--ink-mute); font-weight:500; }
+.run-movers{ display:flex; flex-direction:column; gap:2px; }
+.run-movers .mv-row{ display:grid; grid-template-columns:16px 1fr auto auto; gap:10px; align-items:center; padding:2px 7px; border-radius:4px; background:rgba(255,255,255,0.02); font-size:10px; }
+.run-movers .mv-row .ar{ text-align:center; font-size:9px; }
+.run-movers .mv-row .tk{ font-weight:700; } .run-movers .mv-row .cp{ font-family:var(--mono); font-size:8.5px; color:var(--ink-mute); }
+.run-movers .mv-row .wk{ font-family:var(--mono); font-weight:700; text-align:right; }
 </style>
 </head>
 <body>
@@ -255,8 +279,7 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 <div id="render-errors"></div>
 <div class="stale-banner" id="stale-banner" style="display:none;"></div>
 
-<div class="hero-row">
-  <div class="hero-tile t-book"><div class="ht-lbl">Book P&amp;L · unrealized</div><div class="ht-big" id="h-pnl">—</div><div class="ht-sub" id="h-pnl-sub">—</div></div>
+<div class="hero-row hero-2">
   <div class="hero-tile t-gate"><div class="ht-lbl">Regime gate</div><div class="ht-big sm" id="h-gate">—</div><div class="ht-sub" id="h-gate-sub">—</div></div>
   <div class="hero-tile t-scrn"><div class="ht-lbl">Screener verdict</div><div class="ht-big sm" id="h-scrn">—</div><div class="ht-sub" id="h-scrn-sub">—</div></div>
 </div>
@@ -275,6 +298,12 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
     <div class="card"><div class="accent-top"></div>
       <div class="card-title"><h2>Composite Leaderboard</h2><span class="meta" id="lb-meta">—</span></div>
       <div class="lb" id="leaderboard"></div>
+      <div class="legend">
+        <span class="lg"><i class="lchip pass"></i><i class="lchip near"></i><i class="lchip fail"></i> lens: pass / near / fail</span>
+        <span class="lg">chips = R-10G · R-DIV · S-8G · K-TA</span>
+        <span class="lg"><span class="lb-lean bull">BULL</span> <span class="lb-lean bear">BEAR</span> = Rajiv-DIV lean · <b style="color:var(--accent)">★</b> held</span>
+        <span class="lg">bar/score = composite (mean of 4 lens pass-ratios, 0–100)</span>
+      </div>
     </div>
   </div>
   <div class="bento" style="grid-template-columns:1fr 1fr;">
@@ -285,6 +314,7 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
     <div class="card"><div class="accent-top"></div>
       <div class="card-title"><h2>Lens Temperature · 14d</h2><span class="meta">daily pass (teal) + near (amber)</span></div>
       <div class="spark-grid" id="sparklines"></div>
+      <p class="spark-leg"><b>How to read:</b> each panel is one lens over the last 14 trading days. <span style="color:var(--accent)">Teal</span> = names <b>passing</b> every gate that day; <span style="color:var(--warn)">amber</span> = passing <b>or</b> near (within 1 gate). Rising line = that screen heating up. The <span class="mono">Xp / Yn</span> tag is today's pass / near count (of ~62 evaluated).</p>
     </div>
   </div>
   <div class="bento" style="grid-template-columns:1fr;">
@@ -293,8 +323,13 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
       <div class="promo" id="promo"></div>
     </div>
     <div class="card"><div class="accent-top"></div>
-      <div class="card-title"><h2>Full Watchlist Rundown</h2><span class="meta" id="run-meta">composite + 1-week %</span></div>
-      <div class="run" id="rundown"></div>
+      <div class="card-title"><h2>Full Watchlist Rundown</h2>
+        <span style="display:flex;gap:9px;align-items:center;">
+          <span class="run-toggle" id="run-toggle"><button data-mode="group" class="active">by group</button><button data-mode="movers">by movers</button></span>
+          <span class="meta" id="run-meta">composite + 1-week %</span>
+        </span>
+      </div>
+      <div id="rundown"></div>
     </div>
   </div>
 </div></details>
@@ -302,8 +337,11 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 <!-- ════ §2 OPERATOR (default collapsed) ════ -->
 <details class="zone z2"><summary><span class="sn">§2</span> Operator · the book <span class="sx" id="s2-sx"></span><span class="chev"></span></summary>
 <div class="zone-body">
-  <div class="card"><div class="accent-top" style="background:var(--ink-soft);"></div>
-    <div class="card-title"><h2>Book &amp; Ledger</h2><span class="meta" id="book-meta">—</span></div>
+  <div class="card op-lead"><div class="accent-top" style="background:var(--ink-soft);"></div>
+    <div class="op-hero">
+      <div class="op-pnl"><div class="ht-lbl">Book P&amp;L · unrealized</div><div class="ht-big" id="h-pnl">—</div><div class="ht-sub" id="h-pnl-sub">—</div></div>
+      <div class="op-meta" id="book-meta">—</div>
+    </div>
     <div class="book-grid" id="book-grid"></div>
     <div class="ledger-row" id="ledger-row"></div>
   </div>
@@ -617,17 +655,39 @@ function renderAll(){
       : '<span class="mut" style="font-size:10px;">No multi-lens near-miss candidates today (verse is risk-off — only Rajiv-DIV passing).</span>';
   } catch(e){ __reportErr('promo', e); }
 
-  // ── §1.f WATCHLIST RUNDOWN ──
+  // ── §1.f WATCHLIST RUNDOWN (toggle: group by sector/5LC ↔ biggest movers) ──
   try{
-    $('run-meta').textContent = `${rundown.length} names · 1-week % as-of ${(rundown.find(r=>r.week_as_of)||{}).week_as_of||'—'}`;
-    $('rundown').innerHTML = rundown.map(r => {
-      const wk = r.week_pct;
-      const wc = wk==null ? 'mut' : (wk>=0?'pos':'neg');
+    if (window.__runMode == null) window.__runMode = 'group';
+    const asOf = (rundown.find(r=>r.week_as_of)||{}).week_as_of || '—';
+    $('run-meta').textContent = `${rundown.length} names · 1-week % as-of ${asOf}`;
+    const cellGrid = (rows) => `<div class="run">` + rows.map(r => {
+      const wk=r.week_pct, wc=wk==null?'mut':(wk>=0?'pos':'neg');
       return `<div class="run-cell ${r.tag==='held'?'held':''}">
-        <div class="rt"><span class="tk">${esc(r.ticker)}</span><span class="tag">${r.tag}</span></div>
+        <div class="rt"><span class="tk">${esc(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''}</span><span class="tag">${r.tag}</span></div>
         <div class="rb"><span class="cp">c ${r.composite.toFixed(0)}</span><span class="wk ${wc}">${wk!=null?fmtPct(wk,1):'—'}</span></div>
-      </div>`;
-    }).join('');
+      </div>`; }).join('') + `</div>`;
+    function renderRun(){
+      const host = $('rundown'); if(!host) return;
+      if (window.__runMode === 'movers'){
+        const rows = rundown.slice().filter(r=>r.week_pct!=null).sort((a,b)=>b.week_pct-a.week_pct);
+        const nulls = rundown.filter(r=>r.week_pct==null);
+        host.innerHTML = `<div class="run-movers">` + rows.concat(nulls).map(r=>{
+          const wk=r.week_pct, wc=wk==null?'mut':(wk>=0?'pos':'neg'), ar=wk==null?'·':(wk>=0?'▲':'▼');
+          return `<div class="mv-row"><span class="ar ${wc}">${ar}</span><span class="tk">${esc(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''} <span class="cp">${esc(r.sector||'')}</span></span><span class="cp">c ${r.composite.toFixed(0)}</span><span class="wk ${wc}">${wk!=null?fmtPct(wk,1):'—'}</span></div>`;
+        }).join('') + `</div>`;
+      } else {
+        const groups = {};
+        rundown.forEach(r => { const k=r.sector||'OTHER'; (groups[k]=groups[k]||[]).push(r); });
+        const order = Object.keys(groups).sort((a,b)=> groups[b].length-groups[a].length || a.localeCompare(b));
+        host.innerHTML = order.map(g => {
+          const rows = groups[g].slice().sort((a,b)=> (b.week_pct==null?-999:b.week_pct)-(a.week_pct==null?-999:a.week_pct));
+          return `<div class="run-group"><div class="gh"><span>${esc(g)}</span><span class="gc">${rows.length}</span></div>${cellGrid(rows)}</div>`;
+        }).join('');
+      }
+      document.querySelectorAll('#run-toggle button').forEach(b=> b.classList.toggle('active', b.dataset.mode===window.__runMode));
+    }
+    document.querySelectorAll('#run-toggle button').forEach(b => b.onclick = () => { window.__runMode = b.dataset.mode; renderRun(); });
+    renderRun();
   } catch(e){ __reportErr('rundown', e); }
 
   // ── §2.a BOOK + LEDGER ──
