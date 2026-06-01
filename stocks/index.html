@@ -318,6 +318,16 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 .rg-svg circle:hover{ fill-opacity:1!important; stroke:#e8eaf2!important; stroke-width:0.5!important; }
 .rg-foot{ margin-top:5px; font-size:8.5px; color:var(--ink-faint); line-height:1.4; }
 @media(max-width:1100px){ .rg-svg{ height:300px; } }
+/* ── 260601 v2.8: operator privacy lock ── */
+.op-lock{ background:var(--card); border:1px solid var(--border); border-radius:7px; padding:20px 16px; text-align:center; }
+.op-lock-inner{ max-width:440px; margin:0 auto; font-size:12px; color:var(--ink-soft); line-height:1.5; }
+.op-lock-inner b{ color:var(--ink); }
+.op-lock-form{ display:flex; gap:6px; justify-content:center; margin:11px 0 4px; }
+.op-lock-form input{ font-family:inherit; font-size:12px; padding:5px 9px; border:1px solid var(--border-strong); background:var(--paper-2); color:var(--ink); border-radius:5px; width:210px; }
+.op-lock-form button{ font-family:inherit; font-size:12px; padding:5px 15px; border:1px solid var(--accent); background:var(--accent-soft); color:var(--accent); border-radius:5px; cursor:pointer; font-weight:700; }
+.op-lock-form button:hover{ background:var(--accent); color:#0e1117; }
+.op-lock-msg{ font-size:10px; color:var(--neg); min-height:13px; font-family:var(--mono); }
+.op-lock-note{ font-size:9.5px; color:var(--ink-mute); margin-top:6px; line-height:1.5; }
 </style>
 </head>
 <body>
@@ -401,6 +411,14 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 <!-- ════ §2 OPERATOR (default collapsed) ════ -->
 <details class="zone z2"><summary><span class="sn">§2</span> Operator · the book <span class="sx" id="s2-sx"></span><span class="chev"></span></summary>
 <div class="zone-body">
+  <div id="op-lock" class="op-lock" style="display:none;">
+    <div class="op-lock-inner">🔒 <b>Operator section</b> — holdings, P&amp;L &amp; risk gates are private &amp; encrypted.
+      <div class="op-lock-form"><input id="op-pw" type="password" placeholder="operator password" autocomplete="off"><button id="op-unlock">Unlock</button></div>
+      <div id="unlock-msg" class="op-lock-msg"></div>
+      <div class="op-lock-note">Public viewers see the screener &amp; intel; your book stays AES-GCM-encrypted in the data file until you unlock it in your own browser. The password is never sent anywhere.</div>
+    </div>
+  </div>
+  <div id="op-cards">
   <div class="card op-lead"><div class="accent-top" style="background:var(--ink-soft);"></div>
     <div class="op-hero">
       <div class="op-pnl"><div class="ht-lbl">Book P&amp;L · unrealized</div><div class="ht-big" id="h-pnl">—</div><div class="ht-sub" id="h-pnl-sub">—</div></div>
@@ -430,6 +448,7 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
       <div id="trades-block"></div>
     </div>
   </div>
+</div>
 </div></details>
 
 <!-- ════ §3 INTEL / DR (default collapsed) ════ -->
@@ -493,6 +512,24 @@ const TV_SPECIAL = { BLUESTAR:'BLUESTARCO', KPIT:'KPITTECH', PBFINTECH:'POLICYBZ
 const tvSymbol = (t)=> 'NSE:' + (TV_SPECIAL[t] || t);
 const tvLink = (t)=> `<a class="tvl" href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(tvSymbol(t))}" target="_blank" rel="noopener">${t}</a>`;
 const _jit = (s)=>{ let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))&0xffff; return ((h%100)/100-0.5)*0.64; };
+async function unlockSensitive(pw){
+  const msg=document.getElementById('unlock-msg');
+  try{
+    if(!DATA || !DATA.sensitive_enc) return;
+    const b=DATA.sensitive_enc, dec=(s)=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+    const km=await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+    const key=await crypto.subtle.deriveKey({name:'PBKDF2', salt:dec(b.salt), iterations:b.iter, hash:'SHA-256'}, km, {name:'AES-GCM', length:256}, false, ['decrypt']);
+    const pt=await crypto.subtle.decrypt({name:'AES-GCM', iv:dec(b.iv)}, key, dec(b.ct));
+    const u=JSON.parse(new TextDecoder().decode(pt));
+    DATA.book=DATA.book||{}; DATA.book.totals=u.book_totals||{}; DATA.book.ledger=u.book_ledger||{};
+    const hp={}; (u.held_private||[]).forEach(x=>hp[x.ticker]=x);
+    DATA.held=(DATA.held||[]).map(h=>Object.assign({}, h, hp[h.ticker]||{}));
+    DATA.risk_gates=u.risk_gates||[]; DATA.recent_trades=u.recent_trades||[]; DATA.recent_closed=u.recent_closed||[];
+    DATA._unlocked=true;
+    try{ sessionStorage.setItem('eqpw', pw); }catch(e){}
+    renderAll();
+  }catch(e){ if(msg) msg.textContent='✗ wrong password'; try{ sessionStorage.removeItem('eqpw'); }catch(_){ } }
+}
 
 let DATA = null;
 async function bootstrap(){
@@ -501,6 +538,7 @@ async function bootstrap(){
     if (!r.ok) throw new Error('HTTP ' + r.status);
     DATA = await r.json();
     renderAll();
+    try{ const pw=sessionStorage.getItem('eqpw'); if(pw && DATA && DATA.sensitive_enc && !DATA._unlocked) unlockSensitive(pw); }catch(e){}
   } catch(e){
     document.body.innerHTML = `<div style="max-width:600px;margin:80px auto;padding:24px;background:rgba(224,122,111,0.12);border:2px solid #e07a6f;border-radius:8px;font-family:sans-serif;color:#f0b3ab;"><h2 style="margin-top:0;">⚠ Could not load data</h2><p>${e.message}</p></div>`;
   }
@@ -523,6 +561,7 @@ function renderAll(){
   // ── Preamble (outside try-blocks so const-scoping never breaks later sections) ──
   const book = DATA.book || {};
   const tot = book.totals || {};
+  const LOCKED = !!(DATA.privacy && DATA.privacy.locked && DATA.sensitive_enc && !DATA._unlocked);
   const held = DATA.held || [];
   const sc = DATA.screeners || {};
   const reg = DATA.regime || {};
@@ -574,8 +613,12 @@ function renderAll(){
 
   // ── 2. HERO TILES ──
   try{
-    const hp = $('h-pnl'); hp.textContent = fmtSigned(tot.unrealized_pnl_abs,{compact:true}); hp.className='ht-big '+pnlCls(tot.unrealized_pnl_abs);
+    const hp = $('h-pnl');
+    if (LOCKED){ hp.textContent='🔒'; hp.className='ht-big'; $('h-pnl-sub').innerHTML='<span class="mut">operator only — unlock in §2</span>'; }
+    else {
+    hp.textContent = fmtSigned(tot.unrealized_pnl_abs,{compact:true}); hp.className='ht-big '+pnlCls(tot.unrealized_pnl_abs);
     $('h-pnl-sub').innerHTML = `${fmtPct(tot.unrealized_pnl_pct)} · MV <span class="mono">${fmtINR(tot.current_value,{compact:true})}</span> · day <span class="${pnlCls(tot.change_today_abs)}">${fmtPct(tot.change_today_pct)}</span>`;
+    }
     $('h-gate').textContent = reg.zone || '—';
     const bg = reg.binding_gate || {};
     $('h-gate-sub').innerHTML = bg.id ? `binding <b class="warnc">${esc(bg.id)} ${esc(bg.status)}</b> · <span class="mono">${esc(bg.reading)}</span> vs ${esc(bg.threshold)}` : esc((reg.headline||'').slice(0,80));
@@ -590,6 +633,19 @@ function renderAll(){
       (bulls[0] ? `<span class="pos">${esc(bulls[0].ticker)} bull</span>` : '—') + ' / ' +
       (bears[0] ? `<span class="neg">${esc(bears[0].ticker)} bear</span>` : '—');
   } catch(e){ __reportErr('hero', e); }
+
+  // ── §2 OPERATOR LOCK GATE ──
+  try{
+    const lockEl=$('op-lock'), cardsEl=$('op-cards');
+    if(lockEl && cardsEl){
+      if(LOCKED){
+        lockEl.style.display='block'; cardsEl.style.display='none';
+        const btn=$('op-unlock'), inp=$('op-pw');
+        if(btn) btn.onclick=()=> unlockSensitive(inp?inp.value:'');
+        if(inp) inp.onkeydown=(e)=>{ if(e.key==='Enter') unlockSensitive(inp.value); };
+      } else { lockEl.style.display='none'; cardsEl.style.display=''; }
+    }
+  } catch(e){ __reportErr('op-lock', e); }
 
   // ── 3. STICKY TICKER ──
   try{

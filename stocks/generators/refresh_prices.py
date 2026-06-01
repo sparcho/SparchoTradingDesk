@@ -117,6 +117,32 @@ def main() -> int:
     data = json.loads(DATA_JSON.read_text(encoding="utf-8"))
     print(f"Loaded {DATA_JSON.name} - {len(data.get('held', []))} holdings")
 
+    # Privacy guard: if the operator section is encrypted, the public held[] carries NO
+    # qty/avg/MV. Refresh only public fields (held last price + universe moves) and never
+    # write plaintext book totals / position values.
+    LOCKED = bool((data.get("privacy") or {}).get("locked")) or ("sensitive_enc" in data)
+    if LOCKED:
+        for h in data.get("held", []):
+            sym = NSE_SYMBOLS.get(h.get("ticker"))
+            if not sym:
+                continue
+            price, prev = fetch_price(sym)
+            if price is None:
+                continue
+            h["current_price"] = round(price, 2)
+            if prev:
+                h["day_chg_pct"] = round((price - prev) / prev * 100, 2)
+        try:
+            refresh_universe_moves(data)
+        except Exception as e:
+            print(f"  universe-moves refresh skipped: {e}", file=sys.stderr)
+        now_iso = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        data["emitted_at_utc"] = now_iso
+        data.setdefault("meta", {})["last_price_refresh"] = now_iso
+        DATA_JSON.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+        print("OK (privacy-locked): refreshed held last-price + universe moves only; no book/P&L written")
+        return 0
+
     new_mv = 0.0
     new_invested = 0.0
     new_unreal = 0.0
