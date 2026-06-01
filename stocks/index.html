@@ -259,6 +259,23 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 .run-movers .mv-row .ar{ text-align:center; font-size:9px; }
 .run-movers .mv-row .tk{ font-weight:700; } .run-movers .mv-row .cp{ font-family:var(--mono); font-size:8.5px; color:var(--ink-mute); }
 .run-movers .mv-row .wk{ font-family:var(--mono); font-weight:700; text-align:right; }
+/* ── 260601 v2.2: 5LC heat card + layer/cluster rundown nesting ── */
+.heat{ display:flex; flex-direction:column; gap:5px; }
+.heat-row{ display:grid; grid-template-columns:1.5fr 1fr auto auto; gap:9px; align-items:center; font-size:10px; }
+.heat-row .hl{ color:var(--ink-soft); font-weight:600; } .heat-row .hl .hc{ color:var(--ink-mute); font-family:var(--mono); font-size:9px; }
+.heat-row .hbar{ height:7px; border-radius:3px; background:rgba(255,255,255,0.08); overflow:hidden; }
+.heat-row .hfill{ height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-deep)); }
+.heat-row .hv{ font-family:var(--mono); font-weight:700; min-width:24px; text-align:right; }
+.heat-row .hmv{ font-family:var(--mono); font-weight:700; min-width:48px; text-align:right; }
+.heat-foot{ margin:8px 0 0; padding-top:7px; border-top:1px solid var(--border); font-size:9px; line-height:1.5; color:var(--ink-mute); }
+.run-layer{ margin-bottom:9px; }
+.run-layer .lh{ display:flex; justify-content:space-between; align-items:baseline; font-family:var(--serif); font-size:11.5px; font-weight:700; color:var(--ink); border-bottom:1px solid var(--border-strong); padding-bottom:2px; margin-bottom:4px; }
+.run-layer .lh .lc{ font-family:var(--mono); font-size:8.5px; color:var(--accent); font-weight:600; }
+.run-sub{ margin:0 0 5px; }
+.run-sub .sh-c{ font-size:8.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft); font-weight:700; margin:3px 0 2px; }
+.run-sub .sh-c .gc{ color:var(--ink-mute); font-weight:500; }
+.run-cell.pend{ opacity:0.6; border-left-style:dashed; }
+.run-cell .pend, .mv-row .pend{ color:var(--accent-2); font-style:italic; font-size:8px; }
 </style>
 </head>
 <body>
@@ -312,9 +329,9 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
       <div style="max-height:340px;overflow-y:auto;"><table class="hm" id="hit-matrix"></table></div>
     </div>
     <div class="card"><div class="accent-top"></div>
-      <div class="card-title"><h2>Lens Temperature · 14d</h2><span class="meta">daily pass (teal) + near (amber)</span></div>
-      <div class="spark-grid" id="sparklines"></div>
-      <p class="spark-leg"><b>How to read:</b> each panel is one lens over the last 14 trading days. <span style="color:var(--accent)">Teal</span> = names <b>passing</b> every gate that day; <span style="color:var(--warn)">amber</span> = passing <b>or</b> near (within 1 gate). Rising line = that screen heating up. The <span class="mono">Xp / Yn</span> tag is today's pass / near count (of ~62 evaluated).</p>
+      <div class="card-title"><h2>5LC / Cluster Heat</h2><span class="meta">per-layer: names · avg composite · avg 1d move</span></div>
+      <div class="heat" id="heat"></div>
+      <p class="heat-foot"><b>How to read:</b> each row is a 5-Layer-Cake layer. <span style="color:var(--accent)">Teal bar</span> = average composite screener strength across that layer's names; the right value = avg 1-day price move. Tells you at a glance which layer is screening strong and which is moving.</p>
     </div>
   </div>
   <div class="bento" style="grid-template-columns:1fr;">
@@ -324,9 +341,10 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
     </div>
     <div class="card"><div class="accent-top"></div>
       <div class="card-title"><h2>Full Watchlist Rundown</h2>
-        <span style="display:flex;gap:9px;align-items:center;">
+        <span style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;">
           <span class="run-toggle" id="run-toggle"><button data-mode="group" class="active">by group</button><button data-mode="movers">by movers</button></span>
-          <span class="meta" id="run-meta">composite + 1-week %</span>
+          <span class="run-toggle" id="win-toggle"><button data-win="d1" class="active">1d</button><button data-win="d3">3d</button><button data-win="d5">5d</button></span>
+          <span class="meta" id="run-meta">composite + move %</span>
         </span>
       </div>
       <div id="rundown"></div>
@@ -535,9 +553,9 @@ function renderAll(){
     function watchCell(tk){
       const w = rundown.find(x => x.ticker === tk);
       const px = w && w.ltp!=null ? '₹'+(+w.ltp).toFixed(2) : '—';
-      const wk = w && w.week_pct!=null ? w.week_pct : null;
+      const wk = (w && w.moves && w.moves.d1!=null) ? w.moves.d1 : null;
       const cc = wk==null ? 'mut' : (wk>=0?'pos':'neg');
-      return `<div class="tk-cell"><div class="tk-name"><span class="dot stale"></span>${tk} <span class="tag">watch</span></div><div class="tk-val">${px}</div><div class="tk-chg ${cc}">${wk!=null?fmtPct(wk)+' wk':'—'}</div></div>`;
+      return `<div class="tk-cell"><div class="tk-name"><span class="dot stale"></span>${tk} <span class="tag">watch</span></div><div class="tk-val">${px}</div><div class="tk-chg ${cc}">${wk!=null?fmtPct(wk)+' 1d':'—'}</div></div>`;
     }
     function railCell(key, label){
       const m = macro[key] || {};
@@ -624,29 +642,28 @@ function renderAll(){
     $('hit-matrix').innerHTML = head + body;
   } catch(e){ __reportErr('hit-matrix', e); }
 
-  // ── §1.d SPARKLINES (inline SVG — no Chart canvas, refresh-safe) ──
+  // ── §1.d 5LC / CLUSTER HEAT (per-layer rollup from the rundown) ──
   try{
-    const tl = sc.lens_timeline || {};
-    const L = ['Rajiv-10G','Rajiv-DIV','Sanjeev-8G','Kaarin-TA'];
-    function spark(series){
-      if (!series || !series.length) return '<svg viewBox="0 0 100 34"></svg>';
-      const W=100, H=34, n=series.length;
-      const maxV = Math.max(1, ...series.map(d => (d.passed||0)+(d.near||0)));
-      const xp = (i)=> n<=1 ? 0 : (i/(n-1))*W;
-      const yp = (v)=> H-2 - (v/maxV)*(H-5);
-      const linePts = series.map((d,i)=> `${xp(i).toFixed(1)},${yp((d.passed||0)+(d.near||0)).toFixed(1)}`).join(' ');
-      const passPts = series.map((d,i)=> `${xp(i).toFixed(1)},${yp(d.passed||0).toFixed(1)}`).join(' ');
-      return `<svg viewBox="0 0 100 34" preserveAspectRatio="none">
-        <polyline points="${linePts}" fill="none" stroke="${HEX.warn}" stroke-width="1.2" opacity="0.8"/>
-        <polyline points="${passPts}" fill="none" stroke="${HEX.teal}" stroke-width="1.5"/>
-      </svg>`;
-    }
-    $('sparklines').innerHTML = L.map(l => {
-      const s = tl[l] || [];
-      const last = s[s.length-1] || {};
-      return `<div class="spark"><div class="sh"><span class="nm">${l}</span><span class="vv">${last.passed||0}p / ${last.near||0}n</span></div>${spark(s)}</div>`;
+    const order = sc.layer_order || [];
+    const lnames = sc.layer_names || {};
+    const avg = (a)=>{ const v=a.filter(x=>x!=null&&!isNaN(x)); return v.length? v.reduce((s,x)=>s+x,0)/v.length : null; };
+    const byLayer = {};
+    rundown.forEach(r => { (byLayer[r.layer]=byLayer[r.layer]||[]).push(r); });
+    const layers = (order.length?order:Object.keys(byLayer)).filter(l=>byLayer[l]&&byLayer[l].length);
+    const maxComp = Math.max(1, ...layers.map(l=> avg(byLayer[l].map(r=>r.composite))||0));
+    $('heat').innerHTML = layers.map(l => {
+      const rows = byLayer[l];
+      const ac = avg(rows.map(r=>r.composite)) || 0;
+      const am = avg(rows.map(r=> r.moves? r.moves.d1 : null));
+      const mc = am==null?'mut':(am>=0?'pos':'neg');
+      return `<div class="heat-row">
+        <div class="hl">${esc(lnames[l]||l)} <span class="hc">${rows.length}</span></div>
+        <div class="hbar"><div class="hfill" style="width:${(ac/maxComp*100).toFixed(0)}%"></div></div>
+        <div class="hv">${ac.toFixed(0)}</div>
+        <div class="hmv ${mc}">${am==null?'—':fmtPct(am,1)}</div>
+      </div>`;
     }).join('');
-  } catch(e){ __reportErr('sparklines', e); }
+  } catch(e){ __reportErr('heat', e); }
 
   // ── §1.e PROMOTION ──
   try{
@@ -655,38 +672,54 @@ function renderAll(){
       : '<span class="mut" style="font-size:10px;">No multi-lens near-miss candidates today (verse is risk-off — only Rajiv-DIV passing).</span>';
   } catch(e){ __reportErr('promo', e); }
 
-  // ── §1.f WATCHLIST RUNDOWN (toggle: group by sector/5LC ↔ biggest movers) ──
+  // ── §1.f WATCHLIST RUNDOWN (5LC layer -> cluster; toggle group/movers + 1d/3d/5d) ──
   try{
     if (window.__runMode == null) window.__runMode = 'group';
-    const asOf = (rundown.find(r=>r.week_as_of)||{}).week_as_of || '—';
-    $('run-meta').textContent = `${rundown.length} names · 1-week % as-of ${asOf}`;
-    const cellGrid = (rows) => `<div class="run">` + rows.map(r => {
-      const wk=r.week_pct, wc=wk==null?'mut':(wk>=0?'pos':'neg');
-      return `<div class="run-cell ${r.tag==='held'?'held':''}">
+    if (window.__moveWin == null) window.__moveWin = 'd1';
+    const order = sc.layer_order || [];
+    const lnames = sc.layer_names || {};
+    const asOf = (rundown.find(r=>r.as_of)||{}).as_of || '—';
+    const mvOf = (r)=> (r.moves && r.moves[window.__moveWin]!=null) ? r.moves[window.__moveWin] : null;
+    const winLbl = ()=> ({d1:'1-day',d3:'3-day',d5:'5-day'}[window.__moveWin]||window.__moveWin);
+    const cell = (r)=>{
+      const mv=mvOf(r), wc=mv==null?'mut':(mv>=0?'pos':'neg');
+      const comp = r.pending ? '<span class="pend">pending</span>' : 'c '+r.composite.toFixed(0);
+      return `<div class="run-cell ${r.tag==='held'?'held':''} ${r.pending?'pend':''}">
         <div class="rt"><span class="tk">${esc(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''}</span><span class="tag">${r.tag}</span></div>
-        <div class="rb"><span class="cp">c ${r.composite.toFixed(0)}</span><span class="wk ${wc}">${wk!=null?fmtPct(wk,1):'—'}</span></div>
-      </div>`; }).join('') + `</div>`;
+        <div class="rb"><span class="cp">${comp}</span><span class="wk ${wc}">${mv!=null?fmtPct(mv,1):'—'}</span></div>
+      </div>`;
+    };
+    const cellGrid = (rows)=> `<div class="run">` + rows.map(cell).join('') + `</div>`;
     function renderRun(){
-      const host = $('rundown'); if(!host) return;
+      const host=$('rundown'); if(!host) return;
       if (window.__runMode === 'movers'){
-        const rows = rundown.slice().filter(r=>r.week_pct!=null).sort((a,b)=>b.week_pct-a.week_pct);
-        const nulls = rundown.filter(r=>r.week_pct==null);
-        host.innerHTML = `<div class="run-movers">` + rows.concat(nulls).map(r=>{
-          const wk=r.week_pct, wc=wk==null?'mut':(wk>=0?'pos':'neg'), ar=wk==null?'·':(wk>=0?'▲':'▼');
-          return `<div class="mv-row"><span class="ar ${wc}">${ar}</span><span class="tk">${esc(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''} <span class="cp">${esc(r.sector||'')}</span></span><span class="cp">c ${r.composite.toFixed(0)}</span><span class="wk ${wc}">${wk!=null?fmtPct(wk,1):'—'}</span></div>`;
+        const scored = rundown.filter(r=>mvOf(r)!=null).sort((a,b)=>mvOf(b)-mvOf(a));
+        const rest = rundown.filter(r=>mvOf(r)==null);
+        host.innerHTML = `<div class="run-movers">` + scored.concat(rest).map(r=>{
+          const mv=mvOf(r), wc=mv==null?'mut':(mv>=0?'pos':'neg'), ar=mv==null?'·':(mv>=0?'▲':'▼');
+          return `<div class="mv-row"><span class="ar ${wc}">${ar}</span><span class="tk">${esc(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''} <span class="cp">${esc(r.cluster||'')}</span></span><span class="cp">${r.pending?'<span class="pend">pending</span>':'c '+r.composite.toFixed(0)}</span><span class="wk ${wc}">${mv!=null?fmtPct(mv,1):'—'}</span></div>`;
         }).join('') + `</div>`;
       } else {
-        const groups = {};
-        rundown.forEach(r => { const k=r.sector||'OTHER'; (groups[k]=groups[k]||[]).push(r); });
-        const order = Object.keys(groups).sort((a,b)=> groups[b].length-groups[a].length || a.localeCompare(b));
-        host.innerHTML = order.map(g => {
-          const rows = groups[g].slice().sort((a,b)=> (b.week_pct==null?-999:b.week_pct)-(a.week_pct==null?-999:a.week_pct));
-          return `<div class="run-group"><div class="gh"><span>${esc(g)}</span><span class="gc">${rows.length}</span></div>${cellGrid(rows)}</div>`;
+        const byLayer={};
+        rundown.forEach(r=>{ (byLayer[r.layer]=byLayer[r.layer]||[]).push(r); });
+        const layers=(order.length?order:Object.keys(byLayer)).filter(l=>byLayer[l]&&byLayer[l].length);
+        host.innerHTML = layers.map(l=>{
+          const clusters={};
+          byLayer[l].forEach(r=>{ const k=r.cluster||'Other'; (clusters[k]=clusters[k]||[]).push(r); });
+          const ckeys=Object.keys(clusters).sort((a,b)=>clusters[b].length-clusters[a].length||a.localeCompare(b));
+          const inner=ckeys.map(c=>{
+            const rows=clusters[c].slice().sort((a,b)=>{const x=mvOf(a),y=mvOf(b); return (y==null?-999:y)-(x==null?-999:x);});
+            return `<div class="run-sub"><div class="sh-c">${esc(c)} <span class="gc">${rows.length}</span></div>${cellGrid(rows)}</div>`;
+          }).join('');
+          return `<div class="run-layer"><div class="lh">${esc(lnames[l]||l)} <span class="lc">${esc(l)} · ${byLayer[l].length}</span></div>${inner}</div>`;
         }).join('');
       }
       document.querySelectorAll('#run-toggle button').forEach(b=> b.classList.toggle('active', b.dataset.mode===window.__runMode));
+      document.querySelectorAll('#win-toggle button').forEach(b=> b.classList.toggle('active', b.dataset.win===window.__moveWin));
+      $('run-meta').textContent = `${rundown.length} names · ${winLbl()} move · px ${asOf}`;
     }
-    document.querySelectorAll('#run-toggle button').forEach(b => b.onclick = () => { window.__runMode = b.dataset.mode; renderRun(); });
+    document.querySelectorAll('#run-toggle button').forEach(b=> b.onclick=()=>{ window.__runMode=b.dataset.mode; renderRun(); });
+    document.querySelectorAll('#win-toggle button').forEach(b=> b.onclick=()=>{ window.__moveWin=b.dataset.win; renderRun(); });
     renderRun();
   } catch(e){ __reportErr('rundown', e); }
 
