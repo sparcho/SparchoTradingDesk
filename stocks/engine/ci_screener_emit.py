@@ -25,11 +25,17 @@ AGG = REPO_STOCKS / "data" / "equity_dashboard_aggregate.json"
 
 import equity_dashboard_emit as E
 
-# Repoint the vault emit's path constants at the repo layout
-E.LENS_DIR = REPO_STOCKS / "03_SCREENERS" / "LAYERS"
-E.WATCHLIST_DIR = REPO_STOCKS / "03_SCREENERS" / "WATCHLIST"
+# Repoint the vault emit's path constants at the repo layout.
+# screener_runner writes lens CSVs to <its SCRIPT_DIR.parent.parent>/03_SCREENERS/LAYERS,
+# which (engine at stocks/engine) resolves to the REPO ROOT, not stocks/. Auto-resolve
+# across both candidates so a path quirk can't silently empty the screener.
+REPO_ROOT = REPO_STOCKS.parent
+_lens_cands = [REPO_ROOT / "03_SCREENERS" / "LAYERS", REPO_STOCKS / "03_SCREENERS" / "LAYERS"]
+E.LENS_DIR = next((c for c in _lens_cands if c.exists() and any(c.glob("*/*.csv"))), _lens_cands[0])
+E.WATCHLIST_DIR = E.LENS_DIR.parent / "WATCHLIST"
 E.DAILY_PRICES = HERE / "_cache" / "daily_prices.csv"
 E.TAXONOMY_YAML = HERE / "equity_taxonomy.yaml"
+print(f"[ci] LENS_DIR resolved -> {E.LENS_DIR}")
 
 
 def main() -> int:
