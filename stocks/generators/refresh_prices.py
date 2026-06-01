@@ -56,6 +56,68 @@ def fetch_price(symbol: str):
         return None, None
 
 
+# Universe symbol overrides (mirror yahoo_common SPECIAL for yfinance)
+UNIVERSE_SPECIAL = {
+    "BLUESTAR": "BLUESTARCO.NS", "KPIT": "KPITTECH.NS", "PBFINTECH": "POLICYBZR.NS",
+    "AREM": "AMARAJABAT.NS", "WAAREEENER": "WAAREEENER.NS",
+}
+
+
+def fetch_closes(sym, period="1mo"):
+    """Recent daily closes for a symbol. Returns (list[float], as_of_date) or (None, None)."""
+    try:
+        h = yf.Ticker(sym).history(period=period, interval="1d")
+        if h is None or h.empty:
+            return None, None
+        closes = [float(x) for x in h["Close"].tolist() if x == x]
+        if not closes:
+            return None, None
+        return closes, str(h.index[-1].date())
+    except Exception:
+        return None, None
+
+
+def refresh_universe_moves(data):
+    """Refresh 1d/3d/5d moves + ltp for every watchlist_rundown name, then re-rank the
+    day-trade panel on fresh 1d momentum. Per-ticker guarded; keeps prior on any failure."""
+    sc = data.get("screeners", {})
+    rundown = sc.get("watchlist_rundown", [])
+    if not rundown:
+        return
+    d1_by = {}
+    ok = 0
+    for r in rundown:
+        tk = r.get("ticker")
+        sym = UNIVERSE_SPECIAL.get(tk, f"{tk}.NS")
+        closes, asof = fetch_closes(sym)
+        if not closes or len(closes) < 2:
+            continue
+        latest = closes[-1]
+
+        def pct(n):
+            i = len(closes) - 1 - n
+            return round((latest - closes[i]) / closes[i] * 100, 2) if (i >= 0 and closes[i]) else None
+        r["moves"] = {"as_of": asof, "ltp": round(latest, 2), "d1": pct(1), "d3": pct(3), "d5": pct(5)}
+        r["ltp"] = round(latest, 2)
+        r["as_of"] = asof
+        if r.get("pending"):
+            r["pending"] = False
+        d1_by[tk] = pct(1)
+        ok += 1
+    # re-rank day-trade panel on fresh d1 (static signals composite/stddev/vol/fresh unchanged)
+    for p in sc.get("daytrade_panel", []):
+        d1 = d1_by.get(p.get("ticker"))
+        if d1 is not None:
+            p["d1"] = d1
+        std = p.get("stddev_10d_pct") or 0
+        dd = p.get("d1")
+        p["score"] = round(p.get("composite", 0) * 0.45 + min(std, 6.0) * 7.0
+                           + (10 if p.get("vol_spike") else 0) + (14 if p.get("fresh") else 0)
+                           + (abs(dd) * 2.0 if dd is not None else 0), 1)
+    sc.get("daytrade_panel", []).sort(key=lambda x: -(x.get("score") or 0))
+    print(f"  universe moves refreshed: {ok}/{len(rundown)} names")
+
+
 def main() -> int:
     if not DATA_JSON.exists():
         print(f"ERROR: {DATA_JSON} not found", file=sys.stderr)
@@ -115,6 +177,11 @@ def main() -> int:
     for h in data.get("held", []):
         cv = float(h.get("current_value") or 0)
         h["concentration_pct"] = round((cv / new_mv * 100) if new_mv else 0, 2)
+
+    try:
+        refresh_universe_moves(data)
+    except Exception as e:
+        print(f"  universe-moves refresh skipped (held/book refresh intact): {e}", file=sys.stderr)
 
     now_iso = datetime.now(timezone.utc).isoformat(timespec="seconds")
     data["emitted_at_utc"] = now_iso

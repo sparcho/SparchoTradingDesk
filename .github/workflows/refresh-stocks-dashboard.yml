@@ -1,13 +1,19 @@
 name: Refresh stocks dashboard
 
 # Triggers:
+#   - schedule: weekday IST pre-open / post-open / post-close (server-side; laptop can be off)
 #   - workflow_dispatch: manual "Run workflow" button in Actions tab
 #   - push to stocks/generators/**: if you edit the refresh script
 #
-# Operator-only refresh; no schedule. Click "Run workflow" any time you want
-# fresh NSE prices pulled into the dashboard.
+# refresh_prices.py pulls live NSE prices for held names + the full screener universe,
+# recomputes 1d/3d/5d moves, re-ranks the Day-Trade Fires panel, and updates book/concentration.
+# Lens composites/fires come from the vault pipeline (not refreshed here) — see F117.
 
 on:
+  schedule:
+    - cron: '20 3 * * 1-5'    # ~08:50 IST (pre-open) weekdays
+    - cron: '10 4 * * 1-5'    # ~09:40 IST (just after open) weekdays
+    - cron: '45 10 * * 1-5'   # ~16:15 IST (post-close) weekdays
   workflow_dispatch:
   push:
     paths:
