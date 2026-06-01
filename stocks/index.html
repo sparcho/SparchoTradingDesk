@@ -467,11 +467,11 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
   </div>
   <div class="bento" style="grid-template-columns:1fr 1fr;">
     <div class="card intel"><div class="accent-top"></div>
-      <div class="card-title"><h2>Cross-Thesis Convergence</h2><span class="meta">names in ≥2 briefs</span></div>
+      <div class="card-title"><h2>Cross-Thesis Convergence</h2><span class="meta" id="cross-meta">names in ≥2 briefs · curated</span></div>
       <div class="cross" id="cross"></div>
     </div>
     <div class="card intel"><div class="accent-top"></div>
-      <div class="card-title"><h2>Active Themes</h2><span class="meta">with key dates</span></div>
+      <div class="card-title"><h2>Active Themes</h2><span class="meta" id="themes-meta">curated synthesis</span></div>
       <div class="themes" id="themes"></div>
     </div>
   </div>
@@ -1101,7 +1101,8 @@ function renderAll(){
   try{
     $('s1-sx').textContent = `${sc.universe_count||bubble.length} names · lens ${(sc.lenses&&sc.lenses[0]&&sc.lenses[0].run_date)||''}`;
     $('s2-sx').textContent = `${held.length} held · ${fmtPct(tot.unrealized_pnl_pct)}`;
-    $('s3-sx').textContent = `${(dr.streams||[]).length} DR streams · ${(DATA.catalysts||[]).length} catalysts`;
+    $('s3-sx').textContent = `${(dr.streams||[]).length} DR streams · ${(DATA.catalysts||[]).length} catalysts${dr.as_of?' · intel curated '+dr.as_of:''}`;
+    try{ const am=dr.as_of?(' · curated as-of '+dr.as_of+' (not live)'):''; const cm=$('cross-meta'); if(cm)cm.textContent='names in ≥2 briefs'+am; const tm=$('themes-meta'); if(tm)tm.textContent='curated synthesis'+am; }catch(e){}
   } catch(e){ /* non-critical */ }
 }
 

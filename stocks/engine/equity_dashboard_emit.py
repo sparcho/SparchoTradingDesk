@@ -46,6 +46,7 @@ DR_CROSS = DR_DIR / "260512_DR-CROSS-BRIEF-STITCHING.md"
 REGIME_YAML = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / "regime_state.yaml"
 TAXONOMY_YAML = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / "equity_taxonomy.yaml"
 PW_FILE = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / ".dashboard_pw"  # local-only operator password (gitignored, never pushed)
+DR_INTEL_YAML = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / "dr_intel.yaml"
 # Primary output = the web dashboard's own data folder (what the page + deploy read).
 # Mirror to 00_SYSTEM/_state for parity. WEB_DATA only written if its parent exists
 # (true when the web/generators copy runs; the GENERATORS copy just writes _state).
@@ -315,6 +316,20 @@ def _build_risk_gate_view(held):
 
 
 def _parse_dr_cross_brief(path):
+    if DR_INTEL_YAML.exists() and HAVE_YAML:
+        try:
+            y = yaml.safe_load(DR_INTEL_YAML.read_text(encoding="utf-8")) or {}
+            if y.get("cross_thesis_names") or y.get("falsifiable_triggers"):
+                return {
+                    "source": "live", "intel_source": "dr_intel.yaml",
+                    "as_of": str(y.get("as_of") or ""),
+                    "cross_thesis_names": y.get("cross_thesis_names", []),
+                    "falsifiable_triggers": y.get("falsifiable_triggers", []),
+                    "coverage_gaps": y.get("coverage_gaps", []),
+                    "active_themes": y.get("active_themes", []),
+                }
+        except Exception:
+            pass
     cross = [
         {"ticker": "TARIL", "appears_in": ["Energy v2", "DC v2", "Defence-Railways"], "story": "T&D transformer = triple-convergence bottleneck (renewables / DC / rail)", "held": True},
         {"ticker": "HBLENGINE", "appears_in": ["Defence-Railways", "DC v2 (storage adj)"], "story": "Kavach + defence batteries + lithium scaling", "held": True},

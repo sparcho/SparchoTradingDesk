@@ -76,3 +76,14 @@ jobs:
             git pull --rebase --autostash origin main || true
             git push
           fi
+
+      # Surface failures (Yahoo down, screener drift, etc.) instead of silently going stale.
+      - name: Alert on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "⚠ Stocks dashboard refresh FAILED — $(date -u +'%Y-%m-%d %H:%M UTC')" \
+            --body "The scheduled stocks refresh failed; the dashboard's fires/prices are NOT updated this run (the live aggregate still holds the last good build). Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            || echo "issue create failed (non-fatal)"
