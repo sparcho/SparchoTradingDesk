@@ -288,6 +288,19 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 .dt-card .card-title h2{ color:var(--warn); }
 .dt-foot{ margin:7px 0 0; padding-top:7px; border-top:1px solid var(--border); font-size:9px; line-height:1.5; color:var(--ink-mute); }
 .dt-foot b{ color:var(--ink-soft); }
+/* ── 260601 v2.4: 3-col §1 top + compact day-trade list ── */
+.s1-top .card{ min-width:0; }
+.bubble-wrap{ height:300px; }
+.dt-list{ display:flex; flex-direction:column; gap:2px; }
+.dt-row{ display:grid; grid-template-columns:15px 1fr auto; gap:6px; align-items:center; padding:2px 5px; border-radius:4px; }
+.dt-row:hover{ background:rgba(255,255,255,0.03); }
+.dt-row .dt-rank{ font-family:var(--mono); font-size:9px; color:var(--ink-mute); text-align:right; font-weight:700; }
+.dt-row .dt-tk{ font-weight:700; font-size:10.5px; display:flex; align-items:center; gap:5px; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.dt-row .dt-tk .lb-lean{ font-size:7px; padding:0 4px; border-radius:5px; }
+.dt-row .dt-sig{ display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:9.5px; }
+.dt-row .dt-sig .sc{ color:var(--warn); font-size:11px; } .dt-row .dt-sig .rng{ color:var(--ink-soft); }
+.dt-row .dt-sig .nw{ font-size:7px; font-weight:700; }
+@media(max-width:1100px){ .bento.s1-top{ grid-template-columns:1fr!important; } .bubble-wrap{ height:340px; } }
 </style>
 </head>
 <body>
@@ -318,25 +331,24 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 <!-- ════ §1 SCREENER (hero, default open) ════ -->
 <details class="zone z1" open><summary><span class="sn">§1</span> Screener / Identifier <span class="sx" id="s1-sx"></span><span class="chev"></span></summary>
 <div class="zone-body">
-  <div class="card dt-card"><div class="accent-top"></div>
-    <div class="card-title"><h2>⚡ Day-Trade Fires · intraday-tradeable</h2><span class="meta">ranked for a cold 2-3% session bet · low-beta names filtered out</span></div>
-    <div style="overflow-x:auto;"><table class="dt-tbl" id="daytrade"></table></div>
-    <p class="dt-foot"><b>How to read:</b> ranked by tradeability — <b>Range</b> (10d stddev: can it realistically move 2-3% in a session?) + <b>1d momentum</b> + <b>volume spike</b> (●) + <b>fresh fire</b> (NEW = newly multi-lens today) + composite. Low-beta names (stddev &lt;1.5%, e.g. large-cap IT like TCS) are excluded — they can't reliably hit 2-3% intraday. <b>Not advice</b> — your own entry / stop / sizing discipline applies; confirm the chart before acting.</p>
-  </div>
-  <div class="bento" style="grid-template-columns:1.5fr 1fr;">
+  <div class="bento s1-top" style="grid-template-columns:1fr 1.18fr 0.95fr;">
+    <div class="card dt-card"><div class="accent-top"></div>
+      <div class="card-title"><h2>⚡ Day-Trade Fires</h2><span class="meta">cold 2-3% intraday</span></div>
+      <div class="dt-list" id="daytrade"></div>
+      <p class="dt-foot"><b>Ranked</b> by range (10d stddev — can it do 2-3%?) + 1d momentum + vol spike (●) + fresh fire (NEW) + composite. Low-beta (e.g. TCS) excluded. <b>Not advice.</b></p>
+    </div>
     <div class="card"><div class="accent-top"></div>
-      <div class="card-title"><h2>Screener Bubble Map</h2><span class="meta">x = composite · y = lean · size = lenses hit</span></div>
+      <div class="card-title"><h2>Screener Bubble Map</h2><span class="meta">x=composite · y=lean · size=lenses</span></div>
       <div class="bubble-wrap"><canvas id="bubble-canvas"></canvas></div>
-      <div class="bubble-foot">Top-right big bubbles = high-conviction multi-lens longs · bottom-right = strong-but-bearish (distribution / trim). ★ = held. Composite = mean of the 4 lens pass-ratios.</div>
+      <div class="bubble-foot">Top-right big = high-conviction multi-lens longs · bottom-right = strong-but-bearish. ★ held. <b>Click a bubble → TradingView chart.</b></div>
     </div>
     <div class="card"><div class="accent-top"></div>
       <div class="card-title"><h2>Composite Leaderboard</h2><span class="meta" id="lb-meta">—</span></div>
       <div class="lb" id="leaderboard"></div>
       <div class="legend">
-        <span class="lg"><i class="lchip pass"></i><i class="lchip near"></i><i class="lchip fail"></i> lens: pass / near / fail</span>
-        <span class="lg">chips = R-10G · R-DIV · S-8G · K-TA</span>
-        <span class="lg"><span class="lb-lean bull">BULL</span> <span class="lb-lean bear">BEAR</span> = Rajiv-DIV lean · <b style="color:var(--accent)">★</b> held</span>
-        <span class="lg">bar/score = composite (mean of 4 lens pass-ratios, 0–100)</span>
+        <span class="lg"><i class="lchip pass"></i><i class="lchip near"></i><i class="lchip fail"></i> pass/near/fail</span>
+        <span class="lg">chips = R-10G·R-DIV·S-8G·K-TA · <b style="color:var(--accent)">★</b> held</span>
+        <span class="lg"><span class="lb-lean bull">BULL</span> <span class="lb-lean bear">BEAR</span> = Rajiv-DIV lean · bar = composite</span>
       </div>
     </div>
   </div>
@@ -459,6 +471,9 @@ window.onerror = function(msg, src, line, col, err){
 
 // twilight hexes (CSS vars don't resolve in canvas — mirror here)
 const HEX = { teal:'#36c5b0', violet:'#8b7cf6', pos:'#5fb87f', neg:'#e07a6f', warn:'#e6a23c', amber:'#e6a23c', ink:'#e8eaf2', mute:'#777c95', grid:'rgba(255,255,255,0.07)', track:'rgba(255,255,255,0.08)' };
+// internal ticker -> TradingView symbol (mirror yahoo_common SPECIAL)
+const TV_SPECIAL = { BLUESTAR:'BLUESTARCO', KPIT:'KPITTECH', PBFINTECH:'POLICYBZR', AREM:'ARE&M', WAAREEENER:'WAAREEENER' };
+const tvSymbol = (t)=> 'NSE:' + (TV_SPECIAL[t] || t);
 
 let DATA = null;
 async function bootstrap(){
@@ -590,24 +605,19 @@ function renderAll(){
   // ── §1.0 DAY-TRADE FIRES (intraday-tradeable ranking) ──
   try{
     const dt = sc.daytrade_panel || [];
-    const head = `<thead><tr><th>#</th><th>Ticker</th><th>Lean</th><th class="num">Comp</th><th class="num">Range</th><th class="num">1d</th><th>Vol</th><th>Fresh</th><th class="num">Score</th></tr></thead>`;
-    const body = dt.map((r,i)=>{
-      const d1=r.d1, dc=d1==null?'mut':(d1>=0?'pos':'neg');
-      const leanCls=r.lean>0?'pos':(r.lean<0?'neg':'mut'), leanTx=r.lean>0?'BULL':(r.lean<0?'BEAR':'—');
-      return `<tr>
-        <td class="num mut">${i+1}</td>
-        <td class="tk">${esc(r.ticker)}${r.held?' <span style="color:var(--accent)">★</span>':''} <span class="mut" style="font-size:8px;">${esc(r.sector||'')}</span></td>
-        <td><span class="${leanCls}" style="font-weight:700;font-size:9px;">${leanTx}</span></td>
-        <td class="num">${r.composite.toFixed(0)}</td>
-        <td class="num">${r.stddev_10d_pct!=null?r.stddev_10d_pct.toFixed(1)+'%':'—'}</td>
-        <td class="num ${dc}">${d1!=null?fmtPct(d1,1):'—'}</td>
-        <td style="text-align:center;">${r.vol_spike?'<span class="warnc">●</span>':'<span class="mut">·</span>'}</td>
-        <td style="text-align:center;">${r.fresh?'<span class="pos" style="font-size:8px;font-weight:700;">NEW</span>':'<span class="mut">·</span>'}</td>
-        <td class="num" style="font-weight:700;">${r.score.toFixed(0)}</td>
-      </tr>`;
-    }).join('');
-    $('daytrade').innerHTML = head + `<tbody>${body}</tbody>` || head;
-    if(!dt.length) $('daytrade').innerHTML = head + '<tbody><tr><td colspan="9" class="mut" style="padding:8px;">No intraday-tradeable fires today (no names with stddev ≥1.5% scoring in).</td></tr></tbody>';
+    if (!dt.length){
+      $('daytrade').innerHTML = '<div class="mut" style="font-size:10px;padding:6px;">No intraday-tradeable fires today (no names with stddev ≥1.5% scoring in).</div>';
+    } else {
+      $('daytrade').innerHTML = dt.map((r,i)=>{
+        const d1=r.d1, dc=d1==null?'mut':(d1>=0?'pos':'neg');
+        const leanCls=r.lean>0?'bull':(r.lean<0?'bear':'none'), leanTx=r.lean>0?'BULL':(r.lean<0?'BEAR':'—');
+        return `<div class="dt-row" title="${esc(r.ticker)} · ${esc(r.cluster||r.sector||'')} · score ${r.score.toFixed(0)}">
+          <span class="dt-rank">${i+1}</span>
+          <span class="dt-tk">${esc(r.ticker)}${r.held?' <span style="color:var(--accent)">★</span>':''}<span class="lb-lean ${leanCls}">${leanTx}</span></span>
+          <span class="dt-sig"><b class="sc">${r.score.toFixed(0)}</b><span class="rng">${r.stddev_10d_pct!=null?r.stddev_10d_pct.toFixed(1)+'%':'—'}</span><span class="${dc}">${d1!=null?fmtPct(d1,1):'—'}</span>${r.vol_spike?'<span class="warnc" title="volume spike">●</span>':''}${r.fresh?'<span class="pos nw">NEW</span>':''}</span>
+        </div>`;
+      }).join('');
+    }
   } catch(e){ __reportErr('daytrade', e); }
 
   // ── §1.a BUBBLE MAP ──
@@ -636,6 +646,8 @@ function renderAll(){
         data:{ datasets:[ds] },
         options:{
           responsive:true, maintainAspectRatio:false, animation:false,
+          onClick:(evt,els,chart)=>{ if(els&&els.length){ const p=chart.data.datasets[els[0].datasetIndex].data[els[0].index]; const b=p&&p._b; if(b&&b.ticker) window.open('https://www.tradingview.com/chart/?symbol='+encodeURIComponent(tvSymbol(b.ticker)),'_blank'); } },
+          onHover:(evt,els)=>{ if(evt&&evt.native&&evt.native.target) evt.native.target.style.cursor=(els&&els.length)?'pointer':'default'; },
           layout:{ padding:6 },
           scales:{
             x:{ min:-8, max:108, title:{ display:true, text:'composite screener strength →', color:HEX.mute, font:{size:9} },
