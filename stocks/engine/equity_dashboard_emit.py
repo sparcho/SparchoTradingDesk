@@ -35,6 +35,7 @@ def _find_vault_root(start):
 ROOT = _find_vault_root(HERE)
 POSITIONS_JSON = ROOT / "00_SYSTEM" / "GENERATORS" / "_cache" / "positions_unified.json"
 DAILY_PRICES = ROOT / "00_SYSTEM" / "GENERATORS" / "_cache" / "daily_prices.csv"
+HIST_CSV = ROOT / "00_SYSTEM" / "GENERATORS" / "_cache" / "historical_closes.csv"
 SR_CSV = ROOT / "00_SYSTEM" / "AUTO_SR_LEVELS.csv"
 STOCKS_DIR = ROOT / "02_STOCKS"
 LENS_DIR = ROOT / "03_SCREENERS" / "LAYERS"
@@ -582,37 +583,117 @@ def _prior_multi_hits():
     return prior
 
 
+def _load_hist_closes():
+    """ticker -> sorted [(date, close)] from historical_closes.csv (deep history, all names)."""
+    out = {}
+    if not HIST_CSV.exists():
+        return out
+    with HIST_CSV.open("r", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            tk, d, c = r.get("ticker"), r.get("date"), r.get("close")
+            if not (tk and d and c):
+                continue
+            try:
+                out.setdefault(tk, []).append((d, float(c)))
+            except ValueError:
+                continue
+    for tk in out:
+        out[tk].sort()
+    return out
+
+
+def _load_ohlc():
+    """ticker -> sorted [(date,o,h,l,c)] from daily_prices.csv (for confirmation-candle reads)."""
+    out = {}
+    if not DAILY_PRICES.exists():
+        return out
+    with DAILY_PRICES.open("r", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            tk, d = r.get("ticker"), r.get("date")
+            if not (tk and d):
+                continue
+            try:
+                o, h, l, c = float(r.get("open") or 0), float(r.get("high") or 0), float(r.get("low") or 0), float(r.get("close") or 0)
+            except ValueError:
+                continue
+            if c <= 0:
+                continue
+            out.setdefault(tk, []).append((d, o, h, l, c))
+    for tk in out:
+        out[tk].sort()
+    return out
+
+
 def _build_daytrade_panel(name_index, universe_meta, prices, prior_mh, held_tickers):
-    """Rank fresh fires by intraday tradeability for the 'cold 2-3% day-trade' use-case.
-    Signals: stddev_10d (can it move 2-3%?), 1d momentum, volume spike, fresh fire, composite.
-    Filter: stddev_10d >= 1.5% (low-beta large-caps like TCS are excluded — they can't reliably
-    do 2-3% intraday). Honest: fires = positional-lens hits; price/vol signals are the intraday edge."""
+    """LONG-ONLY intraday-tradeable shortlist for the 'cold 2-3%' use-case.
+    Filters: stddev_10d >= 1.5% (can move 2-3%), lean not bearish, NOT a falling knife.
+    Each candidate gets a confirmation-candle descriptor (operator's father's point: wait for a
+    green confirmation candle before acting). Confirmation read from the latest daily OHLC bar;
+    momentum/knife from historical closes (all names). Honest: no shorts surfaced."""
+    ohlc = _load_ohlc()
     rows = []
     for tk, e in name_index.items():
         m = universe_meta.get(tk, {})
         std = m.get("stddev_10d_pct")
         if std is None or std < 1.5:
             continue
-        mv = _moves(prices, tk)
-        d1 = mv.get("d1") if mv else None
-        composite = round(e["composite"] * 100, 1)
+        if m.get("lean", 0) < 0:        # LONG-ONLY: drop bearish-lean names (no shorting)
+            continue
+        closes = [b[4] for b in ohlc.get(tk, [])]   # coherent w/ confirmation candle (one source)
+        d1 = round((closes[-1] - closes[-2]) / closes[-2] * 100, 2) if len(closes) >= 2 and closes[-2] else None
+        d3 = round((closes[-1] - closes[-4]) / closes[-4] * 100, 2) if len(closes) >= 4 and closes[-4] else None
+        # falling-knife exclusion
+        knife = False
+        if d1 is not None and d1 <= -3:
+            knife = True
+        if len(closes) >= 4 and closes[-1] < closes[-2] < closes[-3] < closes[-4] and (d1 or 0) < 0:
+            knife = True
+        if knife:
+            continue
+        vol_spike = bool(m.get("vol_spike")) or (m.get("vol_spike_days", 0) >= 3)
+        # confirmation candle from latest daily OHLC bar
+        bars = ohlc.get(tk, [])
+        confirmed = False
+        if bars:
+            _d, o, h, l, c = bars[-1]
+            prevc = bars[-2][4] if len(bars) >= 2 else None
+            rng = (h - l) or 1.0
+            green = c > o
+            up = (prevc is not None and c > prevc)
+            strong = ((c - l) / rng) >= 0.6
+            if green and up and strong:
+                confirmed = True
+                desc = "Confirmation candle: green, closed strong" + (" on a volume spike" if vol_spike else " (volume light)")
+            elif green and up:
+                desc = "Up + green but closed mid-range -- wait for a strong-close confirmation candle"
+            elif d1 is not None and abs(d1) < 1:
+                desc = "Basing -- needs a green confirmation candle to trigger"
+            else:
+                desc = "No confirmation candle yet -- hold for a green close"
+        else:
+            desc = "Insufficient candle data -- confirm on the chart"
+        if d1 is not None and d1 < -0.5 and not confirmed:
+            continue   # down on the day with no reversal candle -> not an upward opportunity
         mh = e["multi_hit_count"]
         fresh = (mh >= 2) and (mh > prior_mh.get(tk, 0))
-        vol_spike = bool(m.get("vol_spike")) or (m.get("vol_spike_days", 0) >= 3)
-        score = (composite * 0.45
-                 + min(std, 6.0) * 7.0
-                 + (10 if vol_spike else 0)
-                 + (14 if fresh else 0)
-                 + (abs(d1) * 2.0 if d1 is not None else 0))
+        composite = round(e["composite"] * 100, 1)
+        score = (composite * 0.4
+                 + min(std, 6.0) * 6.0
+                 + (20 if confirmed else 0)
+                 + (8 if vol_spike else 0)
+                 + (10 if fresh else 0)
+                 + (max(0.0, d1) * 3.0 if d1 is not None else 0)
+                 - (max(0.0, -d1) * 1.5 if d1 is not None else 0))
         rows.append({
             "ticker": tk, "composite": composite, "lean": m.get("lean", 0),
             "multi_hit_count": mh, "fresh": fresh, "vol_spike": vol_spike,
-            "stddev_10d_pct": round(std, 2), "d1": d1,
+            "stddev_10d_pct": round(std, 2), "d1": d1, "d3": d3,
+            "confirmed": confirmed, "descriptor": desc,
             "sector": m.get("sector"), "rsi_today": m.get("rsi_today"),
             "held": tk in held_tickers, "score": round(score, 1),
         })
     rows.sort(key=lambda r: -r["score"])
-    return rows[:14]
+    return rows[:12]
 
 
 def _scan_dr_streams(universe):

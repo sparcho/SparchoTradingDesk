@@ -291,15 +291,22 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
 /* ── 260601 v2.4: 3-col §1 top + compact day-trade list ── */
 .s1-top .card{ min-width:0; }
 .bubble-wrap{ height:300px; }
-.dt-list{ display:flex; flex-direction:column; gap:2px; }
-.dt-row{ display:grid; grid-template-columns:15px 1fr auto; gap:6px; align-items:center; padding:2px 5px; border-radius:4px; }
-.dt-row:hover{ background:rgba(255,255,255,0.03); }
-.dt-row .dt-rank{ font-family:var(--mono); font-size:9px; color:var(--ink-mute); text-align:right; font-weight:700; }
-.dt-row .dt-tk{ font-weight:700; font-size:10.5px; display:flex; align-items:center; gap:5px; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.dt-row .dt-tk .lb-lean{ font-size:7px; padding:0 4px; border-radius:5px; }
-.dt-row .dt-sig{ display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:9.5px; }
-.dt-row .dt-sig .sc{ color:var(--warn); font-size:11px; } .dt-row .dt-sig .rng{ color:var(--ink-soft); }
-.dt-row .dt-sig .nw{ font-size:7px; font-weight:700; }
+.dt-list{ display:flex; flex-direction:column; gap:5px; }
+.dt-row{ padding:5px 7px; border-radius:5px; background:rgba(255,255,255,0.02); border-left:2px solid var(--ink-faint); }
+.dt-row.conf{ border-left-color:var(--pos); }
+.dt-head{ display:grid; grid-template-columns:15px 1fr auto auto; gap:6px; align-items:center; }
+.dt-head .dt-rank{ font-family:var(--mono); font-size:9px; color:var(--ink-mute); text-align:right; font-weight:700; }
+.dt-head .dt-tk{ font-weight:700; font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.dt-head .dt-badge{ font-size:7.5px; font-weight:700; padding:1px 5px; border-radius:6px; white-space:nowrap; }
+.dt-head .dt-badge.ok{ background:var(--pos-soft); color:var(--pos); } .dt-head .dt-badge.wait{ background:var(--warn-soft); color:var(--warn); }
+.dt-head .dt-score{ font-family:var(--mono); font-weight:800; color:var(--warn); font-size:12px; }
+.dt-desc{ font-size:9px; color:var(--ink-soft); line-height:1.35; margin:2px 0; }
+.dt-stats{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; font-family:var(--mono); font-size:9.5px; }
+.dt-stats span{ display:flex; flex-direction:column; line-height:1.2; }
+.dt-stats i{ font-style:normal; font-size:7px; color:var(--ink-mute); text-transform:uppercase; letter-spacing:0.04em; }
+.dt-stats .volon{ color:var(--warn); } .dt-stats .voloff{ color:var(--ink-mute); }
+.tvl{ color:inherit; text-decoration:none; border-bottom:1px dotted rgba(255,255,255,0.28); }
+.tvl:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 @media(max-width:1100px){ .bento.s1-top{ grid-template-columns:1fr!important; } .bubble-wrap{ height:340px; } }
 </style>
 </head>
@@ -335,7 +342,7 @@ details.zone>.zone-body{ display:flex; flex-direction:column; gap:7px; padding-t
     <div class="card dt-card"><div class="accent-top"></div>
       <div class="card-title"><h2>⚡ Day-Trade Fires</h2><span class="meta">cold 2-3% intraday</span></div>
       <div class="dt-list" id="daytrade"></div>
-      <p class="dt-foot"><b>Ranked</b> by range (10d stddev — can it do 2-3%?) + 1d momentum + vol spike (●) + fresh fire (NEW) + composite. Low-beta (e.g. TCS) excluded. <b>Not advice.</b></p>
+      <p class="dt-foot"><b>Long-only.</b> Bearish-lean + falling-knife names excluded. Ranked by range + momentum + volume + <b>confirmation candle</b> + composite. ✓ = green confirmation candle today; ⏳ = wait. Low-beta (e.g. TCS) excluded. <b>Not advice — confirm the chart.</b></p>
     </div>
     <div class="card"><div class="accent-top"></div>
       <div class="card-title"><h2>Screener Bubble Map</h2><span class="meta">x=composite · y=lean · size=lenses</span></div>
@@ -474,6 +481,8 @@ const HEX = { teal:'#36c5b0', violet:'#8b7cf6', pos:'#5fb87f', neg:'#e07a6f', wa
 // internal ticker -> TradingView symbol (mirror yahoo_common SPECIAL)
 const TV_SPECIAL = { BLUESTAR:'BLUESTARCO', KPIT:'KPITTECH', PBFINTECH:'POLICYBZR', AREM:'ARE&M', WAAREEENER:'WAAREEENER' };
 const tvSymbol = (t)=> 'NSE:' + (TV_SPECIAL[t] || t);
+const tvLink = (t)=> `<a class="tvl" href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(tvSymbol(t))}" target="_blank" rel="noopener">${t}</a>`;
+const _jit = (s)=>{ let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))&0xffff; return ((h%100)/100-0.5)*0.64; };
 
 let DATA = null;
 async function bootstrap(){
@@ -610,11 +619,19 @@ function renderAll(){
     } else {
       $('daytrade').innerHTML = dt.map((r,i)=>{
         const d1=r.d1, dc=d1==null?'mut':(d1>=0?'pos':'neg');
-        const leanCls=r.lean>0?'bull':(r.lean<0?'bear':'none'), leanTx=r.lean>0?'BULL':(r.lean<0?'BEAR':'—');
-        return `<div class="dt-row" title="${esc(r.ticker)} · ${esc(r.cluster||r.sector||'')} · score ${r.score.toFixed(0)}">
-          <span class="dt-rank">${i+1}</span>
-          <span class="dt-tk">${esc(r.ticker)}${r.held?' <span style="color:var(--accent)">★</span>':''}<span class="lb-lean ${leanCls}">${leanTx}</span></span>
-          <span class="dt-sig"><b class="sc">${r.score.toFixed(0)}</b><span class="rng">${r.stddev_10d_pct!=null?r.stddev_10d_pct.toFixed(1)+'%':'—'}</span><span class="${dc}">${d1!=null?fmtPct(d1,1):'—'}</span>${r.vol_spike?'<span class="warnc" title="volume spike">●</span>':''}${r.fresh?'<span class="pos nw">NEW</span>':''}</span>
+        return `<div class="dt-row ${r.confirmed?'conf':''}">
+          <div class="dt-head">
+            <span class="dt-rank">${i+1}</span>
+            <span class="dt-tk">${tvLink(r.ticker)}${r.held?' <span style="color:var(--accent)">★</span>':''}${r.fresh?' <span class="pos" style="font-size:7px;font-weight:700;">NEW</span>':''}</span>
+            <span class="dt-badge ${r.confirmed?'ok':'wait'}">${r.confirmed?'✓ confirmed':'⏳ wait'}</span>
+            <span class="dt-score" title="tradeability score">${r.score.toFixed(0)}</span>
+          </div>
+          <div class="dt-desc">${esc(r.descriptor||'')}</div>
+          <div class="dt-stats">
+            <span><i>range</i>${r.stddev_10d_pct!=null?r.stddev_10d_pct.toFixed(1)+'%':'—'}</span>
+            <span class="${dc}"><i>1d</i>${d1!=null?fmtPct(d1,1):'—'}</span>
+            <span class="${r.vol_spike?'volon':'voloff'}"><i>vol</i>${r.vol_spike?'spike ●':'—'}</span>
+          </div>
         </div>`;
       }).join('');
     }
@@ -627,15 +644,15 @@ function renderAll(){
       const ex = Chart.getChart(cv); if (ex) ex.destroy();
       const pts = bubble.map(b => ({
         x: b.composite,
-        y: b.lean,
-        r: 5 + (b.multi_hit_count||0) * 4,
+        y: b.lean + _jit(b.ticker),
+        r: 4 + (b.multi_hit_count||0) * 3,
         _b: b
       }));
       const colorFor = (b) => b.held ? HEX.amber : (b.lean>0 ? HEX.pos : (b.lean<0 ? HEX.neg : HEX.teal));
       const ds = {
         label:'names',
         data: pts,
-        backgroundColor: pts.map(p => colorFor(p._b) + '55'),
+        backgroundColor: pts.map(p => colorFor(p._b) + '40'),
         borderColor: pts.map(p => colorFor(p._b)),
         borderWidth: pts.map(p => p._b.held ? 2.5 : 1),
         pointStyle: pts.map(p => p._b.held ? 'star' : 'circle'),
@@ -675,7 +692,7 @@ function renderAll(){
       const leanTx = b.lean>0?'BULL':(b.lean<0?'BEAR':'—');
       return `<div class="lb-row ${b.held?'held':''}">
         <div class="lb-rank">${i+1}</div>
-        <div class="lb-name"><span class="tk">${esc(b.ticker)}</span>${b.held?'<span class="star">★</span>':''}<span class="lb-lean ${leanCls}">${leanTx}</span><span class="sec">${esc(b.sector||'')}</span></div>
+        <div class="lb-name"><span class="tk">${tvLink(b.ticker)}</span>${b.held?'<span class="star">★</span>':''}<span class="lb-lean ${leanCls}">${leanTx}</span><span class="sec">${esc(b.sector||'')}</span></div>
         <div class="lchips">${chips}</div>
         <div class="lb-comp"><div class="bar"><div class="fill" style="width:${Math.max(2,b.composite)}%"></div></div><div class="v">${b.composite.toFixed(0)}</div></div>
       </div>`;
@@ -689,7 +706,7 @@ function renderAll(){
     const head = `<thead><tr><th class="l">Ticker</th>${L.map(l=>`<th>${l.replace('Rajiv-','R-').replace('Sanjeev-','S-').replace('Kaarin-','K-')}</th>`).join('')}<th>hits</th></tr></thead>`;
     const body = `<tbody>${rows.map(r => {
       const tds = L.map(l => { const c=(r.lens&&r.lens[l]); const st=c?c.status:'na'; return `<td><span class="cell ${st}">${c?c.score:'—'}</span></td>`; }).join('');
-      return `<tr><td class="tk">${r.held?'<span class="st">★</span>':''}${esc(r.ticker)}</td>${tds}<td><span class="cell ${r.multi_hit_count>=2?'pass':'fail'}">${r.multi_hit_count}/4</span></td></tr>`;
+      return `<tr><td class="tk">${r.held?'<span class="st">★</span>':''}${tvLink(r.ticker)}</td>${tds}<td><span class="cell ${r.multi_hit_count>=2?'pass':'fail'}">${r.multi_hit_count}/4</span></td></tr>`;
     }).join('')}</tbody>`;
     $('hit-matrix').innerHTML = head + body;
   } catch(e){ __reportErr('hit-matrix', e); }
@@ -720,7 +737,7 @@ function renderAll(){
   // ── §1.e PROMOTION ──
   try{
     const pc = sc.promotion_candidates || [];
-    $('promo').innerHTML = pc.length ? pc.map(p => `<div class="pc"><span class="tk">${esc(p.ticker)}</span> <span class="mh">${p.multi_hit_count}/4</span></div>`).join('')
+    $('promo').innerHTML = pc.length ? pc.map(p => `<div class="pc"><span class="tk">${tvLink(p.ticker)}</span> <span class="mh">${p.multi_hit_count}/4</span></div>`).join('')
       : '<span class="mut" style="font-size:10px;">No multi-lens near-miss candidates today (verse is risk-off — only Rajiv-DIV passing).</span>';
   } catch(e){ __reportErr('promo', e); }
 
@@ -737,7 +754,7 @@ function renderAll(){
       const mv=mvOf(r), wc=mv==null?'mut':(mv>=0?'pos':'neg');
       const comp = r.pending ? '<span class="pend">pending</span>' : 'c '+r.composite.toFixed(0);
       return `<div class="run-cell ${r.tag==='held'?'held':''} ${r.pending?'pend':''}">
-        <div class="rt"><span class="tk">${esc(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''}</span><span class="tag">${r.tag}</span></div>
+        <div class="rt"><span class="tk">${tvLink(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''}</span><span class="tag">${r.tag}</span></div>
         <div class="rb"><span class="cp">${comp}</span><span class="wk ${wc}">${mv!=null?fmtPct(mv,1):'—'}</span></div>
       </div>`;
     };
@@ -749,7 +766,7 @@ function renderAll(){
         const rest = rundown.filter(r=>mvOf(r)==null);
         host.innerHTML = `<div class="run-movers">` + scored.concat(rest).map(r=>{
           const mv=mvOf(r), wc=mv==null?'mut':(mv>=0?'pos':'neg'), ar=mv==null?'·':(mv>=0?'▲':'▼');
-          return `<div class="mv-row"><span class="ar ${wc}">${ar}</span><span class="tk">${esc(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''} <span class="cp">${esc(r.cluster||'')}</span></span><span class="cp">${r.pending?'<span class="pend">pending</span>':'c '+r.composite.toFixed(0)}</span><span class="wk ${wc}">${mv!=null?fmtPct(mv,1):'—'}</span></div>`;
+          return `<div class="mv-row"><span class="ar ${wc}">${ar}</span><span class="tk">${tvLink(r.ticker)}${r.tag==='held'?' <span style="color:var(--accent)">★</span>':''} <span class="cp">${esc(r.cluster||'')}</span></span><span class="cp">${r.pending?'<span class="pend">pending</span>':'c '+r.composite.toFixed(0)}</span><span class="wk ${wc}">${mv!=null?fmtPct(mv,1):'—'}</span></div>`;
         }).join('') + `</div>`;
       } else {
         const byLayer={};
@@ -798,7 +815,7 @@ function renderAll(){
       const g = grid.find(x => x.ticker === h.ticker);
       const chips = L.map(l => { const s=(g&&g.lens&&g.lens[l]&&g.lens[l].status)||'na'; const map={pass:HEX.pos,near:HEX.warn,fail:'rgba(255,255,255,0.10)',na:'rgba(255,255,255,0.04)'}; return `<i style="background:${map[s]}" title="${l}"></i>`; }).join('');
       return `<tr>
-        <td class="tk">${esc(h.ticker)}</td>
+        <td class="tk">${tvLink(h.ticker)}</td>
         <td class="num">${fmtNum(h.qty)}</td>
         <td class="num">${fmtINR(h.avg_cost,{dp:2})}</td>
         <td class="num">${fmtINR(h.current_price,{dp:2})}</td>
@@ -858,7 +875,7 @@ function renderAll(){
     } else { html += '<div class="mut" style="font-size:10px;margin-bottom:6px;">No trades in last broker drop.</div>'; }
     if (rc.length){
       html += '<div style="font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-mute);font-weight:700;margin:6px 0 3px;">Recently closed</div>';
-      html += '<table class="tbl"><tbody>' + rc.map(c => `<tr><td class="tk">${esc(c.ticker)}</td><td class="mut" style="font-size:9px;">${esc(c.cluster||'')}</td><td class="num">${esc(c.exit_date||'')}</td><td class="num ${pnlCls(c.realised_pnl)}">${c.realised_pnl!=null?fmtSigned(c.realised_pnl,{compact:true}):''}</td></tr>`).join('') + '</tbody></table>';
+      html += '<table class="tbl"><tbody>' + rc.map(c => `<tr><td class="tk">${tvLink(c.ticker)}</td><td class="mut" style="font-size:9px;">${esc(c.cluster||'')}</td><td class="num">${esc(c.exit_date||'')}</td><td class="num ${pnlCls(c.realised_pnl)}">${c.realised_pnl!=null?fmtSigned(c.realised_pnl,{compact:true}):''}</td></tr>`).join('') + '</tbody></table>';
     }
     $('trades-block').innerHTML = html;
   } catch(e){ __reportErr('trades', e); }
@@ -892,7 +909,7 @@ function renderAll(){
     const cx = dr.cross_thesis_names || [];
     $('cross').innerHTML = cx.map(c => `
       <div class="cc ${c.held?'held':''}">
-        <div class="ct">${esc(c.ticker)}${c.held?'<span class="star" style="color:var(--accent);">★</span>':''}</div>
+        <div class="ct">${tvLink(c.ticker)}${c.held?'<span class="star" style="color:var(--accent);">★</span>':''}</div>
         <div class="ca">${(c.appears_in||[]).map(a=>`<span class="a">${esc(a)}</span>`).join('')}</div>
         <div class="cs">${esc(c.story)}</div>
       </div>`).join('');

@@ -104,17 +104,9 @@ def refresh_universe_moves(data):
             r["pending"] = False
         d1_by[tk] = pct(1)
         ok += 1
-    # re-rank day-trade panel on fresh d1 (static signals composite/stddev/vol/fresh unchanged)
-    for p in sc.get("daytrade_panel", []):
-        d1 = d1_by.get(p.get("ticker"))
-        if d1 is not None:
-            p["d1"] = d1
-        std = p.get("stddev_10d_pct") or 0
-        dd = p.get("d1")
-        p["score"] = round(p.get("composite", 0) * 0.45 + min(std, 6.0) * 7.0
-                           + (10 if p.get("vol_spike") else 0) + (14 if p.get("fresh") else 0)
-                           + (abs(dd) * 2.0 if dd is not None else 0), 1)
-    sc.get("daytrade_panel", []).sort(key=lambda x: -(x.get("score") or 0))
+    # NOTE: the day-trade panel is owned by ci_screener_emit (long-only + confirmation-candle +
+    # descriptor, all coherent on one OHLC source). refresh_prices intentionally does NOT touch it —
+    # overwriting d1 here with a different price source would re-break candle/momentum coherence.
     print(f"  universe moves refreshed: {ok}/{len(rundown)} names")
 
 
