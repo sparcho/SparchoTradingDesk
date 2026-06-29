@@ -57,11 +57,11 @@ PW_FILE = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / ".dashboard_pw"  # loc
 CLIENTS_FILE = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / ".dashboard_clients.json"  # {account_key: client_password} (gitignored)
 PBKDF2_ITERS = 600000  # OWASP 2023 floor for PBKDF2-SHA256; the browser reads this from the file's `iter`
 # account lenses — mirror the dashboard's FAM_* maps so accounts_public carries real labels (no numbers)
-FAM_ORDER = ["Sparsh", "Rajiv HUF", "2P2", "Rajiv", "HDFC", "Others"]
-FAM_COL = {"Sparsh": "#8b7ae0", "Rajiv HUF": "#3aa98b", "2P2": "#e0764a", "Rajiv": "#d9a23a", "HDFC": "#5b8ee0", "Others": "#8a8f98"}
-FAM_NAME = {"Sparsh": "Sparsh", "Rajiv HUF": "Rajiv HUF", "2P2": "2P2", "Rajiv": "Rajiv", "HDFC": "HDFC · operated", "Others": "Shalini · Yash · Kite"}
+FAM_ORDER = ["Account A", "Account B-HUF", "Account E", "Account B", "HDFC", "Others"]  # F123b codenamed
+FAM_COL = {"Account A": "#8b7ae0", "Account B-HUF": "#3aa98b", "Account E": "#e0764a", "Account B": "#d9a23a", "HDFC": "#5b8ee0", "Others": "#8a8f98"}  # F123b codenamed
+FAM_NAME = {"Account A": "Account A", "Account B-HUF": "Account B-HUF", "Account E": "Account E", "Account B": "Account B", "HDFC": "Operated", "Others": "Acct C · Acct D · Acct F"}  # F123b: codenamed (dead constant)
 def _fam_norm(k):
-    return "HDFC" if k == "HDFC" else (k if k in ("Sparsh", "Rajiv HUF", "2P2", "Rajiv") else "Others")
+    return "HDFC" if k == "HDFC" else (k if k in ("Account A", "Account B-HUF", "Account E", "Account B") else "Others")
 DR_INTEL_YAML = ROOT / "00_SYSTEM" / "GENERATORS" / "_inputs" / "dr_intel.yaml"
 # Primary output = the web dashboard's own data folder (what the page + deploy read).
 # Mirror to 00_SYSTEM/_state for parity. WEB_DATA only written if its parent exists
