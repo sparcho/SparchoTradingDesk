@@ -1,16 +1,17 @@
 name: Refresh silver dashboard
 
-# Updated paths after silver/ subfolder restructure
+# F123b: this cron now runs the FAMILY-DATA-FREE price overlay (silver_refresh_prices.py), NOT the
+# full silver_dashboard_emit.py. The full emit needs the family holdings input (silver_holdings.yaml)
+# + strategy logic, which must stay PRIVATE (in the vault). The cloud only refreshes live market
+# prices on the already-committed aggregate; it never reads holdings and never touches sensitive_enc.
+# The HOST runs the full emit (with the operator password + private inputs) and publishes the book.
 on:
   schedule:
-    # Every 20 min, 24/7 — 72 emits/day, under goldapi.io free-tier 100/day cap.
-    # Operator wants dashboard to feel live for family viewing at any hour
-    # (XAG / Gold / DXY / USDINR all trade 24/5 globally).
+    # Every 20 min, 24/7 — keeps XAG / SBees / Gold / DXY / USDINR feeling live for family viewing.
     - cron: '*/20 * * * *'
   push:
     paths:
-      - 'silver/_inputs/silver_holdings.yaml'
-      - 'silver/generators/**'
+      - 'silver/generators/silver_refresh_prices.py'
   workflow_dispatch:
 
 permissions:
@@ -31,38 +32,31 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install PyYAML requests
+        run: pip install requests
 
-      - name: Run emitter
-        env:
-          GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
-        run: python silver/generators/silver_dashboard_emit.py
+      - name: Refresh live prices (no family data)
+        run: python silver/generators/silver_refresh_prices.py
 
       - name: Commit + push if changed
-        # HARDENED: previously a moved remote (manual push / overlapping run) just failed the push.
-        # The aggregate carries the operator's encrypted book, so don't merge — fast-path push, and
-        # if the remote moved, RESET to latest remote and re-emit on top. silver_dashboard_emit is
-        # carry-forward: with no password it keeps the remote aggregate's prior ciphertext and only
-        # re-lays public price/forecast. A failed re-emit just yields no diff → clean exit.
-        env:
-          GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
+        # The overlay only re-lays public market prices; it never touches sensitive_enc, so a
+        # carry-forward is implicit. If the remote moved, reset to latest and re-overlay on top.
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add silver/data/silver_dashboard_aggregate.json
           if git diff --cached --quiet; then
-            echo "No data changes — skipping commit"; exit 0
+            echo "No price changes — skipping commit"; exit 0
           fi
-          git commit -m "refresh silver dashboard $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git commit -m "refresh silver prices $(date -u +'%Y-%m-%d %H:%M UTC')"
           if git push; then echo "pushed (fast path)"; exit 0; fi
-          echo "push rejected — remote moved; re-emitting on latest remote and retrying"
+          echo "push rejected — remote moved; re-overlaying on latest remote and retrying"
           for i in 1 2 3 4 5; do
             git fetch origin main || { sleep 4; continue; }
             git reset --hard origin/main
-            python silver/generators/silver_dashboard_emit.py || echo "WARN: silver emit failed (continuing)"
+            python silver/generators/silver_refresh_prices.py || echo "WARN: overlay failed (continuing)"
             git add silver/data/silver_dashboard_aggregate.json
-            if git diff --cached --quiet; then echo "no net change after re-emit on latest — done"; exit 0; fi
-            git commit -m "refresh silver dashboard (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git diff --cached --quiet; then echo "no net change after re-overlay — done"; exit 0; fi
+            git commit -m "refresh silver prices (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
             if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
             echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
           done
