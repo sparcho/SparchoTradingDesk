@@ -1,0 +1,47 @@
+name: Dashboard freshness watchdog
+
+# Autonomous fail-loud monitor: every 3h it judges whether the PUBLISHED dashboard
+# data is actually current (NSE-session-aware via daytrade_freshness). On any breach
+# the job FAILS -> GitHub emails the operator -> no need to open anything to discover
+# staleness. Writes stocks/data/health.json either way. No host in the loop.
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'      # every 3 hours, all days
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Commit health.json (always — even when the check below fails)
+        id: health
+        run: |
+          python stocks/generators/watchdog_check.py > /tmp/wd.txt 2>&1 || echo "BREACH=1" >> "$GITHUB_ENV"
+          cat /tmp/wd.txt
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stocks/data/health.json || true
+          if git diff --cached --quiet; then
+            echo "no health change"
+          else
+            git commit -m "watchdog health $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
+
+      - name: Fail the run on breach (triggers GitHub failure email)
+        if: env.BREACH == '1'
+        run: |
+          echo "::error::Dashboard freshness breach — published data is stale. See stocks/data/health.json"
+          exit 1

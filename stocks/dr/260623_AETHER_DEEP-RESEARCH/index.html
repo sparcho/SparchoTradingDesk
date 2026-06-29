@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aether Industries — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Aether Industries — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>AETHER</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-2 pick — complex specialty-chemistry CRAMS/CEM; high-margin grower. Advisory only — no execution directive.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on a high-complexity <strong>specialty-chemicals</strong> company (CRAMS/CEM for global innovators) — the chemistry-complexity USP, a strong FY26 (+38% revenue, 31% EBITDA margin), capacity expansion, and a rich valuation. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>Specialty-chemicals domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Specialty chemicals</span><span>Complex, high-value chemicals (vs bulk commodities) — pharma intermediates, agro, materials. Aether competes on <strong>chemistry complexity</strong>, not scale. The USP.</span></div>
+<div class="mdtr"><span>CRAMS</span><span>Contract Research &amp; Manufacturing Services — making molecules for global pharma/agro innovators under contract.</span></div>
+<div class="mdtr"><span>CEM</span><span>Contract / Exclusive Manufacturing — dedicated long-term manufacturing for specific customers/molecules. CEM + CRAMS &gt;55% of revenue.</span></div>
+<div class="mdtr"><span>Large-scale (own products)</span><span>Aether&#x27;s third model — manufacturing its own portfolio of advanced intermediates at scale.</span></div>
+<div class="mdtr"><span>Site 5 / Phase 1</span><span>New manufacturing capacity (Phase 1 commercial June-2026) — the growth runway.</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (Aether reading)</span></div>
+<div class="mdtr"><span>P/E</span><span>~71.2× (FY26).</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>FY26 ~31% (target FY27 29–30%).</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>founders (Desai family), majority (~85%, <strong>PENDING exact</strong>).</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹14,645 Cr.</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>Navin Fluorine / PI Industries / Clean Science</span><span>High-margin specialty-chem / CRAMS comps</span></div>
+<div class="mdtr"><span>Divi&#x27;s / Laurus</span><span>CRAMS-adjacent (pharma)</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Aether reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>~85% (PENDING exact)</span><span><strong>LIKELY PASS</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~71.2×</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>low (PENDING exact)</span><span>LIKELY PASS (PENDING)</span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>improving post-capex; <strong>PENDING</strong> exact</span><span>PENDING</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>~31% EBITDA margin</span><span><strong>PASS</strong> (strong)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +38%; 3y likely &gt;20%</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>PENDING</span><span>LIKELY PASS (PENDING)</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>₹14,645/₹1,160 ≈ <strong>12.6×</strong></span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: 2-3 PASS (OPM, sales-growth, likely promoter) + likely-passes (D/E, ICR) + valuation FAILs.</strong> A high-margin, fast-growing complex-chemistry franchise — priced as a premium grower.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Aether Industries is a Surat-based specialty-chemicals company competing on <strong>chemistry complexity</strong> — CRAMS (contract R&amp;D + manufacturing) and CEM (exclusive/long-term manufacturing) for global pharma/agro innovators, plus its own advanced-intermediates portfolio. FY26 was strong: <strong>consolidated revenue ₹1,160 Cr (+38% from ₹840.5 Cr), EBITDA ₹354.7 Cr (+53%, margin ~31%), PAT ₹219.5 Cr (+39% from ₹158.4 Cr)</strong> (investorfeed/indianchemicalnews, FY26 results). <strong>Q4 PAT ₹54 Cr (+8%)</strong> — dampened by a <strong>~₹7 Cr inventory loss from a March-2026 warehouse fire</strong> (one-off). CEM + CRAMS contributed &gt;55% of revenue; the company onboarded <strong>19 new customers</strong> and <strong>Site 5 Phase 1</strong> reaches commercial production June-2026. Market cap ₹14,645 Cr at <strong>~71× P/E</strong>; FY27 targets ~29-30% EBITDA / ~19-20% PAT margins.</p>
+<blockquote><strong>CORE VERDICT.</strong> Aether is a genuine high-complexity specialty-chemistry USP — a CRAMS/CEM partner to global innovators with ~31% EBITDA margins, +38% FY26 revenue, a growing customer base, and fresh Site-5 capacity. The &quot;assurance from the nature of the work&quot; is real: complex chemistry is sticky and hard to replicate. <strong>The single constraint is valuation:</strong> ~71× PE / ~12.6× MCap-Sales. The load-bearing question is whether Site-5 capacity + new customers + CEM contracts sustain 30%+ growth at ~30% margins to grow into the multiple. High-quality grower; rich price.</blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Aether Industries Ltd (NSE/BSE: AETHER), Surat-based, manufactures advanced intermediates + specialty chemicals via three models: Large-scale (own products), CRAMS, and CEM.</p>
+<h4>1.1 Business models (FY26)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Model</span><span>What it does</span><span>Note</span></div>
+<div class="mdtr"><span>CEM (Contract/Exclusive Mfg)</span><span>Dedicated long-term manufacturing for specific molecules/customers</span><span>CEM + CRAMS &gt;55% of revenue</span></div>
+<div class="mdtr"><span>CRAMS</span><span>Contract R&amp;D + manufacturing for global innovators</span><span>Sticky, complex</span></div>
+<div class="mdtr"><span>Large-scale (own products)</span><span>Aether&#x27;s own advanced-intermediate portfolio</span><span>Scale/base</span></div>
+</div>
+<h4>1.2 Growth runway</h4>
+<p>Site 5 Phase 1 commercial June-2026 (full Phase 1 in FY27); 19 new customers onboarded FY26; FY27 margin targets ~29-30% EBITDA / ~19-20% PAT.</p>
+<h4>1.3 Equity structure</h4>
+<p>Founder (Desai family) majority (~85%, PENDING exact). FII/DII PENDING.</p>
+<h4>1.4 Recent corporate actions</h4>
+<p>Strong FY26 (+38% rev); Site-5 Phase-1 ramp; warehouse-fire one-off (~₹7 Cr Q4); a (reversed) compliance penalty noted in FY26 report (scanx).</p>
+<blockquote><strong>ANCHOR FACT.</strong> Complex-chemistry CRAMS/CEM + ~31% EBITDA margins + Site-5 capacity + 19 new customers is the bull case. The offset is a ~71× PE / ~12.6× sales multiple.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Promoter &amp; management</h4>
+<p>Founder Desai family, majority (~85% PENDING) — strong skin-in-the-game; technically-led (chemistry depth). KMP detail PENDING AR.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>~85% (PENDING)</span><span>High majority</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span>NONE SURFACED</span><span>PENDING confirmation</span></div>
+<div class="mdtr"><span>SEBI/NSE actions</span><span>MINOR (reversed)</span><span>FY26 compliance report notes a <strong>reversed</strong> penalty (scanx) — reconcile</span></div>
+<div class="mdtr"><span>Auditor changes</span><span>PENDING</span><span>—</span></div>
+<div class="mdtr"><span>One-off (fire)</span><span>NOTED</span><span>~₹7 Cr Q4 inventory loss — non-recurring</span></div>
+<div class="mdtr"><span>OCF vs PAT</span><span>PENDING</span><span>Capex-heavy (Site 5) — check</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; high promoter alignment. Watch: the reversed-penalty note (reconcile), capex/working-capital (Site 5), and the one-off fire impact.</blockquote>
+<hr>
+<h3>Section 3 / The Chemistry-Complexity USP — Durable Moat or Priced-In?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a premium complex-chemistry CRAMS/CEM compounder on the China+1 + innovator-outsourcing trend. Variant question: how durable is 30%+ growth at ~71× PE, and how lumpy are CEM contracts?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>Complex, regulated, multi-step chemistry with validated customer relationships is sticky and high-barrier; CEM (exclusive) revenue is recurring; ~31% EBITDA margins evidence the complexity premium. China+1 + innovator outsourcing is structural.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Valuation.</strong> 71× PE needs sustained 30%+ growth + margin hold.</li>
+<li><strong>CEM lumpiness.</strong> Exclusive-contract revenue can be uneven (molecule lifecycles).</li>
+<li><strong>Site-5 ramp.</strong> Capacity utilisation + return timing.</li>
+<li><strong>Customer concentration.</strong> Top-customer/molecule dependence (PENDING).</li>
+<li><strong>One-offs.</strong> Fire loss + reversed penalty — confirm clean run-rate.</li>
+</ol>
+<blockquote><strong>USP VERDICT.</strong> The complexity moat is real and high-margin; the <em>investment</em> constraint is the multiple + CEM lumpiness, not the franchise.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>EBITDA ₹Cr</span><span>EBITDA margin</span><span>PAT ₹Cr</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>1,160.14 (+38%)</span><span>354.7 (+53%)</span><span>~31%</span><span>219.46 (+39%)</span><span>investorfeed/indianchemicalnews</span></div>
+<div class="mdtr"><span>FY25</span><span>840.55</span><span>~232 (derived)</span><span>~27.6%</span><span>158.42</span><span>indianchemicalnews</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>305</span><span>—</span><span>—</span><span>54 (+8%, fire ~₹7 Cr)</span><span>univest/marketsmojo</span></div>
+<div class="mdtr"><span>FY27 target</span><span>—</span><span>—</span><span>29–30%</span><span>(PAT margin 19–20%)</span><span>management</span></div>
+</div>
+<blockquote>Read: strong FY26 (rev +38%, PAT +39%, margin to ~31%); Q4 dampened by a one-off fire. Older base + ROCE/ROE PENDING.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Valuation/de-rate, CEM lumpiness, Site-5 utilisation, customer concentration, one-offs.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Operationally strong (complex moat, high margin, growing customers); the risk is valuation + contract lumpiness, not balance-sheet. Watch Site-5 ramp + CEM order flow.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>AETHER</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹14,645 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~71.2×</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~12.6×</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>~31%</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>~71× PE / ~12.6× sales prices durable 30%+ growth + ~30% margins + Site-5 conversion.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> Site-5 + new customers + CEM scale → 30%+ growth at ~30% margins → grows into the multiple.</li>
+<li><strong>Base:</strong> ~20-25% growth, margins hold → multiple compresses gradually; sideways.</li>
+<li><strong>Bear:</strong> CEM lumpiness / utilisation lag → a soft year → de-rate from 71×.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> Premium-grower multiple, partly earned by complexity + margins; needs sustained 30%+ growth. Buy-the-delivery / buy-weakness rather than chase.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>Jun-2026 → FY27</span><span>Site-5 Phase-1 commercialisation/ramp</span><span>Capacity → revenue conversion</span></div>
+<div class="mdtr"><span>FY27</span><span>New CEM/CRAMS contracts + customers</span><span>Growth pipeline</span></div>
+<div class="mdtr"><span>FY27</span><span>Margin vs 29-30% target</span><span>Margin durability</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Valuation de-rate (71× PE)</span><span>Med</span><span>High</span><span>Growth vs multiple</span></div>
+<div class="mdtr"><span>2</span><span>CEM contract lumpiness</span><span>Med</span><span>Med</span><span>Quarterly revenue</span></div>
+<div class="mdtr"><span>3</span><span>Site-5 utilisation lag</span><span>Med</span><span>Med</span><span>Capacity ramp</span></div>
+<div class="mdtr"><span>4</span><span>Customer concentration</span><span>Low-Med</span><span>Med</span><span>Top-customer mix</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>30%+ growth durable</span><span>FY27 revenue growth &lt;20%</span></div>
+<div class="mdtr"><span>2</span><span>Margins ~30% hold</span><span>EBITDA margin &lt;26%</span></div>
+<div class="mdtr"><span>3</span><span>Site-5 converts</span><span>Utilisation/return lags through FY27</span></div>
+<div class="mdtr"><span>4</span><span>Premium sustainable</span><span>De-rate below ~45× on a soft print</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: OPM (~31%), sales-growth (+38%), likely promoter (~85%); likely-PASS D/E, ICR. FAIL: PE (~71×), MCap/Sales (~12.6×). PENDING: ROCE/ROE.</p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> complex-chemistry CRAMS/CEM USP; ~31% EBITDA margin; +38% rev / +39% PAT; Site-5 capacity + 19 new customers; high promoter holding; China+1 tailwind.</li>
+<li><strong>Would-not-buy:</strong> ~71× PE / ~12.6× MCap-Sales; CEM lumpiness; Site-5 utilisation risk; ROCE/ROE PENDING; one-offs to clean.</li>
+<li><strong>Depends-on:</strong> Site-5 ramp + CEM scaling sustaining 30%+ growth at ~30% margins.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Complex-chemistry CRAMS/CEM USP; ~31% EBITDA; +38% rev / +39% PAT</span><span>CEM lumpiness; Site-5 utilisation ramp</span><span>~71× PE / ~12.6× MCap-Sales — premium-grower multiple</span></div>
+<div class="mdtr"><span>~85% promoter; 19 new customers; Site-5 runway</span><span>Fire one-off + reversed-penalty (reconcile)</span><span>De-rate risk on any growth wobble</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹14,645 Cr</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~71.2×</span><span>the constraint</span></div>
+<div class="mdtr"><span>Watch</span><span>Site-5 ramp + FY27 growth/margin</span><span>de-rate/re-rate trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Aether is a high-quality, high-margin complex-chemistry CRAMS/CEM grower with a real China+1 tailwind and fresh Site-5 capacity — but at ~71× PE the risk/reward is gated by sustained 30%+ growth, not by the moat. <strong>This brief does NOT recommend deployment.</strong> Watch Site-5 conversion + CEM flow; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: investorfeed.in; indianchemicalnews.com; univest.in (Q4 PAT ₹54 Cr + fire); marketsmojo.com (margin compression); angelone.in</li>
+<li>Valuation/ownership + Site-5/customers/guidance: per the above; scanx.trade (reversed-penalty compliance note)</li>
+<li><strong>PENDING:</strong> exact promoter %, D/E, ROCE/ROE, ICR, FY24/older base, customer concentration, OCF, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_AETHER_DEEP-RESEARCH</div>
+</div></body></html>

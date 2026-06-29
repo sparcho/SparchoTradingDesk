@@ -1,0 +1,344 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5-LAYER CAKE — India Edition — v1 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Thematic</span>
+    <h1 class="htitle">5-LAYER CAKE — India Edition — v1</h1>
+    <div class="hmeta">Deep Research</div>
+    
+  </div>
+  <div class="body"><p><strong>Location:</strong> <code>/TRADER/03_SCREENERS/260422_5LAYER-CAKE_India-v1.md</code></p>
+<p><strong>Purpose:</strong> Reframe the SPARCHO-HDFC screener universe using Jensen Huang&#x27;s 5-layer AI-value-chain framework (WEF 2026), adapted for Indian equity reality. Proposal doc — requires operator sign-off per layer before §16 watchlist additions.</p>
+<p><strong>Status:</strong> DRAFT v1 — no automatic §16 changes. Every proposed addition is tiered (T1 / T2 / T3) with explicit reasoning; operator approves per-name or per-layer.</p>
+<p><strong>Companion:</strong> <code>260422_5LAYER-CAKE_India-v1.pdf</code> (exec summary).</p>
+<hr>
+<h3>0. Why this frame, why now</h3>
+<p>Jensen&#x27;s framing (Energy → Chips → Infra → Models → Applications) is a supply-chain map: demand cascades DOWN from the app layer and the binding constraint is UP at energy. The US-centric naming on his list (NVDA / TSM / AMZN / OpenAI / Palantir) is mostly inaccessible to a SPARCHO-HDFC book that trades NSE.</p>
+<p><strong>What Indian equity markets express well across the cake:</strong></p>
+<ul>
+<li><strong>Layer 1 Energy</strong> — India&#x27;s power-transition is active (PLI solar, grid buildout, nuclear at the edges). Multiple listed plays.</li>
+<li><strong>Layer 2 Chips</strong> — limited direct-fab exposure; India&#x27;s hook is OSAT + EMS (Kaynes, Dixon, Syrma) — early-stage but policy-supported.</li>
+<li><strong>Layer 3 Infrastructure</strong> — telecom fiber (HFCL/STLTECH/TEJAS) + cabling (POLYCAB/KEI) + cooling (BLUESTAR) + DC-adjacent (ANANT RAJ, NETWEB). Strongest physical-infra exposure globally outside US/China.</li>
+<li><strong>Layer 4 Models</strong> — India is services-layer, not frontier-model-layer. TCS / INFY / HCLTECH / PERSISTENT monetise AI as consulting and integration work. No pure Indian LLM yet listed (Sarvam, Krutrim, BharatGPT all private).</li>
+<li><strong>Layer 5 Applications</strong> — rich mid-cap vertical AI (KPIT automotive, NAUKRI hiring, MAPMYINDIA location, NEWGEN workflow, TANLA CPaaS).</li>
+</ul>
+<p><strong>What the US-centric frame MISSES and India expresses uniquely</strong> — see §7 below.</p>
+<hr>
+<h3>1. LAYER 1 — ENERGY ⚡ (India)</h3>
+<h4>1.1 Framework logic</h4>
+<p>Binding constraint. Data-centre + EV + industrial electrification all pull through here. Jensen&#x27;s line &quot;China has 2x our energy capacity&quot; lands differently in India: we are a net electricity importer in many states, grid capacity is the choke point, not generation capacity.</p>
+<h4>1.2 Current §16 watchlist coverage (Layer-1 members)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Ticker</span><span>Role</span></div>
+<div class="mdtr"><span>IREDA</span><span>Renewable-sector PSU financier (pure policy proxy)</span></div>
+<div class="mdtr"><span>WAAREEENER</span><span>Solar module manufacturer (PLI beneficiary)</span></div>
+<div class="mdtr"><span>MGL</span><span>City gas distribution (Mumbai)</span></div>
+</div>
+<h4>1.3 Proposed additions — Layer 1</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Tier</span><span>Ticker</span><span>Sub-role</span><span>Reasoning</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>NTPC</span><span>Largest thermal + growing renewable</span><span>India&#x27;s #1 power-gen entity; Maharatna; the &quot;base-load&quot; play on any AI-energy thesis</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>POWERGRID</span><span>Transmission monopoly</span><span>The true binding constraint is transmission, not generation. POWERGRID is the India-AI equivalent of GEV / PWR</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>ADANIGREEN</span><span>Pure renewable</span><span>Controversial governance; scale matters but watch Credit lens closely</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>TATAPOWER</span><span>Integrated + EV charging</span><span>Transition-exposed; mid-cap diversification vs NTPC mega-cap</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>NHPC</span><span>Hydro baseload</span><span>Low-beta PSU; diversification</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>ADANIENSOL</span><span>Grid / transmission</span><span>Adani-group exposure for transmission thesis</span></div>
+</div>
+<h4>1.4 India-specific nuances Jensen&#x27;s list misses</h4>
+<ul>
+<li><strong>Coal India (COALINDIA)</strong> — politically incorrect but IF &quot;keep the lights on during AI buildout&quot; is the thesis, coal is India&#x27;s near-term answer. Reserve-list candidate, not active.</li>
+<li><strong>Nuclear</strong>: NPCIL unlisted; L&amp;T has component exposure. SMR thematic hasn&#x27;t landed in India yet.</li>
+</ul>
+<hr>
+<h3>2. LAYER 2 — CHIPS / SEMI / EMS 🔧 (India)</h3>
+<h4>2.1 Framework logic</h4>
+<p>Picks-and-shovels for compute. Jensen lists TSMC / NVDA / AMD — essentially inaccessible in direct NSE form. India&#x27;s hook is the PLI Semiconductor Mission ($10B outlay) + OSAT (outsourced assembly &amp; test) + EMS (electronics manufacturing services). Semiconductor FABRICATION is pre-revenue (Tata-PSMC Gujarat fab, Micron Sanand under construction).</p>
+<h4>2.2 Current §16 coverage</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Ticker</span><span>Role</span></div>
+<div class="mdtr"><span>KAYNES</span><span>OSAT (Sanand plant live 2026-03-31) + components</span></div>
+</div>
+<p>Only ONE name in the entire §16 covers Layer 2. This is the largest gap.</p>
+<h4>2.3 Proposed additions — Layer 2</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Tier</span><span>Ticker</span><span>Sub-role</span><span>Reasoning</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>DIXON</span><span>Largest Indian EMS</span><span>PLI mobile + consumer electronics beneficiary; diversified away from single-customer risk</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>SYRMA SGS</span><span>EMS + components</span><span>Mid-cap pure-play electronics manufacturing</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>TATA ELXSI</span><span>Semi design services</span><span>Automotive + media semiconductor design; also fits L4/L5</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>AMBER ENTERPRISES</span><span>Contract manufacturing</span><span>ACs/consumer electronics; PLI beneficiary</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>MOSCHIP SEMICONDUCTOR</span><span>IP / small-cap chip design</span><span>Speculative; IP-licensing model</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>HCLTECH</span><span>DXG (data/design) business</span><span>Also L4; partial chip-design exposure</span></div>
+</div>
+<h4>2.4 India-specific nuances</h4>
+<ul>
+<li><strong>VEDL (already in §16 Minerals &amp; Mining)</strong> technically has Vedanta-Foxconn fab plans (delayed). Don&#x27;t double-classify; Minerals is operator&#x27;s primary routing.</li>
+<li><strong>Global proxy option:</strong> if pure chip exposure is needed, Mirae Asset NYSE FANG+ ETF / Motilal NASDAQ-100 ETF are indirect but clean. Outside Indian-equity mandate.</li>
+</ul>
+<hr>
+<h3>3. LAYER 3 — INFRASTRUCTURE 🏗️ (India)</h3>
+<h4>3.1 Framework logic</h4>
+<p>Data centres, servers, cooling, networking. India is building out aggressively — 5G rollout + BharatNet + cloud migration + hyperscaler capex all converge here.</p>
+<h4>3.2 Current §16 coverage (strongest layer)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Ticker</span><span>Role</span></div>
+<div class="mdtr"><span>HFCL</span><span>Optical fiber cable / telecom networks</span></div>
+<div class="mdtr"><span>STLTECH</span><span>Optical fiber / networking</span></div>
+<div class="mdtr"><span>TEJASNET</span><span>BharatNet / 5G gear</span></div>
+</div>
+<h4>3.3 Proposed additions — Layer 3</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Tier</span><span>Ticker</span><span>Sub-role</span><span>Reasoning</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>BHARTIARTL</span><span>Telco + Nxtra DC subsidiary</span><span>Dual-layer exposure: 5G operator + rapidly-growing data centre ops via Nxtra</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>POLYCAB</span><span>Cables + networking</span><span>India&#x27;s #1 wire &amp; cable; all infra buildouts flow through copper/fiber cabling</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>ANANT RAJ</span><span>DC-focused real estate</span><span>Pivoting from realty to data-centre parks; IT-park / DC play</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>BLUE STAR</span><span>HVAC + data-centre cooling</span><span>India&#x27;s Vertiv / Modine analog</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>KEI INDUSTRIES</span><span>Cables</span><span>Secondary to POLYCAB; diversification</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>INDUSTOWER</span><span>Telecom towers</span><span>Passive infra; steady dividend; less AI-demand-pull</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>NETWEB TECH</span><span>AI server OEM</span><span>Small-cap; HPC/AI server manufacturer; thin float</span></div>
+</div>
+<hr>
+<h3>4. LAYER 4 — MODELS / AI SERVICES 🧠 (India)</h3>
+<h4>4.1 Framework logic</h4>
+<p>Jensen&#x27;s L4 is about foundation-model labs (OpenAI, Anthropic, DeepMind, Meta). India&#x27;s L4 expression is <strong>services</strong> — TCS / INFY / HCLTECH monetize &quot;enterprise AI integration&quot; as consulting revenue. There is no listed Indian frontier-model lab. Private: Sarvam AI, Krutrim (Ola), BharatGPT; eventual IPOs worth watching.</p>
+<h4>4.2 Current §16 coverage</h4>
+<p><strong>NONE.</strong> Entire layer missing from operator&#x27;s current universe.</p>
+<h4>4.3 Proposed additions — Layer 4</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Tier</span><span>Ticker</span><span>Sub-role</span><span>Reasoning</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>TCS</span><span>Largest IT services</span><span>AI consulting + integration at scale; $30B+ revenue base; Tata-group anchor</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>INFOSYS</span><span>#2 IT services + Topaz AI platform</span><span>Productized AI offerings; cleaner AI-narrative vs TCS</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>HCLTECH</span><span>IT services + DXG</span><span>Strong digital practice; mid-beta vs TCS</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>PERSISTENT</span><span>Mid-cap AI services</span><span>Pure-play AI/digital; pricier growth story</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>LTIMindtree</span><span>Mid-cap IT services</span><span>Post-merger; AI practice</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>WIPRO</span><span>Lagging peer</span><span>Lower-tier T1 IT; reserve-list candidate</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>HAPPY MINDS</span><span>Small-cap pure digital</span><span>AI-native positioning; thin float</span></div>
+</div>
+<h4>4.4 India-specific nuances</h4>
+<ul>
+<li><strong>Dividend + AI-narrative combo</strong> in TCS/INFY is unusual — Western AI plays rarely pay yield. This is a factor the US-centric 5LC frame doesn&#x27;t capture.</li>
+<li><strong>Rupee-exports sensitivity</strong>: IT services are USD-revenue; Indian rupee weakness = tailwind. Ties into the INR-FRAMING-CONDITIONAL per CLAUDE.md §13.</li>
+</ul>
+<hr>
+<h3>5. LAYER 5 — APPLICATIONS 💡 (India)</h3>
+<h4>5.1 Framework logic</h4>
+<p>Vertical software that pulls on every layer below. Jensen&#x27;s L5 lists ServiceNow / Salesforce / Tesla / CrowdStrike. India&#x27;s L5 is a mix of mid-cap vertical AI (automotive, location, workflow) + consumer-tech (Info Edge, Paytm).</p>
+<h4>5.2 Current §16 coverage</h4>
+<p><strong>NONE.</strong> Second major gap.</p>
+<h4>5.3 Proposed additions — Layer 5</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Tier</span><span>Ticker</span><span>Sub-role</span><span>Reasoning</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>KPIT TECHNOLOGIES</span><span>Automotive AI / ADAS</span><span>India&#x27;s Tesla-supplier proxy; software-defined vehicle play</span></div>
+<div class="mdtr"><span><strong>T1</strong></span><span>INFO EDGE (NAUKRI)</span><span>AI-native hiring platform</span><span>Consumer-tech + AI; high quality moat</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>TANLA PLATFORMS</span><span>CPaaS / AI messaging</span><span>Route Mobile merger; commerce-messaging AI</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>MAPMYINDIA (CE INFO)</span><span>Location intelligence</span><span>Indian Google-Maps equivalent; small-cap</span></div>
+<div class="mdtr"><span><strong>T2</strong></span><span>NEWGEN SOFTWARE</span><span>Enterprise workflow AI</span><span>Vertical SaaS + AI; mid-cap</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>INTELLECT DESIGN</span><span>BFSI enterprise AI</span><span>Banking vertical software</span></div>
+<div class="mdtr"><span><strong>T3</strong></span><span>ZAGGLE PREPAID</span><span>Fintech AI</span><span>Expense management; newer listing</span></div>
+</div>
+<hr>
+<h3>6. SILVER / COMMODITY BRIDGE TO AI</h3>
+<p>Often missed in the 5LC frame. Operator already exposes this via silver complex (XAG / SILVERBEES) + minerals cluster (MOIL / GMDC / HINDZINC).</p>
+<p><strong>Mechanisms:</strong></p>
+<ul>
+<li><strong>Silver in solar panels</strong> — TOPCon and HJT cells use 15-20 mg silver per watt. Global solar buildout = structural silver demand. Already a core part of operator&#x27;s XAG thesis per CLAUDE.md §14.5 cup-and-handle framework.</li>
+<li><strong>Copper in grid + chip packaging</strong> — HINDCOPPER (Core watchlist candidate), VEDL (already in §16).</li>
+<li><strong>Zinc + lead in batteries</strong> — HINDZINC (already in §16).</li>
+<li><strong>Rare earths / critical minerals in EV motors</strong> — GMDC (already in §16) via Gujarat concessions.</li>
+</ul>
+<p>This bridge means operator&#x27;s minerals cluster IS part of the AI thesis — it just enters via Layer 1 (energy/storage) rather than Layer 2 (chips). This was already captured in F23 (&quot;minerals concentration is deliberate sector bet&quot;) — the 5LC frame now makes the connection explicit.</p>
+<hr>
+<h3>7. UNIQUELY-INDIAN SUB-LAYERS (what Jensen&#x27;s US-centric frame misses)</h3>
+<h4>7.1 India Stack / Digital Public Infrastructure</h4>
+<p>Aadhaar + UPI + DigiLocker + ONDC + Account Aggregator framework = a public-data layer that&#x27;s unique globally. AI applications built on top of this data have a market structurally unavailable to US equities.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Ticker</span><span>Sub-role</span></div>
+<div class="mdtr"><span><strong>PAYTM / ONE97</strong></span><span>UPI payments + consumer fintech</span></div>
+<div class="mdtr"><span><strong>PB FINTECH</strong></span><span>Policybazaar + Paisabazaar; insurance/credit aggregator</span></div>
+<div class="mdtr"><span><strong>CDSL</strong></span><span>Depository; demat data infra</span></div>
+<div class="mdtr"><span><strong>ANGEL ONE</strong></span><span>Digital broking</span></div>
+</div>
+<p>Treat this as a potential new cluster: <strong>&quot;India Stack / Digital Fintech&quot;</strong> — not yet in §16.</p>
+<h4>7.2 Pharma + AI (India&#x27;s R&amp;D moat)</h4>
+<p>Indian pharma has scale + generic-drug dominance. AI in drug discovery and clinical trials plays to this strength.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Ticker</span><span>Sub-role</span></div>
+<div class="mdtr"><span><strong>Dr Reddy&#x27;s</strong></span><span>Generics + AI R&amp;D partnerships</span></div>
+<div class="mdtr"><span><strong>Sun Pharma</strong></span><span>Scale; specialty pivot</span></div>
+<div class="mdtr"><span><strong>Biocon</strong></span><span>Biosimilar + AI-design tie-ups</span></div>
+</div>
+<p>Listed within the Indian ETF umbrella (PHARMABEES — already in §16 Index/ETF). Individual names not yet in §16.</p>
+<h4>7.3 Indic-language AI (mostly unlisted)</h4>
+<ul>
+<li>Sarvam AI, Ola Krutrim, BharatGPT — all private</li>
+<li>Listed proxies: indirectly via TCS / INFY (which consume these models) and via cloud plays (Jio Platforms, Reliance)</li>
+</ul>
+<p>Monitor for IPO windows; not actionable today.</p>
+<h4>7.4 Agri + Rural AI</h4>
+<p>India&#x27;s agricultural data layer and precision-farming story is unique in Asia. AVANTIFEED (already in §16 Agri &amp; Food) is one entry point; most plays here are private agri-tech startups.</p>
+<hr>
+<h3>8. CURRENT §16 WATCHLIST MAPPED TO 5LC LAYERS</h3>
+<p>Every current name classified by primary layer. Some names span layers (flagged).</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Cluster</span><span>Ticker</span><span>Primary 5LC Layer</span><span>Notes</span></div>
+<div class="mdtr"><span>Core</span><span>HFCL</span><span><strong>L3 Infra</strong></span><span>Fiber/networks</span></div>
+<div class="mdtr"><span>Core</span><span>PARADEEP</span><span>— (Fertilizer / L1-adjacent via energy input)</span><span>Doesn&#x27;t fit 5LC cleanly</span></div>
+<div class="mdtr"><span>Core</span><span>IREDA</span><span><strong>L1 Energy</strong></span><span>Renewable-sector financier</span></div>
+<div class="mdtr"><span>Core</span><span>EXIDEIND</span><span><strong>L1 Energy</strong> (storage/battery)</span><span>Battery-storage / EV-adjacent</span></div>
+<div class="mdtr"><span>M&amp;D</span><span>BEL</span><span>— (Defence electronics)</span><span>L3-adjacent but primarily defence</span></div>
+<div class="mdtr"><span>M&amp;D</span><span>GRSE, MAZDOCK, SOLARINDS, MTARTECH, HAL</span><span>— (Defence)</span><span>Outside 5LC</span></div>
+<div class="mdtr"><span>M&amp;D</span><span>HBLENGINE</span><span><strong>L1 Energy</strong> (battery/power systems)</span><span>Partial L1 fit</span></div>
+<div class="mdtr"><span>Tech &amp; Semi</span><span>KAYNES</span><span><strong>L2 Chips</strong></span><span>OSAT</span></div>
+<div class="mdtr"><span>Telecom Infra</span><span>STLTECH</span><span><strong>L3 Infra</strong></span><span>Optical</span></div>
+<div class="mdtr"><span>Telecom Infra</span><span>TEJASNET</span><span><strong>L3 Infra</strong></span><span>BharatNet/5G</span></div>
+<div class="mdtr"><span>Energy &amp; Storage</span><span>WAAREEENER</span><span><strong>L1 Energy</strong></span><span>Solar modules</span></div>
+<div class="mdtr"><span>Energy &amp; Storage</span><span>MGL</span><span><strong>L1 Energy</strong></span><span>Gas distribution</span></div>
+<div class="mdtr"><span>Minerals &amp; Mining</span><span>MOIL, GMDC, HINDZINC, GRAPHITE, VEDL</span><span><strong>L1 Energy</strong> (via mineral-AI bridge)</span><span>§6 above</span></div>
+<div class="mdtr"><span>Agri &amp; Food</span><span>AVANTIFEED</span><span>— (Rural/Agri sub-layer)</span><span>§7.4</span></div>
+<div class="mdtr"><span>Silver Complex</span><span>XAG, SILVERBEES, SILVER1!</span><span><strong>L1 Energy</strong> (solar-silver bridge)</span><span>§6 above</span></div>
+<div class="mdtr"><span>Index / ETF</span><span>NIFTY, NIFTYBEES, BANKBEES, ITBEES, PHARMABEES, PSUBNKBEES</span><span>—</span><span>Passive; ITBEES is partial L4 exposure</span></div>
+</div>
+<h4>Layer coverage summary</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Layer</span><span>Current dedicated names</span><span>Gap severity</span></div>
+<div class="mdtr"><span>L1 Energy (direct)</span><span>3 (IREDA, WAAREE, MGL) + minerals/silver bridge</span><span>Moderate</span></div>
+<div class="mdtr"><span>L2 Chips</span><span>1 (KAYNES)</span><span><strong>HIGH</strong></span></div>
+<div class="mdtr"><span>L3 Infrastructure</span><span>3 (HFCL, STLTECH, TEJAS)</span><span>Low</span></div>
+<div class="mdtr"><span>L4 Models / AI services</span><span>0</span><span><strong>CRITICAL</strong></span></div>
+<div class="mdtr"><span>L5 Applications</span><span>0</span><span><strong>CRITICAL</strong></span></div>
+<div class="mdtr"><span>India Stack</span><span>0</span><span><strong>HIGH</strong></span></div>
+<div class="mdtr"><span>Pharma+AI</span><span>0 individual (PHARMABEES partial)</span><span>Moderate</span></div>
+</div>
+<hr>
+<h3>9. TIERED ADDITION PROPOSAL — SUMMARY</h3>
+<h4>Tier 1 (must-add to earn 5LC credibility)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Layer</span><span>Ticker</span><span>Rationale shorthand</span></div>
+<div class="mdtr"><span>L1</span><span>NTPC</span><span>India&#x27;s #1 power gen</span></div>
+<div class="mdtr"><span>L1</span><span>POWERGRID</span><span>Transmission monopoly = true binding constraint</span></div>
+<div class="mdtr"><span>L2</span><span>DIXON</span><span>EMS leader</span></div>
+<div class="mdtr"><span>L2</span><span>SYRMA SGS</span><span>EMS / components</span></div>
+<div class="mdtr"><span>L3</span><span>BHARTIARTL</span><span>Telco + Nxtra DC</span></div>
+<div class="mdtr"><span>L3</span><span>POLYCAB</span><span>Cables (underlays everything)</span></div>
+<div class="mdtr"><span>L4</span><span>TCS</span><span>AI services at scale</span></div>
+<div class="mdtr"><span>L4</span><span>INFOSYS</span><span>Topaz AI platform</span></div>
+<div class="mdtr"><span>L5</span><span>KPIT TECH</span><span>Automotive AI</span></div>
+<div class="mdtr"><span>L5</span><span>INFO EDGE (NAUKRI)</span><span>AI-native consumer tech</span></div>
+</div>
+<p><strong>10 T1 additions</strong> — would grow §16 from 31 → 41 names.</p>
+<h4>Tier 2 (optional, fill specific thematic holes)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Layer</span><span>Ticker</span></div>
+<div class="mdtr"><span>L1</span><span>ADANIGREEN, TATAPOWER</span></div>
+<div class="mdtr"><span>L2</span><span>TATA ELXSI, AMBER</span></div>
+<div class="mdtr"><span>L3</span><span>ANANT RAJ, BLUE STAR, KEI</span></div>
+<div class="mdtr"><span>L4</span><span>HCLTECH, PERSISTENT</span></div>
+<div class="mdtr"><span>L5</span><span>TANLA, MAPMYINDIA, NEWGEN</span></div>
+<div class="mdtr"><span>India Stack</span><span>PAYTM, PB FINTECH, CDSL</span></div>
+</div>
+<p><strong>15 T2 additions</strong> if all taken.</p>
+<h4>Tier 3 (reserve-list candidates; not active)</h4>
+<p>Keep aware of: NHPC, ADANIENSOL, MOSCHIP, INDUSTOWER, NETWEB, LTIMindtree, WIPRO, HAPPY MINDS, INTELLECT DESIGN, ZAGGLE, Dr Reddy&#x27;s, Sun Pharma, Biocon, COALINDIA. Route to <code>/TRADER/03_SCREENERS/RESERVE.md</code>.</p>
+<hr>
+<h3>10. IMPLEMENTATION RECOMMENDATION</h3>
+<h4>Phase A — immediately (operator sign-off required)</h4>
+<ol>
+<li>Add T1 list (10 names) to CLAUDE.md §16 with proper cluster assignments. Universe grows 31 → 41.</li>
+<li>Consider new cluster: <strong>&quot;India Stack / Digital Fintech&quot;</strong> for PAYTM / PB FINTECH / CDSL / ANGEL ONE when operator adds any.</li>
+<li>Consider new cluster: <strong>&quot;IT Services / AI&quot;</strong> for TCS / INFOSYS / HCLTECH etc — currently no cluster fits.</li>
+</ol>
+<h4>Phase B — weekly review integration</h4>
+<p>Every Sunday 18:00 WATCHLIST_REVIEW now also checks 5LC layer balance: are we drifting toward heavy L3/L1 exposure and ignoring L4/L5? Operator gets a single number: &quot;5LC layer diversification index&quot; — or a simple per-layer tally.</p>
+<h4>Phase C — chart upload protocol</h4>
+<p>Every chart share triggers WATCHLIST_AUTO_ADD (PROCESSES.md §5.16). From this proposal forward, the classifier ALSO tags the 5LC layer of the added name, so every name in §16 has a layer label.</p>
+<hr>
+<h3>11. SOURCES + CAVEATS</h3>
+<p><strong>Primary:</strong></p>
+<ul>
+<li>Jensen Huang / Larry Fink, WEF Davos 2026 keynote</li>
+<li>Operator&#x27;s shared Discord reference text 2026-04-22</li>
+</ul>
+<p><strong>Secondary:</strong></p>
+<ul>
+<li>NSE screener / Moneycontrol / public market cap data</li>
+<li>India PLI Semiconductor Mission ($10B) policy framework</li>
+<li>BharatNet / 5G spectrum auction context</li>
+</ul>
+<p><strong>Caveats:</strong></p>
+<ul>
+<li>Every proposed name REQUIRES operator per-name or per-layer sign-off. Auto-addition would violate CLAUDE.md §17.3 explicit-revision rule for large-batch changes.</li>
+<li>Mid-cap and small-cap additions (SYRMA, MAPMYINDIA, HAPPY MINDS etc) have thinner float + higher execution slippage — sizing matters.</li>
+<li>IT-services names (TCS/INFY) have rupee-USD correlation that ties into INR-FRAMING-CONDITIONAL — Credit lens should weigh in before add.</li>
+<li>Private / unlisted names (Sarvam, Krutrim, BharatGPT, OpenAI/Anthropic) monitored for IPO windows but not actionable today.</li>
+</ul>
+<hr>
+<h3>12. NEXT STEPS</h3>
+<ol>
+<li>Operator reviews this doc + companion PDF.</li>
+<li>Operator signs off per-tier (T1 all-in, T2 select, T3 reserve) OR per-name.</li>
+<li>Approved names added to CLAUDE.md §16 in one revision session. Unapproved T2/T3 names go to <code>/TRADER/03_SCREENERS/RESERVE.md</code>.</li>
+<li>WATCHLIST_REVIEW (PROCESSES.md §5.17) starts including 5LC balance in the weekly decision matrix.</li>
+</ol>
+<hr>
+<h3>13. REVISION LOG</h3>
+<ul>
+<li><strong>v1 — 2026-04-22</strong> — Initial framework proposal. 10 T1, 15 T2, 14 T3 additions recommended. Uniquely-Indian sub-layers (India Stack, Pharma+AI, Indic language, Agri-AI) surfaced. Commodity-bridge to AI explicitly mapped.</li>
+</ul>
+<p><em>(Reserved for future updates. v2 expected after operator sign-off pass + first round of §16 additions live.)</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260422_5LAYER-CAKE_India-v1</div>
+</div></body></html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bajaj Finance — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Bajaj Finance — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>BAJFINANCE</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-11 pick — best-in-class diversified consumer NBFC (GNPA 1.0%, ROA 4.5%). Premium P/B 5.2x. See NBFC comparison. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s bellwether diversified consumer NBFC — the best-in-class asset-quality + scale + tech USP, against a deep premium valuation (P/B 5.2×). <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage; full peer context in the 260623 NBFC-LENDERS cross-comparison.</p>
+<blockquote><strong>Lender lens.</strong> The 8-rule filter (built for non-financials) is partly N/A — for a lender use <strong>P/B vs ROE + GNPA/credit cost + CRAR + NIM</strong>. Both shown.</blockquote>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Diversified consumer NBFC</span><span>Consumer durables, personal/SME loans, 2W/3W, mortgages (BHFL), deposits, cross-sell — a tech-led, omnichannel lending franchise. The USP = scale + cross-sell + cleanest book.</span></div>
+<div class="mdtr"><span>AUM</span><span>₹5.10 lakh cr (+22%) — crossed ₹5 lakh cr.</span></div>
+<div class="mdtr"><span>GNPA / NNPA</span><span>1.01% / 0.41% — best-in-class asset quality.</span></div>
+<div class="mdtr"><span>ROA / ROE</span><span>4.4-4.6% / 19-20%. CRAR 21.55%.</span></div>
+<div class="mdtr"><span>P/B (key) / P/E</span><span>5.24× / 30.9× (19-Jun-26) — premium. Mkt cap ₹5,96,695 Cr.</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule) — lender-adjusted</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>Bajaj group majority (~54%, PENDING exact)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~30.9×</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>N/A (lender)</span><span>N/A</span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>ROE 19-20%</span><span>BORDERLINE (~20)</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>N/A (NIM is the metric)</span><span>N/A</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>AUM +22%; PAT +15%</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>N/A (lender)</span><span>N/A</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>P/B 5.24× is the lens</span><span>N/A</span></div>
+</div>
+<p><strong>Lender lens: P/B 5.24× on ~19-20% ROE; GNPA 1.01% (best-in-class); CRAR 21.55%; AUM +22%.</strong> The highest-quality NBFC in the cohort — at the richest P/B.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Bajaj Finance is India&#x27;s bellwether diversified consumer NBFC. FY26: <strong>AUM ₹5.10 lakh cr (+22%), PAT ₹19,332 Cr (+15%), GNPA 1.01% / NNPA 0.41%, ROA 4.4-4.6%, ROE 19-20%, CRAR 21.55%</strong> (Bajaj Q4/FY26 investor presentation; cross-checked scanx). 52.5M loans booked, 119M+ customer franchise. Market cap ₹5,96,695 Cr at <strong>P/B 5.24× / P/E 30.9×</strong> (19-Jun-26) — a deep premium.</p>
+<blockquote><strong>CORE VERDICT.</strong> Bajaj Finance is the <strong>best-in-class quality compounder</strong> in the NBFC cohort — cleanest asset quality (GNPA 1.0%), best ROA (~4.5%), scale + tech + deposit franchise + cross-sell, growing AUM +22%. The 5.24× P/B is <strong>earned</strong> by that quality + ~19-20% ROE. <strong>The honest constraints:</strong> (1) the <strong>premium P/B (5.2×)</strong> leaves limited margin for error — any growth/quality wobble de-rates it; (2) ROE sits ~19-20% (just at the bar); (3) law-of-large-numbers deceleration on a ₹5-lakh-cr book. The load-bearing question is whether AUM compounds 20%+ at 4.5% ROA to sustain the premium. Best quality, richest price; see the NBFC comparison for the archetype contrast. <strong>The quality-compounder NBFC, priced for it.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Bajaj Finance Ltd (NSE/BSE: BAJFINANCE), Bajaj group — diversified lending (consumer durables, personal/SME, 2W/3W, mortgages via BHFL, gold, deposits) + payments/cross-sell.</p>
+<h4>1.1 FY26 detail</h4>
+<p>AUM ₹5.10 lakh cr (+22%); PAT ₹19,332 Cr (+15%); GNPA 1.01% / NNPA 0.41%; ROA 4.4-4.6%; ROE 19-20%; CRAR 21.55%; 52.5M loans; 119M+ customers; ₹6/sh dividend.</p>
+<h4>1.2 Equity / structure</h4>
+<p>Bajaj group majority (~54%, PENDING); diversified funding (deposits + NCD + bank). FII/DII per shareholding.</p>
+<h4>1.3 Recent corporate actions</h4>
+<p>FY26 results (AUM +22%, PAT +15%, GNPA 1.0%); BHFL value (housing-finance subsidiary).</p>
+<blockquote><strong>ANCHOR FACT.</strong> Best-in-class asset quality (GNPA 1.0%) + 4.5% ROA + scale/tech/cross-sell + AUM +22% is the bull case; the offset is the deep premium P/B (5.24×) leaving little error margin.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<p>Bajaj group majority; strong, disciplined management; deposit-taking NBFC (high oversight).</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter (Bajaj)</span><span>~54% (PENDING)</span><span>Majority</span></div>
+<div class="mdtr"><span>Asset quality</span><span>BEST-IN-CLASS</span><span>GNPA 1.01% / NNPA 0.41%</span></div>
+<div class="mdtr"><span>CRAR</span><span>STRONG</span><span>21.55%</span></div>
+<div class="mdtr"><span>Growth deceleration</span><span>WATCH</span><span>Large-base (₹5-lakh-cr)</span></div>
+<div class="mdtr"><span>Valuation</span><span>RICH</span><span>P/B 5.24×</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; best-in-class quality + capital. The watch is large-base growth deceleration + the premium valuation.</blockquote>
+<hr>
+<h3>Section 3 / The Quality-Compounder USP — Earned Premium or Priced-for-Perfection?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: the quality NBFC compounder deserving a premium. Variant question: how much growth deceleration risk does the 5.2× P/B carry?</p>
+<ul>
+<li><strong>Why real:</strong> cleanest book (GNPA 1.0%) + best ROA + scale + tech + cross-sell + deposit franchise = a genuinely best-in-class lending compounder.</li>
+<li><strong>Scepticism:</strong> (1) 5.2× P/B (rich); (2) ROE ~19-20% (at the bar); (3) large-base deceleration; (4) consumer-credit-cycle; (5) competition (fintech/banks).</li>
+</ul>
+<blockquote><strong>USP VERDICT.</strong> A genuinely best-in-class quality NBFC — the premium is earned by quality + ROE; the risk is deceleration vs the rich P/B.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>AUM ₹L cr</span><span>PAT ₹Cr</span><span>GNPA</span><span>ROE</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>5.10 (+22%)</span><span>19,332 (+15%)</span><span>1.01%</span><span>19-20%</span><span>Bajaj IP / scanx</span></div>
+<div class="mdtr"><span>FY25</span><span>~4.18</span><span>~16,810</span><span>lower</span><span>~</span><span>screener</span></div>
+</div>
+<p>Risk drivers: premium valuation, large-base deceleration, consumer-credit cycle, competition.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Best-in-class quality + capital; the risk is valuation + growth-deceleration, not asset quality. Watch AUM growth + GNPA.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (19-Jun-26)</span><span>BAJFINANCE</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹5,96,695 Cr</span></div>
+<div class="mdtr"><span>P/B (key)</span><span>5.24×</span></div>
+<div class="mdtr"><span>P/E</span><span>30.9×</span></div>
+<div class="mdtr"><span>ROE</span><span>19-20%</span></div>
+<div class="mdtr"><span>GNPA</span><span>1.01%</span></div>
+</div>
+<ul>
+<li><strong>Bull:</strong> AUM compounds 20%+ at 4.5% ROA → premium holds/compounds.</li>
+<li><strong>Base:</strong> growth moderates to high-teens → P/B compresses gradually.</li>
+<li><strong>Bear:</strong> large-base deceleration / GNPA up → de-rate from 5.2× P/B.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> Best-in-class quality at the richest P/B — earned, but with low margin for error; deceleration is the swing.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Catalyst</span><span>/ Risk</span></div>
+<div class="mdtr"><span>FY27</span><span>AUM growth + GNPA prints</span><span>Quality/growth durability</span></div>
+<div class="mdtr"><span>Risk</span><span>Premium P/B; large-base deceleration; consumer-credit cycle</span></div>
+<div class="mdtr"><span>Falsification</span><span>If GNPA breaks &gt;2% or ROE falls &lt;17%, the premium is unsupported.</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<p><strong>Lender screen:</strong> PASS promoter, AUM-growth; ROE borderline (~20); FAIL P/E (30.9×); P/B 5.24× (rich). GNPA 1.01% (best-in-class), CRAR 21.55%.</p>
+<ul>
+<li><strong>Would-buy:</strong> best-in-class NBFC; GNPA 1.0%; ROA 4.5%; AUM +22%; scale/tech/deposit franchise.</li>
+<li><strong>Would-not-buy:</strong> premium P/B (5.24×); ROE ~at-the-bar; large-base deceleration risk.</li>
+<li><strong>Depends-on:</strong> AUM compounding 20%+ at 4.5% ROA.</li>
+</ul>
+<h4>Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>GNPA 1.0%; ROA 4.5%; CRAR 21.55%; AUM +22%; scale/tech/cross-sell</span><span>Large-base deceleration; consumer-credit cycle</span><span>Premium P/B 5.24× (low error margin)</span></div>
+</div>
+<h4>Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated. Mkt cap ₹5,96,695 Cr; P/B 5.24× / PE 30.9× (the key lens); watch AUM + GNPA.</p>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Bajaj Finance is the best-in-class quality NBFC compounder — cleanest book (GNPA 1.0%), best ROA (~4.5%), AUM +22% — at the richest P/B in the cohort (5.24×), where the premium is earned but leaves little error margin. <strong>This brief does NOT recommend deployment.</strong> See the NBFC cross-comparison for the archetype contrast; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26: Bajaj Finance Q4/FY26 investor presentation (cms-assets.bajajfinserv.in); scanx.trade; screener.in/company/BAJFINANCE (mcap ₹5,96,695 Cr, P/B 5.24×, PE 30.9×, 19-Jun-26)</li>
+<li>Internal: 260623_NBFC-LENDERS-5NAME_cross-comparison</li>
+<li><strong>PENDING:</strong> exact promoter %, NIM/cost-to-income/credit cost, funding-mix split, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_BAJFINANCE_DEEP-RESEARCH</div>
+</div></body></html>

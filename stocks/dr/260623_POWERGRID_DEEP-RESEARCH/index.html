@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Power Grid Corporation — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Power Grid Corporation — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>POWERGRID</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-10 pick — India&#x27;s transmission monopoly (Maharatna); regulated annuity, cheap (PE ~16x), high dividend, capex re-accelerating. Cross-thesis T&amp;D backbone. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s central transmission monopoly — the regulated annuity + monopoly USP, a re-accelerating capex cycle (₹40,000 Cr) + ₹1.70 lakh cr works-in-hand, and a cheap, high-dividend valuation. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage. (The cross-thesis T&amp;D backbone across Energy/DC/Defence-Rail.)</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Central transmission utility</span><span>Power Grid owns/operates India&#x27;s inter-state high-voltage transmission grid (1,73,000+ ckm lines, 265 substations) — a regulated near-monopoly. The USP.</span></div>
+<div class="mdtr"><span>Regulated RoE annuity</span><span>Earns a CERC-set return on its regulated transmission assets → highly predictable, annuity-like cash flow + a ~90% EBITDA margin.</span></div>
+<div class="mdtr"><span>Capex / works-in-hand</span><span>FY26 capex ₹40,000 Cr (surged past guidance); works-in-hand ₹1.70 lakh cr + ₹1.1 lakh cr bidding pipeline → multi-year visibility + a re-accelerating capex cycle (renewables-integration + HVDC).</span></div>
+<div class="mdtr"><span>P/E</span><span>~16× (mcap ~₹2,60,000 Cr ÷ PAT ₹15,928 Cr).</span></div>
+<div class="mdtr"><span>Promoter</span><span>GoI ~51%. Dividend ₹9/sh (high yield).</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>POWERGRID reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>GoI ~51%</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~16×</span><span><strong>PASS</strong> (cheap)</span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>regulated leverage</span><span>PENDING</span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>regulated ~15%</span><span><strong>FAIL</strong> (regulated cap)</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>~88% EBITDA (transmission)</span><span><strong>PASS</strong> (high)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +3.7% (regulated)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>PENDING</span><span>LIKELY PASS</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~5.5× (₹2.6L/₹47,684)</span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: 3 PASS (promoter, PE ~16×, OPM ~88%) + regulated constraints (ROE ~15%, slow growth, high MCap/Sales).</strong> A cheap, high-margin, high-dividend regulated monopoly — the picks-and-shovels of the grid-capex cycle.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Power Grid is India&#x27;s central transmission monopoly (Maharatna). FY26: <strong>total income ₹47,684 Cr (cons), net profit ₹15,928 Cr (+3.7%)</strong>; <strong>capex ₹40,000 Cr (surged past guidance)</strong>; works-in-hand ~₹1.70 lakh cr + ₹1.1 lakh cr bidding pipeline; ₹9/sh total dividend; ₹5,000 Cr fundraise approved (psuconnect/indianmasterminds, FY26). 1,73,000+ ckm transmission lines, 265 substations. GoI ~51%; market cap ~₹2,60,000 Cr at <strong>~16× P/E</strong>, ~88% EBITDA margin.</p>
+<blockquote><strong>CORE VERDICT.</strong> Power Grid is a <strong>cheap, high-margin, high-dividend regulated transmission monopoly</strong> — a ~88%-EBITDA annuity with a ₹1.70 lakh cr works-in-hand and a <strong>re-accelerating capex cycle (₹40,000 Cr FY26)</strong> driven by renewables-integration + HVDC + inter-regional grid demand. It is the cross-thesis &quot;T&amp;D backbone&quot; (Energy/DC/Defence-Rail) at a value multiple (PE ~16×). <strong>The honest constraints:</strong> regulated ROE is capped (~15%, below 20%), and reported growth is slow (+3.7%) — though the capex surge should re-accelerate asset-base growth. The load-bearing question is whether the capex re-acceleration (post a flat patch) lifts the regulated asset base + earnings. Cheap + high-margin + high-dividend monopoly with a capex tailwind; capped ROE + slow recent growth are the trade-offs. <strong>A defensive value way to play the grid/renewables/DC capex cycle.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Power Grid Corporation of India Ltd (NSE/BSE: POWERGRID), GoI Maharatna — inter-state transmission (regulated), plus telecom + consultancy + a small renewables/Africa push.</p>
+<h4>1.1 FY26 detail</h4>
+<p>Income ₹47,684 Cr (cons); PAT ₹15,928 Cr (+3.7%); capex ₹40,000 Cr; works-in-hand ₹1.70 lakh cr; bidding pipeline ₹1.1 lakh cr; FY27 capitalisation guide ₹37,000 Cr; FY27-30 capex ₹20,000-25,000 Cr/yr.</p>
+<h4>1.2 Equity / capex cycle</h4>
+<p>GoI ~51%; ₹5,000 Cr fundraise (for the capex re-acceleration). The renewables-integration + HVDC + inter-regional transmission build is the multi-year capex driver.</p>
+<h4>1.3 Recent corporate actions</h4>
+<p>FY26 results (PAT +3.7%; capex surge); ₹9 dividend; fundraise approved.</p>
+<blockquote><strong>ANCHOR FACT.</strong> A ~88%-EBITDA regulated transmission monopoly at ~16× PE with a ₹1.70 lakh cr works-in-hand + a re-accelerating ₹40,000 Cr capex cycle (renewables/HVDC) is the bull case; the offset is capped ROE (~15%) + slow recent growth (+3.7%).</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<p>GoI ~51% (Maharatna); clean PSU; regulated returns (predictable, capped); ₹5,000 Cr fundraise (modest dilution for capex).</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter (GoI)</span><span>~51%</span><span>Maharatna</span></div>
+<div class="mdtr"><span>Regulated returns</span><span>STABLE</span><span>CERC RoE</span></div>
+<div class="mdtr"><span>Capex re-acceleration</span><span>POSITIVE</span><span>₹40,000 Cr FY26 (renewables/HVDC)</span></div>
+<div class="mdtr"><span>Fundraise</span><span>NOTED</span><span>₹5,000 Cr (capex)</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>LEVERAGED (regulated)</span><span>Project-debt</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; regulated, predictable monopoly. Watch capex-conversion to regulated asset base + the modest fundraise.</blockquote>
+<hr>
+<h3>Section 3 / The Transmission-Monopoly USP — Cheap Annuity + Capex Re-acceleration</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a cheap, defensive transmission monopoly with a re-accelerating capex cycle (renewables/HVDC). Variant question: does the capex surge translate to asset-base + earnings growth above the recent +3.7%?</p>
+<ul>
+<li><strong>Why real:</strong> a regulated near-monopoly with ~88% EBITDA + annuity cash flow + a structural grid-capex tailwind (renewables-integration, HVDC, inter-regional) = a durable, predictable franchise; works-in-hand underwrites visibility.</li>
+<li><strong>Scepticism:</strong> (1) capped ROE (~15%); (2) recent slow growth (+3.7%); (3) capex-to-earnings lag; (4) competition in inter-state transmission bidding (TBCB); (5) fundraise dilution.</li>
+</ul>
+<blockquote><strong>USP VERDICT.</strong> A genuine monopoly annuity at a value multiple — the capex re-acceleration is the growth catalyst; the regulated ROE caps the upside.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Income ₹Cr</span><span>PAT ₹Cr</span><span>Capex ₹Cr</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>47,684 (cons)</span><span>15,928 (+3.7%)</span><span>40,000</span><span>psuconnect/indianmasterminds</span></div>
+<div class="mdtr"><span>FY25</span><span>~</span><span>15,354</span><span>~</span><span>screener</span></div>
+</div>
+<p>Risk drivers: capped ROE, capex-to-earnings lag, TBCB competition, regulated-shift, fundraise dilution.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Low-risk, defensive (regulated annuity, ~88% margin); the &quot;risk&quot; is capped ROE + capex-conversion pace, not solvency. Watch capex → asset-base growth.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>POWERGRID</span></div>
+<div class="mdtr"><span>Market cap</span><span>~₹2,60,000 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~16× (cheap)</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~5.5×</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>~88%</span></div>
+<div class="mdtr"><span>Dividend</span><span>₹9/sh (high yield)</span></div>
+</div>
+<ul>
+<li><strong>Bull:</strong> capex surge re-accelerates asset base + earnings → modest re-rate off a cheap base + high yield.</li>
+<li><strong>Base:</strong> steady regulated compounding + dividend → defensive total return.</li>
+<li><strong>Bear:</strong> regulated-ROE shift / TBCB competition → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> Cheap + high-margin + high-dividend monopoly with a capex tailwind — a defensive value way to play the grid-capex cycle; capped ROE limits the ceiling.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Catalyst</span></div>
+<div class="mdtr"><span>FY27</span><span>Capex → regulated-asset-base growth</span></div>
+<div class="mdtr"><span>FY27</span><span>New transmission wins (renewables/HVDC)</span></div>
+<div class="mdtr"><span>Risk</span><span>Capped ROE; TBCB competition; regulated shift</span></div>
+<div class="mdtr"><span>Falsification</span><span>If capex fails to lift asset-base/earnings growth above ~5%, the re-acceleration thesis weakens; if regulated ROE is cut, value erodes.</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<p><strong>Screen:</strong> PASS promoter (~51%), PE (~16×), OPM (~88%); FAIL ROE (regulated ~15%), sales-growth (+3.7%), MCap/Sales (~5.5×); PENDING D/E, ICR.</p>
+<ul>
+<li><strong>Would-buy:</strong> transmission monopoly; ~88% EBITDA; cheap (PE ~16×); high dividend; ₹1.70 lakh cr works-in-hand; capex re-acceleration (renewables/HVDC); cross-thesis backbone.</li>
+<li><strong>Would-not-buy:</strong> capped ROE (~15%); slow recent growth (+3.7%); capex-to-earnings lag; fundraise dilution.</li>
+<li><strong>Depends-on:</strong> capex re-acceleration lifting asset-base + earnings growth.</li>
+</ul>
+<h4>Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Transmission monopoly; ~88% EBITDA; cheap (PE ~16×); high dividend; ₹1.70L cr works-in-hand; capex re-accelerating</span><span>Capex-to-earnings lag; ₹5,000 Cr fundraise; TBCB competition</span><span>Regulated-capped ROE (~15%); slow recent growth (+3.7%)</span></div>
+</div>
+<h4>Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated. Market cap ~₹2.6L cr; PE ~16× (value anchor); watch capex-driven asset-base growth.</p>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Power Grid is a cheap, high-margin (~88% EBITDA), high-dividend regulated transmission monopoly — the cross-thesis T&amp;D backbone — with a ₹1.70 lakh cr works-in-hand + a re-accelerating ₹40,000 Cr capex cycle (renewables/HVDC), at ~16× PE; the constraints are capped ROE (~15%) + slow recent growth. <strong>This brief does NOT recommend deployment.</strong> A defensive value way to play the grid-capex cycle; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26: psuconnect.in (PAT ₹15,921 Cr); indianmasterminds.com; whalesbook.com (PAT ₹15,928 Cr); scanx.trade (₹5,000 Cr fundraise); psuwatch.com (capex ₹40,000 Cr)</li>
+<li>Valuation: mcap ~₹2.6L cr (Apr-26); screener.in/company/POWERGRID</li>
+<li><strong>PENDING:</strong> exact mcap/PE live, D/E/ICR, capex-to-asset-base detail, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_POWERGRID_DEEP-RESEARCH</div>
+</div></body></html>

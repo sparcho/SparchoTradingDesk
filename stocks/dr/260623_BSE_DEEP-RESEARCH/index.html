@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BSE Limited — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">BSE Limited — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>BSE</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-4 pick — stock-exchange duopoly; explosive F&amp;O-led growth (+88% PAT). Key risk = F&amp;O regulatory dependence. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s #2 stock exchange — the exchange-duopoly + asset-light USP, an explosive FY26 driven by Sensex derivatives, and the central risk that the growth is F&amp;O-volume (hence regulation) dependent. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>Exchange domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Stock exchange</span><span>BSE operates equity + equity-derivatives (Sensex/Bankex options) + other segments. With NSE, it&#x27;s a duopoly. Asset-light, transaction-fee model.</span></div>
+<div class="mdtr"><span>Equity derivatives (F&amp;O)</span><span>The growth engine — Sensex/Bankex index options. Notional turnover exploded in FY26. <strong>But F&amp;O is the focus of SEBI regulation (lot-size, expiry, suitability) — the key risk.</strong></span></div>
+<div class="mdtr"><span>ADT (notional turnover)</span><span>Average daily notional turnover — the volume metric driving derivatives revenue.</span></div>
+<div class="mdtr"><span>Other businesses</span><span>StAR MF (mutual-fund platform), listing fees, data, BSE&#x27;s stake in CDSL.</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (BSE reading)</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>FY26 48%; PBT margin 64.1% (from 54%) — asset-light operating leverage.</span></div>
+<div class="mdtr"><span>PAT</span><span>FY26 ₹2,475 Cr (+87.9%); EPS ₹60.61 (from ₹32.18).</span></div>
+<div class="mdtr"><span>P/E</span><span>premium exchange multiple (~45-50× historically) — <strong>exact PENDING live-verify</strong>.</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>No identifiable promoter (widely held / diversified).</span></div>
+<div class="mdtr"><span>Market cap</span><span>PENDING (live-verify); stock +50.55% YTD-2026.</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>NSE (unlisted)</span><span>The dominant exchange (BSE is #2; NSE IPO pending)</span></div>
+<div class="mdtr"><span>MCX / CDSL / Angel One</span><span>Capital-market-infra cohort (this batch)</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>BSE reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>none (widely held)</span><span><strong>FAIL</strong> (technical)</span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>premium (~45-50×, PENDING)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>high (asset-light) — PENDING exact</span><span><strong>LIKELY PASS</strong></span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>EBITDA 48%</span><span><strong>PASS</strong> (strong)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 rev +63.5%; strong</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>PENDING (likely high)</span><span>LIKELY FAIL (PENDING)</span></div>
+</div>
+<p><strong>Aggregate: 4-5 PASS/likely-PASS (net cash, ROCE, OPM 48%, sales-growth, ICR) — high-quality asset-light grower.</strong> The FAILs are valuation + no-promoter. The qualitative risk (F&amp;O regulation) is not in the screen but is central.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>BSE Limited is India&#x27;s #2 stock exchange — an asset-light, transaction-fee duopoly (with NSE) whose FY26 was explosive on the <strong>Sensex derivatives (F&amp;O) boom</strong>: <strong>revenue from operations ₹4,834 Cr (+63.5%), consolidated total income ₹5,148 Cr, EBITDA ₹3,393 Cr (48% margin), PAT ₹2,475 Cr (+87.9%), EPS ₹60.61</strong> (business-standard/angelone/sahi, FY26 results 7-May-2026); <strong>derivatives revenue &gt;2× to ₹3,134 Cr</strong>, equity-derivatives ADT ₹245 trillion in Q4. PBT margin expanded to 64.1% (from 54%). ₹10 dividend; stock +50.55% YTD-2026.</p>
+<blockquote><strong>CORE VERDICT.</strong> BSE is a high-quality, asset-light exchange duopoly with extraordinary operating leverage (48% EBITDA, 64% PBT margin) and an explosive FY26 (+88% PAT) — genuine &quot;assurance from the nature of the work&quot; <em>as a franchise</em>. <strong>But the single dominant risk is that the growth is F&amp;O-volume-led, and F&amp;O is precisely what SEBI regulates</strong> (lot-size, expiry rationalisation, retail-suitability) — a regulatory action can reset derivatives volumes (and BSE&#x27;s earnings) quickly. The load-bearing question is the durability of derivatives volumes against the regulatory backdrop. Premium valuation + regulatory-dependence are the constraints on a genuinely high-quality model.</blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>BSE Limited (NSE: BSE) operates equity, equity-derivatives, and other market segments, plus StAR MF, listing, data, and a CDSL stake.</p>
+<h4>1.1 FY26 drivers</h4>
+<p>Equity-derivatives (Sensex/Bankex options) drove the surge: derivatives revenue ₹3,134 Cr (&gt;2×); ADT ₹245 trillion Q4 (from ₹112 trillion year-ago). Operating leverage lifted EBITDA margin to 48%, PBT margin to 64.1%.</p>
+<h4>1.2 Equity structure</h4>
+<p>No identifiable promoter (widely held / institution + public). FII/DII PENDING.</p>
+<h4>1.3 Recent corporate actions</h4>
+<p>FY26 results (PAT +88%); ₹10 dividend; continued derivatives-volume growth.</p>
+<blockquote><strong>ANCHOR FACT.</strong> A 48%-EBITDA, net-cash exchange duopoly that doubled PAT on the derivatives boom is the bull case; the offset is that the same F&amp;O engine is the prime target of SEBI regulation — the earnings are regulation-sensitive.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Governance</h4>
+<p>SEBI-regulated MII; widely held; high oversight. Regulated-fee + F&amp;O-policy dependence is structural.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter</span><span>None (widely held)</span><span>MII</span></div>
+<div class="mdtr"><span>SEBI/regulatory</span><span>REGULATED</span><span>F&amp;O-policy dependence (key)</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>STRONG</span><span>Net cash; 48% EBITDA</span></div>
+<div class="mdtr"><span>Revenue concentration</span><span>WATCH</span><span>Derivatives-volume reliance</span></div>
+<div class="mdtr"><span>Auditor changes</span><span>PENDING</span><span>—</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; strong MII governance + balance sheet. The real watch is F&amp;O-regulation/volume concentration.</blockquote>
+<hr>
+<h3>Section 3 / The Exchange-Duopoly USP — Durable or F&amp;O-Regulation-Exposed?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a re-rating exchange duopoly riding the derivatives boom + StAR MF + CDSL optionality. Variant question: how much of the +88% PAT is durable vs a regulation-vulnerable F&amp;O spike?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>An exchange is a regulated, asset-light, network-effect duopoly with huge operating leverage — structurally high-quality. BSE has genuinely gained derivatives share.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>F&amp;O regulation.</strong> SEBI lot-size/expiry/suitability actions can reset volumes — the #1 risk.</li>
+<li><strong>Volume durability.</strong> ADT ₹245 trillion — sustainable or a euphoria peak?</li>
+<li><strong>NSE competition.</strong> NSE remains dominant; NSE IPO could shift dynamics.</li>
+<li><strong>Valuation.</strong> Premium multiple on a regulation-sensitive earnings spike.</li>
+<li><strong>Mix.</strong> How much non-derivatives (StAR MF, listing, data) diversification?</li>
+</ol>
+<blockquote><strong>USP VERDICT.</strong> Excellent franchise; the risk is that the <em>recent</em> earnings power is F&amp;O-volume-led and regulation-exposed — durability is the question, not quality.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue (ops) ₹Cr</span><span>Total income ₹Cr</span><span>EBITDA margin</span><span>PAT ₹Cr</span><span>EPS</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>4,834 (+63.5%)</span><span>5,148</span><span>48%</span><span>2,475 (+87.9%)</span><span>60.61</span><span>business-standard/angelone</span></div>
+<div class="mdtr"><span>FY25</span><span>~2,957 (derived)</span><span>—</span><span>lower</span><span>~1,318 (derived)</span><span>32.18</span><span>—</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>1,563 (+84.7%)</span><span>—</span><span>—</span><span>797 (+61%)</span><span>—</span><span>angelone</span></div>
+</div>
+<blockquote>Read: explosive FY26 (rev +63.5%, PAT +88%) on derivatives + operating leverage. The durability hinges on F&amp;O volumes/regulation.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>F&amp;O regulation, volume durability, NSE competition, valuation.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Lowest balance-sheet risk (net cash, 48% EBITDA); the dominant risk is regulatory (F&amp;O) + volume-cyclicality, not solvency. Watch SEBI F&amp;O policy + ADT.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>BSE</span></div>
+<div class="mdtr"><span>Market cap</span><span>PENDING (live-verify)</span></div>
+<div class="mdtr"><span>P/E</span><span>premium exchange (~45-50× historically; PENDING)</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>48%</span></div>
+<div class="mdtr"><span>PAT growth</span><span>+87.9%</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>A premium exchange multiple prices durable derivatives volumes + continued operating leverage. A SEBI F&amp;O action is the principal de-rate risk.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> F&amp;O volumes sustain/grow + StAR MF/data diversify → earnings compound → premium holds.</li>
+<li><strong>Base:</strong> volumes plateau, some regulation → earnings growth normalises; multiple compresses.</li>
+<li><strong>Bear:</strong> SEBI F&amp;O curbs reset volumes → earnings + multiple de-rate sharply.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> High-quality franchise at a premium on regulation-sensitive earnings — the F&amp;O-policy path dominates the risk/reward. (Verify live PE/mcap.)</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27</span><span>SEBI F&amp;O policy decisions</span><span>The dominant variable</span></div>
+<div class="mdtr"><span>FY27 quarters</span><span>Derivatives ADT + revenue</span><span>Volume durability</span></div>
+<div class="mdtr"><span>FY27</span><span>NSE IPO / competition</span><span>Industry dynamics</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>SEBI F&amp;O regulation</span><span>Med</span><span>High</span><span>Policy actions</span></div>
+<div class="mdtr"><span>2</span><span>Derivatives-volume reset</span><span>Med</span><span>High</span><span>ADT trend</span></div>
+<div class="mdtr"><span>3</span><span>Valuation de-rate</span><span>Med</span><span>Med</span><span>Earnings vs multiple</span></div>
+<div class="mdtr"><span>4</span><span>NSE competition</span><span>Med</span><span>Med</span><span>Share/IPO</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>Derivatives earnings durable</span><span>A SEBI action resets ADT &gt;30%</span></div>
+<div class="mdtr"><span>2</span><span>Operating leverage holds</span><span>EBITDA margin falls &lt;40%</span></div>
+<div class="mdtr"><span>3</span><span>Premium justified</span><span>De-rate on volume/regulation shock</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: net cash (D/E), ROCE (likely), OPM (48%), sales-growth (+63.5%), ICR. FAIL: promoter (none), PE (premium). PENDING: MCap/Sales, exact PE.</p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> asset-light exchange duopoly; 48% EBITDA / 64% PBT margin; +88% PAT; net cash; derivatives share gains; StAR MF + CDSL optionality.</li>
+<li><strong>Would-not-buy:</strong> F&amp;O-regulation dependence (key); volume-cyclical earnings spike; premium valuation; no promoter.</li>
+<li><strong>Depends-on:</strong> durability of derivatives volumes against SEBI policy.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Exchange duopoly; 48% EBITDA; +88% PAT; net cash; StAR MF/CDSL optionality</span><span>Volume durability; NSE competition</span><span><strong>F&amp;O regulation (SEBI) — earnings reset risk</strong></span></div>
+<div class="mdtr"><span>Operating leverage; derivatives share gains</span><span>Premium valuation</span><span>Derivatives-volume-concentrated earnings</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap / PE</span><span>PENDING (live-verify)</span><span>premium exchange multiple</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>48%</span><span>quality anchor</span></div>
+<div class="mdtr"><span>Watch</span><span>SEBI F&amp;O policy + ADT</span><span>the dominant trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> BSE is a high-quality, asset-light exchange duopoly with extraordinary FY26 operating leverage (+88% PAT, 48% EBITDA) — but the growth is F&amp;O-volume-led and therefore SEBI-regulation-exposed, at a premium multiple. <strong>This brief does NOT recommend deployment.</strong> Watch the F&amp;O-policy path; verify live PE/mcap. Decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results (7-May-26): business-standard.com; angelone.in; sahi.com; venturasecurities.com; trendlyne.com</li>
+<li>Derivatives/margins: business-standard.com; bajajfinserv.in (EBITDA/income); chartalert.in</li>
+<li><strong>PENDING:</strong> exact market cap + P/E (live-verify), MCap/Sales, ROCE exact, FY25 base, FII/DII split, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_BSE_DEEP-RESEARCH</div>
+</div></body></html>

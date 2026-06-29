@@ -1,0 +1,100 @@
+name: Refresh stocks dashboard (live · 5min market hours)
+
+# LIGHT 15-min refresh — the moving parts only, so nothing on the equity dashboard
+# stays stale more than ~15 min (F-260615 trade-lab "live"):
+#   - held last-price + day-moves + universe moves   (refresh_prices.py)
+#   - regime live readings: TNX / DXY / USDINR / Brent / CCC OAS   (ci_regime_refresh.py)
+#
+# The HEAVY job (full screener: 1y history + 4 lenses) stays at 2x/weekday in
+# refresh-stocks-dashboard.yml — those sections are daily-by-nature and running them
+# every 20 min would hammer Yahoo for no benefit. Same concurrency group as the heavy
+# job so the two never push the aggregate at the same time.
+#
+# Weekday-only: NSE + the macro scalars are closed on weekends, so 15-min weekend runs
+# would just re-stamp identical data.
+
+on:
+  schedule:
+    # F260622 addendum — prices.json fresh every 5 min during NSE market hours. 09:15–15:35 IST =
+    # ~03:45–10:05 UTC; the 3–10 UTC window covers the session with margin. refresh_prices.py is
+    # NSE-session gated, so holiday runs no-op silently (weekends are excluded by the 1-5 DOW field).
+    # Off-hours keep the lighter 15-min cadence so overnight macro/regime readings stay current.
+    # NOTE: GitHub scheduled workflows are best-effort and can be delayed/dropped under load, so the
+    # effective intraday cadence is "~5 min" not a hard 5-min tick (acceptable for a live overlay).
+    - cron: '*/5 3-10 * * 1-5'        # every 5 min, NSE market hours (prices.json live)
+    - cron: '*/15 0-2,11-23 * * 1-5'  # every 15 min off-hours (overnight macro / regime)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stocks-refresh        # shared with the heavy job — queue, never race
+  cancel-in-progress: false
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install --quiet yfinance numpy pyyaml
+
+      - name: Overlay held last-price + universe moves
+        run: python stocks/generators/refresh_prices.py
+
+      # Regime live readings (TNX/DXY/USDINR/Brent/CCC). Reading-numbers only — never
+      # touches the curated zone/score/headline/status. continue-on-error so a Yahoo/FRED
+      # hiccup can never block the price refresh above.
+      - name: Refresh regime live readings
+        continue-on-error: true
+        run: python stocks/engine/ci_regime_refresh.py
+
+      - name: Commit + push if changed
+        # HARDENED (same pattern as the heavy job): the aggregate carries the operator's encrypted
+        # book and is regenerated each run, so a moved remote must NOT be merged. Fast-path push;
+        # if the remote moved, RESET to latest remote and re-overlay (refresh_prices preserves the
+        # remote's sensitive_enc — locked mode touches only public price fields; regime readings are
+        # numbers-only). A failed re-overlay just yields no diff → clean exit (no false alarm).
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          rebuild() {
+            python stocks/generators/refresh_prices.py || echo "WARN: price overlay failed (continuing)"
+            python stocks/engine/ci_regime_refresh.py || echo "WARN: regime readings failed (continuing)"
+          }
+          git add stocks/data/equity_dashboard_aggregate.json stocks/data/prices.json
+          if git diff --cached --quiet; then
+            echo "No changes — skipping commit"; exit 0
+          fi
+          git commit -m "auto: live prices + regime readings $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if git push; then echo "pushed (fast path)"; exit 0; fi
+          echo "push rejected — remote moved; re-overlaying on latest remote and retrying"
+          for i in 1 2 3 4 5; do
+            git fetch origin main || { sleep 4; continue; }
+            git reset --hard origin/main
+            rebuild
+            git add stocks/data/equity_dashboard_aggregate.json stocks/data/prices.json
+            if git diff --cached --quiet; then echo "no net change after re-overlay on latest — done"; exit 0; fi
+            git commit -m "auto: live prices + regime readings (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
+            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+          done
+          echo "::error::could not push after rebuild retries"; exit 1
+
+      - name: Alert on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "⚠ Stocks live-refresh FAILED — $(date -u +'%Y-%m-%d %H:%M UTC')" \
+            --body "The 20-min live refresh (prices + regime readings) failed; the dashboard holds the last good build. Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            || echo "issue create failed (non-fatal)"

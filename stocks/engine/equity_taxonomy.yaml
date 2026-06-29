@@ -1,0 +1,108 @@
+# equity_taxonomy.yaml — 5-Layer-Cake (5LC) layer + USP cluster per ticker.
+# Authored 2026-06-01 per operator directive: "use 5LC as the primary grouping
+# structure, then group by clusters ... group them according to what their actual USP is."
+#
+# Primary grouping  = layer  (the 5LC layer)
+# Secondary grouping = cluster (the name's ACTUAL USP — what the company actually does)
+#
+# Consumed by equity_dashboard_emit.py (joins layer+cluster onto bubble_set +
+# watchlist_rundown). Single source of truth for dashboard grouping.
+
+layer_order: [L1, L2, L3, L4, L5, DPI, PH, UNMAPPED]
+layer_names:
+  L1: "Energy & Resources"
+  L2: "Chips & Electronics"
+  L3: "Infrastructure & Hardware"
+  L4: "IT Services"
+  L5: "Applications / Vertical AI"
+  DPI: "India Stack / Financials"
+  PH: "Pharma"
+  UNMAPPED: "Unmapped"
+
+tickers:
+  # ── L1 · Energy & Resources ──
+  NTPC:       {layer: L1, cluster: "Power Generation & Utilities"}
+  POWERGRID:  {layer: L1, cluster: "Power Generation & Utilities"}
+  TATAPOWER:  {layer: L1, cluster: "Power Generation & Utilities"}
+  ADANIGREEN: {layer: L1, cluster: "Power Generation & Utilities"}
+  WAAREEENER: {layer: L1, cluster: "Renewables Mfg & Finance"}
+  IREDA:      {layer: L1, cluster: "Renewables Mfg & Finance"}
+  MGL:        {layer: L1, cluster: "City Gas Distribution"}
+  MOIL:       {layer: L1, cluster: "Minerals & Mining"}
+  GMDCLTD:    {layer: L1, cluster: "Minerals & Mining"}
+  HINDZINC:   {layer: L1, cluster: "Minerals & Mining"}
+  HINDALCO:   {layer: L1, cluster: "Minerals & Mining"}
+  HINDCOPPER: {layer: L1, cluster: "Minerals & Mining"}
+  VEDL:       {layer: L1, cluster: "Minerals & Mining"}
+  GRAPHITE:   {layer: L1, cluster: "Carbon & Battery Materials"}
+  HSCL:       {layer: L1, cluster: "Carbon & Battery Materials"}
+  PCBL:       {layer: L1, cluster: "Carbon & Battery Materials"}
+  AETHER:     {layer: L1, cluster: "Specialty Chemicals"}
+  PARADEEP:   {layer: L1, cluster: "Fertilizers & Agri-inputs"}
+  CHAMBLFERT: {layer: L1, cluster: "Fertilizers & Agri-inputs"}
+  AVANTIFEED: {layer: L1, cluster: "Agri & Aquaculture"}
+
+  # ── L2 · Chips & Electronics ──
+  KAYNES:     {layer: L2, cluster: "EMS / Contract Mfg"}
+  DIXON:      {layer: L2, cluster: "EMS / Contract Mfg"}
+  SYRMA:      {layer: L2, cluster: "EMS / Contract Mfg"}
+  AMBER:      {layer: L2, cluster: "EMS / Contract Mfg"}
+  TATAELXSI:  {layer: L2, cluster: "Semicon & Design (ER&D)"}
+
+  # ── L3 · Infrastructure & Hardware ──
+  TARIL:      {layer: L3, cluster: "Power Equipment / T&D"}
+  POWERINDIA: {layer: L3, cluster: "Power Equipment / T&D"}
+  POLYCAB:    {layer: L3, cluster: "Cables & Wires"}
+  KEI:        {layer: L3, cluster: "Cables & Wires"}
+  EXIDEIND:   {layer: L3, cluster: "Batteries & Storage"}
+  AREM:       {layer: L3, cluster: "Batteries & Storage"}
+  VOLTAS:     {layer: L3, cluster: "HVAC & Cooling"}
+  BLUESTAR:   {layer: L3, cluster: "HVAC & Cooling"}
+  HFCL:       {layer: L3, cluster: "Telecom & Networking"}
+  STLTECH:    {layer: L3, cluster: "Telecom & Networking"}
+  TEJASNET:   {layer: L3, cluster: "Telecom & Networking"}
+  BHARTIARTL: {layer: L3, cluster: "Telecom & Networking"}
+  PACEDIGITK: {layer: L3, cluster: "Telecom & Networking"}
+  ANANTRAJ:   {layer: L3, cluster: "Data Center & Real Asset"}
+  BEL:        {layer: L3, cluster: "Defence — Electronics & Systems"}
+  PARAS:      {layer: L3, cluster: "Defence — Electronics & Systems"}
+  ASTRAMICRO: {layer: L3, cluster: "Defence — Electronics & Systems"}
+  APOLLO:     {layer: L3, cluster: "Defence — Electronics & Systems"}
+  IDEAFORGE:  {layer: L3, cluster: "Defence — Electronics & Systems"}
+  GRSE:       {layer: L3, cluster: "Defence — Shipbuilding & Aerospace"}
+  MAZDOCK:    {layer: L3, cluster: "Defence — Shipbuilding & Aerospace"}
+  HAL:        {layer: L3, cluster: "Defence — Shipbuilding & Aerospace"}
+  MTARTECH:   {layer: L3, cluster: "Defence — Shipbuilding & Aerospace"}
+  SOLARINDS:  {layer: L3, cluster: "Defence — Munitions & Rail"}
+  HBLENGINE:  {layer: L3, cluster: "Defence — Munitions & Rail"}
+
+  # ── L4 · IT Services ──
+  TCS:        {layer: L4, cluster: "IT Services (large-cap)"}
+  INFY:       {layer: L4, cluster: "IT Services (large-cap)"}
+  HCLTECH:    {layer: L4, cluster: "IT Services (large-cap)"}
+  PERSISTENT: {layer: L4, cluster: "IT — Digital Engineering"}
+  KPIT:       {layer: L4, cluster: "Automotive Software (ER&D)"}
+
+  # ── L5 · Applications / Vertical AI ──
+  MAPMYINDIA: {layer: L5, cluster: "Geospatial & Mapping"}
+  GENESYS:    {layer: L5, cluster: "Geospatial & Mapping"}
+  CEINSYS:    {layer: L5, cluster: "Geospatial & Mapping"}
+  NEWGEN:     {layer: L5, cluster: "Enterprise Software / Low-code"}
+  TANLA:      {layer: L5, cluster: "Communications / CPaaS"}
+  NAUKRI:     {layer: L5, cluster: "Internet / Classifieds"}
+
+  # ── DPI · India Stack / Financials ──
+  PAYTM:      {layer: DPI, cluster: "Digital Fintech"}
+  PBFINTECH:  {layer: DPI, cluster: "Digital Fintech"}
+  CDSL:       {layer: DPI, cluster: "Capital-Market Infra"}
+  ANGELONE:   {layer: DPI, cluster: "Capital-Market Infra"}
+  MCX:        {layer: DPI, cluster: "Capital-Market Infra"}
+  BSE:        {layer: DPI, cluster: "Capital-Market Infra"}
+  BAJFINANCE: {layer: DPI, cluster: "NBFC — Lending"}
+  CHOLAFIN:   {layer: DPI, cluster: "NBFC — Lending"}
+  SHRIRAMFIN: {layer: DPI, cluster: "NBFC — Lending"}
+
+  # ── PH · Pharma ──
+  DRREDDY:    {layer: PH, cluster: "Pharma & Biotech"}
+  SUNPHARMA:  {layer: PH, cluster: "Pharma & Biotech"}
+  BIOCON:     {layer: PH, cluster: "Pharma & Biotech"}

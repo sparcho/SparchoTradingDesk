@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaynes Technology — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Kaynes Technology — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>KAYNES</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-3 pick — EMS + semiconductor (OSAT) vertical integration. HONEST: stock −44.5% in 1yr despite growth. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on a premium EMS company integrating into <strong>semiconductors (OSAT/ATMP) + HDI PCB</strong> — the high-end USP, FY26 growth, and an <strong>important honesty flag: the stock fell ~44.5% over the past year even as revenue/PAT grew</strong> (a valuation + execution-credibility reset). <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>EMS / semiconductor domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Premium EMS</span><span>Higher-complexity electronics manufacturing (industrial, auto, medical, aerospace) — higher margin (~15-16% EBITDA) than commodity assembly. Kaynes&#x27;s core.</span></div>
+<div class="mdtr"><span>OSAT / ATMP</span><span>Outsourced Semiconductor Assembly &amp; Test / Assembly-Test-Mark-Pack — the back-end of chip-making. Kaynes&#x27;s <strong>Sanand OSAT</strong> delivered India&#x27;s first commercial multichip module — a national-first semiconductor milestone.</span></div>
+<div class="mdtr"><span>HDI PCB</span><span>High-Density-Interconnect printed circuit boards — Kaynes&#x27;s new PCB unit (backward integration).</span></div>
+<div class="mdtr"><span>Order book</span><span>Backlog ₹8,366 Cr (~1.5 years of sales).</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (Kaynes reading)</span></div>
+<div class="mdtr"><span>P/E</span><span>~60× (derived: mcap ₹21,807 Cr ÷ PAT ₹363.9 Cr).</span></div>
+<div class="mdtr"><span>P/B</span><span>~4.59×.</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>FY26 15.8% (vs 15.1%) — high for EMS.</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>53.5%.</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹21,807 Cr (<strong>−44.5% in 1 year</strong>).</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>Dixon / Syrma / Amber</span><span>EMS peers (this batch)</span></div>
+<div class="mdtr"><span>Tata Electronics / global OSAT</span><span>Semiconductor back-end context</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Kaynes reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>53.5%</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~60×</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>semicon capex → <strong>PENDING</strong> (likely rising)</span><span>PENDING</span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>capex drag; <strong>PENDING</strong></span><span>PENDING</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>EBITDA 15.8%</span><span><strong>FAIL</strong> (but high for EMS)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +33%; multi-year strong</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>PENDING</span><span>PENDING</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>₹21,807/₹3,626 ≈ <strong>6.0×</strong></span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: 2 PASS (promoter, sales-growth) + FAILs (PE, OPM, MCap/Sales) + PENDINGs.</strong> Premium-EMS growth with a semiconductor optionality — but the market has <em>already</em> punished the valuation (−44.5%).</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Kaynes Technology is a premium EMS company moving up the value chain into <strong>semiconductors (OSAT/ATMP) and HDI PCB</strong>. FY26: <strong>revenue ₹3,626 Cr (+33%), PAT ₹363.9 Cr (+24%), EBITDA margin 15.8%</strong> (constructionworld/tradingview/investywise, FY26); <strong>order book ₹8,366 Cr (~1.5 years).</strong> Strategically, its <strong>Sanand OSAT facility delivered India&#x27;s first commercially manufactured multichip module</strong> — a genuine national-first; the HDI PCB unit is nearing readiness. <strong>The honest headline: the stock is down ~44.5% over the past year</strong> even though revenue/PAT grew — a valuation + execution-credibility reset (the name had run to extreme multiples and faced working-capital/credibility questions). Promoter 53.5%; market cap ₹21,807 Cr at <strong>~60× P/E</strong>, ~4.6× book.</p>
+<blockquote><strong>CORE VERDICT.</strong> Kaynes has the most differentiated USP in the EMS batch — premium EMS (15.8% EBITDA, double the commodity EMS names) <em>plus</em> a real semiconductor back-end (OSAT) and PCB integration, with ~1.5 years of order visibility. <strong>But it&#x27;s the batch&#x27;s clearest case of &quot;great story, painful price action&quot;:</strong> −44.5% in a year as the market reset an over-extended multiple and questioned execution/working-capital. The load-bearing question is whether OSAT/PCB scale profitably (capital-heavy, execution-intensive) and whether ~60× PE is now a fair entry after the de-rate. High-USP, high-capex, high-multiple — the de-rate has improved (not fixed) the risk/reward.</blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Kaynes Technology India Ltd (NSE/BSE: KAYNES), Mysuru-based, provides end-to-end premium EMS (industrial, auto, medical, aerospace, defence) and is integrating into semiconductors + PCB.</p>
+<h4>1.1 Business / strategic segments</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Segment</span><span>What it does</span><span>Note</span></div>
+<div class="mdtr"><span>Premium EMS (core)</span><span>High-mix industrial/auto/medical/defence electronics</span><span>15.8% EBITDA — high for EMS</span></div>
+<div class="mdtr"><span>OSAT / ATMP (Sanand)</span><span>Semiconductor assembly &amp; test</span><span>India&#x27;s first commercial multichip module</span></div>
+<div class="mdtr"><span>HDI PCB</span><span>High-density PCB manufacturing</span><span>Nearing operational readiness</span></div>
+</div>
+<h4>1.2 Order book</h4>
+<p>₹8,366 Cr (~1.5 years of sales visibility).</p>
+<h4>1.3 Equity structure</h4>
+<p>Promoter 53.5%. FII/DII PENDING.</p>
+<h4>1.4 Recent corporate actions</h4>
+<p>FY26 results (+33% rev); Sanand OSAT first multichip module; HDI PCB ramp; <strong>stock −44.5% over the year</strong> (valuation/credibility reset).</p>
+<blockquote><strong>ANCHOR FACT.</strong> Premium EMS + a real OSAT semiconductor back-end + PCB integration + ₹8,366 Cr OB is the differentiated bull case; the offset is the brutal −44.5% 1-year de-rate and the capital-intensity/execution risk of scaling semiconductors.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Promoter &amp; management</h4>
+<p>Promoter 53.5% (majority); ambitious semicon strategy. Execution/working-capital credibility was questioned during the de-rate — a watch item.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>53.5%</span><span>Majority</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>SEBI/NSE actions</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>Working-capital / cash conversion</span><span>WATCH</span><span>Credibility questions during de-rate — verify OCF</span></div>
+<div class="mdtr"><span>Capex/leverage</span><span>WATCH</span><span>Semicon/PCB capex → D/E (PENDING)</span></div>
+<div class="mdtr"><span>Auditor changes</span><span>PENDING</span><span>—</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS (with watch).</strong> No kill-flag; the real watch is working-capital/cash-conversion + capex-leverage as semicon scales. Verify OCF vs PAT at the AR.</blockquote>
+<hr>
+<h3>Section 3 / The Premium-EMS + Semiconductor USP — Real Edge or Capex Trap?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus (pre-de-rate): a premium-EMS + India-semiconductor leader deserving a huge multiple. Variant question (post −44.5%): does OSAT/PCB scale profitably, or is it a capital sink that depresses returns?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>Premium EMS earns ~2× commodity-EMS margins; OSAT (India&#x27;s first commercial multichip module) is a genuine, policy-backed national capability with scarce competition; PCB integration deepens the moat.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Why −44.5%?</strong> Over-extended multiple + execution/working-capital credibility — has it bottomed?</li>
+<li><strong>OSAT economics.</strong> Capital-heavy; profitability + ramp timeline PENDING.</li>
+<li><strong>Working capital.</strong> The flagged concern — verify OCF conversion.</li>
+<li><strong>Capex/leverage.</strong> Semicon + PCB capex → D/E trajectory.</li>
+<li><strong>Valuation.</strong> ~60× PE even after the de-rate.</li>
+</ol>
+<blockquote><strong>USP VERDICT.</strong> The most differentiated USP in the batch — but also the most capital-intensive and the one the market has most aggressively repriced. Genuine edge; unproven returns at scale.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>PAT ₹Cr</span><span>EBITDA margin</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>3,626 (+33%)</span><span>363.9 (+24%)</span><span>15.8%</span><span>constructionworld/tradingview</span></div>
+<div class="mdtr"><span>FY25</span><span>~2,723 (derived)</span><span>~293 (derived)</span><span>15.1%</span><span>screener</span></div>
+<div class="mdtr"><span>Stock 1-yr</span><span>—</span><span>—</span><span><strong>−44.5%</strong></span><span>screener</span></div>
+</div>
+<blockquote>Read: solid operating growth (rev +33%, PAT +24%, margin up) — but the stock fell 44.5%, i.e. the de-rate is valuation/credibility, not operations. Working-capital/OCF is the number to verify.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Valuation (still ~60×), OSAT capex/returns, working-capital/cash-conversion, leverage, execution.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Operationally growing; the risks are returns-on-capital (semicon capex) + working-capital + still-high valuation. The de-rate improved entry but didn&#x27;t resolve the capex/returns question.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>KAYNES</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹21,807 Cr (−44.5% 1yr)</span></div>
+<div class="mdtr"><span>P/E</span><span>~60×</span></div>
+<div class="mdtr"><span>P/B</span><span>~4.59×</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~6.0×</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>15.8%</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>~60× PE (post a −44.5% reset) still prices strong EMS growth + profitable semicon scaling. The market has de-rated the prior euphoria but not to a cheap level.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> OSAT/PCB scale profitably + EMS compounds + working-capital normalises → re-rate off the reset base.</li>
+<li><strong>Base:</strong> EMS grows, semicon ramps slowly/capital-heavy → returns muted; range.</li>
+<li><strong>Bear:</strong> semicon capex depresses ROCE + working-capital strain → further de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> A de-rated high-USP name, not a cheap one. The OSAT returns + working-capital evidence are the swing — the −44.5% reset is the opportunity <em>and</em> the warning.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27 quarters</span><span>OSAT/PCB ramp + profitability</span><span>Semicon economics</span></div>
+<div class="mdtr"><span>FY27</span><span>Working-capital / OCF</span><span>Credibility repair</span></div>
+<div class="mdtr"><span>FY27</span><span>EMS order conversion</span><span>Core health</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Semicon capex depresses returns</span><span>Med</span><span>High</span><span>ROCE, capex</span></div>
+<div class="mdtr"><span>2</span><span>Working-capital strain</span><span>Med</span><span>High</span><span>OCF vs PAT</span></div>
+<div class="mdtr"><span>3</span><span>Valuation still ~60×</span><span>Med</span><span>Med</span><span>Growth vs multiple</span></div>
+<div class="mdtr"><span>4</span><span>Execution credibility</span><span>Med</span><span>Med</span><span>Guidance delivery</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>OSAT scales profitably</span><span>OSAT remains loss-making/sub-scale through FY27</span></div>
+<div class="mdtr"><span>2</span><span>Working-capital normalises</span><span>OCF stays well below PAT for 2+ quarters</span></div>
+<div class="mdtr"><span>3</span><span>De-rate has bottomed</span><span>New lows on continued capex/WC concerns</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: promoter (53.5%), sales-growth (+33%). FAIL: PE (~60×), OPM (15.8%, high for EMS but &lt;20%), MCap/Sales (~6×). PENDING: D/E, ROCE/ROE, ICR.</p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> most differentiated USP in batch (premium EMS + OSAT semicon + PCB); 15.8% EBITDA (2× commodity EMS); ₹8,366 Cr OB; India-first multichip module; −44.5% de-rate improves entry.</li>
+<li><strong>Would-not-buy:</strong> still ~60× PE; semicon capex/returns unproven; working-capital credibility flagged; ROCE/D-E PENDING.</li>
+<li><strong>Depends-on:</strong> OSAT/PCB profitable scaling + working-capital normalisation.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Premium EMS (15.8% EBITDA) + OSAT semicon + PCB; OB ₹8,366 Cr; 53.5% promoter</span><span>OSAT capex/returns + ramp timeline</span><span><strong>Stock −44.5% in 1yr</strong> (valuation/credibility reset)</span></div>
+<div class="mdtr"><span>+33% rev / +24% PAT; India-first multichip module</span><span>Working-capital / OCF credibility</span><span>Still ~60× PE; capex-heavy semicon</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹21,807 Cr (−44.5% 1yr)</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~60×</span><span>the constraint (post-reset)</span></div>
+<div class="mdtr"><span>Watch</span><span>OSAT profitability + OCF</span><span>re-rate/de-rate trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Kaynes is the most differentiated USP in the EMS batch — premium EMS + a real semiconductor back-end — but it&#x27;s also the one the market has most violently repriced (−44.5% in a year) on valuation + execution/working-capital concerns, and it remains ~60× PE with capital-heavy semicon scaling ahead. <strong>This brief does NOT recommend deployment.</strong> The de-rate improved the entry but the OSAT-returns + working-capital evidence must come first; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: constructionworld.in; investywise.com; tradingview.com/quartr (rev +33%, PAT +24%, EBITDA 15.8%, OB ₹8,366 Cr)</li>
+<li>Valuation/ownership: screener.in/company/KAYNES (mcap ₹21,807 Cr, −44.5% 1yr, P/B 4.59×, promoter 53.5%)</li>
+<li>OSAT/PCB: investywise.com; constructionworld.in</li>
+<li><strong>PENDING:</strong> D/E, ROCE/ROE, ICR, OCF, FY25 base, OSAT segment economics, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_KAYNES_DEEP-RESEARCH</div>
+</div></body></html>

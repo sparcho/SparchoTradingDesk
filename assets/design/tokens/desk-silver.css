@@ -1,0 +1,311 @@
+/* ============================================================
+   SPARCHO Trading Desk — Silver Desk theme tokens
+   ------------------------------------------------------------
+   reskin:silver-blackgold-v1
+   The Silver Desk shell (silver/index.html) authors against
+   THESE custom properties only — no hardcoded hex in the shell.
+   Two scopes, body-class switched:
+     .theme-silver-dark   (DEFAULT)  black & gold on near-black
+     .theme-silver-light             brushed silver / platinum
+   Locked decisions (HANDOFF §2B / §4):
+     - Dark = #0c0b0e base, #d8b25a gold accent (mockup canon).
+     - Light = crisper white panels on light field (AA), NOT
+       transparent glass over metal.
+     - Signal colours (green=bull/ok, red=bear/kill, amber=watch)
+       are FIXED across both themes — never recoloured.
+     - Display = Poppins (--font-display-alt); numbers Space Mono.
+   Hex lives ONLY in this file; the shell consumes vars + color-mix.
+   ============================================================ */
+
+/* ───────────────────────── DARK · black & gold (default) ───────────────────────── */
+.theme-silver-dark {
+  color-scheme: dark;
+
+  /* base surfaces */
+  --paper:        #0c0b0e;
+  --paper-2:      #15110c;
+  --bg:           #0c0b0e;
+  --hero-bg:      #0c0b0e;
+  --hero-bg-2:    #15110c;
+  --card:         rgba(22,18,12,0.55);
+  --slate-bg:     #100d09;
+  --slate-bg-2:   #1a150e;
+  --tab-stripe:   rgba(216,178,90,0.05);
+  --info-soft:    rgba(255,255,255,0.05);
+  --forest-soft:  #1a150e;
+
+  /* ink ramp — warm parchment over near-black */
+  --ink:          #f3ece0;
+  --text:         #f3ece0;
+  --ink-soft:     #c9bfa8;
+  --text-muted:   #c9bfa8;
+  --ink-mute:     #8d8472;
+  --text-soft:    #8d8472;
+  --ink-faint:    #5d5648;
+  --forest:       #f3ece0;
+
+  /* gold accent ramp (mockup canon) */
+  --amber:            #d8b25a;
+  --amber-soft:       rgba(216,178,90,0.16);
+  --amber-deep:       #b88f33;
+  --silver-gold:      #d8b25a;
+  --silver-gold-soft: rgba(216,178,90,0.16);
+  --silver-gold-dark: #e3c884;
+  --warning:          #d8b25a;
+  --warning-soft:     rgba(216,178,90,0.16);
+  --warning-strong:   #e3c884;
+  --accent:           #d8b25a;
+
+  /* silver / platinum secondary ramp */
+  --silver:       #9a9182;
+  --silver-lite:  #e3dac6;
+  --silver-deep:  #c9bfa8;
+  --silver-grad:  linear-gradient(135deg, #f3ece0 0%, #d8b25a 48%, #b88f33 100%);
+
+  /* borders / hairlines — gold-tinted */
+  --border:        rgba(216,178,90,0.16);
+  --border-strong: rgba(216,178,90,0.30);
+
+  /* SIGNAL colours — FIXED across themes (never chrome) */
+  --sig-pos:  #5fd08a; --sig-pos-soft:  rgba(95,208,138,0.15);
+  --sig-neg:  #e8736a; --sig-neg-soft:  rgba(232,115,106,0.15);
+  --sig-warn: #e8a24a; --sig-warn-soft: rgba(232,162,74,0.16);
+  --positive: #5fd08a; --positive-soft: rgba(95,208,138,0.15);
+  --negative: #e8736a; --negative-soft: rgba(232,115,106,0.15);
+
+  /* ambient glows */
+  --glow-silver: rgba(227,218,198,0.22);
+  --glow-amber:  rgba(216,178,90,0.32);
+  --glow-green:  rgba(95,208,138,0.26);
+  --glow-violet: rgba(155,125,225,0.26);
+
+  /* hero / scene */
+  --scene-grad:  radial-gradient(70% 60% at 50% 34%, #1a150e, #0c0b0e 58%, #060507 100%);
+  --vign-shadow: inset 0 0 240px 80px rgba(0,0,0,0.80);
+
+  /* ambient page field (body::before radial wash + ::after grid) */
+  --field-bg:    radial-gradient(1200px 560px at 50% -10%, rgba(227,218,198,0.075), transparent 60%),
+                 radial-gradient(980px 640px at 88% 112%, rgba(216,178,90,0.07), transparent 55%),
+                 radial-gradient(760px 540px at 6% 92%, rgba(155,125,225,0.05), transparent 55%),
+                 #0c0b0e;
+  --field-line:  rgba(216,178,90,0.05);
+  --glass-sheen: rgba(255,255,255,0.10);
+  --glass-bevel: rgba(0,0,0,0.35);
+  --glass-float: rgba(0,0,0,0.92);
+  --header-fill: rgba(12,11,14,0.74);
+
+  /* metallic-glass surface composition */
+  --glass-grad:   linear-gradient(158deg, rgba(255,255,255,0.065) 0%, rgba(255,255,255,0.020) 24%, rgba(255,255,255,0.004) 58%, rgba(255,255,255,0.024) 100%), rgba(22,18,12,0.46);
+  --glass-edge:   rgba(216,178,90,0.12);
+  --glass-top:    rgba(255,255,255,0.13);
+  --tile-grad:    linear-gradient(158deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012));
+  --tile-edge:    rgba(255,255,255,0.06);
+  --tile-hover:   rgba(255,255,255,0.08);
+  --soft-veil:    rgba(255,255,255,0.05);
+
+  /* identity glows for intel nav (violet stays an intel cue, fixed) */
+  --intel-edge:   #9b7de1;
+  --intel-ink:    #b59cf0;
+
+  /* brushed metallic text gradients */
+  --hl-grad:      linear-gradient(120deg,#f3ece0 0%,#e3dac6 30%,#c9bfa8 52%,#fff8ec 78%,#d8b25a 100%);
+  --xag-grad:     linear-gradient(135deg,#fff8ec,#e3dac6 55%,#b88f33);
+  --xag-ink:      #f3ece0;
+  --hl-ink:       #f3ece0;
+  --ovhero-grad:  linear-gradient(135deg,#f7dcad,#d8b25a 58%,#b88f33);
+  --dlhero-grad:  linear-gradient(135deg,#b9f4cf,#5fd08a 60%,#3f9e68);
+  --sr-now-ink:   #100d09;          /* text on amber sr-now pill */
+  --refresh-ink:  #100d09;          /* text on amber refresh hover */
+  --on-slate:     #f3ece0;          /* text on slate dtree-now */
+
+  /* state pill backgrounds (F109 / strategy ladder chips) */
+  --pill-pending-bg: rgba(255,255,255,0.10); --pill-pending-fg:#c9bfa8;
+  --pill-reserved-bg: rgba(255,255,255,0.08); --pill-reserved-fg:#a6a7ae;
+  --pill-armed-state-bg: rgba(120,160,210,0.16); --pill-armed-state-fg:#8fb4dd;
+
+  /* live-status dots — fixed signal cue */
+  --dot-fresh: #5fd08a; --dot-stale: #e6a23c; --dot-pinned: #a855f7;
+
+  /* ticker dot + ticker change tints (fixed signal cues) */
+  --tk-dot-fresh: #22c55e; --tk-dot-fresh-ring: rgba(34,197,94,0.70);
+  --tk-chg-pos: #86efac; --tk-chg-neg: #fda4a4;
+  --tk-fg: #f3ece0;
+
+  /* progress / gauge tracks */
+  --track: rgba(255,255,255,0.09);
+
+  /* F109 status pills (armed/fired/abort tints) */
+  --pill-armed-bg: rgba(216,178,90,0.16); --pill-armed-fg: #e3c884;
+  --pill-fired-bg: rgba(95,208,138,0.18); --pill-fired-fg: #5fd08a;
+  --abort-veil: rgba(232,115,106,0.10);
+  --modal-grad: linear-gradient(90deg,#ededf0,#a6a7ae);
+
+  /* hero band (legacy zone, kept) */
+  --hero-band-ink: #f3ece0; --hero-regime-veil: rgba(243,236,224,0.10);
+  --hero-regime-edge: rgba(243,236,224,0.22); --hero-regime-ink: #d7dbe1;
+
+  /* age-pill freshness states (fixed signal cues, JS-driven) */
+  --age-ok-bg: rgba(95,208,138,0.18);  --age-ok-fg: #7fe0a6;
+  --age-warn-bg: rgba(232,162,74,0.20); --age-warn-fg: #f0c074;
+  --age-hot-bg: rgba(216,178,90,0.18);  --age-hot-fg: #e3c884;
+  --age-stale-bg: rgba(232,115,106,0.20); --age-stale-fg: #f0a097;
+  --age-idle-bg: rgba(255,255,255,0.08); --age-idle-fg: #c9bfa8;
+
+  /* render-error banner (warn signal) */
+  --err-bg: rgba(232,162,74,0.14); --err-edge: #e8a24a; --err-fg: #f0c074;
+
+  /* chart gradient stops + axes (gauge / radar) */
+  --gauge-grad-0: #f3b06a; --gauge-grad-1: #d4761f;
+  --radar-line: #d8b25a; --radar-fill-0: rgba(216,178,90,0.34); --radar-fill-1: rgba(216,178,90,0.05);
+  --radar-point-edge: #100d09; --radar-neutral: rgba(255,255,255,0.22);
+  --chart-grid: rgba(255,255,255,0.07); --chart-axis-label: #c9bfa8;
+
+  /* COT card accent hexes (mixed signal/structural) */
+  --cot-pos: #5fd08a; --cot-info: #5a9fe0;
+
+  /* account default accent + realized history tile */
+  --acc-default-edge: #c9bfa8; --acc-hist-edge: #9a9182; --acc-hist-bg: rgba(255,255,255,0.03);
+  --pill-neutral-bg: rgba(255,255,255,0.10); --pill-neutral-fg: #c9bfa8;
+
+  /* 3D hero — abstract tesseract metal + PMREM canvas-gradient environment */
+  --hero-metal: #d8b25a;                       /* core + wire colour (dark = gold) */
+  --hero-env-0: #f6d99a; --hero-env-1: #caa24f; --hero-env-2: #3a2c12; --hero-env-3: #0a0805;
+}
+
+/* ───────────────────────── LIGHT · brushed silver / platinum ───────────────────────── */
+.theme-silver-light {
+  color-scheme: light;
+
+  /* base surfaces — crisp white panels on a cool light field */
+  --paper:        #eaedf1;
+  --paper-2:      #dfe4ea;
+  --bg:           #eaedf1;
+  --hero-bg:      #eaedf1;
+  --hero-bg-2:    #dfe4ea;
+  --card:         rgba(255,255,255,0.92);
+  --slate-bg:     #dfe4ea;
+  --slate-bg-2:   #d6dbe1;
+  --tab-stripe:   rgba(20,30,50,0.03);
+  --info-soft:    rgba(20,30,50,0.04);
+  --forest-soft:  #dfe4ea;
+
+  /* ink ramp — high-contrast graphite (AA) */
+  --ink:          #10151f;
+  --text:         #10151f;
+  --ink-soft:     #313b52;
+  --text-muted:   #313b52;
+  --ink-mute:     #4a5468;
+  --text-soft:    #4a5468;
+  --ink-faint:    #7e89a0;
+  --forest:       #10151f;
+
+  /* accent ramp — antique-gold on light (keeps gold identity, AA) */
+  --amber:            #9a6f1f;
+  --amber-soft:       rgba(154,111,31,0.13);
+  --amber-deep:       #7d5916;
+  --silver-gold:      #9a6f1f;
+  --silver-gold-soft: rgba(154,111,31,0.13);
+  --silver-gold-dark: #7d5916;
+  --warning:          #9a6f1f;
+  --warning-soft:     rgba(154,111,31,0.13);
+  --warning-strong:   #7d5916;
+  --accent:           #9a6f1f;
+
+  /* silver / platinum secondary ramp */
+  --silver:       #5d6883;
+  --silver-lite:  #2a3340;
+  --silver-deep:  #454f61;
+  --silver-grad:  linear-gradient(135deg, #ffffff 0%, #b9bec6 48%, #7a8493 100%);
+
+  --border:        rgba(20,30,50,0.13);
+  --border-strong: rgba(20,30,50,0.22);
+
+  /* SIGNAL colours — FIXED meaning; tuned for AA on light */
+  --sig-pos:  #1c9b54; --sig-pos-soft:  rgba(28,155,84,0.12);
+  --sig-neg:  #d2473b; --sig-neg-soft:  rgba(210,71,59,0.12);
+  --sig-warn: #b07a12; --sig-warn-soft: rgba(176,122,18,0.14);
+  --positive: #1c9b54; --positive-soft: rgba(28,155,84,0.12);
+  --negative: #d2473b; --negative-soft: rgba(210,71,59,0.12);
+
+  --glow-silver: rgba(20,30,50,0.10);
+  --glow-amber:  rgba(154,111,31,0.18);
+  --glow-green:  rgba(28,155,84,0.18);
+  --glow-violet: rgba(97,73,214,0.16);
+
+  --scene-grad:  radial-gradient(74% 64% at 50% 30%, #fdfdfe, #e8ecf1 54%, #d7dde5 100%);
+  --vign-shadow: inset 0 0 220px 60px rgba(180,186,196,0.50);
+
+  /* ambient page field */
+  --field-bg:    radial-gradient(1200px 560px at 50% -10%, rgba(154,111,31,0.05), transparent 60%),
+                 radial-gradient(980px 640px at 88% 112%, rgba(97,73,214,0.05), transparent 55%),
+                 #eaedf1;
+  --field-line:  rgba(20,30,50,0.028);
+  --glass-sheen: rgba(255,255,255,0.70);
+  --glass-bevel: rgba(20,30,50,0.06);
+  --glass-float: rgba(20,30,50,0.42);
+  --header-fill: rgba(255,255,255,0.84);
+
+  /* metallic-glass surface composition — crisp white panels (AA) */
+  --glass-grad:   linear-gradient(158deg, rgba(255,255,255,0.96), rgba(255,255,255,0.82)), rgba(255,255,255,0.92);
+  --glass-edge:   rgba(20,30,50,0.10);
+  --glass-top:    rgba(255,255,255,0.70);
+  --tile-grad:    linear-gradient(158deg, rgba(255,255,255,0.96), rgba(255,255,255,0.78));
+  --tile-edge:    rgba(20,30,50,0.08);
+  --tile-hover:   rgba(20,30,50,0.05);
+  --soft-veil:    rgba(20,30,50,0.04);
+
+  --intel-edge:   #6149d6;
+  --intel-ink:    #5237c4;
+
+  --hl-grad:      none;
+  --xag-grad:     none;
+  --xag-ink:      #2a3340;
+  --hl-ink:       #1a2030;
+  --ovhero-grad:  linear-gradient(135deg,#b88f33,#9a6f1f 58%,#7d5916);
+  --dlhero-grad:  linear-gradient(135deg,#1c9b54,#157a41);
+  --sr-now-ink:   #ffffff;
+  --refresh-ink:  #ffffff;
+  --on-slate:     #10151f;
+
+  --pill-pending-bg: rgba(20,30,50,0.08); --pill-pending-fg:#4a5468;
+  --pill-reserved-bg: rgba(20,30,50,0.06); --pill-reserved-fg:#5d6883;
+  --pill-armed-state-bg: rgba(70,110,170,0.14); --pill-armed-state-fg:#2f5d8f;
+
+  --dot-fresh: #1c9b54; --dot-stale: #b07a12; --dot-pinned: #7c3aed;
+
+  --tk-dot-fresh: #1c9b54; --tk-dot-fresh-ring: rgba(28,155,84,0.55);
+  --tk-chg-pos: #1c9b54; --tk-chg-neg: #d2473b;
+  --tk-fg: #10151f;
+
+  --track: rgba(20,30,50,0.10);
+
+  --pill-armed-bg: rgba(154,111,31,0.14); --pill-armed-fg: #7d5916;
+  --pill-fired-bg: rgba(28,155,84,0.14); --pill-fired-fg: #157a41;
+  --abort-veil: rgba(210,71,59,0.08);
+  --modal-grad: linear-gradient(90deg,#5d6883,#2a3340);
+
+  --hero-band-ink: #f3f5fa; --hero-regime-veil: rgba(255,255,255,0.14);
+  --hero-regime-edge: rgba(255,255,255,0.30); --hero-regime-ink: #e8ecf3;
+
+  --age-ok-bg: rgba(28,155,84,0.14);  --age-ok-fg: #15663a;
+  --age-warn-bg: rgba(176,122,18,0.16); --age-warn-fg: #7d5916;
+  --age-hot-bg: rgba(154,111,31,0.14);  --age-hot-fg: #7d5916;
+  --age-stale-bg: rgba(210,71,59,0.14); --age-stale-fg: #a8362c;
+  --age-idle-bg: rgba(20,30,50,0.08); --age-idle-fg: #4a5468;
+
+  --err-bg: rgba(176,122,18,0.12); --err-edge: #b07a12; --err-fg: #7d5916;
+
+  --gauge-grad-0: #c79a45; --gauge-grad-1: #9a6f1f;
+  --radar-line: #9a6f1f; --radar-fill-0: rgba(154,111,31,0.28); --radar-fill-1: rgba(154,111,31,0.04);
+  --radar-point-edge: #ffffff; --radar-neutral: rgba(20,30,50,0.30);
+  --chart-grid: rgba(20,30,50,0.10); --chart-axis-label: #4a5468;
+
+  --cot-pos: #1c9b54; --cot-info: #2f6fdb;
+
+  --acc-default-edge: #5d6883; --acc-hist-edge: #7a8493; --acc-hist-bg: rgba(20,30,50,0.03);
+  --pill-neutral-bg: rgba(20,30,50,0.08); --pill-neutral-fg: #4a5468;
+
+  /* 3D hero — brushed silver metal + cool environment (light scope) */
+  --hero-metal: #9aa1ad;
+  --hero-env-0: #ffffff; --hero-env-1: #bdc5d1; --hero-env-2: #586273; --hero-env-3: #2a3340;
+}

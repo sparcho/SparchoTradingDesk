@@ -1,0 +1,69 @@
+name: Refresh silver dashboard
+
+# Updated paths after silver/ subfolder restructure
+on:
+  schedule:
+    # Every 20 min, 24/7 — 72 emits/day, under goldapi.io free-tier 100/day cap.
+    # Operator wants dashboard to feel live for family viewing at any hour
+    # (XAG / Gold / DXY / USDINR all trade 24/5 globally).
+    - cron: '*/20 * * * *'
+  push:
+    paths:
+      - 'silver/_inputs/silver_holdings.yaml'
+      - 'silver/generators/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install PyYAML requests
+
+      - name: Run emitter
+        env:
+          GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
+        run: python silver/generators/silver_dashboard_emit.py
+
+      - name: Commit + push if changed
+        # HARDENED: previously a moved remote (manual push / overlapping run) just failed the push.
+        # The aggregate carries the operator's encrypted book, so don't merge — fast-path push, and
+        # if the remote moved, RESET to latest remote and re-emit on top. silver_dashboard_emit is
+        # carry-forward: with no password it keeps the remote aggregate's prior ciphertext and only
+        # re-lays public price/forecast. A failed re-emit just yields no diff → clean exit.
+        env:
+          GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add silver/data/silver_dashboard_aggregate.json
+          if git diff --cached --quiet; then
+            echo "No data changes — skipping commit"; exit 0
+          fi
+          git commit -m "refresh silver dashboard $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if git push; then echo "pushed (fast path)"; exit 0; fi
+          echo "push rejected — remote moved; re-emitting on latest remote and retrying"
+          for i in 1 2 3 4 5; do
+            git fetch origin main || { sleep 4; continue; }
+            git reset --hard origin/main
+            python silver/generators/silver_dashboard_emit.py || echo "WARN: silver emit failed (continuing)"
+            git add silver/data/silver_dashboard_aggregate.json
+            if git diff --cached --quiet; then echo "no net change after re-emit on latest — done"; exit 0; fi
+            git commit -m "refresh silver dashboard (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
+            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+          done
+          echo "::error::could not push after rebuild retries"; exit 1

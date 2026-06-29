@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ceinsys Tech (CS Tech AI) — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Ceinsys Tech (CS Tech AI) — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>CEINSYS</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-8 pick — GIS/geospatial + engineering small-cap; cheap (PE ~13x) + high growth (+58%) + net cash. Declining promoter. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on a GIS/geospatial + engineering + tech-solutions small-cap — the cheap-valuation + high-growth + net-cash USP, against a declining promoter holding and government-business reliance. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>GIS / engineering domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>GIS / geospatial</span><span>Geographic-information-system services (mapping, surveys, digital twins) — Ceinsys&#x27;s heritage; comparable to MapMyIndia/Genesys at the services layer.</span></div>
+<div class="mdtr"><span>Engineering services</span><span>Infrastructure/water/urban engineering + digital solutions.</span></div>
+<div class="mdtr"><span>Technology Solutions</span><span>The faster-growing, higher-value digital/AI segment (rebrand to &quot;CS Tech AI&quot;).</span></div>
+<div class="mdtr"><span>Order book</span><span>₹876 Cr — strong visibility for a ~₹660 Cr-revenue company.</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (Ceinsys reading)</span></div>
+<div class="mdtr"><span>P/E</span><span>~13× (mcap ₹1,728 Cr ÷ PAT ₹133.4 Cr) — cheap.</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>21.9% FY26.</span></div>
+<div class="mdtr"><span>PAT</span><span>FY26 ₹133.4 Cr (+111%).</span></div>
+<div class="mdtr"><span>Net cash</span><span>₹248 Cr.</span></div>
+<div class="mdtr"><span>Promoter</span><span>declining over 3 years (PENDING exact; ~sub-30%).</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹1,728 Cr (small-cap).</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>Genesys / MapMyIndia</span><span>GIS/geospatial peers (covered)</span></div>
+<div class="mdtr"><span>Engineering-consultancy small-caps</span><span>Adjacencies</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Ceinsys reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>declining (~sub-30%, PENDING)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~13×</span><span><strong>PASS</strong> (cheap)</span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash (₹248 Cr)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>improving (PENDING)</span><span>LIKELY PASS (PENDING)</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>21.9% EBITDA</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +58%</span><span><strong>PASS</strong> (strong)</span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~2.6× (₹1,728/₹660.7)</span><span><strong>FAIL</strong> (close)</span></div>
+</div>
+<p><strong>Aggregate: 5-6 PASS/likely (PE ~13×, net cash, OPM 21.9%, sales-growth +58%, ICR, likely ROCE) — one of the strongest screens in Batches 8-9.</strong> The catches are a declining promoter + small-cap/govt-reliance.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Ceinsys Tech (rebranding to CS Tech AI) is a GIS/geospatial + engineering + tech-solutions small-cap. FY26 was strong: <strong>consolidated revenue ₹660.7 Cr (+58%), PAT ₹133.4 Cr (+111%), EBITDA ₹144.9 Cr (+85.8%, 21.9% margin), EPS ₹67.9</strong> (whalesbook/tradingview, FY26). <strong>Order book ₹876 Cr</strong> (Geospatial+Engineering ₹358.8 Cr; Tech Solutions ₹300.9 Cr); <strong>net cash ₹248 Cr</strong>. Market cap ₹1,728 Cr at <strong>~13× P/E</strong> — cheap. Promoter holding has declined over 3 years; the company is rebranding (CS Tech AI) + reducing government-business reliance.</p>
+<blockquote><strong>CORE VERDICT.</strong> Ceinsys is a <strong>cheap, fast-growing, net-cash small-cap</strong> — +58% revenue / +111% PAT, 21.9% EBITDA, an ₹876 Cr order book (&gt;1× revenue), net cash, at a <strong>~13× PE</strong> (among the cheapest-with-growth in the whole program). The AI/tech-solutions pivot + GIS heritage are credible. <strong>The honest caveats:</strong> (1) <strong>declining promoter holding</strong> over 3 years (a governance watch); (2) small-cap (₹1,728 Cr) liquidity/scale risk; (3) historical government-business reliance (which it&#x27;s reducing); (4) a Q4 &quot;profit slip&quot; noted despite the strong FY. The load-bearing question is whether the growth + AI-pivot sustain while the promoter-holding trend + govt-dependence are managed. Cheap + high-growth small-cap; declining promoter + small-size are the constraints. <strong>One of the more attractive value-growth combinations in Batches 8-9 — for those comfortable with small-cap + the promoter-trend watch.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Ceinsys Tech Ltd (NSE/BSE: CEINSYS / 538734), Nagpur-based — GIS/geospatial, engineering, and technology-solutions services; rebranding to CS Tech AI.</p>
+<h4>1.1 Segments (FY26)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Segment</span><span>FY26 ₹Cr</span><span>Note</span></div>
+<div class="mdtr"><span>Geospatial &amp; Engineering</span><span>358.8</span><span>GIS/surveys/infra-engineering</span></div>
+<div class="mdtr"><span>Technology Solutions</span><span>300.9</span><span>Digital/AI — the higher-growth leg</span></div>
+</div>
+<h4>1.2 FY26 detail</h4>
+<p>Revenue ₹660.7 Cr (+58%); PAT ₹133.4 Cr (+111%); EBITDA 21.9%; OB ₹876 Cr; net cash ₹248 Cr; EPS ₹67.9.</p>
+<h4>1.3 Equity structure</h4>
+<p>Promoter declining over 3 years (~sub-30%, PENDING). FII/DII PENDING.</p>
+<h4>1.4 Recent corporate actions</h4>
+<p>FY26 results (+58%/+111%); rebrand to CS Tech AI; reducing government-business reliance; global-expansion intent.</p>
+<blockquote><strong>ANCHOR FACT.</strong> A cheap (~13× PE), net-cash GIS/engineering small-cap growing +58% rev / +111% PAT with an ₹876 Cr order book is the bull case; the offsets are a declining promoter holding + small-cap/govt-reliance.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Ownership</h4>
+<p>Promoter holding has <strong>declined over the last 3 years</strong> — the key governance watch for a small-cap.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>DECLINING</span><span>The key governance watch</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span>PENDING</span><span>Verify</span></div>
+<div class="mdtr"><span>SEBI/NSE actions</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>Govt-business reliance</span><span>REDUCING</span><span>Historically govt-heavy; diversifying</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>STRONG</span><span>Net cash ₹248 Cr</span></div>
+<div class="mdtr"><span>Small-cap liquidity</span><span>WATCH</span><span>₹1,728 Cr mcap — thin float</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS (declining-promoter + small-cap watch).</strong> No kill-flag; net cash + strong growth. The genuine watches are the declining promoter holding + small-cap/govt-dependence.</blockquote>
+<hr>
+<h3>Section 3 / The GIS + AI-Pivot USP — Cheap Compounder or Small-Cap Risk?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a cheap, fast-growing GIS/engineering small-cap pivoting to AI. Variant question: do the declining promoter + small-cap + govt-reliance offset the cheap-growth appeal?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>GIS/geospatial heritage + a growing tech-solutions/AI segment + an ₹876 Cr order book + net cash + 21.9% margins = a cheap, profitable, growing niche player.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Promoter decline.</strong> Why declining? Governance/dilution read.</li>
+<li><strong>Govt-reliance.</strong> Reducing — but how dependent today?</li>
+<li><strong>Small-cap.</strong> Liquidity/scale + execution risk.</li>
+<li><strong>Q4 profit slip.</strong> Despite strong FY — read it.</li>
+<li><strong>AI rebrand.</strong> Substance vs marketing (CS Tech AI).</li>
+</ol>
+<blockquote><strong>USP VERDICT.</strong> A genuinely cheap, growing niche — the small-cap + declining-promoter watches are the price of the cheapness; the AI/tech-solutions pivot is the upside.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>PAT ₹Cr</span><span>EBITDA margin</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>660.7 (+58%)</span><span>133.4 (+111%)</span><span>21.9%</span><span>whalesbook/tradingview</span></div>
+<div class="mdtr"><span>FY25</span><span>~418 (derived)</span><span>~63 (derived)</span><span>lower</span><span>screener</span></div>
+<div class="mdtr"><span>OB</span><span>876</span><span>—</span><span>—</span><span>tradingview</span></div>
+</div>
+<blockquote>Read: very strong FY26 (rev +58%, PAT +111%, margin expanding) + net cash + a large OB. Small-cap + declining promoter are the watches.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Declining promoter, small-cap liquidity, govt-business reliance, growth durability, Q4 profit slip.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Net-cash, high-growth — the risks are governance (promoter trend) + small-cap + growth-durability, not solvency. Watch promoter holding + order conversion.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>CEINSYS</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹1,728 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~13× (cheap)</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~2.6×</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>21.9%</span></div>
+<div class="mdtr"><span>Net cash</span><span>₹248 Cr</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>~13× PE on +58%/+111% growth is genuinely cheap for the growth — the market discounts the small-cap + promoter-trend + govt-reliance.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> growth + AI-pivot sustain, govt-reliance falls, promoter trend stabilises → strong re-rate off a cheap base.</li>
+<li><strong>Base:</strong> ~20-30% growth, multiple holds → compounds.</li>
+<li><strong>Bear:</strong> promoter exit/dilution / govt-business loss / growth fade → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> Among the most attractive cheap-growth small-caps in the program — the governance (promoter trend) + small-cap risks are the offset to the ~13× PE.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27</span><span>Order conversion + growth</span><span>Durability</span></div>
+<div class="mdtr"><span>FY27</span><span>Tech-Solutions/AI scale</span><span>Mix-upgrade</span></div>
+<div class="mdtr"><span>FY27</span><span>Promoter-holding trend</span><span>Governance</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Declining promoter / governance</span><span>Med</span><span>Med-High</span><span>Shareholding trend</span></div>
+<div class="mdtr"><span>2</span><span>Small-cap liquidity</span><span>Med</span><span>Med</span><span>Float</span></div>
+<div class="mdtr"><span>3</span><span>Govt-business reliance</span><span>Med</span><span>Med</span><span>Segment mix</span></div>
+<div class="mdtr"><span>4</span><span>Growth durability</span><span>Med</span><span>Med</span><span>Order conversion</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>Growth durable</span><span>FY27 revenue growth &lt;25%</span></div>
+<div class="mdtr"><span>2</span><span>Governance OK</span><span>Promoter holding keeps falling / pledge appears</span></div>
+<div class="mdtr"><span>3</span><span>Cheap = opportunity</span><span>Govt-business loss + growth fade</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: PE (~13×), net cash (D/E), OPM (21.9%), sales-growth (+58%), ICR; likely-PASS ROCE. FAIL: promoter (declining/sub-50), MCap/Sales (~2.6×).</p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> cheap (~13× PE) + high-growth (+58%/+111%); net cash ₹248 Cr; OB ₹876 Cr; 21.9% margin; AI/tech-solutions pivot.</li>
+<li><strong>Would-not-buy:</strong> declining promoter (governance watch); small-cap liquidity; govt-business reliance; Q4 profit slip.</li>
+<li><strong>Depends-on:</strong> growth + AI-pivot sustaining while promoter-trend + govt-reliance are managed.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Cheap (~13× PE); +58% rev / +111% PAT; net cash ₹248 Cr; OB ₹876 Cr; 21.9% margin</span><span>Govt-business reliance (reducing); Q4 profit slip; AI-rebrand substance</span><span><strong>Declining promoter holding (governance watch)</strong></span></div>
+<div class="mdtr"><span>Tech-Solutions/AI mix-upgrade</span><span>—</span><span>Small-cap liquidity (₹1,728 Cr)</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹1,728 Cr</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~13×</span><span>cheap-growth anchor</span></div>
+<div class="mdtr"><span>Watch</span><span>promoter-holding trend + order conversion</span><span>governance + growth trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Ceinsys is one of the most attractive cheap-growth combinations in Batches 8-9 — +58% rev / +111% PAT, net cash, 21.9% EBITDA, an ₹876 Cr order book, at ~13× PE — but it&#x27;s a small-cap with a <strong>declining promoter holding</strong> (the key governance watch) + historical govt-business reliance. <strong>This brief does NOT recommend deployment.</strong> Attractive value-growth for those comfortable with the small-cap + promoter-trend risk; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: whalesbook.com (rev +58%, PAT +111%); tradingview.com/quartr (EBITDA +86%, OB ₹876 Cr); ca.investing.com (concall); marketsmojo.com (Q4 profit slip)</li>
+<li>Valuation/ownership: screener.in/company/538734 (mcap ₹1,728 Cr; promoter declining); net cash ₹248 Cr</li>
+<li><strong>PENDING:</strong> exact promoter %, pledge, ROCE/ROE, FY25 base, govt-revenue %, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_CEINSYS_DEEP-RESEARCH</div>
+</div></body></html>

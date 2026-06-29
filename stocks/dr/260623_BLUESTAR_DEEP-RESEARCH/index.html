@@ -1,0 +1,187 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blue Star — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Blue Star — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>BLUESTAR</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-10 pick — diversified HVAC (room-AC + commercial-AC/EMP projects). FY26 PAT -11% on mild summer; premium PE ~52x. Better-diversified than Voltas. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on a diversified HVAC company — room-AC + commercial-AC + electro-mechanical projects (EMP) — the diversification USP (vs pure-AC peers), against an FY26 weather-hit AC year and a premium multiple. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Unitary Products</span><span>Room AC + commercial refrigeration (the consumer/seasonal leg) — weather-sensitive.</span></div>
+<div class="mdtr"><span>EMP + Commercial AC</span><span>Electro-mechanical projects (HVAC/MEP for buildings) + central/commercial AC — the B2B/projects leg (the diversification + order-book strength).</span></div>
+<div class="mdtr"><span>Order book</span><span>₹6,923 Cr (+10.5%) — the EMP/commercial backlog (revenue visibility).</span></div>
+<div class="mdtr"><span>Diversification</span><span>Unlike pure-AC Voltas, Blue Star&#x27;s EMP/commercial mix cushions a weak AC season.</span></div>
+<div class="mdtr"><span>P/E</span><span>~52× (mcap ₹33,908 Cr ÷ PAT ₹527 Cr). Promoter ~38%.</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Blue Star reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>~38% (PENDING)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~52×</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>low (PENDING)</span><span><strong>LIKELY PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>decent (PENDING)</span><span>PENDING</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>thin (~5-6% — HVAC/projects)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +3.6%</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>PENDING</span><span>LIKELY PASS</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~2.7× (₹33,908/₹12,402)</span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: 1-2 likely-PASS (D/E, ICR) + FAILs (promoter, PE, OPM, slow growth, MCap/Sales).</strong> A diversified HVAC name, but thin-margin + premium-priced + a weak FY26 AC year.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Blue Star is a diversified HVAC company — room AC + commercial AC + electro-mechanical projects (EMP). FY26: <strong>consolidated net profit ₹527 Cr (−10.8%), revenue ₹12,402 Cr (+3.6%)</strong>; <strong>EMP + Commercial-AC +12.8% to ₹6,763 Cr</strong> (strong), while <strong>Unitary Products (room AC) was weak (₹5,332 Cr)</strong> on an early monsoon + mild summer; Q4 PAT ₹227 Cr (+17.1%) (investywise/business-standard, FY26). <strong>Order book ₹6,923 Cr (+10.5%).</strong> Market cap ₹33,908 Cr at <strong>~52× P/E</strong>, ~2.7× sales; promoter ~38%.</p>
+<blockquote><strong>CORE VERDICT.</strong> Blue Star is a <strong>better-diversified HVAC play than pure-AC peers</strong> — its EMP/commercial-AC projects leg (+12.8%, ₹6,923 Cr order book) cushioned a weak room-AC season, so FY26 PAT fell only −10.8% (vs Voltas −56%). The diversification + B2B order-book are the genuine USP. <strong>The honest constraints:</strong> (1) <strong>FY26 was still a down year (PAT −10.8%)</strong> on the weather-hit AC leg; (2) <strong>thin HVAC margins (~5-6%)</strong>; (3) a <strong>premium ~52× PE</strong>; (4) sub-50% promoter (~38%). The load-bearing question is room-AC margin/volume recovery (a normal summer) + continued EMP order conversion. Diversification cushion + order book; thin margins + weather-AC exposure + premium PE are the trade-offs. <strong>The more-resilient HVAC name (vs Voltas) — but still premium + a soft FY26.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Blue Star Ltd (NSE/BSE: BLUESTAR/BLUESTARCO) — Unitary Products (room AC + commercial refrigeration), EMP + Commercial AC (projects/central AC), and professional electronics.</p>
+<h4>1.1 FY26 detail</h4>
+<p>Net profit ₹527 Cr (−10.8%); revenue ₹12,402 Cr (+3.6%); EMP+Commercial-AC ₹6,763 Cr (+12.8%); Unitary Products ₹5,332 Cr (weak — mild summer); Q4 PAT ₹227 Cr (+17.1%); order book ₹6,923 Cr (+10.5%).</p>
+<h4>1.2 Equity / structure</h4>
+<p>Promoter ~38% (PENDING); low debt. FII/DII PENDING.</p>
+<h4>1.3 Recent corporate actions</h4>
+<p>FY26 results (PAT −10.8%; EMP strong, AC weak); order book +10.5%; AC-capacity/manufacturing investments.</p>
+<blockquote><strong>ANCHOR FACT.</strong> A diversified HVAC company whose EMP/commercial-AC projects leg (+12.8%, ₹6,923 Cr OB) cushioned a weak room-AC season is the bull case; the offsets are FY26 PAT −10.8% (weather), thin ~5-6% margins, and a ~52× premium PE.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<p>Promoter ~38% (sub-50); diversified HVAC; low debt; established brand + projects franchise.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>~38% (PENDING)</span><span>Sub-50%</span></div>
+<div class="mdtr"><span>Diversification</span><span>POSITIVE</span><span>EMP/commercial cushions AC</span></div>
+<div class="mdtr"><span>Order book</span><span>POSITIVE</span><span>₹6,923 Cr (+10.5%)</span></div>
+<div class="mdtr"><span>Margin</span><span>WATCH</span><span>Thin ~5-6% (HVAC/projects)</span></div>
+<div class="mdtr"><span>AC-weather exposure</span><span>WATCH</span><span>Unitary Products seasonality</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; diversified + low debt. Watch thin margins + AC-weather exposure.</blockquote>
+<hr>
+<h3>Section 3 / The Diversified-HVAC USP — Resilient Cushion or Thin-Margin + Premium?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a diversified HVAC compounder (AC brand + EMP) on India&#x27;s cooling-penetration runway. Variant question: thin margins + ~52× PE + a weak AC season — is the diversification enough?</p>
+<ul>
+<li><strong>Why real:</strong> the EMP/commercial-AC projects leg (+12.8%, ₹6,923 Cr OB) + a room-AC brand + a structural cooling-penetration runway = a more-resilient HVAC franchise than pure-AC peers.</li>
+<li><strong>Scepticism:</strong> (1) FY26 PAT −10.8% (weather); (2) thin ~5-6% margins; (3) ~52× premium PE; (4) sub-50% promoter; (5) AC competitive pricing.</li>
+</ul>
+<blockquote><strong>USP VERDICT.</strong> A genuinely more-resilient HVAC play (diversification + order book) — but thin margins + premium valuation + AC-weather exposure temper it.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>PAT ₹Cr</span><span>Note</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>12,402 (+3.6%)</span><span>527 (−10.8%)</span><span>EMP strong; AC weak (mild summer)</span><span>investywise/business-standard</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>4,072 (+1.3%)</span><span>227 (+17.1%)</span><span>—</span><span>business-standard</span></div>
+<div class="mdtr"><span>FY25</span><span>~11,970</span><span>~591</span><span>—</span><span>screener</span></div>
+</div>
+<p>Risk drivers: AC-weather/seasonality, thin margins, premium valuation, AC competitive pricing, sub-50 promoter.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Moderate (diversified, low-debt); the risk is thin margins + AC-weather + valuation, not solvency. Watch AC season + EMP conversion.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (Jun-26)</span><span>BLUESTAR</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹33,908 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~52×</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~2.7×</span></div>
+<div class="mdtr"><span>OPM</span><span>~5-6% (thin)</span></div>
+<div class="mdtr"><span>Order book</span><span>₹6,923 Cr (+10.5%)</span></div>
+</div>
+<ul>
+<li><strong>Bull:</strong> normal summer → AC volume/margin recovery + EMP order conversion → earnings rebound → re-rate-justify.</li>
+<li><strong>Base:</strong> steady EMP + modest AC → earnings recover gradually; premium multiple.</li>
+<li><strong>Bear:</strong> weak AC season + competitive pricing → earnings stay soft → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> The more-resilient HVAC name at a premium (~52×) on thin margins — the AC-margin/season recovery + EMP conversion decide whether the premium holds.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Catalyst</span></div>
+<div class="mdtr"><span>Summer FY27</span><span>AC volume/margin (normal season)</span></div>
+<div class="mdtr"><span>FY27</span><span>EMP order conversion (₹6,923 Cr OB)</span></div>
+<div class="mdtr"><span>Risk</span><span>AC-weather; thin margins; premium PE; AC pricing</span></div>
+<div class="mdtr"><span>Falsification</span><span>If AC margins stay weak + EMP slows, the ~52× premium is unsupported.</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<p><strong>Screen:</strong> likely-PASS D/E, ICR; FAIL promoter (~38%), PE (~52×), OPM (~5-6%), sales-growth (+3.6%), MCap/Sales (~2.7×); PENDING ROCE.</p>
+<ul>
+<li><strong>Would-buy:</strong> diversified HVAC (EMP cushions AC); ₹6,923 Cr order book (+10.5%); AC brand; structural cooling runway; more resilient than pure-AC peers.</li>
+<li><strong>Would-not-buy:</strong> FY26 PAT −10.8% (weather); thin ~5-6% margins; ~52× premium PE; sub-50% promoter; AC competitive pricing.</li>
+<li><strong>Depends-on:</strong> AC-season recovery + EMP conversion.</li>
+</ul>
+<h4>Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Diversified HVAC (EMP +12.8% cushions AC); OB ₹6,923 Cr (+10.5%); AC brand; cooling runway</span><span>AC-season recovery; AC competitive pricing</span><span><strong>FY26 PAT −10.8% (weather); thin ~5-6% margins</strong></span></div>
+<div class="mdtr"><span>More resilient than pure-AC peers</span><span>Sub-50% promoter (~38%)</span><span>~52× premium PE</span></div>
+</div>
+<h4>Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated. Market cap ₹33,908 Cr; PE ~52×; watch AC season + EMP conversion.</p>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Blue Star is the more-resilient HVAC name (EMP/commercial projects + ₹6,923 Cr order book cushion the weather-sensitive AC leg, so FY26 PAT fell only −10.8% vs Voltas −56%) — but it runs thin ~5-6% margins at a premium ~52× PE. <strong>This brief does NOT recommend deployment.</strong> A diversified-HVAC play needing an AC-margin/season recovery; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26: investywise.com; business-standard.com (Q4 PAT +17.1%); scanx.trade (rev ₹12,402 Cr); univest.in (OB ₹6,923 Cr)</li>
+<li>Valuation: screener.in/company/BLUESTARCO (mcap ₹33,908 Cr, PE ~52×)</li>
+<li>Internal: 260623_VOLTAS / 260623_AMBER (AC peers)</li>
+<li><strong>PENDING:</strong> exact promoter %, ROCE, D/E, segment-margin detail, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_BLUESTAR_DEEP-RESEARCH</div>
+</div></body></html>
