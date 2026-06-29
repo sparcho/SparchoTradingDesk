@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HCLTech — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">HCLTech — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>HCLTECH</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-13 pick — #3 IT; ROIC 40%, cheap (PE ~19x), high dividend, promoter 61% — best-screening large IT. Modest CC growth. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s #3 IT-services + products company — the high-ROIC + cheap-valuation + promoter-backed USP, against modest constant-currency growth. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Sourced + as-of; ≥2-source cross-checks; &gt;5% shown both ways; unverifiable = <strong>PENDING</strong>. INR (₹ crore). No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>IT services + products</span><span>HCLTech spans IT/engineering services + a software-products business (HCLSoftware) + a strong infrastructure/cloud heritage. The diversified-IT USP.</span></div>
+<div class="mdtr"><span>ROIC</span><span>Return on Invested Capital 40.3% (+235 bps YoY) — best-in-class capital efficiency.</span></div>
+<div class="mdtr"><span>CC growth</span><span>FY26 +3.9% constant-currency (modest, demand-soft) / +6% USD / +11.2% INR.</span></div>
+<div class="mdtr"><span>TCV</span><span>$9.3bn new-deal wins FY26.</span></div>
+<div class="mdtr"><span>P/E</span><span>~18.67× (gurufocus, 10-Jun-26) — cheap. Promoter (Vama Sundari/Shiv Nadar) 60.81%. Mkt cap ₹3.10 trillion.</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>HCLTech reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>60.81% (Vama Sundari)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~18.67×</span><span><strong>PASS</strong> (near threshold)</span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>ROIC 40.3%</span><span><strong>PASS</strong> (best-in-class)</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>EBIT 17.9% (ex-restructuring)</span><span>BORDERLINE</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +3.9% CC</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~2.4× (₹3.10T/₹1,30,144)</span><span><strong>FAIL</strong> (close)</span></div>
+</div>
+<p><strong>Aggregate: 5 PASS (promoter 60.8%, PE ~19×, net cash, ROIC 40%, ICR) — the best-screening large-cap IT (promoter PASS + near-threshold PE)</strong> + FAILs (modest CC growth, MCap/Sales) + borderline OPM. A high-ROIC, cheap, promoter-backed compounder in a demand-soft year.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>HCLTech is India&#x27;s #3 IT-services + products company. FY26: <strong>revenue ₹1,30,144 Cr (+11.2% INR, +6% USD, +3.9% CC), net income ₹17,361 Cr (13.3% margin, −0.2%)</strong>; EBIT/net margin ex-restructuring 17.9%/13.8%; <strong>ROIC 40.3% (+235 bps); TCV $9.3bn; dividend ₹60/sh</strong> (hcltech/scanx, FY26). Promoter (Vama Sundari/Shiv Nadar) 60.81%; market cap ₹3.10 trillion at <strong>~18.67× P/E</strong> — cheap.</p>
+<blockquote><strong>CORE VERDICT.</strong> HCLTech is the <strong>best-screening large-cap IT</strong> — promoter 60.81% (a PASS, unlike TCS-aside the only large IT with a majority promoter that also screens cheap), <strong>ROIC 40.3% (best-in-class)</strong>, net cash, a high dividend (₹60), at a cheap ~18.67× PE. Its software-products + infrastructure mix differentiates it. <strong>The honest constraints:</strong> (1) modest growth (FY26 +3.9% CC) on the soft IT-demand backdrop; (2) net income roughly flat (restructuring costs); (3) EBIT margin ~17.9% (below 20). The load-bearing question is IT-demand recovery + AI re-accelerating CC growth. High-ROIC + cheap + promoter-backed + high-dividend; modest growth + restructuring drag are the trade-offs. <strong>Alongside TCS, the quality-value large-cap IT — best screen, awaiting demand recovery.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>HCL Technologies Ltd (NSE/BSE: HCLTECH), Shiv Nadar group — IT/engineering services + HCLSoftware (products) + cloud/infrastructure.</p>
+<h4>1.1 FY26 detail</h4>
+<p>Revenue ₹1,30,144 Cr (+11.2% INR, +6% USD, +3.9% CC); net income ₹17,361 Cr (13.3%, −0.2%); EBIT margin 17.9% (ex-restructuring); ROIC 40.3%; TCV $9.3bn; ₹60 dividend.</p>
+<h4>1.2 Equity / cash</h4>
+<p>Vama Sundari (Shiv Nadar family) 60.81%; net cash; high dividend.</p>
+<h4>1.3 Recent corporate actions</h4>
+<p>FY26 results (+3.9% CC; ROIC 40%; ₹60 dividend); AI-demand push; restructuring.</p>
+<blockquote><strong>ANCHOR FACT.</strong> A #3 IT with best-in-class ROIC (40%), net cash, a 60.8% promoter, a high dividend (₹60), at a cheap ~18.67× PE is the bull case; the offset is modest CC growth (+3.9%) + a restructuring drag on net income.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<p>Vama Sundari (Shiv Nadar) 60.81%; strong promoter + governance; high dividend; best-in-class ROIC.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter</span><span>60.81%</span><span>Majority (best among large IT)</span></div>
+<div class="mdtr"><span>ROIC</span><span>BEST-IN-CLASS</span><span>40.3%</span></div>
+<div class="mdtr"><span>Margin</span><span>~17.9% EBIT</span><span>restructuring drag</span></div>
+<div class="mdtr"><span>Demand / growth</span><span>MODEST</span><span>+3.9% CC</span></div>
+<div class="mdtr"><span>Cash return</span><span>HIGH</span><span>₹60 dividend</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; majority promoter + best-in-class ROIC + high dividend. The watch is the IT-demand cycle (CC growth) + restructuring.</blockquote>
+<hr>
+<h3>Section 3 / The High-ROIC-IT USP — Quality-Value vs Demand-Soft</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a cheap, high-ROIC, promoter-backed IT compounder awaiting demand recovery. Variant question: +3.9% CC growth + restructuring — when does growth re-accelerate?</p>
+<ul>
+<li><strong>Why real:</strong> #3 scale + ROIC 40% + net cash + products (HCLSoftware) + a high dividend + a majority promoter = a high-quality, capital-efficient compounder, the best-screening large IT.</li>
+<li><strong>Scepticism:</strong> (1) modest CC growth (+3.9%); (2) restructuring drag (net income flat); (3) EBIT margin ~17.9% (&lt;20); (4) AI net-impact; (5) demand-recovery timing.</li>
+</ul>
+<blockquote><strong>USP VERDICT.</strong> A best-screening, high-ROIC IT compounder at a cheap multiple — the demand/AI recovery is the swing; quality + capital efficiency are best-in-class.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>Net income ₹Cr</span><span>ROIC</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>1,30,144 (+11.2% INR, +3.9% CC)</span><span>17,361 (13.3%, −0.2%)</span><span>40.3%</span><span>hcltech/scanx</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>33,981</span><span>4,488 (+4%)</span><span>—</span><span>scanx</span></div>
+</div>
+<p>Risk drivers: IT-demand cycle (CC growth), restructuring, AI net-impact, currency.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> High-quality, net-cash, best-in-class ROIC; the risk is the demand cycle (CC growth) + restructuring, not solvency. Watch CC growth + margin normalisation.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (10-Jun-26)</span><span>HCLTECH</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹3.10 trillion</span></div>
+<div class="mdtr"><span>P/E</span><span>~18.67× (cheap)</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~2.4×</span></div>
+<div class="mdtr"><span>ROIC</span><span>40.3%</span></div>
+<div class="mdtr"><span>Dividend</span><span>₹60/sh</span></div>
+</div>
+<ul>
+<li><strong>Bull:</strong> IT-demand recovers + AI scales + restructuring done → CC growth re-accelerates → re-rate + high dividend.</li>
+<li><strong>Base:</strong> ~mid-single-digit growth, margin normalises → defensive compounding + dividend.</li>
+<li><strong>Bear:</strong> prolonged demand trough → growth stays low → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> The best-screening large-cap IT (promoter PASS + PE ~19× + ROIC 40% + high dividend) — a quality-value name in a demand-soft year; alongside TCS the pick of large IT.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Catalyst / Risk</span></div>
+<div class="mdtr"><span>FY27</span><span>CC growth re-acceleration; AI traction; margin normalisation (post-restructuring)</span></div>
+<div class="mdtr"><span>Risk</span><span>IT-demand cycle; AI net-impact; restructuring</span></div>
+<div class="mdtr"><span>Falsification</span><span>If FY27 CC growth stays &lt;4% with margins not normalising, the compounding thesis stalls.</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<p><strong>Screen:</strong> PASS promoter (60.81%), PE (~18.67×), net cash, ROIC (40%), ICR (5 PASS); FAIL sales-growth (+3.9% CC), MCap/Sales; borderline OPM (~17.9%).</p>
+<ul>
+<li><strong>Would-buy:</strong> best-screening large IT; ROIC 40%; net cash; 60.8% promoter; cheap (~18.67× PE); high dividend (₹60); products (HCLSoftware) differentiation.</li>
+<li><strong>Would-not-buy:</strong> modest CC growth (+3.9%); restructuring drag (net income flat); EBIT margin &lt;20%; demand-recovery timing.</li>
+<li><strong>Depends-on:</strong> IT-demand recovery + AI re-accelerating CC growth.</li>
+</ul>
+<h4>Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Best-screening large IT; ROIC 40%; net cash; 60.8% promoter; cheap (~18.67× PE); ₹60 dividend; HCLSoftware</span><span>AI net-impact; restructuring; margin normalisation</span><span>Modest CC growth (+3.9%); EBIT margin ~17.9% (&lt;20)</span></div>
+</div>
+<h4>Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated. Mkt cap ₹3.10T; PE ~18.67× (the value anchor); watch CC growth + margin.</p>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> HCLTech is the best-screening large-cap IT — promoter 60.81%, ROIC 40.3% (best-in-class), net cash, a ₹60 dividend, at a cheap ~18.67× PE — but FY26 CC growth was modest (+3.9%) with a restructuring drag. <strong>This brief does NOT recommend deployment.</strong> Alongside TCS, the quality-value large-cap IT awaiting a demand recovery; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26: hcltech.com (press release/investor release); scanx.trade (Q4); apacnewsnetwork.com (₹60 dividend)</li>
+<li>Valuation/ownership: gurufocus.com (PE ~18.67×, 10-Jun-26); stockanalysis.com (mcap ₹3.10T); trendlyne.com (promoter 60.81%)</li>
+<li><strong>PENDING:</strong> exact mcap/PE live, ROCE, FY27 guide, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_HCLTECH_DEEP-RESEARCH</div>
+</div></body></html>

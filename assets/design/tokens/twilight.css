@@ -1,0 +1,95 @@
+/* ============================================================
+   SPARCHO Trading Desk — TWILIGHT (light) theme
+   ------------------------------------------------------------
+   The front-of-house / hub identity. "A well-designed investment
+   memo at dawn": a warm→cool dawn field, luminous glass, deep
+   navy ink, and TWO desk colours that are the warm/cool poles of
+   one gradient — EMBER (Silver Desk · warm metal at dawn) and
+   TIDE (Equity Desk · cool live-market data). The hub literally
+   is the gradient between the two books. Light-forward by doctrine.
+
+   Apply `.theme-twilight` to a container (or <body>).
+
+   Signal colours are FIXED and tuned for light backgrounds
+   (WCAG AA on glass): green=bull/ok, red=bear/kill, amber=watch.
+   60-30-10 — accent is the 10%, never the field.
+   ============================================================ */
+
+.theme-twilight {
+  color-scheme: light;
+
+  /* ---- Background field — the DAWN: warm (ember) → cool (tide) ---- */
+  --tw-bg-1:   #faf6f0;   /* warm off-white — ember side */
+  --tw-bg-2:   #f5f4f3;   /* neutral crossover */
+  --tw-bg-3:   #edf4f5;   /* cool off-white — tide side */
+  --tw-bg-grad: linear-gradient(150deg, var(--tw-bg-1) 0%, var(--tw-bg-2) 50%, var(--tw-bg-3) 100%); /* @kind color */
+
+  /* ---- Glass panels (restrained — hero + desk cards only) ---- */
+  --glass:        rgba(255,255,255,0.60);
+  --glass-strong: rgba(255,255,255,0.82);
+  --glass-quiet:  rgba(255,255,255,0.42);
+  --glass-border: rgba(255,255,255,0.75);
+  --glass-hair:   rgba(45,43,90,0.08);
+  --glass-shadow: 0 10px 34px rgba(45,43,90,0.10), inset 0 1px 0 rgba(255,255,255,0.65); /* @kind shadow */
+  --glass-shadow-lift: 0 18px 50px rgba(45,43,90,0.16), inset 0 1px 0 rgba(255,255,255,0.7); /* @kind shadow */
+
+  /* ---- Ink ramp (deep twilight navy) ---- */
+  --tw-ink:      #1d2b4a;   /* primary — 11.8:1 on bg */
+  --tw-ink-2:    #3a4668;   /* secondary */
+  --tw-ink-soft: #5a6483;   /* body / muted */
+  --tw-ink-mute: #7b85a3;   /* meta / labels */
+  --tw-ink-faint:#9aa3bd;   /* faint / hairline text */
+
+  /* ============================================================
+     THE TWO DESK COLOURS — warm & cool poles of one gradient
+     ============================================================ */
+  /* EMBER — Silver Desk · warm metal at dawn */
+  --ember:      #e0a458;   /* accent on light/dark */
+  --ember-deep: #b9772c;   /* AA text on light glass */
+  --ember-lum:  #eaad62;   /* luminous — on dark */
+  --ember-soft: rgba(224,164,88,0.14);
+  --ember-glow: rgba(224,164,88,0.40);
+
+  /* TIDE — Equity Desk · cool live-market data */
+  --tide:       #3fa6bc;   /* accent on light/dark */
+  --tide-deep:  #2a7a8c;   /* AA text on light glass */
+  --tide-lum:   #5cc3d6;   /* luminous — on dark */
+  --tide-soft:  rgba(63,166,188,0.14);
+  --tide-glow:  rgba(63,166,188,0.36);
+
+  /* The unifying signature gradient (the dawn between the books) */
+  --signature-grad: linear-gradient(112deg, var(--ember) 0%, var(--tide) 100%); /* @kind color */
+
+  /* Interactive accent — tide-deep, AA on light glass */
+  --tw-link:       var(--tide-deep);
+  --tw-link-soft:  var(--tide-soft);
+
+  /* ---- back-compat aliases (older mockups) ---- */
+  --tw-coral: var(--ember);  --tw-coral-deep: var(--ember-deep);
+  --tw-cyan:  var(--tide);   --tw-cyan-deep:  var(--tide-deep);
+  --tw-accent-grad: var(--signature-grad);
+  --tw-equity: var(--tide-deep);  --tw-equity-soft: var(--tide-soft);
+  --tw-silver: var(--ember-deep); --tw-silver-soft: var(--ember-soft);
+
+  /* ---- FIXED semantic signal colours (light-bg, AA) ---- */
+  --sig-up:     #0e7d3a;  --sig-up-soft:   rgba(14,125,58,0.12);   /* bullish / OK / +P&L */
+  --sig-down:   #b42318;  --sig-down-soft: rgba(180,35,24,0.10);   /* bearish / kill / -P&L */
+  --sig-watch:  #b45309;  --sig-watch-soft:rgba(180,83,9,0.12);    /* watch / pending */
+  --sig-neutral:#6b7596;  --sig-neutral-soft:rgba(107,117,150,0.12);/* neutral / reference */
+
+  /* ============================================================
+     SEMANTIC ALIASES — author the landing against THESE
+     ============================================================ */
+  --surface-field:   var(--tw-bg-grad);
+  --surface-glass:   var(--glass);
+  --surface-solid:   var(--glass-strong);
+
+  --text-display:    var(--tw-ink);
+  --text-heading:    var(--tw-ink-2);
+  --text-body:       var(--tw-ink-soft);
+  --text-label:      var(--tw-ink-mute);
+  --text-faint:      var(--tw-ink-faint);
+
+  --accent-line:     var(--tw-link);     /* links, affordances */
+  --hairline:        var(--glass-hair);
+}

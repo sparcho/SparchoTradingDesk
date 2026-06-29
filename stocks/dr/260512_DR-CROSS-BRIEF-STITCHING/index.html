@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🧵 DR Cross-Brief Stitching v1 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Thematic</span>
+    <h1 class="htitle">🧵 DR Cross-Brief Stitching v1</h1>
+    <div class="hmeta"><b>2026-05-12</b> &middot; status <b>active</b></div>
+    <div class="obs">v1 cross-brief synthesis after F96 shipped — natural next step once 8 first-layer DR briefs exist. Maps which names appear in multiple briefs (multi-thesis conviction), surfaces conditional thesis interactions (Warsh × Defence × Silver-gap), and flags stitching ideas for further work.</div>
+  </div>
+  <div class="body"><blockquote>Eight active DR briefs sit at the first-layer level. This document does the second-layer work: which names appear in multiple briefs (conviction), which theses interact conditionally (regime-sensitivity), and where the natural next-layer briefs should be authored.</blockquote>
+<p><strong>Active first-layer briefs covered here:</strong></p>
+<ol>
+<li>260422_5LAYER-CAKE_India-v1 — frame doc</li>
+<li>260422_DEEP-RESEARCH_India-Stack-DPI-brief — DPI / India Stack</li>
+<li>260501_DEEP-RESEARCH_warsh-steepener-india-implications — Macro / curve</li>
+<li>260502_DEEP-RESEARCH_india-ai-players-engine-map — AI sector</li>
+<li>260503_DEEP-RESEARCH_india-DC-5LC-v2 — Data centre × 5LC</li>
+<li>260503_DEEP-RESEARCH_india-energy-v2 — Energy</li>
+<li>260511_DR_INDIA-DEFENCE-RAILWAYS-CAPEX — Defence + Railways</li>
+<li>260426_TANLA_vs_GENESYS_cross-comparison (cross-comp, not thematic)</li>
+</ol>
+<hr>
+<h3>§1 Multi-brief names — the cross-thesis convergence map</h3>
+<p>Names appearing in 2+ briefs deserve outsized attention. They&#x27;re where multiple structural cycles converge on the same equity.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Ticker</span><span>Briefs</span><span>Cross-thesis story</span></div>
+<div class="mdtr"><span><strong>TARIL</strong> ⭐ held</span><span>Energy v2 §D · DC v2 §3 · Defence-Railways §5</span><span>T&amp;D transformer = bottleneck input to renewables (Energy) + DC power-distribution (DC) + rail electrification (Defence-Railways). <strong>Triple-convergence name.</strong></span></div>
+<div class="mdtr"><span><strong>HBLENGINE</strong> ⭐ held</span><span>Defence-Railways §3+§4 · (DC v2 — energy storage tangent)</span><span>Kavach signalling (Railways) + defence batteries (Defence) + lithium scaling (DC v2 storage adjacency). <strong>Triple-convergence in defence-rail-storage corner.</strong></span></div>
+<div class="mdtr"><span><strong>POWERGRID</strong></span><span>Energy v2 §C · Defence-Railways §5 · DC v2 §1</span><span>T&amp;D backbone — feeds power to renewables (Energy), to DC (DC), to rail electrification (Defence-Railways). PSU yield support across all three cycles.</span></div>
+<div class="mdtr"><span><strong>NTPC</strong> ⭐ held</span><span>Energy v2 §A · DC v2 §1</span><span>Largest power utility, thermal+renewable mix. Energy v2 plays the generation cycle; DC v2 plays the DC power-source angle.</span></div>
+<div class="mdtr"><span><strong>KEC International</strong></span><span>Energy v2 §C (T&amp;D EPC) · Defence-Railways §5</span><span>T&amp;D + Railways OHE + civil — three-leg portfolio captures both major capex cycles simultaneously.</span></div>
+<div class="mdtr"><span><strong>BHEL</strong></span><span>Energy v2 §A (thermal genco eqpt) · Defence-Railways §5</span><span>Power equipment with defence/rail adjacency (locomotives, transformers, naval kit). Cyclical re-rating play, not pure capex purity.</span></div>
+<div class="mdtr"><span><strong>POLYCAB / KEI</strong></span><span>Energy v2 §C (cables) · DC v2 §3 (DC cabling)</span><span>Cables — same input feeding T&amp;D buildout (Energy) and DC infrastructure (DC).</span></div>
+<div class="mdtr"><span><strong>L&amp;T</strong></span><span>Defence-Railways §3 (AMCA) · DC v2 (EPC adjacency)</span><span>AMCA defence prime + diversified EPC. Multi-cycle exposure.</span></div>
+<div class="mdtr"><span><strong>TATAELXSI</strong></span><span>AI Players · DC v2 §2</span><span>Engineering services + chip-adjacent design IP. AI-cycle + DC-cycle convergence.</span></div>
+<div class="mdtr"><span><strong>KAYNES / SYRMA / DIXON</strong></span><span>DC v2 §2 · AI Players (indirect)</span><span>OSAT + EMS — directly leveraged to DC + AI buildout.</span></div>
+<div class="mdtr"><span><strong>TANLA</strong></span><span>AI Players · TANLA-vs-GENESYS comparison</span><span>Proprietary CPaaS stack; engine-independent AI. Cross-comp affirms tactical buy if base completes.</span></div>
+<div class="mdtr"><span><strong>MAPMYINDIA</strong></span><span>AI Players · standalone DR (260423)</span><span>Geospatial data moat. Governance + thesis MODERATE — parking-lot status, watch base healing.</span></div>
+<div class="mdtr"><span><strong>GENESYS</strong></span><span>TANLA-vs-GENESYS comparison · L5 Apps reference</span><span>Still in bleed phase; weakest of the AI-vertical SaaS basket.</span></div>
+</div>
+<h4>Implication</h4>
+<blockquote><strong>The capital-goods + T&amp;D corner is the highest cross-conviction zone in the system right now.</strong> TARIL, HBLENGINE, POWERGRID, KEC, NTPC, BHEL all show up across multiple capex-cycle briefs. The book is already heavy in this zone (TARIL #1, HBL #2). Position-sizing discipline matters more than thesis-validation here — the thesis is over-determined.</blockquote>
+<hr>
+<h3>§2 Conditional thesis interactions — the macro overlay matters</h3>
+<p>DR briefs assume base-case macro. The Warsh-steepener brief identifies how that base case can swing. Below: conditional outcomes for each thematic brief if specific macro paths play out.</p>
+<h4>Scenario A — Warsh confirmed + steepener plays (long-end up, short-end dovish)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Brief</span><span>Conditional impact</span></div>
+<div class="mdtr"><span>Defence-Railways</span><span><strong>Mixed.</strong> Long-end up compresses Tier-2 PSU defence multiples (BDL 76x, BEL 50x) but doesn&#x27;t hurt T1 execution-proven names (HBL, TARIL with delivered earnings). Net: <strong>Tier 1 outperforms Tier 2.</strong></span></div>
+<div class="mdtr"><span>Energy v2</span><span><strong>Negative for high-PE renewables</strong> (WAAREEENER, ADANIGREEN — DCF-sensitive). <strong>Neutral for PSU utilities</strong> (POWERGRID, NTPC) with yield support.</span></div>
+<div class="mdtr"><span>DC v2</span><span><strong>Negative for high-PE L4/L5</strong> (AI services + apps) via discount-rate pressure. <strong>Positive for L3 physical infra</strong> (POLYCAB, BLUESTAR, ANANTRAJ) where near-term cashflows dominate.</span></div>
+<div class="mdtr"><span>AI Players</span><span><strong>Generally negative.</strong> Engine-dependent API consumers compress more than engine-independent IP plays. <strong>TANLA / KPIT / MAPMYINDIA hold up better than NAUKRI / NEWGEN.</strong></span></div>
+<div class="mdtr"><span>Silver (cross-asset, not its own brief but linked)</span><span><strong>Negative.</strong> Long-end nominal up + AI-deflation thesis = higher real yields = silver headwind. <strong>F98 redeployment buckets should de-emphasise silver dip-buy bucket if steepener plays.</strong></span></div>
+<div class="mdtr"><span>DPI / India Stack</span><span><strong>Mixed.</strong> PAYTM / PB FINTECH face NBFC-style scrutiny on funding costs. CDSL / ANGELONE benefit from broader market activity.</span></div>
+</div>
+<h4>Scenario B — Warsh confirmed but NO steepener (long-end stable)</h4>
+<ul>
+<li>Steepener-conditional bearish channels (silver, high-PE growth) don&#x27;t fire</li>
+<li>Defence-Railways Tier 2 multiples hold</li>
+<li>Energy v2 renewables hold</li>
+</ul>
+<h4>Scenario C — Hormuz full breakdown (regime flips RED)</h4>
+<ul>
+<li>Defence-Railways: <strong>strong tailwind</strong> — supply-chain redundancy demand, AMCA urgency</li>
+<li>Energy v2: <strong>strong tailwind for thermal/PSU</strong> (NTPC), <strong>headwind for renewables</strong> (cost-of-capital up)</li>
+<li>DC v2: <strong>negative</strong> — global capex friction, India&#x27;s comparative advantage narrows if dollar strength returns</li>
+<li>AI Players: <strong>negative</strong> (risk-off)</li>
+<li>Silver (linked): <strong>strong tailwind</strong> — F98 trim ladder fires faster, redeployment cash bucket gets bigger</li>
+</ul>
+<h4>Implication</h4>
+<blockquote><strong>The defence-railways book (TARIL + HBL) is the only allocation that&#x27;s positive in BOTH Scenario A (Tier 1 outperforms) AND Scenario C (geopolitical tailwind).</strong> It&#x27;s net-conditional-resilient. This is why operator&#x27;s instinct to concentrate there is structurally sound — though F89/F95 cluster-discipline concerns remain valid on size.</blockquote>
+<hr>
+<h3>§3 Brief-level coverage gaps and stitching ideas</h3>
+<h4>Gaps in current coverage</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Gap</span><span>What&#x27;s missing</span><span>Suggested next brief</span></div>
+<div class="mdtr"><span><strong>Banks / Financials</strong></span><span>No dedicated brief. Only mentioned in Warsh-steepener Channel 4 (NBFC tilt vs PSU bank tilt).</span><span>&quot;India Financials post-Warsh — NBFC vs PSU bank decomposition&quot;</span></div>
+<div class="mdtr"><span><strong>Auto / EV</strong></span><span>No standalone brief. KPIT mentioned (AI Players, auto-vertical IP); EXIDEIND held but no thesis doc.</span><span>&quot;India EV + Auto Components — 5LC framing&quot;</span></div>
+<div class="mdtr"><span><strong>Pharma</strong></span><span>Zero coverage. BIOCON, SUNPHARMA, DRREDDY in screenerverse but no thesis.</span><span>&quot;India Pharma — biosimilars + API self-reliance&quot;</span></div>
+<div class="mdtr"><span><strong>Cement / Building Materials</strong></span><span>Zero coverage. Could matter as DC buildout + infrastructure overlay.</span><span>&quot;India Cement + Building Materials — DC + Infra demand&quot;</span></div>
+<div class="mdtr"><span><strong>Microstructure / FII flow</strong></span><span>F100 flag scoping this; no brief yet.</span><span>(Scoped via F100)</span></div>
+</div>
+<h4>Cross-brief stitching ideas (lighter-weight follow-ons)</h4>
+<ul>
+<li><strong>Energy v2 ↔ DC v2</strong> — these largely overlap on L1 (NTPC/POWERGRID/ADANIGREEN). Could be merged into a &quot;Capex-Cycle Layer-1 (Power+T&amp;D)&quot; single-source document with sub-section drill-downs.</li>
+<li><strong>Defence-Railways ↔ Energy v2</strong> — POWERGRID/KEC/TARIL/BHEL appear in both. A 1-page &quot;Capital Goods Cluster — multi-cycle convergence&quot; addendum would lock in why the cluster overweight is structurally defensible.</li>
+<li><strong>AI Players ↔ DC v2</strong> — TATAELXSI/KAYNES sit at the intersection. AI Players treats them as L4/L5; DC v2 treats them as L2/L3. A 1-pager reconciling the two reads would clarify their tier-1 vs tier-2 status.</li>
+<li><strong>Warsh-steepener overlay refresh</strong> — given Warsh full-Senate vote THIS WEEK, add a &quot;what&#x27;s changed since 5/01&quot; delta addendum. Highest time-sensitivity of all the cross-brief work.</li>
+</ul>
+<hr>
+<h3>§4 Falsifiable claims tracker — across all briefs</h3>
+<p>Aggregating the explicit falsifiable triggers from each brief in one place so the system tracks them.</p>
+<h4>From 260511_DR_INDIA-DEFENCE-RAILWAYS-CAPEX §10</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Trigger</span><span>Direction</span><span>Watch metric</span></div>
+<div class="mdtr"><span>TARIL revenue growth &lt;12% YoY</span><span>bear</span><span>quarterly results</span></div>
+<div class="mdtr"><span>TARIL OB drops &lt;Rs 4,000 cr</span><span>bear</span><span>quarterly disclosure</span></div>
+<div class="mdtr"><span>HBL Kavach KM commissioning &lt;800 km/quarter for 2 consecutive Q</span><span>bear/trim</span><span>RailTel/MoR data</span></div>
+<div class="mdtr"><span>HBL PLW/BLW orders descoped</span><span>bear/trim</span><span>DDNews / MoR press</span></div>
+<div class="mdtr"><span>FY27 actual capex tracking &lt;FY26 RE by &gt;5% at H1</span><span>de-risk</span><span>MoR/MoD H1 disclosure</span></div>
+<div class="mdtr"><span>FY27 BE capex actuals — quarterly run-rate</span><span>mixed</span><span>quarterly MoD/MoR</span></div>
+<div class="mdtr"><span>Kavach km-commissioned &gt;1,250/quarter</span><span>bull</span><span>quarterly disclosure</span></div>
+<div class="mdtr"><span>AMCA RFP issued in 90 days from 26-Feb shortlist</span><span>bull</span><span>DRDO press</span></div>
+</div>
+<h4>From 260502_DEEP-RESEARCH_india-ai-players-engine-map</h4>
+<p>6 falsifiable claims F1-F6 emitted to OUTCOME_AUDIT for 6-12 month grading. Tracking via <code>/05_EVALUATIONS/AGENTS/</code> if not already in this doc — verify.</p>
+<h4>From 260501_DEEP-RESEARCH_warsh-steepener-india-implications</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Trigger</span><span>Direction</span><span>Watch metric</span></div>
+<div class="mdtr"><span>AI-deflation thesis: CPI/PCE prints decelerate beyond consensus over FY26-27</span><span>confirms Warsh dovish-short</span><span>quarterly CPI / PCE</span></div>
+<div class="mdtr"><span>US 10Y rises &gt;50bp post-Warsh confirmation</span><span>confirms steepener</span><span>daily TNX</span></div>
+<div class="mdtr"><span>USDINR breaches 96</span><span>confirms FX-channel impact</span><span>daily INR=X</span></div>
+<div class="mdtr"><span>Indian NBFC NII expansion next 2 Q</span><span>confirms channel-4 NBFC tilt</span><span>quarterly results</span></div>
+</div>
+<h4>From 260423_DEEP-RESEARCH_mapmyindia-governance-GIS-AI</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Trigger</span><span>Direction</span></div>
+<div class="mdtr"><span>One quarter of clean re-acceleration (sales + OPM + NP all up)</span><span>re-engage</span></div>
+<div class="mdtr"><span>Bottom-structure confirms with 1004 swing-low recapture</span><span>re-engage</span></div>
+<div class="mdtr"><span>Ola litigation resolution + clean RPT compliance for 2 Q</span><span>governance upgrade</span></div>
+</div>
+<hr>
+<h3>§5 What to put on the live dashboard</h3>
+<p>Recommended additions to DASHBOARD - LIVE to keep these stitches visible:</p>
+<ol>
+<li><strong>&quot;DR tracking watchlist&quot;</strong> section listing the falsifiable triggers above with current-status (✅ on-track / ⚠️ at-risk / ❌ triggered)</li>
+<li><strong>&quot;Cross-thesis names&quot;</strong> strip showing the multi-brief convergence list from §1 with their current screen-status</li>
+<li><strong>&quot;Macro-overlay sensitivity&quot;</strong> indicator showing which Scenario (A/B/C) the regime is currently leaning toward, and which book positions benefit / suffer</li>
+</ol>
+<p>The dashboard already shows positions, flags, briefs — DR tracking is the missing piece.</p>
+<hr>
+<h3>§6 Author notes</h3>
+<p>This is a <strong>v1 stitching doc</strong>. It mostly maps what already exists. The next-layer work is:</p>
+<ul>
+<li><strong>One specific deepening per gap</strong> in §3 (&quot;India Financials post-Warsh&quot; being the highest-leverage given Warsh vote this week)</li>
+<li><strong>Refresh of any brief that goes stale</strong> — currently all are &lt;2 weeks old except the 5-Layer Cake (3 weeks)</li>
+<li><strong>A monthly cadence</strong> for this cross-brief doc so multi-thesis names get re-validated when individual briefs change</li>
+</ul>
+<p>Operator decision needed: which gap to author next, and whether to invest in the cross-brief monthly cadence vs ad-hoc refreshes.</p>
+<hr>
+<p><em>v1 2026-05-12 — first cross-brief synthesis after F96 shipped. Stitches 8 active briefs. Author: Claude. Reviewer: Sparcho.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260512_DR-CROSS-BRIEF-STITCHING</div>
+</div></body></html>

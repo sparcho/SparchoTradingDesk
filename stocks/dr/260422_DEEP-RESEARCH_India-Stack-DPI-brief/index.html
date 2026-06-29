@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEEP-RESEARCH MINI-PROJECT — India Stack / DPI sub-layer · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Thematic</span>
+    <h1 class="htitle">DEEP-RESEARCH MINI-PROJECT — India Stack / DPI sub-layer</h1>
+    <div class="hmeta"><b>&#x27;2026-04-22&#x27;</b></div>
+    
+  </div>
+  <div class="body"><p><strong>Location:</strong> <code>/TRADER/03_SCREENERS/260422_DEEP-RESEARCH_India-Stack-DPI-brief.md</code></p>
+<p><strong>Status:</strong> v1 SHORT BRIEF (operator requested get-up-to-speed format; full per-name research docs to follow as separate v2 deliverables)</p>
+<p><strong>Process:</strong> First pilot of <code>DEEP_RESEARCH_MINI_PROJECT</code> (PROCESSES.md §5.18)</p>
+<p><strong>Scope:</strong> India Stack / Digital Public Infrastructure cluster — listed plays + unlisted IPO-monitor candidates</p>
+<hr>
+<h3>1. Purpose</h3>
+<p>Identify how AI-era value capture happens INSIDE India Stack-native companies, pre-position before the market prices in specific AI-project announcements, and build an alert-trigger framework so operator can react fast when surprises land.</p>
+<h3>2. The &quot;why it&#x27;s different&quot; insight</h3>
+<p>India&#x27;s Digital Public Infrastructure (UPI + Aadhaar + DigiLocker + ONDC + Account Aggregator framework) is a <strong>public data layer that has no US equivalent</strong>. Every month ~16 billion UPI transactions flow through NPCI&#x27;s rails. When AI meets that much transactional + identity + consent data — with the regulatory wrapping already built — the monetization unlocks don&#x27;t look like US fintech. They look like entirely new product categories.</p>
+<p>AI announcements from DPI-native companies (Paytm&#x27;s AI credit scoring, PB&#x27;s AI insurance matching, CDSL&#x27;s AI depository analytics, Angel One&#x27;s AI trade execution) can cause step-change re-ratings because:</p>
+<ul>
+<li><strong>Moat is the data, not the model</strong> — any of these names has exclusive data sets no competitor can replicate</li>
+<li><strong>Regulator-blessed</strong> — DPDP Act (Data Protection) + RBI/SEBI AI frameworks make the operating perimeter clear, not a moving target like US AI regulation</li>
+<li><strong>Scale is already there</strong> — not a &quot;will customers adopt&quot; question; adoption is measured in billions</li>
+</ul>
+<h3>3. Scope (listed names)</h3>
+<h4>Listed (4 core)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Ticker</span><span>Role</span><span>AI angle</span></div>
+<div class="mdtr"><span><strong>PAYTM / ONE97</strong></span><span>UPI payments, lending, wealth</span><span>AI credit scoring, fraud detection, merchant intelligence</span></div>
+<div class="mdtr"><span><strong>PB FINTECH</strong></span><span>Policybazaar (insurance), Paisabazaar (credit)</span><span>AI-personalized insurance matching, risk scoring</span></div>
+<div class="mdtr"><span><strong>CDSL</strong></span><span>Depository (demat records)</span><span>AI-driven analytics on capital market data, retail flow intelligence</span></div>
+<div class="mdtr"><span><strong>ANGEL ONE</strong></span><span>Digital broking</span><span>AI-native trade execution, personalized research, algo retail rollout</span></div>
+</div>
+<h4>Unlisted / IPO-monitor (private for now; track for IPO windows)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Role</span><span>IPO timing</span></div>
+<div class="mdtr"><span><strong>Sarvam AI</strong></span><span>Indic-language LLM lab</span><span>Rumoured late 2026 / 2027</span></div>
+<div class="mdtr"><span><strong>Ola Krutrim</strong></span><span>Indic LLM + sovereign AI stack</span><span>Depends on Ola Group IPO choreography</span></div>
+<div class="mdtr"><span><strong>BharatGPT</strong></span><span>Govt-adjacent Indic LLM</span><span>Unclear; possibly joint-venture structure</span></div>
+<div class="mdtr"><span><strong>NPCI</strong></span><span>UPI rails (systemically important)</span><span>Unlikely to IPO; regulated utility</span></div>
+<div class="mdtr"><span><strong>PhonePe</strong></span><span>UPI payments scale</span><span>US parent Walmart IPO pending</span></div>
+</div>
+<h3>4. Per-name quick thesis</h3>
+<h4>PAYTM / ONE97</h4>
+<ul>
+<li><strong>Core AI angle:</strong> credit scoring + fraud. UPI transactional history = lending underwriting goldmine. AI-driven merchant acquisition / intelligence sits alongside.</li>
+<li><strong>What to watch for:</strong> product announcements on (a) AI-underwritten consumer credit, (b) merchant AI, (c) wealth-stack AI advisory.</li>
+<li><strong>Alert trigger:</strong> a regulator-blessed AI-underwriting product launch would move the stock materially — NBFC license + AI + UPI data is a singular combo.</li>
+<li><strong>Risk:</strong> regulatory overhang continues to dominate; wallet-to-bank transition still playing out.</li>
+</ul>
+<h4>PB FINTECH</h4>
+<ul>
+<li><strong>Core AI angle:</strong> insurance + credit matching. The fundamental problem both markets solve — &quot;what product fits this customer&quot; — is an AI-solvable problem that PB already owns the data for.</li>
+<li><strong>Watch for:</strong> health-insurance AI matching (huge margin pool), AI-driven risk-adjusted pricing rollout to small-value products.</li>
+<li><strong>Alert trigger:</strong> Policybazaar AI-agent product announcement; Paisabazaar AI-underwriting on unsecured credit.</li>
+<li><strong>Risk:</strong> competitive threat from banks / insurers building in-house. Platform-vs-direct battle.</li>
+</ul>
+<h4>CDSL</h4>
+<ul>
+<li><strong>Core AI angle:</strong> India&#x27;s demat-account data moat is structural. Retail equity flows are captured at highest-fidelity. AI-analytics on this dataset = forward flow intelligence.</li>
+<li><strong>Watch for:</strong> CDSL product announcements on (a) AI-powered capital-market analytics, (b) ONDC-style aggregation of brokerage-agnostic data, (c) data-API commercialization.</li>
+<li><strong>Alert trigger:</strong> CDSL launches paid data-API with AI overlay; meaningful revenue implications.</li>
+<li><strong>Risk:</strong> regulatory — SEBI could impose data-commercialization restrictions. Very consensus-positioned; high valuation.</li>
+</ul>
+<h4>ANGEL ONE</h4>
+<ul>
+<li><strong>Core AI angle:</strong> democratization of algo + AI trade execution for retail. Platform scale (20M+ customers) means AI-execution monetizes quickly.</li>
+<li><strong>Watch for:</strong> AI-agent-powered advisory, algorithmic trading for retail, quant-strategies-as-a-service.</li>
+<li><strong>Alert trigger:</strong> AI-advisor launch + AUM adoption milestones.</li>
+<li><strong>Risk:</strong> discount broking margins compress; IPO-age-of-retail slowing.</li>
+</ul>
+<h3>5. Alert-trigger framework (pre-committed operator response)</h3>
+<p>This is where deep-research earns its keep — not in prediction, but in pre-commitment so you don&#x27;t scramble on news-day.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Trigger type</span><span>Example</span><span>Pre-committed response</span></div>
+<div class="mdtr"><span><strong>Product launch</strong> (AI-branded)</span><span>Paytm launches AI-underwriting</span><span>Alert; check chart; if daily &gt; pre-announcement 5D high on 2x volume, consider small initial tranche (size per §8.3/8.4)</span></div>
+<div class="mdtr"><span><strong>Regulator blessing</strong></span><span>DPDP rules clarified favourably</span><span>Alert; broad move across DPI cluster likely; look for relative-strength leader within cluster</span></div>
+<div class="mdtr"><span><strong>Partnership announcement</strong></span><span>PB Fintech × NVIDIA / Google / OpenAI partnership</span><span>Alert; evaluate whether partnership has commercialization path vs. announcement-theatre</span></div>
+<div class="mdtr"><span><strong>Executive hire</strong></span><span>Big Tech AI talent moves to DPI co</span><span>Noted; not a standalone trigger; becomes one if paired with product-launch roadmap</span></div>
+<div class="mdtr"><span><strong>IPO announcement</strong></span><span>Sarvam AI / Krutrim file DRHP</span><span>Alert; add to IPO-watch sub-list; pre-pricing research cycle starts</span></div>
+<div class="mdtr"><span><strong>Macro regime shift</strong></span><span>Payments regulation tightens</span><span>Negative trigger; immediate cluster reassessment — NOT a &quot;buy the dip&quot; until clarity</span></div>
+</div>
+<h3>6. Cross-references with existing TRADER infrastructure</h3>
+<ul>
+<li><strong>Chart uploads</strong>: when operator shares a chart for any DPI name, <code>WATCHLIST_AUTO_ADD</code> + <code>SCREENSHOT_INTAKE</code> already handle logging + classification. No new tooling needed.</li>
+<li><strong>Sector regime check</strong>: DPI cluster&#x27;s regime-sensitivity is medium-high — dependent on Indian retail / fintech liquidity. Cross-reference with PSUBNKBEES + BANKBEES flow.</li>
+<li><strong>Cluster-rotation tracker</strong>: DPI becomes one of the ~13 clusters tracked weekly. Over time, empirical data will show whether DPI leads/lags.</li>
+<li><strong>Upcoming <code>Asia-emerging-tech-research-agent</code></strong> (Task #38 deferred) would feed into this process — especially for unlisted/private companies + Asian peers (Kakao Pay, GrabAI, SeaAI).</li>
+</ul>
+<h3>7. Timeline (pilot)</h3>
+<p>This brief is v1 SHORT. Next iterations:</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Version</span><span>Scope</span><span>Trigger</span></div>
+<div class="mdtr"><span><strong>v2 per-name deep dives</strong> (4 separate docs)</span><span>Full scenario analysis + price-action overlay per name</span><span>When operator shares charts of any of the 4 names OR within 2 weeks, whichever first</span></div>
+<div class="mdtr"><span><strong>v3 quarterly refresh</strong></span><span>All listed + unlisted updates; alert-log review</span><span>First Sunday of next quarter (2026-07-05 per SCHEDULE.md §19)</span></div>
+<div class="mdtr"><span><strong>v4 post-catalyst</strong></span><span>If any alert-trigger fires, v4 focuses on the responder only</span><span>Event-driven</span></div>
+</div>
+<h3>8. Open questions for operator</h3>
+<ol>
+<li><strong>Timing preference on v2 per-name deep-dives</strong> — all 4 this week, or stagger across 2 weeks with charts as you share them?</li>
+<li><strong>India-Stack cluster in GAMEPLAN</strong> — should DPI names ever be core-size positions, or always smaller-tier speculative allocations? (Informs sizing rules.)</li>
+<li><strong>Unlisted IPO monitoring</strong> — do you want a dedicated <code>/TRADER/03_SCREENERS/IPO-WATCH.md</code> for Sarvam / Krutrim / etc or handle these ad-hoc?</li>
+<li><strong>Alert-trigger mechanism</strong> — do you want the scheduled-task layer to also run a weekly news-sweep for DPI-cluster AI announcements? Would need a proper search-tool MCP; flaggable as follow-up.</li>
+</ol>
+<hr>
+<h3>9. Revision log</h3>
+<ul>
+<li><strong>v1 — 2026-04-22</strong> — Initial short-brief pilot. First deliverable under <code>DEEP_RESEARCH_MINI_PROJECT</code> process (PROCESSES.md §5.18). Four listed names + IPO-watch tail. Alert-trigger framework established. v2 per-name dives queued pending operator preference.</li>
+</ul>
+<p><em>(Reserved for future updates.)</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260422_DEEP-RESEARCH_India-Stack-DPI-brief</div>
+</div></body></html>

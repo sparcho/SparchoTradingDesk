@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mazagon Dock Shipbuilders — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Mazagon Dock Shipbuilders — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>MAZDOCK</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-2 USP pick — India&#x27;s submarine + warship monopoly (defence PSU). Cheapest defence multiple in batch. Advisory only — no execution directive.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s largest warship + <strong>submarine</strong> builder — the near-monopoly defence-PSU USP, a ₹20,535 Cr order book, the Colombo Dockyard expansion, modest near-term growth, and a (relatively) cheaper defence multiple. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>Defence shipbuilding domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Warship building yard</span><span>Builds destroyers, frigates, corvettes for the Indian Navy. Mazdock is India&#x27;s largest.</span></div>
+<div class="mdtr"><span>Submarines (Scorpene/P75)</span><span>Mazdock is India&#x27;s primary conventional-<strong>submarine</strong> builder (Scorpene/Kalvari class; P75-I pipeline) — a near-monopoly capability.</span></div>
+<div class="mdtr"><span>P17A / P15B</span><span>Stealth frigate / destroyer programmes — the bulk of the current order book.</span></div>
+<div class="mdtr"><span>ICGS</span><span>Indian Coast Guard ships.</span></div>
+<div class="mdtr"><span>Order book</span><span>Contracted backlog; ₹20,535 Cr (31-Mar-26).</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (Mazdock reading)</span></div>
+<div class="mdtr"><span>P/E</span><span>~41.6× (screener, 19-Jun-26) — cheapest defence name in the batch.</span></div>
+<div class="mdtr"><span>P/B</span><span>~10.4×.</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>81.2% (Government of India).</span></div>
+<div class="mdtr"><span>PAT margin</span><span>FY26 ~20% (₹2,578/₹12,840).</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹1,01,599 Cr.</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>GRSE / Cochin Shipyard</span><span>Other defence-shipbuilding PSUs</span></div>
+<div class="mdtr"><span>HAL / BEL</span><span>Defence-PSU references</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Mazdock reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>81.2% (GoI)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~41.6×</span><span><strong>FAIL</strong> (but cheapest defence here)</span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash (order advances) — PENDING exact</span><span><strong>LIKELY PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>high (advance-funded) — PENDING exact</span><span>LIKELY PASS (PENDING)</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>PAT margin ~20%; EBITDA margin PENDING</span><span>BORDERLINE (PENDING)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +12.3%; 3y PENDING</span><span>PENDING</span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>LIKELY PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>₹1,01,599/₹12,840 ≈ <strong>7.9×</strong></span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: 1-2 firm/likely PASS (promoter, net-cash) + valuation FAILs.</strong> A cash-rich monopoly PSU with a strong balance sheet but rich multiple and only modest near-term growth.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Mazagon Dock Shipbuilders is India&#x27;s largest warship-building yard and its primary conventional-<strong>submarine</strong> builder — a genuine near-monopoly defence-PSU capability (Scorpene submarines, P17A stealth frigates, P15B destroyers). FY26: <strong>revenue ₹12,840 Cr (+12.3%), consolidated PAT ₹2,578 Cr (+6.8%)</strong>; <strong>Q4 revenue ₹3,684 Cr (+16%)</strong>, Q4 PAT ₹464 Cr (<strong>+41.9% per univest; one source cited +107.2% — shown both, flagged</strong>). <strong>Order book ₹20,535 Cr</strong> (P17A ₹8,257 Cr, ICGS ₹2,690 Cr, P15B ₹863 Cr balance). Strategically, Mazdock acquired a <strong>51% stake in Colombo Dockyard</strong> (~₹237 Cr), adding Sri Lanka&#x27;s largest shipyard. Government holds 81.2%; market cap ₹1,01,599 Cr at <strong>~41.6× P/E</strong> — the cheapest defence multiple in the batch.</p>
+<blockquote><strong>CORE VERDICT.</strong> Mazdock owns the scarcest &quot;assurance from the nature of the work&quot; capability in the batch — India&#x27;s submarine + capital-warship monopoly, an 81% govt parent, a net-cash balance sheet, and ₹20,535 Cr of contracted visibility. <strong>Two honest caveats:</strong> (1) near-term growth is modest (rev +12%, PAT +7%) as current programmes mature ahead of the next big award cycle (P75-I submarines, next-gen destroyers); (2) at ~42× PE / ~7.9× sales it&#x27;s not cheap in absolute terms (though cheapest defence here). The load-bearing question is the timing/scale of the next mega-orders (P75-I) that would re-accelerate growth. Highest-moat, most-defensive balance sheet of the batch; growth is back-half-loaded to the next order cycle.</blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Mazagon Dock Shipbuilders Ltd (NSE/BSE: MAZDOCK), Mumbai, is a Government-of-India defence-PSU shipyard building submarines and surface combatants for the Indian Navy and Coast Guard.</p>
+<h4>1.1 Order book (31-Mar-26)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Programme</span><span>Balance ₹Cr</span></div>
+<div class="mdtr"><span>P17A stealth frigates</span><span>8,257</span></div>
+<div class="mdtr"><span>ICGS (Coast Guard vessels)</span><span>2,690</span></div>
+<div class="mdtr"><span>P15B destroyers</span><span>863</span></div>
+<div class="mdtr"><span>Other (submarines/refits/misc)</span><span>balance to ₹20,535 total</span></div>
+</div>
+<h4>1.2 Strategic developments</h4>
+<p>51% controlling stake in <strong>Colombo Dockyard PLC</strong> (~₹237 Cr) — Sri Lanka&#x27;s largest shipyard (capacity + regional footprint). Pipeline: P75-I submarines, next-gen destroyers/frigates (future awards).</p>
+<h4>1.3 Equity structure</h4>
+<p>Government of India 81.2% (PSU). FII/DII split PENDING.</p>
+<h4>1.4 Recent corporate actions</h4>
+<p>FY26 results; Colombo Dockyard acquisition; continued P17A/P15B execution.</p>
+<blockquote><strong>ANCHOR FACT.</strong> Submarine + capital-warship monopoly + 81% govt parent + net-cash + ₹20,535 Cr OB is the bull case. The near-term constraint is modest growth pending the next mega-order (P75-I) cycle; the valuation (~42× PE) is the other.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Ownership</h4>
+<p>Government of India 81.2% — PSU governance; strategic-national-asset status (positive for order flow, but govt-priority/pricing dependence).</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter (GoI)</span><span>81.2%</span><span>Strong; strategic asset</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span>NIL (govt)</span><span>—</span></div>
+<div class="mdtr"><span>SEBI/NSE actions</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>Auditor (CAG/statutory)</span><span>PSU norms</span><span>PENDING specifics</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>STRONG</span><span>Net cash (order advances)</span></div>
+<div class="mdtr"><span>Execution/delay risk</span><span>WATCH</span><span>Shipbuilding timelines/cost-overrun risk</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; strong govt parent + net cash. Standard PSU caveats (govt pricing/priority; execution timelines).</blockquote>
+<hr>
+<h3>Section 3 / The Submarine/Warship Monopoly — Durable Moat or Order-Cycle Dependent?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a strategic monopoly riding India&#x27;s naval-modernisation + indigenisation supercycle. Variant question: with FY26 growth at +12%, is the stock pricing the <em>next</em> order cycle that hasn&#x27;t been awarded yet?</p>
+<h4>3.1 Why the moat is real</h4>
+<p>Submarine + capital-warship construction is a sovereign-critical, extremely high-barrier capability; Mazdock is the de-facto national builder. Order advances make it cash-generative; the Navy&#x27;s modernisation is structural.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Next-order timing.</strong> P75-I submarines / next-gen destroyers — when awarded, and to whom? The growth re-accelerant.</li>
+<li><strong>Modest current growth.</strong> +12% rev / +7% PAT — current programmes maturing.</li>
+<li><strong>Execution/delays.</strong> Shipbuilding cost-overrun/timeline risk.</li>
+<li><strong>Govt pricing/priority.</strong> PSU dependence on MoD budget + nomination vs competition.</li>
+<li><strong>Valuation.</strong> ~42× PE on +7% PAT growth needs the next cycle.</li>
+</ol>
+<blockquote><strong>MOAT VERDICT.</strong> The moat is the strongest/most-strategic in the batch — but the <em>growth</em> is order-cycle-dependent, and the multiple is pricing the next cycle. Buy-the-order-award rather than the current run-rate.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>PAT ₹Cr</span><span>Note</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>12,840 (+12.3%)</span><span>2,578 (+6.8%, cons)</span><span>~20% PAT margin</span><span>univest/chartalert</span></div>
+<div class="mdtr"><span>FY25</span><span>11,432</span><span>2,414</span><span>—</span><span>univest</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>3,684 (+16%)</span><span>464</span><span>+41.9% (univest) / +107.2% (angelone) — flagged</span><span>univest/angelone</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>PENDING</span><span>—</span><span>—</span><span>PENDING</span></div>
+</div>
+<blockquote>Read: steady but modest growth; strong absolute profitability (~20% PAT margin) and net cash. Q4 PAT growth reads diverge across sources (+41.9% vs +107.2%) — <strong>cross-check needed</strong>; FY full-year +6.8% is firm.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Next-order-cycle timing, execution/delays, modest near-term growth, valuation, govt-pricing.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Lowest balance-sheet risk (net cash, govt parent); the risk is growth-timing + valuation, not solvency. Watch the P75-I / next-gen award calendar.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (19-Jun-26)</span><span>MAZDOCK</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹1,01,599 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~41.6×</span></div>
+<div class="mdtr"><span>P/B</span><span>~10.4×</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~7.9×</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>~42× PE on +7% PAT growth prices the next big naval-order cycle (P75-I etc.) re-accelerating growth, plus Colombo Dockyard optionality.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> P75-I / next-gen destroyer awards land → OB + growth re-accelerate; multiple sustained.</li>
+<li><strong>Base:</strong> steady execution, awards delayed → ~10% growth, multiple compresses; sideways.</li>
+<li><strong>Bear:</strong> order delays + execution slip → de-rate from 42×.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> Cheapest defence multiple in the batch, but still ~42× on modest current growth — the case rests on the next order cycle. Buy-the-award discipline.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27</span><span>P75-I submarine / next-gen award decisions</span><span>The growth re-accelerant</span></div>
+<div class="mdtr"><span>FY27</span><span>Colombo Dockyard contribution</span><span>Regional-expansion proof</span></div>
+<div class="mdtr"><span>FY27 quarters</span><span>Execution + margin</span><span>Programme health</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Next-order delay</span><span>Med</span><span>High</span><span>MoD award calendar</span></div>
+<div class="mdtr"><span>2</span><span>Valuation de-rate</span><span>Med</span><span>Med</span><span>Growth vs ~42×</span></div>
+<div class="mdtr"><span>3</span><span>Execution/cost overrun</span><span>Med</span><span>Med</span><span>Programme milestones</span></div>
+<div class="mdtr"><span>4</span><span>Govt pricing/priority</span><span>Low-Med</span><span>Med</span><span>MoD budget</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>Next cycle re-accelerates growth</span><span>No major submarine/destroyer award by FY27-end</span></div>
+<div class="mdtr"><span>2</span><span>Net-cash + margin durable</span><span>PAT margin &lt;15% or net debt emerges</span></div>
+<div class="mdtr"><span>3</span><span>Premium sustainable</span><span>De-rate below ~30× absent new orders</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: promoter (81.2%), net-cash (D/E/ICR likely-pass). Borderline: OPM. FAIL: PE (~42×), MCap/Sales (~7.9×). PENDING: ROCE/ROE, sales-CAGR, EBITDA margin.</p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> submarine/warship monopoly; 81% govt parent; net cash; ₹20,535 Cr OB; Colombo Dockyard optionality; ~20% PAT margin; cheapest defence multiple here.</li>
+<li><strong>Would-not-buy:</strong> modest growth (rev +12%/PAT +7%); ~42× PE on that growth; order-cycle dependence; execution/delay + govt-pricing risk.</li>
+<li><strong>Depends-on:</strong> timing/scale of P75-I + next-gen awards.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Submarine/warship monopoly; 81% govt; net cash; OB ₹20,535 Cr</span><span>Modest growth (+7% PAT); next-order timing</span><span>~42× PE on +7% growth — needs the next cycle</span></div>
+<div class="mdtr"><span>~20% PAT margin; Colombo Dockyard expansion</span><span>Execution/cost-overrun; govt pricing</span><span>Q4 PAT growth source-discrepancy (cross-check)</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹1,01,599 Cr</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~41.6×</span><span>cheapest defence here; the constraint</span></div>
+<div class="mdtr"><span>Watch</span><span>P75-I / next-gen award calendar</span><span>the growth re-accelerant</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Mazdock is the most strategic moat + most defensive balance sheet in Batch 2 (submarine/warship monopoly, 81% govt, net cash, ₹20,535 Cr OB) — but near-term growth is modest and the ~42× multiple is pricing the next naval-order cycle. <strong>This brief does NOT recommend deployment.</strong> Buy-the-award discipline; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: univest.in; chartalert.in; angelone.in (Q4 +107.2%); scanx.trade; multibagg.ai</li>
+<li>Order book / Colombo: univest.in; scanx.trade; youtube earnings coverage</li>
+<li>Valuation/ownership (19-Jun-26): screener.in/company/MAZDOCK; groww.in; trendlyne.com</li>
+<li><strong>PENDING:</strong> EBITDA margin, ROCE/ROE, sales-CAGR, exact D/E, OCF, Q4 PAT-growth reconciliation, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_MAZDOCK_DEEP-RESEARCH</div>
+</div></body></html>

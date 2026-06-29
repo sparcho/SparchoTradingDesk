@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apollo Micro Systems — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Apollo Micro Systems — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>APOLLO</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-1 USP pick — design-led defence electronic subsystems + IDL explosives + UAV. Operator-named. GOVERNANCE FLAG: promoter pledge ~40%. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on a <strong>design-led defence electronic &amp; electro-mechanical subsystems</strong> maker now vertically integrating into <strong>explosives (IDL)</strong> and <strong>UAVs</strong> — the FY26 breakout, and a high valuation paired with a <strong>material promoter-pledge governance flag</strong>. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>Defence-electronics domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Electronic / electro-mechanical subsystems</span><span>The guidance, control, actuation and avionics &quot;brains + muscles&quot; inside missiles, torpedoes, rockets, aircraft. Apollo is <strong>design-led</strong> (its own IP, not just build-to-print) — the USP.</span></div>
+<div class="mdtr"><span>IDL Explosives (via ADIPL)</span><span>Apollo acquired IDL Explosives (through subsidiary ADIPL) — vertical integration into <strong>munitions/explosives</strong>, widening the addressable defence wallet.</span></div>
+<div class="mdtr"><span>UAV (DPIIT licence)</span><span>Apollo received a DPIIT licence to manufacture <strong>drones/UAVs</strong> — a new growth vector.</span></div>
+<div class="mdtr"><span>Order book</span><span>Contracted backlog; ₹1,432 Cr (Mar-26).</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (Apollo reading)</span></div>
+<div class="mdtr"><span>P/E</span><span>~130–142× (screener/marketsmojo, 22-Jun-26 — two reads shown).</span></div>
+<div class="mdtr"><span>P/B</span><span>~26–38× (two reads).</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>~52% (latest qtr) / 55.12% (top promoter Karunakar Reddy Baddam) — <strong>but ~39.9% of promoter holding is PLEDGED</strong> (governance flag).</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹16,003 Cr (22-Jun-26).</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>~24% (₹218 Cr ex-other-income / ₹904 Cr rev, FY26).</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>BEL / Astra Micro / Paras</span><span>Defence-electronics references</span></div>
+<div class="mdtr"><span>Solar Industries</span><span>Explosives/munitions (now an Apollo-adjacent space via IDL)</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Apollo reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>~52–55%</span><span><strong>PASS</strong> (but ~40% pledged — see flag)</span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~130–142×</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>PENDING (acquisition-funded; likely elevated)</span><span>PENDING</span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>PENDING</span><span>PENDING</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>~24%</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +61%; 3y likely &gt;20%</span><span><strong>PASS</strong> (PENDING exact)</span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>PENDING</span><span>PENDING</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>₹16,003/₹904 ≈ <strong>17.7×</strong></span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: 3 PASS (promoter, OPM, sales-growth) + 2 FAIL (valuation) + PENDINGs — AND a governance flag (pledge ~40%).</strong> Strong growth + USP, rich price, and a pledge that must be weighed.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Apollo Micro Systems is a Hyderabad <strong>design-led defence electronics</strong> company — electronic &amp; electro-mechanical subsystems for missiles, torpedoes, rockets and avionics — now vertically integrating into <strong>explosives (IDL via ADIPL)</strong> and <strong>UAVs (DPIIT licence)</strong>. FY26 was a breakout: <strong>revenue ₹904 Cr (+61% from ₹562 Cr), Q4 ₹293 Cr (+81%, highest-ever), PAT ₹107 Cr (+91%), EBITDA (ex-other-income) ₹218 Cr (+69%, ~24% margin)</strong> (business-standard/whalesbook/scanx, FY26 results 19-May-2026). <strong>Order book ₹1,432 Cr</strong> (31-Mar-2026); first export order received. The stock has re-rated to <strong>~130–142× P/E</strong>, market cap ₹16,003 Cr (22-Jun-2026). <strong>Governance flag: ~39.9% of the promoter&#x27;s holding is pledged</strong> (scanx/screener) — material and must be weighed.</p>
+<blockquote><strong>CORE VERDICT.</strong> Apollo has a real design-led defence-electronics USP and an aggressive, <em>executing</em> growth profile (rev +61%, PAT +91%, +24% margin) with two new vectors (explosives via IDL, UAVs) — exactly the &quot;USP that moves with assurance&quot; archetype. <strong>Two honest constraints:</strong> (1) valuation is very high (~130–142× PE, ~17.7× MCap/Sales); (2) <strong>~40% of promoter holding is pledged</strong> — a genuine governance risk that can amplify downside in a drawdown. The load-bearing question is whether IDL + UAV + the core OB sustain 40%+ growth to grow into the multiple, while the pledge unwinds rather than worsens. High-conviction USP, high-risk price+pledge.</blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Apollo Micro Systems Ltd (NSE/BSE: APOLLO) designs and builds electronic/electro-mechanical subsystems for defence and aerospace, expanding into explosives and UAVs.</p>
+<h4>1.1 Business segments</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Segment</span><span>What it does</span><span>Note</span></div>
+<div class="mdtr"><span>Defence electronics (core)</span><span>Subsystems for missiles/torpedoes/rockets/avionics; design-led</span><span>The USP</span></div>
+<div class="mdtr"><span>Explosives (IDL via ADIPL)</span><span>Munitions/explosives — new vertical</span><span>Widens defence wallet</span></div>
+<div class="mdtr"><span>UAV / drones</span><span>DPIIT-licensed UAV manufacture</span><span>New growth vector</span></div>
+</div>
+<h4>1.2 Order book &amp; milestones</h4>
+<p>OB ₹1,432 Cr (Mar-26); IDL acquisition concluded; DPIIT UAV licence; first export order (business-standard/whalesbook).</p>
+<h4>1.3 Equity structure</h4>
+<p>Promoter ~52–55% (Karunakar Reddy Baddam top holder); <strong>~39.9% of promoter holding pledged</strong> (governance flag). FII/DII PENDING.</p>
+<h4>1.4 Recent corporate actions</h4>
+<p>FY26 record results; IDL Explosives buyout via ADIPL; DPIIT UAV licence; maiden export order.</p>
+<blockquote><strong>ANCHOR FACT.</strong> Design-led defence-electronics USP + vertical integration into explosives + a UAV licence = a widening defence wallet with +61% FY26 revenue. The two offsets are the ~130–142× PE and the ~40% promoter pledge.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Promoter &amp; the pledge</h4>
+<p>Promoter group holds ~52–55% (skin-in-the-game PASS), <strong>but ~39.9% of that is pledged</strong> — the single most important governance item. A high pledge raises forced-selling/contagion risk in a sharp drawdown and warrants monitoring of pledge-release trajectory.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span><strong>~39.9% pledged</strong></span><span><strong>Material flag</strong> — track release</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>~52–55%</span><span>Majority (skin-in-game)</span></div>
+<div class="mdtr"><span>Encumbrance disclosure</span><span>DISCLOSED</span><span>&quot;No encumbrance for FY26&quot; filing referenced — reconcile vs pledge data (PENDING)</span></div>
+<div class="mdtr"><span>SEBI/NSE actions</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>Auditor changes</span><span>PENDING</span><span>—</span></div>
+<div class="mdtr"><span>Acquisition (IDL) integration</span><span>WATCH</span><span>Execution + funding/leverage</span></div>
+<div class="mdtr"><span>OCF vs PAT</span><span>PENDING</span><span>Acquisition + WC intensity — check</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS with a RED-AMBER — the ~40% promoter pledge is a real flag, not a kill-flag.</strong> There is a disclosure nuance (a &quot;no encumbrance FY26&quot; filing vs pledge data) that must be <strong>reconciled</strong> before relying on either. Weight the pledge in any sizing.</blockquote>
+<hr>
+<h3>Section 3 / The Design-Led USP + Vertical Integration — Real Engine or Hype?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a fast-growing design-led defence-electronics compounder expanding into munitions + UAVs. Variant question: how durable is 40-60% growth, and does the pledge/valuation cap risk-adjusted upside?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>Design-led (own-IP) subsystems are stickier and higher-margin than build-to-print; IDL adds a munitions annuity; UAV licence opens a new TAM. +24% EBITDA margin shows pricing power.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Pledge.</strong> ~40% promoter pledge — release path? Reconcile vs the &quot;no encumbrance&quot; disclosure.</li>
+<li><strong>Growth durability.</strong> +61% FY26 — how much repeats vs a step-change off IDL consolidation?</li>
+<li><strong>IDL integration + leverage.</strong> Acquisition funding/working-capital impact (D/E PENDING).</li>
+<li><strong>Valuation.</strong> ~130-142× PE demands sustained hyper-growth.</li>
+<li><strong>Execution breadth.</strong> Three businesses (electronics + explosives + UAV) at once — execution risk.</li>
+</ol>
+<blockquote><strong>USP VERDICT.</strong> The design-led moat + vertical integration is real and growing fast — but the pledge + valuation make the <em>risk-adjusted</em> case far more two-sided than the headline growth suggests.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>EBITDA (ex-OI) ₹Cr</span><span>PAT ₹Cr</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>904 (+61%)</span><span>218 (+69%, ~24%)</span><span>107 (+91%)</span><span>business-standard/whalesbook/scanx</span></div>
+<div class="mdtr"><span>FY25</span><span>562</span><span>129</span><span>~56</span><span>scanx</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>293 (+81%)</span><span>—</span><span>(margin 12.55%)</span><span>business-standard</span></div>
+<div class="mdtr"><span>FY24/earlier</span><span>PENDING</span><span>PENDING</span><span>PENDING</span><span>screener — PENDING</span></div>
+</div>
+<blockquote>Read: a genuine breakout year (helped by IDL consolidation). Organic-vs-acquired split + the older base are PENDING.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Promoter pledge, valuation/de-rate, IDL integration + leverage, multi-business execution, working capital.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Strong operating momentum, but the risk stack (pledge + ~140× PE + acquisition leverage) is higher than the other Batch-1 names. Watch the pledge trajectory and D/E.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (as-of 22-Jun-26)</span><span>APOLLO</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹16,003 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~130–142× (two reads)</span></div>
+<div class="mdtr"><span>P/B</span><span>~26–38× (two reads)</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~17.7×</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>~24%</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>~140× PE prices multi-year 40%+ growth with successful IDL/UAV scaling and no pledge accident.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> IDL + UAV + core OB sustain 40%+ growth, pledge releases → grows into the multiple.</li>
+<li><strong>Base:</strong> growth normalises to 20-30%, multiple compresses → sideways-to-down.</li>
+<li><strong>Bear:</strong> integration/working-capital stress or pledge-driven forced selling → sharp de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> Among the richest in the batch, with an added pledge tail-risk. Quality + momentum are real; the price + pledge make it a watch-and-size-carefully name, not a chase.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27 quarters</span><span>Organic growth + IDL contribution</span><span>Durability of the breakout</span></div>
+<div class="mdtr"><span>FY27</span><span>Pledge-release disclosures</span><span>Governance de-risking</span></div>
+<div class="mdtr"><span>FY27</span><span>UAV order wins / exports</span><span>New-vector traction</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Promoter-pledge accident</span><span>Low-Med</span><span>High</span><span>Pledge % each quarter</span></div>
+<div class="mdtr"><span>2</span><span>Valuation de-rate (~140× PE)</span><span>Med</span><span>High</span><span>Growth vs multiple</span></div>
+<div class="mdtr"><span>3</span><span>IDL integration / leverage</span><span>Med</span><span>Med</span><span>D/E, OCF</span></div>
+<div class="mdtr"><span>4</span><span>Multi-business execution</span><span>Med</span><span>Med</span><span>Segment delivery</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>Growth is durable</span><span>FY27 organic growth &lt;25%</span></div>
+<div class="mdtr"><span>2</span><span>Pledge is benign</span><span>Pledge rises further / encumbrance event</span></div>
+<div class="mdtr"><span>3</span><span>Margins hold</span><span>EBITDA margin &lt;20%</span></div>
+<div class="mdtr"><span>4</span><span>Premium sustainable</span><span>De-rate below ~80× on a soft print</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: promoter (~52%, pledged), OPM (~24%), sales-growth (+61%). FAIL: PE (~140×), MCap/Sales (~17.7×). PENDING: D/E, ROCE/ROE, ICR. <strong>+ governance flag (pledge ~40%).</strong></p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> design-led defence-electronics USP; +61% rev / +91% PAT; IDL explosives + UAV vectors; ~24% margin; OB ₹1,432 Cr; first export.</li>
+<li><strong>Would-not-buy:</strong> ~140× PE / ~17.7× MCap-Sales; <strong>~40% promoter pledge</strong>; acquisition-leverage + D/E PENDING; multi-business execution risk.</li>
+<li><strong>Depends-on:</strong> sustained 40%+ growth + pledge release; clean IDL integration.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Design-led USP; rev +61%/PAT +91%; IDL + UAV vectors; ~24% margin</span><span>IDL integration + leverage (D/E PENDING); multi-business execution</span><span><strong>Promoter pledge ~40%</strong> — forced-selling/contagion tail</span></div>
+<div class="mdtr"><span>OB ₹1,432 Cr; first export order</span><span>Encumbrance-disclosure reconciliation needed</span><span>~140× PE / ~17.7× MCap-Sales — very rich</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹16,003 Cr (22-Jun-26)</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~130–142×</span><span>the constraint</span></div>
+<div class="mdtr"><span>Watch</span><span>promoter-pledge % + FY27 organic growth</span><span>the de-risk/de-rate triggers</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Apollo is a genuinely fast-growing design-led defence-electronics USP widening into explosives + UAVs — but it carries the batch&#x27;s highest risk stack: ~140× PE plus a ~40% promoter pledge. <strong>This brief does NOT recommend deployment.</strong> Reconcile the pledge/encumbrance disclosure and watch the pledge trajectory before any sizing; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results (19-May-26): business-standard.com; whalesbook.com; scanx.trade; theprint.in/indiacsr (press release)</li>
+<li>Valuation/ownership (22-Jun-26): screener.in/company/APOLLO; marketsmojo.com; tickertape.in; scanx (pledge/encumbrance)</li>
+<li><strong>PENDING:</strong> FY24/older + organic-vs-IDL split, D/E, ROCE/ROE, OCF, FII/DII, exact PE/PB reconciliation, pledge-vs-encumbrance reconciliation, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_APOLLO_DEEP-RESEARCH</div>
+</div></body></html>

@@ -1,0 +1,69 @@
+name: Refresh company news (live · 5min market hours)
+
+# JOURNALIST-owned live news pipeline (F260622). Every ~5 min during NSE market hours:
+#   - refresh_news.py : Marketaux API (NEWS_API_KEY secret) + Google-News-RSS fallback -> vetted
+#                       data/news_candidates.json (deterministic relevance/dedup/recency/cap).
+#   - curate_news.py  : JOURNALIST vetting rules (credibility/sentiment/materiality/why) ->
+#                       data/news_curated.json (the published set the dashboard reads).
+# Bulletproof: stdlib only (no pip), per-source try/except, last-good cache (a 0-result run keeps
+# the last good file + stamps stale — the panel never blanks). NSE-session gated in the scripts, so
+# holiday runs no-op silently. If NEWS_API_KEY is unset it runs RSS-only (still fully functional).
+# A later upgrade can swap an hourly LLM journalist pass in for curate_news.py — same JSON contract.
+
+on:
+  schedule:
+    - cron: '*/5 3-10 * * 1-5'        # every 5 min, NSE market hours (~08:30-16:29 IST)
+    - cron: '*/30 0-2,11-23 * * 1-5'  # every 30 min off-hours (overnight headlines, lighter)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stocks-news      # own queue (separate from the price/aggregate job)
+  cancel-in-progress: false
+
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Fetch + vet candidates (Marketaux + Google News RSS)
+        env:
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+        run: |
+          python stocks/generators/refresh_news.py || echo "WARN news fetch failed (last-good kept)"
+
+      - name: Journalist curation (rules) -> news_curated.json
+        run: |
+          python stocks/generators/curate_news.py || echo "WARN curation failed (last-good kept)"
+
+      - name: Commit + push if changed
+        # Hardened (mirrors the price job): fast-path push; if the remote moved (the price/aggregate
+        # job pushed), reset to latest remote, RE-RUN the news scripts on top, and retry. The news
+        # files are independent of the aggregate, so a clean regenerate-on-latest is always safe.
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stocks/data/news_candidates.json stocks/data/news_curated.json
+          if git diff --cached --quiet; then echo "no news change"; exit 0; fi
+          git commit -m "auto: company news refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if git push; then echo "pushed (fast path)"; exit 0; fi
+          for i in 1 2 3; do
+            git fetch origin main || { sleep 4; continue; }
+            git reset --hard origin/main
+            NEWS_API_KEY="${{ secrets.NEWS_API_KEY }}" python stocks/generators/refresh_news.py || true
+            python stocks/generators/curate_news.py || true
+            git add stocks/data/news_candidates.json stocks/data/news_curated.json
+            if git diff --cached --quiet; then echo "no net change after reset"; exit 0; fi
+            git commit -m "auto: company news refresh (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push; then echo "pushed (retry $i)"; exit 0; fi
+          done
+          echo "WARN: could not push news after retries"; exit 0

@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ideaForge Technology — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">ideaForge Technology — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>IDEAFORGE</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-8 pick — India&#x27;s #1 drone/UAV maker (~50% share); strong order momentum + combat-drone/US catalysts, but FY26 small annual loss. Turnaround. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s #1 drone/UAV maker (~50% share) — the market-leadership + order-momentum + combat-drone-expansion USP, against an FY26 that was a small annual loss (lumpy, turnaround) with a strong Q4 recovery. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>Drone / UAV domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>UAV / drone</span><span>Unmanned aerial vehicles for defence (ISR — intelligence/surveillance/recon) + civil (mapping/survey). ideaForge is India&#x27;s #1 by market share (~50%). The USP.</span></div>
+<div class="mdtr"><span>ISR → combat</span><span>ideaForge is expanding from surveillance drones into <strong>combat drones</strong> (loitering munitions, kamikazes, long-range strike) — the new growth vector.</span></div>
+<div class="mdtr"><span>Order inflow / book</span><span>FY26 order inflow ~₹530 Cr (highest-ever); FY27 opening order book ~₹310 Cr (to execute mostly H1 FY27).</span></div>
+<div class="mdtr"><span>Lumpy revenue</span><span>Defence-procurement-driven → revenue (and profit/loss) swings sharply quarter to quarter.</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (ideaForge reading)</span></div>
+<div class="mdtr"><span>Revenue</span><span>FY26 ₹286.1 Cr (+78% from ₹161 Cr).</span></div>
+<div class="mdtr"><span>FY26 PAT</span><span><strong>annual LOSS ~₹17 Cr</strong> (despite a record, profitable Q4: ₹60 Cr PAT).</span></div>
+<div class="mdtr"><span>EBITDA</span><span>FY26 ₹27 Cr (~9.4%); Q4 52.6% margin (lumpy).</span></div>
+<div class="mdtr"><span>Promoter</span><span>sub-50% (PENDING; institution-heavy).</span></div>
+<div class="mdtr"><span>Market cap</span><span>~₹1,200 Cr (Apr-26, ₹285, −45% from 52w high ₹520).</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>Paras Defence (anti-drone) / DroneAcharya</span><span>Drone-ecosystem adjacencies</span></div>
+<div class="mdtr"><span>Global dual-use drone makers</span><span>DRONEII ranks ideaForge #3 globally</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>ideaForge reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>sub-50% (PENDING)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>N/A (FY26 annual loss)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash (IPO proceeds)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>negative (FY loss)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>FY EBITDA ~9.4% (Q4 52.6%)</span><span><strong>FAIL</strong> (FY); recovering</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +78%</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~4.2× (₹1,200/₹286)</span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: 3 PASS (net cash, sales-growth +78%, ICR) + FAILs (promoter, PE N/A on loss, ROCE neg, OPM, MCap/Sales).</strong> A high-USP market leader, but FY26 was a small loss — a lumpy turnaround, not a quality-compounder today.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>ideaForge Technology is India&#x27;s #1 drone/UAV maker (<strong>~50% market share</strong>, #3 globally among dual-use drone makers per DRONEII). FY26: <strong>revenue ₹286.1 Cr (+78% from ₹161 Cr)</strong>; a <strong>record, profitable Q4 (revenue ₹141 Cr, PAT ₹60 Cr, 42.5% margin)</strong> — but <strong>a small full-year annual loss of ~₹17 Cr</strong> (EBITDA ₹27 Cr) on the lumpy first three quarters (suasnews/scanx, FY26). <strong>Order momentum is strong:</strong> highest-ever FY26 order inflow ~₹530 Cr + an FY27 opening order book ~₹310 Cr; it received its <strong>first US order</strong> in Q4 and is expanding into <strong>combat drones</strong> (loitering munitions, long-range strike). Market cap ~₹1,200 Cr (₹285, −45% from a 52-week high of ₹520).</p>
+<blockquote><strong>CORE VERDICT.</strong> ideaForge has a genuinely strong USP — <strong>India&#x27;s #1 drone maker (~50% share)</strong>, a deployed fleet with 950k+ cumulative flights, strong FY26 order momentum (₹530 Cr inflow), a credible <strong>combat-drone expansion</strong> (the high-value defence vector), and a maiden US order. <strong>But the honest reality is it&#x27;s a lumpy turnaround:</strong> FY26 was a small annual <em>loss</em> (−₹17 Cr) despite a record profitable Q4, the stock is −45% from its high, and the screen fails on profitability/valuation. The load-bearing question is whether the order book + combat-drone + civil ramp convert to <em>sustained</em> annual profitability. High strategic USP + strong order momentum; current loss-making + lumpiness make it a recovery/story bet, not a quality holding today. <strong>Improving (Q4 strongly profitable), but unproven on full-year profit.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>ideaForge Technology Ltd (NSE/BSE: IDEAFORGE), Navi-Mumbai-based, designs + makes drones/UAVs for defence (ISR + emerging combat) + civil (mapping/survey).</p>
+<h4>1.1 FY26 detail</h4>
+<p>Revenue ₹286.1 Cr (+78%); FY EBITDA ₹27 Cr; <strong>FY annual loss ~₹17 Cr</strong>; Q4 record (rev ₹141 Cr, PAT ₹60 Cr, 42.5%). Order inflow ~₹530 Cr (FY26); FY27 opening OB ~₹310 Cr.</p>
+<h4>1.2 Strategy / moat</h4>
+<p>~50% India UAV share; #3 globally (DRONEII); expanding ISR → combat drones (loitering munitions, kamikazes, long-range strike); first US order (Q4); 950k+ cumulative flights.</p>
+<h4>1.3 Equity structure</h4>
+<p>Sub-50% promoter (institution-heavy; PENDING). Net cash (IPO). FII/DII PENDING.</p>
+<h4>1.4 Recent corporate actions</h4>
+<p>FY26 results (record Q4; small FY loss); record order inflow; combat-drone push; first US order.</p>
+<blockquote><strong>ANCHOR FACT.</strong> India&#x27;s #1 drone maker (~50% share) + record FY26 order inflow (₹530 Cr) + a combat-drone expansion + a maiden US order is the bull case; the honest offset is <strong>FY26 was a small annual loss (−₹17 Cr)</strong> — lumpy, with a record profitable Q4.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Ownership</h4>
+<p>Sub-50% promoter (institution-heavy post-IPO); net cash.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>sub-50% (PENDING)</span><span>Institution-heavy</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>SEBI/NSE actions</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>Profitability</span><span>RED (FY loss)</span><span>FY26 −₹17 Cr (lumpy)</span></div>
+<div class="mdtr"><span>Revenue lumpiness</span><span>WATCH</span><span>Defence-procurement-driven</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>STRONG</span><span>Net cash</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS (profitability + lumpiness watch).</strong> No kill-flag; net cash. The real watch is the FY loss + revenue lumpiness — treat as a turnaround.</blockquote>
+<hr>
+<h3>Section 3 / The Drone-Leadership USP — Combat-Drone Re-rating or Lumpy Loss-Maker?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: India&#x27;s drone leader on the defence-UAV/combat-drone supercycle. Variant question: it&#x27;s loss-making FY26 + lumpy — when does it reach sustained profitability?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>~50% India share + deployed-fleet data + ISR pedigree + a credible combat-drone roadmap (high-value) + a maiden US order = a genuine, scarce drone-leadership USP on a structural defence-UAV trend.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Profitability.</strong> FY26 −₹17 Cr — when sustained annual profit?</li>
+<li><strong>Lumpiness.</strong> Defence-procurement-driven — Q4 was record but Q1-Q3 weak.</li>
+<li><strong>Combat-drone.</strong> Execution/timeline of the new (high-value) vector.</li>
+<li><strong>Order conversion.</strong> ₹530 Cr inflow / ₹310 Cr OB → revenue in FY27?</li>
+<li><strong>Valuation.</strong> ~4.2× sales on a loss-making FY.</li>
+</ol>
+<blockquote><strong>THESIS VERDICT.</strong> A scarce, strategic drone-leadership USP with strong order momentum — but currently lumpy + loss-making; the thesis is forward (sustained profit + combat-drone + US/civil ramp), not current earnings.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>PAT ₹Cr</span><span>Note</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>286.1 (+78%)</span><span><strong>−17 (loss)</strong></span><span>EBITDA ₹27 Cr; lumpy</span><span>suasnews/scanx</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>141</span><span>60 (42.5% margin)</span><span>record</span><span>scanx</span></div>
+<div class="mdtr"><span>FY25</span><span>161</span><span>~ (PENDING)</span><span>—</span><span>screener</span></div>
+<div class="mdtr"><span>FY27 OB</span><span>310 (opening)</span><span>—</span><span>inflow ₹530 Cr FY26</span><span>suasnews</span></div>
+</div>
+<blockquote>Read: FY26 revenue +78% but a small annual <em>loss</em> (−₹17 Cr) on lumpy Q1-Q3, with a record profitable Q4. Order momentum strong (₹530 Cr inflow). Sustained profit is the test.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Loss-making + path-to-sustained-profit, revenue lumpiness, combat-drone execution, order conversion, valuation.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Net-cash (low solvency risk); the dominant risk is reaching sustained profitability + lumpiness, not the franchise. Watch annual profit + order conversion.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (Apr-26)</span><span>IDEAFORGE</span></div>
+<div class="mdtr"><span>Market cap</span><span>~₹1,200 Cr (−45% from 52w high)</span></div>
+<div class="mdtr"><span>P/E</span><span>N/A (FY26 loss)</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~4.2×</span></div>
+<div class="mdtr"><span>FY26 PAT</span><span>−₹17 Cr (loss)</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>With an FY loss, the market caps the strategic drone-leadership + order momentum + combat-drone optionality, not earnings (price-to-sales / option basis). The −45% from the high reflects the loss + lumpiness.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> order book + combat-drone + US/civil ramp → sustained annual profit → re-rating off a loss base.</li>
+<li><strong>Base:</strong> lumpy quarters, near-breakeven FY → range/uncertain.</li>
+<li><strong>Bear:</strong> order delays + continued losses → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> A strategic drone-leadership + order-momentum bet at a price-to-sales/option valuation — the sustained-profitability + combat-drone ramp is the entire case. Improving but unproven.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27 (H1)</span><span>OB (₹310 Cr) execution</span><span>Revenue + profit</span></div>
+<div class="mdtr"><span>FY27</span><span>Combat-drone orders</span><span>High-value vector</span></div>
+<div class="mdtr"><span>FY27</span><span>US/civil ramp</span><span>Diversification</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Continued losses / lumpiness</span><span>Med</span><span>High</span><span>Annual profit</span></div>
+<div class="mdtr"><span>2</span><span>Order-conversion timing</span><span>Med</span><span>Med</span><span>OB execution</span></div>
+<div class="mdtr"><span>3</span><span>Combat-drone execution</span><span>Med</span><span>Med</span><span>Product/orders</span></div>
+<div class="mdtr"><span>4</span><span>Valuation (loss-making)</span><span>Med</span><span>Med</span><span>Profitability</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>Sustained profitability</span><span>No full-year profit in FY27</span></div>
+<div class="mdtr"><span>2</span><span>Order momentum real</span><span>OB fails to convert / inflow drops</span></div>
+<div class="mdtr"><span>3</span><span>Combat-drone monetises</span><span>Combat orders stay immaterial</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: net cash (D/E), sales-growth (+78%), ICR. FAIL: promoter (sub-50), PE (FY loss), ROCE (neg), OPM (FY), MCap/Sales (~4.2×). <strong>Loss-making turnaround — the screen says so.</strong></p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> India&#x27;s #1 drone maker (~50% share); record order inflow (₹530 Cr); combat-drone expansion; first US order; net cash; +78% revenue.</li>
+<li><strong>Would-not-buy:</strong> <strong>FY26 annual loss (−₹17 Cr)</strong>; lumpy/quarter-dependent; sub-50% promoter; ~4.2× sales on a loss; combat-drone execution risk.</li>
+<li><strong>Depends-on:</strong> order conversion + combat-drone + US/civil ramp delivering <em>sustained</em> annual profit.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>India #1 drone (~50% share); ₹530 Cr order inflow; combat-drone vector; first US order; net cash</span><span>Order conversion (₹310 Cr OB); combat-drone execution</span><span><strong>FY26 annual loss −₹17 Cr (lumpy)</strong></span></div>
+<div class="mdtr"><span>+78% revenue; record profitable Q4</span><span>Sub-50% promoter</span><span>Stock −45% from high; ~4.2× sales on a loss</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>~₹1,200 Cr (−45% from high)</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>FY26 PAT</span><span>−₹17 Cr</span><span>the reality (loss)</span></div>
+<div class="mdtr"><span>Watch</span><span>sustained profitability + OB conversion</span><span>turnaround trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> ideaForge is a scarce, strategic USP — India&#x27;s #1 drone maker (~50% share) with strong FY26 order momentum (₹530 Cr inflow), a combat-drone expansion, and a maiden US order — but FY26 was a small annual loss (−₹17 Cr) on lumpy quarters, so it is a forward turnaround/strategic-option bet, not a quality holding on today&#x27;s fundamentals. <strong>This brief does NOT recommend deployment.</strong> Watch sustained profitability + order conversion; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: suasnews.com (₹530 Cr inflow, FY loss ₹17 Cr, Q4 ₹141 Cr/₹60 Cr); scanx.trade (Q4 record); onlinetradinginstitute.in; business-standard.com (Q4 upper circuit)</li>
+<li>Market/share: DRONEII (#3 global); ~50% India UAV share; mcap ~₹1,200 Cr (Apr-26)</li>
+<li><strong>PENDING:</strong> exact promoter %, FY25 PAT, ROCE, live price/mcap, combat-drone order detail, live levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_IDEAFORGE_DEEP-RESEARCH</div>
+</div></body></html>

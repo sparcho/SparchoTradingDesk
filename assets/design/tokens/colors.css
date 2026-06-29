@@ -1,0 +1,124 @@
+/* ============================================================
+   SPARCHO Trading Desk — Color System
+   ------------------------------------------------------------
+   POINT OF VIEW
+   The live products are dark "terminal" surfaces. The default
+   theme (:root) is TWILIGHT TERMINAL — the flagship Equity Desk:
+   deep indigo-navy base, teal = data/screen, violet = intel/DR.
+
+   THE ONE INVIOLABLE RULE
+   Green / red / amber are SIGNAL colours. They are reserved for
+   P&L and pass / fail / caution ONLY — never used as chrome,
+   section accents, or decoration. A bullish bubble and a
+   profitable position must stay instantly legible. Teal and
+   violet carry all "structural" accent duty.
+
+   Add `.theme-silver` to a container to switch to the Silver
+   Desk palette (graphite paper + amber). The editorial print
+   palettes (Twilight Glass / Dune / Ice) live in editorial.css.
+   ============================================================ */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- TWILIGHT TERMINAL — base surfaces (deep indigo-navy) ---- */
+  --paper:        #0e1117;   /* page background */
+  --paper-2:      #141826;   /* raised page band / sticky header bg */
+  --card:         #171b29;   /* card fill */
+  --card-2:       #1c2133;   /* card gradient stop / inner card */
+  --well:         #0a0d14;   /* recessed wells (ticker bar, code) */
+
+  /* ---- Ink ramp ---- */
+  --ink:          #e8eaf2;   /* primary text */
+  --ink-soft:     #a4a8bd;   /* secondary text */
+  --ink-mute:     #777c95;   /* meta / labels */
+  --ink-faint:    #525873;   /* faint / disabled / axis */
+
+  /* ---- Structural accents (chrome) ---- */
+  --accent:       #36c5b0;   /* TEAL — data / screen / primary */
+  --accent-soft:  rgba(54,197,176,0.15);
+  --accent-deep:  #2aa896;
+  --accent-2:     #8b7cf6;   /* VIOLET — intel / deep-research */
+  --accent-2-soft:rgba(139,124,246,0.16);
+  --accent-2-deep:#6f5fe0;
+
+  /* ---- Borders / hairlines ---- */
+  --border:        rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.16);
+
+  /* ---- SIGNAL colours — P&L and pass/fail ONLY (never chrome) ---- */
+  --pos:       #5fb87f;   --pos-soft:  rgba(95,184,127,0.15);   /* bullish / met / +P&L */
+  --neg:       #e07a6f;   --neg-soft:  rgba(224,122,111,0.15);  /* bearish / failed / -P&L */
+  --warn:      #e6a23c;   --warn-soft: rgba(230,162,60,0.16);   /* caution / watch / pending */
+  --amber:     #f1c40f;   --amber-soft:rgba(241,196,15,0.15);   /* data-gap / observation */
+  --info:      #5a9fe0;   --info-soft: rgba(90,159,224,0.15);   /* informational / reference */
+
+  /* ---- Regime badges (macro state) ---- */
+  --regime-green:  #5fb87f;
+  --regime-yellow: #e6a23c;
+  --regime-red:    #e07a6f;
+
+  /* ---- Live-status dots ---- */
+  --dot-fresh:  #5fb87f;   /* pulsing — fresh data */
+  --dot-stale:  #e6a23c;   /* solid amber — stale */
+  --dot-pinned: #a855f7;   /* solid violet — pinned / manual */
+
+  /* ============================================================
+     SEMANTIC ALIASES — author components against THESE.
+     ============================================================ */
+  --surface-page:    var(--paper);
+  --surface-raised:  var(--paper-2);
+  --surface-card:    var(--card);
+  --surface-inner:   var(--card-2);
+  --surface-well:    var(--well);
+
+  --text-heading:    var(--ink);
+  --text-body:       var(--ink-soft);
+  --text-label:      var(--ink-mute);
+  --text-faint:      var(--ink-faint);
+
+  --accent-primary:  var(--accent);     /* teal */
+  --accent-intel:    var(--accent-2);   /* violet */
+
+  --hairline:        var(--border);
+  --hairline-strong: var(--border-strong);
+}
+
+/* ============================================================
+   THEME · SILVER DESK — graphite paper + amber accent.
+   Deliberately monochrome so the metal reads "silver".
+   Apply `.theme-silver` to any container.
+   ============================================================ */
+.theme-silver {
+  color-scheme: dark;
+
+  --paper:        #16161a;
+  --paper-2:      #1c1c20;
+  --card:         #202127;
+  --card-2:       #262830;
+  --well:         #101014;
+
+  --ink:          #ededf0;
+  --ink-soft:     #a6a7ae;
+  --ink-mute:     #7c7d85;
+  --ink-faint:    #5a5b62;
+
+  /* Silver-graphite gradient + amber are the structural accents here.
+     The live product names its accent --amber; expose both names. */
+  --accent:       #e89143;   /* AMBER — Silver Desk primary accent */
+  --accent-soft:  rgba(232,145,67,0.16);
+  --accent-deep:  #c9762e;
+  --amber:        #e89143;   /* product alias of --accent */
+  --amber-soft:   rgba(232,145,67,0.16);
+  --amber-deep:   #c9762e;
+  --accent-2:     #b9bec6;   /* SILVER — secondary accent */
+  --accent-2-soft:rgba(185,190,198,0.14);
+  --accent-2-deep:#8b929c;
+
+  --silver-grad:  linear-gradient(135deg, #e6e9ee 0%, #b9bec6 48%, #8b929c 100%); /* @kind color */
+
+  --border:        rgba(255,255,255,0.09);
+  --border-strong: rgba(255,255,255,0.17);
+
+  /* signal colours unchanged — same reserved meaning across themes */
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voltas — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Voltas — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>VOLTAS</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-9 pick — India #1 room-AC brand (~18-19% share). HONEST: FY26 PAT collapsed ~56% (margin/EMP drag); PE ~120x (meaningless-high). Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s #1 room-AC brand (Tata group) — the market-leadership + structural-AC-penetration USP, against an FY26 earnings collapse (PAT −56% on AC margin pressure + EMP project drag) and an extreme PE on depressed earnings. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>AC / consumer-durable domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Room AC (RAC)</span><span>Voltas is India&#x27;s #1 room-AC brand (~18-19% share) — strong brand + distribution. The core USP. But AC is competitive (pricing pressure) + seasonal (summer-peaked) + weather-dependent.</span></div>
+<div class="mdtr"><span>EMP (Electro-Mechanical Projects)</span><span>Voltas&#x27;s projects/EPC arm (HVAC/MEP for buildings, domestic + Middle East) — lumpy, prone to project losses (a FY26 drag).</span></div>
+<div class="mdtr"><span>Voltbek</span><span>The JV with Arcelik for refrigerators/washing machines (consumer durables) — scaling, loss-making historically.</span></div>
+<div class="mdtr"><span>Volume vs margin</span><span>FY26 AC volumes strong (~2.25M units), but margins/profit collapsed on competitive pricing + EMP losses.</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (Voltas reading)</span></div>
+<div class="mdtr"><span>Revenue</span><span>FY26 fell ~7.6% (~₹12,000 Cr est — PENDING exact).</span></div>
+<div class="mdtr"><span>PAT</span><span>FY26 ₹370 Cr (<strong>−55.6%</strong> from ₹834 Cr).</span></div>
+<div class="mdtr"><span>P/E</span><span>~114-131× (screener, 23-Jun-26) — extreme on collapsed earnings.</span></div>
+<div class="mdtr"><span>Promoter</span><span>Tata group 30.30% (Tata Sons 26.64%); no pledge.</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹44,802 Cr.</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>Amber Enterprises (covered)</span><span>The AC contract-manufacturer (Voltas is a brand/OEM mix)</span></div>
+<div class="mdtr"><span>Blue Star</span><span>HVAC/AC peer</span></div>
+<div class="mdtr"><span>Lloyd (Havells) / Daikin</span><span>AC-brand competitors</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Voltas reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>Tata 30.30% (no pledge)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~114-131× (on collapsed earnings)</span><span><strong>FAIL</strong> (extreme)</span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>low (PENDING)</span><span><strong>LIKELY PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>collapsed in FY26</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>thin + collapsed (AC/EMP)</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 −7.6%</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>PENDING</span><span>LIKELY PASS (PENDING)</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~3.7× (₹44,802/~₹12,000)</span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: mostly FAIL — FY26 earnings collapsed.</strong> #1 AC brand, but a thin-margin, competitive, seasonal business in a bad earnings year at an extreme PE. The weakest current fundamentals in the batch.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Voltas is India&#x27;s #1 room-AC brand (Tata group, ~18-19% share). <strong>The honest headline: FY26 was a bad year</strong> — <strong>revenue fell ~7.6%; PAT collapsed ~55.6% to ₹370 Cr</strong> (from ₹834 Cr), with Q4 PAT down ~52% to ₹113 Cr (sahi/scanx, FY26) — on <strong>AC competitive-pricing margin pressure + EMP (projects) drag</strong>, even though AC volumes were strong (~2.25M units FY26; 1M units in Q1 FY27 alone). Market cap ₹44,802 Cr at <strong>~114-131× P/E</strong> — extreme, because earnings are depressed. Tata group 30.30% (no pledge); dividend ₹4.</p>
+<blockquote><strong>CORE VERDICT.</strong> Voltas has a genuine USP — <strong>India&#x27;s #1 AC brand (~18-19% share)</strong> + strong distribution + a structural AC-penetration runway + Tata backing. <strong>But it is the weakest current-fundamentals name in the batch:</strong> FY26 revenue fell ~7.6% and <strong>PAT collapsed ~56%</strong> on AC margin pressure (intense competition) + EMP project losses, and the <strong>PE (~114-131×) is meaningless-high on depressed earnings.</strong> Volumes are strong (the brand still sells), but pricing/margins were crushed. The load-bearing question is whether AC margins normalise + EMP stops dragging — a margin-recovery bet, not a quick-mover. Strong brand + volume + structural runway; collapsed margins + extreme PE + competitive pricing are the constraints. <strong>A margin-recovery/turnaround case, with the AC competitive intensity as the structural risk.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Voltas Ltd (NSE/BSE: VOLTAS), Tata group — room AC + cooling (core), EMP (electro-mechanical projects/EPC), and Voltbek (consumer-durables JV).</p>
+<h4>1.1 FY26 detail</h4>
+<p>Revenue ~−7.6%; PAT ₹370 Cr (−55.6%); Q4 rev ₹4,887.83 Cr (+2.5% YoY), Q4 PAT ₹113.43 Cr (−51.9%); AC ~2.25M units; ~18-19% AC share. Margin pressure (AC competition) + EMP drag.</p>
+<h4>1.2 Equity structure</h4>
+<p>Tata group 30.30% (Tata Sons 26.64%); no pledge. FII/DII PENDING.</p>
+<h4>1.3 Recent corporate actions</h4>
+<p>FY26 results (PAT −56%; margin pressure); strong AC volumes; ₹4 dividend; Q1 FY27 1M AC units (volume recovery).</p>
+<blockquote><strong>ANCHOR FACT.</strong> India&#x27;s #1 AC brand (~18-19% share) + a structural AC-penetration runway + strong volumes is the bull case; the honest offset is <strong>FY26 PAT collapsed ~56%</strong> on AC margin pressure + EMP drag, at an extreme ~114-131× PE on depressed earnings.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Ownership</h4>
+<p>Tata group 30.30% (no pledge) — credible parent; clean governance.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>30.30% (Tata, no pledge)</span><span>Sub-50%</span></div>
+<div class="mdtr"><span>SEBI/NSE actions</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>Margin collapse</span><span>RED</span><span>FY26 PAT −56% (AC pricing + EMP)</span></div>
+<div class="mdtr"><span>EMP project drag</span><span>WATCH</span><span>Projects/EPC losses</span></div>
+<div class="mdtr"><span>Voltbek JV</span><span>WATCH</span><span>Consumer-durable JV (historically loss-making)</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>LIKELY OK</span><span>Low debt (PENDING)</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS (margin-collapse watch).</strong> No kill-flag; clean Tata governance. The real watch is the AC-margin collapse + EMP drag + Voltbek losses.</blockquote>
+<hr>
+<h3>Section 3 / The #1-AC-Brand USP — Margin Recovery or Competitive Squeeze?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: #1 AC brand on India&#x27;s structural cooling-penetration runway. Variant question: FY26 PAT collapsed −56% on competition — is AC margin pressure cyclical or structural?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>~18-19% AC share + strong brand/distribution + Tata + a structural AC-penetration runway (India AC penetration low) = a durable consumer franchise; volumes remain strong.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>AC margins.</strong> FY26 collapse — competitive pricing (Lloyd/others) structural or cyclical?</li>
+<li><strong>EMP drag.</strong> Project losses — when do they stop?</li>
+<li><strong>Voltbek.</strong> Consumer-durable JV losses.</li>
+<li><strong>Valuation.</strong> ~114-131× PE on depressed earnings (meaningless).</li>
+<li><strong>Volume vs margin.</strong> Strong volumes but crushed margins — pricing power?</li>
+</ol>
+<blockquote><strong>THESIS VERDICT.</strong> A strong brand + volume + structural runway — but FY26 margins collapsed on competition + EMP; the case is margin recovery, not current earnings. The AC competitive intensity is the structural risk.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>PAT ₹Cr</span><span>Note</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>~−7.6% (~₹12,000 est)</span><span>370 (−55.6%)</span><span>AC margin pressure + EMP drag</span><span>sahi/scanx</span></div>
+<div class="mdtr"><span>FY25</span><span>~₹13,000 (est)</span><span>834</span><span>—</span><span>screener</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>4,887.83 (+2.5%)</span><span>113.43 (−51.9%)</span><span>—</span><span>sahi</span></div>
+<div class="mdtr"><span>Q1 FY27</span><span>—</span><span>—</span><span>1M AC units (volume recovery)</span><span>upstox</span></div>
+</div>
+<blockquote>Read: <strong>FY26 earnings collapsed (PAT −56%)</strong> on AC competitive pricing + EMP losses despite strong volumes; PE is meaningless on these earnings. Q1 FY27 volume strong (recovery hope).</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>AC margin collapse / competition, EMP project drag, Voltbek losses, extreme PE on depressed earnings, seasonality.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> The dominant risk is <strong>margin (AC competition + EMP)</strong>, not solvency. Strong volumes don&#x27;t help if pricing/margins stay crushed. Watch AC margins + EMP + Voltbek.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (23-Jun-26)</span><span>VOLTAS</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹44,802 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~114-131× (on collapsed earnings)</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~3.7×</span></div>
+<div class="mdtr"><span>FY26 PAT</span><span>₹370 Cr (−55.6%)</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>The ~114-131× PE is meaningless on depressed earnings — the market caps a <em>margin recovery</em> + the structural AC runway, not the ₹370 Cr current PAT. On normalised AC margins the multiple would be far lower.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> AC margins normalise (competition eases) + EMP stops dragging + volumes compound → earnings rebound sharply → re-rate off the trough.</li>
+<li><strong>Base:</strong> margin pressure persists, slow recovery → earnings stay soft; PE stays optically extreme.</li>
+<li><strong>Bear:</strong> structural AC price competition + EMP/Voltbek losses → earnings stay depressed → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> A margin-recovery bet on a strong brand — value it on normalised AC margins, not the meaningless trailing PE. The AC competitive intensity is the swing.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>Summer FY27</span><span>AC volumes + margins</span><span>Core recovery (Q1 1M units = good start)</span></div>
+<div class="mdtr"><span>FY27</span><span>EMP project execution</span><span>Drag removal</span></div>
+<div class="mdtr"><span>FY27</span><span>Voltbek losses narrowing</span><span>JV turnaround</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>AC margin pressure (competition)</span><span>Med-High</span><span>High</span><span>AC EBIT margin</span></div>
+<div class="mdtr"><span>2</span><span>EMP project losses</span><span>Med</span><span>Med</span><span>Projects segment</span></div>
+<div class="mdtr"><span>3</span><span>Valuation (extreme PE)</span><span>Med</span><span>Med</span><span>Earnings recovery</span></div>
+<div class="mdtr"><span>4</span><span>Voltbek losses / weather</span><span>Med</span><span>Low-Med</span><span>JV + season</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>AC margins recover</span><span>AC margin stays compressed through FY27</span></div>
+<div class="mdtr"><span>2</span><span>EMP stops dragging</span><span>EMP losses persist</span></div>
+<div class="mdtr"><span>3</span><span>Brand = pricing power</span><span>Volumes up but margins stay crushed</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>Mostly FAIL: promoter (30.30%), PE (~114-131× extreme), OPM (collapsed), ROCE (collapsed), sales-growth (−7.6%), MCap/Sales (~3.7×); likely-PASS D/E, ICR. <strong>FY26 earnings collapsed — the screen says so.</strong></p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> India&#x27;s #1 AC brand (~18-19% share); strong volumes (~2.25M units; Q1 FY27 1M); structural AC-penetration runway; Tata + no pledge.</li>
+<li><strong>Would-not-buy:</strong> <strong>FY26 PAT collapsed −56%</strong> (AC competition + EMP); ~114-131× PE (meaningless-high); competitive pricing (structural?); EMP/Voltbek drag.</li>
+<li><strong>Depends-on:</strong> AC margins normalising + EMP/Voltbek drag easing.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>#1 AC brand (~18-19% share); strong volumes (Q1 FY27 1M units); structural runway; Tata (no pledge)</span><span>EMP project drag; Voltbek losses; seasonality</span><span><strong>FY26 PAT collapsed −56% (AC competition + EMP)</strong></span></div>
+<div class="mdtr"><span>Brand + distribution</span><span>Volume-vs-margin gap</span><span>~114-131× PE on depressed earnings (meaningless)</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹44,802 Cr</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~114-131× (on trough earnings)</span><span>uninformative until margins normalise</span></div>
+<div class="mdtr"><span>Watch</span><span>AC margin + EMP + volumes</span><span>margin-recovery trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Voltas is India&#x27;s #1 AC brand with strong volumes + a structural cooling-penetration runway + Tata backing — but FY26 earnings collapsed ~56% on intense AC price competition + EMP project drag, and the ~114-131× PE is meaningless on depressed earnings. <strong>This brief does NOT recommend deployment.</strong> It&#x27;s a margin-recovery/turnaround case (value on normalised AC margins); the AC competitive intensity is the structural risk. Decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: sahi.com (Q4 PAT −52%); scanx.trade (FY26 PAT ₹370 Cr); marketsmojo.com (margin pressure); indmoney.com (AC sales vs share-fall)</li>
+<li>Volumes/valuation (23-Jun-26): upstox.com (Q1 FY27 1M units); screener.in/company/VOLTAS (mcap ₹44,802 Cr, PE ~114-131×, Tata 30.30%)</li>
+<li>Internal: 260623_AMBER_DEEP-RESEARCH (AC-contract-mfg comp)</li>
+<li><strong>PENDING:</strong> exact FY26 revenue, D/E, ROCE, EMP/Voltbek segment detail, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_VOLTAS_DEEP-RESEARCH</div>
+</div></body></html>

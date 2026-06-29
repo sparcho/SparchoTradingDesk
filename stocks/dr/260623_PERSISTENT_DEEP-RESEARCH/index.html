@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Persistent Systems — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Persistent Systems — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>PERSISTENT</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-8 pick — digital-engineering IT; best grower in the IT batch (24 straight quarters), but premium PE ~47x + sub-50 promoter. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on a digital-engineering IT-services company — the consistent-growth + AI-pivot USP (24 straight quarters of growth), and a premium valuation with a sub-50% promoter. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>IT / digital-engineering domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Digital engineering</span><span>Building software products + platforms for clients (BFSI, healthcare, tech) — Persistent&#x27;s higher-growth niche vs commodity IT-services. The USP.</span></div>
+<div class="mdtr"><span>TCV / ACV</span><span>Total / Annual Contract Value — order-booking metrics ($600.8M TCV / $445.1M ACV in Q4).</span></div>
+<div class="mdtr"><span>EBIT margin</span><span>~15.6% FY26 — mid-tier IT margin (scaling).</span></div>
+<div class="mdtr"><span>AI pivot</span><span>Persistent has leaned into GenAI-led engineering — a growth vector.</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (Persistent reading)</span></div>
+<div class="mdtr"><span>Revenue</span><span>FY26 $1,654.4M / ₹14,748 Cr (+23.5% INR, +17.4% USD).</span></div>
+<div class="mdtr"><span>PAT</span><span>FY26 ~₹1,656 Cr (PE-implied; Q4 PAT ₹529 Cr +33.7%) — <strong>exact FY PENDING</strong>.</span></div>
+<div class="mdtr"><span>P/E</span><span>~46.58× (screener, 22-Jun-26).</span></div>
+<div class="mdtr"><span>Promoter</span><span>Anand Deshpande 29.35% (sub-50).</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹77,140 Cr.</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>Coforge / Mphasis / LTIMindtree</span><span>Mid-cap IT peers</span></div>
+<div class="mdtr"><span>Tata Elxsi / KPIT</span><span>ER&amp;D adjacencies (this batch)</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Persistent reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>29.35%</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~46.58×</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>high (IT, ~25%+)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>EBIT 15.6%; EBITDA ~18-19%</span><span>BORDERLINE (PENDING)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +23.5% INR; multi-year strong</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~5.2× (₹77,140/₹14,748)</span><span><strong>FAIL</strong></span></div>
+</div>
+<p><strong>Aggregate: 4 PASS (net cash, ROCE, sales-growth +23.5%, ICR) + FAILs (promoter, PE, MCap/Sales) + borderline OPM.</strong> The best grower in the IT batch — but premium-priced + sub-50% promoter.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Persistent Systems is a digital-engineering IT-services company (BFSI, healthcare, tech) with an unusually consistent growth record — <strong>24 straight quarters of sequential growth.</strong> FY26: <strong>revenue $1,654.4M (+17.4% USD) / ₹14,748 Cr (+23.5% INR), EBIT margin 15.6%</strong>; Q4 PAT ₹529 Cr (+33.7%); strong order booking (Q4 TCV $600.8M, ACV $445.1M) (persistent/multibagg, FY26). FY26 PAT ~₹1,656 Cr (PE-implied; exact FY PENDING). Market cap ₹77,140 Cr at <strong>~46.6× P/E</strong>; promoter (founder Anand Deshpande) 29.35%.</p>
+<blockquote><strong>CORE VERDICT.</strong> Persistent is the <strong>best grower in the IT batch</strong> — 24 consecutive quarters of growth, +23.5% INR revenue in FY26, strong TCV, and a credible AI-led digital-engineering pivot. It&#x27;s a high-quality, net-cash compounder. <strong>The honest caveats:</strong> (1) it trades at a <strong>premium ~46.6× PE</strong> (a growth multiple that needs the growth to continue); (2) margins are mid-tier (~15.6% EBIT) — scaling but below top-tier IT; (3) sub-50% promoter (29.35%). The load-bearing question is whether the growth + AI pivot sustain the ~20%+ pace to justify the multiple. High-quality consistent grower; the premium is the only real constraint. <strong>The pick of the IT batch on growth quality.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Persistent Systems Ltd (NSE/BSE: PERSISTENT), Pune-based digital-engineering IT — software products + platforms for BFSI, healthcare, hi-tech.</p>
+<h4>1.1 FY26 detail</h4>
+<p>Revenue $1,654.4M (+17.4% USD) / ₹14,748 Cr (+23.5% INR); EBIT 15.6%; Q4 24th straight growth quarter; TCV $600.8M / ACV $445.1M. New Labour Codes ~0.6% EBIT / ~0.5% PAT one-time impact.</p>
+<h4>1.2 Equity structure</h4>
+<p>Founder Anand Deshpande 29.35% (sub-50); net cash. FII/DII PENDING.</p>
+<h4>1.3 Recent corporate actions</h4>
+<p>FY26 results (24 quarters of growth); AI-led engineering pivot; MD re-appointment (Deshpande).</p>
+<blockquote><strong>ANCHOR FACT.</strong> 24 straight quarters of growth + +23.5% INR revenue + strong TCV + an AI-engineering pivot = the most consistent grower in the IT batch; the offset is a ~46.6× premium multiple + sub-50% promoter.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Ownership</h4>
+<p>Founder-led (Deshpande 29.35%); professional, consistent execution.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>29.35%</span><span>Sub-50% (founder)</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>SEBI/NSE actions</span><span>NONE SURFACED</span><span>PENDING</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>STRONG</span><span>Net cash</span></div>
+<div class="mdtr"><span>Margin (mid-tier)</span><span>WATCH</span><span>EBIT ~15.6% (scaling)</span></div>
+<div class="mdtr"><span>Client concentration</span><span>WATCH</span><span>Top-client/BFSI mix</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; founder-led + net cash + consistent execution. Watch margin scaling + client concentration.</blockquote>
+<hr>
+<h3>Section 3 / The Consistent-Growth + AI USP — Durable Compounder or Premium-Priced?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a consistent digital-engineering compounder leaning into AI. Variant question: can ~20% growth + margin scaling justify ~46.6× PE?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>24 straight growth quarters + strong TCV + a differentiated digital-engineering/AI position = a genuine, consistent compounder; net cash + high ROCE support quality.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Valuation.</strong> ~46.6× PE needs ~20%+ growth to continue.</li>
+<li><strong>Margin.</strong> EBIT ~15.6% — does it scale toward top-tier?</li>
+<li><strong>AI.</strong> GenAI engineering — net tailwind or commoditisation risk?</li>
+<li><strong>Client concentration.</strong> BFSI/top-client mix.</li>
+<li><strong>Promoter.</strong> Sub-50% (founder).</li>
+</ol>
+<blockquote><strong>USP VERDICT.</strong> A genuinely high-quality consistent grower — the only real question is the premium multiple vs the durability of ~20% growth + margin scaling.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>EBIT margin</span><span>PAT ₹Cr</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>14,748 (+23.5%)</span><span>15.6%</span><span>~1,656 (PE-implied; PENDING)</span><span>persistent/screener</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>~3,700 ($422.5M)</span><span>—</span><span>529 (+33.7%)</span><span>persistent</span></div>
+<div class="mdtr"><span>FY25</span><span>~11,942 (derived)</span><span>lower</span><span>~1,238 (derived)</span><span>screener</span></div>
+</div>
+<blockquote>Read: strong, consistent growth (+23.5% INR, 24 quarters) with margins scaling (~15.6% EBIT). Exact FY26 PAT PENDING (Q4 ₹529 Cr +33.7%; PE-implied FY ~₹1,656 Cr).</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Premium valuation, mid-tier margin, AI/IT-services demand, client concentration.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> High-quality, net-cash, consistent grower; the risk is valuation + IT-demand cyclicality, not solvency. Watch growth durability + margin scaling.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (22-Jun-26)</span><span>PERSISTENT</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹77,140 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~46.58×</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~5.2×</span></div>
+<div class="mdtr"><span>EBIT margin</span><span>15.6%</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>~46.6× PE prices sustained ~20% growth + margin scaling. The consistency record supports a premium; the level is the question.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> ~20%+ growth + AI + margin scaling continue → compounds at a premium.</li>
+<li><strong>Base:</strong> growth normalises to mid-teens → multiple compresses gradually.</li>
+<li><strong>Bear:</strong> IT-demand slowdown / margin stall → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> The pick of the IT batch on growth quality, at a premium — the durability of ~20% growth decides the re-rate vs de-rate.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27 quarters</span><span>Growth + TCV</span><span>Durability</span></div>
+<div class="mdtr"><span>FY27</span><span>Margin scaling</span><span>Quality</span></div>
+<div class="mdtr"><span>FY27</span><span>AI-engineering deals</span><span>Growth vector</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Valuation de-rate (~46.6×)</span><span>Med</span><span>High</span><span>Growth vs multiple</span></div>
+<div class="mdtr"><span>2</span><span>IT-demand slowdown</span><span>Med</span><span>Med</span><span>Revenue/TCV</span></div>
+<div class="mdtr"><span>3</span><span>Margin stall</span><span>Med</span><span>Med</span><span>EBIT margin</span></div>
+<div class="mdtr"><span>4</span><span>Client concentration</span><span>Low-Med</span><span>Med</span><span>Top-client mix</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>~20% growth durable</span><span>FY27 revenue growth &lt;12%</span></div>
+<div class="mdtr"><span>2</span><span>Margin scales</span><span>EBIT margin falls &lt;14%</span></div>
+<div class="mdtr"><span>3</span><span>Premium justified</span><span>De-rate below ~30× on a growth miss</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: net cash (D/E), ROCE, sales-growth (+23.5%), ICR. FAIL: promoter (29.35%), PE (~46.6×), MCap/Sales (~5.2×). Borderline: OPM (EBIT 15.6%).</p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> 24 straight growth quarters; +23.5% INR revenue; strong TCV; AI-engineering pivot; net cash; high ROCE.</li>
+<li><strong>Would-not-buy:</strong> ~46.6× PE (premium); mid-tier ~15.6% EBIT margin; sub-50% promoter; IT-demand cyclicality.</li>
+<li><strong>Depends-on:</strong> ~20% growth + margin scaling continuing.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>24 straight growth quarters; +23.5% rev; strong TCV; net cash; AI pivot</span><span>Margin scaling (EBIT ~15.6%); client concentration</span><span>~46.6× PE (premium — needs growth to continue)</span></div>
+<div class="mdtr"><span>High ROCE; founder-led</span><span>Sub-50% promoter (29.35%)</span><span>IT-demand cyclicality</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹77,140 Cr</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~46.58×</span><span>the constraint</span></div>
+<div class="mdtr"><span>Watch</span><span>growth + TCV + margin</span><span>re-rate/de-rate trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Persistent is the highest-quality grower in the IT batch — 24 straight quarters of growth, +23.5% INR revenue, strong TCV, an AI-engineering pivot, net cash — but it trades at a premium ~46.6× PE with mid-tier margins + a sub-50% promoter. <strong>This brief does NOT recommend deployment.</strong> The durability of ~20% growth is the swing; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: persistent.com (press releases); multibagg.ai (24 quarters); univest.in</li>
+<li>Valuation/ownership (22-Jun-26): screener.in/company/PERSISTENT (mcap ₹77,140 Cr, PE 46.58×, Deshpande 29.35%); companiesmarketcap.com</li>
+<li><strong>PENDING:</strong> exact FY26 PAT, OPM (EBITDA), FY25 base, client concentration, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_PERSISTENT_DEEP-RESEARCH</div>
+</div></body></html>

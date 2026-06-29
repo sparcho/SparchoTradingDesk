@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TANLA vs GENESYS — Cross-Comparison · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Cross-comparison</span>
+    <h1 class="htitle">TANLA vs GENESYS — Cross-Comparison</h1>
+    <div class="hmeta">status <b>active</b></div>
+    
+  </div>
+  <div class="body"><p><strong>Date:</strong> 2026-04-26 · <strong>Type:</strong> Two-name prospects comparison</p>
+<p><strong>Companion to:</strong> <code>260426_TANLA_DEEP-RESEARCH.pdf</code> + <code>260426_GENESYS_DEEP-RESEARCH.pdf</code></p>
+<p><strong>Macro context (verified live):</strong> India VIX 19.71 (above 18 watch threshold), Brent crude $99, USDINR ₹94, Nifty intraday -1%</p>
+<hr>
+<h3>1. Snapshot side-by-side</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Dimension</span><span>TANLA Platforms</span><span>Genesys International</span></div>
+<div class="mdtr"><span>Sector / cluster</span><span>L5 Apps · CPaaS / messaging-AI</span><span>L5 Apps · GIS / mapping-data</span></div>
+<div class="mdtr"><span>Market cap</span><span>~₹6,500 Cr (mid-cap)</span><span>~₹1,170 Cr (small-cap)</span></div>
+<div class="mdtr"><span>Last close (25-Apr)</span><span>₹485.80</span><span>₹261.74</span></div>
+<div class="mdtr"><span>52w high / low</span><span>₹766 / ₹366</span><span>₹742 / ₹207</span></div>
+<div class="mdtr"><span>% from 52w high</span><span>-37%</span><span><strong>-65%</strong></span></div>
+<div class="mdtr"><span>% from 52w low</span><span>+33%</span><span>+26%</span></div>
+<div class="mdtr"><span>DMA50 / DMA200</span><span>₹450 / ₹567</span><span>₹275 / ₹444</span></div>
+<div class="mdtr"><span>Position vs DMAs</span><span>Above DMA50, below DMA200</span><span>Below DMA50 &amp; DMA200</span></div>
+<div class="mdtr"><span>Recent momentum</span><span>1m +14.8%, 6m on V-recovery</span><span>1m -3%, 6m -55%</span></div>
+<div class="mdtr"><span>Chart pattern</span><span>V-bottom + base compression</span><span>Still in bleed phase</span></div>
+</div>
+<p><strong>Read:</strong> Both names are in the lower half of multi-year drawdowns, but the chart phase is materially different. TANLA has <em>stopped bleeding and started accumulating</em> (V-bottom intact, DMA20/DMA50 cluster at ₹450 acting as support, today&#x27;s Q4 print clean). Genesys has <em>not yet stopped bleeding</em> — price below all DMAs, recent momentum still negative, last quarterly print poor, no recovery base established yet.</p>
+<hr>
+<h3>2. Fundamental-discipline screen — head-to-head</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>TANLA</span><span>Genesys</span></div>
+<div class="mdtr"><span>1</span><span>Promoter Holding ≥ 50%</span><span>46.17% (stable) — <strong>FAIL</strong></span><span>31.52% (declining 8pp/3y) — <strong>FAIL</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>18.7 — <strong>PASS</strong></span><span>27.1 — <strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>0.03 (debt-free) — <strong>PASS</strong></span><span>0.22 — <strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE / ROE / ROIC ≥ 20%</span><span>ROCE 29% / ROE 23% — <strong>PASS</strong></span><span>ROCE 15% / ROE 10.8% — <strong>FAIL</strong></span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>16% (CPaaS-structural) — <strong>FAIL</strong></span><span>Annual 39% / latest Q 20.78% — <strong>PASS</strong> (borderline)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3Y CAGR ≥ 20%</span><span>~14-17% — <strong>FAIL</strong></span><span>~38% — <strong>PASS</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>Very high (debt-free) — <strong>PASS</strong></span><span>~11x — <strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap / Sales ≤ 2</span><span>~1.45x — <strong>PASS</strong></span><span>~3.7x — <strong>FAIL</strong></span></div>
+<div class="mdtr"><span><strong>Aggregate</strong></span><span></span><span><strong>5 PASS / 3 FAIL</strong></span><span><strong>4 PASS / 4 FAIL</strong></span></div>
+</div>
+<p><strong>Pattern read:</strong> TANLA&#x27;s failures cluster around <strong>CPaaS-category structural margin reality</strong> (OPM, sales-growth), with quality metrics (ROCE, ROE, P/E, MCap/Sales) all clearing. Genesys&#x27;s failures cluster around <strong>governance and quality</strong> (declining promoter holding, modest returns on capital, premium valuation versus revenue base) — these are not cyclical noise, they&#x27;re structural traits of the business <em>as it currently is</em>.</p>
+<p>The promoter-holding contrast is the most important single delta: TANLA at 46.17% is stable; Genesys at 31.52% has fallen 8 percentage points over 3 years. That trajectory matters more than the snapshot.</p>
+<hr>
+<h3>3. Recent quarter — clean vs ugly</h3>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>TANLA Q4 FY26 (just printed)</span><span>Genesys Q3 FY26 (latest reported)</span></div>
+<div class="mdtr"><span>Revenue</span><span>₹1,178 Cr (+15% YoY)</span><span>₹76 Cr (~flat sequentially)</span></div>
+<div class="mdtr"><span>Operating Profit</span><span>₹192 Cr EBITDA (+17% YoY)</span><span>₹16 Cr (down ~50% sequentially)</span></div>
+<div class="mdtr"><span>OPM</span><span>16.3% (sequential recovery from 14.7%)</span><span>20.78% (down from 38.97% prior Q)</span></div>
+<div class="mdtr"><span>Net Profit</span><span>₹134 Cr (+14.5% YoY)</span><span>₹1.05 Cr (down from ₹12.05 Cr)</span></div>
+<div class="mdtr"><span>Exceptional charges</span><span>None</span><span>₹5.1 Cr Labour-Code one-off</span></div>
+<div class="mdtr"><span>Read</span><span><strong>Clean in-line print</strong></span><span><strong>Ugly print, pending Q4 confirmation</strong></span></div>
+</div>
+<p>TANLA is past the binary catalyst with a clean number. Genesys is <em>waiting</em> for its next-quarter (Q4 FY26, expected May 2026) to confirm whether the Q3 weakness was Labour-Code-one-off or structural compression.</p>
+<hr>
+<h3>4. Forward thesis — both rely on a single anchor</h3>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>TANLA</span><span>Genesys</span></div>
+<div class="mdtr"><span>Forward thesis</span><span>Wisely AI scaling beyond Indosat</span><span>Tata Motors HD-ADAS royalty stream materialising</span></div>
+<div class="mdtr"><span>Anchor customer</span><span>Indosat Ooredoo Hutchison (Indonesia)</span><span>Tata Motors (India)</span></div>
+<div class="mdtr"><span>Disclosed metric</span><span>100M users protected, +10% client ARPU</span><span>6-year contract, per-vehicle royalty</span></div>
+<div class="mdtr"><span>Revenue today</span><span>&lt; 8% of consolidated</span><span>&lt; 5% of consolidated (estimated)</span></div>
+<div class="mdtr"><span>Concentration risk</span><span>Indosat is the only meaningful Wisely customer disclosed</span><span>Tata Motors is the only HD-ADAS contract publicly signed</span></div>
+<div class="mdtr"><span>Time-to-material</span><span>FY27-FY28 if scaling</span><span>FY28-FY29 as Tata SDV vehicle-volumes ramp</span></div>
+<div class="mdtr"><span>Upside leverage</span><span>Per-message x message-volume x customer-count</span><span>Per-vehicle x Tata-vehicle-volume x OEM-count</span></div>
+</div>
+<p>Both names depend on a <strong>single anchor scaling into a multi-customer business</strong> over 2-4 years. Both are exposed to the binary &quot;does the second customer sign&quot; question. TANLA has a slightly cleaner technical-data story (200B annual messages = real moat); Genesys has a slightly cleaner regulatory-moat story (NGP-2022 keeps foreigners out of the data).</p>
+<hr>
+<h3>5. Valuation asymmetry</h3>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>TANLA</span><span>Genesys</span></div>
+<div class="mdtr"><span>EV / Sales</span><span>1.5x</span><span>3.7x</span></div>
+<div class="mdtr"><span>EV / EBITDA</span><span>9.0x</span><span>~10x</span></div>
+<div class="mdtr"><span>P/E</span><span>18.7x</span><span>27.1x</span></div>
+<div class="mdtr"><span>Discount-to-peer</span><span>At low end of CPaaS peer set (Twilio 2.4x, Sinch 0.6x, Bandwidth 0.9x)</span><span>At ~28% of MapMyIndia&#x27;s 13x EV/Sales</span></div>
+<div class="mdtr"><span>Bull-case fair value</span><span>₹820-950 (+70-95% from ₹485) on Wisely scaling</span><span>₹450-600 (+70-130% from ₹262) on Tata-anchor delivery</span></div>
+<div class="mdtr"><span>Bear-case fair value</span><span>₹290-330 (-32 to -40%) on CPaaS commoditisation</span><span>₹150-180 (-30 to -43%) on Tata ramp-slip</span></div>
+</div>
+<p>TANLA: bull case is +95%, bear case is -40% → asymmetry slightly favours upside (~2.4 : 1 reward-to-risk).</p>
+<p>Genesys: bull case is +130%, bear case is -43% → asymmetry stronger on paper (~3.0 : 1) BUT the bear case is a closer-to-base outcome given the Q3 FY26 print and the unproven Tata ramp.</p>
+<hr>
+<h3>6. Risk profile contrast</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Risk</span><span>TANLA</span><span>Genesys</span></div>
+<div class="mdtr"><span>Fundamental cyclical risk</span><span>OTT-messaging displacement of A2P SMS</span><span>Government-contract revenue lumpiness</span></div>
+<div class="mdtr"><span>Fundamental structural risk</span><span>AI commoditising CPaaS category</span><span>HD-ADAS adoption pace dependent on Tata SDV ramp</span></div>
+<div class="mdtr"><span>Governance risk</span><span>Modest (clean record, stable promoter)</span><span>Elevated (promoter holding declining, share-cap expanding)</span></div>
+<div class="mdtr"><span>Liquidity risk</span><span>Mid-cap, normal liquidity</span><span>Small-cap (₹1,170 Cr), thinner float</span></div>
+<div class="mdtr"><span>Concentration risk on existing book</span><span>Diversifier (cloud-software, low correlation)</span><span>Diversifier (GIS-mapping, low correlation)</span></div>
+<div class="mdtr"><span>Macro-regime sensitivity</span><span>Mid-cap tech beta</span><span>Small-cap tech beta (higher)</span></div>
+</div>
+<p>Genesys carries higher risk on every governance / liquidity / regime dimension. This is the single largest contrast in the comparison.</p>
+<hr>
+<h3>7. Under current macro regime (India VIX 19.7, Brent $99, INR ₹94, Nifty -1%)</h3>
+<p>The macro state matters. As of this brief:</p>
+<ul>
+<li><strong>India VIX 19.71</strong> — above the 18 &quot;watch&quot; threshold; in the 18-22 range that signals derisk-or-wait.</li>
+<li><strong>Brent $99</strong> — already elevated; the &quot;if oil spikes&quot; trigger has fired.</li>
+<li><strong>USDINR ₹94</strong> — rupee weak; FII flow risk elevated.</li>
+<li><strong>Nifty intraday -1%</strong> — broader-tape weakness.</li>
+</ul>
+<p>Per the regime decision tree codified in <code>260425_stress-tests.md</code>:</p>
+<ul>
+<li>VIX 18-22 + Brent $90-95 = &quot;watch + watch&quot; zone</li>
+<li>The stress-tests map says the cleanest discipline in this regime is <strong>HAL ₹2L (lowest variance) safe harbor OR sit out</strong></li>
+</ul>
+<p>But per <code>COMPANY-DEEP-RESEARCH_LESSONS-LEARNED L-04</code>, the cleaner discipline for a single-name capital test is <strong>abort and sit out</strong>, not rotate.</p>
+<p><strong>Current-regime read on both names:</strong></p>
+<ul>
+<li>High-beta names (TANLA, Genesys) get hit harder than defensive names in VIX-watch regime</li>
+<li>Genesys (small-cap, thinner float, ongoing chart bleed) carries higher near-term tail risk</li>
+<li>TANLA&#x27;s just-printed clean Q4 is somewhat protected from the regime stress because the binary catalyst is past</li>
+<li>Genesys still has its Q4 binary catalyst pending — buying ahead of it in this regime stacks two unfavourable bets</li>
+</ul>
+<hr>
+<h3>8. Final synthesis — TANLA vs GENESYS</h3>
+<h4>Where TANLA wins</h4>
+<ol>
+<li><strong>Cleaner discipline screen</strong> (5/8 vs 4/8)</li>
+<li><strong>Just-printed clean Q4</strong> — past the binary catalyst with an in-line number</li>
+<li><strong>Better chart structure</strong> — V-bottom + DMA20/DMA50 compression launchpad vs Genesys&#x27;s continued bleed</li>
+<li><strong>Stable promoter holding</strong> (46.17% vs Genesys 31.52% declining)</li>
+<li><strong>Larger scale + better liquidity</strong> — mid-cap vs small-cap (matters more in stressed regime)</li>
+<li><strong>CPaaS commoditisation risk is slow-moving</strong> vs Genesys&#x27;s binary Tata-ramp dependency</li>
+</ol>
+<h4>Where Genesys wins</h4>
+<ol>
+<li><strong>Higher 3-year sales growth</strong> (~38% vs TANLA&#x27;s ~14-17%) — the secular growth story is stronger if it converts to operating leverage</li>
+<li><strong>Stronger headline asymmetry</strong> (+130% vs -43% bull/bear) — if Tata anchor delivers, the upside is bigger</li>
+<li><strong>Cleaner regulatory moat</strong> (NGP-2022 keeps global mapping competition out of India) — TANLA&#x27;s DLT moat is real but less absolute</li>
+<li><strong>Smaller market cap = faster re-rating potential</strong> if the thesis works</li>
+<li><strong>Tata Motors anchor is a more tangible commercial validation</strong> than Indosat-only for TANLA</li>
+</ol>
+<h4>Where they tie</h4>
+<ol>
+<li>Both have promoter holding under 50%</li>
+<li>Both depend on a single-anchor customer scaling to a multi-customer business</li>
+<li>Both are at meaningful drawdowns from peaks (-37% / -65%)</li>
+<li>Both pass governance kill-flag binary (no SEBI actions, no auditor change, no off-balance-sheet financing)</li>
+<li>Both are theme-coherent diversifiers to the operator&#x27;s existing GMDC-MOIL-HINDZINC commodity-heavy book</li>
+</ol>
+<h4>Net take</h4>
+<p><strong>TANLA is the cleaner setup right now.</strong> Genesys is the harder optionality bet that needs more patient timing.</p>
+<p>If the operator must pick ONE for a near-term capital test, TANLA wins on (a) discipline screen 5/8 vs 4/8, (b) Q4 print already done and clean, (c) chart phase has stopped bleeding and started accumulating, (d) larger-cap / better-liquidity matters more in the current VIX-watch regime, (e) governance is materially cleaner.</p>
+<p>Genesys is a <strong>deeper-value, longer-horizon, higher-conviction-required bet</strong> that should re-enter the conversation only after:</p>
+<ul>
+<li>Q4 FY26 results print (expected May 2026)</li>
+<li>A clean OPM recovery print (above 30%, ideally above 35%)</li>
+<li>Either a second-OEM HD-ADAS contract OR confirmed Tata SDV-vehicle ramp data</li>
+<li>A regime that is calmer than current (India VIX below 16, Brent below $90)</li>
+</ul>
+<h4>And the regime-aware overlay</h4>
+<p><strong>Neither TANLA nor Genesys is the right deployment right now.</strong> With India VIX at 19.7 (above the 18 watch trigger), Brent at $99 (above the $90 watch trigger), and Nifty intraday -1%, the cleaner discipline per <code>LESSONS-LEARNED L-04</code> is <strong>abort and sit week 1 out</strong> rather than deploy into either name in this regime.</p>
+<p>If forced to choose: TANLA. But the cleaner choice is to hold cash, watch how the macro VIX/oil/rupee triad resolves Mon-Wed, and re-decide on Thursday with a calmer baseline. The 2L test integrity is preserved more by patience than by deploying-anyway-into-the-better-of-two-names.</p>
+<hr>
+<h3>9. Sources</h3>
+<ul>
+<li><code>260426_TANLA_DEEP-RESEARCH.pdf</code> (companion company DR)</li>
+<li><code>260426_GENESYS_DEEP-RESEARCH.pdf</code> (companion company DR)</li>
+<li><code>260425_DEEP-RESEARCH_india-GIS-frontrunners.pdf</code> (thematic context for Genesys)</li>
+<li><code>260425_chart-read.md</code>, <code>260425_agent-vetting.md</code>, <code>260425_stress-tests.md</code> (TANLA-side analysis)</li>
+<li><code>COMPANY-DEEP-RESEARCH_LESSONS-LEARNED.md</code> (especially L-03 macro-baseline + L-04 single-name test discipline)</li>
+<li>Live-verified macro baselines (26-April-2026): Brent BZ=F $99.13, WTI CL=F $94.40, India VIX ^INDIAVIX 19.71, USDINR INR=X 94.22, Nifty ^NSEI 23,898</li>
+</ul></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260426_TANLA_vs_GENESYS_cross-comparison</div>
+</div></body></html>

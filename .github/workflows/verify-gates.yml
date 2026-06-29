@@ -1,0 +1,81 @@
+name: verify-gates
+
+# F138/F139 read-back (vault audit 2026-06-29): make the manual pre-publish verifies a CI gate so a
+# corrupt/truncated artifact or a plaintext family-financials leak physically cannot sit on GH-Pages.
+# Scope note: the Python generators live in the (private) vault, not this repo — their ast.parse gate
+# runs in system_doctor.py (vault-side). THIS workflow gates the PUBLISHED ARTIFACTS in this repo:
+#   1) every committed JSON parses + no NUL bytes (the recurring corruption class)
+#   2) no denylisted family token appears in committed files (the F122/F123 leak class)
+#
+# To make these BLOCKING: Settings → Branches → add a rule on `main` → Require status checks →
+# select "json-validity" and "privacy-scan". (Left non-required by default so the host's direct-push
+# publish flow is not broken until you opt in.)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  json-validity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Every committed JSON parses
+        run: |
+          set -uo pipefail
+          fail=0
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            if ! python3 -c "import json,sys; json.load(open(sys.argv[1], encoding='utf-8'))" "$f" 2>/dev/null; then
+              echo "::error file=$f::invalid JSON (truncation/corruption?)"; fail=1
+            fi
+          done < <(git ls-files '*.json')
+          echo "checked $(git ls-files '*.json' | wc -l) JSON files"
+          exit $fail
+      - name: No NUL bytes in committed text artifacts
+        run: |
+          set -uo pipefail
+          fail=0
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            if LC_ALL=C grep -qP '\x00' "$f"; then
+              echo "::error file=$f::contains NUL byte (interrupted/atomic-write failure)"; fail=1
+            fi
+          done < <(git ls-files '*.json' '*.html' '*.js' '*.css')
+          exit $fail
+
+  privacy-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No plaintext family tokens in committed files
+        env:
+          LEAK_DENYLIST: ${{ secrets.LEAK_DENYLIST }}
+        run: |
+          set -uo pipefail
+          # The denylist lives in a repo SECRET so the sensitive tokens never live in the repo itself.
+          # Put FULL names / specific sensitive strings (one per line) — NOT bare first names like
+          # "Rajiv", which collide with the public screener-lens names (Rajiv-10G / Rajiv-DIV).
+          if [ -z "${LEAK_DENYLIST:-}" ]; then
+            echo "::warning::LEAK_DENYLIST secret not set — family-token scan SKIPPED."
+            echo "Set it: Settings → Secrets and variables → Actions → New repository secret → LEAK_DENYLIST"
+            exit 0
+          fi
+          fail=0
+          while IFS= read -r token; do
+            token="$(echo "$token" | tr -d '\r' | sed 's/^ *//;s/ *$//')"
+            [ -z "$token" ] && continue
+            if git grep -n -F -i -- "$token" -- '*.html' '*.json' '*.js' >/dev/null 2>&1; then
+              echo "::error::denylisted token present in committed file(s)"
+              # print file:line WITHOUT echoing the token value into public logs
+              git grep -n -F -i -c -- "$token" -- '*.html' '*.json' '*.js' | sed 's/:[0-9]*$//' | sort -u
+              fail=1
+            fi
+          done <<< "$LEAK_DENYLIST"
+          exit $fail

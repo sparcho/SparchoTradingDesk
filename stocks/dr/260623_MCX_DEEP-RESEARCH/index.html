@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCX (Multi Commodity Exchange) — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">MCX (Multi Commodity Exchange) — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>MCX</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-4 pick — commodity-derivatives MONOPOLY (~96% share), 73% EBITDA, +138% PAT. Volume-cyclical + premium. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s near-monopoly commodity-derivatives exchange — the ~96%-share + 73%-EBITDA USP, a record FY26 (PAT +138%), and the bullion-volume-led / regulation-and-cycle-dependent caveats. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>Commodity-exchange domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Commodity-derivatives exchange</span><span>MCX runs futures + options on bullion (gold/silver), energy, base metals. <strong>~95.9% share of Indian commodity futures</strong> — a near-monopoly. Asset-light, transaction-fee model. The USP.</span></div>
+<div class="mdtr"><span>ADT</span><span>Average daily turnover — the volume driver. FY26 ADT ₹5.4 lakh Cr (+145%).</span></div>
+<div class="mdtr"><span>Bullion options</span><span>The FY26 growth engine — gold/silver F&amp;O ADT +496% (volume-led, cycle-sensitive).</span></div>
+<div class="mdtr"><span>Traded clients</span><span>20.9 lakh in FY26 (from 13 lakh) — participation growth.</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (MCX reading)</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>FY26 <strong>73%</strong> (from 63%); net margin 55% — exceptional asset-light leverage.</span></div>
+<div class="mdtr"><span>PAT</span><span>FY26 ₹1,332 Cr (+138%).</span></div>
+<div class="mdtr"><span>P/E</span><span>~54× (derived: mcap ₹72,493 Cr ÷ PAT ₹1,332 Cr).</span></div>
+<div class="mdtr"><span>P/B</span><span>~25.5×.</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>No identifiable promoter (widely held MII).</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹72,493 Cr (+73.1% in 1 year).</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>NCDEX</span><span>Agri-commodity exchange (much smaller)</span></div>
+<div class="mdtr"><span>BSE / NSE</span><span>Equity-derivatives exchanges (different segment)</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>MCX reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>none (widely held)</span><span><strong>FAIL</strong> (technical)</span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~54×</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>high (asset-light) — PENDING exact</span><span><strong>LIKELY PASS</strong></span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>EBITDA 73%</span><span><strong>PASS</strong> (exceptional)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 income +101%; strong</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~30× (₹72,493/₹2,429)</span><span><strong>FAIL</strong> (asset-light norm)</span></div>
+</div>
+<p><strong>Aggregate: 4-5 PASS/likely-PASS (net cash, ROCE, OPM 73%, sales-growth, ICR) — the highest-margin, most-monopoly franchise in the batch.</strong> FAILs are valuation + no-promoter. Volume-cyclicality is the qualitative watch.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>MCX is India&#x27;s near-monopoly commodity-derivatives exchange — <strong>~95.9% of commodity futures, ~100% precious metals, 99.6% energy, 99.8% base metals.</strong> FY26 was a record: <strong>total income ₹2,429 Cr (+101%), EBITDA ₹1,774 Cr (73% margin, from 63%), PAT ₹1,332 Cr (+138%)</strong>; Q4 PAT +291% (scanx/investywise/multibagg, FY26). The surge was <strong>bullion-volume-led</strong> — FY26 ADT ₹5.4 lakh Cr (+145%), gold/silver F&amp;O ADT +496%, traded clients 20.9 lakh (from 13 lakh). Market cap ₹72,493 Cr (+73% in 1yr) at <strong>~54× P/E, ~25.5× book</strong>.</p>
+<blockquote><strong>CORE VERDICT.</strong> MCX is the highest-quality &quot;assurance from the nature of the work&quot; name in the batch — a near-pure commodity-derivatives <strong>monopoly</strong> with a 73% EBITDA margin, net cash, and a post-tech-migration cost base that delivers extreme operating leverage. <strong>The honest caveats:</strong> (1) FY26&#x27;s +138% PAT was <strong>bullion-volume-led</strong>, and bullion F&amp;O volumes are cycle/price-sensitive (a gold/silver volatility lull would slow growth); (2) ~54× PE / ~30× sales prices continued volume strength; (3) regulatory/STT and the (small) options-monopoly-scrutiny tail. The load-bearing question is the durability of bullion + broader-commodity volumes. Best franchise + margins in the batch; volume-cyclicality + premium are the constraints.</blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Multi Commodity Exchange of India Ltd (NSE: MCX) operates commodity futures + options (bullion, energy, base metals), post-trade via MCXCCL.</p>
+<h4>1.1 FY26 drivers</h4>
+<p>Bullion-led volume surge: ADT ₹5.4 lakh Cr (+145%); bullion F&amp;O ADT +496%; metals +116%, energy +29%. Options scale-up + the (completed) tech-platform migration drove the 73% EBITDA margin.</p>
+<h4>1.2 Market position</h4>
+<p>~95.9% commodity-futures share; near-100% in precious metals/energy/base metals — a structural monopoly.</p>
+<h4>1.3 Equity structure</h4>
+<p>No identifiable promoter (widely held MII). FII/DII PENDING.</p>
+<h4>1.4 Recent corporate actions</h4>
+<p>Record FY26 (PAT +138%); continued options growth; traded-client base to 20.9 lakh.</p>
+<blockquote><strong>ANCHOR FACT.</strong> A ~96%-share commodity-derivatives monopoly with a 73% EBITDA margin + net cash that more-than-doubled PAT is the bull case; the offset is that the surge is bullion-volume-led (cycle-sensitive) at a ~54× multiple.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Governance</h4>
+<p>SEBI-regulated MII; widely held; high oversight. Regulated + volume-dependent.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter</span><span>None (widely held)</span><span>MII</span></div>
+<div class="mdtr"><span>SEBI/regulatory</span><span>REGULATED</span><span>Commodity-derivatives oversight; STT</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>STRONG</span><span>Net cash; 73% EBITDA</span></div>
+<div class="mdtr"><span>Tech-platform</span><span>RESOLVED</span><span>Migration completed (was a prior overhang)</span></div>
+<div class="mdtr"><span>Volume concentration</span><span>WATCH</span><span>Bullion-led volumes (cyclical)</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; strong MII governance + balance sheet; the prior tech-migration overhang is resolved. The watch is volume-cyclicality.</blockquote>
+<hr>
+<h3>Section 3 / The Monopoly USP — Durable or Volume-Cyclical?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a structural commodity-derivatives monopoly compounding on financialisation + options. Variant question: how much of +138% PAT is durable vs a bullion-volatility-driven peak?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>A ~96%-share, regulated, asset-light monopoly with 73% EBITDA + net cash is an exceptional, hard-to-replicate franchise; options + new products + participation growth are structural tailwinds.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Bullion-volume durability.</strong> +496% bullion F&amp;O ADT — peak or new base?</li>
+<li><strong>Cycle sensitivity.</strong> A gold/silver volatility lull slows volumes.</li>
+<li><strong>Valuation.</strong> ~54× PE / ~30× sales on volume-led earnings.</li>
+<li><strong>Regulation/STT.</strong> Commodity-derivatives policy/tax actions.</li>
+<li><strong>New-product reliance.</strong> Growth beyond bullion (energy/metals/index).</li>
+</ol>
+<blockquote><strong>USP VERDICT.</strong> Exceptional monopoly franchise — the question is purely the durability of the (bullion-led) volume surge and the premium multiple, not the moat.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Total income ₹Cr</span><span>EBITDA margin</span><span>PAT ₹Cr</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>2,429 (+101%)</span><span>73%</span><span>1,332 (+138%)</span><span>scanx/investywise</span></div>
+<div class="mdtr"><span>FY25</span><span>~1,208 (derived)</span><span>63%</span><span>~560 (derived)</span><span>multibagg</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>rev +205%</span><span>—</span><span>+291%</span><span>dsij</span></div>
+</div>
+<blockquote>Read: record, volume-led FY26 (income +101%, PAT +138%, margin 63%→73%). The durability hinges on commodity (esp. bullion) volumes.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Bullion-volume cyclicality, valuation, regulation/STT, new-product reliance.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Lowest balance-sheet risk (net cash, 73% EBITDA, monopoly); the risk is volume-cyclicality + valuation, not solvency. Watch ADT + bullion volumes.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>MCX</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹72,493 Cr (+73% 1yr)</span></div>
+<div class="mdtr"><span>P/E</span><span>~54×</span></div>
+<div class="mdtr"><span>P/B</span><span>~25.5×</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~30×</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>73%</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>~54× PE / ~30× sales prices durable high commodity volumes + sustained 70%+ margins. The bullion-cycle is the swing.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> bullion + broader-commodity volumes sustain/grow + new products → earnings compound → premium holds.</li>
+<li><strong>Base:</strong> volumes plateau off the FY26 peak → earnings growth normalises; multiple compresses.</li>
+<li><strong>Bear:</strong> bullion volatility lull / regulation → volumes + earnings de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> The best franchise in the batch at a premium on volume-led earnings — the commodity (bullion) cycle dominates the risk/reward.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27 quarters</span><span>ADT + bullion volumes</span><span>Durability</span></div>
+<div class="mdtr"><span>FY27</span><span>New products (index/electricity)</span><span>Diversification</span></div>
+<div class="mdtr"><span>FY27</span><span>Regulation/STT</span><span>Policy risk</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Bullion-volume cyclicality</span><span>Med</span><span>High</span><span>ADT trend</span></div>
+<div class="mdtr"><span>2</span><span>Valuation de-rate</span><span>Med</span><span>Med</span><span>Earnings vs ~54×</span></div>
+<div class="mdtr"><span>3</span><span>Regulation/STT</span><span>Low-Med</span><span>Med</span><span>Policy</span></div>
+<div class="mdtr"><span>4</span><span>New-product execution</span><span>Med</span><span>Low-Med</span><span>Diversification</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>Volume surge durable</span><span>ADT falls &gt;30% off the FY26 peak</span></div>
+<div class="mdtr"><span>2</span><span>Margins durable</span><span>EBITDA margin falls &lt;60%</span></div>
+<div class="mdtr"><span>3</span><span>Premium justified</span><span>De-rate on a volume/regulation shock</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: net cash (D/E), ROCE (likely), OPM (73%), sales-growth (+101%), ICR. FAIL: promoter (none), PE (~54×), MCap/Sales (~30×).</p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> ~96%-share commodity-derivatives monopoly; 73% EBITDA; net cash; +138% PAT; options + participation growth; resolved tech overhang.</li>
+<li><strong>Would-not-buy:</strong> bullion-volume-led (cyclical) earnings; ~54× PE / ~30× sales; regulation/STT; no promoter.</li>
+<li><strong>Depends-on:</strong> durability of commodity (bullion) volumes.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>~96% monopoly; 73% EBITDA; net cash; +138% PAT</span><span>New-product diversification; regulation/STT</span><span>Bullion-volume cyclicality (peak risk)</span></div>
+<div class="mdtr"><span>Options + participation growth; tech overhang resolved</span><span>Premium valuation</span><span>~54× PE / ~30× sales</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹72,493 Cr</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~54×</span><span>the constraint</span></div>
+<div class="mdtr"><span>Watch</span><span>ADT + bullion volumes</span><span>durability trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> MCX is the highest-quality franchise in Batch 4 — a ~96%-share commodity-derivatives monopoly with a 73% EBITDA margin and net cash — but FY26&#x27;s +138% PAT was bullion-volume-led and therefore cycle-sensitive, at a ~54× multiple. <strong>This brief does NOT recommend deployment.</strong> Watch the commodity-volume cycle; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: scanx.trade; investywise.com; dsij.in (Q4 +291%); multibagg.ai; whalesbook.com</li>
+<li>Valuation/share: screener.in/company/MCX (mcap ₹72,493 Cr, P/B 25.5×); company FY24 market-share disclosures</li>
+<li><strong>PENDING:</strong> exact shareholding, ROCE exact, FY25 base, regulatory/STT specifics, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_MCX_DEEP-RESEARCH</div>
+</div></body></html>

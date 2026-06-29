@@ -1,0 +1,469 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INDIA AI PLAYERS — UNIVERSE MAP &amp; FOUNDATION-MODEL ENGINE ATTRIBUTION · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Thematic</span>
+    <h1 class="htitle">INDIA AI PLAYERS — UNIVERSE MAP &amp; FOUNDATION-MODEL ENGINE ATTRIBUTION</h1>
+    <div class="hmeta"><b>&#x27;2026-05-02&#x27;</b></div>
+    
+  </div>
+  <div class="body"><p><strong>Deep-Research Thematic Brief — Confidential / Study Mode</strong></p>
+<p><strong>Prepared for:</strong> Sparcho</p>
+<p><strong>Workstream:</strong> Deep-Research</p>
+<p><strong>Date:</strong> 02 May 2026</p>
+<p><strong>Mode:</strong> STUDY — research-only, not a trade recommendation. §5.24 STRESS_TEST_GATE not triggered (descriptive output, no top-N picks / add / trim / exit / regime-flip).</p>
+<p><strong>Anchor protocols:</strong> PROCESSES.md §5.18 / §5.20 (DEEP_RESEARCH) · §5.22 CRITICAL_ANALYSIS_INTAKE · DEEP_RESEARCH.md v1.3 · research-discipline.md v1 (10-rule + Rule 11 audit_emit + new Rule 12 canonical-format)</p>
+<p><strong>Builds on:</strong> <code>260422_5LAYER-CAKE_India-v1</code>, <code>260422_DEEP-RESEARCH_India-Stack-DPI-brief</code>, <code>260423_DEEP-RESEARCH_mapmyindia-governance-GIS-AI</code>, <code>260425_DEEP-RESEARCH_india-DC-5LC</code>, <code>260425_DEEP-RESEARCH_india-GIS-frontrunners</code>, <code>260428_DEEP-RESEARCH_india-energy</code></p>
+<p><strong>Theme (when rendered to PDF):</strong> B&amp;W Canvas — per CLAUDE.md §11.5 bento theme stack; rendered through <code>dr_md_to_canvas.py</code> per Rule 12</p>
+<hr>
+<h3>§5.22 CRITICAL_ANALYSIS_INTAKE BLOCK</h3>
+<ul>
+<li><strong>Canonical files read:</strong></li>
+<li><code>/TRADER/00_SYSTEM/REFERENCES/FRAMEWORKS/research-discipline.md</code> (v1, 11-rule incl. Rule 11 audit_emit, plus operator-stated Rule 12 added 2026-05-02 on canonical-PDF rendering)</li>
+<li><code>/TRADER/00_SYSTEM/AGENTS/DEEP_RESEARCH.md</code> (v1.3)</li>
+<li><code>/TRADER/00_SYSTEM/PROCESSES.md</code> §5.18 / §5.20 / §5.22 (lines ~1789–2090)</li>
+<li><code>/TRADER/00_SYSTEM/PEOPLE.md</code> (source-attribution principle — relevant for Sanjeev / Rajiv / Kaarin lens callouts; none triggered here as this is a market-mapping study)</li>
+<li><code>/TRADER/00_SYSTEM/CLAUDE.md</code> §16 (universe text-cache; live-check confirmed §16 still 65/65 per 260427 SCRN-MAP render — no fresher render since 260427 in <code>/03_SCREENERS/SCRN-MAP/2604/</code>; flag below)</li>
+<li><code>/TRADER/01_DAILY/2604/260428/260428_DEEP-RESEARCH_india-energy.md</code> (canonical-format reference for Rule 12)</li>
+<li><code>/TRADER/09_DEEP_RESEARCH/COMPANY/260423_DEEP-RESEARCH_mapmyindia-governance-GIS-AI.md</code> (existing MAPMYINDIA ground-truth on AI-vertical narrative)</li>
+<li><strong>Reference posts consulted (POSTS/ sweep):</strong> <code>_INDEX.md</code> inventoried; load-bearing post: <code>260421_theaiportfolios_claude-portfolio-servicenow.md</code> (ServiceNow-Anthropic design-partner pattern — informs how to read &quot;X uses Y model&quot; claims). <code>260422_barchart_warsh-ai-deflation-fed-rates.md</code> (AI-deflation thesis — frame, not load-bearing for this attribution). <code>260423_evolvingai_claude-paul-graham-startup-refinement.md</code> (mechanism-vs-vibes discipline pattern; applied throughout). No POSTS/ entry on Indian AI players directly.</li>
+<li><strong>Web searches run (15 queries):</strong> IndiaAI Mission compute partners + 12-team selection, Sarvam-M / Sarvam-105B architecture (Mistral-derivative vs from-scratch), Krutrim-1 / Krutrim-2 base models, BharatGen / Hanooman / Project Indus, Yotta / Reliance Jio / Tata-OpenAI / NVIDIA-Reliance, Anthropic-Bengaluru-office partnerships (Pratham / Air India / EkStep / CSF), Infosys-Anthropic (Topaz integration) + Infosys-OpenAI tools, HCLTech AI Force engine stack, Wipro Lab45 partnerships, Tata Group OpenAI partnership + 100MW DC, MAPMYINDIA Drive GPT + Perplexity, HealthifyMe Ria multi-engine, Cropin Aksara µ-LM, Paytm Groq + Perplexity, Anant Raj data-center AI-ready infra.</li>
+<li><strong>Known scope limits / analogy caveats:</strong></li>
+<li><strong>Engine attribution is PARTIAL by design</strong> for any Indian player that does not publicly disclose its model stack. UNDISCLOSED is the honest tag for Tata Elxsi / KPIT / Tanla / Newgen / Genesys / Info Edge / PB Fintech / Angel One / CDSL / Pristyn / Practo / Niramai (proprietary CV not LLM). The customer-case-study evidence path used for Western SaaS is much thinner for Indian listed mid-caps.</li>
+<li><strong>&quot;X uses cloud Y&quot; ≠ &quot;X uses engine Z&quot;</strong> (research-discipline Rule 4 / mechanism-vs-analogy). Wipro–Google Cloud partnership establishes cloud, not necessarily Gemini-only engine; HCLTech AI Force explicitly multi-engine on AWS Bedrock (Claude / OpenAI / Gemini / Llama / Granite). Tagged as multi-engine where evidence supports.</li>
+<li><strong>Tata Group is double-counted</strong>: the Tata Group ↔ OpenAI strategic partnership (Feb 2026) is the parent-level deal; downstream consumption by TCS / Tata Elxsi / Air India is implied but not all uniformly disclosed at subsidiary level. Air India is the named Anthropic Claude Code customer (different engine than parent OpenAI deal) — Tata is structurally HYBRID.</li>
+<li><strong>Infosys is HYBRID by design</strong>: Anthropic-Topaz partnership (Feb 2026) AND OpenAI coding tools added April 2026. Both load-bearing. Treat as multi-engine, not single-vendor.</li>
+<li><strong>Paytm engine vs infra</strong>: Groq partnership is INFERENCE INFRA (Groq LPU chip), not a foundation-model engine choice; the actual model running on Groq is operator-of-Paytm-managed (could be Llama / open-weight). Perplexity partnership is consumer-facing API consumption. Tagged as multi-engine + Groq-infra.</li>
+<li><strong>Drive GPT (MAPMYINDIA)</strong>: brand name suggests transformer; public sources show Mappls offers a &quot;Custom Built Navigation Engine&quot; + voice navigation, but the underlying LLM provider for Drive GPT is NOT publicly disclosed. <strong>Earlier task brief assumed Anthropic Claude — that assumption is NOT supported by current public evidence.</strong> UNDISCLOSED is the honest tag. Falsifiable claim F1 below.</li>
+<li><strong>Anant Raj / Yotta / NxtGen are infra-layer</strong>, not engine-layer. They run customer engines (Llama / Claude / GPT / Sarvam) on customer-pickable hardware. Tagged ENGINE-AGNOSTIC; documented as compute-layer beneficiaries of the engine wars rather than engine-bets themselves.</li>
+<li><strong>Drift flag</strong>: <code>/03_SCREENERS/SCRN-MAP/2604/</code> latest render is 260427_MULTI_SCRN-MAP.pdf; no fresher render in <code>2605/</code> checked into the SCRN-MAP folder (folder-tree only contains 2604). Per CLAUDE.md §17.5, citing 260427 as today&#x27;s authoritative — should be re-verified at next morning-brief run.</li>
+<li><strong>Source tiers in use:</strong> Primary — Anthropic press releases (anthropic.com/news), Sarvam / Krutrim / BharatGen technical reports (sarvam.ai blog, huggingface model cards, ai-labs.olakrutrim.com PDF), Infosys press release, HCLTech AI Force press release, Tata-OpenAI joint announcement, NVIDIA blog India AI Mission. Secondary — TechCrunch, Business Standard, BusinessToday, AnalyticsIndiaMag, Inc42, YourStory, CNBC, JM Financial blog, Datacenter Dynamics, Outlook Business, Rest of World, AtlanticCouncil. Tertiary — aggregator pieces (Tribune, ETV Bharat, opentools.ai, IBTimes-AU) used only to triangulate, never load-bearing alone. Every load-bearing claim tier-tagged inline below.</li>
+</ul>
+<hr>
+<h3>§5.24 STRESS_TEST_GATE — not triggered</h3>
+<p>This output is <strong>study-mode</strong> per operator brief. No BUY / ADD / TRIM / EXIT / HEDGE / tranche / regime-flip / stop-loss / top-N-actionable recommendation is made. Therefore the 6-question stress-test block is NOT invoked. The Layer-2 player×engine matrix is descriptive market-mapping — when operator later asks &quot;which TRADER-65 names benefit most from Anthropic-India build-out,&quot; THAT crosses into actionability and §5.24 will be run at that stage. Verdict line in this file is descriptive, not actionable.</p>
+<hr>
+<h3>EXECUTIVE SUMMARY — CORE FINDING</h3>
+<p><strong>India&#x27;s AI stack has bifurcated into two cleanly attributable engine camps, plus a large UNDISCLOSED middle layer.</strong></p>
+<p>The two attributable camps:</p>
+<ol>
+<li><strong>Sovereign / domestic-engine camp</strong> — IndiaAI Mission funded, MeitY-routed: 12 teams (Sarvam, BharatGen, Hanooman, Project Indus / Tech Mahindra, Gnani, Soket, Gan, Avataar, GenLoop, Zenteq, Intellihealth, Shodh, Fractal). Sarvam-105B trained from scratch on 12 trillion tokens at the IndiaAI Impact Summit Feb 2026 is the flagship sovereign claim. Krutrim-2 (Ola) sits adjacent — built on Mistral-NeMo 12B architecture, not from-scratch. Both publish weights. <strong>Domestic</strong> is the honest tag for the lab itself; <strong>Mistral-derivative</strong> is the honest tag for the underlying architecture for several &quot;sovereign&quot; models (Sarvam-M, Krutrim-2). Sarvam-105B is the cleanest from-scratch claim.</li>
+</ol>
+<ol>
+<li><strong>Hyperscaler-engine camp</strong> — Indian IT-services + verticals running on US foundation models. Three sub-patterns: (a) <strong>Anthropic-design-partner / Claude-customer</strong> — Infosys (Topaz + Claude), Air India (Claude Code), Pratham (Anytime Testing Machine on Claude); (b) <strong>OpenAI-strategic</strong> — Tata Group (Tata-OpenAI multi-dimensional deal), HCLTech (OpenAI strategic), JioHotstar (OpenAI search), PhonePe; (c) <strong>Google Cloud / Gemini</strong> — TCS (TCS Generative AI on Google Cloud), Wipro (Lab45 on Google Cloud + multi-LLM), Cropin (Google Cloud backbone). Several are <strong>HYBRID</strong> — Infosys runs both Claude and OpenAI tools; HCLTech AI Force on AWS Bedrock multi-engine (Claude / OpenAI / Gemini / Llama / Granite); Reliance Jio engages OpenAI + Meta + Google + NVIDIA simultaneously.</li>
+</ol>
+<p>The <strong>UNDISCLOSED middle layer</strong> is large: Tata Elxsi, KPIT, Tanla Platforms, Newgen, Genesys, Info Edge, PB Fintech, Angel One, CDSL, Pristyn, Practo, MAPMYINDIA&#x27;s Drive GPT (despite the brand suggesting a transformer). For these names, the engine choice is either truly undisclosed or buried inside white-labelled vendor agreements; the operator-actionable read is &quot;do not assume the engine; ask in the next concall or stay UNDISCLOSED-tagged in the watchlist scoring.&quot;</p>
+<p><strong>For the operator&#x27;s TRADER-65 universe, this means:</strong></p>
+<ul>
+<li><strong>15 of 65 names have direct AI-build dependencies</strong> that are now mappable: TCS, INFOSYS, HCLTECH, PERSISTENT, TATA ELXSI, KPIT, MAPMYINDIA, GENESYS, NEWGEN, INFO EDGE, TANLA, PAYTM, PB FINTECH, ANGEL ONE, BHARTIARTL.</li>
+<li><strong>Of those 15, only 5 have publicly disclosed primary-engine relationships</strong> (Infosys → Anthropic + OpenAI hybrid; HCLTech → Anthropic + OpenAI + Gemini + Llama hybrid; TCS → Google + OpenAI hybrid; Bharti Airtel → Perplexity Pro distribution; Paytm → Groq + Perplexity). The remaining 10 are UNDISCLOSED.</li>
+<li><strong>Yotta is the cleanest UNLISTED listed-equity-adjacent compute beneficiary</strong> of the engine wars (60–70% of India&#x27;s GPU capacity per CNBC; 20,736 NVIDIA Blackwell Ultra GPUs ordered for August 2026 deployment; pre-IPO round of $1.2–1.5B with 12-month listing target). Operator should track Yotta IPO filing on <code>/03_SCREENERS/IPO-WATCH.md</code>.</li>
+<li><strong>Reliance Industries (RIL) — currently NOT in TRADER-65</strong> — is the single largest AI-infra capex announcement in India ($110B over multi-year, 3GW Jamnagar DC). Worth reviewing for /00_SYSTEM/RESERVE_LIST.md inclusion as a watch-only name on AI-infra exposure (separate gates for Adani-overhang-style governance considerations apply but are out of scope here).</li>
+</ul>
+<hr>
+<h3>HOW TO READ THIS DOCUMENT</h3>
+<p><strong>Part I</strong> sets the structural map — the 7-archetype taxonomy of Indian AI players and the engine-attribution methodology used.</p>
+<p><strong>Part II</strong> walks each archetype with named players, their core product, listed-status, engine attribution, source tier, and a confidence flag.</p>
+<p><strong>Part III</strong> is the load-bearing <strong>player × engine matrix</strong> as a single scannable table — 50+ rows, the headline visual.</p>
+<p><strong>Part IV</strong> flags TRADER-65 overlap and reserve-list candidates.</p>
+<p><strong>Part V</strong> is L1–L5 layered output, falsifiable claims block (Rule 7), and the auto-emit kill-switch register (Rule 11).</p>
+<p><strong>Part VI</strong> is open questions / next-cycle work + sources.</p>
+<p>Every numeric or attribution is tier-tagged. UNDISCLOSED is used where evidence is absent, not paraphrased away.</p>
+<hr>
+<h3>PART I — STRUCTURAL MAP</h3>
+<h4>I.1 The 7-archetype taxonomy</h4>
+<p>Refined from the operator-supplied seven buckets:</p>
+<ol>
+<li><strong>Foundation-model labs</strong> — entities that train (or claim to train) their own model weights, sovereign or otherwise. Sub-split into (a) from-scratch sovereign, (b) fine-tuned over open-weight base, (c) wrappers on hosted APIs claiming model-status.</li>
+<li><strong>AI infrastructure / cloud / DC</strong> — engine-agnostic compute providers (GPU, DC capacity, sovereign-AI cloud). Beneficiaries of the engine wars; not engine-bets.</li>
+<li><strong>Vertical AI applications</strong> — domain-specific products (health, legal, finance, agri, edtech, GIS) that consume engines via API or fine-tuned wrappers.</li>
+<li><strong>Enterprise IT-services AI practices</strong> — global integrators (TCS, Infosys, Wipro, HCLTech, LTIMindtree, Tech Mahindra) with named AI products (Topaz, AI Force, Lab45, Ignio, Maker&#x27;s Lab) and partnership deals with multiple model vendors.</li>
+<li><strong>AI-native consumer apps</strong> — chatbots, generative tools, productivity (Quizizz, Perplexity-India, etc.).</li>
+<li><strong>AI hardware / edge</strong> — chip startups + edge-AI plays. Less mature in India; Tenstorrent has a Bangalore office, Polymage Labs (IISc-incubated) builds compiler tooling for Tenstorrent. No domestic AI-accelerator pure-play of scale yet.</li>
+<li><strong>Listed pure-plays vs unlisted vs subsidiaries-of-conglomerates</strong> — orthogonal flag, not its own bucket. Tagged in Part III matrix.</li>
+</ol>
+<h4>I.2 Engine-attribution methodology — what counts as evidence</h4>
+<p>Borrowed from the §5.22 CRITICAL_ANALYSIS_INTAKE source-discipline framework, mapped to engine-attribution:</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Tier</span><span>What counts</span><span>Examples used here</span></div>
+<div class="mdtr"><span><strong>Primary (cleanest)</strong></span><span>Customer-case-study page on the engine vendor&#x27;s site OR joint press release naming both companies AND the model</span><span>Anthropic ↔ Infosys press release naming Claude + Topaz; OpenAI ↔ Reliance JioHotstar PR; NVIDIA ↔ Reliance / Tata 2GW DC; Google Cloud ↔ TCS Generative AI announcement</span></div>
+<div class="mdtr"><span><strong>Secondary (moderate)</strong></span><span>Tech-press reporting (TechCrunch, BusinessToday, AnalyticsIndiaMag) that triangulates across multiple sources OR the Indian player&#x27;s own technical paper / blog naming the base architecture</span><span>Sarvam-M Mistral-Small fine-tune (Sarvam blog); Krutrim-2 Mistral-NeMo (HuggingFace card); HealthifyMe Ria using GPT-3.5/4-Turbo/Whisper (AnalyticsIndiaMag conference coverage)</span></div>
+<div class="mdtr"><span><strong>Tertiary (weak)</strong></span><span>Aggregator listicles, opinion pieces, &quot;X is rumored to use Y&quot; without specific source</span><span>Used only to triangulate, never as sole load-bearing source</span></div>
+<div class="mdtr"><span><strong>UNDISCLOSED</strong></span><span>No evidence at any tier</span><span>Tata Elxsi engine, KPIT engine, Tanla engine, Newgen engine, Genesys engine, Info Edge engine, PB Fintech engine, Angel One engine, MAPMYINDIA Drive GPT engine, most pharma + AI uses</span></div>
+</div>
+<p>This matters because <strong>the most common error mode is upgrading a tertiary &quot;X probably uses Y&quot; claim to a primary-tier conclusion</strong>. The matrix below explicitly flags confidence per row.</p>
+<h4>I.3 The IndiaAI Mission as a forcing variable</h4>
+<p>The IndiaAI Mission (MeitY, March 2024 launch, ₹10,372 crore outlay) is the single biggest structural shaper of which Indian AI labs get to play. Two pillars are load-bearing for this brief:</p>
+<ul>
+<li><strong>IndiaAI Compute</strong> — 38,000+ GPUs (mostly NVIDIA, mostly via Yotta + Jio + others) onboarded to common compute facility, available to startups and academia at subsidised rates (~₹65/hour cited in Indian Masterminds coverage). Means: an Indian lab does not need to own a hyperscaler relationship to train a 100B-parameter model. This is the precondition for Sarvam-105B&#x27;s &quot;from scratch&quot; claim.</li>
+<li><strong>Innovation Centre — 12 selected teams</strong> (Sarvam, BharatGen / IIT Bombay consortium, Soket AI, Gnani AI, Gan AI, Avataar AI, GenLoop, Zenteq, Intellihealth, Shodh AI, Fractal Analytics, Tech Mahindra Maker&#x27;s Lab) with funding allocations totaling ~₹2,194 crore (BharatGen ₹1,058.52 crore is the largest single allocation; Sarvam ₹246.72 crore; Tech Mahindra ₹2.66 crore is the smallest — interesting given Project Indus already exists). Source: DD News + The Tribune (secondary).</li>
+</ul>
+<p>The IndiaAI Mission operates as a <strong>subsidy on the domestic-engine camp specifically</strong>. It does NOT subsidise the hyperscaler-engine camp, which is funded by their own balance sheets (Anthropic / OpenAI / Google direct partnerships).</p>
+<h4>I.4 Anthropic&#x27;s India footprint as a 2026 inflection</h4>
+<p>Anthropic opened a Bengaluru office February 2026 (second Asia office after Tokyo), led by Irina Ghose. India is now Anthropic&#x27;s #2 consumer market by Claude usage, after the US. Run-rate revenue in India has doubled since the October 2025 announcement. Named partnerships at the office launch:</p>
+<ul>
+<li><strong>Pratham</strong> (education NGO) — Anthropic&#x27;s first strategic India AI lab partner; Anytime Testing Machine on Claude piloted with 1,500 students across 20 schools; 100-school target end-2026.</li>
+<li><strong>Air India</strong> (Tata Group subsidiary) — Claude Code customer for developer tooling.</li>
+<li><strong>Central Square Foundation</strong> — API credits for AI-EdTech tools.</li>
+<li><strong>EkStep Foundation</strong> — agriculture-focused AI applications.</li>
+<li><strong>Infosys</strong> (separate Feb 17 2026 deal) — Topaz integrates Claude + Claude Code; Anthropic Center of Excellence; starting in telecom vertical.</li>
+<li><strong>Indic-language model effort</strong> — company-wide push to strengthen 10 widely spoken Indian languages (Hindi / Bengali / Tamil / Urdu et al). Not a model release; a data + tuning programme.</li>
+</ul>
+<p>Source: anthropic.com/news/bengaluru-office-partnerships-across-india + secondary coverage. Tier: PRIMARY.</p>
+<p>This matters for engine attribution because it <strong>changes the prior</strong> on which Indian players are likely to be Claude-adjacent over the next 12 months: anyone building developer tooling (Air-India-pattern), any education NGO with corpus depth (Pratham-pattern), and any IT-services firm building telecom-vertical agents (Infosys-pattern) is now a higher-probability Anthropic prospect than they were six months ago. Operator-relevant: this strengthens the INFOSYS engine-side moat narrative without changing TCS&#x27;s engine-side narrative (which remains Google + OpenAI via Tata-OpenAI deal).</p>
+<hr>
+<h3>PART II — ARCHETYPE WALK</h3>
+<h4>A. Foundation-model labs</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>Core</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>Sarvam AI</strong></span><span>Unlisted</span><span>Sarvam-M (24B), Sarvam-30B, Sarvam-105B (from scratch, 12T tokens)</span><span><strong>Custom (from-scratch for 105B); Mistral-derivative for Sarvam-M</strong></span><span>Primary (Sarvam blog + technical paper)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Krutrim (Ola)</strong></span><span>Unlisted (Ola Electric is listed; Krutrim is a separate Ola group entity)</span><span>Krutrim-1 (7B, Llama-2-class), Krutrim-2 (12B on Mistral-NeMo)</span><span><strong>Mistral / Meta-derivative open weights</strong></span><span>Primary (HuggingFace cards)</span><span>High</span></div>
+<div class="mdtr"><span><strong>BharatGen (IIT Bombay consortium)</strong></span><span>Govt / academic</span><span>Param2 17B MoE + Indic toolkit; NVIDIA collaboration</span><span><strong>Custom open-source on NVIDIA stack</strong></span><span>Primary (BharatGen + NVIDIA blog)</span><span>High</span></div>
+<div class="mdtr"><span><strong>CoRover BharatGPT</strong></span><span>Unlisted</span><span>Multilingual virtual-assistant platform for govt + banking</span><span><strong>Domestic / proprietary</strong></span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span><strong>Hanooman (Reliance + IIT Bombay + SML)</strong></span><span>Subsidiary / consortium</span><span>22-language LLM up to 40B params</span><span><strong>Domestic / consortium open</strong></span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span><strong>Project Indus (Tech Mahindra Makers Lab)</strong></span><span>Listed (TECHM)</span><span>Hindi-first 8B LLM (scaled from earlier 1.2B); NVIDIA partnership</span><span><strong>Custom domestic</strong></span><span>Primary (Tech Mahindra PR)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Gnani AI</strong></span><span>Unlisted</span><span>Voice-AI Indic LLM (₹177.27cr IndiaAI funding)</span><span><strong>Domestic</strong></span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span><strong>Soket AI / Gan AI / Avataar / GenLoop / Zenteq / Intellihealth / Shodh / Fractal</strong></span><span>Unlisted (Fractal preparing IPO)</span><span>Various Indic foundation models</span><span><strong>Domestic</strong></span><span>Secondary (DD News + Tribune)</span><span>Medium</span></div>
+</div>
+<p><strong>Key read:</strong> the &quot;sovereign&quot; claim is strongest for Sarvam-105B + BharatGen Param2 (from-scratch / open-source on NVIDIA stack); weakest for fine-tunes-of-Mistral that get presented as sovereign (Sarvam-M, Krutrim-2). The MeitY-disclosed funding allocations are a useful reality check on which labs are at scale (BharatGen ₹1,058cr = at scale; Tech Mahindra ₹2.66cr = nominal).</p>
+<h4>B. AI infrastructure / cloud / DC</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>Core</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>Yotta Data Services</strong></span><span>Unlisted (pre-IPO $1.2–1.5B, 12-month listing target)</span><span>&quot;Shakti Cloud&quot; sovereign-AI infra; 60–70% of India&#x27;s GPU capacity per CNBC; 20,736 NVIDIA Blackwell Ultra GPUs by Aug 2026; $2B AI hub</span><span><strong>Engine-agnostic (NVIDIA hardware; runs whichever engine the customer brings)</strong></span><span>Primary (NVIDIA case-study + CNBC)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Reliance Jio (Jamnagar DC)</strong></span><span>RIL listed (not in TRADER-65)</span><span>3GW DC; NVIDIA 2,000MW partnership; OpenAI JioHotstar deal; Meta + Google AI backbone talks</span><span><strong>Multi-engine HYBRID (OpenAI primary on JioHotstar; Meta + Google in talks; Hanooman domestic via SML / IIT Bombay)</strong></span><span>Primary (TechCrunch + DCD)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Tata Group / Tata Communications</strong></span><span>TCS / TCOMM listed</span><span>Tata-OpenAI strategic partnership Feb 2026; 100MW DC capacity for OpenAI eyeing 1GW; NVIDIA AI cloud on Tata</span><span><strong>OpenAI primary at parent level; HYBRID at subsidiary</strong></span><span>Primary (Tata-OpenAI joint PR + DCD)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Anant Raj Cloud</strong></span><span>Listed (TRADER-65: ANANT RAJ)</span><span>Manesar / Panchkula DC; ₹18,000 crore capex; Submer partnership for AI-ready high-density</span><span><strong>Engine-agnostic infra; AI-ready GPU-density buildout</strong></span><span>Primary (BS + DCD)</span><span>High</span></div>
+<div class="mdtr"><span><strong>NxtGen Datacenter</strong></span><span>Unlisted</span><span>Hyperscaler colo + cloud</span><span><strong>Engine-agnostic</strong></span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span><strong>AdaniConneX</strong></span><span>Unlisted (Adani Enterprises listed parent)</span><span>Hyperscaler DC JV with EdgeConneX</span><span><strong>Engine-agnostic</strong></span><span>Secondary</span><span>Medium</span></div>
+</div>
+<p><strong>Key read:</strong> infra is the cleanest beneficiary of the engine wars because it doesn&#x27;t have to pick a side — it sells GPU-hours to whoever buys. Yotta + Anant Raj are the listed-equity-adjacent pure-plays; Reliance Jio is the most aggressive single-name AI-infra capex story (₹110B announced, $-equivalent multi-year programme).</p>
+<h4>C. Vertical AI applications</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>Core</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>MAPMYINDIA / CE Info</strong></span><span>Listed (TRADER-65)</span><span>Mappls; Drive GPT (voice nav LLM); HD maps; Mappls DT; ClarityX; Perplexity exploratory</span><span><strong>UNDISCLOSED (Drive GPT engine not public); exploratory Perplexity partnership</strong></span><span>Secondary (India TV + AIM coverage)</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Tata Elxsi</strong></span><span>Listed (TRADER-65)</span><span>AI Centre of Excellence; automotive + media AI design partner</span><span><strong>UNDISCLOSED (engine-agnostic design partner; multi-cloud)</strong></span><span>Secondary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>KPIT Technologies</strong></span><span>Listed (TRADER-65)</span><span>Automotive software + AI for ADAS / mobility</span><span><strong>UNDISCLOSED</strong></span><span>Secondary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Tanla Platforms</strong></span><span>Listed (TRADER-65)</span><span>CPaaS + Trubloq + Wisely AI; participates in BharatGPT events</span><span><strong>UNDISCLOSED (likely multi-engine wrapper)</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Newgen Software</strong></span><span>Listed (TRADER-65)</span><span>Process automation + content services + AI</span><span><strong>UNDISCLOSED</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Genesys International</strong></span><span>Listed (TRADER-65; Sparcho-HDFC since 260427)</span><span>3D maps + geospatial AI</span><span><strong>UNDISCLOSED</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Info Edge (Naukri)</strong></span><span>Listed (TRADER-65)</span><span>Naukri AI matching + Iimjobs + 99acres AI features</span><span><strong>UNDISCLOSED (presumed multi-engine wrapper)</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>HealthifyMe</strong></span><span>Unlisted</span><span>Ria virtual nutritionist + Coach Co-pilot</span><span><strong>HYBRID multi-engine — OpenAI GPT-3.5 / GPT-4-Turbo / Whisper + Anthropic + Google + Meta + open-source (CEO on record)</strong></span><span>Primary (OpenAI customer page + AIM + TC)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Cropin</strong></span><span>Unlisted</span><span>Aksara µ-LM (Mistral 7B-Instruct base, fine-tuned with GPT-4-Turbo Q&amp;A pairs); Google Cloud backbone partnership</span><span><strong>HYBRID — Mistral base + OpenAI for synthetic data + Google Cloud infra</strong></span><span>Primary (Cropin blog + Cloud Wars)</span><span>High</span></div>
+<div class="mdtr"><span><strong>SatSure</strong></span><span>Unlisted</span><span>Satellite-image AI for agri + insurance + lending</span><span><strong>UNDISCLOSED (likely traditional CV not LLM-primary)</strong></span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span><strong>Niramai Health Analytix</strong></span><span>Unlisted</span><span>Thermalytix breast-cancer detection (proprietary CV + ML)</span><span><strong>Custom proprietary (not LLM-primary)</strong></span><span>Primary (Niramai docs + IndiaAI)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Qure.ai</strong></span><span>Unlisted</span><span>Radiology + ultrasound interpretation; Series D $65M</span><span><strong>Custom foundational AI for radiology (own model line)</strong></span><span>Primary (Qure.ai PR + MobiHealthNews)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Practo</strong></span><span>Unlisted</span><span>Telemedicine + practice mgmt</span><span><strong>UNDISCLOSED</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Pristyn Care</strong></span><span>Unlisted</span><span>Clinical chains + AI workflow</span><span><strong>UNDISCLOSED</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>OpenNyAI</strong></span><span>Govt-DPG</span><span>Legal-AI digital public good</span><span><strong>Open-source / multi-engine</strong></span><span>Secondary</span><span>Medium</span></div>
+</div>
+<h4>D. Enterprise IT-services AI practices</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>AI product</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>TCS</strong></span><span>Listed (TRADER-65)</span><span>TCS BaNCS-AI; Ignio; TCS Generative AI on Google Cloud</span><span><strong>HYBRID — Google Cloud (Generative AI partnership) + OpenAI (via Tata-OpenAI strategic deal)</strong></span><span>Primary (TCS PR + Tata PR)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Infosys</strong></span><span>Listed (TRADER-65)</span><span>Topaz; Nia</span><span><strong>HYBRID — Anthropic Claude + Claude Code (Feb 2026 partnership) + OpenAI tools (April 2026)</strong></span><span>Primary (Anthropic + Infosys PR + BusinessToday + TC)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Wipro</strong></span><span>Listed (NOT in TRADER-65)</span><span>Lab45 AI Platform</span><span><strong>HYBRID — Google Cloud primary partnership; supports multi-LLM (state-of-the-art third-party + custom)</strong></span><span>Primary (Wipro PR)</span><span>High</span></div>
+<div class="mdtr"><span><strong>HCLTech</strong></span><span>Listed (TRADER-65)</span><span>AI Force; DRYiCE</span><span><strong>HYBRID multi-engine on AWS Bedrock — Anthropic Claude + Azure OpenAI + Google Gemini + Meta Llama 3 + IBM Granite + OpenAI strategic</strong></span><span>Primary (HCLTech PR + cxotoday)</span><span>High</span></div>
+<div class="mdtr"><span><strong>Tech Mahindra</strong></span><span>Listed (NOT in TRADER-65)</span><span>Maker&#x27;s Lab; Project Indus</span><span><strong>DOMESTIC — own Project Indus 8B Hindi-first LLM with NVIDIA; multi-engine for client work</strong></span><span>Primary (Tech Mahindra PR)</span><span>High</span></div>
+<div class="mdtr"><span><strong>LTIMindtree</strong></span><span>Listed (NOT in TRADER-65)</span><span>AI/GenAI practice</span><span><strong>UNDISCLOSED (multi-engine implied)</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Persistent Systems</strong></span><span>Listed (TRADER-65)</span><span>GenAI Hub</span><span><strong>UNDISCLOSED specifically; included in IT-stocks lists benefiting from AI partnerships</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Mphasis</strong></span><span>Listed (NOT in TRADER-65)</span><span>Sparkle.AI / NextLabs</span><span><strong>UNDISCLOSED (multi-engine implied)</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Coforge</strong></span><span>Listed (NOT in TRADER-65)</span><span>AI services</span><span><strong>UNDISCLOSED</strong></span><span>Tertiary</span><span>Low</span></div>
+</div>
+<p><strong>Key read:</strong> the IT-services pack is the most-evidenced sub-segment for engine attribution because their AI partnerships ARE press-released (it&#x27;s marketing). Three are now confidently HYBRID multi-engine (Infosys, HCLTech, TCS). One has its own domestic engine (Tech Mahindra Project Indus). The mid-cap pack (LTIM, Persistent, Mphasis, Coforge) is engine-UNDISCLOSED at the public-source level.</p>
+<h4>E. AI-native consumer apps</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>Core</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>Quizizz</strong></span><span>Unlisted (US-incorporated; Bengaluru engineering)</span><span>Gamified classroom AI</span><span><strong>UNDISCLOSED (likely multi-engine API consumer)</strong></span><span>Secondary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Perplexity AI</strong></span><span>Unlisted (US-domiciled, Indian-origin founder)</span><span>Search-AI; Airtel India bundling deal</span><span><strong>HYBRID multi-engine (OpenAI / Anthropic / xAI / own Sonar) — see Perplexity public docs</strong></span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span><strong>PhonePe</strong></span><span>Unlisted (Walmart-owned; carve-out IPO planned)</span><span>UPI app AI features</span><span><strong>OpenAI partnership (announced)</strong></span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span><strong>Krutrim chatbot (Ola)</strong></span><span>Unlisted</span><span>Consumer LLM app</span><span><strong>Krutrim-1 / Krutrim-2 own</strong></span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span><strong>Sarvam Saarika / Sarvam apps</strong></span><span>Unlisted</span><span>Indic agent / voice apps</span><span><strong>Sarvam own</strong></span><span>Primary</span><span>High</span></div>
+</div>
+<h4>F. Fintech AI</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>Core</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>Paytm</strong></span><span>Listed (TRADER-65)</span><span>Payments + lending + AI risk / fraud</span><span><strong>Groq inference partnership (LPU chip — INFRA, not engine) + Perplexity AI for real-time financial assistance</strong></span><span>Primary (Groq PR + Inc42)</span><span>High</span></div>
+<div class="mdtr"><span><strong>PB Fintech (Policybazaar / Paisabazaar)</strong></span><span>Listed (TRADER-65)</span><span>Insurance + lending marketplace</span><span><strong>UNDISCLOSED</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>CDSL</strong></span><span>Listed (TRADER-65)</span><span>Depository</span><span><strong>UNDISCLOSED (limited AI surface)</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Angel One</strong></span><span>Listed (TRADER-65)</span><span>Discount broking + AI advisor (Athena)</span><span><strong>UNDISCLOSED publicly</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Pine Labs / Setu</strong></span><span>Unlisted</span><span>Fintech infra; experimented with ChatGPT + Anthropic Claude for bill-payment agents</span><span><strong>HYBRID experimental — Anthropic + OpenAI</strong></span><span>Secondary (Bloomberg)</span><span>Medium</span></div>
+</div>
+<h4>G. Pharma + AI (TRADER-65 PH cluster)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>Core</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>Dr Reddy&#x27;s</strong></span><span>Listed (TRADER-65)</span><span>Generics + biosimilars; AI in drug discovery</span><span><strong>UNDISCLOSED publicly (vendor partnerships likely)</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Sun Pharma</strong></span><span>Listed (TRADER-65)</span><span>Generics; AI in mfg analytics</span><span><strong>UNDISCLOSED</strong></span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span><strong>Biocon</strong></span><span>Listed (TRADER-65)</span><span>Biosimilars + biologics</span><span><strong>UNDISCLOSED</strong></span><span>Tertiary</span><span>Low</span></div>
+</div>
+<p><strong>Key read:</strong> pharma-AI in India remains internal / vendor-mediated. None of the three TRADER-65 pharma names publicly disclose a foundation-model engine. This is consistent with global pharma — engine choice is downstream of CRO / vendor decisions and rarely surfaces in IR materials.</p>
+<h4>H. Telecom + adjacent</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>Core</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>Bharti Airtel</strong></span><span>Listed (TRADER-65: BHARTIARTL)</span><span>Telecom; bundled Perplexity Pro free for 360M subscribers (1 year)</span><span><strong>Distribution partner for Perplexity (consumer); enterprise AI engine UNDISCLOSED</strong></span><span>Primary (Perplexity + BS)</span><span>Medium-High</span></div>
+<div class="mdtr"><span><strong>Reliance Jio</strong></span><span>RIL listed</span><span>Telecom + JioHotstar AI search on OpenAI; Hanooman LLM consortium; Meta + Google talks</span><span><strong>HYBRID multi-engine (OpenAI primary on JioHotstar; Hanooman domestic; Meta + Google in talks)</strong></span><span>Primary</span><span>High</span></div>
+</div>
+<h4>I. AI hardware / edge</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Player</span><span>Listed</span><span>Core</span><span>Engine claim</span><span>Tier</span><span>Confidence</span></div>
+<div class="mdtr"><span><strong>Tenstorrent (Bangalore office)</strong></span><span>Unlisted (US/Canada-domiciled)</span><span>AI accelerator chips (Blackhole series) — Bengaluru office</span><span><strong>N/A (chip vendor)</strong></span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span><strong>Polymage Labs (IISc-incubated)</strong></span><span>Unlisted</span><span>AI compiler for Tenstorrent accelerators</span><span><strong>N/A (compiler-tooling, not model)</strong></span><span>Secondary</span><span>Medium</span></div>
+</div>
+<p><strong>Key read:</strong> Indian AI-hardware pure-play of scale is <strong>absent from the listed equity universe</strong> as of May 2026. The closest listed-adjacent is the EMS / chips L2 cluster (KAYNES, DIXON, SYRMA SGS, TATA ELXSI) which manufactures AI server / edge hardware downstream but is not a chip-design-IP play.</p>
+<hr>
+<h3>PART III — PLAYER × ENGINE MATRIX (LOAD-BEARING VISUAL)</h3>
+<p><strong>Reading the matrix:</strong></p>
+<ul>
+<li><strong>Engine 1 / Engine 2</strong> = primary and secondary engine where attribution is supported.</li>
+<li><strong>Confidence</strong> = High / Medium / Low based on tier of evidence (per Part I.2 methodology).</li>
+<li><strong>TRADER-65</strong> = ✓ if in <code>CLAUDE.md §16</code> text-cache (live-check pending — see drift note in intake block).</li>
+<li><strong>Listed</strong> = ✓ if publicly listed (NSE / BSE / international).</li>
+</ul>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Player</span><span>Archetype</span><span>Listed</span><span>TRADER-65</span><span>Engine 1 (primary)</span><span>Engine 2 (secondary)</span><span>Source tier</span><span>Confidence</span></div>
+<div class="mdtr"><span>1</span><span>Sarvam AI</span><span>Foundation lab</span><span>—</span><span>—</span><span>Custom (Sarvam-105B from-scratch)</span><span>Mistral-derivative (Sarvam-M)</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>2</span><span>Krutrim (Ola)</span><span>Foundation lab</span><span>—</span><span>—</span><span>Mistral-NeMo (Krutrim-2)</span><span>Llama-2-class (Krutrim-1)</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>3</span><span>BharatGen / IIT Bombay</span><span>Foundation lab</span><span>Govt</span><span>—</span><span>Custom on NVIDIA stack (Param2 17B MoE)</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>4</span><span>Hanooman (Reliance + IITB + SML)</span><span>Foundation lab</span><span>Subsidiary</span><span>—</span><span>Domestic consortium open</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>5</span><span>CoRover BharatGPT</span><span>Foundation lab</span><span>—</span><span>—</span><span>Domestic / proprietary</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>6</span><span>Project Indus (Tech Mahindra Makers Lab)</span><span>Foundation lab</span><span>✓ TECHM</span><span>—</span><span>Custom domestic 8B Hindi-first</span><span>NVIDIA partnership</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>7</span><span>Gnani AI</span><span>Foundation lab</span><span>—</span><span>—</span><span>Domestic voice-AI Indic</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>8</span><span>Soket / Gan / Avataar / GenLoop / Zenteq / Intellihealth / Shodh / Fractal</span><span>Foundation lab</span><span>—</span><span>—</span><span>Domestic</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>9</span><span>Yotta Data Services</span><span>Infra / DC</span><span>Pre-IPO</span><span>—</span><span>Engine-agnostic (NVIDIA Blackwell Ultra)</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>10</span><span>Reliance Jio (Jamnagar)</span><span>Infra / DC</span><span>✓ RIL</span><span>—</span><span>Multi-engine HYBRID (OpenAI / Meta / Google / Hanooman)</span><span>NVIDIA hardware</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>11</span><span>Tata Group / Tata Communications</span><span>Infra / DC</span><span>✓ TCOMM</span><span>—</span><span>OpenAI strategic (parent-level Feb 2026)</span><span>NVIDIA AI cloud</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>12</span><span>Anant Raj Cloud</span><span>Infra / DC</span><span>✓ ANANT RAJ</span><span>✓</span><span>Engine-agnostic (Submer high-density)</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>13</span><span>NxtGen</span><span>Infra / DC</span><span>—</span><span>—</span><span>Engine-agnostic</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>14</span><span>AdaniConneX</span><span>Infra / DC</span><span>Subsidiary</span><span>—</span><span>Engine-agnostic</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>15</span><span>TCS</span><span>IT-services</span><span>✓</span><span>✓</span><span>Google Cloud (Generative AI)</span><span>OpenAI (via Tata-OpenAI)</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>16</span><span>Infosys</span><span>IT-services</span><span>✓</span><span>✓</span><span>Anthropic Claude + Claude Code</span><span>OpenAI tools</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>17</span><span>Wipro</span><span>IT-services</span><span>✓</span><span>—</span><span>Google Cloud (Lab45)</span><span>Multi-LLM SaaS</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>18</span><span>HCLTech</span><span>IT-services</span><span>✓</span><span>✓</span><span>Anthropic Claude (AWS Bedrock)</span><span>Azure OpenAI / Gemini / Llama / Granite</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>19</span><span>Tech Mahindra</span><span>IT-services</span><span>✓</span><span>—</span><span>Domestic (Project Indus 8B)</span><span>NVIDIA + multi-engine for clients</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>20</span><span>LTIMindtree</span><span>IT-services</span><span>✓</span><span>—</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>21</span><span>Persistent Systems</span><span>IT-services</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>22</span><span>Mphasis</span><span>IT-services</span><span>✓</span><span>—</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>23</span><span>Coforge</span><span>IT-services</span><span>✓</span><span>—</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>24</span><span>MAPMYINDIA</span><span>Vertical (GIS)</span><span>✓</span><span>✓</span><span>UNDISCLOSED (Drive GPT engine not public)</span><span>Perplexity exploratory</span><span>Secondary</span><span>Low</span></div>
+<div class="mdtr"><span>25</span><span>Tata Elxsi</span><span>Vertical (auto + media)</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Secondary</span><span>Low</span></div>
+<div class="mdtr"><span>26</span><span>KPIT Technologies</span><span>Vertical (auto)</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Secondary</span><span>Low</span></div>
+<div class="mdtr"><span>27</span><span>Tanla Platforms</span><span>Vertical (CPaaS)</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>28</span><span>Newgen Software</span><span>Vertical (process auto)</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>29</span><span>Genesys International</span><span>Vertical (GIS)</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>30</span><span>Info Edge / Naukri</span><span>Vertical (jobs)</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>31</span><span>HealthifyMe</span><span>Vertical (health)</span><span>—</span><span>—</span><span>OpenAI (GPT-3.5 / 4-Turbo / Whisper)</span><span>Anthropic / Google / Meta / open-source</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>32</span><span>Cropin</span><span>Vertical (agri)</span><span>—</span><span>—</span><span>Mistral 7B-Instruct (Aksara base)</span><span>OpenAI GPT-4-Turbo (synthetic data) + Google Cloud</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>33</span><span>SatSure</span><span>Vertical (agri / sat)</span><span>—</span><span>—</span><span>UNDISCLOSED (CV-primary)</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>34</span><span>Niramai</span><span>Vertical (health)</span><span>—</span><span>—</span><span>Custom proprietary (CV / ML, not LLM)</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>35</span><span>Qure.ai</span><span>Vertical (radiology)</span><span>—</span><span>—</span><span>Custom foundational AI (own line)</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>36</span><span>Practo</span><span>Vertical (health)</span><span>—</span><span>—</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>37</span><span>Pristyn Care</span><span>Vertical (health)</span><span>—</span><span>—</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>38</span><span>OpenNyAI</span><span>Vertical (legal DPG)</span><span>Govt</span><span>—</span><span>Open-source / multi-engine</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>39</span><span>Quizizz</span><span>Consumer (edu)</span><span>—</span><span>—</span><span>UNDISCLOSED</span><span>—</span><span>Secondary</span><span>Low</span></div>
+<div class="mdtr"><span>40</span><span>Perplexity (India ops)</span><span>Consumer (search)</span><span>—</span><span>—</span><span>Multi-engine HYBRID (OpenAI / Anthropic / xAI / own Sonar)</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>41</span><span>PhonePe</span><span>Consumer (fintech)</span><span>Pre-IPO</span><span>—</span><span>OpenAI partnership</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>42</span><span>Paytm</span><span>Fintech</span><span>✓</span><span>✓</span><span>Groq INFRA (LPU) + Perplexity AI</span><span>Multi-engine wrapper</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>43</span><span>PB Fintech</span><span>Fintech</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>44</span><span>CDSL</span><span>Fintech</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>45</span><span>Angel One</span><span>Fintech</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>46</span><span>Pine Labs / Setu</span><span>Fintech</span><span>Pre-IPO</span><span>—</span><span>HYBRID (Anthropic + OpenAI experiments)</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+<div class="mdtr"><span>47</span><span>Dr Reddy&#x27;s</span><span>Pharma</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>48</span><span>Sun Pharma</span><span>Pharma</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>49</span><span>Biocon</span><span>Pharma</span><span>✓</span><span>✓</span><span>UNDISCLOSED</span><span>—</span><span>Tertiary</span><span>Low</span></div>
+<div class="mdtr"><span>50</span><span>Bharti Airtel</span><span>Telecom</span><span>✓</span><span>✓</span><span>Perplexity Pro distribution (consumer); enterprise UNDISCLOSED</span><span>—</span><span>Primary</span><span>Medium-High</span></div>
+<div class="mdtr"><span>51</span><span>Air India (Tata)</span><span>Enterprise customer</span><span>Subsidiary</span><span>—</span><span>Anthropic Claude Code</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>52</span><span>Pratham (NGO)</span><span>Education</span><span>Non-profit</span><span>—</span><span>Anthropic Claude (Anytime Testing Machine)</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>53</span><span>Central Square Foundation</span><span>Education</span><span>Non-profit</span><span>—</span><span>Anthropic Claude</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>54</span><span>EkStep Foundation</span><span>Agri / DPG</span><span>Non-profit</span><span>—</span><span>Anthropic Claude</span><span>—</span><span>Primary</span><span>High</span></div>
+<div class="mdtr"><span>55</span><span>Zoho</span><span>SaaS</span><span>Unlisted</span><span>—</span><span>Own inference stack (no OpenAI / Anthropic spend); MCP supports both</span><span>—</span><span>Secondary</span><span>Medium</span></div>
+</div>
+<hr>
+<h3>PART IV — TRADER-65 OVERLAP + RESERVE-LIST CANDIDATES</h3>
+<h4>IV.1 TRADER-65 names with direct AI-engine disclosure</h4>
+<p>Of 65 universe names per CLAUDE.md §16 text-cache:</p>
+<p><strong>HIGH-CONFIDENCE engine-attribution (5):</strong></p>
+<div class="mdtbl">
+<div class="mdtr"><span>Ticker</span><span>Engine 1</span><span>Engine 2</span><span>Read</span></div>
+<div class="mdtr"><span><strong>INFOSYS</strong></span><span>Anthropic Claude + Claude Code</span><span>OpenAI tools</span><span>Cleanest single-name Anthropic-India play in TRADER-65.</span></div>
+<div class="mdtr"><span><strong>HCLTECH</strong></span><span>Anthropic Claude (AWS Bedrock)</span><span>OpenAI / Gemini / Llama / Granite</span><span>Multi-engine hub via AI Force.</span></div>
+<div class="mdtr"><span><strong>TCS</strong></span><span>Google Cloud</span><span>OpenAI (via Tata-OpenAI)</span><span>Google-primary, OpenAI via parent.</span></div>
+<div class="mdtr"><span><strong>PAYTM</strong></span><span>Groq (infra) + Perplexity AI</span><span>Multi-engine</span><span>Inference-infra play, not engine-bet.</span></div>
+<div class="mdtr"><span><strong>BHARTIARTL</strong></span><span>Perplexity (consumer distribution)</span><span>UNDISCLOSED enterprise</span><span>Consumer-AI distribution moat.</span></div>
+</div>
+<p><strong>LOW-CONFIDENCE / UNDISCLOSED (10 of 15 AI-relevant names):</strong></p>
+<p>PERSISTENT, TATA ELXSI, KPIT, MAPMYINDIA, GENESYS, NEWGEN, TANLA, INFO EDGE, PB FINTECH, ANGEL ONE — engine choice is not publicly disclosed at the level required for primary-tier evidence. Action: flag for next-concall watch (Q4 FY26 results land May–June 2026 — likely first chance to surface engine-stack disclosure).</p>
+<p><strong>Pharma + AI (3):</strong> DR REDDY&#x27;S, SUN PHARMA, BIOCON — UNDISCLOSED. Pharma-AI engine choice typically not surfaced in IR.</p>
+<p><strong>DC infra (1):</strong> ANANT RAJ — engine-agnostic infra; AI-ready GPU-density beneficiary regardless of which engine wins.</p>
+<h4>IV.2 RESERVE_LIST candidates surfaced from this DR</h4>
+<p>Names worth considering for <code>/00_SYSTEM/RESERVE_LIST.md</code> PROMOTE / KEEP / PASS review:</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Candidate</span><span>Listed</span><span>Why surfaced here</span><span>Suggested verdict</span></div>
+<div class="mdtr"><span><strong>Yotta Data Services</strong></span><span>Pre-IPO (12-month listing target)</span><span>Cleanest unlisted-listed-equity-adjacent compute beneficiary; 60–70% India GPU capacity per CNBC</span><span><strong>Add to IPO-WATCH.md</strong> for filing-watch trigger</span></div>
+<div class="mdtr"><span><strong>Reliance Industries (RIL)</strong></span><span>Listed</span><span>$110B AI-infra capex; 3GW Jamnagar; OpenAI + Meta + Google + NVIDIA partnerships</span><span><strong>PROMOTE to active watch</strong> as AI-infra mega-cap (separate gate for governance / Adani-style overhang considerations)</span></div>
+<div class="mdtr"><span><strong>Tech Mahindra (TECHM)</strong></span><span>Listed</span><span>Project Indus 8B Hindi-first LLM with NVIDIA; IT-services AI practice</span><span><strong>PROMOTE to active watch</strong> as the cleanest TRADER-adjacent IT-services name with a publicly-owned domestic foundation model</span></div>
+<div class="mdtr"><span><strong>Tata Communications (TCOMM)</strong></span><span>Listed</span><span>OpenAI 100MW DC partner eyeing 1GW; NVIDIA AI cloud</span><span><strong>PROMOTE to active watch</strong> as Tata-OpenAI infra subsidiary</span></div>
+<div class="mdtr"><span><strong>Wipro (WIPRO)</strong></span><span>Listed</span><span>Lab45 + Google Cloud partnership; multi-LLM platform</span><span><strong>KEEP as RESERVE candidate</strong> (less clean than Infosys / HCLTech engine narrative)</span></div>
+<div class="mdtr"><span><strong>LTIMindtree</strong></span><span>Listed</span><span>IT-services AI; partnership specifics undisclosed</span><span><strong>KEEP as RESERVE candidate</strong></span></div>
+<div class="mdtr"><span><strong>Mphasis</strong></span><span>Listed</span><span>NextLabs / Sparkle.AI; engine UNDISCLOSED</span><span><strong>PASS unless next-concall surfaces engine relationship</strong></span></div>
+<div class="mdtr"><span><strong>Coforge</strong></span><span>Listed</span><span>AI services; engine UNDISCLOSED</span><span><strong>PASS unless next-concall surfaces engine relationship</strong></span></div>
+<div class="mdtr"><span><strong>Ola Electric (OLAELEC)</strong></span><span>Listed</span><span>Krutrim is sister-entity of Ola group; Krutrim-1 / Krutrim-2 own engines</span><span><strong>KEEP as RESERVE candidate</strong>; Ola Electric is auto-EV not Krutrim, but group-level AI optionality</span></div>
+<div class="mdtr"><span><strong>Fractal Analytics</strong></span><span>Pre-IPO (preparing)</span><span>IndiaAI Mission selected (₹137.91cr); analytics + AI services</span><span><strong>Add to IPO-WATCH.md</strong></span></div>
+</div>
+<h4>IV.3 Universe-drift flag</h4>
+<p>Per CLAUDE.md §17.5 live-check discipline: latest SCRN-MAP render in <code>/03_SCREENERS/SCRN-MAP/2604/</code> is <code>260427_MULTI_SCRN-MAP.pdf</code>. No fresher render in <code>/03_SCREENERS/SCRN-MAP/2605/</code> folder (folder does not yet exist). Per §17.5.1, this DR&#x27;s universe-overlap analysis uses the 65/65 figure cached at 260427; any drift since is pending live-check at next morning-brief. Operator action: re-verify universe-overlap counts on next §16 reconciliation.</p>
+<hr>
+<h3>PART V — L1–L5 LAYERED OUTPUT + FALSIFIABLE CLAIMS + AUDIT EMIT</h3>
+<h4>V.1 — L1 Plain-language summary (5–7 bullets)</h4>
+<ul>
+<li><strong>Indian AI is split into two real camps + a big undisclosed middle.</strong> Camp A is the sovereign-domestic camp funded by IndiaAI Mission (Sarvam, BharatGen, Hanooman, Project Indus, etc.); Camp B is the hyperscaler-engine camp (Anthropic / OpenAI / Google customers). The undisclosed middle is most Indian listed mid-caps that publicly say &quot;we use AI&quot; but never say which engine.</li>
+<li><strong>Anthropic&#x27;s India footprint stepped up in Feb 2026.</strong> Bengaluru office, Pratham + Air India + Infosys + EkStep + CSF partnerships, India is now Claude&#x27;s #2 consumer market globally. The Anthropic-Infosys deal is the cleanest single-name lever in the operator&#x27;s TRADER-65 universe.</li>
+<li><strong>Among the operator&#x27;s 65-name universe, 5 names have publicly disclosed primary-engine relationships:</strong> INFOSYS (Anthropic + OpenAI), HCLTECH (multi-engine via AWS Bedrock), TCS (Google + OpenAI via Tata), PAYTM (Groq + Perplexity), BHARTIARTL (Perplexity distribution). The other 10 AI-relevant names in the universe are UNDISCLOSED.</li>
+<li><strong>Yotta Data Services is the cleanest unlisted compute beneficiary</strong> with a 12-month IPO timeline; deserves IPO-WATCH inclusion. Reliance Industries is the largest single-name AI-infra capex programme ($110B over multi-year) and is currently NOT in TRADER-65 — worth a reserve-list review.</li>
+<li><strong>MAPMYINDIA Drive GPT engine is NOT publicly disclosed</strong>, despite the brand name implying a transformer. The earlier framing in the brief that suggested an Anthropic relationship is not supported by current public evidence — the only Anthropic-MAPMYINDIA link in the source corpus is the ServiceNow (US) Anthropic-design-partner pattern in <code>260421_theaiportfolios_claude-portfolio-servicenow.md</code>, NOT a MAPMYINDIA-Anthropic relationship. UNDISCLOSED is the honest tag.</li>
+<li><strong>The &quot;sovereign LLM&quot; claim deserves nuance.</strong> Sarvam-105B (from-scratch on 12T tokens) and BharatGen Param2 17B MoE are the cleanest sovereign builds. Sarvam-M (Mistral-Small fine-tune) and Krutrim-2 (Mistral-NeMo) are derivatives — domestic <em>labs</em> but not sovereign <em>architectures</em>.</li>
+<li><strong>Engine attribution is HIGH RISK for thematic-vibes errors.</strong> &quot;X uses Google Cloud&quot; does not equal &quot;X uses Gemini.&quot; Customer-case-study pages on the engine vendor&#x27;s site are the cleanest evidence; press-release joint announcements second; everything else is at-risk of upgrade-bias.</li>
+</ul>
+<h4>V.2 — L4 Open questions / gaps</h4>
+<ul>
+<li><strong>Drive GPT engine</strong> (MAPMYINDIA) — what is the underlying model? Falsifiable F1 below.</li>
+<li><strong>Tata Elxsi engine stack</strong> — design-partner work for whom on what model? Likely NDA-bound.</li>
+<li><strong>KPIT mobility AI</strong> — ADAS perception is heavy on CV, but the GenAI / agentic layer is where engine choice lives. Concall watch.</li>
+<li><strong>Tanla Wisely AI</strong> — likely multi-engine wrapper; needs IR confirmation.</li>
+<li><strong>Newgen / Genesys / Info Edge / PB Fintech / Angel One / CDSL</strong> — all UNDISCLOSED. Q4 FY26 (May–June 2026) and Q1 FY27 concalls are the next reasonable window.</li>
+<li><strong>Pharma + AI (Dr Reddy&#x27;s / Sun Pharma / Biocon)</strong> — engine choice is downstream of CRO / vendor decisions. May never surface in IR.</li>
+<li><strong>IndiaAI Mission Innovation Centre disclosure</strong> — only top-level funding allocations are public; per-team milestone reporting (Sarvam-105B done; what about the other 11?) is uneven.</li>
+<li><strong>Sarvam-105B independent benchmark</strong> — Sarvam&#x27;s own benchmark is the source-of-record; an independent eval (LMArena / HELM-style) would be the cleanest validation of the from-scratch claim.</li>
+<li><strong>Hanooman&#x27;s actual deployment status</strong> — announced in 2024, &quot;up to 40B parameters,&quot; but production-scale public usage is harder to verify than Sarvam&#x27;s.</li>
+<li><strong>Domestic engine vs Indic-fine-tune of open-weight base</strong> — taxonomy is muddy. Worth a follow-up post in <code>POSTS/</code> codifying the four categories (from-scratch sovereign / Mistral-derivative / Llama-derivative / Wrapper).</li>
+</ul>
+<h4>V.3 — L5 Counterfactual / invalidation conditions</h4>
+<p>The thesis &quot;two attributable engine camps + UNDISCLOSED middle&quot; would fail if:</p>
+<ul>
+<li><strong>(a)</strong> A 2026-Q3 IR cycle surfaces clean engine disclosure for &gt;50% of the currently-UNDISCLOSED TRADER-65 mid-caps. This would shrink the UNDISCLOSED middle and re-classify the universe. Probability: medium (likely partial; &gt;50% bar is high).</li>
+<li><strong>(b)</strong> A regulatory mandate (MeitY / SEBI) requires Indian listed companies to disclose foundation-model dependencies in IR materials. Probability: low in 12-month window (no draft circulating as of search date).</li>
+<li><strong>(c)</strong> One of the IndiaAI-Mission-funded labs (Sarvam / BharatGen / Hanooman) achieves a top-10 LMArena ranking by year-end 2026 — would invert the &quot;sovereign-camp is structurally weaker than hyperscaler-camp&quot; prior. Probability: medium-low.</li>
+<li><strong>(d)</strong> Anthropic&#x27;s India revenue growth stalls (current run-rate doubled since Oct 2025; if it flattens H2 2026) — would weaken the &quot;Anthropic-India-footprint as 2026 inflection&quot; framing. Probability: low (current trajectory steep).</li>
+</ul>
+<h4>V.4 — Falsifiable claims block (Rule 7) → audit_emit (Rule 11)</h4>
+<p>Five falsifiable claims are emitted to <code>SCREENER_CHART_AUDIT.md</code> via <code>audit_emit.emit_dr_claims</code> per Rule 11. Each is observable, source-tied, and has an explicit kill condition.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>ID</span><span>Claim</span><span>Falsification trigger</span><span>Window</span></div>
+<div class="mdtr"><span><strong>F1</strong></span><span>MAPMYINDIA&#x27;s Drive GPT is NOT built on Anthropic Claude (per current public evidence base; engine UNDISCLOSED).</span><span>If MAPMYINDIA next concall (or any IR / press release before 2026-12-31) discloses Anthropic Claude as Drive GPT engine, F1 falsified — i.e. the original task-brief framing was correct.</span><span>rolling_to_2026-12-31</span></div>
+<div class="mdtr"><span><strong>F2</strong></span><span>Sarvam-105B is the cleanest from-scratch Indian foundation-model claim, trained on 12T tokens.</span><span>If an independent benchmark (LMArena, HELM, OpenLLMLeaderboard) shows Sarvam-105B underperforming Mistral-Small 24B on Indic benchmarks, the &quot;from-scratch is meaningfully better than fine-tune&quot; sub-claim is weakened. Date-bound: by 2026-09-30.</span><span>fire_or_fail_2026-09-30</span></div>
+<div class="mdtr"><span><strong>F3</strong></span><span>Of the 15 AI-relevant TRADER-65 names, only 5 (INFOSYS, HCLTECH, TCS, PAYTM, BHARTIARTL) have publicly disclosed primary-engine relationships as of 2026-05-02.</span><span>If ≥3 additional TRADER-65 mid-caps (PERSISTENT / TATA ELXSI / KPIT / MAPMYINDIA / GENESYS / NEWGEN / TANLA / INFO EDGE / PB FINTECH / ANGEL ONE) disclose a primary-engine partnership in their next two concall cycles (May–June 2026 + Q1 FY27 Aug 2026), the &quot;UNDISCLOSED middle is large&quot; thesis is weakened.</span><span>rolling_quarterly</span></div>
+<div class="mdtr"><span><strong>F4</strong></span><span>Yotta Data Services files for IPO within 12 months of 2026-05-02 (i.e. by 2027-05-02).</span><span>Public DRHP filing observable on SEBI portal. If no DRHP by 2027-05-02, the &quot;12-month listing target&quot; management claim missed.</span><span>fire_or_fail_2027-05-02</span></div>
+<div class="mdtr"><span><strong>F5</strong></span><span>Anthropic&#x27;s India run-rate revenue continues to double (or more) in the next 12 months from May 2026.</span><span>If Anthropic&#x27;s next India-revenue disclosure (likely at Bengaluru office anniversary Feb 2027) shows &lt;2x growth from May 2026 baseline, the &quot;Feb 2026 inflection&quot; framing weakens.</span><span>fire_or_fail_2027-02-15</span></div>
+</div>
+<h4>V.5 — Skeptic pass (Rule 9)</h4>
+<p>Five questions an informed adversary would ask, answered in one line each:</p>
+<ol>
+<li><strong>&quot;Aren&#x27;t you over-counting Anthropic exposure by counting Air India + Pratham + EkStep as separate?&quot;</strong> — They are separate disclosed customers with different surface areas (developer-tooling / education / agriculture); not double-counted, but acknowledged that they&#x27;re tied to the same Anthropic-India launch event.</li>
+<li><strong>&quot;Why isn&#x27;t Reliance / RIL in TRADER-65 already given the $110B AI capex?&quot;</strong> — Out-of-scope for this DR; flagged as RESERVE_LIST PROMOTE candidate. Operator decision per separate gate (governance overhang considerations).</li>
+<li><strong>&quot;How can you call Sarvam-105B &#x27;from scratch&#x27; when nobody outside Sarvam has reproduced the training run?&quot;</strong> — Acknowledged in F2 falsification; current claim is source-of-record (Sarvam blog + Business Standard secondary), pending independent benchmark.</li>
+<li><strong>&quot;You&#x27;re treating UNDISCLOSED as a uniform tag; but some of these companies (e.g. Tata Elxsi) probably DO use specific engines under NDA — isn&#x27;t that misleading?&quot;</strong> — Acknowledged. UNDISCLOSED here means &quot;not surfaceable from public sources at primary-tier evidence.&quot; NDA-bound usage is implied for several but cannot be load-bearing in the matrix.</li>
+<li><strong>&quot;What&#x27;s the operator-actionable read?&quot;</strong> — INFOSYS is the cleanest single-name Anthropic-India play; HCLTECH the cleanest multi-engine; TCS the cleanest Google-Cloud + OpenAI hybrid; PAYTM the cleanest infra-inference-chip play (Groq); BHARTIARTL the cleanest consumer-AI-distribution play. UNDISCLOSED mid-caps are concall-watch, not action-now.</li>
+</ol>
+<hr>
+<h3>PART VI — OPEN QUESTIONS, CATALYSTS, SOURCES</h3>
+<h4>VI.1 Catalysts to monitor</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Why it matters</span></div>
+<div class="mdtr"><span><strong>May–June 2026</strong></span><span>TRADER-65 mid-cap Q4 FY26 results (TATA ELXSI / KPIT / TANLA / NEWGEN / GENESYS / INFO EDGE / MAPMYINDIA et al.)</span><span>First reasonable window for engine-disclosure.</span></div>
+<div class="mdtr"><span><strong>Aug 2026</strong></span><span>Q1 FY27 results (same names + Anthropic India anniversary follow-up)</span><span>Second concall window for engine-disclosure surfacing.</span></div>
+<div class="mdtr"><span><strong>CY 2026 H2</strong></span><span>Yotta DRHP filing (if 12-month target holds)</span><span>IPO-WATCH trigger; cleanest listed-equity-adjacent compute proxy.</span></div>
+<div class="mdtr"><span><strong>CY 2026 H2</strong></span><span>Sarvam-105B independent benchmark (LMArena / HELM)</span><span>Validates or weakens the &quot;from-scratch sovereign&quot; claim.</span></div>
+<div class="mdtr"><span><strong>2026-Q4</strong></span><span>IndiaAI Mission Innovation Centre Phase 2 awards (rumored expansion)</span><span>Could surface 12 more domestic labs.</span></div>
+<div class="mdtr"><span><strong>Feb 2027</strong></span><span>Anthropic Bengaluru office 1-year anniversary</span><span>India revenue growth disclosure window.</span></div>
+<div class="mdtr"><span><strong>Ongoing</strong></span><span>Tata-OpenAI deal subsidiary-level rollouts</span><span>TCS engine-disclosure clarity.</span></div>
+</div>
+<h4>VI.2 Risks to the framing</h4>
+<ol>
+<li><strong>Hype-cycle inflation</strong> — every mid-cap IT firm has an &quot;AI Force / Topaz / Lab45 / DRYiCE / GenAI Hub&quot;-equivalent product page. Confusing the marketing surface with the engine substrate is the easiest error.</li>
+<li><strong>Engine-of-the-month risk</strong> — Anthropic / OpenAI / Google partnerships re-shuffle quarterly. Today&#x27;s HYBRID-claim might be obsolete by Q3 FY27.</li>
+<li><strong>Sovereign-camp consolidation</strong> — IndiaAI Mission funding skew (BharatGen ₹1,058cr vs Tech Mahindra ₹2.66cr) suggests survivors-dominate dynamics; many of the 12 selected may not ship at scale.</li>
+<li><strong>Open-weight commoditization</strong> — if Llama 4 / Mistral 3 / DeepSeek continue commoditizing, the &quot;Mistral-derivative vs from-scratch&quot; distinction matters less; both become &quot;open-weight-derivative.&quot;</li>
+<li><strong>Indic-language under-investment by hyperscalers</strong> — Anthropic&#x27;s 10-Indian-language push is a counter-bet; if it succeeds, the sovereign-camp&#x27;s Indic moat narrows.</li>
+</ol>
+<h4>VI.3 Sources (verification stack)</h4>
+<ul>
+<li><strong>Anthropic India:</strong> <a href="https://www.anthropic.com/news/bengaluru-office-partnerships-across-india">anthropic.com/news/bengaluru-office-partnerships-across-india</a> (Primary)</li>
+<li><strong>Anthropic-Infosys:</strong> <a href="https://www.anthropic.com/news/anthropic-infosys">anthropic.com/news/anthropic-infosys</a> + <a href="https://www.infosys.com/newsroom/press-releases/2026/advanced-enterprise-ai-solutions-industries.html">infosys.com/newsroom/press-releases/2026</a> (Primary, both sides)</li>
+<li><strong>Tata-OpenAI:</strong> <a href="https://www.tata.com/newsroom/business/tata-openai-partnership">tata.com/newsroom/business/tata-openai-partnership</a> (Primary)</li>
+<li><strong>NVIDIA-Reliance / Tata:</strong> <a href="https://www.datacenterdynamics.com/en/news/nvidia-partners-with-reliance-jio-for-2000mw-of-ai-data-centers-tata-for-ai-cloud-in-india/">datacenterdynamics.com — NVIDIA partners with Reliance Jio for 2,000MW</a> (Secondary)</li>
+<li><strong>Sarvam-105B / Sarvam-M:</strong> <a href="https://www.sarvam.ai/blogs/sarvam-m">sarvam.ai/blogs/sarvam-m</a> + <a href="https://www.business-standard.com/technology/tech-news/sarvam-105b-model-sovereign-ai-india-foundation-model-launch-impact-summit-126021900551_1.html">business-standard.com — Sarvam 105B</a> (Primary)</li>
+<li><strong>Krutrim-1 / Krutrim-2:</strong> <a href="https://huggingface.co/krutrim-ai-labs/Krutrim-2-instruct">huggingface.co/krutrim-ai-labs/Krutrim-2-instruct</a> + <a href="https://github.com/ola-krutrim/Krutrim-1-7B">github.com/ola-krutrim/Krutrim-1-7B</a> (Primary)</li>
+<li><strong>Project Indus:</strong> <a href="https://www.techmahindra.com/insights/press-releases/tech-mahindra-launches-project-indus-large-language-model-llm/">techmahindra.com/insights/press-releases/tech-mahindra-launches-project-indus-large-language-model-llm</a> (Primary)</li>
+<li><strong>IndiaAI Mission:</strong> <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2231169&amp;reg=3&amp;lang=1">pib.gov.in PRID 2231169 (Sarvam)</a> + <a href="https://ddnews.gov.in/en/indiaai-mission-shortlists-12-teams-for-indigenous-ai-models-minister-updates-rajya-sabha/">DD News — 12 teams shortlisted</a> (Primary + secondary)</li>
+<li><strong>HCLTech AI Force on AWS Bedrock:</strong> <a href="https://www.hcltech.com/press-releases/hcltech-ai-forcetm-integrates-anthropic-claude-3-amazon-bedrock">hcltech.com/press-releases/hcltech-ai-forcetm-integrates-anthropic-claude-3-amazon-bedrock</a> (Primary)</li>
+<li><strong>TCS-Google Cloud:</strong> <a href="https://www.tcs.com/who-we-are/newsroom/press-release/tcs-announces-generative-ai-partnership-with-google-cloud">tcs.com/who-we-are/newsroom/press-release/tcs-announces-generative-ai-partnership-with-google-cloud</a> (Primary)</li>
+<li><strong>Wipro Lab45:</strong> <a href="https://www.wipro.com/newsroom/press-releases/2024/wipro-introduces-the-lab45-ai-platform-designed-to-increase-efficiencies-and-transform-business-functions/">wipro.com/newsroom/press-releases/2024/wipro-introduces-the-lab45-ai-platform</a> (Primary)</li>
+<li><strong>Yotta-NVIDIA Blackwell:</strong> <a href="https://yotta.com/press-releases/yotta-to-deploy-20000-nvidia-blackwell-ultra-gpus/">yotta.com/press-releases/yotta-to-deploy-20000-nvidia-blackwell-ultra-gpus</a> + <a href="https://www.cnbc.com/2026/02/27/india-yotta-nvidia-ai-gpu-demand-data-centers-investment.html">cnbc.com — Yotta $2B AI hub</a> (Primary + secondary)</li>
+<li><strong>Anant Raj DC:</strong> <a href="https://www.business-standard.com/companies/news/delhi-developer-anant-raj-to-invest-2-billion-on-india-data-center-boom-125063000543_1.html">business-standard.com — Anant Raj $2bn DC</a> + <a href="https://submer.com/blog/press/partnering-with-anant-raj-part-to-accelerate-sovereign-ai-ready-infrastructure-across-india/">submer.com partnership PR</a> (Primary)</li>
+<li><strong>HealthifyMe Ria:</strong> <a href="https://openai.com/index/healthify/">openai.com/index/healthify</a> + <a href="https://analyticsindiamag.com/industry-insights/ai-in-healthcare/healthify-uses-openais-gpts-to-help-indians-make-better-health-choices/">analyticsindiamag.com — Healthify uses GPTs</a> (Primary)</li>
+<li><strong>Cropin Aksara:</strong> <a href="https://www.cropin.com/blogs/introducing-aksara-a-digital-agronomist/">cropin.com/blogs/introducing-aksara-a-digital-agronomist</a> + <a href="https://cloudwars.com/ai/with-new-agriculture-ai-model-cropin-aims-to-democratize-knowledge-for-farmers/">cloudwars.com</a> (Primary + secondary)</li>
+<li><strong>Paytm-Groq / Paytm-Perplexity:</strong> <a href="https://groq.com/newsroom/groq-partners-with-paytm-delivering-real-time-ai-for-payments-and-platform-intelligence-in-india">groq.com/newsroom/groq-partners-with-paytm</a> + <a href="https://inc42.com/buzz/paytm-partners-perplexity-to-offer-users-real-time-ai-financial-assistance/">inc42.com — Paytm-Perplexity</a> (Primary + secondary)</li>
+<li><strong>OpenAI-Reliance JioHotstar:</strong> <a href="https://techcrunch.com/2026/02/19/openai-reliance-partner-to-add-ai-search-to-jiohotstar/">techcrunch.com — OpenAI-Reliance JioHotstar AI search</a> (Secondary)</li>
+<li><strong>MAPMYINDIA-Perplexity exploratory:</strong> <a href="https://www.indiatvnews.com/technology/news/mapmyindia-eyes-collaboration-with-perplexity-ai-expanding-its-role-in-india-s-ai-ecosystem-2025-10-27-1014534">indiatvnews.com</a> + <a href="https://analyticsindiamag.com/ai-news-updates/mapmyindia-invites-perplexity-ai-for-partnership/">analyticsindiamag.com</a> (Secondary; exploratory not contracted)</li>
+<li><strong>Qure.ai foundational AI:</strong> <a href="https://www.mobihealthnews.com/news/asia/qureai-pursuing-large-ai-65m-series-d-funding-and-more-briefs">mobihealthnews.com — Qure.ai $65M Series D</a> (Secondary)</li>
+</ul>
+<hr>
+<p><strong>End of brief.</strong></p>
+<p>Operator action: (i) review IV.2 RESERVE_LIST candidates for next promotion-cycle; (ii) confirm Yotta + Fractal Analytics added to <code>IPO-WATCH.md</code>; (iii) confirm next-concall watch list for the 10 UNDISCLOSED TRADER-65 mid-caps; (iv) confirm F1–F5 audit-emission rows landed in <code>SCREENER_CHART_AUDIT.md</code>; (v) decide whether RIL deserves §16 active-watch promotion separately from this DR.</p>
+<p><em>Tier-2 entry. Builds on India-Stack-DPI + India-DC + India-GIS + India-energy thematic stack. Engine-attribution methodology codified here is reusable for future &quot;X player ↔ Y engine&quot; mapping tasks.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260502_DEEP-RESEARCH_india-ai-players-engine-map</div>
+</div></body></html>

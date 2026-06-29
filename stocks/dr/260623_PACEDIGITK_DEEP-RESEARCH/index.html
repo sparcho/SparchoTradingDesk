@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pace Digitek — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Pace Digitek — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>PACEDIGITK</b> &middot; status <b>active</b></div>
+    <div class="obs">HELD 100-sh starter @ ₹181.80 (6/19). Recently-listed telecom-infra + BESS small-cap; risk-gates PENDING (do not fabricate). Thin disclosure — expect PENDINGs. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> Wall-Street-grade due diligence on a <strong>recently-listed (Oct-2025) telecom-infrastructure + energy-storage small-cap</strong> — what the company actually does, order-book quality, the BESS pivot, valuation, and whether a name with limited public history warrants conviction. <strong>Advisory only — NOT a recommendation; the operator decides.</strong></p>
+<blockquote><strong>Caveat up front — thin disclosure.</strong> Pace Digitek IPO&#x27;d in October 2025; most multi-year history lives in the DRHP/RHP and only ~2 quarters of listed reporting exist. This brief therefore carries <strong>more PENDINGs than a large-cap brief — that is correct discipline, not a gap to paper over.</strong> Several ratios (ROCE/ROE, exact D/E, segment split, order-book size) are PENDING a DRHP/annual-report read.</blockquote>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every numeric field carries a source + as-of date. Material figures are cross-checked against ≥2 sources; &gt;5% disagreements shown both ways. Unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers; every level carries a &quot;why&quot;. No BUY/ADD/TRIM/EXIT/HEDGE/stop directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>Telecom-infrastructure &amp; energy domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Telecom infrastructure</span><span>Towers, base-station power, network deployment, turnkey rollout for telcos/govt. Pace&#x27;s core since 2007.</span></div>
+<div class="mdtr"><span>Power management systems</span><span>The power/rectifier/backup systems that keep telecom sites running — a Pace manufacturing line.</span></div>
+<div class="mdtr"><span>Turnkey / EPC</span><span><em>Engineering-Procurement-Construction</em> — Pace executes end-to-end projects; revenue is project-milestone, working-capital heavy.</span></div>
+<div class="mdtr"><span>O&amp;M</span><span>Operations &amp; Maintenance — recurring annuity-like service revenue on deployed infrastructure.</span></div>
+<div class="mdtr"><span>BESS</span><span><em>Battery Energy Storage System</em> — grid-scale Li-ion storage. Pace&#x27;s growth pivot (via subsidiary), incl. an MSEDCL (Maharashtra) award. Capacity guided 5 → 10 GWh by Sep-2026.</span></div>
+<div class="mdtr"><span>ICT</span><span><em>Information &amp; Communication Technology</em> — smart/digital solutions, a third business line.</span></div>
+<div class="mdtr"><span>Order book (OB)</span><span>Contracted-but-undelivered revenue. Described as &quot;robust/strong&quot; in IPO materials; <strong>exact figure PENDING.</strong></span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (Pace reading where known)</span></div>
+<div class="mdtr"><span>LTP</span><span>Last Traded Price. ₹181.82 (held-card, 23-Jun-2026); ₹203.9 (26-May-2026, kotakneo) — <strong>note the ~11% decline into late June.</strong></span></div>
+<div class="mdtr"><span>P/E</span><span>Price/Earnings. ~14.6× (kotakneo, 26-May-2026).</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~₹4,110 Cr / ₹2,462 Cr ≈ <strong>1.67×</strong> (screener/Mar-2026 mcap; FY26 sales).</span></div>
+<div class="mdtr"><span>OPM</span><span>Operating margin. Net margin ~11.3% (₹279/₹2,462 FY26); <strong>OPM exact PENDING.</strong></span></div>
+<div class="mdtr"><span>D/E</span><span>Debt-to-equity. <strong>PENDING</strong> (EPC/telecom-infra is typically working-capital + debt heavy).</span></div>
+<div class="mdtr"><span>ROCE/ROE</span><span><strong>PENDING</strong> exact (recent listing; equity base post-IPO).</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>69.5% (screener, Mar-2026).</span></div>
+</div>
+<h4>Peer universe (referenced in valuation)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>HFCL</span><span>Telecom equipment + OFC + defence; listed mid-cap reference.</span></div>
+<div class="mdtr"><span>Tejas Networks</span><span>Telecom networking products (Tata-backed).</span></div>
+<div class="mdtr"><span>ITI Ltd</span><span>PSU telecom equipment.</span></div>
+<div class="mdtr"><span>Sterlite Technologies (STL)</span><span>Optical fibre + network integration.</span></div>
+<div class="mdtr"><span>(BESS-adjacent)</span><span>The storage pivot makes Pace partly comparable to energy-storage/EPC names; no clean listed pure-peer — flag.</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Pace reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter Holding ≥ 50%</span><span>69.5% (screener, Mar-26)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~14.6× (kotakneo, 26-May-26)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span><strong>PENDING</strong> (likely elevated — EPC/WC heavy)</span><span>PENDING</span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE/ROIC ≥ 20%</span><span><strong>PENDING</strong> exact</span><span>PENDING</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>net margin ~11%; OPM <strong>PENDING</strong> (EPC margins typically &lt;20%)</span><span>LIKELY FAIL (PENDING)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +1% vs FY25; longer CAGR <strong>PENDING</strong> (FY23 base needed)</span><span>PENDING (recent stall)</span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span><strong>PENDING</strong></span><span>PENDING</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~1.67×</span><span><strong>PASS</strong></span></div>
+</div>
+<p><strong>Aggregate: 3 firm PASS (promoter, PE, MCap/Sales) + 4 PENDING + 1 likely-FAIL.</strong> For a recently-listed name this is an <em>incomplete</em> screen by design — the PENDINGs are the homework. The honest read: cheap (PE 14.6×, MCap/Sales 1.67×) with promoter skin-in, but capital-efficiency + leverage are unverified and FY26 top-line growth stalled.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Pace Digitek is a 2007-incorporated, October-2025-listed multi-disciplinary infrastructure company spanning <strong>telecom infrastructure (core), energy (solar + Li-ion/BESS), and ICT</strong> (chittorgarh/indianeconomyandmarket IPO materials). FY25 (pre-listing): sales <strong>₹2,438.78 Cr</strong>, net profit <strong>₹267.61 Cr</strong> (business-standard/screener). FY26 (first full listed year): revenue <strong>₹2,462.2 Cr</strong>, profit <strong>₹279.1 Cr</strong> (screener-derived web reads) — i.e. <strong>roughly flat top-line (+1%) with PAT +~4%</strong>. The stock IPO&#x27;d at ₹208–219, currently ₹181.82 (held-card, 23-Jun) — <strong>below its issue price</strong> — at ~14.6× P/E and ~1.67× MCap/Sales. The forward narrative is the <strong>BESS pivot</strong>: capacity guided 5→10 GWh by Sep-2026, an MSEDCL (Maharashtra) award funding ₹630 Cr of IPO proceeds into the storage subsidiary, plus a board-approved 7.5 GWh expansion + ₹200 Cr capex.</p>
+<blockquote><strong>CORE VERDICT.</strong> Pace is a cheap, promoter-heavy, profitable small-cap with a credible-on-paper BESS growth option layered on a steady telecom-infra base — but it is <strong>recently listed with thin disclosure, FY26 top-line growth has stalled (+1%), and the key capital-efficiency/leverage metrics are PENDING.</strong> The discipline screen is only 3-of-8 <em>firm</em> PASS (the rest PENDING). The load-bearing question is whether the BESS pivot converts a flat-growth EPC base into a genuine growth engine, or whether this is listing-era optimism on a working-capital-heavy contractor. <strong>Conviction should scale with disclosure</strong> — and disclosure is currently limited.</blockquote>
+<p><strong>Operator-relevant context, addressed head-on</strong></p>
+<ul>
+<li><strong>Held starter framing.</strong> PACEDIGITK is a <strong>100-share delivery starter @ ₹181.80</strong> (taken 2026-06-19; the prior 300@178 limit expired no-fill). LTP ₹181.82 ⇒ effectively flat. This is a <em>starter</em>, sized appropriately for a thin-disclosure new listing.</li>
+<li><strong>Risk-gates PENDING, not fabricated.</strong> <code>_index.md</code> carries <code>gates_refresh_due: true</code> — not yet in AUTO_SR_LEVELS; structural gates are PENDING a levels pass (V-01/V-03/§0.2c). The operator&#x27;s 260619 level-ID read (Z1 174–180 / breakout &gt;189 / stop &lt;174 / targets 189→199–206→213–219→230, confidence MODERATE) is carried in Key Levels as the working read.</li>
+<li><strong>Thin-disclosure risk is the headline.</strong> This brief deliberately flags what it cannot verify rather than guessing.</li>
+</ul>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Pace Digitek Limited (NSE/BSE: PACEDIGITK), incorporated 2007, is a multi-disciplinary solutions provider with core expertise in telecom infrastructure, extended into energy (solar, Li-ion/BESS) and smart ICT (chittorgarh/indianeconomyandmarket). Revenue is earned through manufacturing + supply of power-management systems, turnkey project execution, and O&amp;M services.</p>
+<h4>1.1 Business segments (FY-mix PENDING exact)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Segment</span><span>What it does</span><span>Mix note</span></div>
+<div class="mdtr"><span>Telecom infrastructure (core)</span><span>Turnkey rollout, power-management systems mfg, O&amp;M for telcos/govt</span><span>Core / largest — <strong>exact % PENDING (DRHP)</strong></span></div>
+<div class="mdtr"><span>Energy — solar + BESS</span><span>Solar projects; Li-ion <strong>BESS</strong> via subsidiary (Lineage Power Pvt Ltd, commenced FY25; Pace Renewable Energies for the MSEDCL BESS project per IPO use-of-proceeds)</span><span>The growth pivot; capacity 5→10 GWh guided by Sep-26</span></div>
+<div class="mdtr"><span>ICT / smart solutions</span><span>Digital/ICT solutions</span><span>Smaller — <strong>PENDING</strong></span></div>
+</div>
+<blockquote><strong>Subsidiary-name caveat:</strong> IPO materials cite <strong>Pace Renewable Energies Pvt Ltd</strong> (recipient of ₹630 Cr IPO proceeds for the MSEDCL BESS project); a separate read cites <strong>Lineage Power Pvt Ltd</strong> as the BESS manufacturing subsidiary (commenced FY25). Both are referenced; the exact corporate structure is <strong>PENDING</strong> a DRHP read.</blockquote>
+<h4>1.2 Geographic / customer mix</h4>
+<p>India-domestic; telco + state-utility (MSEDCL) customers. Customer concentration detail <strong>PENDING</strong> (DRHP risk factors).</p>
+<h4>1.3 Equity structure (Mar-2026, screener)</h4>
+<p>Promoter <strong>69.5%</strong>, FII <strong>0.6%</strong>, DII <strong>6.0%</strong>, public <strong>23.9%</strong>. Market cap <strong>~₹4,110 Cr</strong> (Mar-2026). High promoter holding; thin institutional float.</p>
+<h4>1.4 Recent corporate actions</h4>
+<ul>
+<li><strong>IPO (Sep–Oct 2025):</strong> ₹819.15 Cr issue, price band ₹208–219, subscribed <strong>1.59×</strong> (chittorgarh/business-standard); ₹630 Cr of fresh-issue proceeds earmarked for the BESS subsidiary (MSEDCL project) + general corporate purposes.</li>
+<li><strong>BESS expansion:</strong> board approved <strong>7.5 GWh BESS expansion + ₹200 Cr capex</strong>; capacity guided <strong>5 → 10 GWh by Sep-2026</strong> (screener/web).</li>
+<li><strong>Inso Pace WOS acquisition + ESOP + new director</strong> (board actions, web).</li>
+<li><strong>FY26 results:</strong> revenue ₹2,462.2 Cr, PAT ₹279.1 Cr (web/screener-derived) — flat-ish vs FY25.</li>
+</ul>
+<blockquote><strong>ANCHOR FACT.</strong> The BESS pivot — funded by ₹630 Cr of IPO money, anchored by the MSEDCL award, and guided to double capacity to 10 GWh by Sep-2026 — is the load-bearing forward story. But FY26 top-line was essentially flat, so the pivot is <em>promised, not yet in the printed numbers</em>. Treat BESS as an embedded option to be confirmed by FY27 revenue, not a current-quarter driver.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Promoter &amp; management</h4>
+<p>Promoter group holds 69.5% — strong skin-in-the-game. Founder/management identity + tenure <strong>PENDING</strong> an annual-report read. A new director was added (board action, web).</p>
+<h4>2.2 Board &amp; governance footprint</h4>
+<ul>
+<li>Independent-director composition per SEBI LODR — <strong>PENDING</strong> (DRHP/AR).</li>
+<li>Statutory auditor continuity — <strong>PENDING</strong>.</li>
+<li>Recently listed (Oct-2025): limited public track record; DRHP risk-factors should be read in full before conviction.</li>
+</ul>
+<h4>2.3 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>SEBI / NSE adverse actions</span><span>NONE SURFACED</span><span>None found in web scan as of 23-Jun-26 (PENDING SEBI-orders review)</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span>PENDING</span><span>Not surfaced; verify in shareholding filing</span></div>
+<div class="mdtr"><span>Auditor changes</span><span>PENDING</span><span>DRHP/AR read needed</span></div>
+<div class="mdtr"><span>RPTs</span><span>PENDING</span><span>Multiple subsidiaries (Pace Renewable, Lineage, Inso Pace) → RPT map needed</span></div>
+<div class="mdtr"><span>Off-balance-sheet items</span><span>PENDING</span><span>EPC guarantees/BG exposure — PENDING</span></div>
+<div class="mdtr"><span>OCF vs reported PAT</span><span>PENDING</span><span>EPC working-capital intensity is the key thing to check — <strong>PENDING</strong></span></div>
+<div class="mdtr"><span>Track record</span><span>RECENT LISTING</span><span>&lt;1 year listed; limited history — treat as a context risk</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PENDING (cautious).</strong> No kill-flag <em>surfaced</em>, and promoter holding is high — but for a name &lt;1 year listed with several subsidiaries and an EPC/working-capital model, too many checks are PENDING to stamp a clean PASS. <strong>Read the DRHP risk-factors + first annual report before treating governance as clear.</strong> This is an honest &quot;not-yet-verified,&quot; not a clean bill.</blockquote>
+<hr>
+<h3>Section 3 / The Order-Book / BESS Thesis — Real Growth or Listing-Era Optimism?</h3>
+<p>The load-bearing forward question and the <strong>variant-perception vs consensus</strong> crux. Consensus (IPO-era): a diversified telecom-infra player with a &quot;robust order book&quot; pivoting into high-growth BESS. The variant question: FY26 top-line was <strong>flat (+1%)</strong> — so is the growth narrative ahead of the numbers?</p>
+<h4>3.1 The thesis components</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Component</span><span>Detail (source)</span></div>
+<div class="mdtr"><span>Core telecom-infra base</span><span>Steady, EPC/turnkey + power systems + O&amp;M; FY26 rev ₹2,462 Cr</span></div>
+<div class="mdtr"><span>BESS pivot</span><span>5→10 GWh by Sep-26; 7.5 GWh expansion approved; ₹630 Cr IPO proceeds + ₹200 Cr capex; MSEDCL award</span></div>
+<div class="mdtr"><span>Order book</span><span>&quot;Robust/strong&quot; (IPO materials) — <strong>exact size + composition PENDING</strong></span></div>
+<div class="mdtr"><span>Margins</span><span>Net margin ~11% FY26; OPM <strong>PENDING</strong></span></div>
+</div>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Flat FY26 growth.</strong> Revenue +1% YoY despite the growth narrative. Is FY26 a transition year (BESS not yet contributing) or a structural plateau? <strong>The single most important question.</strong></li>
+<li><strong>Order-book size + quality.</strong> &quot;Robust&quot; is not a number. Without OB size, conversion timeline, and customer concentration, the growth runway is unverifiable — <strong>PENDING</strong>.</li>
+<li><strong>BESS execution + economics.</strong> Grid BESS is capital-intensive and competitive; can a telecom-infra contractor earn adequate returns on storage capex? Margins/returns <strong>PENDING</strong>.</li>
+<li><strong>Working capital / leverage.</strong> EPC + capex-heavy BESS = cash-flow intensity. D/E and OCF <strong>PENDING</strong> — the make-or-break for a contractor.</li>
+<li><strong>MSEDCL single-anchor risk.</strong> How concentrated is the BESS order on one state utility? <strong>PENDING</strong>.</li>
+</ol>
+<blockquote><strong>THESIS VERDICT.</strong> Plausible but <strong>unconfirmed in the numbers.</strong> The BESS option is real (funded, awarded, capacity guided) but FY26&#x27;s flat top-line means the pivot has not yet shown up as growth. Treat as an embedded multi-quarter option whose first proof-point is FY27 revenue + BESS contribution disclosure — not a current catalyst.</blockquote>
+<hr>
+<h3>Section 4 / Business Risk + Margins</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>PAT ₹Cr</span><span>Net margin</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>2,462.2</span><span>279.1</span><span>~11.3%</span><span>screener/web reads (FY26)</span></div>
+<div class="mdtr"><span>FY25</span><span>2,438.78</span><span>267.61</span><span>~11.0%</span><span>business-standard/screener</span></div>
+<div class="mdtr"><span>FY24</span><span>PENDING (DRHP)</span><span>PENDING</span><span>PENDING</span><span>DRHP — PENDING read</span></div>
+<div class="mdtr"><span>FY23</span><span>PENDING (DRHP)</span><span>PENDING</span><span>PENDING</span><span>DRHP — PENDING read</span></div>
+<div class="mdtr"><span>EBITDA / OPM</span><span>PENDING all years</span><span>—</span><span>—</span><span>PENDING</span></div>
+</div>
+<blockquote>Read: FY25→FY26 is <strong>essentially flat</strong> (rev +1.0%, PAT +4.3%). The pre-IPO multi-year trajectory (FY23–FY24) is <strong>PENDING</strong> the DRHP — and it matters, because the IPO was sold partly on a growth story that the first listed year did not extend. EBITDA/OPM are <strong>PENDING</strong> across all years.</blockquote>
+<h4>4.2 Risk drivers</h4>
+<ul>
+<li><strong>Execution / working capital:</strong> EPC + BESS capex is cash-hungry; the OCF-vs-PAT check is the leading indicator — <strong>PENDING</strong>.</li>
+<li><strong>Customer concentration:</strong> telco + MSEDCL anchors — <strong>PENDING</strong> quantum.</li>
+<li><strong>Competition:</strong> telecom-infra is fragmented/competitive; BESS is increasingly crowded.</li>
+<li><strong>Listing-era float dynamics:</strong> lock-in expiries, thin institutional ownership.</li>
+</ul>
+<blockquote><strong>CORE RISK VERDICT.</strong> The risk is <strong>growth-conversion + cash-conversion, not solvency-visible-today.</strong> A flat FY26 plus PENDING leverage/OCF means the prudent stance is to <em>verify before sizing up</em>. The first 1–2 FY27 quarters (with BESS revenue disclosed) are the trigger for any cleaner read.</blockquote>
+<hr>
+<h3>Section 5 / Valuation Triangulation vs Peers</h3>
+<p>Pace at ₹181.82 (held-card, 23-Jun) / ~₹4,110 Cr mcap is <strong>optically cheap</strong>: ~14.6× P/E, ~1.67× MCap/Sales — both <em>inside</em> the Fundamental Light-Filter thresholds (PE ≤20, MCap/Sales ≤2).</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Company</span><span>Mkt Cap ₹Cr</span><span>P/E</span><span>MCap/Sales</span><span>Note (source)</span></div>
+<div class="mdtr"><span><strong>Pace Digitek</strong></span><span>~4,110</span><span>~14.6×</span><span>~1.67×</span><span>screener/kotakneo, May-26</span></div>
+<div class="mdtr"><span>HFCL</span><span>PENDING</span><span>PENDING</span><span>PENDING</span><span>telecom-equipment peer — PENDING ×2</span></div>
+<div class="mdtr"><span>Tejas Networks</span><span>PENDING</span><span>PENDING</span><span>PENDING</span><span>networking peer — PENDING ×2</span></div>
+<div class="mdtr"><span>ITI Ltd</span><span>PENDING</span><span>PENDING</span><span>PENDING</span><span>PSU peer — PENDING ×2</span></div>
+</div>
+<blockquote>Peer multiples left <strong>PENDING</strong> rather than guessed (not cross-verified to the ≥2-source bar in this pass).</blockquote>
+<h4>5.1 What current valuation implies</h4>
+<p>~14.6× P/E on a flat-growth FY26 prices Pace as a <em>steady contractor</em>, NOT as a BESS growth story — i.e. the market is <strong>not</strong> paying up for the pivot yet. That cuts both ways: limited downside <em>if</em> the base holds, and re-rating optionality <em>if</em> BESS converts.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> BESS scales to 10 GWh, contributes materially in FY27, top-line re-accelerates to double-digit growth → re-rating from 14.6× toward 20×+ on rising EPS = <strong>material upside</strong>. (Magnitude PENDING a model.)</li>
+<li><strong>Base:</strong> Telecom-infra base holds, BESS ramps slowly → EPS grows mid-single-digit, multiple roughly held → <strong>modest upside / sideways</strong>.</li>
+<li><strong>Bear:</strong> Flat growth persists, BESS execution/working-capital disappoints, a lock-in/float overhang weighs → de-rating below ₹174 (level-ID invalidation) = <strong>material downside</strong>.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> Cheap on the screen, but cheap <em>because</em> FY26 didn&#x27;t grow — the multiple is not mispricing a proven grower, it&#x27;s pricing a flat contractor with an unproven option. The asymmetry only turns favourable once FY27 shows BESS revenue. Anchor on the print, not the narrative.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalyst calendar (next ~12 months)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>What it tells us</span></div>
+<div class="mdtr"><span>Q1/Q2 FY27</span><span>First FY27 results with BESS contribution</span><span>Does the pivot show up as growth? The key proof-point</span></div>
+<div class="mdtr"><span>By Sep-2026</span><span>BESS capacity 5→10 GWh milestone</span><span>Execution proof on the storage capex</span></div>
+<div class="mdtr"><span>FY27</span><span>MSEDCL BESS project execution updates</span><span>De-risks (or flags) the anchor order</span></div>
+<div class="mdtr"><span>FY27</span><span>IPO lock-in expiries</span><span>Float/overhang dynamics</span></div>
+<div class="mdtr"><span>FY27</span><span>Order-book disclosure (size/composition)</span><span>Closes the biggest PENDING — runway visibility</span></div>
+</div>
+<h4>6.2 Risk register (ranked prob × severity)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob.</span><span>Severity</span><span>Hedge / watch</span></div>
+<div class="mdtr"><span>1</span><span>Flat growth persists (pivot doesn&#x27;t convert)</span><span>Med-High</span><span>High</span><span>Watch FY27 revenue + BESS disclosure</span></div>
+<div class="mdtr"><span>2</span><span>Working-capital / leverage strain (PENDING)</span><span>Med</span><span>High</span><span>Read OCF vs PAT + D/E at first AR</span></div>
+<div class="mdtr"><span>3</span><span>BESS execution/economics disappoint</span><span>Med</span><span>Med</span><span>Track capacity + project milestones</span></div>
+<div class="mdtr"><span>4</span><span>Customer concentration (telco/MSEDCL)</span><span>Med</span><span>Med</span><span>DRHP risk-factor read</span></div>
+<div class="mdtr"><span>5</span><span>Lock-in / thin-float overhang</span><span>Med</span><span>Med</span><span>Smaller size; staggered</span></div>
+<div class="mdtr"><span>6</span><span>Governance surprise (PENDING checks)</span><span>Low-Med</span><span>High</span><span>DRHP + SEBI feed</span></div>
+<div class="mdtr"><span>7</span><span>Smallcap liquidity (thin float)</span><span>Med</span><span>Low-Med</span><span>Starter-size discipline</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>BESS pivot converts to growth</span><span>If FY27 revenue is again flat (&lt;5% growth) with no disclosed BESS revenue line, the growth thesis is wrong</span></div>
+<div class="mdtr"><span>2</span><span>The base is cash-generative</span><span>If OCF runs well below PAT for 2+ quarters (working-capital bleed), the contractor model is the risk</span></div>
+<div class="mdtr"><span>3</span><span>Valuation is &quot;cheap, not cheap-for-a-reason&quot;</span><span>If a lock-in overhang + flat growth drive a close below ₹174, the cheapness was a value trap</span></div>
+<div class="mdtr"><span>4</span><span>Order book is real runway</span><span>If OB disclosure shows heavy single-customer concentration or weak conversion, the runway narrows</span></div>
+<div class="mdtr"><span>5</span><span>Governance is clean</span><span>Any SEBI action, RPT red flag, or auditor exit on first AR = abort</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Eight-rule screen (recap)</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>69.5%</span><span>PASS</span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~14.6×</span><span>PASS</span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>PENDING</span><span>PENDING</span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>PENDING</span><span>PENDING</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>~11% net; PENDING OPM</span><span>LIKELY FAIL (PENDING)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>flat FY26; PENDING CAGR</span><span>PENDING</span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>PENDING</span><span>PENDING</span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~1.67×</span><span>PASS</span></div>
+</div>
+<p><strong>Aggregate: 3 firm PASS + 4 PENDING + 1 likely-FAIL.</strong> An <em>incomplete</em> screen — appropriate for a name &lt;1 year listed. The cheapness (PE 14.6×, MCap/Sales 1.67×) and promoter alignment are the firm positives; capital-efficiency, leverage, and growth-durability are the open questions.</p>
+<h4>7.2 Final verdict on the deep-research scope</h4>
+<ul>
+<li><strong>Would-buy reasons:</strong> cheap (PE 14.6×, MCap/Sales 1.67×); promoter 69.5%; profitable (₹279 Cr FY26); funded BESS growth option (₹630 Cr IPO proceeds, MSEDCL award, 5→10 GWh guide); below IPO price (entry discount).</li>
+<li><strong>Would-not-buy reasons:</strong> FY26 top-line flat (+1%) — growth not yet visible; ROCE/ROE/D-E/OCF all PENDING; recent listing with thin disclosure + lock-in dynamics; OPM likely below the 20% bar; no clean listed pure-peer for valuation triangulation.</li>
+<li><strong>Depends-on:</strong> the first FY27 print with a BESS revenue line; an OCF-vs-PAT + D/E read at the first annual report; and order-book disclosure. Until those land, conviction stays starter-sized.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Cheap (PE 14.6× / MCap-Sales 1.67×); promoter 69.5%; profitable</span><span>FY26 flat top-line (+1%); BESS not yet in the numbers</span><span>ROCE/ROE/D-E/OCF all <strong>PENDING</strong> — capital-efficiency unverified</span></div>
+<div class="mdtr"><span>Funded BESS option (₹630 Cr + MSEDCL; 5→10 GWh by Sep-26)</span><span>Recent listing (&lt;1y); lock-in/float overhang</span><span>EPC/BESS working-capital intensity could strain cash</span></div>
+<div class="mdtr"><span>Trading below IPO price (₹208–219 → ₹182)</span><span>Multiple subsidiaries → RPT map needed</span><span>Thin disclosure; no clean listed pure-peer</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p><strong>Structural risk-gate ladder is PENDING</strong> (<code>gates_refresh_due: true</code>; not in AUTO_SR_LEVELS — do NOT fabricate). Working read = the operator&#x27;s 260619 level-ID record:</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Level</span><span>Price</span><span>Why</span></div>
+<div class="mdtr"><span>Held avg</span><span>₹181.80</span><span>Cost basis (100-sh starter, 6/19)</span></div>
+<div class="mdtr"><span>LTP</span><span>₹181.82</span><span>Held-card 23-Jun (intraday PENDING live-verify)</span></div>
+<div class="mdtr"><span>Entry zone Z1</span><span>174–180</span><span>Buy-the-support band on pullbacks (level-ID 260619)</span></div>
+<div class="mdtr"><span>Breakout trigger</span><span>daily-close &gt;189</span><span>Buy-the-breakout on volume</span></div>
+<div class="mdtr"><span>Invalidation / stop</span><span>daily-close &lt;174</span><span>Structural failure of the basing recovery</span></div>
+<div class="mdtr"><span>T1 (trim)</span><span>189 → 199–206</span><span>First resistance / trim band</span></div>
+<div class="mdtr"><span>T2</span><span>213–219</span><span>IPO-price supply zone</span></div>
+<div class="mdtr"><span>T3</span><span>230</span><span>52-week-high supply</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Pace Digitek is a cheap, promoter-heavy, profitable telecom-infra small-cap with a funded BESS growth <em>option</em> — but FY26 growth was flat and the capital-efficiency/leverage picture is <strong>PENDING</strong> a DRHP/AR read, so conviction must scale with disclosure. <strong>This brief does NOT recommend deployment.</strong> The 100-share starter size is consistent with a thin-disclosure new listing. The trade decision sits with the operator; canonical risk-gates should be auto-derived before sizing up.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>IPO + business: chittorgarh.com; kotakneo.com; 5paisa.com; indianeconomyandmarket.com; business-standard.com (IPO subscription, 01-Oct-2025); icicidirect.com</li>
+<li>Financials + valuation + ownership: screener.in/company/PACEDIGITK; kotakneo.com (price/PE, 26-May-2026); groww.in</li>
+<li>BESS/expansion: screener/web reads (5→10 GWh, 7.5 GWh approval, ₹200 Cr capex, Inso Pace acquisition)</li>
+<li>Internal: 02_STOCKS/PACEDIGITK/_index.md (held state); 260619_LEVELS (level-ID read)</li>
+<li><strong>PENDING (not read to ≥2-source bar):</strong> FY23–FY24 financials, EBITDA/OPM all years, D/E, ROCE/ROE/ROIC, order-book size, segment split, peer multiples (HFCL/Tejas/ITI), board/auditor/RPT detail.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No BUY/ADD/TRIM/EXIT/HEDGE/tranche/stop-loss recommendation. The trade decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_PACEDIGITK_DEEP-RESEARCH</div>
+</div></body></html>

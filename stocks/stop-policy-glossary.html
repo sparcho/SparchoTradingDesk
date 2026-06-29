@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stop &amp; Policy Glossary — Sparcho Trading Desk</title><style>
+:root{--bg:#05070d;--card:#0c1118;--ink:#e6edf3;--ink2:#9fb0c3;--mut:#6b7a8d;--cyan:#42dbe6;--hair:#1c2733;--pos:#34d399;--neg:#f87171}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:40px 22px 80px}
+a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
+h1{font-size:30px;margin:0 0 6px;letter-spacing:-.01em}h2{font-size:21px;margin:34px 0 10px;color:var(--cyan);border-bottom:1px solid var(--hair);padding-bottom:6px}
+h3{font-size:16px;margin:22px 0 6px;color:var(--ink)}h4{font-size:14px;margin:16px 0 4px;color:var(--ink2)}
+p{color:var(--ink2);margin:9px 0}strong{color:var(--ink)}
+code{font-family:'Space Mono',ui-monospace,monospace;font-size:12.5px;background:#121a24;color:#a7e7ef;padding:1px 6px;border-radius:5px}
+ul{color:var(--ink2);margin:8px 0;padding-left:22px}li{margin:4px 0}
+blockquote{border-left:3px solid var(--cyan);background:rgba(66,219,230,0.05);margin:14px 0;padding:10px 16px;color:var(--ink2);border-radius:0 8px 8px 0}
+hr{border:0;border-top:1px solid var(--hair);margin:26px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px}
+th,td{border:1px solid var(--hair);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#0e1620;color:var(--cyan);font-weight:700}td{color:var(--ink2)}tr:nth-child(even) td{background:rgba(255,255,255,0.015)}
+.back{display:inline-block;margin-bottom:18px;font-size:13px;color:var(--mut)}
+.foot{margin-top:40px;font-size:12px;color:var(--mut);border-top:1px solid var(--hair);padding-top:14px}
+</style></head><body><div class="wrap"><a class="back" href="./">← Equity Desk</a>
+<h1>Stop &amp; Policy Glossary</h1>
+<p>Plain-English reference for every term and stop-management policy used by the <strong>Stop-Policy Championship</strong> harness (stop_policy_championship) and the Trade Lab / Research panels of the equity dashboard. This is the single place to look up what &quot;1R&quot;, &quot;ratchet&quot;, &quot;scratch&quot;, or <code>trail_atr</code> actually mean.</p>
+<blockquote>The championship is a <strong>measurement layer only</strong> — it replays every closed system trade under each policy below and scores which stop discipline would have made the most money over our own trade population, net of costs. It changes nothing about the live rule until a policy wins on n ≥ 30.</blockquote>
+<hr>
+<h2>1. Core terms</h2>
+<h3>R / risk-unit</h3>
+<p><strong>R is one unit of risk</strong> — the rupee distance between your entry price and your original stop. If you buy at ₹100 with a stop at ₹95, then <strong>1R = ₹5</strong>. Every outcome in the system is measured in R rather than rupees, so a small position and a large position are comparable: &quot;+2R&quot; means the trade made twice what it risked, whatever the position size. Costs are also expressed in R (a ~0.2% round-trip becomes a small fraction of an R and is subtracted from every result).</p>
+<h3>Full-risk stop (1R stop)</h3>
+<p>The <strong>original, rule-based stop</strong> placed at trade entry — the invalidation level. Being stopped here is a <strong>−1R loss</strong> (a full unit of risk), before costs. This is the widest the loss is ever allowed to be; every policy below only ever moves the stop *tighter* (up, for a long), never wider.</p>
+<h3>Breakeven (BE)</h3>
+<p><strong>Your entry price.</strong> A stop &quot;at breakeven&quot; means the worst case is now a <strong>scratch</strong> (roughly zero, minus costs) instead of a loss. Moving a stop to BE removes downside risk but gives up nothing on the upside.</p>
+<h3>Profit-Lock-to-BE</h3>
+<p>The act of <strong>raising the stop from the full-risk (1R) level up to breakeven</strong> once the trade is comfortably ahead. It &quot;locks in&quot; the elimination of loss: from that point the trade can only scratch or win. This is the single move that defines the <code>belock_r1</code> policy.</p>
+<blockquote><strong>Live QUICK_EXIT Profit-Lock (the executed rule).</strong> The live resolver parks the stop at <strong>entry + cost_buffer (0.2%)</strong> — a hair above breakeven, so a scratch covers costs — and arms it when <strong>either</strong> a session <strong>CLOSES ≥ entry + 0.5R</strong> *or* (F135 high-arm) an intraday <strong>HIGH ≥ entry + 1.0R</strong> (<code>PROFIT_LOCK_HIGH_R</code>, tunable). The high-arm closes the *give-back* gap: a trade that spikes to +1R and fades the same day still locks the gain next session instead of riding the full original stop. Ratchets up only (monotonic), effective the next session.</blockquote>
+<h3>Ratchet</h3>
+<p>A stop that moves <strong>in one direction only — never backward.</strong> For a long, a ratcheting stop only ever steps *up*; if price pulls back, the stop holds where it is. The mechanism behaves like a ratchet wrench: it clicks tighter and locks. Both trailing policies (<code>trail_priorlow</code>, <code>trail_atr</code>) ratchet.</p>
+<h3>Trail</h3>
+<p>A stop that <strong>follows price as it moves in your favour</strong>, keeping a chosen distance behind it. A trailing stop is always also a ratchet (it follows up, never down). The two trailing methods differ only in *what* they follow: the prior session&#x27;s low (<code>trail_priorlow</code>) or a volatility band below the peak (<code>trail_atr</code>).</p>
+<h3>Scratch</h3>
+<p>A <strong>flat exit — roughly zero P&amp;L, minus costs.</strong> Happens when a stop sitting at (or just above) breakeven is hit: the trade neither won nor lost meaningfully. &quot;Scratch a stalled trade&quot; = get out near flat rather than let a going-nowhere position bleed or round-trip a gain.</p>
+<h3>Stall Exit</h3>
+<p>A <strong>hard time limit</strong>: if a trade has hit neither its target nor its stop after a fixed number of sessions, it is <strong>force-closed at that session&#x27;s close</strong> regardless of where price sits. It frees capital from trades that are going nowhere. This is the mechanism behind the <code>stall_exit_k</code> policy (current default k = 2, i.e. exit at the close of day 2). Distinct from the <strong>grace</strong> family, which only *tightens the stop* on a stall rather than force-closing.</p>
+<blockquote><strong>Progress test (F135).</strong> Whether a held trade is &quot;going nowhere&quot; is judged on <strong>closing progress</strong> (<code>STALL_PROGRESS_BASIS = &quot;close&quot;</code>), not the intraday high. So a <strong>spike-and-fade</strong> — a new intraday high that closes back below the entry session&#x27;s close — reads as *stalling*, and the day-N exit still fires. The old intraday-high test let a single wick silence the stall clock and keep a dead trade alive.</blockquote>
+<h3>R1 milestone vs Trim-1 / Trim-2 / Trim-3</h3>
+<p>These are easily confused — they are <strong>different things</strong>:</p>
+<ul><li><strong>R1 milestone (+1R)</strong> is a *measurement marker* used internally by the stop</li></ul>
+<p>policies: the price level one full risk-unit above entry (entry + 1R). Several policies &quot;arm&quot; when +1R prints (e.g. <code>belock_r1</code> moves the stop to breakeven the session after +1R is tagged). <strong>+1R is not an exit</strong> — nothing is sold when it is reached; it is only the trigger that lets a stop start moving.</p>
+<ul><li><strong>Trim-1 / Trim-2 / Trim-3</strong> are *execution actions* on the live book — the</li></ul>
+<p>staged partial sells of an actual position as it runs into target zones (the exit ladder). They reduce position size; the R1 milestone does not.</p>
+<p>In short: <strong>R1 is a trigger for the stop machinery; Trim-1/2/3 are real sells of shares.</strong> Do not read &quot;+1R milestone&quot; as &quot;take the first trim.&quot;</p>
+<hr>
+<h2>2. The stop-management policies</h2>
+<p>Each policy is one stop-discipline the championship replays. The identifier (code) is the machine name; the label is what the dashboard shows.</p>
+<table>
+<thead><tr><th>Identifier (code)</th><th>Dashboard label</th><th>One-line behaviour</th></tr></thead>
+<tbody>
+<tr><td><code>baseline</code></td><td>Fixed stop</td><td>The stop never moves — runs to target or back to the original 1R stop.</td></tr>
+<tr><td><code>belock_r1</code></td><td>Move to breakeven</td><td><strong>Profit-Lock-to-BE</strong>: once +1R prints, the stop jumps to breakeven.</td></tr>
+<tr><td><code>grace_1</code></td><td>Breakeven if flat (1 day)</td><td>If not in profit after <strong>1</strong> session, pull the stop to breakeven (scratch a stall).</td></tr>
+<tr><td><code>grace_2</code></td><td>Breakeven if flat (2 days)</td><td>Same idea, <strong>2</strong> sessions of grace before tightening to breakeven.</td></tr>
+<tr><td><code>grace_3</code></td><td>Breakeven if flat (3 days)</td><td>Same idea, <strong>3</strong> sessions of grace before tightening to breakeven.</td></tr>
+<tr><td><code>trail_priorlow</code></td><td>Trail under the lows</td><td><strong>Ratchets</strong> the stop up to just under each prior session&#x27;s low. Tightest.</td></tr>
+<tr><td><code>trail_atr</code></td><td>Trail below the peak</td><td>Chandelier: stop sits a fixed ATR-multiple below the peak close, trailing up.</td></tr>
+<tr><td><code>stall_exit_2</code></td><td>Time exit (2 days)</td><td><strong>Stall Exit</strong>: force-close at the day-2 close if neither target nor stop hit.</td></tr>
+</tbody></table>
+<h3>baseline — *Fixed stop*</h3>
+<p>The stop never moves. The trade runs until it hits its target or falls back to the original full-risk (1R) stop. The simplest rule, and the control against which every other policy is scored.</p>
+<h3>belock_r1 — *Move to breakeven* (Profit-Lock-to-BE)</h3>
+<p>Once the trade is comfortably ahead — specifically, the session after <strong>+1R</strong> prints — the stop is raised to your entry price (<strong>breakeven</strong>). From then on the worst case is a scratch, not a loss. (Renamed from the older code <code>be_after_t1</code>: &quot;BE-lock at the R1 milestone&quot;.)</p>
+<h3>grace_1 / grace_2 / grace_3 — *Breakeven if flat (the grace family)*</h3>
+<p>A <strong>patience window</strong>. If the trade is not in profit after k sessions (1, 2 or 3), the stop is pulled up to breakeven so a <strong>stalled</strong> trade <strong>scratches</strong> instead of bleeding — but a trade that *is* working keeps its full-risk room. More grace days = more time to start working before the stop tightens. (Renamed from the older code <code>patience_k</code>; tuned by the <code>GRACE_K</code> sweep in stop_policy_championship.)</p>
+<h3>trail_priorlow — *Trail under the lows*</h3>
+<p>Each session the stop is <strong>ratcheted</strong> up to just under the previous session&#x27;s low — it follows price up like a fence and never moves down. The tightest of the trailing methods; gives back the least on a reversal but is the most easily shaken out. (Renamed from the older code <code>bar_low_ratchet</code>.)</p>
+<h3>trail_atr — *Trail below the peak* (chandelier)</h3>
+<p>The stop sits a fixed <strong>&quot;normal daily wiggle&quot;</strong> (an ATR multiple, default 3×ATR(14)) below the highest close reached, <strong>trailing</strong> up on new closing highs. Gives jumpy / volatile names more room than <code>trail_priorlow</code>. (Renamed from the older code <code>atr_chandelier</code>.)</p>
+<h3>stall_exit_2 — *Time exit (Stall Exit)*</h3>
+<p>A <strong>hard time limit</strong>: if neither target nor stop is hit, the trade is <strong>force-closed at the end of day 2</strong> regardless of price. Frees capital from going-nowhere trades. The session count k is set by <code>STALL_EXIT_K</code> (default 2). (Renamed from the older code <code>hard_scratch_k</code>.) Unlike the <strong>grace</strong> family, which only tightens the stop on a stall, Stall Exit closes the position outright.</p>
+<hr>
+<h2>3. Identifier rename map (2026-06-23)</h2>
+<p>The opaque internal codes were renamed to plain-English identifiers in this pass. The data keys, generator constants, and dashboard labels were updated together.</p>
+<table>
+<thead><tr><th>Old code</th><th>New code</th><th>Old config constant</th><th>New config constant</th></tr></thead>
+<tbody>
+<tr><td><code>be_after_t1</code></td><td><code>belock_r1</code></td><td>—</td><td>—</td></tr>
+<tr><td><code>patience_k</code> (<code>patience_1/2/3</code>)</td><td><code>grace_k</code> (<code>grace_1/2/3</code>)</td><td><code>PATIENCE_K</code></td><td><code>GRACE_K</code></td></tr>
+<tr><td><code>hard_scratch_k</code> (<code>hard_scratch_2</code>)</td><td><code>stall_exit_k</code> (<code>stall_exit_2</code>)</td><td><code>HARD_SCRATCH_K</code></td><td><code>STALL_EXIT_K</code></td></tr>
+<tr><td><code>bar_low_ratchet</code></td><td><code>trail_priorlow</code></td><td>—</td><td>—</td></tr>
+<tr><td><code>atr_chandelier</code></td><td><code>trail_atr</code></td><td>—</td><td>—</td></tr>
+</tbody></table>
+<p><strong>Source of truth:</strong> the <code>POLICIES</code> roster in stop_policy_championship. The <code>_state/stop_policy_*.json</code> and <code>EDGE/trade_lab.json</code> payloads carry the new keys from the next <code>stop_policy</code> daily-driver + emit run onward.</p>
+<hr>
+<p>*Cross-refs: stop_policy_championship · F260622-STOPLAB · equity dashboard Trade Lab + Research tabs.*</p>
+<div class="foot">Source: 00_SYSTEM/STOP_POLICY_GLOSSARY.md · F260623 · rendered for the published desk.</div></div></body></html>

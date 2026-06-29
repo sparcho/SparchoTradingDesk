@@ -1,0 +1,994 @@
+{
+  "schema_version": "v2",
+  "doc_type": "silver_dashboard_aggregate",
+  "emitted_at_utc": "2026-06-29T07:01:44+00:00",
+  "meta": {
+    "source_excel": "My Stocks (Google Sheets, father-maintained)",
+    "source_excel_drive_id": "1L6QZtyhrCN198GuLWGmpBZTaCoEWMH54IrTT-ts630I",
+    "source_excel_modified_utc": "2026-05-17T05:01:30Z",
+    "source_excel_note": "Tracker-only \u2014 buy/sell history. NOT linked to live price; the 'Current Price' cell is a manual reference, not a live quote.",
+    "last_synced": "2026-06-14",
+    "synced_by": "Claude (manual mirror v2)",
+    "ticker": "SILVERBEES",
+    "yahoo_symbol": "SILVERBEES.NS",
+    "exchange": "NSE",
+    "fund_name": "Nippon India Silver ETF",
+    "related_flag": "F260518-F109_silver-re-entry-v2_lower-floor-thesis",
+    "last_regraded": "2026-06-14",
+    "obsidian_reference_dashboard": "00_SYSTEM/DASHBOARDS/SILVER_DASHBOARD.md (v1.6)",
+    "book_local_emit_utc": "2026-06-29T07:01:44+00:00"
+  },
+  "current_price": {
+    "primary_inr": 208.49,
+    "primary_date": "2026-06-29",
+    "primary_source": "live:SILVERBEES.NS",
+    "primary_staleness_days": 0,
+    "primary_day_chg_pct": 0.9294670087621706,
+    "primary_intraday": {
+      "open": 208.9,
+      "high": 209.93,
+      "low": 206.58,
+      "prev_close": 206.57,
+      "volume": 16791184
+    }
+  },
+  "current_market": {
+    "silverbees": {
+      "status": "ok",
+      "ticker": "SILVERBEES",
+      "yahoo_symbol": "SILVERBEES.NS",
+      "currency": "INR",
+      "market_state": null,
+      "price": 208.49,
+      "prev_close": 206.57,
+      "day_chg_pct": 0.9294670087621706,
+      "as_of_utc": "2026-06-29T07:01:38+00:00"
+    },
+    "xagusd": {
+      "status": "ok",
+      "ticker": "XAGUSD",
+      "yahoo_symbol": "SI=F",
+      "currency": "USD",
+      "market_state": null,
+      "price": 59.22,
+      "prev_close": 59.674,
+      "day_chg_pct": -0.7608003485605132,
+      "as_of_utc": "2026-06-29T06:51:28+00:00"
+    },
+    "usdinr": {
+      "status": "ok",
+      "ticker": "USDINR",
+      "yahoo_symbol": "INR=X",
+      "currency": "INR",
+      "market_state": null,
+      "price": 94.315,
+      "prev_close": 94.3,
+      "day_chg_pct": 0.015906680805939096,
+      "as_of_utc": "2026-06-29T07:01:37+00:00"
+    },
+    "dxy": {
+      "status": "ok",
+      "ticker": "DXY",
+      "yahoo_symbol": "DX-Y.NYB",
+      "currency": "USD",
+      "market_state": null,
+      "price": 101.215,
+      "prev_close": 101.357,
+      "day_chg_pct": -0.14009885849028278,
+      "as_of_utc": "2026-06-29T06:51:39+00:00"
+    },
+    "gold": {
+      "status": "ok",
+      "ticker": "GOLD",
+      "yahoo_symbol": "GC=F",
+      "price": 4078.0,
+      "prev_close": 4096.3,
+      "as_of_utc": "2026-06-29T06:51:36+00:00",
+      "currency": "USD"
+    },
+    "wti": {
+      "status": "ok",
+      "ticker": "WTI",
+      "yahoo_symbol": "CL=F",
+      "price": 70.07,
+      "prev_close": 69.23,
+      "day_chg_pct": 1.213346814964595,
+      "as_of_utc": "2026-06-29T06:51:39+00:00",
+      "currency": "USD"
+    },
+    "tnx": {
+      "status": "ok",
+      "ticker": "TNX",
+      "yahoo_symbol": "^TNX",
+      "price": 4.372,
+      "prev_close": 4.392,
+      "day_chg_pct": -0.45537340619308875,
+      "as_of_utc": "2026-06-26T18:59:55+00:00",
+      "currency": "USD"
+    },
+    "mcx_silver": {
+      "status": "ok",
+      "ticker": "MCX SILVER",
+      "value": 219593.0,
+      "unit": "INR/kg",
+      "prev_close": 221404.0,
+      "day_chg_pct": -0.8179617351086701,
+      "as_of": "2026-06-29T07:01:14+00:00",
+      "contract": "SILVER 2026-07-03",
+      "lot_kg": 30,
+      "source": "groww.in/commodities/futures/mcx_silver [groww:structured]",
+      "source_note": "official mcxindia.com Akamai-walled; Groww __NEXT_DATA__ structured JSON (hardened, fail-loud)"
+    },
+    "gsr": {
+      "status": "ok",
+      "ticker": "GSR",
+      "value": 68.86187098953056,
+      "derivation": "GOLD / XAGUSD (spot/spot)"
+    },
+    "fetched_at_utc": "2026-06-29T07:01:44+00:00"
+  },
+  "live_xagusd_used_for_ladders": 59.22,
+  "snapshot_tickers": [
+    {
+      "label": "Silver Spot",
+      "tv_symbol": "TVC:SILVER",
+      "category": "metals"
+    },
+    {
+      "label": "Gold Spot",
+      "tv_symbol": "TVC:GOLD",
+      "category": "metals"
+    },
+    {
+      "label": "Gold-Silver Ratio",
+      "tv_symbol": "OANDA:XAUXAG",
+      "category": "metals"
+    },
+    {
+      "label": "MCX Silver Front",
+      "tv_symbol": "MCX:SILVER1!",
+      "category": "metals"
+    },
+    {
+      "label": "SilverBees ETF",
+      "tv_symbol": "NSE:SILVERBEES",
+      "category": "metals"
+    },
+    {
+      "label": "Brent Crude",
+      "tv_symbol": "TVC:UKOIL",
+      "category": "energy"
+    },
+    {
+      "label": "WTI Oil",
+      "tv_symbol": "TVC:USOIL",
+      "category": "energy"
+    },
+    {
+      "label": "Dollar Index",
+      "tv_symbol": "TVC:DXY",
+      "category": "macro"
+    },
+    {
+      "label": "USD/INR",
+      "tv_symbol": "FX_IDC:USDINR",
+      "category": "macro"
+    },
+    {
+      "label": "10Y TIPS Yield",
+      "tv_symbol": "FRED:DFII10",
+      "category": "macro"
+    },
+    {
+      "label": "Bitcoin",
+      "tv_symbol": "COINBASE:BTCUSD",
+      "category": "crypto"
+    }
+  ],
+  "tradingview_main_chart": {
+    "symbol": "NSE:SILVERBEES",
+    "interval": "D",
+    "height_px": 480
+  },
+  "forecast": {
+    "composite_verdict": "\ud83d\udd34 DEFENSIVE-HOLD / SUSPENDED \u2014 F2 floor broken + RED firmer; accumulation SUSPENDED by gates, thesis intact but macro hostile \u2014 260621 max-roster synthesis",
+    "composite_source": "260621_XAG_PHASE-B-SYNTHESIS (09_DEEP_RESEARCH); full L1 max-roster web re-research; authoritative distribution = the re-weighted 7-bucket below (260621)",
+    "consensus_state": "DIVERGENT \u2014 washed-out positioning + physical TIGHT 4/5 (COMMODITIES/FLOW bull) vs hawkish-Warsh + CPI-4.2% + rising-real-yield repricing (MACRO/CREDIT bear); regime gate resolves per V-12 (regime-wins)",
+    "v15_binding": "No fresh operator chart drop 260621 \u2014 charts informational only (cache-anchored, V-01a); regime override drives the composite",
+    "probability_mass": [
+      {
+        "scenario": "$78+",
+        "weight_pct": 3,
+        "note": "needs a dovish surprise \u2014 very unlikely post-Warsh"
+      },
+      {
+        "scenario": "$72-78",
+        "weight_pct": 7,
+        "note": "old range, now far overhead"
+      },
+      {
+        "scenario": "$69-72",
+        "weight_pct": 12,
+        "note": "first recovery battleground"
+      },
+      {
+        "scenario": "$65-69",
+        "weight_pct": 24,
+        "note": "F2 zone \u2014 now overhead resistance after the break"
+      },
+      {
+        "scenario": "$59-65",
+        "weight_pct": 30,
+        "note": "price IS here (~$64.9); modal \u2014 macro-hostile chop zone"
+      },
+      {
+        "scenario": "$55-59",
+        "weight_pct": 16,
+        "note": "cascade tail (V-14 touchable) \u2014 fatter now F2 broken"
+      },
+      {
+        "scenario": "$52-55",
+        "weight_pct": 8,
+        "note": "V-18 reserve"
+      }
+    ],
+    "upper_half_69plus_pct": 22,
+    "last_synthesis_doc": "260621_XAG_PHASE-B-SYNTHESIS",
+    "last_chart_read_doc": "260511_XAG_CHART-READ-TRANSCRIPT",
+    "last_chart_read_date": "2026-06-25",
+    "last_chart_read_verdict": "\ud83d\udfe1 DOWNTREND-INTACT, MILD-OVERSOLD BOUNCE (QT+MACRO+FLOW+CREDIT synthesis 260625) \u2014 the 2.618 Kaarin-fib blowoff top ($120.36) has unwound -52% to ~$57 XAG; price HOLDS above the $48.18 1.0-fib / 40-yr breakout. GSR rising 44->69.75 (silver the WEAKEST metal); DXY ~101 + USD-INR firm = near-term LIQUIDATION-leaning. Structural debasement thesis INTACT above $47; invalidation = sustained daily close <$47. The final ~20k tranche waits for the $50-53 floor zone (1.115 fib + rising-diagonal + box + arc), DXY-102-104-apex conditional. COT on the latest canonical F&O cut (06-09 MM-net +9.8K, 26th pctile, washed-out); Thursday COT not yet dropped (using cached as-of, not fabricated)."
+  },
+  "bull_bear": {
+    "scenario_weights": {
+      "bull_pct": 22,
+      "base_pct": 46,
+      "bear_pct": 32
+    },
+    "bull_case": [
+      "\ud83d\udc02 ~22% \u2014 Physical TIGHT 4/5 reasserts: deep COMEX backwardation (steepest since the 1980s) + Shanghai premium +$6.91/oz (+10.06%, SGE>London) + elevated lease rates + thin COMEX registered (86.2Moz) = paper-vs-physical bifurcation extreme [goldsilver.ai/SchiffGold 17-18 Jun]",
+      "Positioning washed-out: canonical COT MM-net +9.8K (09-Jun survey, 26th pct, << 70K NO-ENTRY) \u2014 thin long-liquidation fuel left for a cascade [CFTC #084691]",
+      "5th consecutive structural deficit (~67Moz, Silver Institute); credit EASING (CCC OAS 939bp falling) removes one tail",
+      "V-14 velocity floor: physical resists STAYING <$65 for weeks \u2014 a relief bounce to reclaim $65-69 is the bull path if any macro data softens",
+      "Under-deployment is strength: ~\u20b93.9Cr dry powder buys the F1/F2 zones the ladder always wanted, below the \u20b9252 blended \u2014 once gates re-arm"
+    ],
+    "base_case": [
+      "\u2696\ufe0f ~46% \u2014 Chop-and-digest $59-67 while the hawkish-Fed repricing clears; each gold-MM unwind wave drags silver in sympathy",
+      "Macro gate firmly shut: CPI 4.2% (>3.9% auto-RED) + Warsh hawkish (hike priced by Oct) + 10Y real yield 2.19% rising + DXY 100.8 fresh high = no new deploys (V-12)",
+      "SBees 15% duty premium (~+9%) cushions the INR book vs global spot; family book marked at SILVERBEES \u20b9221.6 (19-Jun)",
+      "Ladder stays gate-BLOCKED until TNX <4.45% + a non-hawkish Fed signal + CPI back <3.9%; do nothing, let the gates decide",
+      "Next reads: COT 22-Jun (Juneteenth-delayed), PCE 25-Jun, June CPI ~14-Jul, FOMC 28-29 Jul"
+    ],
+    "bear_case": [
+      "\ud83d\udc3b ~32% \u2014 Second leg DOWN already underway: F2 $67.87 BROKEN (XAG ~$64.9, Fri 19-Jun daily close) -> 5.3 suspend confirmed; real-yield + DXY grind continues",
+      "Gold MM still crowded long \u2014 a gold capitulation cascade drags silver to the $55-59 V-14 tail",
+      "Market pricing a Fed HIKE by Oct \u2014 the entire 2026 'dovish-Fed' silver pillar is inverted until proven otherwise (V-11 realized)",
+      "RBI reserves $671.6B now <$680B cushion gate; USDINR structural bias to 100+ \u2014 INR-side stress could compound",
+      "EXIT-ALL watch: weekly close <$63 (Feb-6 proven low $63.85) \u2014 XAG ~$64.9 is CLOSE; V-18 $52 hard stop unconditional"
+    ]
+  },
+  "news": {
+    "headlines": [
+      {
+        "date": "2026-06-17",
+        "weight": "high",
+        "source": "Macro",
+        "sentiment": "bad",
+        "headline": "FOMC HOLD 3.50-3.75% (unanimous) but Warsh's debut HAWKISH: 2026 cut REMOVED from the dots, market now prices a HIKE by Oct. V-11 hawkish-transition risk realized \u2014 the binding silver deploy-block. [CNBC/NPR 17-Jun]"
+      },
+      {
+        "date": "2026-06-10",
+        "weight": "high",
+        "source": "Macro",
+        "sentiment": "bad",
+        "headline": "US May CPI 4.2% YoY (3-yr high) \u2014 ABOVE the 3.9% auto-RED ceiling; core 2.9%, energy +23.5% YoY. Hardens the no-deploy gate. [CNBC/Morningstar 10-Jun]"
+      },
+      {
+        "date": "2026-06-19",
+        "weight": "high",
+        "source": "Metals",
+        "sentiment": "bad",
+        "headline": "XAGUSD ~$64.9 (desk SILVERBEES-derived, Fri close) BROKE the $67.87 F2 floor -> 5.3 suspend confirmed; SILVERBEES -3.6% to \u20b9221.6. CONFIRMED vs live spot $64.9-65.6 across 18-20 Jun (Investing.com $64.93 19-Jun; Kitco/APMEX ~$65.0-65.6 20-Jun; TradingEconomics $64.26 18-Jun) \u2014 the $68-72 aggregator reads were stale; V-26 delta RESOLVED. [desk pipeline + live-spot triangulation]"
+      },
+      {
+        "date": "2026-06-25",
+        "weight": "high",
+        "source": "Technical",
+        "sentiment": "neutral",
+        "headline": "TA SYNTHESIS 260625: 2.618-fib blowoff top $120.36 -> -52% unwind to ~$57; downtrend intact, mild-oversold bounce. Holds above the $48.18 1.0-fib/40-yr breakout. GSR 44->69.75 (silver weakest metal); DXY ~101 + USD-INR firm = liquidation-leaning near-term. Thesis intact >$47; final ~20k tranche waits the $50-53 floor (DXY-102-104 conditional). [kaarin level-ID; QT/MACRO/FLOW/CREDIT]"
+      },
+      {
+        "date": "2026-06-12",
+        "weight": "high",
+        "source": "Flow",
+        "sentiment": "good",
+        "headline": "Positioning washed-out: canonical COT silver MM-net +9.8K (09-Jun survey, 12-Jun release; 26th pct, OI 126.2K, << 70K NO-ENTRY) = little long fuel for a cascade. Next COT 22-Jun (Juneteenth-delayed). [CFTC disagg F&O combined #084691]"
+      },
+      {
+        "date": "2026-06-18",
+        "weight": "high",
+        "source": "Physical",
+        "sentiment": "good",
+        "headline": "Physical TIGHT 4/5: deep COMEX backwardation + Shanghai premium +$6.91/oz (+10.06%) + elevated lease rates + thin COMEX registered 86.2Moz. Offset: LBMA vaults +0.6% MoM. [goldsilver.ai/SchiffGold 17-18 Jun]"
+      },
+      {
+        "date": "2026-06-12",
+        "weight": "med",
+        "source": "India",
+        "sentiment": "neutral",
+        "headline": "Credit/FX mixed: CCC OAS ~939bp FALLING (abort risk easing) + HY 263bp tightening; but RBI reserves $671.6B now <$680B cushion (gold-reval, -$9.99B w/w); USDINR 94.3 PAUSE; 15% bullion duty intact (+9% SBees premium). [FRED/RBI WSS]"
+      }
+    ]
+  },
+  "catalysts": [
+    {
+      "date": "2026-06-22",
+      "weight": "high",
+      "kind": "flow",
+      "summary": "CFTC COT release (Juneteenth-delayed from 19-Jun) \u2014 16-Jun survey; first read on whether the F2 break flushed MM positioning further [CFTC]"
+    },
+    {
+      "date": "2026-06-25",
+      "weight": "high",
+      "kind": "data",
+      "summary": "US May PCE / Core PCE (Fed's preferred gauge) \u2014 confirms or eases the CPI-4.2% hot read; a cool print is the first re-arm catalyst [BEA]"
+    },
+    {
+      "date": "2026-07-14",
+      "weight": "high",
+      "kind": "data",
+      "summary": "US June CPI \u2014 the key test of whether headline pushes past 4.2% or rolls over [BLS; date unconfirmed-primary]"
+    },
+    {
+      "date": "2026-07-28",
+      "weight": "high",
+      "kind": "fed",
+      "summary": "FOMC 28-29 Jul (no SEP) \u2014 first read on whether an Oct hike gets pulled forward; Warsh's second meeting [Fed]"
+    },
+    {
+      "date": "2026-06-22",
+      "weight": "med",
+      "kind": "level",
+      "summary": "Monday XAGUSD vs F2 $67.87 \u2014 watch for any reclaim of the broken floor (the desk-vs-aggregator delta is already RESOLVED: live spot 18-20 Jun confirms ~$64.9) [V-26 resolved]"
+    },
+    {
+      "date": "2026-06-30",
+      "weight": "med",
+      "kind": "geo",
+      "summary": "Iran/Hormuz: US-Iran Switzerland talks CANCELLED; Israel-Hezbollah strikes continue \u2014 oil reversal re-spikes inflation + re-arms \u00a710.1 [TradingEconomics]"
+    }
+  ],
+  "sr_levels": {
+    "current_xagusd_estimate": 64.91,
+    "last_updated": "2026-06-21",
+    "thesis": "F2 FLOOR BROKEN \u2014 XAG ~$64.9 closed below the $67.87 F2 structural floor (Fri 19-Jun) -> 5.3 suspend CONFIRMED. $67.87 flips from support to overhead resistance. Accumulation SUSPENDED by gates (TNX>=4.45 + CPI 4.2% + Warsh hawkish + USDINR PAUSE; V-12 regime-wins). HOLD 45,000u \u2014 no EXIT trigger hit (wkly ~$64.9 > $63 EXIT-ALL; V-18 $52 far below). Re-arm: weekly reclaim >$67.87 + TNX <4.45 + a non-hawkish Fed signal + CPI <3.9",
+    "resistance": [
+      {
+        "price": 67.87,
+        "label": "F2 (was floor, now resistance)",
+        "note": "Broken on the 19-Jun daily close; weekly reclaim needed to repair the thesis",
+        "distance_pct": 14.606551840594403,
+        "distance_label": "+14.6%"
+      },
+      {
+        "price": 69.0,
+        "label": "F1 lower / prior support",
+        "note": "First overhead supply on a bounce",
+        "distance_pct": 16.51469098277609,
+        "distance_label": "+16.5%"
+      },
+      {
+        "price": 72.0,
+        "label": "F1 upper / V-13 zone top",
+        "note": "Top of the old $69-72 V-13 zone \u2014 now resistance",
+        "distance_pct": 21.58054711246201,
+        "distance_label": "+21.6%"
+      },
+      {
+        "price": 78.0,
+        "label": "range top",
+        "note": "Old $72-78 accumulation range ceiling; far overhead",
+        "distance_pct": 31.712259371833838,
+        "distance_label": "+31.7%"
+      }
+    ],
+    "support": [
+      {
+        "price": 63.85,
+        "label": "Feb-6 proven low / EXIT-ALL line",
+        "note": "Weekly close <$63 = EXIT-ALL trigger; price ~$64.9 is CLOSE \u2014 the key near-term line",
+        "distance_pct": 7.81830462681527,
+        "distance_label": "+7.8%"
+      },
+      {
+        "price": 62.0,
+        "label": "$59-65 mid",
+        "note": "Modal-bucket midpoint; macro-hostile chop zone",
+        "distance_pct": 4.694360013508952,
+        "distance_label": "+4.7%"
+      },
+      {
+        "price": 59.0,
+        "label": "$59-65 base / V-14 tail top",
+        "note": "Below here = cascade-tail territory (V-14 touchable in 2-6 days)",
+        "distance_pct": -0.3714961161769653,
+        "distance_label": "-0.4%"
+      },
+      {
+        "price": 55.0,
+        "label": "cascade tail",
+        "note": "$55-59 tail bucket",
+        "distance_pct": -7.125970955758188,
+        "distance_label": "-7.1%"
+      },
+      {
+        "price": 52.0,
+        "label": "\ud83d\uded1 V-18 hard stop",
+        "note": "Unconditional abort-all on daily close",
+        "distance_pct": -12.191827085444105,
+        "distance_label": "-12.2%"
+      }
+    ]
+  },
+  "floor_framework": {
+    "v_id": "V-13",
+    "status": "settled (5-agent consensus)",
+    "velocity_note": "V-14 \u2014 physical demand creates a VELOCITY floor (silver can't STAY below $60-65 long), NOT a LEVEL floor (CAN touch $55-58 in cascade). Physical responds in 2-6 weeks; paper cascades in 2-6 days.",
+    "tiers": [
+      {
+        "tier": "$78+ no-add",
+        "band_low": 78,
+        "band_high": null,
+        "prob_pct": 3,
+        "mechanism": "needs a dovish surprise \u2014 very unlikely post-Warsh"
+      },
+      {
+        "tier": "$72-78",
+        "band_low": 72,
+        "band_high": 78,
+        "prob_pct": 7,
+        "mechanism": "old range, now far overhead"
+      },
+      {
+        "tier": "F1 $69-72",
+        "band_low": 69,
+        "band_high": 72,
+        "prob_pct": 12,
+        "mechanism": "first recovery battleground above"
+      },
+      {
+        "tier": "F2 $65-69",
+        "band_low": 65,
+        "band_high": 69,
+        "prob_pct": 24,
+        "mechanism": "F2 zone \u2014 now overhead resistance after the break"
+      },
+      {
+        "tier": "$59-65",
+        "band_low": 59,
+        "band_high": 65,
+        "prob_pct": 30,
+        "mechanism": "price IS here (~$64.9) \u2014 modal, macro-hostile chop"
+      },
+      {
+        "tier": "$55-59",
+        "band_low": 55,
+        "band_high": 59,
+        "prob_pct": 16,
+        "mechanism": "cascade tail (V-14 touchable)"
+      },
+      {
+        "tier": "V-18 $52-55",
+        "band_low": 52,
+        "band_high": 55,
+        "prob_pct": 8,
+        "mechanism": "tail; V-18 $52 hard stop"
+      }
+    ]
+  },
+  "strategy_timeline_public": [
+    {
+      "date": "2026-05-02",
+      "verdict": "\ud83d\udfe2 STRONG-BULLISH",
+      "version": "v6.25",
+      "title": "Offensive deployment",
+      "summary": "Accumulate the $75-80 zone; target ~$95 with a 40-60% trim; goal ~20% blended gain."
+    },
+    {
+      "date": "2026-05-10",
+      "verdict": "\ud83d\udfe2 MILDLY BULLISH",
+      "version": "v3",
+      "title": "V-15 doctrine recalibration",
+      "summary": "4 bull / 5 neutral / 0 bear non-chart agents = LEANING; gap data filled (COMEX/SLV/Fed/copper); Fed-hold softened the stack."
+    },
+    {
+      "date": "2026-05-11",
+      "verdict": "\ud83d\udfe2 MILDLY-TO-MOD BULL",
+      "version": "ct-19",
+      "title": "Chart-read FRESH-BULL tilt",
+      "summary": "19-chart drop: daily MACD positive+expanding, weekly channel intact, monthly $50-wedge breakout; trim timing compressed."
+    },
+    {
+      "date": "2026-05-14",
+      "verdict": "\ud83d\udfe2 MILDLY-TO-MOD BULL",
+      "version": "eod",
+      "title": "India duty-hike sticky",
+      "summary": "SBees held the duty-hike gains even as XAGUSD pulled back from $89.17 to $86.87; physical premium sticky."
+    },
+    {
+      "date": "2026-05-16",
+      "verdict": "\ud83d\udfe1 BULL-BUT-COMPRESSING",
+      "version": "cot",
+      "title": "FROTH threshold breached",
+      "summary": "MM net +15.76K (W/W +4.92K, largest of the 6-print run); OI +6.87K first material expansion; size-up window closing."
+    },
+    {
+      "date": "2026-05-31",
+      "verdict": "\ud83d\udfe2 BASE-CONSTRUCTIVE",
+      "version": "v7-260531",
+      "title": "Regime re-grade + re-entry live",
+      "summary": "Regime YELLOW (from RED-transitioning); oil -17%, COT washed-out, V-13 reaffirmed; 7-bucket modal up to $69-78; re-entry ladder live."
+    },
+    {
+      "date": "2026-06-06",
+      "verdict": "\u2705 EXECUTED",
+      "version": "f109-closed",
+      "title": "F109 re-entry executed",
+      "summary": "F109 silver re-entry closed as executed; holdings reconciled across surfaces (F119 lineage); strategy stays scoped to the F109 envelope."
+    },
+    {
+      "date": "2026-06-07",
+      "verdict": "\ud83d\udfe1 DEFENSIVE-HOLD",
+      "version": "v8-260607",
+      "title": "NFP shock - gates fired, accumulation suspended",
+      "summary": "NFP +172K killed the cut pillar; silver -7.17% to $68.57 into the F2 zone; TNX 4.55% abort fired; USDINR 95.19 PAUSE; regime RED; ladder gate-BLOCKED (V-12)."
+    },
+    {
+      "date": "2026-06-14",
+      "verdict": "\ud83d\udfe1 DEFENSIVE-HOLD",
+      "version": "v9-260614",
+      "title": "L1 re-research - RED maintained, deploy-gate OFF",
+      "summary": "TNX 4.49% still > 4.45% + real yield 2.17% rising = binding block; XAG ~$67.8 at the $67.87 floor; washed-out positioning + 4/7 physical bullish, but V-12 regime-wins."
+    }
+  ],
+  "global_inventory": {
+    "last_updated": "2026-06-18",
+    "source": "Phase-B L1 COMMODITIES web re-research 260621 \u2014 goldsilver.ai/CME mirror (COMEX 17-Jun; Shanghai 18-Jun), LBMA London Vault (end-May), MacroMicro/iShares (SLV 18-Jun)",
+    "items": [
+      {
+        "venue": "COMEX (reg+elig total)",
+        "value": "~321.3M oz",
+        "change": "registered +5.7%/30d (slight rebuild off thin base)",
+        "bias": "\ud83d\udfe1 mixed",
+        "note": "Total ~321.3Moz (goldsilver.ai/CME mirror 17-Jun)"
+      },
+      {
+        "venue": "COMEX (Registered)",
+        "value": "~86.2M oz",
+        "change": "+5.7% over 30d",
+        "bias": "\ud83d\udfe2 bullish",
+        "note": "Immediately-deliverable thin vs OI = paper leverage; slight rebuild off a low base (17-Jun)"
+      },
+      {
+        "venue": "COMEX (Eligible)",
+        "value": "~235.1M oz",
+        "change": "\u2014",
+        "bias": "\ud83d\udfe1 mixed",
+        "note": "Bulk of stock; not pledged for delivery (17-Jun)"
+      },
+      {
+        "venue": "SLV ETF (holdings)",
+        "value": "~14,939t (~480M oz)",
+        "change": "\u2248 \u221280t w/w",
+        "bias": "\ud83d\udfe1 mixed",
+        "note": "Mild Western outflow; not the marginal buyer (iShares/MacroMicro 18-Jun)"
+      },
+      {
+        "venue": "Shanghai premium (SGE)",
+        "value": "+$6.91/oz (+10.06%)",
+        "change": "persistent East>West premium",
+        "bias": "\ud83d\udfe2 bullish",
+        "note": "SGE/SHFE > London = real physical tightness, metal pulled East (goldsilver.ai 18-Jun)"
+      },
+      {
+        "venue": "LBMA",
+        "value": "~887.7M oz (27,611t)",
+        "change": "+0.6% MoM",
+        "bias": "\ud83d\udfe1 mixed",
+        "note": "Vaults rebuilding; free float ~25.9% rising = the lone loosening signal (LBMA end-May)"
+      }
+    ]
+  },
+  "cot": {
+    "survey_date": "2026-06-23",
+    "release_date": "2026-06-12",
+    "verified": "2026-06-21 \u2014 CONFIRMED CURRENT (not stale): the expected 16-Jun survey does NOT exist; CFTC delayed the 19-Jun release to Mon 22-Jun (Juneteenth). Next refresh 22-Jun.",
+    "source": "CFTC disaggregated F&O COMBINED #084691 (Socrata kh3c-gbw2) \u2014 canonical per COT_CANONICAL_SOURCE.md; MM net = long-short, percentile off this same series. Legacy/metalcharts/futures-only cross-checks DROPPED (phantom conflict).",
+    "mm_net": 9794,
+    "mm_net_k": 11.7,
+    "mm_net_percentile": 26,
+    "oi": 126230,
+    "oi_k": 108.9,
+    "wow_delta_k": -0.6,
+    "ladder_rung": "COT-CAPITULATION / washed-out (26th pct, <70K NO-ENTRY)",
+    "g8_status": "MET \u2014 washed-out base intact; MM net +9.8K at the 26th percentile of its own 3.8yr range, well under the 70K NO-ENTRY gate",
+    "percentile_heuristic": "26th percentile (computed off CFTC disaggregated MM-combined #084691, trailing 200 wks; range -24.6K..+50.0K)",
+    "read": "Canonical CFTC disaggregated Managed-Money NET (F&O combined, #084691): +9,794 contracts (09-Jun survey / 12-Jun release), -639 w/w, OI 126,230. 26th percentile = washed-out, well under the 70K NO-ENTRY gate. CONFIRMED latest available 21-Jun: the 16-Jun survey doesn't exist (CFTC Juneteenth delay -> next release Mon 22-Jun). Prior weeks (same cut): 02-Jun +10,433 / 26-May +10,244. Positioning is NOT the binding constraint \u2014 the macro/yield gate is.",
+    "cot_source": "live_fetcher (cot_metals.json)",
+    "mm_net_pct_oi": 10.8
+  },
+  "paper_physical": {
+    "as_of": "2026-06-21 (Phase-B L1 COMMODITIES web re-research)",
+    "composite": "TIGHT",
+    "component_count": "4 of 5 bullish-tight",
+    "lease_pending": true,
+    "lease_note": "ELEVATED regime, no clean live print (LBMA stopped quoting SIFO in 2012; private benchmarks only). Directional: tight.",
+    "anchor_note": "Shanghai premium % + backwardation direction are structurally reliable; the $68-72 aggregator absolute-spot reads were stale \u2014 live spot 18-20 Jun confirms the desk's ~$64.9 (V-26 resolved).",
+    "components": [
+      {
+        "label": "Futures curve",
+        "value": "Deep backwardation",
+        "signal": "tight",
+        "source": "Investing/SchiffGold",
+        "as_of": "2026-06 (analyst; exact spread PENDING)",
+        "why": "Front > deferred = physical scarcity bid; cited as the steepest since the 1980s. Backwardation is the cleanest squeeze tell."
+      },
+      {
+        "label": "1M lease rate",
+        "value": "Elevated (exact PENDING)",
+        "signal": "tight",
+        "source": "BullionTrading/BullionStar",
+        "as_of": "2026-06 (directional)",
+        "why": "High cost to borrow metal = tight float. Exact rate PENDING \u2014 no public SIFO benchmark since 2012."
+      },
+      {
+        "label": "Shanghai premium",
+        "value": "+$6.91/oz (+10.06%)",
+        "signal": "tight",
+        "source": "goldsilver.ai",
+        "as_of": "2026-06-18",
+        "why": "SGE/SHFE > London = metal pulled East; a persistent double-digit premium is real physical tightness."
+      },
+      {
+        "label": "COMEX registered",
+        "value": "86.2M oz",
+        "signal": "tight",
+        "source": "goldsilver.ai (CME mirror)",
+        "as_of": "2026-06-17",
+        "why": "Immediately-deliverable stock is thin; low registered vs OI = paper leverage. +5.7%/30d is a slight rebuild off a low base."
+      }
+    ],
+    "offsets": [
+      {
+        "label": "LBMA vault build",
+        "value": "+0.6% MoM, free float ~25.9% rising",
+        "signal": "loose",
+        "source": "LBMA London Vault",
+        "as_of": "end-May 2026",
+        "why": "London inventory rebuilding + rising free float is the one genuine loosening signal \u2014 watch for the first crack."
+      }
+    ]
+  },
+  "warnings": [],
+  "silver_strategy": {
+    "schema": "silver-strategy/v1",
+    "signed": "operator 2026-06-25",
+    "advisory_only": true,
+    "kaarin_fib": {
+      "timeframe": "12M",
+      "anchor_0_xag": 3.57,
+      "anchor_1_xag": 48.18,
+      "range_xag": 44.61,
+      "ladder_xag": {
+        "1.0": 48.18,
+        "1.115": 53.3,
+        "1.272": 60.31,
+        "1.414": 66.64,
+        "1.618": 75.75,
+        "1.886": 87.71,
+        "2.115": 97.92,
+        "2.618": 120.36
+      },
+      "blowoff_top_xag": 120.36,
+      "current_unwound_xag": 57.14
+    },
+    "levels_xag": {
+      "invalidation": {
+        "xag": 47,
+        "sb_ref": 170,
+        "basis": "sustained daily close",
+        "why": "below the 1.0 fib / 40-yr breakout = structural thesis break"
+      },
+      "hard_floor": {
+        "xag": 48.18,
+        "sb_ref": 174,
+        "why": "1.0 fib = the 40-yr 1980/2011 breakout retest"
+      },
+      "floor_zone": {
+        "xag": [
+          50,
+          53
+        ],
+        "sb_ref": [
+          181,
+          192
+        ],
+        "why": "1.115 fib + rising diagonal + box + arc confluence \u2014 the FINAL-tranche buy zone"
+      },
+      "core_line": {
+        "xag": 60,
+        "sb_ref": 217,
+        "why": "1.272 fib \u2014 core debasement line"
+      },
+      "exit_zone": {
+        "xag": [
+          75,
+          82
+        ],
+        "sb_ref": [
+          271,
+          297
+        ],
+        "why": "sits in the 1.618-1.886 fib band \u2014 TACTICAL sell zone"
+      }
+    },
+    "dxy_conditionality": {
+      "apex_low": 102,
+      "apex_high": 104,
+      "rule": "the $50-53 floor HOLDS IF DXY rejects its 102-104 multi-year apex; a DXY break > 104 -> expect silver to flush THROUGH $53 toward the $48.18 hard floor.",
+      "signpost": "silver_floor_confirm_deny"
+    },
+    "core_vs_tactical": {
+      "threshold_xag": 60,
+      "rule": "tranche entry < $60 XAG = CORE (retain \u2014 long-term debasement hold); entry >= $60 = TACTICAL (sell into the $75-82 recovery).",
+      "examples": {
+        "core": [
+          "19/6 lot @ 212.78 SB (< $60 XAG-equiv)",
+          "25/6 lot @ 203.76 SB (< $60 XAG-equiv)"
+        ],
+        "tactical": [
+          "all lots with entry >= $60 XAG-equivalent"
+        ]
+      }
+    },
+    "final_tranche": {
+      "units": 20000,
+      "placement": "at the FLOOR zone, NOT chased at the current ~Rs.206 (SB) / ~$57.8 (XAG)",
+      "zone_sb": [
+        185,
+        195
+      ],
+      "zone_xag": [
+        50,
+        52
+      ]
+    },
+    "freed_capital": "uncommitted / freed capital rotates to the equity screener-verse"
+  },
+  "probability": {
+    "layer": "PROBABILITY",
+    "subtitle": "Where silver is headed \u2014 objective, independent of what we hold",
+    "as_of": "2026-06-21",
+    "composite_verdict": "\ud83d\udd34 DEFENSIVE-HOLD / SUSPENDED \u2014 F2 floor broken + RED firmer; accumulation SUSPENDED by gates, thesis intact but macro hostile \u2014 260621 max-roster synthesis",
+    "composite_source": "260621_XAG_PHASE-B-SYNTHESIS (09_DEEP_RESEARCH); full L1 max-roster web re-research; authoritative distribution = the re-weighted 7-bucket below (260621)",
+    "consensus_state": "DIVERGENT \u2014 washed-out positioning + physical TIGHT 4/5 (COMMODITIES/FLOW bull) vs hawkish-Warsh + CPI-4.2% + rising-real-yield repricing (MACRO/CREDIT bear); regime gate resolves per V-12 (regime-wins)",
+    "v15_binding": "No fresh operator chart drop 260621 \u2014 charts informational only (cache-anchored, V-01a); regime override drives the composite",
+    "distribution": [
+      {
+        "scenario": "$78+",
+        "weight_pct": 3,
+        "note": "needs a dovish surprise \u2014 very unlikely post-Warsh"
+      },
+      {
+        "scenario": "$72-78",
+        "weight_pct": 7,
+        "note": "old range, now far overhead"
+      },
+      {
+        "scenario": "$69-72",
+        "weight_pct": 12,
+        "note": "first recovery battleground"
+      },
+      {
+        "scenario": "$65-69",
+        "weight_pct": 24,
+        "note": "F2 zone \u2014 now overhead resistance after the break"
+      },
+      {
+        "scenario": "$59-65",
+        "weight_pct": 30,
+        "note": "price IS here (~$64.9); modal \u2014 macro-hostile chop zone"
+      },
+      {
+        "scenario": "$55-59",
+        "weight_pct": 16,
+        "note": "cascade tail (V-14 touchable) \u2014 fatter now F2 broken"
+      },
+      {
+        "scenario": "$52-55",
+        "weight_pct": 8,
+        "note": "V-18 reserve"
+      }
+    ],
+    "upper_half_69plus_pct": 22,
+    "floor_tiers": [
+      {
+        "tier": "$78+ no-add",
+        "band_low": 78,
+        "band_high": null,
+        "prob_pct": 3,
+        "mechanism": "needs a dovish surprise \u2014 very unlikely post-Warsh"
+      },
+      {
+        "tier": "$72-78",
+        "band_low": 72,
+        "band_high": 78,
+        "prob_pct": 7,
+        "mechanism": "old range, now far overhead"
+      },
+      {
+        "tier": "F1 $69-72",
+        "band_low": 69,
+        "band_high": 72,
+        "prob_pct": 12,
+        "mechanism": "first recovery battleground above"
+      },
+      {
+        "tier": "F2 $65-69",
+        "band_low": 65,
+        "band_high": 69,
+        "prob_pct": 24,
+        "mechanism": "F2 zone \u2014 now overhead resistance after the break"
+      },
+      {
+        "tier": "$59-65",
+        "band_low": 59,
+        "band_high": 65,
+        "prob_pct": 30,
+        "mechanism": "price IS here (~$64.9) \u2014 modal, macro-hostile chop"
+      },
+      {
+        "tier": "$55-59",
+        "band_low": 55,
+        "band_high": 59,
+        "prob_pct": 16,
+        "mechanism": "cascade tail (V-14 touchable)"
+      },
+      {
+        "tier": "V-18 $52-55",
+        "band_low": 52,
+        "band_high": 55,
+        "prob_pct": 8,
+        "mechanism": "tail; V-18 $52 hard stop"
+      }
+    ],
+    "velocity_note": "V-14 \u2014 physical demand creates a VELOCITY floor (silver can't STAY below $60-65 long), NOT a LEVEL floor (CAN touch $55-58 in cascade). Physical responds in 2-6 weeks; paper cascades in 2-6 days.",
+    "world_numbers": {
+      "regime_zone": "RED",
+      "regime_headline": "RED \u2014 FIRMER. Warsh's FOMC debut (16-17 Jun) was HAWKISH: the 2026 cut was removed from the dots and the market now prices a HIKE by Oct (V-11 hawkish-transition risk MATERIALIZED). May CPI 4.2% YoY (10-Jun) breached the 3.9% auto-RED ceiling; 10Y real yield 2.19% rising; DXY 100.8 at a fresh 2026 high. XAGUSD ~$64.9 (desk SILVERBEES-derived, Fri 19-Jun) has BROKEN below the $67.87 F2 floor -> 5.3 suspend CONFIRMED (CONFIRMED vs live spot $64.9-65.6 across 18-20 Jun (Investing.com $64.93 19-Jun; Kitco/APMEX ~$65.0-65.6 20-Jun; TradingEconomics $64.26 18-Jun); the $68-72 aggregator reads were STALE \u2014 V-26 delta RESOLVED 260621). OFFSET unchanged: positioning washed-out (COT MM +9.8K, 26th pct) + physical TIGHT 4/5 (backwardation, Shanghai +10%, lease elevated) \u2014 but V-12 regime-wins: macro forbids new deploys. HOLD 45,000u; no EXIT trigger hit (wkly ~$64.9 > $63). Credit EASING (CCC 939bp falling); RBI reserves $671.6B now <$680B (gold-reval).",
+      "macro_gates": [
+        {
+          "id": "TNX",
+          "status": "FAIL",
+          "reading": "4.45%",
+          "threshold": "<4.45%",
+          "note": "10Y nominal 4.451% (19-Jun, desk pipeline) AT/above the 4.45% abort-trigger; 10Y real yield 2.19% rising (TradingEconomics 18-Jun). Binding deploy block per 5.2"
+        },
+        {
+          "id": "FOMC",
+          "status": "FAIL",
+          "reading": "HOLD + hawkish Warsh",
+          "threshold": "non-hawkish",
+          "note": "16-17 Jun: HOLD 3.50-3.75% unanimous; 2026 cut REMOVED from dots, hike priced by Oct; Warsh debut hawkish (CNBC/NPR 17-Jun). V-11 risk realized"
+        },
+        {
+          "id": "CPI",
+          "status": "FAIL",
+          "reading": "4.2% YoY",
+          "threshold": "<3.9%",
+          "note": "May CPI 4.2% YoY (10-Jun, CNBC/Morningstar) \u2014 above the 3.9% auto-RED ceiling; core 2.9%, energy +23.5% YoY"
+        },
+        {
+          "id": "DXY",
+          "status": "WATCH",
+          "reading": "100.8",
+          "threshold": "<102",
+          "note": "fresh 2026 high, strong uptrend (TradingEconomics 19-Jun); ~1.2 cushion to the 102 pause \u2014 headwind for USD-priced silver"
+        },
+        {
+          "id": "USDINR",
+          "status": "PAUSE",
+          "reading": "94.3",
+          "threshold": "<94 normal / <96 wkly",
+          "note": "94.31-94.44 (19-Jun) just over the 94 PAUSE; mean-reverting down from 95.2; wkly close ~94.3 << 96. Structural bias to 100+ \u2014 sub-gate prints are traps"
+        },
+        {
+          "id": "CCC_OAS",
+          "status": "OK",
+          "reading": "~939bp",
+          "threshold": "<1000bp",
+          "note": "EASING \u2014 ~939bp and falling (FRED/TradingEconomics Jun) from 957bp rising; broad HY 263bp tightening. Credit-abort risk receding"
+        },
+        {
+          "id": "RBI_FX",
+          "status": "WATCH",
+          "reading": "$671.6B",
+          "threshold": ">$680B",
+          "note": "BREACHED \u2014 $671.6B wk-end 12-Jun (-$9.99B w/w, gold-revaluation driven not bullion sales; RBI WSS). Now below the $680B cushion gate"
+        },
+        {
+          "id": "BRENT",
+          "status": "WATCH",
+          "reading": "~$80",
+          "threshold": "<$105",
+          "note": "Brent ~$80 / WTI >$77 (TradingEconomics 19-Jun); US-Iran Switzerland talks CANCELLED, Hormuz/Israel-Lebanon live \u2014 oil reversal re-arms 10.1"
+        }
+      ],
+      "cot": {
+        "mm_net_k": 9.8,
+        "ladder_rung": "COT-CAPITULATION / washed-out (26th pct, <70K NO-ENTRY)",
+        "g8_status": "MET \u2014 washed-out base intact; MM net +9.8K at the 26th percentile of its own 3.8yr range, well under the 70K NO-ENTRY gate",
+        "read": "Canonical CFTC disaggregated Managed-Money NET (F&O combined, #084691): +9,794 contracts (09-Jun survey / 12-Jun release), -639 w/w, OI 126,230. 26th percentile = washed-out, well under the 70K NO-ENTRY gate. CONFIRMED latest available 21-Jun: the 16-Jun survey doesn't exist (CFTC Juneteenth delay -> next release Mon 22-Jun). Prior weeks (same cut): 02-Jun +10,433 / 26-May +10,244. Positioning is NOT the binding constraint \u2014 the macro/yield gate is.",
+        "as_of": null
+      },
+      "gsr": 68.86187098953056,
+      "inventory_headline": {
+        "venue": "COMEX (Registered)",
+        "value": "~86.2M oz",
+        "change": "+5.7% over 30d",
+        "bias": "\ud83d\udfe2 bullish",
+        "note": "Immediately-deliverable thin vs OI = paper leverage; slight rebuild off a low base (17-Jun)"
+      },
+      "inventory_as_of": "2026-06-18"
+    },
+    "bull_bear": {
+      "scenario_weights": {
+        "bull_pct": 22,
+        "base_pct": 46,
+        "bear_pct": 32
+      },
+      "bull_case": [
+        "\ud83d\udc02 ~22% \u2014 Physical TIGHT 4/5 reasserts: deep COMEX backwardation (steepest since the 1980s) + Shanghai premium +$6.91/oz (+10.06%, SGE>London) + elevated lease rates + thin COMEX registered (86.2Moz) = paper-vs-physical bifurcation extreme [goldsilver.ai/SchiffGold 17-18 Jun]",
+        "Positioning washed-out: canonical COT MM-net +9.8K (09-Jun survey, 26th pct, << 70K NO-ENTRY) \u2014 thin long-liquidation fuel left for a cascade [CFTC #084691]",
+        "5th consecutive structural deficit (~67Moz, Silver Institute); credit EASING (CCC OAS 939bp falling) removes one tail",
+        "V-14 velocity floor: physical resists STAYING <$65 for weeks \u2014 a relief bounce to reclaim $65-69 is the bull path if any macro data softens",
+        "Under-deployment is strength: ~\u20b93.9Cr dry powder buys the F1/F2 zones the ladder always wanted, below the \u20b9252 blended \u2014 once gates re-arm"
+      ],
+      "base_case": [
+        "\u2696\ufe0f ~46% \u2014 Chop-and-digest $59-67 while the hawkish-Fed repricing clears; each gold-MM unwind wave drags silver in sympathy",
+        "Macro gate firmly shut: CPI 4.2% (>3.9% auto-RED) + Warsh hawkish (hike priced by Oct) + 10Y real yield 2.19% rising + DXY 100.8 fresh high = no new deploys (V-12)",
+        "SBees 15% duty premium (~+9%) cushions the INR book vs global spot; family book marked at SILVERBEES \u20b9221.6 (19-Jun)",
+        "Ladder stays gate-BLOCKED until TNX <4.45% + a non-hawkish Fed signal + CPI back <3.9%; do nothing, let the gates decide",
+        "Next reads: COT 22-Jun (Juneteenth-delayed), PCE 25-Jun, June CPI ~14-Jul, FOMC 28-29 Jul"
+      ],
+      "bear_case": [
+        "\ud83d\udc3b ~32% \u2014 Second leg DOWN already underway: F2 $67.87 BROKEN (XAG ~$64.9, Fri 19-Jun daily close) -> 5.3 suspend confirmed; real-yield + DXY grind continues",
+        "Gold MM still crowded long \u2014 a gold capitulation cascade drags silver to the $55-59 V-14 tail",
+        "Market pricing a Fed HIKE by Oct \u2014 the entire 2026 'dovish-Fed' silver pillar is inverted until proven otherwise (V-11 realized)",
+        "RBI reserves $671.6B now <$680B cushion gate; USDINR structural bias to 100+ \u2014 INR-side stress could compound",
+        "EXIT-ALL watch: weekly close <$63 (Feb-6 proven low $63.85) \u2014 XAG ~$64.9 is CLOSE; V-18 $52 hard stop unconditional"
+      ]
+    }
+  },
+  "sensitive_enc": {
+    "v": 1,
+    "iter": 200000,
+    "salt": "7pXm9lUJHf8otJUZ3xdALA==",
+    "iv": "nPMMX/260EPcneTd",
+    "ct": "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"
+  },
+  "privacy": {
+    "locked": true,
+    "hidden": [
+      "accounts",
+      "family_totals",
+      "strategy",
+      "deployment_plan",
+      "silver_cap",
+      "trim_ladder",
+      "add_ladder",
+      "strategy_timeline",
+      "f98_redeployment",
+      "meta_private"
+    ]
+  }
+}

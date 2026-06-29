@@ -1,0 +1,240 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CDSL (Central Depository Services) — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">CDSL (Central Depository Services) — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>CDSL</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-4 pick — depository duopoly (India-Stack DPI), 45% ROCE; FY26 PAT dipped (cyclical). Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s larger depository — the duopoly + asset-light + high-ROCE USP, the demat-account moat, and FY26 earnings that <em>dipped</em> on capital-market-activity dependence. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Every figure carries source + as-of; cross-checked ≥2 sources; &gt;5% disagreements shown both ways; unverifiable = <strong>PENDING</strong>, never fabricated. INR (₹ crore). No naked numbers. No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<h4>Capital-market-infra domain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Depository</span><span>Holds securities in electronic (demat) form; CDSL + NSDL are India&#x27;s duopoly. CDSL is #1 by demat accounts. The USP = a regulated, asset-light, recurring-fee duopoly.</span></div>
+<div class="mdtr"><span>Demat account</span><span>Electronic securities account; CDSL earns annual + transaction + corporate-action fees per account. Account growth = structural moat.</span></div>
+<div class="mdtr"><span>India-Stack / DPI</span><span>Digital public infrastructure; CDSL is a beneficiary of financialisation + retail-investor growth.</span></div>
+<div class="mdtr"><span>Revenue volatility</span><span>Transaction + IPO/corporate-action fees swing with market activity → earnings can be cyclical.</span></div>
+</div>
+<h4>Financial terms</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning (CDSL reading)</span></div>
+<div class="mdtr"><span>P/E</span><span>~57× (derived: mcap ₹25,958 Cr ÷ cons PAT ₹455 Cr).</span></div>
+<div class="mdtr"><span>ROCE</span><span><strong>45.14%</strong> (asset-light) — exceptional.</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~21× (₹25,958/₹1,239) — high (normal for asset-light infra).</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>No identifiable single promoter (widely held; BSE-linked heritage) — <strong>PENDING</strong> structure.</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹25,958 Cr.</span></div>
+</div>
+<h4>Peer universe</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>Note</span></div>
+<div class="mdtr"><span>NSDL</span><span>The other depository (duopoly partner/competitor)</span></div>
+<div class="mdtr"><span>BSE / MCX / Angel One</span><span>Capital-market-infra cohort (this batch)</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>CDSL reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>no identifiable promoter (widely held)</span><span><strong>FAIL</strong> (technical)</span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~57×</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>45.14%</span><span><strong>PASS</strong> (exceptional)</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>high (depository margins ~50%+)</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>std income +11% FY26; 3y PENDING</span><span>BORDERLINE (PENDING)</span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~21×</span><span><strong>FAIL</strong> (asset-light norm)</span></div>
+</div>
+<p><strong>Aggregate: 4 PASS (D/E, ROCE 45%, OPM, ICR) — a genuinely high-quality asset-light duopoly.</strong> The FAILs are valuation + the (normal-for-infra) high MCap/Sales + no-promoter. FY26 earnings dipped, which is the watch.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>CDSL is India&#x27;s larger depository (by demat accounts) — an asset-light, regulated <strong>duopoly</strong> (with NSDL) earning recurring annual + transaction + corporate-action fees, with an exceptional <strong>45.14% ROCE</strong>. FY26: <strong>standalone total income ₹1,096 Cr (+11%)</strong> but <strong>consolidated total income ₹1,239 Cr (+3%) and consolidated net profit ₹455 Cr (−14% from ₹526 Cr)</strong> (cdsl/business-standard, FY26 results); <strong>Q4 PAT ₹79.79 Cr (−20.5%)</strong> on revenue ₹262.85 Cr (+17%). EPS ₹21.82 (from ₹25.20); dividend ₹12.75. Market cap ₹25,958 Cr at <strong>~57× P/E</strong>.</p>
+<blockquote><strong>CORE VERDICT.</strong> CDSL is a high-quality &quot;assurance from the nature of the work&quot; name — an asset-light, regulated depository duopoly with 45% ROCE, net cash, and a structural demat-account growth moat (financialisation of India). <strong>The honest caveat:</strong> revenue is <strong>market-activity-dependent and volatile</strong> — FY26 net profit fell 14% as transaction/IPO/corporate-action fees normalised after a hot prior year (quarterly revenue has swung ~44% over seven quarters). At ~57× PE, the multiple prices a re-acceleration. The load-bearing question is whether demat-account growth + market activity rebound earnings. Excellent franchise + high returns; cyclical revenue + premium multiple are the constraints.</blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Central Depository Services (India) Ltd (NSE: CDSL) is a SEBI-regulated depository — electronic custody of securities, plus KYC (CVL), insurance-repository, and data services.</p>
+<h4>1.1 Revenue streams</h4>
+<p>Annuity fees (per account/issuer), transaction fees (market-activity-linked), IPO/corporate-action fees, KYC + data services. The annuity portion is sticky; the transaction/IPO portion is cyclical.</p>
+<h4>1.2 FY26 detail</h4>
+<p>Std income ₹1,096 Cr (+11%); cons income ₹1,239 Cr (+3%); cons PAT ₹455 Cr (−14%); ROCE 45.14%.</p>
+<h4>1.3 Equity structure</h4>
+<p>No identifiable single promoter (widely held; BSE was a legacy stakeholder, since diluted). FII/DII/public mix PENDING.</p>
+<h4>1.4 Recent corporate actions</h4>
+<p>FY26 results (PAT −14%); ₹12.75 dividend; continued demat-account growth.</p>
+<blockquote><strong>ANCHOR FACT.</strong> A 45%-ROCE, net-cash, regulated depository duopoly with structural demat-account growth is the bull case; the offset is that FY26 net profit <em>fell 14%</em> on market-activity-dependent revenue volatility, at a ~57× multiple.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<h4>2.1 Ownership / governance</h4>
+<p>SEBI-regulated market infrastructure institution (MII) — high governance/regulatory oversight; widely held (no dominant promoter). Regulated-pricing dependence is inherent.</p>
+<h4>2.2 Governance flags — adversarial scan</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>None identifiable</span><span>Widely held MII</span></div>
+<div class="mdtr"><span>SEBI/regulatory</span><span>REGULATED</span><span>MII oversight; regulated fees</span></div>
+<div class="mdtr"><span>Promoter pledge</span><span>N/A</span><span>—</span></div>
+<div class="mdtr"><span>Balance sheet</span><span>STRONG</span><span>Net cash; 45% ROCE</span></div>
+<div class="mdtr"><span>Revenue volatility</span><span>WATCH</span><span>Market-activity dependence (FY26 PAT −14%)</span></div>
+<div class="mdtr"><span>Auditor changes</span><span>PENDING</span><span>—</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; strong MII governance + balance sheet. The real watch is earnings cyclicality + regulated-fee dependence.</blockquote>
+<hr>
+<h3>Section 3 / The Depository-Duopoly USP — Durable Moat or Cyclical Earnings?</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a structural financialisation-of-India duopoly compounding demat accounts. Variant question: FY26 earnings fell 14% — how cyclical is the revenue, and is ~57× PE justified through a soft patch?</p>
+<h4>3.1 Why the USP is real</h4>
+<p>A regulated duopoly with asset-light economics + recurring fees + 45% ROCE is a rare, high-quality moat; demat-account growth is structural as Indian households financialise.</p>
+<h4>3.2 Honest scepticism — five open questions</h4>
+<ol>
+<li><strong>Revenue cyclicality.</strong> ~44% quarterly revenue swing — how much is annuity vs market-linked?</li>
+<li><strong>FY26 dip.</strong> PAT −14% — base normalisation or trend?</li>
+<li><strong>Regulated fees.</strong> SEBI pricing actions can cap monetisation.</li>
+<li><strong>Competition.</strong> NSDL (now listed) intensity.</li>
+<li><strong>Valuation.</strong> ~57× PE on dipping earnings.</li>
+</ol>
+<blockquote><strong>USP VERDICT.</strong> Genuinely high-quality duopoly with exceptional returns — but the earnings are more cyclical than the &quot;structural compounder&quot; narrative implies; the multiple needs a rebound.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<h4>4.1 Multi-year financials</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Total income ₹Cr (cons)</span><span>PAT ₹Cr (cons)</span><span>ROCE</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>1,239 (+3%)</span><span>455 (−14%)</span><span>45.14%</span><span>cdsl/business-standard</span></div>
+<div class="mdtr"><span>FY25</span><span>1,199</span><span>526</span><span>high</span><span>cdsl</span></div>
+<div class="mdtr"><span>Q4 FY26</span><span>262.85 rev (+17%)</span><span>79.79 (−20.5%)</span><span>—</span><span>business-standard</span></div>
+</div>
+<blockquote>Read: FY26 net profit fell 14% on revenue normalisation despite std-income +11% — the cyclicality is the story. ROCE stays exceptional (45%).</blockquote>
+<h4>4.2 Risk drivers</h4>
+<p>Revenue cyclicality, regulated-fee risk, NSDL competition, valuation.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Lowest balance-sheet risk (net cash, 45% ROCE); the risk is earnings cyclicality + valuation, not solvency. Watch demat-account growth + market-activity rebound.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>CDSL</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹25,958 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~57×</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~21× (asset-light)</span></div>
+<div class="mdtr"><span>ROCE</span><span>45.14%</span></div>
+</div>
+<h4>5.1 What it implies</h4>
+<p>~57× PE on FY26 <em>dipped</em> earnings prices an earnings rebound + continued account growth. Asset-light quality supports a premium; the cyclicality caps how much.</p>
+<h4>5.2 Bull / base / bear</h4>
+<ul>
+<li><strong>Bull:</strong> market activity + demat growth rebound → earnings re-accelerate → premium holds.</li>
+<li><strong>Base:</strong> steady account growth, cyclical revenue → earnings recover modestly; multiple compresses.</li>
+<li><strong>Bear:</strong> prolonged market lull / fee cuts → earnings stay soft → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> High-quality duopoly at a premium on cyclically-soft earnings — the rebound is the swing.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<h4>6.1 Catalysts</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Event</span><span>Tells us</span></div>
+<div class="mdtr"><span>FY27 quarters</span><span>Transaction/IPO revenue</span><span>Cyclical rebound</span></div>
+<div class="mdtr"><span>FY27</span><span>Demat-account growth</span><span>Structural moat</span></div>
+<div class="mdtr"><span>FY27</span><span>SEBI fee actions</span><span>Monetisation risk</span></div>
+</div>
+<h4>6.2 Risk register</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Risk</span><span>Prob</span><span>Severity</span><span>Watch</span></div>
+<div class="mdtr"><span>1</span><span>Revenue cyclicality</span><span>Med-High</span><span>Med</span><span>Quarterly revenue</span></div>
+<div class="mdtr"><span>2</span><span>Regulated fee cuts</span><span>Low-Med</span><span>Med</span><span>SEBI actions</span></div>
+<div class="mdtr"><span>3</span><span>Valuation de-rate</span><span>Med</span><span>Med</span><span>Earnings vs ~57×</span></div>
+<div class="mdtr"><span>4</span><span>NSDL competition</span><span>Low-Med</span><span>Low-Med</span><span>Market share</span></div>
+</div>
+<h4>6.3 Falsification tests / kill-switches</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Claim</span><span>Failure trigger</span></div>
+<div class="mdtr"><span>1</span><span>Earnings rebound</span><span>FY27 PAT fails to recover toward FY25</span></div>
+<div class="mdtr"><span>2</span><span>ROCE durable</span><span>ROCE falls below ~30%</span></div>
+<div class="mdtr"><span>3</span><span>Account growth structural</span><span>Demat-account growth stalls</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<h4>7.1 Screen recap</h4>
+<p>PASS: D/E (net cash), ROCE (45%), OPM, ICR. FAIL: promoter (none), PE (~57×), MCap/Sales (~21×). Borderline: sales-CAGR.</p>
+<h4>7.2 Final verdict</h4>
+<ul>
+<li><strong>Would-buy:</strong> asset-light regulated depository duopoly; 45% ROCE; net cash; structural demat-account growth; dividends.</li>
+<li><strong>Would-not-buy:</strong> FY26 PAT −14% (cyclical); ~57× PE; regulated-fee dependence; no promoter.</li>
+<li><strong>Depends-on:</strong> market-activity + demat-account-growth rebound.</li>
+</ul>
+<h4>7.3 Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>Duopoly; 45% ROCE; net cash; structural account growth</span><span>Revenue cyclicality; SEBI fee risk</span><span>FY26 PAT −14% (market-activity dependent)</span></div>
+<div class="mdtr"><span>High margins; dividends</span><span>NSDL competition</span><span>~57× PE on dipped earnings</span></div>
+</div>
+<h4>7.4 Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Anchor</span><span>Value</span><span>Why</span></div>
+<div class="mdtr"><span>Market cap</span><span>₹25,958 Cr</span><span>price PENDING live-verify</span></div>
+<div class="mdtr"><span>P/E</span><span>~57×</span><span>the constraint</span></div>
+<div class="mdtr"><span>Watch</span><span>transaction-revenue rebound + account growth</span><span>re-rate/de-rate trigger</span></div>
+</div>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> CDSL is a genuinely high-quality, asset-light depository duopoly (45% ROCE, net cash) with a structural demat-growth moat — but FY26 earnings fell 14% on market-activity-dependent revenue, and ~57× PE prices a rebound. <strong>This brief does NOT recommend deployment.</strong> Watch the cyclical earnings rebound; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26 results: cdslindia.com (media release); business-standard.com (Q4 PAT ₹79.8 Cr); dailyhunt/business-upturn (income +11%); marketsmojo.com</li>
+<li>Valuation/metrics: simplywall.st; screener.in/company/CDSL (mcap ₹25,958 Cr, ROCE 45.14%, EPS ₹21.82)</li>
+<li><strong>PENDING:</strong> exact shareholding, annuity-vs-transaction revenue split, 3y CAGR, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_CDSL_DEEP-RESEARCH</div>
+</div></body></html>

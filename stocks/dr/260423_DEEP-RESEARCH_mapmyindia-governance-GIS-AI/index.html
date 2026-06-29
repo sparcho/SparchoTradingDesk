@@ -1,0 +1,521 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEEP_RESEARCH — MAPMYINDIA: Governance gate + GIS×AI thesis · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">DEEP_RESEARCH — MAPMYINDIA: Governance gate + GIS×AI thesis</h1>
+    <div class="hmeta">ticker <b>MAPMYINDIA / C.E. Info Systems Ltd (NSE: MAPMYINDIA, BSE: 543425)</b></div>
+    
+  </div>
+  <div class="body"><p><strong>Date:</strong> 2026-04-24</p>
+<p><strong>Operator ask:</strong> Two-part exploratory study — (A) does MAPMYINDIA pass Sanjeev&#x27;s binary governance gate? (B) is the GIS×AI thesis concrete mechanism or thematic vibes?</p>
+<p><strong>Verdict line:</strong> Governance = <strong>PARTIAL PASS</strong> (honest operator family, clean headline record, one minor procedural RPT-filing penalty H1 FY26, one unresolved Ola litigation, CEO-succession-into-B2C structure deserves ongoing watch). Thesis = <strong>MODERATE MECHANISM</strong> (real policy tailwind + genuine market-share in auto embedded + large visible order book; but AI revenue is NOT separately disclosed, FY28 ₹1,000cr target requires trajectory inflection not yet visible, Google price-cut + Ola competitive pressure are real).</p>
+<p><strong>Integration:</strong> Governance PARTIAL + thesis MODERATE ⇒ <strong>parking-lot / secondary watchlist</strong>, not a front-of-book candidate. Bottom structure per Sanjeev unhealed (917/922 close below prior 1004 swing low) argues: wait for consolidation AND one quarter of clean re-acceleration (sales + OPM + NP all up) before re-engaging the question.</p>
+<hr>
+<h3>§5.22 CRITICAL_ANALYSIS_INTAKE BLOCK</h3>
+<ul>
+<li><strong>Canonical files read:</strong></li>
+<li><code>/TRADER/00_SYSTEM/REFERENCES/FRAMEWORKS/research-discipline.md</code> (v1, 2026-04-23 — full 10-rule spine)</li>
+<li><code>/TRADER/00_SYSTEM/PROCESSES.md</code> §5.22 + §5.24 (lines 1846–2066)</li>
+<li><code>/TRADER/00_SYSTEM/REFERENCES/CONVERSATIONS/260423_sanjeev_L2-chips-semi-ems-read.md</code> (full, incl. MAPMYINDIA §3 and blindspot audit §7)</li>
+<li><code>/TRADER/00_SYSTEM/AGENTS/DEEP_RESEARCH.md</code> (v1.2)</li>
+<li><strong>Reference posts consulted (POSTS/ sweep):</strong> <code>_INDEX.md</code> inventoried; no existing post on MAPMYINDIA, GIS, geospatial, or India-map-software. Closest thematic proximity: the Sanjeev conversation (CONVERSATIONS/, not POSTS/) already flagged by operator. No fake-citation — no relevant POSTS/.</li>
+<li><strong>Web searches run (16 queries total, parallel):</strong> Q3 FY26 results, Q2 FY26 results, promoter/pledging, board/auditor, SEBI action, RPTs, Q3 FY26 concall, buyback/dividend/acquisitions, independent directors, Rohan Verma succession, Elara/JM analyst targets, Ola lawsuit outcome, FY28 guidance + ClarityX + Advanced Survey, deferred govt orders, share price history + corrections, India geospatial market size. Additional: auto OEM ADAS products, AI strategy, data sovereignty, exec comp, defense/ISR, Genesys peer comp, other income composition.</li>
+<li><strong>Known scope limits / analogy caveats:</strong></li>
+<li><strong>Sanjeev framework is n=1</strong> per source file — applied here as consultant lens (Option-B gate), not oracle. Every Sanjeev-derived verdict is labelled as such.</li>
+<li><strong>Other-income &gt;50% NP test:</strong> could not be directly verified against quarterly line-item disclosures from open sources (would need BSE XBRL / investor-presentation P&amp;L breakdown). Indirect triangulation (cash ~₹650cr × treasury yield vs PAT ~₹19cr) suggests other income likely IS material in weak quarters — flagged as unverified, not load-bearing.</li>
+<li><strong>Auditor name:</strong> not explicitly confirmed from open web; would need FY25 annual report direct. Flag.</li>
+<li><strong>Rakesh Verma FY25 cash comp:</strong> not retrieved from open web; FY25 annual report required. Flag.</li>
+<li><strong>AI-product revenue contribution in ₹Cr:</strong> company does NOT disclose AI as a separate segment. Map-led vs IoT-led is the disclosed split. Any &quot;AI revenue&quot; claim is therefore narrative, not line-item — load-bearing caveat for Part B.</li>
+<li><strong>Ola litigation outcome:</strong> no public settlement or judgment found as of search date; status open. Material risk.</li>
+<li><strong>Source tiers in use:</strong> Primary — BSE filings via bseindia.com, company IR PDFs (cdn-public.mappls.com), NSE transcript archives. Secondary — Business Standard, BusinessToday, Entrackr, Medianama, Construction World, MultiBagg, InvestyWise. Tertiary — Tracxn, Inc42 aggregation. Research-discipline blog PIB releases for policy claims. Every load-bearing claim tier-tagged inline below.</li>
+</ul>
+<hr>
+<h3>§5.24 STRESS_TEST_GATE — not triggered</h3>
+<p>This output is <strong>study-mode</strong> per operator instruction. No BUY / ADD / TRIM / EXIT / HEDGE / tranche / regime-flip / stop-loss / top-N-actionable recommendation is made. Therefore the 6-question stress-test block is NOT invoked. If operator later asks &quot;should I position in MAPMYINDIA now,&quot; that crosses into explicit actionability and §5.24 will be run at that stage — including Commodities / Credit extensions irrelevant here, but Quant-Technical extensions (entry-gate, V-01 chart freshness) would apply. Verdict line in this file is descriptive, not actionable.</p>
+<hr>
+<h3>Rule 8 CHEAT-SHEET (readable in 5 min)</h3>
+<p><strong>2-sentence summary:</strong> MAPMYINDIA is a founder-operated (Verma family) B2B geospatial + IoT business with a clean headline governance record, a real data-sovereignty moat on government/defense contracts, and ~80% share of Indian auto-OEM embedded maps — but Q3 FY26 broke across every Sanjeev parameter (sales −18%, OPM −780bps, OP/NP/EPS all down double-digit) and AI-product revenue is not separately disclosed despite being the thesis frame. The stock is down ~66% from the June 2024 peak (₹2,747 → ~₹922) as execution slipped and Google Maps 70% price-cut pressured the consumer side; forward case relies on order book (₹1,770cr) converting + auto/defense AI products monetizing into the FY28 ₹1,000cr target (which the current run-rate ~₹450cr/yr does NOT support without a step-change).</p>
+<p><strong>Top findings (one line each, with mechanism):</strong></p>
+<ol>
+<li><strong>Governance headline is clean, but not immaculate.</strong> Verma family ~51.36% stable, no pledging, long-tenured operators; one procedural exchange penalty for delayed RPT filing H1 FY26; no SEBI order. Secondary.</li>
+<li><strong>CEO succession in 2024 into a founder-son-led B2C venture (Mappls brand licensed out) is a structural RPT to watch.</strong> MapmyIndia invested ₹35cr CCDs + ₹10L for 10% — transparent but a perpetual related-party surface. Secondary.</li>
+<li><strong>Q3 FY26 (Dec 2025) fires every Sanjeev quarterly bad-signal.</strong> Revenue ₹93.7cr (−18% YoY), EBITDA ₹26.8cr (margin 28.6% vs 36.4%), PAT ₹19cr (−41% YoY), Map-led −41.5%, C&amp;E −44%. Primary (investor presentation / BSE).</li>
+<li><strong>Q2 FY26 (Sep 2025) is mixed not bad.</strong> Revenue ₹113.8cr (+9.7%) but PAT ₹18.5cr (−39.2%) — IoT +67.5% offsets Map-led −14.3%. Reads as &quot;sales up, quality down&quot;. Secondary.</li>
+<li><strong>Order book ₹1,770.7cr (Dec 2025, up from ₹1,500cr Mar 2025) is the forward thesis anchor.</strong> Conversion into Q4 FY26 + Q1 FY27 is management&#x27;s stated catch-up path. Primary (concall).</li>
+<li><strong>FY28 ₹1,000cr revenue guidance requires trajectory inflection.</strong> 9M FY26 revenue ₹329cr ⇒ FY26 ~₹440cr run-rate, flat to FY25 ₹463cr. Hitting ₹1,000cr by FY28 implies ~45% CAGR from FY26 — dependent on order-book conversion + AI/ADAS ramp. Primary + arithmetic.</li>
+<li><strong>Data-sovereignty moat is real on government/defense (e.g. SoI National Geo-Spatial Platform contract, IOCL ₹110cr CVTMS) — NOT on consumer navigation.</strong> NGP 2022 restricts foreign entities from full-res data. Primary (PIB) + secondary.</li>
+<li><strong>AI product revenue is not separately disclosed.</strong> NCASE / Drive GPT / HD maps / ClarityX / Mappls DT / Advanced Survey 20% stake / Perplexity exploratory — all qualitative in IR narrative, none line-itemed. Load-bearing caveat for thesis. Primary (concalls) + secondary (Autocar).</li>
+<li><strong>Google Maps 70% price-cut Aug 2024 + Ola Maps entry are genuine competitive pressure.</strong> MMI CEO (on public record) calls Ola quality unmet + Google pricing inconsistent; active data-theft litigation unresolved. Secondary (Inc42, BusinessToday).</li>
+<li><strong>Peer Genesys International FY25: revenue ₹315cr (+57%), EBITDA margin 52.9%, PAT ₹56cr (+160%) — smaller, faster, fatter.</strong> MAPMYINDIA FY25 ₹463cr (+22%), 39% EBITDA, PAT ₹148cr (+10%). MMI is bigger and more mature; Genesys has stronger tailwind metrics. Secondary.</li>
+</ol>
+<p><strong>Cases (2–3 concrete examples):</strong></p>
+<ul>
+<li><strong>IOCL ₹110cr CVTMS win (vehicle tracking for ~23,000 LPG trucks).</strong> Concrete IoT+location-intelligence deal, long-tenor, govt-adjacent. Proves B2G2C monetization works.</li>
+<li><strong>Survey of India &quot;National Geo-Spatial Platform&quot; award.</strong> First-of-its-kind national platform for geospatial data cataloging + role-based access. Directly operationalizes NGP 2022 / National Geospatial Mission. Shows MMI as the default Indian-entity winner when data-sovereignty eligibility matters.</li>
+<li><strong>Gtropy 75.98% → 96% IoT consolidation (₹25cr).</strong> Real capital-allocation discipline: take operational control of the fast-growing (+67.5% YoY) IoT telematics subsidiary. Contrast with the ₹25cr Zepto 0.049% stake, which is optionality-flavored more than strategic.</li>
+</ul>
+<p><strong>Common misconceptions (3):</strong></p>
+<ul>
+<li><strong>&quot;MAPMYINDIA is an AI company.&quot;</strong> It is a geospatial + IoT company with AI integrated into mapping/navigation. No disclosed AI revenue line. Calling it an AI pure-play overstates the product mix.</li>
+<li><strong>&quot;Google Maps kills MAPMYINDIA.&quot;</strong> Google dominates consumer navigation (~80% share) but MMI holds ~80% in auto-OEM embedded nav — different segment, different buying criteria, different moat (certification, offline maps, defense-eligibility). Consumer ARPU loss ≠ business loss.</li>
+<li><strong>&quot;Order book = revenue.&quot;</strong> ₹1,770cr order book is multi-year, conversion-dependent, lumpy on govt execution cycles (Bihar/Maharashtra delivery delays already hit Q3). Book ≠ P&amp;L until delivered.</li>
+</ul>
+<p><strong>Source tier summary (Rule 4):</strong> 45%+ primary (BSE filings, company IR PDFs, NSE transcript archive, PIB); ~45% secondary (Business Standard, BT, Entrackr, Medianama, Construction World, YourStory, Autocar Professional, Inc42 reporting); ~10% tertiary (aggregators — used only to triangulate, never load-bearing). Unverified items explicitly flagged in intake block.</p>
+<hr>
+<h3>L1 — Plain-language summary</h3>
+<p>MAPMYINDIA is a 30+ year old Indian map-and-IoT company run by the Verma family. The books look clean at the top — family owns half, no pledging, no SEBI action, long track record. But the last reported quarter (Dec 2025) was genuinely bad: sales down, margins compressed, profit down 41%. The company says this is because government customers deferred deliveries and will catch up next two quarters. Meanwhile, the business has a big forward order book (₹1,770cr), a real government/defense moat because Indian law now blocks foreign entities from holding full-resolution map data, and the world&#x27;s best-positioned embedded-maps business for Indian car makers. The &quot;AI&quot; angle is real in the sense that they build AI-enhanced mapping products (HD maps for self-driving, Drive GPT for voice nav, a new analytics arm called ClarityX), but they don&#x27;t tell investors how much of their revenue is AI — so nobody can yet prove it&#x27;s a growth engine from numbers. The stock is down two-thirds from its 2024 peak, so the market has already priced a lot of bad news. This study does NOT say to buy or avoid — it says: the governance passes with a couple of watches, the thesis is moderately concrete not vibes, and the chart structure is not yet healed per Sanjeev&#x27;s rule (&quot;never enter at peaks&quot; applies symmetrically — don&#x27;t enter a broken structure without a base either).</p>
+<hr>
+<h3>L2 — Structured findings</h3>
+<h4>PART A — Governance deep-dive through Sanjeev&#x27;s binary gate</h4>
+<p>Sanjeev&#x27;s binary gate: &quot;Governance is a binary gate, not a spectrum&quot; (Sanjeev framework §4 rule 9). Criterion: can the books be trusted?</p>
+<h5>A1. Promoter / founder history</h5>
+<ul>
+<li><strong>Promoters:</strong> Rakesh Kumar Verma (Chairman &amp; MD, co-founder), Rashmi Verma (co-founder), family. Rakesh Verma is a 26+ year tenure operator at the company he co-founded (1995 as C.E. Info Systems, branded MapmyIndia). Tier: Primary (company profile PDF) + Secondary (DNA India, Inc42).</li>
+<li><strong>Founding wealth:</strong> post-IPO (Dec 2021) the Vermas were reported worth ~$586M — long-term skin in the game. No exit-selling pattern visible in SAST disclosures. Tier: Secondary.</li>
+<li><strong>Son Rohan Verma:</strong> was CEO ~6 years, <strong>stepped down Mar 2025</strong> to launch an independent B2C venture using the Mappls retail brand under license, funded by MMI (₹35cr CCDs + 10% equity for ₹10L). Remains non-exec director on MMI board. Tier: Secondary (Business Standard, Inc42, YourStory, Entrackr — multiple).</li>
+</ul>
+<p><strong>Verdict on A1:</strong> PASS with one watch. Founder stewardship is long-term and aligned (stake + no pledging). The succession-into-licensed-B2C-venture is an ongoing related-party surface area — not a red flag in disclosure (operator called it up-front at board), but a structural watchpoint because Mappls brand licensing + future CCD-conversion terms compound into real capital over time.</p>
+<h5>A2. Board composition + audit committee independence</h5>
+<ul>
+<li>Company publishes standing audit, nomination-and-remuneration, stakeholders-relationship, risk-management, and CSR committees per corporate governance section. Tier: Primary (company IR).</li>
+<li>Specific independent-director count + audit-committee chair independence ratio <strong>not retrieved</strong> from open web; FY25 annual report direct read required to close. Tier: UNVERIFIED — flag.</li>
+</ul>
+<p><strong>Verdict on A2:</strong> PASS PROVISIONAL pending annual-report direct read. No red flags surfaced in secondary coverage; standard committee architecture is in place.</p>
+<h5>A3. Auditor history + qualifications / emphasis-of-matter</h5>
+<ul>
+<li>Auditor identity not retrieved from open-web search — would need FY25 AR direct. Tier: UNVERIFIED — flag.</li>
+<li>No news coverage of audit qualifications, emphasis-of-matter paragraphs, or auditor changes. Silence is not evidence of absence, but coverage of adverse auditor events for listed Indian companies tends to be loud; absence is weak-positive. Tier: Secondary (by exhaustion of searches).</li>
+</ul>
+<p><strong>Verdict on A3:</strong> PROVISIONAL PASS. Close with annual report.</p>
+<h5>A4. Related-party transactions — scale + disclosure quality</h5>
+<ul>
+<li><strong>Material 2025 RPT surface:</strong> Mappls brand licensed to Rohan Verma&#x27;s new B2C venture; MMI invested ₹35cr CCDs + ₹10L equity for 10% stake. Disclosed at board level. Tier: Secondary.</li>
+<li><strong>Procedural penalty:</strong> Exchange (BSE/NSE) levied a minor fine on MMI for delayed submission of RPT disclosures for the half-year ended Sep 30, 2025. Board acknowledged inadvertent delay, paid fine, committed to stronger compliance. Tier: Secondary (TipRanks, InvestyWise via BSE filing).</li>
+</ul>
+<p><strong>Verdict on A4:</strong> PARTIAL PASS. The penalty is procedural not substantive — it&#x27;s about timing of filing, not content or hidden RPTs — so the gate does not fail. But combined with the CEO-succession-B2C structure and the ₹35cr CCD + brand license, <strong>this is the axis that warrants ongoing monitoring</strong>. Reading the actual FY25 AR RPT schedule (and when it drops, the FY26 AR) is the next evidence step.</p>
+<h5>A5. Ownership (promoter trajectory, pledging, insider activity)</h5>
+<ul>
+<li>Promoter holding ~51.36% (Rakesh + Rashmi Verma) stable. Tier: Secondary (Scribd DRHP + Trendlyne SAST).</li>
+<li><strong>No pledging</strong> reported through recent disclosures. Tier: Secondary.</li>
+<li><strong>PhonePe exit:</strong> PhonePe sold 5.3% stake (2.86M shares at ₹1,813.7) in June 2025 block deal — cleanup of an early investor, not a promoter action. Stock fell ~9% on the day. Tier: Secondary (BusinessToday).</li>
+<li>No red-flagged insider trading events surfaced. Tier: Secondary.</li>
+</ul>
+<p><strong>Verdict on A5:</strong> PASS. Promoter trajectory is stable, no pledging — this is the cleanest axis.</p>
+<h5>A6. SEBI / exchange actions</h5>
+<ul>
+<li><strong>One exchange fine</strong> for delayed RPT filing (H1 FY26) — see A4.</li>
+<li><strong>No SEBI investigation, order, settlement, or penalty</strong> surfaced in searches. Tier: Secondary (by exhaustion).</li>
+</ul>
+<p><strong>Verdict on A6:</strong> PASS. One procedural fine is not a governance-gate failure.</p>
+<h5>A7. Material litigation</h5>
+<ul>
+<li><strong>MapmyIndia v. Ola Electric</strong> (July 2024 legal notice, data-theft / API-reverse-engineering allegation over Ola Maps). Ola publicly denied. <strong>No settlement or judgment surfaced</strong> in open web as of search date. Tier: Secondary (BusinessToday, Business Standard, Inc42, YourStory).</li>
+<li>No other material litigation surfaced.</li>
+</ul>
+<p><strong>Verdict on A7:</strong> PARTIAL — unresolved adversarial litigation against a listed peer. MMI is plaintiff (not defendant), which is a positive sign (rights-enforcement, not rights-violation), but outcome risk is open. Low-severity for governance gate but medium for thesis competitiveness.</p>
+<h5>A8. Executive compensation vs Genesys International</h5>
+<ul>
+<li>Specific Rakesh Verma FY25 remuneration <strong>not retrieved</strong> from open web — FY25 AR direct required. Tier: UNVERIFIED — flag.</li>
+<li>Genesys FY25 exec comp also not retrieved. Close with both ARs.</li>
+</ul>
+<p><strong>Verdict on A8:</strong> DEFERRED pending AR read. Not a pass-fail call without data.</p>
+<h5>A9. Capital allocation track record</h5>
+<ul>
+<li><strong>FY25 final dividend:</strong> ₹3.50/share (175% of ₹2 FV). Primary (BSE corp action) + Secondary (Autocar Pro).</li>
+<li><strong>Q1 FY26 interim dividend:</strong> ~₹20cr aggregate. Secondary.</li>
+<li><strong>Acquisitions / strategic stakes H1-Q3 FY26:</strong></li>
+<li>Gtropy: 75.98% → 96% (₹25cr, FY26), IoT telematics subsidiary consolidation. Strategic fit = clear. Secondary (CEOs of Bharat, Entrackr).</li>
+<li>Zepto: ₹25cr for 0.049% stake (FY26). Optionality play, marginal strategic fit; reads as financial more than strategic. Secondary.</li>
+<li>Advanced Survey LLP: 20% strategic investment approved Q3 FY26 — HD mapping. Strategic fit = clear. Primary (BSE filing, InvestyWise).</li>
+<li>Iwayplus: stake for indoor mapping. Strategic fit = clear. Secondary.</li>
+<li>Mappls DT (ex-Vidteq): carved out as wholly-owned subsidiary for govt digital transformation + defense tech. Secondary.</li>
+<li>Rohan Verma B2C venture: ₹35cr CCDs + ₹10L equity for 10%. See A4.</li>
+<li><strong>Cash:</strong> ~₹639–676cr through 2025. No leverage, no dilution pressure. Secondary.</li>
+<li><strong>No buyback</strong> announced in FY25 / FY26 to date.</li>
+</ul>
+<p><strong>Verdict on A9:</strong> PASS with one note. Dividends are modest and consistent. Strategic acquisitions are coherent (Gtropy, Advanced Survey, Iwayplus, Mappls DT all directly bolt into the core). Zepto stake is the least coherent — small enough to not matter, but flags the &quot;treasury as VC fund&quot; temptation that can dilute discipline over time. Watch.</p>
+<h5>A10. Multi-parameter quarterly read (Sanjeev template)</h5>
+<div class="mdtbl">
+<div class="mdtr"><span>Quarter</span><span>Sales</span><span>OPM</span><span>OP</span><span>NP</span><span>EPS</span><span>Sanjeev label</span></div>
+<div class="mdtr"><span>Q2 FY26 (Sep 2025)</span><span>₹113.8cr <strong>+9.7% YoY</strong></span><span>mid-30s% (mixed vs ~38% prior)</span><span>flat-down</span><span>₹18.5cr <strong>−39.2%</strong></span><span>down</span><span><strong>MIXED</strong> — sales up, bottom line down, IoT carrying</span></div>
+<div class="mdtr"><span>Q3 FY26 (Dec 2025)</span><span>₹93.7cr <strong>−18% YoY</strong></span><span>28.6% <strong>(−780bps YoY)</strong></span><span>₹26.8cr EBITDA <strong>−35.8%</strong></span><span>₹19cr <strong>−41%</strong></span><span>₹3.30 diluted, down</span><span><strong>BAD on all parameters</strong> — Sanjeev&#x27;s DIXON/KAYNES template fires</span></div>
+</div>
+<p>Segment decomposition Q3: Map-led ₹51cr (−41.5% YoY), C&amp;E ₹36.8cr (−44%), IoT continuing to grow but insufficient to offset.</p>
+<p><strong>Other-income-as-%-of-NP test:</strong> Company holds ~₹650cr cash → ~₹45cr/yr at 7% treasury yield → ~₹11cr/qtr. Vs Q3 PAT ₹19cr, other income is mathematically plausible at ~55–60% of NP in weak quarters. Could not verify directly from quarterly line-item disclosures in open search results; <strong>flagged as plausible earnings-quality concern, not proven</strong>. Direct BSE quarterly XBRL / investor presentation P&amp;L breakdown required to close. This is Sanjeev&#x27;s DIXON test (rule 4) at the edge of firing.</p>
+<p><strong>Verdict on A10:</strong> PARTIAL / LEANING FAIL for the Dec 2025 quarter by Sanjeev&#x27;s template. Management&#x27;s explanation (government-order deferrals to Bihar/Maharashtra election cycles + AI integration slippage + HD-map capex) is specific and falsifiable — Q4 FY26 + Q1 FY27 results are the verification window. If the catch-up narrative holds, the single quarter is noise; if it doesn&#x27;t, the framework&#x27;s concern was correct.</p>
+<h5>A11. Promoter commentary coherence</h5>
+<ul>
+<li><strong>Stated FY28 target:</strong> ₹1,000cr revenue, ₹2,000cr order book by Apr 2028. Consistent across recent concalls.</li>
+<li><strong>Coherence check:</strong> FY25 actual ₹463cr ⇒ FY28 target ₹1,000cr = 29% CAGR. 9M FY26 ₹329cr ⇒ FY26 full-year ~₹440cr (flat to down vs FY25). Means FY26 → FY28 has to do ~51% CAGR to catch up from a flat year. <strong>Ambitious; not demonstrably achievable from current trajectory.</strong> Primary (concalls) + arithmetic.</li>
+<li><strong>Past forward-looking vs actuals:</strong> Company has historically met EBITDA margin guidance (35%+ band) but revenue growth has consistently underrun IPO-era aspirations. Tier: Secondary (trend through FY23–FY25 result summaries).</li>
+</ul>
+<p><strong>Verdict on A11:</strong> PARTIAL. Commentary is coherent within its own frame and disclosed honestly; the underrun-vs-aspiration pattern is real but disclosed, not hidden.</p>
+<h5>Part A — consolidated verdict: <strong>PARTIAL PASS</strong></h5>
+<ul>
+<li>Honest-operator family: ✅</li>
+<li>Headline governance record: ✅ (one procedural exchange fine, no SEBI action)</li>
+<li>Board/audit/auditor specifics: ✅ PROVISIONAL (need AR direct read to fully close)</li>
+<li>RPT disclosure quality: ⚠️ (CEO-succession-B2C structure is a structural watchpoint)</li>
+<li>Quarterly earnings quality: ⚠️ (Dec 2025 fires Sanjeev&#x27;s bad-parameter template; other-income %-of-NP flag not verified)</li>
+<li>Capital allocation: ✅ with minor ⚠️ on Zepto stake</li>
+<li>Litigation: ⚠️ (Ola case unresolved; MMI is plaintiff)</li>
+<li>Promoter commentary coherence: ⚠️ (FY28 target requires step-change, not yet visible)</li>
+</ul>
+<p><strong>Sanjeev-gate binary:</strong> does NOT fall to FAIL. Does NOT clean to pure PASS. Sits at <strong>PARTIAL</strong> — enough to keep the name in a secondary study universe, not enough to close it out as &quot;buy the business on governance alone.&quot;</p>
+<p><strong>Sanjeev-framework silence points:</strong> the framework is silent on (i) large-cash-balance-and-treasury-income as a legitimate part of the model (vs a quality concern), (ii) succession-into-licensed-sibling-entity structures, and (iii) IP-based B2B SaaS-plus-hardware companies where margin and mix can swing hard on customer-delivery timing without being a governance signal. Each of these is more prominent in MAPMYINDIA than in the Sanjeev-original EMS/manufacturing set.</p>
+<hr>
+<h4>PART B — GIS × AI thesis investigation</h4>
+<p>Thesis under test (operator stated): <em>&quot;India GIS has massive untapped potential; AI+GIS could produce exponential growth; MAPMYINDIA&#x27;s AI vertical is a possible vehicle.&quot;</em></p>
+<p>Rule 4 of Sanjeev framework / §5.22 step 4: mechanism, not analogy.</p>
+<h5>B1. India GIS landscape — policy state</h5>
+<ul>
+<li><strong>National Geospatial Policy 2022</strong> (announced Dec 2022): liberalizes geospatial data access, restricts foreign entities from holding full-resolution data without Survey of India approval, targets high-resolution topo + national DEM by 2030. Tier: Primary (PIB).</li>
+<li><strong>National Geospatial Mission FY26:</strong> ₹100cr Budget allocation (Budget 2025). Tier: Primary (PIB / Budget 2025).</li>
+<li><strong>Operation Dronagiri:</strong> pilot launched Nov 13, 2024 across UP, Haryana, Assam, AP, Maharashtra. Tier: Primary (PIB / Sarkaritel).</li>
+<li><strong>PM Gati Shakti portal:</strong> opened to private sector (Budget 2025) to support PPP planning with geospatial datasets. Tier: Primary (PIB) + Secondary (Elets eGov, Inc42).</li>
+<li><strong>SVAMITVA</strong> (rural property-card program) and <strong>DILRMP</strong> (Digital India Land Records) are ongoing consumption drivers of geospatial services. Tier: Tertiary (general coverage).</li>
+<li><strong>Market size:</strong> ~₹277B (2025) → ~₹1.06 lakh crore by 2030 per industry estimates. India Geospatial Analytics sub-market USD 1.58B (2025) → USD 3.55B (2031) at 14.4% CAGR per Mordor Intelligence. Tier: Secondary (industry reports — treat as directional, not precise).</li>
+</ul>
+<p><strong>B1 verdict:</strong> The policy tailwind is REAL and DATED — not a vibe. Actual government programs, actual budget lines, actual FY26 spend commitments. First-principles test: true even if every MMI competitor disappeared? Yes — the policy exists independent of MMI. Pass.</p>
+<h5>B2. AI × GIS use-case taxonomy, ranked (Indian commercial-maturity lens)</h5>
+<div class="mdtbl">
+<div class="mdtr"><span>Use case</span><span>Market-size potential</span><span>India commercial maturity</span><span>MMI exposure</span></div>
+<div class="mdtr"><span>ADAS / HD maps for L2+ autonomy</span><span>Large (auto OEM embedded)</span><span>Early-commercial; 2026-2030 ramp</span><span>NCASE, e-horizon, Advanced Survey LLP 20%</span></div>
+<div class="mdtr"><span>Government digital-twin / urban planning</span><span>Large (Smart Cities, Gati Shakti)</span><span>Early-commercial; contract-by-contract</span><span>Mappls DT subsidiary</span></div>
+<div class="mdtr"><span>Telematics / fleet / IoT</span><span>Medium</span><span>Commercial (Gtropy +67.5% YoY)</span><span>Gtropy 96% subsidiary</span></div>
+<div class="mdtr"><span>Defense / ISR</span><span>Medium-Large, opaque</span><span>Emerging; sovereignty-gated</span><span>Mappls DT; specifics undisclosed</span></div>
+<div class="mdtr"><span>Consumer navigation super-app</span><span>Large but winner-take-most</span><span>Mature (Google dominant)</span><span>Mappls app (small share)</span></div>
+<div class="mdtr"><span>Indoor / venue mapping</span><span>Small-medium</span><span>Emerging</span><span>Iwayplus stake</span></div>
+<div class="mdtr"><span>Generative-AI layer on maps (Drive GPT, Perplexity synergy)</span><span>Unclear</span><span>Experimental</span><span>In development</span></div>
+<div class="mdtr"><span>Enterprise location analytics / BI</span><span>Medium</span><span>Commercial</span><span>ClarityX</span></div>
+</div>
+<p><strong>B2 verdict:</strong> MMI is present across nearly every cell, but depth / revenue-contribution per cell is NOT independently disclosed. Breadth-without-depth-disclosure means the thesis frame is &quot;optionality-rich&quot; not &quot;one clear product line is compounding.&quot;</p>
+<h5>B3. MAPMYINDIA AI products — concrete products, customers, revenue lines</h5>
+<ul>
+<li><strong>Disclosed products (primary + company IR):</strong></li>
+<li><strong>NCASE suite</strong> for auto OEMs: Navigation, Connected, ADAS, Shared, Electric mobility. HD maps + e-horizon + DMS/ADAS hardware.</li>
+<li><strong>Drive GPT</strong> for AI-assisted navigation / voice.</li>
+<li><strong>Mappls consumer app</strong> + devices.</li>
+<li><strong>Mappls DT</strong> (formerly Vidteq): govt digital transformation, digital twins, defense tech.</li>
+<li><strong>ClarityX</strong> (launched FY25): AI-driven data analytics &amp; consulting.</li>
+<li><strong>Gtropy:</strong> IoT telematics.</li>
+<li><strong>Disclosed customers / contracts:</strong></li>
+<li><strong>Survey of India National Geo-Spatial Platform</strong> — awarded to MMI. Primary (IR, BSE).</li>
+<li><strong>IOCL ₹110cr CVTMS</strong> for ~23,000 LPG trucks across ~150 locations. Secondary (Autocar Pro).</li>
+<li>&quot;Industry leaders across big tech, corporates, automotive and government authorities&quot; — company claim, no named customer disclosure.</li>
+<li><strong>AI-product revenue contribution in ₹Cr:</strong> <strong>NOT DISCLOSED AS A SEPARATE SEGMENT.</strong> Only Map-led vs IoT-led splits are reported. In FY25: Map-led ₹345.6cr (47% EBITDA margin), IoT-led ₹117.7cr (14% margin). AI is embedded within Map-led but unquantified. This is the load-bearing caveat for any &quot;AI growth&quot; claim.</li>
+<li><strong>Roadmap:</strong> order book conversion into Q4 FY26 + Q1 FY27 (management-stated); FY28 ₹1,000cr target; ₹2,000cr order book by Apr 2028.</li>
+</ul>
+<p><strong>B3 verdict:</strong> Products and customers are CONCRETE. Revenue-to-AI mapping is NOT. The thesis has to be framed as &quot;Map-led growth (which is AI-adjacent by composition) will re-accelerate via order-book conversion&quot; — not as &quot;AI segment doubles.&quot; Two different claims. Only the first is provable from disclosed line items.</p>
+<h5>B4. Competitive landscape</h5>
+<ul>
+<li><strong>Google Maps:</strong> ~80% share consumer navigation. Aug 2024 cut API pricing 70% for Indian developers. Tier: Secondary (Inc42, Equitymaster).</li>
+<li><strong>Ola Maps:</strong> launched July 2024. MMI CEO on record that Ola quality is &quot;not up to the mark.&quot; Active MMI litigation alleging API reverse-engineering. Outcome unresolved. Tier: Secondary.</li>
+<li><strong>Genesys International:</strong> listed comparable. FY25 ₹315cr revenue (+57% growth), 52.9% EBITDA margin, PAT ₹56cr (+160%). Focus: 3D mapping, imagery, defense/surveying. Smaller but faster + fatter. Tier: Secondary.</li>
+<li><strong>Esri India:</strong> enterprise GIS platform leader (ArcGIS ecosystem). Different buying motion from MMI&#x27;s embedded B2B. Tier: Tertiary.</li>
+<li><strong>OSM India / TomTom / HERE / Apple Maps:</strong> marginal share in India enterprise.</li>
+<li><strong>AI-first entrants:</strong> LocaleAI, SatGuide, Aarav Unmanned Systems — smaller, mostly unlisted.</li>
+</ul>
+<p><strong>Automotive sector specifically:</strong> MMI ~80% of Indian OEM embedded navigation. Tier: Secondary. The moat here is certification, HD-map licensing, and historical integration — hard to displace mid-cycle.</p>
+<p><strong>B4 verdict:</strong> Two-track competitive read. (i) Consumer navigation: MMI is a minority, under pressure from Google price-cut, Ola entry pending. (ii) Auto OEM embedded + government data platform + defense: MMI is the incumbent with real sovereignty-backed moat. The thesis only works if you frame the bull case on (ii), not (i).</p>
+<h5>B5. Government-captive moat — real or overstated?</h5>
+<ul>
+<li><strong>Real:</strong> NGP 2022 + Survey of India approval requirements restrict foreign entities from holding full-resolution geospatial data. MMI (Indian entity, listed, 30-yr operator) is a default eligible vendor. SoI National Geo-Spatial Platform contract directly monetizes this. Primary (PIB + IR).</li>
+<li><strong>Overstated if:</strong> one assumes govt contracts are abundant, fast, and high-margin. Evidence shows them being <strong>large-order-book-but-slow-conversion</strong> (Q3 FY26 deferrals = proof of lumpiness). Plus Budget-cycle risk: ₹100cr National Geospatial Mission FY26 is not ₹10,000cr; the direct ministry spend is modest relative to the ₹1,000cr+ revenue target.</li>
+<li><strong>Overstated if:</strong> one assumes the moat extends to consumer side. It does not.</li>
+</ul>
+<p><strong>B5 verdict:</strong> Moat is real but scope-limited. It protects auto-OEM + govt + defense revenue pools; it does not protect consumer navigation share. Narrative of &quot;data sovereignty = Indian monopoly&quot; is oversimplified.</p>
+<h5>B6. Financial translation — what the thesis requires</h5>
+<ul>
+<li><strong>Current AI-product base:</strong> Unknown (not disclosed). Best upper-bound: Map-led ₹345.6cr FY25, of which an undisclosed subset is AI-integrated product (HD maps, NCASE, Drive GPT, Mappls DT). Lower-bound: the new/explicitly-AI-labelled lines (ClarityX + Drive GPT + Advanced Survey 20%) are almost certainly &lt;₹50cr currently, likely &lt;₹20cr combined — rounding error at total-company level.</li>
+<li><strong>12/24/36-month trajectory to support an &quot;AI-growth&quot; narrative:</strong></li>
+<li>FY26 (12m from now): order-book conversion restores map-led growth +20%+ YoY; AI contribution would need to be called out as a &gt;10% segment in IR to move the needle narratively.</li>
+<li>FY27 (24m): ADAS/HD-map deliveries to auto OEMs monetizing; Mappls DT govt-digital-twin contracts at scale; AI segment carved out as a reporting line.</li>
+<li>FY28 (36m): ₹1,000cr aggregate; AI / HD-map / ADAS must be meaningful (≥25% of revenue) for the thesis to be validated on numbers.</li>
+<li><strong>Revenue growth required:</strong> from FY26 run-rate ~₹450cr to FY28 ₹1,000cr = ~49% CAGR. Historical company growth: FY24→FY25 +22%, FY23→FY24 ~+17%. Step-change required is real and not mechanically supported by 2-year trailing growth.</li>
+</ul>
+<p><strong>B6 verdict:</strong> The translation from thesis to P&amp;L is a step-function, not a smooth curve. It requires order-book conversion + AI segment scaling simultaneously. Both are management-stated targets. Neither is yet proven.</p>
+<h5>B7. Kill-switch / falsification (Rule 7)</h5>
+<p>Thesis fails if ANY of the following observables occur:</p>
+<ol>
+<li><strong>Order-book conversion miss.</strong> If FY27 revenue comes in below ₹600cr (vs trajectory needed for ₹1,000cr FY28), the &quot;catch-up&quot; narrative is broken. Dated falsification: observable by Q1 FY28 annual results.</li>
+<li><strong>AI segment never separately disclosed by FY28.</strong> If the company continues to report only Map-led vs IoT-led by FY28 AR, the &quot;AI vehicle&quot; thesis is thematic, not operational. Dated falsification: FY28 AR.</li>
+<li><strong>Auto-OEM share loss.</strong> If concall commentary explicitly acknowledges losing &gt;10% OEM share to Google/Ola/HERE by FY27, the core moat has cracked. Dated falsification: quarterly concalls.</li>
+<li><strong>Govt-execution structural (not cyclical) breakdown.</strong> If delivery deferments recur through 3+ consecutive quarters despite management&#x27;s Q4 FY26 + Q1 FY27 catch-up commitment, then the order book is a mirage not an asset.</li>
+<li><strong>Ola litigation adverse judgment AND commercial displacement visible.</strong> Worst-case joint outcome. Dated: court schedule + market-share data.</li>
+<li><strong>Rakesh Verma stake drift down &gt;5 pp via open-market sales</strong> (not strategic secondary offering). Signals insider view-break.</li>
+</ol>
+<p>Any one of these doesn&#x27;t sink the study; two or more firing = thesis invalidated.</p>
+<h5>Part B — consolidated verdict: <strong>MODERATE MECHANISM</strong> (not pure themes)</h5>
+<ul>
+<li>Policy tailwind: concrete, dated, sourced to PIB. ✅</li>
+<li>Products: concrete. ✅</li>
+<li>Customers: some concrete (SoI, IOCL), most undisclosed. ⚠️</li>
+<li>Revenue lines tagged as &quot;AI&quot;: <strong>NOT DISCLOSED AS SEGMENT</strong>. ❌ (this is what tips it from STRONG to MODERATE)</li>
+<li>Moat: real but scope-limited to govt + auto-OEM embedded + defense; NOT consumer. ⚠️</li>
+<li>Competitive pressure: real on consumer side (Google, Ola). ⚠️</li>
+<li>Financial translation to ₹1,000cr FY28: requires step-change not yet evidenced. ⚠️</li>
+<li>Kill-switch: specific, dated, observable. ✅</li>
+</ul>
+<p>Thesis is not THEMATIC VIBES — enough dated mechanism exists. But it does not reach STRONG MECHANISM because AI-revenue is narrative, not line-item; and the step-change to FY28 target is aspirational, not trajectory-extrapolable.</p>
+<hr>
+<h3>L3 — Evidence + source chain</h3>
+<h4>Quarterly financials chain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Quarter</span><span>Revenue</span><span>PAT</span><span>Segment detail</span><span>Source tier</span><span>Citation</span></div>
+<div class="mdtr"><span>Q3 FY26 (Dec 2025)</span><span>₹93.7cr (−18%)</span><span>₹19cr (−41%)</span><span>Map-led ₹51cr (−41.5%), C&amp;E ₹36.8cr (−44%), IoT flat</span><span>Primary</span><span>BSE filing Feb 13 2026; MultiBagg Q3 FY26 deep-dive; InvestyWise; Elara/JM analyst notes</span></div>
+<div class="mdtr"><span>Q2 FY26 (Sep 2025)</span><span>₹113.8cr (+9.7%)</span><span>₹18.5cr (−39.2%)</span><span>Map-led ₹62.7cr (−14.3%), IoT ₹51.1cr (+67.5%)</span><span>Primary + Secondary</span><span>Investor Presentation PDF; Medianama; Entrackr; Construction World</span></div>
+<div class="mdtr"><span>FY25 full-year</span><span>₹463.3cr (+22%)</span><span>₹147.6cr (+10%)</span><span>Map-led ₹345.6cr (+29%, 47% EBITDA mgn), IoT ₹117.7cr (+5%, 14% mgn)</span><span>Primary + Secondary</span><span>Company IR PR; IndianStartupNews; Autocar Pro</span></div>
+<div class="mdtr"><span>Peer Genesys FY25</span><span>₹315cr (+57%)</span><span>₹56cr (+160%), EBITDA mgn 52.9%</span><span>—</span><span>Secondary</span><span>CXO Today, APN News, Tracxn</span></div>
+</div>
+<h4>Governance chain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Axis</span><span>Key data</span><span>Source tier</span><span>Citation</span></div>
+<div class="mdtr"><span>Promoter holding</span><span>~51.36% Rakesh + Rashmi Verma, stable</span><span>Secondary</span><span>Scribd DRHP, Trendlyne SAST</span></div>
+<div class="mdtr"><span>Pledging</span><span>None reported</span><span>Secondary</span><span>Trendlyne</span></div>
+<div class="mdtr"><span>CEO succession</span><span>Rohan Verma step-down Mar 2025; MMI invested ₹35cr CCD + ₹10L for 10% in his B2C venture</span><span>Secondary</span><span>BS, Inc42, YourStory, Entrackr</span></div>
+<div class="mdtr"><span>Exchange penalty</span><span>Minor fine for delayed H1 FY26 RPT filing</span><span>Secondary</span><span>TipRanks, InvestyWise, BSE</span></div>
+<div class="mdtr"><span>SEBI action</span><span>None surfaced</span><span>Secondary (exhaustion)</span><span>—</span></div>
+<div class="mdtr"><span>Litigation</span><span>MMI v Ola Electric, July 2024, unresolved</span><span>Secondary</span><span>BusinessToday, BS, Inc42, YourStory</span></div>
+<div class="mdtr"><span>Dividends</span><span>₹3.50/share final FY25 (175%); ~₹20cr Q1 FY26 interim</span><span>Primary + Secondary</span><span>BSE corp action, Autocar Pro</span></div>
+<div class="mdtr"><span>Acquisitions</span><span>Gtropy 96% (₹25cr), Advanced Survey 20%, Iwayplus, Mappls DT carve-out, Zepto 0.049% (₹25cr)</span><span>Primary + Secondary</span><span>BSE filings, CEOsOfBharat, Entrackr, InvestyWise</span></div>
+<div class="mdtr"><span>Cash</span><span>₹639–676cr through 2025</span><span>Secondary</span><span>Company IR, MultiBagg</span></div>
+</div>
+<h4>GIS × AI thesis chain</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Claim</span><span>Data</span><span>Source tier</span><span>Citation</span></div>
+<div class="mdtr"><span>NGP 2022</span><span>Dec 2022 liberalization; foreign entities can&#x27;t hold full-res data</span><span>Primary</span><span>PIB releases</span></div>
+<div class="mdtr"><span>National Geospatial Mission FY26</span><span>₹100cr Budget 2025 allocation</span><span>Primary</span><span>PIB / Budget 2025</span></div>
+<div class="mdtr"><span>Operation Dronagiri</span><span>Nov 13 2024, 5 states</span><span>Primary</span><span>PIB, Sarkaritel</span></div>
+<div class="mdtr"><span>India geospatial market</span><span>~₹277B 2025 → ~₹1.06 lakh cr 2030</span><span>Secondary</span><span>Convergence Now; Mordor Intelligence (separate USD figures — directional)</span></div>
+<div class="mdtr"><span>MMI auto OEM share</span><span>~80% embedded nav</span><span>Secondary</span><span>Inc42, Equitymaster</span></div>
+<div class="mdtr"><span>Google Maps India share</span><span>~80% consumer; 70% price cut Aug 2024</span><span>Secondary</span><span>Inc42, Equitymaster, BusinessToday</span></div>
+<div class="mdtr"><span>Ola Maps entry</span><span>Launched July 2024; MMI litigation pending</span><span>Secondary</span><span>BS, Inc42, YourStory</span></div>
+<div class="mdtr"><span>SoI National Geo-Spatial Platform</span><span>Awarded to MMI</span><span>Primary</span><span>IR + BSE</span></div>
+<div class="mdtr"><span>IOCL CVTMS</span><span>₹110cr for ~23k LPG trucks</span><span>Secondary</span><span>Autocar Pro</span></div>
+<div class="mdtr"><span>Genesys FY25 comp</span><span>₹315cr, 52.9% EBITDA, +57%</span><span>Secondary</span><span>CXO Today, APN News</span></div>
+<div class="mdtr"><span>FY28 target</span><span>₹1,000cr revenue, ₹2,000cr order book by Apr 2028</span><span>Primary</span><span>Concalls, IR</span></div>
+</div>
+<h4>Price chain</h4>
+<ul>
+<li><strong>Peak:</strong> ₹2,747.85 on June 21, 2024 (primary — exchange OHLC).</li>
+<li><strong>Current (2026-04-23 per Sanjeev capture):</strong> ~₹921.85, down ~66% from peak.</li>
+<li><strong>Corrections:</strong> 11% on July 18 2024 (Google price-cut news); ~4% Dec 2 2024 (B2C carve-out announcement); ~9% June 12 2025 (PhonePe 5.3% block deal); subsequent slide through Q3 FY26 miss to Feb 2026 ~32-month low.</li>
+<li><strong>Analyst targets Feb 2026:</strong> Elara BUY at ₹2,273 (97% upside from then-price); JM Financial ADD with target cut 44% (from 40x to 26x Sep 2027 earnings).</li>
+</ul>
+<hr>
+<h3>L4 — Open questions / gaps (what would strengthen next cycle)</h3>
+<ol>
+<li><strong>FY25 annual report direct read:</strong> auditor identity + any qualifications / emphasis-of-matter; full board composition + independent-director list; RPT schedule at line-item detail; Rakesh Verma (and Rashmi Verma) total remuneration; Genesys FY25 AR for peer comp.</li>
+<li><strong>Q4 FY26 results (due May 2026):</strong> verify management&#x27;s stated order-book catch-up. This is the decisive quarter for the &quot;deferment-not-structural&quot; claim.</li>
+<li><strong>Any first disclosure of AI-labelled revenue segment.</strong> Watch FY26 AR MD&amp;A for explicit segmentation evolution.</li>
+<li><strong>Ola litigation status update:</strong> court filings / any settlement.</li>
+<li><strong>Direct other-income line from BSE XBRL quarterly filings</strong> to verify or dismiss the &quot;other-income &gt; 50% of NP&quot; Sanjeev concern.</li>
+<li><strong>Operator Sanjeev follow-up conversation</strong> (if another call happens) — does his framework now have a view on mature-cash-balance B2B SaaS/hardware hybrids vs his original manufacturing/EMS frame? This is the gap his own §7 blindspot audit surfaced.</li>
+</ol>
+<hr>
+<h3>L5 — Counterfactual / invalidation (what would kill the thesis vs what would kill the governance verdict)</h3>
+<p><strong>Governance verdict INVALIDATED if:</strong></p>
+<ul>
+<li>FY25 AR reveals material auditor qualification or emphasis-of-matter — flips PARTIAL → FAIL.</li>
+<li>Ola litigation produces a judgment against MMI with material damages → flips PARTIAL → PARTIAL-FAIL.</li>
+<li>Any second procedural penalty within 12 months — pattern not incident.</li>
+<li>Promoter open-market selling &gt;5pp stake in a non-strategic transaction.</li>
+<li>Discovery that Rohan Verma B2C venture has pulled material IP / customer contracts / key personnel out of MMI without arm&#x27;s-length pricing visible.</li>
+</ul>
+<p><strong>Thesis INVALIDATED if:</strong></p>
+<ul>
+<li>Q4 FY26 + Q1 FY27 do NOT show the stated order-book conversion catch-up.</li>
+<li>FY27 revenue &lt;₹600cr.</li>
+<li>AI segment never separately disclosed through FY28.</li>
+<li>Auto OEM share loss &gt;10pp to any competitor by FY27.</li>
+<li>Multiple kill-switches from B7 fire.</li>
+</ul>
+<p><strong>Thesis SIGNIFICANTLY STRENGTHENED if:</strong></p>
+<ul>
+<li>Q4 FY26 comes in at ₹150cr+ revenue with OPM recovering to 35%+ AND Q1 FY27 confirms.</li>
+<li>AI segment carved out at ≥15% of revenue in FY26 AR with +50% growth YoY.</li>
+<li>Advanced Survey LLP / Mappls DT produce a named-customer disclosure in defense or Smart City with contract value.</li>
+<li>Ola litigation resolved in MMI&#x27;s favor.</li>
+</ul>
+<hr>
+<h3>Integration — Part A × Part B matrix</h3>
+<p>Operator&#x27;s prompt-defined matrix:</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Governance</span><span>Thesis</span><span>→</span><span>Conclusion</span></div>
+<div class="mdtr"><span>PASS</span><span>STRONG</span><span></span><span>Serious watchlist candidate (needs QT/Credit/Macro signoff for trade)</span></div>
+<div class="mdtr"><span>PASS</span><span>THEMATIC</span><span></span><span>Parking-lot for later</span></div>
+<div class="mdtr"><span>FAIL</span><span>any</span><span></span><span>Everything moot per Sanjeev binary gate</span></div>
+<div class="mdtr"><span>PARTIAL</span><span>STRONG</span><span></span><span>Tension worth debating</span></div>
+<div class="mdtr"><span><strong>PARTIAL</strong></span><span><strong>MODERATE</strong></span><span><strong>→</strong></span><span><strong>Study-universe; not front-of-book. Needs one clean quarter + AR read before re-engagement.</strong></span></div>
+</div>
+<p><strong>Sanjeev blindspot audit (per prompt):</strong> Does the thesis rely on thematic tailwinds Sanjeev&#x27;s framework would systematically miss?</p>
+<p>Yes, partially. Sanjeev&#x27;s framework is explicitly (per its own §7 blindspot audit) thematic-tailwind-blind — &quot;MAPMYINDIA is literally this case.&quot; The framework will consistently miss first-mover re-ratings on AI/DPI/sovereignty-tailwind stories until realized sales catch up. Therefore:</p>
+<ul>
+<li>The governance PARTIAL is Sanjeev-native — his framework is well-suited to call that.</li>
+<li>The thesis MODERATE is where <strong>operator judgment has to override the framework</strong> — because the framework will call this &quot;wait forever for sales growth to prove it&quot; while the tailwind may price in ahead. This is an evidence-backed override zone. The override is legitimate but REQUIRES (a) the AI-segment disclosure path to actually emerge, and (b) the kill-switches in B7 to be actively monitored — otherwise the override collapses into exactly the thematic-vibes failure mode the research-discipline framework is designed to prevent.</li>
+</ul>
+<p>Chart-structure point (Sanjeev-native, unchallenged): close 917/922 below the prior 1004 swing low IS &quot;not good at all&quot; by the framework&#x27;s rule 11, and per rule 12 &quot;bottom-formation takes time&quot; — even a clean fundamental story in a broken structure needs consolidation. This is NOT an override zone; it&#x27;s a discipline gate. The right time to re-engage this study is AFTER one printed quarter of clean re-acceleration (sales + OPM + NP all up) AND basing action visible in QT&#x27;s multi-TF read.</p>
+<hr>
+<h3>Rule 1 — Frame-check (load-bearing assumptions)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Assumption</span><span>Origin</span><span>Load-bearing</span><span>Flag</span></div>
+<div class="mdtr"><span>&quot;India GIS has massive untapped potential&quot;</span><span>Industry narrative + policy frame</span><span>HIGH</span><span>Confirmed by NGP 2022 + market-size data. Not a blind spot.</span></div>
+<div class="mdtr"><span>&quot;AI+GIS could produce exponential growth&quot;</span><span>Thematic industry claim</span><span>HIGH</span><span>Analogy-heavy unless tied to disclosed product/revenue lines. Flagged; refused as load-bearing in final verdict.</span></div>
+<div class="mdtr"><span>&quot;MMI&#x27;s AI vertical is a possible vehicle&quot;</span><span>Operator framing</span><span>HIGH</span><span>Requires AI segment disclosure which does NOT exist. Moderated to &quot;Map-led business is the AI-adjacent vehicle.&quot;</span></div>
+<div class="mdtr"><span>&quot;MAPMYINDIA is a durable B2B franchise&quot;</span><span>Implicit</span><span>MEDIUM</span><span>Confirmed on auto OEM + govt; contested on consumer.</span></div>
+<div class="mdtr"><span>&quot;Sanjeev&#x27;s framework is authoritative on this name&quot;</span><span>Prior conversation</span><span>MEDIUM</span><span>His own §7 blindspot audit flags this case; framework is partially out-of-domain here.</span></div>
+<div class="mdtr"><span>&quot;Current price structure is broken&quot;</span><span>Sanjeev + chart</span><span>HIGH</span><span>Primary chart evidence supports. Unchallenged.</span></div>
+</div>
+<h3>Rule 2 — 80/20 scope</h3>
+<p>The 20% that drives 80% of the answer:</p>
+<ol>
+<li>Does the Verma family actually run it honestly and are the Dec 2025 books real?</li>
+<li>Does the order book convert in Q4 FY26 + Q1 FY27?</li>
+<li>Is &quot;AI&quot; a disclosed segment or a narrative layer?</li>
+</ol>
+<p>All three addressed with dated observables above.</p>
+<h3>Rule 3 — First principles (3–7)</h3>
+<ol>
+<li><strong>Geospatial data is sovereign infrastructure.</strong> A country can liberalize access but cannot surrender full-resolution ownership to foreign entities without strategic cost. (True even if every competitor disappeared; true without prior approaches; not &quot;best practice&quot; — it&#x27;s regulatory reality.)</li>
+<li><strong>Embedded B2B maps compete on certification + integration, not on consumer ARPU.</strong> OEM buyers do not switch mid-cycle. (Pass 3-test.)</li>
+<li><strong>AI layered on top of an existing map asset is a margin lever, not a new business.</strong> (Pass 3-test: true independent of competitors, prior approaches, or best practice.)</li>
+<li><strong>Long-tenured founder operators produce lower governance surprise rates than professionally-installed management teams — but also lower dynamism on succession.</strong> (Pass 3-test.)</li>
+<li><strong>Government orders are high-visibility and low-timing-certainty.</strong> Order book != revenue. (Pass 3-test.)</li>
+</ol>
+<h3>Rule 5 — 3 distinct alternatives</h3>
+<ul>
+<li><strong>A (Speed, simplest viable):</strong> <em>Cyclical miss, no structural break.</em> Order book converts by Q1 FY27, FY26 is a blip, FY28 target hit ±15%. Base case = buy on consolidation if chart bases. Probability: medium. (30–40%.)</li>
+<li><strong>B (Impact, most-consequential-if-true):</strong> <em>Structural inflection.</em> AI/ADAS/Mappls DT ramp materializes and is formally segmented, re-rating to Genesys-like multiples. Stock doubles from base. Probability: lower (15–25%).</li>
+<li><strong>C (Minimum assumption):</strong> <em>Boring B2B compounder with volatility.</em> Governance OK, business OK, no AI step-change; revenue grinds to ~₹700cr by FY28, valuation mean-reverts on earnings recovery only. Probability: highest (35–45%).</li>
+</ul>
+<p><strong>Note:</strong> These three do NOT collapse into the same answer — they have different required-catalysts, different payoffs, different probabilities. Rule 5 satisfied.</p>
+<h3>Rule 6 — Current-behavior / consensus map</h3>
+<ul>
+<li><strong>Sell-side consensus:</strong> split (Elara BUY ₹2,273 / +97%; JM ADD with 44% target cut). Median view is &quot;recovery is coming but execution risk has re-rated multiple down.&quot;</li>
+<li><strong>Market pricing:</strong> stock at ~₹900s after −66% from peak. Pricing the bear case aggressively.</li>
+<li><strong>Consensus narrative:</strong> &quot;deferred deliveries + Google price-cut + CEO-succession concerns&quot; are the bear story; &quot;order book + AI optionality&quot; is the bull.</li>
+<li><strong>Edge / gap:</strong> the quantifiable gap is whether the ₹1,770cr order book converts at the stated pace. This is observable and dated (Q4 FY26 + Q1 FY27). There IS a gap because the market is currently split; one side will be wrong.</li>
+</ul>
+<h3>Rule 7 — Falsification (see L5 + B7 above)</h3>
+<p>Covered in L5 and B7 — each load-bearing claim has a dated observable.</p>
+<hr>
+<h3>Rule 9 — Self-quiz (5 adversary questions)</h3>
+<ol>
+<li><strong>&quot;The &#x27;data sovereignty moat&#x27; sounds great but how much revenue does it actually protect — give a number?&quot;</strong></li>
+</ol>
+<p>   → Unknown precisely. SoI + IOCL + Mappls DT contracts aggregate undisclosed; govt-adjacent Map-led is likely ₹100–150cr of ₹346cr FY25 Map-led, but MMI doesn&#x27;t disclose this line. Honest answer: moat is real but unsized in open data.</p>
+<ol>
+<li><strong>&quot;Q3 FY26 fires every Sanjeev bad signal. Why isn&#x27;t this governance-adjacent earnings-quality fail?&quot;</strong></li>
+</ol>
+<p>   → Because the specific failure mode (revenue lumpy on govt-delivery cycles) is a business-model fact, not a books-quality fact. Management pre-committed to Q4/Q1 catch-up — making it falsifiable. If catch-up misses, THEN it becomes earnings-quality concerning. Currently it&#x27;s execution-concerning, not governance-concerning.</p>
+<ol>
+<li><strong>&quot;What if Google just buys Ola Maps / Genesys and crushes MMI on price?&quot;</strong></li>
+</ol>
+<p>   → Consumer side MMI already minority; loss there priced in. Auto-OEM embedded side has certification and offline-map + sovereignty requirements that make direct Google substitution structurally slow. Genesys acquisition by Google unlikely to clear CCI and wouldn&#x27;t close the Indian-entity-only policy gap. Core moat survives; thesis-damaging but not killing.</p>
+<ol>
+<li><strong>&quot;The Rohan Verma B2C spin-out with the Mappls brand is textbook founder-family value-leak — why isn&#x27;t it a FAIL?&quot;</strong></li>
+</ol>
+<p>   → Because it was disclosed, board-approved, with a public investment structure (₹35cr CCDs + 10% equity for ₹10L) — the alignment is disclosed even if imperfect. A FAIL would require undisclosed transfers or non-arm&#x27;s-length terms. Watch closely; not yet a fail.</p>
+<ol>
+<li><strong>&quot;If you had to short one load-bearing claim, which is weakest?&quot;</strong></li>
+</ol>
+<p>   → &quot;AI is the growth vehicle.&quot; It&#x27;s weakest because it&#x27;s the only one without disclosed line-item support. Management narrative ≠ segment reporting. Until MMI actually carves out an AI segment in reporting, this claim floats above evidence.</p>
+<p>All 5 answered cleanly in one line. Rule 9 cleared.</p>
+<hr>
+<h3>Rule 10 — L1–L5 layering: confirmed above</h3>
+<ul>
+<li><strong>L1</strong> — Plain-language summary ✅</li>
+<li><strong>L2</strong> — Structured findings (Part A + Part B) ✅</li>
+<li><strong>L3</strong> — Evidence + source chain tables ✅</li>
+<li><strong>L4</strong> — Open questions / gaps ✅</li>
+<li><strong>L5</strong> — Counterfactual / invalidation ✅</li>
+</ul>
+<hr>
+<h3>Rule 4 — Source-tier audit summary</h3>
+<ul>
+<li><strong>Primary (BSE/NSE filings, IR PDFs, transcripts, PIB):</strong> Q3 FY26 financial headlines, Q2 FY26 investor presentation, SoI contract award, National Geospatial Policy specifics, National Geospatial Mission ₹100cr allocation, Operation Dronagiri, FY25 annual press release, concall commentary on catch-up.</li>
+<li><strong>Secondary (established business press):</strong> Business Standard, BusinessToday, Entrackr, Medianama, Construction World, YourStory, Autocar Pro, Inc42, MultiBagg, InvestyWise, CXO Today, APN News.</li>
+<li><strong>Tertiary (aggregators — NOT load-bearing):</strong> Scribd DRHP copy, Trendlyne SAST, Tracxn. Used for triangulation only; every claim tracked through at least one primary or secondary source.</li>
+<li><strong>Unverified / flagged (need direct FY25 AR):</strong> auditor name, independent-director count, Rakesh Verma FY25 total comp, direct other-income composition quarterly, specific Ola litigation docket status.</li>
+</ul>
+<hr>
+<h3>Rule 5 §5 closing checklist (research-discipline.md §5)</h3>
+<ul>
+<li>[x] Rule 1: Assumptions surfaced and rated (Frame-check table above)</li>
+<li>[x] Rule 2: 80/20 scope stated</li>
+<li>[x] Rule 3: First principles listed (5, not padded)</li>
+<li>[x] Rule 4: Every load-bearing claim tier-tagged inline + summary above</li>
+<li>[x] Rule 5: 3 distinct alternatives constructed with differentiated probabilities</li>
+<li>[x] Rule 6: Current-behavior / consensus mapped; edge gap stated</li>
+<li>[x] Rule 7: Load-bearing claims have dated falsification tests (B7 + L5)</li>
+<li>[x] Rule 8: Cheat-sheet output present at top</li>
+<li>[x] Rule 9: Skeptic pass done, 5 questions answered</li>
+<li>[x] Rule 10: Output layered L1–L5</li>
+</ul>
+<p>All 10 rules satisfied. Shippable under DEEP_RESEARCH mandate + v1.2 Principle 8.</p>
+<hr>
+<h3>Revision log</h3>
+<ul>
+<li><strong>v1 — 2026-04-24</strong> — Initial mini-project under §5.20. Study-mode; no §5.24 block. PARTIAL-PASS / MODERATE-MECHANISM verdicts. Sanjeev framework applied as Option-B consultant lens with explicit n=1 caveat and blindspot-zone flagged. Parking-lot classification pending (a) one clean quarter + (b) AR direct read + (c) chart-structure base.</li>
+</ul>
+<p><em>End of document.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260423_DEEP-RESEARCH_mapmyindia-governance-GIS-AI</div>
+</div></body></html>

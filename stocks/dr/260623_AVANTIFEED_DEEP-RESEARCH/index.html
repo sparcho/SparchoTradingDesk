@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avanti Feeds — Company Deep-Research · 2026-06-23 · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">Avanti Feeds — Company Deep-Research · 2026-06-23</h1>
+    <div class="hmeta"><b>2026-06-23</b> &middot; ticker <b>AVANTIFEED</b> &middot; status <b>active</b></div>
+    <div class="obs">NOT held. Batch-13 pick — shrimp feed + processing leader; cheap (PE ~17x), net cash, ROCE 22%, but US-shrimp-tariff + raw-material exposure. Advisory only.</div>
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> due diligence on India&#x27;s shrimp-feed + processing leader — the market-leadership + net-cash + decent-returns USP, against US-shrimp-export-tariff + raw-material-cost exposure. <strong>Advisory only — NOT a recommendation; the operator decides.</strong> Screener-verse coverage.</p>
+<blockquote><strong>Discipline note (V-01 / V-26 / V-36).</strong> Sourced + as-of; ≥2-source cross-checks; &gt;5% shown both ways; unverifiable = <strong>PENDING</strong>. INR (₹ crore). No execution directive.</blockquote>
+<hr>
+<h3>Plain-English Glossary</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Term</span><span>Meaning</span></div>
+<div class="mdtr"><span>Shrimp feed</span><span>Avanti is India&#x27;s largest shrimp-feed maker (Thai Union JV) — the cash core; ~568k MT FY26.</span></div>
+<div class="mdtr"><span>Shrimp processing/export</span><span>The processed-shrimp-export arm (~17k MT, +20%) — North America is 68% of it → US-tariff exposure.</span></div>
+<div class="mdtr"><span>Raw-material cost</span><span>Soybean/fish meal + wheat — the key feed cost lines (margin driver).</span></div>
+<div class="mdtr"><span>ROCE / ROE</span><span>22.3% / 19.09% — decent capital efficiency; net cash.</span></div>
+<div class="mdtr"><span>P/E</span><span>~17.27× (09-Jun-26) — cheap. Promoter (~44%, Thai Union JV). Mkt cap ~₹14,600 Cr.</span></div>
+</div>
+<hr>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>#</span><span>Rule</span><span>Avanti reading</span><span>Verdict</span></div>
+<div class="mdtr"><span>1</span><span>Promoter ≥ 50%</span><span>~44% (PENDING; Thai Union JV)</span><span><strong>FAIL</strong> (sub-50)</span></div>
+<div class="mdtr"><span>2</span><span>P/E ≤ 20</span><span>~17.27×</span><span><strong>PASS</strong> (cheap)</span></div>
+<div class="mdtr"><span>3</span><span>D/E ≤ 0.5</span><span>net cash</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>4</span><span>ROCE/ROE ≥ 20%</span><span>ROCE 22.3% / ROE 19.09%</span><span><strong>PASS</strong> (ROCE)</span></div>
+<div class="mdtr"><span>5</span><span>OPM ≥ 20%</span><span>~12% operating</span><span><strong>FAIL</strong> (agri-input)</span></div>
+<div class="mdtr"><span>6</span><span>Sales 3y-CAGR ≥ 20%</span><span>FY26 +8.9% gross income</span><span><strong>FAIL</strong></span></div>
+<div class="mdtr"><span>7</span><span>ICR ≥ 5</span><span>net cash → high</span><span><strong>PASS</strong></span></div>
+<div class="mdtr"><span>8</span><span>MCap/Sales ≤ 2</span><span>~2.4× (₹14,600/₹6,066)</span><span><strong>FAIL</strong> (close)</span></div>
+</div>
+<p><strong>Aggregate: 3-4 PASS (PE ~17×, net cash, ROCE 22%, ICR) + FAILs (promoter ~44%, OPM ~12%, modest growth).</strong> A cheap, net-cash, decent-ROCE aqua leader — US-tariff + raw-material exposed.</p>
+<hr>
+<h3>Executive Summary</h3>
+<p>Avanti Feeds is India&#x27;s largest shrimp-feed maker (Thai Union JV) + a processed-shrimp exporter. FY26: <strong>consolidated revenue ₹6,066 Cr, PAT ₹657 Cr, PBT ₹882 Cr (+20%), operating margin 12% (from 11%); ROCE 22.3%, ROE 19.09%</strong> (tradebrains/investywise, FY26); processed-shrimp sales +20% (16,976 MT; North America 68%); feed +1.7% (567,986 MT). Market cap ~₹14,600 Cr at <strong>~17.27× P/E</strong> — cheap; net cash; highest dividend in a decade.</p>
+<blockquote><strong>CORE VERDICT.</strong> Avanti Feeds is a <strong>cheap, net-cash, decent-returns aquaculture leader</strong> — India&#x27;s #1 shrimp-feed maker (Thai Union JV) + a growing processed-shrimp-export arm, with ROCE 22.3% + a margin uptick (to 12%) + a record dividend, at ~17× PE. <strong>The honest constraints:</strong> (1) <strong>US-shrimp-export-tariff exposure</strong> — North America is 68% of processed-shrimp revenue, so US trade/tariff actions hit the export arm; (2) <strong>raw-material-cost exposure</strong> (soybean/fish meal/wheat) compresses feed margins; (3) thin ~12% operating margin + modest growth (+8.9%); (4) sub-50% promoter (~44%). The load-bearing question is whether feed-volume + processing growth + benign raw-material/tariff sustain the decent returns. Cheap + net cash + ROCE 22% + dividend; US-tariff + raw-material + thin-margin are the trade-offs. <strong>A cheap, well-run aqua leader with a US-tariff overhang.</strong></blockquote>
+<hr>
+<h3>Section 1 / Company Overview</h3>
+<p>Avanti Feeds Ltd (NSE/BSE: AVANTIFEED), Thai Union JV — shrimp feed (core) + processed-shrimp exports.</p>
+<h4>1.1 FY26 detail</h4>
+<p>Revenue ₹6,066 Cr; PAT ₹657 Cr; PBT ₹882 Cr (+20%); operating margin 12% (from 11%); ROCE 22.3%, ROE 19.09%; processed-shrimp +20% (16,976 MT, NA 68%); feed 567,986 MT (+1.7%); net cash; record dividend.</p>
+<h4>1.2 Equity / structure</h4>
+<p>Promoter ~44% (Thai Union JV, PENDING); net cash.</p>
+<h4>1.3 Recent corporate actions</h4>
+<p>FY26 results (PBT +20%, margin uptick, record dividend); FY27 target 5.8 lakh MT feed; US-tariff watch.</p>
+<blockquote><strong>ANCHOR FACT.</strong> A cheap (~17× PE), net-cash, ROCE-22% shrimp-feed + processing leader (Thai Union JV) with a record dividend is the bull case; the offsets are US-shrimp-tariff (NA 68% of processed exports) + raw-material-cost exposure + thin ~12% margin.</blockquote>
+<hr>
+<h3>Section 2 / Management &amp; Governance</h3>
+<p>Promoter ~44% (Thai Union JV); established aqua leader; net cash; decent ROCE.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Check</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>Promoter</span><span>~44% (PENDING)</span><span>Sub-50% (Thai Union JV)</span></div>
+<div class="mdtr"><span>US-tariff</span><span>WATCH</span><span>NA 68% of processed-shrimp export</span></div>
+<div class="mdtr"><span>Raw-material</span><span>WATCH</span><span>Soybean/fish meal/wheat (feed margin)</span></div>
+<div class="mdtr"><span>ROCE/balance sheet</span><span>STRONG</span><span>ROCE 22.3%; net cash</span></div>
+<div class="mdtr"><span>Dividend</span><span>HIGH</span><span>Highest in a decade</span></div>
+</div>
+<blockquote><strong>GOVERNANCE GATE: PASS.</strong> No kill-flag; net cash + decent ROCE + dividend. The watch is US-tariff (export) + raw-material cost (feed margin).</blockquote>
+<hr>
+<h3>Section 3 / The Aqua-Leader USP — Cheap Quality vs US-Tariff/Raw-Material</h3>
+<p><strong>Variant-perception crux.</strong> Consensus: a cheap, net-cash, well-run aqua leader. Variant question: does US-shrimp-tariff + raw-material exposure offset the cheap-quality appeal?</p>
+<ul>
+<li><strong>Why real:</strong> India&#x27;s #1 shrimp-feed (Thai Union JV) + processing + ROCE 22% + net cash + a record dividend = a cheap, capital-efficient aqua leader.</li>
+<li><strong>Scepticism:</strong> (1) US-tariff (NA 68% of processed exports); (2) raw-material-cost (feed margin); (3) thin ~12% margin + modest growth; (4) sub-50 promoter; (5) shrimp-cycle/disease risk.</li>
+</ul>
+<blockquote><strong>USP VERDICT.</strong> A genuinely cheap, decent-ROCE aqua leader — the US-tariff + raw-material exposure are the offset to the cheap-quality + net-cash + dividend.</blockquote>
+<hr>
+<h3>Section 4 / Financials &amp; Risk</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Period</span><span>Revenue ₹Cr</span><span>PAT ₹Cr</span><span>OPM</span><span>ROCE</span><span>Source</span></div>
+<div class="mdtr"><span>FY26</span><span>6,066</span><span>657</span><span>12%</span><span>22.3%</span><span>tradebrains/investywise</span></div>
+<div class="mdtr"><span>FY25</span><span>~5,570</span><span>~</span><span>11%</span><span>~</span><span>screener</span></div>
+</div>
+<p>Risk drivers: US-shrimp-tariff, raw-material cost (feed margin), thin margin, shrimp-cycle/disease, sub-50 promoter.</p>
+<blockquote><strong>CORE RISK VERDICT.</strong> Net-cash + decent-ROCE; the risk is US-tariff (export) + raw-material/shrimp-cycle, not solvency. Watch US-trade actions + raw-material prices.</blockquote>
+<hr>
+<h3>Section 5 / Valuation</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric (09-Jun-26)</span><span>AVANTIFEED</span></div>
+<div class="mdtr"><span>Market cap</span><span>~₹14,600 Cr</span></div>
+<div class="mdtr"><span>P/E</span><span>~17.27× (cheap)</span></div>
+<div class="mdtr"><span>MCap/Sales</span><span>~2.4×</span></div>
+<div class="mdtr"><span>ROCE</span><span>22.3%</span></div>
+</div>
+<ul>
+<li><strong>Bull:</strong> feed-volume + processing growth + benign raw-material/tariff → earnings + dividend compound → modest re-rate.</li>
+<li><strong>Base:</strong> steady feed, US-tariff manageable → cheap value + dividend.</li>
+<li><strong>Bear:</strong> US-tariff shock / raw-material spike / shrimp-disease → de-rate.</li>
+</ul>
+<blockquote><strong>VALUATION VERDICT.</strong> A cheap (~17× PE), net-cash, ROCE-22% aqua leader — the US-tariff + raw-material exposure cap it; cheap-quality + dividend support it.</blockquote>
+<hr>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Window</span><span>Catalyst / Risk</span></div>
+<div class="mdtr"><span>FY27</span><span>Feed-volume target (5.8 lakh MT); processing growth; raw-material/tariff</span></div>
+<div class="mdtr"><span>Risk</span><span>US-shrimp-tariff; raw-material cost; shrimp-cycle/disease</span></div>
+<div class="mdtr"><span>Falsification</span><span>If a US-tariff action + raw-material spike compress margins, the cheap-quality thesis weakens.</span></div>
+</div>
+<hr>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final Verdict</h3>
+<p><strong>Screen:</strong> PASS PE (~17×), net cash, ROCE (22.3%), ICR; FAIL promoter (~44%), OPM (~12%), modest growth, MCap/Sales.</p>
+<ul>
+<li><strong>Would-buy:</strong> India&#x27;s #1 shrimp-feed (Thai Union JV); ROCE 22.3%; net cash; record dividend; cheap (~17× PE); processing growth (+20%).</li>
+<li><strong>Would-not-buy:</strong> US-shrimp-tariff (NA 68% of exports); raw-material-cost (feed margin); thin ~12% margin; sub-50 promoter; shrimp-cycle.</li>
+<li><strong>Depends-on:</strong> feed/processing growth + benign raw-material/tariff sustaining returns.</li>
+</ul>
+<h4>Flags table</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>🟢 Good</span><span>🟡 Watch</span><span>🔴 Bad / risk</span></div>
+<div class="mdtr"><span>#1 shrimp-feed (Thai Union JV); ROCE 22.3%; net cash; record dividend; cheap (~17× PE)</span><span>Raw-material cost (feed margin); shrimp-cycle/disease</span><span><strong>US-shrimp-tariff (NA 68% of processed exports)</strong></span></div>
+<div class="mdtr"><span>Processing +20%; FY27 feed target 5.8 lakh MT</span><span>Sub-50% promoter (~44%)</span><span>Thin ~12% operating margin</span></div>
+</div>
+<h4>Key levels / watchlist</h4>
+<p>No level-ID pass (not held); price levels <strong>PENDING</strong> — not fabricated. Mkt cap ~₹14,600 Cr; PE ~17× (value anchor); watch US-tariff + raw-material.</p>
+<blockquote><strong>DEEP-RESEARCH NET STAMP.</strong> Avanti Feeds is a cheap, net-cash, decent-ROCE (22.3%) aquaculture leader (India&#x27;s #1 shrimp-feed, Thai Union JV) with a record dividend at ~17× PE — but US-shrimp-export-tariff (NA 68% of processed exports) + raw-material-cost exposure + thin ~12% margins are the structural offsets. <strong>This brief does NOT recommend deployment.</strong> A cheap, well-run aqua leader with a US-tariff overhang; decision sits with the operator.</blockquote>
+<h4>Sources cited (web, as-of 23-Jun-2026 unless noted)</h4>
+<ul>
+<li>FY26: tradebrains.in (OPM 12%, exports +20%); investywise.com; scanx.trade (PBT ₹882 Cr +20%); multibagg.ai (Q4)</li>
+<li>Valuation/metrics (09-Jun-26): mcap ~₹14,600 Cr, PE ~17.27×; ROCE 22.3% / ROE 19.09%; screener.in</li>
+<li><strong>PENDING:</strong> exact promoter %, FY25 base, US-tariff specifics, live price/levels.</li>
+</ul>
+<p><em>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE — informational and qualitative. No execution recommendation. Decision sits with the operator.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260623_AVANTIFEED_DEEP-RESEARCH</div>
+</div></body></html>

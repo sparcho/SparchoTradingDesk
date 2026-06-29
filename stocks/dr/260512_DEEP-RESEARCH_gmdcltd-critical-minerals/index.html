@@ -1,0 +1,215 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DR — Gujarat Mineral Development Corporation (GMDCLTD) Lean Deep-Dive · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">DR — Gujarat Mineral Development Corporation (GMDCLTD) Lean Deep-Dive</h1>
+    <div class="hmeta"><b>2026-05-12</b> &middot; ticker <b>GMDCLTD</b> &middot; status <b>active</b></div>
+    <div class="obs">GMDC is held (340 sh @ ₹688.56) and is the only minerals-mining cluster name in the book. Critical-minerals + REE thesis is real but execution is slow; FY26 quarterly trajectory has been weak. This is the lean variant per operator Path 3 — first formal company-DR after the position was opened.</div>
+  </div>
+  <div class="body"><p><strong>Author:</strong> DEEP_RESEARCH</p>
+<p><strong>Date:</strong> 2026-05-12</p>
+<p><strong>Theme:</strong> State-owned mineral PSU; lignite leader + critical minerals + REE optionality</p>
+<p><strong>Status of position:</strong> Active · 340 sh @ ₹688.56 · ~₹2.34 L cost · CMP ~₹663 (-3.7% unrealised)</p>
+<p><strong>Mode:</strong> Lean (Path 3)</p>
+<hr>
+<h3>§1 Executive Summary</h3>
+<p>GMDC is India&#x27;s <strong>second-largest lignite producer and the leading merchant seller of lignite</strong>, with the Gujarat state government holding 74% — a structural PSU governance profile. The investment case is bifurcated: the <strong>core lignite business</strong> is mature, slowly declining, and faces secular thermal-coal demand pressure; the <strong>critical-minerals + rare earth pivot</strong> is the optionality kicker that could re-rate the stock if it executes. As of Q3 FY26 (Dec-2025), net profit declined 9.89% to Rs 133 cr and net sales declined 11.37% to Rs 579 cr — confirming the lignite-decline narrative. Six new lignite blocks (~360 MT reserves) come online Q4 FY26 / Q1 FY27, which should arrest the volume decline.</p>
+<p><strong>Verdict line:</strong> <strong>HOLD with downside-watch.</strong> The position is small (340 sh / ~₹2.3 L) and below cost; not a thesis-breaker but the FY26 trajectory is weak. The REE/NMDC partnership is the upside lever — needs concrete commercial milestones (offtake agreement, production timeline) before re-rate is plausible. Three-quarter window to validate or de-risk.</p>
+<hr>
+<h3>§2 Business Decomposition</h3>
+<h4>§2.1 Revenue lines</h4>
+<div class="mdtbl">
+<div class="mdtr"><span>Segment</span><span>Estimated mix</span><span>Trend</span></div>
+<div class="mdtr"><span><strong>Lignite mining + sale</strong></span><span>~75-80%</span><span>Volume declining (mature mines); 6 new blocks Q4 FY26/Q1 FY27 arrest decline</span></div>
+<div class="mdtr"><span><strong>Power generation</strong> (captive thermal at AKRIMOTA + others)</span><span>~15-20%</span><span>Stable; secondary to lignite</span></div>
+<div class="mdtr"><span><strong>Bauxite + manganese + fluorspar</strong></span><span>~5-10%</span><span>Small but margin-rich</span></div>
+<div class="mdtr"><span><strong>REE / critical minerals</strong></span><span>&lt;2% (early stage)</span><span>Optionality; NMDC partnership announced</span></div>
+</div>
+<h4>§2.2 Lignite — the core mature business</h4>
+<p><a href="https://en.wikipedia.org/wiki/Gujarat_Mineral_Development_Corporation">Wikipedia</a> + <a href="https://www.careratings.com/upload/CompanyFiles/PR/202508140855_Gujarat_Mineral_Development_Corporation_Limited.pdf">Care Ratings analysis</a>:</p>
+<ul>
+<li>#2 producer in India (after Neyveli Lignite); #1 merchant seller (i.e., selling on the open market rather than to a captive parent)</li>
+<li>Primary mines: Panandhro, Tadkeshwar, Mata No Madh (Bhuj), Rajpardi, Bhavnagar, plus 6 new blocks in award stage</li>
+<li>End-customers: thermal power (captive + state-utility), brick + ceramic industries</li>
+<li><strong>Pricing:</strong> Notice for interim allocation pricing eff. 2026-05-06; lignite is price-administered (state-set), unlike coal which has e-auction premiums</li>
+<li><strong>Volume trend:</strong> Declining naturally as old mines deplete; new block commissioning is the volume-replacement story</li>
+</ul>
+<h4>§2.3 Critical minerals + REE — the upside lever</h4>
+<p>GMDC has announced a partnership with NMDC for rare earth element development. Per MD Roopwant Singh:</p>
+<blockquote>&quot;The collaboration with NMDC brings together complementary institutional strengths and technical expertise to explore opportunities in the rare earth sector.&quot;</blockquote>
+<p>This aligns with India&#x27;s national priorities on critical-mineral resilience. <strong>But — and this matters — no concrete commercial offtake, production timeline, or revenue contribution has been disclosed yet.</strong> This is optionality, not earnings.</p>
+<p>REE prices have been weak globally (China-dominated supply chain). Indian REE economics are uncertain without:</p>
+<ul>
+<li>Concentrate-to-oxide processing capability (downstream)</li>
+<li>Offtake from auto/defence end-users at premium to spot</li>
+<li>Government subsidy or production-linked incentive (PLI for critical minerals not yet defined for REE)</li>
+</ul>
+<hr>
+<h3>§3 Q3 FY26 Trajectory — the weakness signal</h3>
+<p>Per latest disclosure:</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>Q3 FY26</span><span>YoY</span></div>
+<div class="mdtr"><span>Net sales (consolidated)</span><span>Rs 579.15 cr</span><span><strong>-11.37%</strong></span></div>
+<div class="mdtr"><span>Net profit</span><span>Rs 133.06 cr</span><span><strong>-9.89%</strong></span></div>
+</div>
+<p>This is <strong>the central problem with GMDC as a hold today.</strong> Revenue and profit both negative YoY through Q3 confirm the natural decline of mature mines. The 6 new block commissioning in Q4 FY26 / Q1 FY27 needs to materially reverse this trajectory. If FY27 revenue can&#x27;t beat FY26 by &gt;10%, the thesis is mostly broken.</p>
+<p><strong>Verifiable FY26 numbers will land at Q4 results (expected late May / early June 2026).</strong> Watch:</p>
+<ul>
+<li>Did the new mines commission on time?</li>
+<li>What&#x27;s the volume run-rate from Q1 FY27 onwards?</li>
+<li>Did margin compression continue?</li>
+</ul>
+<hr>
+<h3>§4 Energy v2 Cross-Reference</h3>
+<p>GMDC is mentioned in <a href="../THEMATIC/260503_DEEP-RESEARCH_india-energy-v2.md">Energy v2</a> as an Energy-cluster adjacent name (lignite → thermal power input). The brief frames the holding as:</p>
+<ul>
+<li>Mature thermal-fuel supplier with declining base business</li>
+<li>Optionality on critical-minerals theme (national priority + state-backing)</li>
+<li>PSU dividend yield support</li>
+</ul>
+<p>The Energy v2 verdict on GMDC: &quot;secondary/adjacent — not a primary Energy pick.&quot; This deep-dive does not change that framing.</p>
+<hr>
+<h3>§5 Valuation</h3>
+<p>CMP ~Rs 663 / mcap ~Rs 20,000 cr / P/E TTM ~30x (declining EPS means trailing P/E rises mechanically; forward P/E is the better metric).</p>
+<p>Compared to peers:</p>
+<ul>
+<li><strong>Coal India</strong> — vastly larger; better dividend yield; trades 6-7x P/E</li>
+<li><strong>NMDC</strong> — iron-ore; cyclical; 8-10x P/E</li>
+<li><strong>Neyveli Lignite (NLC India)</strong> — lignite peer; smaller market position; ~10-12x P/E</li>
+</ul>
+<p><strong>GMDC trades at a premium to peers</strong> that&#x27;s hard to defend purely on lignite economics. The premium reflects the REE optionality + Gujarat-state backing. <strong>If REE thesis fails to materialise commercially, multiple compression risk is high</strong> — peer-line P/E of ~10x would imply Rs 230-280 territory (i.e., -55-65% downside).</p>
+<p>This is the asymmetry that matters: <strong>upside requires REE commercial proof; downside is mean-reversion to peer multiples.</strong></p>
+<hr>
+<h3>§6 Bull / Base / Bear Case — 12-18 months</h3>
+<h4>Bull (20%)</h4>
+<ul>
+<li>REE partnership with NMDC announces commercial offtake + production timeline</li>
+<li>Government PLI for critical minerals announced (defence + EV demand pull)</li>
+<li>6 new lignite mines ramp cleanly; FY27 revenue +15% YoY</li>
+<li>Stock re-rates → <strong>Rs 850-950</strong></li>
+</ul>
+<h4>Base (50%)</h4>
+<ul>
+<li>New mines commission with delays; FY27 revenue +5-8%</li>
+<li>REE remains &quot;in pipeline&quot; — no commercial proof</li>
+<li>Stock holds Rs 600-700 band</li>
+<li><strong>Rs 650-720</strong></li>
+</ul>
+<h4>Bear (25%)</h4>
+<ul>
+<li>New mine commissioning slips beyond Q2 FY27</li>
+<li>REE partnership stalls (no commercial output, no PLI)</li>
+<li>FY27 revenue flat or declining; margin compression</li>
+<li><strong>Rs 450-550</strong></li>
+</ul>
+<h4>Tail (5%)</h4>
+<ul>
+<li>Coal/lignite policy shift adverse (carbon transition acceleration)</li>
+<li><strong>Rs 350-450</strong></li>
+</ul>
+<p><strong>Weighted EV:</strong> ~Rs 650 — roughly flat from CMP. <strong>Risk-adjusted, no compelling reason to add or to maintain conviction; equally no immediate forced sell.</strong> The position is small enough to monitor without action.</p>
+<hr>
+<h3>§7 Risk Factors (GMDC-Specific)</h3>
+<ol>
+<li><strong>REE thesis execution risk</strong> (HIGH probability of slippage, HIGH impact on upside)</li>
+<li><strong>Mature mine depletion</strong> — natural production decline already visible in Q3 FY26</li>
+<li><strong>PSU governance / state political-cycle risk</strong> — Gujarat state could direct strategic decisions; transparent but not always investor-aligned</li>
+<li><strong>Coal/lignite secular pressure</strong> — long-term carbon-transition headwind</li>
+<li><strong>Capital allocation discipline</strong> — REE capex without commercial certainty is balance-sheet risk</li>
+<li><strong>Margin sensitivity to fuel costs</strong> + administered pricing constraints</li>
+</ol>
+<hr>
+<h3>§8 Cross-Reference</h3>
+<ul>
+<li>260503_DEEP-RESEARCH_india-energy-v2 — Energy v2 adjacent name</li>
+<li>260512_DR-CROSS-BRIEF-STITCHING §3 — flagged gap: Cement/Building Materials adjacent</li>
+<li>_index — canonical stock-index page</li>
+</ul>
+<hr>
+<h3>§9 Operator Decision Box</h3>
+<p><strong>Current state:</strong> 340 sh @ ₹688.56 · cost basis ₹2.34 L · CMP ₹663 → -3.7% unrealised. ~0.5% of book by MV (smallest held position).</p>
+<p><strong>Decision questions:</strong></p>
+<ol>
+<li><strong>Hold/Add/Trim?</strong> — HOLD. Position is too small to add (no thesis-clarity to justify) and not large enough to require trimming.</li>
+<li><strong>Where&#x27;s the cut?</strong> — If Q4 FY26 results (late May/early June) confirm continued revenue decline AND no concrete REE commercial milestone is announced by Q1 FY27, consider trimming 50%. The optionality requires evidence.</li>
+<li><strong>F98 redeployment overlap?</strong> — NO. GMDC is not on the F98 candidate list. The thesis is too uncertain to justify additional capital allocation.</li>
+</ol>
+<p><strong>Verdict:</strong> <strong>HOLD with watch.</strong> Three-quarter trial window:</p>
+<ul>
+<li><strong>Q4 FY26 results</strong> (May-Jun 2026) — new mine commissioning + FY27 guidance</li>
+<li><strong>Q1 FY27</strong> (Aug 2026) — actual run-rate from new mines</li>
+<li><strong>Q2 FY27</strong> (Nov 2026) — REE commercial-milestone check-point</li>
+</ul>
+<p>If 2 of 3 milestones miss → trim 50%. If all 3 hit → consider sizing up.</p>
+<hr>
+<h3>Sources</h3>
+<ul>
+<li><a href="https://www.gmdcltd.com/">GMDCLTD official site</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Gujarat_Mineral_Development_Corporation">Wikipedia — Gujarat Mineral Development Corporation</a></li>
+<li><a href="https://www.screener.in/company/GMDCLTD/consolidated/">Screener — GMDCLTD company profile</a></li>
+<li><a href="https://www.careratings.com/upload/CompanyFiles/PR/202508140855_Gujarat_Mineral_Development_Corporation_Limited.pdf">Care Ratings — GMDC analysis</a></li>
+<li><a href="https://www.tickertape.in/stocks/gujarat-mineral-development-corporation-GMDC">Tickertape GMDC live</a></li>
+<li><a href="https://groww.in/stocks/gujarat-mineral-development-corporation-ltd">Groww GMDC stock page</a></li>
+<li><a href="https://finance.yahoo.com/quote/GMDCLTD.NS/">Yahoo Finance GMDCLTD.NS</a></li>
+</ul>
+<hr>
+<p><em>v1 lean 2026-05-12 — first formal company-DR. Refresh post Q4 FY26 results.</em></p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260512_DEEP-RESEARCH_gmdcltd-critical-minerals</div>
+</div></body></html>

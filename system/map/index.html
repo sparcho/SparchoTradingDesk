@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!-- reskin:system-map-v1 · live force-graph of THIS system · classic script · tokens via styles.css -->
+<html lang="en" class="theme-equity-dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System Map · Sparcho Trading Desk</title>
+<link rel="stylesheet" href="../../assets/design/styles.css">
+<style>
+/* chrome reads design-system vars; the 8 DOMAIN node colours are a CANVAS palette (concrete
+   values, like the 3D-hero) defined in JS — canvas fillStyle can't resolve CSS vars. */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-sans);
+  background-image:radial-gradient(1100px 700px at 70% -8%, color-mix(in srgb,var(--accent) 8%,transparent), transparent 60%),
+                   radial-gradient(900px 600px at 0% 100%, color-mix(in srgb,var(--accent-2) 7%,transparent), transparent 55%);
+  overflow:hidden; }
+.hud{ position:fixed; inset:0; pointer-events:none; z-index:2; }
+.hud .frame{ position:absolute; inset:10px; border:1px solid var(--border-strong); border-radius:14px;
+  box-shadow:inset 0 0 60px color-mix(in srgb,var(--accent) 8%,transparent); }
+.hud .corner{ position:absolute; width:18px; height:18px; border:2px solid var(--accent); opacity:0.7; }
+.hud .c1{ top:14px; left:14px; border-right:none; border-bottom:none; }
+.hud .c2{ top:14px; right:14px; border-left:none; border-bottom:none; }
+.hud .c3{ bottom:14px; left:14px; border-right:none; border-top:none; }
+.hud .c4{ bottom:14px; right:14px; border-left:none; border-top:none; }
+.topbar{ position:fixed; top:22px; left:26px; right:26px; z-index:4; display:flex; align-items:flex-start; gap:14px; }
+.title{ font-family:var(--font-mono); }
+.title b{ font-size:15px; letter-spacing:0.04em; }
+.title .sub{ display:block; font-size:9.5px; color:var(--ink-mute); text-transform:uppercase; letter-spacing:0.12em; margin-top:3px; }
+.title a{ color:var(--ink-mute); text-decoration:none; }
+.spacer{ flex:1; }
+.meta{ font-family:var(--font-mono); font-size:9.5px; color:var(--ink-faint); text-align:right; line-height:1.6; }
+.legend{ position:fixed; left:26px; bottom:24px; z-index:4; display:flex; flex-wrap:wrap; gap:6px; max-width:62vw; }
+.lchip{ pointer-events:auto; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono);
+  font-size:9.5px; padding:3px 9px; border-radius:99px; border:1px solid var(--border); background:var(--card); color:var(--ink-soft);
+  transition:border-color .12s, background .12s; }
+.lchip:hover{ border-color:var(--accent); }
+.lchip.off{ opacity:0.4; }
+.lchip .dot{ width:8px; height:8px; border-radius:50%; }
+.hint{ position:fixed; right:26px; bottom:24px; z-index:4; font-family:var(--font-mono); font-size:9px; color:var(--ink-faint); text-align:right; line-height:1.6; }
+#stalebar{ position:fixed; top:0; left:0; right:0; z-index:6; display:none; padding:6px 16px; font-family:var(--font-mono);
+  font-size:11px; text-align:center; background:var(--warn-soft); color:var(--warn); border-bottom:1px solid var(--warn); }
+#map{ position:fixed; inset:0; z-index:1; display:block; }
+#tip{ position:fixed; z-index:5; pointer-events:none; opacity:0; transition:opacity .1s; font-family:var(--font-mono);
+  font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; background:color-mix(in srgb,var(--paper) 88%,transparent);
+  border:1px solid var(--accent); color:var(--ink); box-shadow:0 4px 18px rgba(0,0,0,0.45); }
+.err{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:7; font-family:var(--font-mono); color:var(--ink-mute); }
+@media (max-width:760px){ .legend{ max-width:90vw; } .title b{ font-size:13px; } }
+</style>
+</head>
+<body>
+<div id="stalebar"></div>
+<canvas id="map"></canvas>
+<div class="hud"><div class="frame"></div><div class="corner c1"></div><div class="corner c2"></div><div class="corner c3"></div><div class="corner c4"></div></div>
+<div class="topbar">
+  <div class="title"><b>SYSTEM MAP</b><span class="sub"><a href="../../index.html">◂ Landing</a> · live force-graph of the desk</span></div>
+  <div class="spacer"></div>
+  <div class="meta" id="meta">loading…</div>
+</div>
+<div class="legend" id="legend"></div>
+<div class="hint">drag a node · hover to trace · click a domain to isolate · click empty space to reset</div>
+<div id="tip"></div>
+<div class="err" id="err">system map data unavailable.</div>
+<script>
+'use strict';
+// ── canvas DOMAIN palette (concrete colours — canvas fillStyle can't read CSS vars; mirrors COLOR_CODING) ──
+const DOMC = {
+  'system':'#18a0fb', 'active-stocks':'#46d18a', 'deep-research':'#e8b048', 'silver':'#b08cf0',
+  'flags':'#ff9a4d', 'positions':'#2fd4c8', 'agents':'#c89b6a', 'daily':'#00e5ff'
+};
+const cssv = (n,f)=>{ try{ const v=getComputedStyle(document.documentElement).getPropertyValue(n).trim(); return v||f; }catch(e){ return f; } };
+const canvas = document.getElementById('map');
+const ctx = canvas.getContext('2d');
+const tip = document.getElementById('tip');
+let G=null, nodes=[], links=[], byId={}, adj={};
+let W=0,H=0,DPR=1, raf=null, running=false, visible=true, hiddenTab=false;
+let reduce=false; try{ reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){}
+let drag=null, hover=null, isolate=null, mouse={x:0,y:0,has:false};
+
+function fit(){
+  DPR = Math.min(2, window.devicePixelRatio||1);
+  W = window.innerWidth||document.documentElement.clientWidth||1280;
+  H = window.innerHeight||document.documentElement.clientHeight||800;
+  if(!W||!H) return false;                       // 0×0 self-heal — try again next frame
+  canvas.width = Math.round(W*DPR); canvas.height = Math.round(H*DPR);
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  return true;
+}
+
+function seed(){
+  const cx=W/2, cy=H/2;
+  const doms = (G.domains||[]).map(d=>d.id);
+  const angById={}; doms.forEach((id,i)=>{ angById[id]= -Math.PI/2 + i/doms.length*Math.PI*2; });
+  nodes.forEach(n=>{
+    if(n.kind==='center'){ n.x=cx; n.y=cy; n.pin=true; return; }
+    if(n.kind==='hub'){ const a=angById[n.id]||0; n.x=cx+Math.cos(a)*Math.min(W,H)*0.26; n.y=cy+Math.sin(a)*Math.min(W,H)*0.26; }
+    else { const a=(angById['dom:'+n.domain]!=null?angById['dom:'+n.domain]:0) + (Math.sin((n.id.length*13)%7)-0.5)*0.6;
+           const r=Math.min(W,H)*(0.34+((n.id.length*7)%10)/26); n.x=cx+Math.cos(a)*r; n.y=cy+Math.sin(a)*r; }
+    n.vx=0; n.vy=0;
+  });
+}
+
+function step(){
+  const cx=W/2, cy=H/2;
+  // repulsion (all-pairs; n≈70 is fine)
+  for(let i=0;i<nodes.length;i++){ const a=nodes[i];
+    for(let j=i+1;j<nodes.length;j++){ const b=nodes[j];
+      let dx=a.x-b.x, dy=a.y-b.y, d2=dx*dx+dy*dy+0.01; const d=Math.sqrt(d2);
+      const f=2600/d2; const fx=dx/d*f, fy=dy/d*f;
+      if(!a.pin){ a.vx+=fx; a.vy+=fy; } if(!b.pin){ b.vx-=fx; b.vy-=fy; }
+    }
+  }
+  // springs
+  links.forEach(l=>{ const a=byId[l.source], b=byId[l.target]; if(!a||!b) return;
+    let dx=b.x-a.x, dy=b.y-a.y; const d=Math.hypot(dx,dy)||0.01;
+    const rest=(a.kind==='hub'||b.kind==='hub'||a.kind==='center'||b.kind==='center')?120:70;
+    const f=(d-rest)*0.012; const fx=dx/d*f, fy=dy/d*f;
+    if(!a.pin){ a.vx+=fx; a.vy+=fy; } if(!b.pin){ b.vx-=fx; b.vy-=fy; }
+  });
+  // gravity to centre + integrate
+  nodes.forEach(n=>{ if(n.pin) return;
+    n.vx+=(cx-n.x)*0.0009; n.vy+=(cy-n.y)*0.0009;
+    n.vx*=0.86; n.vy*=0.86;
+    n.x+=Math.max(-12,Math.min(12,n.vx)); n.y+=Math.max(-12,Math.min(12,n.vy));
+    n.x=Math.max(24,Math.min(W-24,n.x)); n.y=Math.max(46,Math.min(H-30,n.y));
+  });
+}
+
+function shown(n){ if(!isolate) return true; if(n.kind==='center') return true; return (('dom:'+n.domain)===isolate)||(n.id===isolate); }
+function nodeR(n){ return n.kind==='center'?13 : n.kind==='hub'?9 : 4+ (n.kind==='ticker'?2:0); }
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const inkFaint=cssv('--ink-faint','#4f5d76');
+  const hl = hover ? new Set([hover.id, ...(adj[hover.id]||[])]) : null;
+  // links
+  links.forEach(l=>{ const a=byId[l.source], b=byId[l.target]; if(!a||!b||!shown(a)||!shown(b)) return;
+    const on = hl ? (hl.has(a.id)&&hl.has(b.id)) : true;
+    ctx.globalAlpha = on ? (l.kind==='spine'?0.5:0.22) : 0.05;
+    ctx.strokeStyle = (l.kind==='couple')? cssv('--accent-2','#00e5ff') : cssv('--accent','#18a0fb');
+    ctx.lineWidth = l.kind==='spine'?1.4:0.8;
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+  });
+  ctx.globalAlpha=1;
+  // nodes
+  nodes.forEach(n=>{ if(!shown(n)) return;
+    const col = n.kind==='center'? cssv('--ink','#eaf2fb') : (DOMC[n.domain]||'#888');
+    const dim = hl && !hl.has(n.id) ? 0.28 : 1;
+    const r=nodeR(n); const fr = (n.freshness==null?1:n.freshness);
+    ctx.globalAlpha = dim * (0.45+0.55*fr);
+    ctx.beginPath(); ctx.arc(n.x,n.y,r,0,Math.PI*2); ctx.fillStyle=col; ctx.fill();
+    if(n.kind!=='leaf'){ ctx.globalAlpha=dim*0.9; ctx.lineWidth=1; ctx.strokeStyle=col; ctx.stroke(); }
+    if(n.stale){ ctx.globalAlpha=dim*0.8; ctx.lineWidth=1; ctx.strokeStyle=cssv('--warn','#e8b048');
+      ctx.beginPath(); ctx.arc(n.x,n.y,r+3,0,Math.PI*2); ctx.stroke(); }
+    // labels: center + hubs always; leaves on hover/isolate
+    if(n.kind==='center'||n.kind==='hub'|| (hl&&hl.has(n.id)) || (isolate&&shown(n))){
+      ctx.globalAlpha=dim; ctx.fillStyle=cssv('--ink','#eaf2fb');
+      ctx.font=(n.kind==='center'?'700 13px ':'600 10px ')+'ui-monospace,monospace';
+      ctx.textAlign='center'; ctx.fillText(n.label, n.x, n.y - r - 5);
+    }
+  });
+  ctx.globalAlpha=1;
+}
+
+function frame(){ raf=null;
+  if(!reduce) step();
+  draw();
+  pump();
+}
+function pump(){ const run = running && visible && !hiddenTab;
+  if(run && raf==null){ if(reduce){ draw(); } else { raf=requestAnimationFrame(frame); } }
+  else if(!run && raf!=null){ cancelAnimationFrame(raf); raf=null; }
+}
+
+function start(){
+  running=true;
+  if(reduce){ for(let i=0;i<260;i++) step(); draw(); }   // settle instantly under reduced-motion (no perpetual sim)
+  else pump();
+}
+
+function pickNode(mx,my){ let best=null,bd=1e9;
+  nodes.forEach(n=>{ if(!shown(n))return; const d=Math.hypot(n.x-mx,n.y-my); const r=nodeR(n)+6; if(d<r&&d<bd){bd=d;best=n;} });
+  return best;
+}
+
+function wire(){
+  canvas.style.pointerEvents='auto';
+  canvas.addEventListener('mousedown', e=>{ const n=pickNode(e.clientX,e.clientY); if(n&&n.kind!=='center'){ drag=n; n.pin=true; } });
+  window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; mouse.has=true;
+    if(drag){ drag.x=e.clientX; drag.y=e.clientY; drag.vx=0; drag.vy=0; pump(); return; }
+    const n=pickNode(e.clientX,e.clientY); hover=n||null;
+    if(n){ tip.textContent=n.label+' · '+n.domain+(n.stale?' · stale':''); tip.style.left=(e.clientX+12)+'px'; tip.style.top=(e.clientY+14)+'px'; tip.style.opacity='1'; canvas.style.cursor='pointer'; }
+    else { tip.style.opacity='0'; canvas.style.cursor='default'; }
+    if(reduce) draw();
+  }, {passive:true});
+  window.addEventListener('mouseup', ()=>{ if(drag){ if(drag.kind!=='hub') drag.pin=false; drag=null; } });
+  canvas.addEventListener('click', e=>{ const n=pickNode(e.clientX,e.clientY);
+    if(n && (n.kind==='hub')){ isolate=(isolate===n.id)?null:n.id; }
+    else if(!n){ isolate=null; }
+    syncLegend(); if(reduce) draw();
+  });
+}
+
+function syncLegend(){
+  const lg=document.getElementById('legend'); if(!lg) return;
+  lg.innerHTML=(G.domains||[]).map(d=>{
+    const off = isolate && isolate!==d.id ? ' off':'';
+    return '<span class="lchip'+off+'" data-dom="'+d.id+'"><span class="dot" style="background:'+(DOMC[d.key]||'#888')+'"></span>'+d.label+'</span>';
+  }).join('');
+  lg.querySelectorAll('.lchip').forEach(c=>c.onclick=()=>{ const id=c.dataset.dom; isolate=(isolate===id)?null:id; syncLegend(); if(reduce) draw(); pump(); });
+}
+
+function staleness(){
+  try{ const gen=new Date(G.generated_utc); const ageH=(Date.now()-gen.getTime())/3.6e6;
+    if(isFinite(ageH) && ageH>26){ const b=document.getElementById('stalebar'); b.style.display='block';
+      b.textContent='⚠ system map data is '+Math.round(ageH)+'h old — regenerate via system_map_emit.py'; }
+  }catch(e){}
+}
+
+function init(graph){
+  G=graph; nodes=(G.nodes||[]).map(n=>Object.assign({},n)); links=(G.links||[]);
+  byId={}; adj={}; nodes.forEach(n=>byId[n.id]=n);
+  links.forEach(l=>{ (adj[l.source]=adj[l.source]||[]).push(l.target); (adj[l.target]=adj[l.target]||[]).push(l.source); });
+  document.getElementById('meta').innerHTML = (G.counts? (G.counts.nodes+' nodes · '+G.counts.links+' links'):'') +
+    '<br>'+(G.privacy&&G.privacy.gate==='clean'?'privacy gate · clean':'') +
+    '<br>'+(G.generated_utc? ('emitted '+String(G.generated_utc).slice(0,16).replace('T',' ')+'Z'):'');
+  if(!fit()){ requestAnimationFrame(()=>{ if(fit()){ seed(); start(); } }); } else { seed(); start(); }
+  syncLegend(); staleness();
+  window.__mapMeta = { nodes:nodes.length, links:links.length, domains:(G.domains||[]).length };
+}
+
+function boot(){
+  fetch('data/system_map_graph.json?t='+Date.now(), {cache:'no-store'})
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(init)
+    .catch(e=>{ const el=document.getElementById('err'); if(el){ el.style.display='flex'; el.textContent='system map data unavailable ('+(e&&e.message||e)+')'; } window.__mapMeta={nodes:0,links:0,error:String(e&&e.message||e)}; });
+}
+
+window.addEventListener('resize', ()=>{ if(fit()){ if(reduce) draw(); pump(); } });
+document.addEventListener('visibilitychange', ()=>{ hiddenTab=document.hidden; pump(); });
+try{ new IntersectionObserver(es=>{ visible=es.some(x=>x.isIntersecting); pump(); }).observe(canvas); }catch(e){}
+wire();
+window.__mapInit = init;   // harness hook (inject a stub graph without a fetch)
+window.__mapShown = ()=> nodes.filter(shown).length;   // visible-node count (isolate test)
+window.__mapSetIsolate = (id)=>{ isolate=id; };         // harness: drive the isolate filter
+boot();
+</script>
+</body>
+</html>

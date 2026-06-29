@@ -1,0 +1,78 @@
+name: Refresh stocks dashboard
+
+# Triggers:
+#   - schedule:          auto EOD pull after the NSE close (F129) — keeps the
+#                        Day-Trade Fires + held book on the latest close with no
+#                        manual click. 11:00 UTC = 16:30 IST (daily bar settled).
+#   - workflow_dispatch: manual "Run workflow" button for an on-demand intraday pull.
+#   - push to stocks/generators/**: redeploy when the refresh script changes.
+#
+# refresh_prices.py re-scores the fires on live prices via the shared daytrade_core
+# scorer and stamps daytrade_freshness; the page banner shows staleness if a pull
+# ever fails (fail-closed). NSE holidays just produce a no-op (no new bar).
+
+on:
+  schedule:
+    - cron: '0 11 * * 1-5'      # 16:30 IST, Mon-Fri (after NSE close)
+  workflow_dispatch:
+  push:
+    paths:
+      - 'stocks/generators/**'
+      - '.github/workflows/refresh-stocks-dashboard.yml'
+
+permissions:
+  contents: write
+
+# Share the queue with the 20-min live job so the two NEVER push the aggregate at
+# the same time. Without this the heavy job's push raced the live job and fast-failed
+# with `! [rejected] main -> main (fetch first)` -> a failure email (260611 CC-FIX).
+concurrency:
+  group: stocks-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install yfinance
+        run: pip install yfinance
+
+      - name: Refresh NSE live prices + re-score Day-Trade Fires
+        run: python stocks/generators/refresh_prices.py
+
+      - name: Commit + push if changed
+        # HARDENED (same pattern as the live job): the aggregate carries the operator's
+        # encrypted book and is regenerated each run, so a moved remote must NOT be merged.
+        # Fast-path push; if the remote moved, RESET to latest remote and re-run the price
+        # refresh on top (refresh_prices preserves the remote's sensitive_enc — locked mode
+        # only touches public price fields). A failed re-overlay just yields no diff → clean
+        # exit, never a false-alarm failure email.
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stocks/data/equity_dashboard_aggregate.json stocks/data/prices.json
+          if git diff --cached --quiet; then
+            echo "No price changes — skipping commit"; exit 0
+          fi
+          git commit -m "refresh equity prices + fires $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if git push; then echo "pushed (fast path)"; exit 0; fi
+          echo "push rejected — remote moved; re-overlaying on latest remote and retrying"
+          for i in 1 2 3 4 5; do
+            git fetch origin main || { sleep 4; continue; }
+            git reset --hard origin/main
+            python stocks/generators/refresh_prices.py || echo "WARN: price overlay failed (continuing)"
+            git add stocks/data/equity_dashboard_aggregate.json stocks/data/prices.json
+            if git diff --cached --quiet; then echo "no net change after re-overlay on latest — done"; exit 0; fi
+            git commit -m "refresh equity prices + fires (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
+            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+          done
+          echo "::error::could not push after rebuild retries"; exit 1
