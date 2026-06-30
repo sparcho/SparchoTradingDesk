@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "AVANTIFEED",
-  "emitted_at_utc": "2026-06-30T09:03:11+00:00",
+  "emitted_at_utc": "2026-06-30T09:23:53+00:00",
   "public": {
     "ticker": "AVANTIFEED",
     "name": "Avanti Feeds",
@@ -5387,74 +5387,98 @@
     "gate_levels": [
       {
         "label": "INVALIDATION",
-        "price": 632.3,
+        "price": 879.0,
         "dir": "below",
         "kind": "inv",
-        "why": "52-week low",
-        "auto": true
+        "why": "near pivot S3 Rs880.70"
       },
       {
-        "label": "SUPPORT",
-        "price": 919.8,
+        "label": "TRIM-50",
+        "price": 903.0,
+        "dir": "below",
+        "kind": "trim",
+        "why": "near pivot S2 Rs904.70"
+      },
+      {
+        "label": "SOFT-WATCH",
+        "price": 919.0,
         "dir": "below",
         "kind": "watch",
-        "why": "pivot S1",
-        "auto": true
+        "why": "near pivot S1 Rs919.80"
       },
       {
-        "label": "RESISTANCE",
-        "price": 943.8,
+        "label": "TRIM-30",
+        "price": 1000.0,
         "dir": "above",
         "kind": "trim",
-        "why": "classical pivot",
-        "auto": true
+        "why": "near 200-day SMA Rs999.06"
       },
       {
-        "label": "UPSIDE",
-        "price": 1503.4,
+        "label": "TRIM-add",
+        "price": 1068.0,
         "dir": "above",
         "kind": "trim",
-        "why": "52-week high",
-        "auto": true
+        "why": null
+      },
+      {
+        "label": "TRIM-60",
+        "price": 1220.0,
+        "dir": "above",
+        "kind": "trim",
+        "why": "near 50-day SMA Rs1219.52"
       }
     ],
-    "gate_levels_auto": true,
+    "gate_levels_auto": false,
     "gate_check": [
       {
-        "label": "RESISTANCE",
-        "price": 943.8,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 0.9519734730987247
-      },
-      {
-        "label": "SUPPORT",
-        "price": 919.8,
+        "label": "SOFT-WATCH",
+        "price": 919.0,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -1.6151460049203148
+        "dist_pct": -1.7007166541876113
+      },
+      {
+        "label": "TRIM-50",
+        "price": 903.0,
+        "dir": "below",
+        "kind": "trim",
+        "dist_pct": -3.412129639533638
       },
       {
         "label": "INVALIDATION",
-        "price": 632.3,
+        "price": 879.0,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -32.36709808535673
+        "dist_pct": -5.979249117552677
       },
       {
-        "label": "UPSIDE",
-        "price": 1503.4,
+        "label": "TRIM-30",
+        "price": 1000.0,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 60.808642635576014
+        "dist_pct": 6.963311584126647
+      },
+      {
+        "label": "TRIM-add",
+        "price": 1068.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 14.236816771847261
+      },
+      {
+        "label": "TRIM-60",
+        "price": 1220.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 30.49524013263451
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 632.3,
-        "note": "daily close below Rs632 invalidates the structure"
+        "level": 879.0,
+        "note": "daily close below Rs879 -> 52W-low Rs632 in play"
       },
       {
         "case": "base",
@@ -5465,8 +5489,8 @@
       {
         "case": "bull",
         "label": "Bull: Trend resumption",
-        "level": 1503.4,
-        "note": "sustained move toward Rs1503"
+        "level": 1220.0,
+        "note": "sustained move toward Rs1220 / 52W-high Rs1503"
       }
     ],
     "catalysts": [
@@ -5544,8 +5568,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "AOFadIANllDEpFrVZeUUuw==",
-    "iv": "bKs2VuaiSiCYIbPr",
-    "ct": "ApzLVTR5a38p37jOy+y/GJtN3CwB9qcyurIVVoj3IiX6484VA88c0LzazCRMHp+nDwtHfAYNs5cYMyP4tXmBRjhtUFBKFlj+LS2RtXBX2siGySIwF8qfBDVj1JVP5iKOzVfPLfSFZ21OiOQGyBfJPF4xt/qBHObhRXqy5CGrV1ltICqwam/RowGWcr6vN/ZN+XoRdWsWcPObdlnSsUfZCwwtNpdENrr/ujpCBtRTvmFMRFVdhr18dsiXdAbROXeANlaR8o+4deMHhLPg44N8L+g/XgaahLF3MF1aAg8/2DA04jE4Lxb+RSAFywTPdnrkuwFOozde2dUGvjQiscdMW+vV1NWGzFY0xNEgsj2yTNulrXj3nn8CRoIXUafn7nDHxl9CO7c7xzeqWQ6eH6YXtu+CuvVf+/nNKbiRu+E2uNBYzex2QhxGRw3BY1CCz8PDVfQRmyTTZHF2n2H1/3UG9IDveUBPywTYdoEtY0DYv7bhhXoRndBD14HNLUFAoty/MkEMetBmK3tnhlHmoCLT1jpo1H0YvwX4tlszkdPlpQMwzP8Q1Vkq6bTfCv/Rj0VxFQSxxqI+LwSjlx2IshBPbBtfRVLves8PEh5JVyWtYj2JJlYbTTWhwwSVOEQmB5rq/5LetbcnKPMt0c9bjCh0LJF1+cP57JAmg7Po1/L+QB/y+xBbopBQU0OpZGetyFwy7/K9xDxXZU1bAuPxDqDHM93t4LHawAYbvzCIuwVESA3/bETlWXwoeQwr/FHPhK85/Ugnl5Q6MXbddGO82mmXNU56Fa84i3G9/zDVc4727G74wIiKsCFGBC/u7bM7qFFf4D/I/RFzGoN/Q+ZumyhMslDbldSiyx3LQARCWs6RLD+zsEuuMEcPSVB3NcUkQI7zucIo6JTvqR5DdH+CgNtGPZdO40AJP2m0d7+r11iBPVduy6qxuWamr0rUaMUCuwZOKiQBTkHDGwNU7RE2fpXdc8NudkTZUKhC4QixxKRKPUCdX+UIeKXh09fCNgXxM3p3zHxkc3wgr242waGJKV7pIDLKv+NmmAFYLejf/PnHIhrUL4Y4XYODZ1wZqLyRyZaotPmkE7u2jy+qpSExnenM7eXDjx9T2HLcGbiXZUYhIJrIjRjWv4I2YPw/cHFM8v/zquWER6OAbSc0WSVn/OG8AJMMipNueBZ+5Yu3vG3/Wi2/6mwjHvdUzkjmwv7E6THIbJoXVMWTq+WmzeLe4qHnV69/OpE3LI4iD6nFWVtPp+aM89w71NNUlUVg"
+    "salt": "ji8N8dccoK50B7LTTr53xw==",
+    "iv": "0n9GE5+pDo6lUks7",
+    "ct": "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"
   }
 }

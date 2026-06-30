@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "PACEDIGITK",
-  "emitted_at_utc": "2026-06-30T09:03:19+00:00",
+  "emitted_at_utc": "2026-06-30T09:24:00+00:00",
   "public": {
     "ticker": "PACEDIGITK",
     "name": "Pace Digitek",
@@ -1366,86 +1366,110 @@
     "gate_levels": [
       {
         "label": "INVALIDATION",
-        "price": 141.72,
+        "price": 174.0,
         "dir": "below",
         "kind": "inv",
-        "why": "52-week low",
-        "auto": true
+        "why": "near 60-day swing low (2) Rs176.11"
       },
       {
-        "label": "SUPPORT",
-        "price": 199.66,
+        "label": "TRIM-50",
+        "price": 183.0,
+        "dir": "below",
+        "kind": "trim",
+        "why": "near pivot S3 Rs185.38"
+      },
+      {
+        "label": "SOFT-WATCH",
+        "price": 195.0,
         "dir": "below",
         "kind": "watch",
-        "why": "classical pivot",
-        "auto": true
+        "why": "near pivot S1 Rs195.31"
       },
       {
-        "label": "RESISTANCE",
-        "price": 203.58,
+        "label": "TRIM-30",
+        "price": 228.0,
         "dir": "above",
         "kind": "trim",
-        "why": "60-day swing high",
-        "auto": true
+        "why": "near 52-week high Rs227.93"
       },
       {
-        "label": "UPSIDE",
-        "price": 227.93,
+        "label": "TRIM-add",
+        "price": 240.0,
         "dir": "above",
         "kind": "trim",
-        "why": "52-week high",
-        "auto": true
+        "why": "near 52-week high Rs227.93"
+      },
+      {
+        "label": "TRIM-60",
+        "price": 251.0,
+        "dir": "above",
+        "kind": "trim",
+        "why": null
       }
     ],
-    "gate_levels_auto": true,
+    "gate_levels_auto": false,
     "gate_check": [
       {
-        "label": "SUPPORT",
-        "price": 199.66,
+        "label": "SOFT-WATCH",
+        "price": 195.0,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -0.6122753745831001
+        "dist_pct": -2.931952809995513
       },
       {
-        "label": "RESISTANCE",
-        "price": 203.58,
-        "dir": "above",
+        "label": "TRIM-50",
+        "price": 183.0,
+        "dir": "below",
         "kind": "trim",
-        "dist_pct": 1.3390412663646902
-      },
-      {
-        "label": "UPSIDE",
-        "price": 227.93,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 13.460102543680632
+        "dist_pct": -8.905371098611175
       },
       {
         "label": "INVALIDATION",
-        "price": 141.72,
+        "price": 174.0,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -29.453930011449046
+        "dist_pct": -13.38543481507292
+      },
+      {
+        "label": "TRIM-30",
+        "price": 228.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 13.494947483697553
+      },
+      {
+        "label": "TRIM-add",
+        "price": 240.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 19.468365772313216
+      },
+      {
+        "label": "TRIM-60",
+        "price": 251.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 24.943999203544237
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 141.72,
-        "note": "daily close below Rs142 invalidates the structure"
+        "level": 174.0,
+        "note": "daily close below Rs174 -> 52W-low Rs142 in play"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
         "level": 200.89,
-        "note": "holds current band"
+        "note": "holds current band; reclaim Rs228 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
         "label": "Bull: Trend resumption",
-        "level": 227.93,
-        "note": "sustained move toward Rs228"
+        "level": 251.0,
+        "note": "sustained move toward Rs251 / 52W-high Rs228"
       }
     ],
     "catalysts": [
@@ -1523,8 +1547,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "/eHuP3GTaIVPeo4v0+RB3A==",
-    "iv": "UNkmBNLPezS8AJSj",
-    "ct": "rCpfZeZaB7uZDtgKGGKwxZTvpqNnOp1D8YLBDqi9gmfL0NzjWFMLKE92+bipgAWCDZOlFem3UZAS9UKEV29icSN4FETOx7tHileQqaDPnAEBfTGfCZISVsMwQj26fA1DlskJ/6XXGSgRvN4k7GBIY2fRZ+E13qSrDUCJ5FSo3h3Uwx3yDP4pxYPnQ6d9UHcdtODDS6PkG4pqMxADH58gEwU6+qarwL1v1cw9NhLs1DWQUK9C1AZM5nzmTY0uiCDdz8CvpsZmiZk6KTQKv7ai01JF9VRTBxxcqqc2wH4KiXdkvLIq9jNy9F49KXVmT9dmjCrrTA6N6qw4kGtfyanmL2AxKmyXXTwTc8DPQZSua3N/WKqWC23Ijr4heoyFlGTbRH6tsHoy8n2c3vVbTI4IYQf+usduyRE6MuSyL4bFb6eXrLlUiyCCsJiprzrykjtsxpDHzux2YCH4BGW1F9iWuRBanQS50cSyTznBMbNxn8NCa7sQ12dJeUM/B034asOkWdaNoreuAZNDw0d0v2qexicSRhTatkuZCNf8Xcyoj5vUNAc11NywHmeUp9quGvxjvyG55fr5c0wKWvQnrAwf+COLQa5Bh83KPVXSAL4CsryW/fXAk7u7EB3ncJisF0bTZqZnjrkRQr41jGVHsHtOPGjowUBD7xMot5tGUN1hzfdJffOR2If7+bJI+N2zii6jnpe79wavxo2+c/ehnL00ZzUVukEdxblZ+VKgTYyHfGsNRRWDAvY5GF8HvFjFmP4SIVQzH0QgrwsK+dGibDyq/axNx2vLyulAaJ4r0BdLNlau+eSqenpWnATQx05obtVypkePzbF7H8+UwIicaAgQNU1nBCw6OjktUUDPNb6a9EEoRVspKoSYdl7JwBhASphYqRnU9tS4qaFqCwNtYmj6/Xqz710pSOEVzO3Y9G3Kk+/ICT5ffK+fo1Cti+fFV1bZEESxK+9RapkE5Q/QiTlFQ969ebervWPlH6YmC6cOjviM936T+XbUcAeT/0nI+BhkKXbUEkPvkHjmLy3zZqAaUOFlwo5NmlNjR3n14Lm8AZ8YpmpHJgYeE/kaFUJw7O8nKCtv39PyhnQWhIsx/wwkLXLPJ0Mql/kf+CjV+i1FJeiPVCp2Ufcv6OD9EiS3jgOzTh4WHmjYgR+WD7EWwImGPxcssQBqmbU++xcCwGkYWpR8aWA2XiJc1KWAUVMVeik7RxHmVmpoeUBJSI2bPgSqxLpOV/Mq36XkgiDZXMvHNxuv8KtnnGYCij5KCYiqFyOu"
+    "salt": "74y9BH3h+JlI8DHmxNQl/A==",
+    "iv": "NHZicCgg0ewm/1R3",
+    "ct": "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"
   }
 }
