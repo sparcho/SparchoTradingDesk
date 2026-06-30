@@ -75,7 +75,7 @@ SECTOR_MAP = {
         'BAJFINANCE', 'CHOLAFIN', 'SHRIRAMFIN', 'MCX', 'BSE',
     },
     # Other clusters (kept for context; not used by Rajiv #1 but useful for future screeners)
-    'MINERALS': {'GMDCLTD', 'MOIL', 'HINDZINC', 'GRAPHITE', 'VEDL', 'DECNGOLD'},   # +DECNGOLD 260619 (gold explorer)
+    'MINERALS': {'GMDCLTD', 'MOIL', 'HINDZINC', 'GRAPHITE', 'VEDL', 'DECNGOLD', 'HINDCOPPER'},   # +DECNGOLD 260619 (gold explorer); +HINDCOPPER 260630 (copper PSU onboard)
     'TELECOM': {'HFCL', 'STLTECH', 'TEJASNET', 'BHARTIARTL', 'POLYCAB', 'KEI', 'PACEDIGITK'},   # +PACEDIGITK 260619 (held; telecom-digital infra)
     'DEFENCE': {'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO'},   # +APOLLO +ASTRAMICRO 260620 (full screener-verse onboard)
     'SEMI_EMS': {'KAYNES', 'DIXON', 'SYRMA', 'AMBER'},
