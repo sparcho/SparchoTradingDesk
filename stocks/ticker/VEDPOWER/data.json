@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "VEDPOWER",
-  "emitted_at_utc": "2026-06-30T14:25:24+00:00",
+  "emitted_at_utc": "2026-07-01T03:32:31+00:00",
   "public": {
     "ticker": "VEDPOWER",
     "name": "Vedanta Power",
@@ -24,7 +24,7 @@
     "regime_global": {
       "zone": "YELLOW",
       "score": 58,
-      "as_of": "2026-06-30"
+      "as_of": "2026-07-01"
     },
     "regime_zone": null,
     "regime_lens": null,
@@ -42,10 +42,111 @@
     "level_id_record": null,
     "level_id_date": null,
     "last_stock_ta": "PENDING",
-    "live": {},
+    "live": {
+      "price": 40.28,
+      "day_chg_pct": -2.47,
+      "week_chg_pct": null,
+      "date": "2026-07-01"
+    },
     "chart_kind": "line",
-    "ohlc": [],
-    "sr_levels": [],
+    "ohlc": [
+      [
+        "2026-06-15",
+        40.94
+      ],
+      [
+        "2026-06-16",
+        40.0
+      ],
+      [
+        "2026-06-17",
+        42.0
+      ],
+      [
+        "2026-06-18",
+        40.53
+      ],
+      [
+        "2026-06-19",
+        41.03
+      ],
+      [
+        "2026-06-22",
+        43.08
+      ],
+      [
+        "2026-06-23",
+        44.07
+      ],
+      [
+        "2026-06-24",
+        43.61
+      ],
+      [
+        "2026-06-25",
+        42.42
+      ],
+      [
+        "2026-06-26",
+        42.42
+      ],
+      [
+        "2026-06-29",
+        41.3
+      ],
+      [
+        "2026-06-30",
+        40.28
+      ],
+      [
+        "2026-07-01",
+        40.28
+      ]
+    ],
+    "sr_levels": [
+      {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 40.66,
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 41.92,
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 43.55,
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 44.81,
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 39.03,
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 37.77,
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 36.14,
+        "as_of": "2026-07-01"
+      }
+    ],
     "operator_levels": [],
     "gate_levels": [
       {
@@ -53,28 +154,28 @@
         "price": 37.5,
         "dir": "below",
         "kind": "inv",
-        "why": null
+        "why": "near pivot S2 Rs37.77"
       },
       {
         "label": "TRIM-50",
         "price": 38.9,
         "dir": "below",
         "kind": "trim",
-        "why": null
+        "why": "near pivot S1 Rs39.03"
       },
       {
         "label": "SOFT-WATCH",
         "price": 39.5,
         "dir": "below",
         "kind": "watch",
-        "why": null
+        "why": "near pivot S1 Rs39.03"
       },
       {
         "label": "TRIM-30",
         "price": 45.2,
         "dir": "above",
         "kind": "trim",
-        "why": null
+        "why": "near pivot R3 Rs44.81"
       },
       {
         "label": "TRIM-add",
@@ -92,13 +193,62 @@
       }
     ],
     "gate_levels_auto": false,
-    "gate_check": [],
+    "gate_check": [
+      {
+        "label": "SOFT-WATCH",
+        "price": 39.5,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -1.936444885799407
+      },
+      {
+        "label": "TRIM-50",
+        "price": 38.9,
+        "dir": "below",
+        "kind": "trim",
+        "dist_pct": -3.426017874875875
+      },
+      {
+        "label": "INVALIDATION",
+        "price": 37.5,
+        "dir": "below",
+        "kind": "inv",
+        "dist_pct": -6.901688182720955
+      },
+      {
+        "label": "TRIM-30",
+        "price": 45.2,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 12.214498510427015
+      },
+      {
+        "label": "TRIM-add",
+        "price": 48.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 19.165839126117177
+      },
+      {
+        "label": "TRIM-60",
+        "price": 52.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 29.096325719960277
+      }
+    ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
         "level": 37.5,
         "note": "daily close below Rs38 invalidates the structure"
+      },
+      {
+        "case": "base",
+        "label": "Base: Range / accumulate",
+        "level": 40.28,
+        "note": "holds current band; reclaim Rs45 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
@@ -182,8 +332,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "iOXMNEKzXSdGKgoRyZUDIg==",
-    "iv": "mL5KmML5gkkX8aXw",
-    "ct": "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"
+    "salt": "45fuA9wZdZ/kfYBTvFnBvg==",
+    "iv": "ym/0O+ewqbHet2WM",
+    "ct": "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"
   }
 }
