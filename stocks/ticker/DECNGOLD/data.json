@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "DECNGOLD",
-  "emitted_at_utc": "2026-07-01T03:32:22+00:00",
+  "emitted_at_utc": "2026-07-01T10:58:28+00:00",
   "public": {
     "ticker": "DECNGOLD",
     "name": "DECNGOLD",
@@ -43,9 +43,9 @@
     "level_id_date": null,
     "last_stock_ta": null,
     "live": {
-      "price": 198.22,
-      "day_chg_pct": 0.0,
-      "week_chg_pct": -9.014963738180489,
+      "price": 188.91,
+      "day_chg_pct": -4.697,
+      "week_chg_pct": -13.288350316717166,
       "date": "2026-07-01"
     },
     "chart_kind": "candles",
@@ -395,72 +395,90 @@
       ],
       [
         "2026-07-01",
-        199.5,
-        204.79,
-        196.17,
-        198.22
+        198.22,
+        198.84,
+        185.4,
+        188.91
       ]
     ],
     "sr_levels": [
       {
         "method": "classical_pivot",
         "kind": "PIVOT",
-        "price": 199.73,
+        "price": 191.05,
         "as_of": "2026-07-01"
       },
       {
         "method": "classical_pivot",
         "kind": "R1",
-        "price": 203.28,
+        "price": 196.7,
         "as_of": "2026-07-01"
       },
       {
         "method": "classical_pivot",
         "kind": "R2",
-        "price": 208.35,
+        "price": 204.49,
         "as_of": "2026-07-01"
       },
       {
         "method": "classical_pivot",
         "kind": "R3",
-        "price": 211.9,
+        "price": 210.14,
         "as_of": "2026-07-01"
       },
       {
         "method": "classical_pivot",
         "kind": "S1",
-        "price": 194.66,
+        "price": 183.26,
         "as_of": "2026-07-01"
       },
       {
         "method": "classical_pivot",
         "kind": "S2",
-        "price": 191.11,
+        "price": 177.61,
         "as_of": "2026-07-01"
       },
       {
         "method": "classical_pivot",
         "kind": "S3",
-        "price": 186.04,
+        "price": 169.82,
         "as_of": "2026-07-01"
       },
       {
         "method": "swing_high",
         "kind": "SH1",
         "price": 176.86,
-        "as_of": "2026-06-30"
+        "as_of": "2026-07-01"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 116.44,
-        "as_of": "2026-06-30"
+        "as_of": "2026-07-01"
       },
       {
         "method": "swing_low",
         "kind": "SL2",
         "price": 153.09,
-        "as_of": "2026-06-30"
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "sma",
+        "kind": "SMA50",
+        "price": 155.33,
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "annual_hilo",
+        "kind": "52W_HIGH",
+        "price": 227.51,
+        "as_of": "2026-07-01"
+      },
+      {
+        "method": "annual_hilo",
+        "kind": "52W_LOW",
+        "price": 116.44,
+        "as_of": "2026-07-01"
       }
     ],
     "operator_levels": [],
@@ -470,12 +488,12 @@
         "price": 116.44,
         "dir": "below",
         "kind": "inv",
-        "why": "60-day swing low",
+        "why": "52-week low",
         "auto": true
       },
       {
         "label": "SUPPORT",
-        "price": 194.66,
+        "price": 183.26,
         "dir": "below",
         "kind": "watch",
         "why": "pivot S1",
@@ -483,10 +501,18 @@
       },
       {
         "label": "RESISTANCE",
-        "price": 199.73,
+        "price": 191.05,
         "dir": "above",
         "kind": "trim",
         "why": "classical pivot",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
+        "price": 227.51,
+        "dir": "above",
+        "kind": "trim",
+        "why": "52-week high",
         "auto": true
       }
     ],
@@ -494,24 +520,31 @@
     "gate_check": [
       {
         "label": "RESISTANCE",
-        "price": 199.73,
+        "price": 191.05,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 0.7617798405811679
+        "dist_pct": 1.1328145677836086
       },
       {
         "label": "SUPPORT",
-        "price": 194.66,
+        "price": 183.26,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -1.795984259913229
+        "dist_pct": -2.9908421999894164
+      },
+      {
+        "label": "UPSIDE",
+        "price": 227.51,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 20.433010428246252
       },
       {
         "label": "INVALIDATION",
         "price": 116.44,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -41.25718898193926
+        "dist_pct": -38.36218305012969
       }
     ],
     "scenario_ladder": [
@@ -524,8 +557,14 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 198.22,
+        "level": 188.91,
         "note": "holds current band"
+      },
+      {
+        "case": "bull",
+        "label": "Bull: Trend resumption",
+        "level": 227.51,
+        "note": "sustained move toward Rs228"
       }
     ],
     "catalysts": [
@@ -603,8 +642,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "iDgJ55D7SJ+YYuwjk9PvXA==",
-    "iv": "pi3x1vz097yrGtYp",
-    "ct": "nFo3eNh3y/SwnJ1sOUiT7BWJhy7JDnv2PEmxGzYgvFA9a9NxSPPEoOavYXGLIetzpDvFecae6EYlsexAquh0rutm5go4DV0OmI0R7JRN7mMjokp2n/QPSXSiW+4sIqDQ46Yf8iYERD0ayW+m+k3D9UAIQsS/Q4M4euDhG7cgg9PHCIho9lZdi8elwZObkROkfsDs0fMoJVcctIRmKWhWRCz6CJ03Oc3A0Ja18D0Kkac1HTrhUA414soX6BKKsY2XgPL5BLQsYTCTDta6TDuZOeaxlKXMvEzU8ezGlXdFpdavsVdneIDoqErCNldkEhwq1MccDyiRtj9lseektHJSLgRG3Rzpy2S3vYCcGHLYu5YHrDmoiGWso9U0DxnkALCEPOiNE0/NdwJgvzvp9RbQKQcDajHtTylQzAs8ZdfvwzyhbokKFSdI35C6lrFxAJISPEXP1t0o9bC8AKqGdxgonu6ALISQJMK2FPUDTIIS2jwcIXtK8VzpDF9L+Hi2tBQLSLqGM+ST9O60W3ffu064B+wbABDK9FdDM3PfWWJPQYRyANQbD+qP6Jkv9bilGgfv/ZyIJ09LuQsfTCLs9ilXAbClMvn0D5WbwhIJYYDaKn8zHwERnsbGqKX2bpv2LoqP3/YoiSJ3ktpIEw=="
+    "salt": "UqW0Vwq89cUAOvIQ6wIJyA==",
+    "iv": "yeb+Uz+N8FPioeFK",
+    "ct": "FIlD/yY3yIpbrIYlZPOMnqbAyQlFOd2lUItxMJ4/2vi6fmqUMHHdADLT5MIYMzGN9jGbrJsrBsVnbEM+M7r8uyVKKyWTW8dx6F7ezxOqEmLtgqgJZct9DD142kSHDqctw0xYgDHqLsYbFT1RI6oYS5b+TOgIOm748IRFFnA6LDXVSXdtDh+mNtBPq17Udxneg3+QR1s485XGCQAgf4XIFTMqzkwxprTxQRSU5bVkkRxclG0mMJVHciMFsNFB6c9eP2NtiibTzxK4Md9kSPIe2ORjTUIULgVkC/i4Vc7oLLmaROoXHYP7t1MTdZvi0KGNlgdPUsZPWv5ZnE03UHpnl95TOqJz/vlaEbw5GHVOurfa7f77D94aL+scJzBH9IiBAt/yVzptxBN08u86KrV0ftTbHdJQIHA0bAVMR/+h7RUJvYT5FmBwDoiEaAZerF6mUQ8XACyjSKuS7HRNmHaZFijVppwVtuM2axiClp4anxZhxU3QNy3iTpsxWYvCoAq3m1znMfatJUmIAXiODiZVx7qB7qoYGp4n3obf3pVAmqVoha7pizmWnPyVj2oeVlTuCcY/i9lP5swp29XDqI0OaOb78t+D7DqH7oj8xJ4M+7gOrcRMMMjTULp1Cv/Dx+taoMg4N9gUxIR1hw=="
   }
 }
