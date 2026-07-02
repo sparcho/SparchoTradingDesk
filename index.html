@@ -418,11 +418,14 @@ function setGauge(arcId, pId, pct){
   p.textContent = fmtPct(pct, 1);
   p.className = "p " + (pct >= 0 ? "pos" : "neg");
 }
-function setRefresh(rdId, txtId, iso){
+function setRefresh(rdId, txtId, iso, sc){
   const rd = document.getElementById(rdId), tx = document.getElementById(txtId);
   const m = agoMin(iso);
-  if (tx) tx.textContent = iso ? ("refreshed " + ago(iso) + (m != null && m > 120 ? " · stale" : "")) : "refresh —";
-  if (rd && m != null && m > 120) rd.classList.add("stale");      /* amber = watch/stale, per signal doctrine */
+  const stItems = (sc && sc.any_stale) ? (sc.items||[]).filter(i=>i.is_stale) : [];   /* F260702: desk staleness contract */
+  const stale = (m != null && m > 120) || stItems.length > 0;
+  if (tx) tx.textContent = iso ? ("refreshed " + ago(iso) + (stale ? (" · stale" + (stItems.length?(" ("+stItems.length+")"):"")) : "")) : "refresh —";
+  if (rd){ if (stale) rd.classList.add("stale"); else rd.classList.remove("stale"); }  /* amber = watch/stale, per signal doctrine */
+  if (rd && stItems.length) rd.title = stItems.map(i=>i.label+': '+i.reason).join(" · ");
 }
 
 function renderLanding(P){
@@ -442,7 +445,7 @@ function renderLanding(P){
     const xag = (s.current_market && s.current_market.xagusd) ?? s.live_xagusd_used_for_ladders ?? null;
     document.getElementById("s-stat2-v").textContent = (typeof xag === "number") ? ("$" + xag.toFixed(2)) : "—";
     setGauge("s-gauge-arc","s-gauge-p", sUnrealPct);
-    setRefresh("s-rd","s-refresh", s.emitted_at_utc || (s.meta && s.meta.last_synced));
+    setRefresh("s-rd","s-refresh", s.emitted_at_utc || (s.meta && s.meta.last_synced), s.staleness);
 
     /* ---- equity card ---- */
     const tot = (q.book && q.book.totals) || {};
@@ -465,7 +468,7 @@ function renderLanding(P){
       e2.textContent = fmtPct(day, 1); e2.className = "v " + ((day ?? 0) >= 0 ? "pos" : "neg");
     }
     setGauge("e-gauge-arc","e-gauge-p", eUnreal);
-    setRefresh("e-rd","e-refresh", q.emitted_at_utc || (q.meta && q.meta.last_price_refresh));
+    setRefresh("e-rd","e-refresh", q.emitted_at_utc || (q.meta && q.meta.last_price_refresh), q.staleness);
     /* sub-line: held count + dominant cluster (public ops metadata only) */
     if (held.length) {
       const counts = {};
