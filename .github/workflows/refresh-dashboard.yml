@@ -14,6 +14,11 @@ on:
       - 'silver/generators/silver_refresh_prices.py'
   workflow_dispatch:
 
+concurrency:
+  group: sparcho-desk-main-push        # F143: EVERY main-branch pusher shares ONE queue so no two
+  cancel-in-progress: false  # cloud pushes never race each other -> the host's cooperative
+                             # yield (deploy_common) can reliably slot its publish into a gap.
+
 permissions:
   contents: write
 
