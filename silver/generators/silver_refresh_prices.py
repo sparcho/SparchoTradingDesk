@@ -25,6 +25,18 @@ HERE = Path(__file__).resolve().parent
 DATA_JSON = HERE.parent / "data" / "silver_dashboard_aggregate.json"
 sys.path.insert(0, str(HERE))
 
+# staleness_contract: single source of truth for the staleness contract (F260702).
+try:
+    import staleness_contract
+except ImportError:
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parent))
+    try:
+        import staleness_contract
+    except ImportError:
+        staleness_contract = None
+
 
 def _now_utc():
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -128,6 +140,12 @@ def main():
 
     data.setdefault("meta", {})["last_price_overlay_utc"] = _now_utc()
     data["emitted_at_utc"] = _now_utc()
+    # Refresh the canonical staleness contract on the freshly-overlaid silver data (F260702).
+    try:
+        if staleness_contract:
+            data["staleness"] = staleness_contract.build_staleness(data, "silver", now_utc_iso=data["emitted_at_utc"])
+    except Exception as _e:
+        print(f"[staleness] silver overlay build skipped: {_e}", file=sys.stderr)
 
     # SAFETY: this overlay must never resurrect plaintext family data. If the prior aggregate was
     # locked, it must stay locked (we never touch sensitive_enc / privacy).

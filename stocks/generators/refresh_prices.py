@@ -33,6 +33,18 @@ except ImportError:
     sys.path.insert(0, str(HERE))
     import daytrade_core
 
+# staleness_contract: single source of truth for the staleness contract (F260702).
+try:
+    import staleness_contract
+except ImportError:
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parent))
+    try:
+        import staleness_contract
+    except ImportError:
+        staleness_contract = None
+
 MIN_COVERAGE = 0.5   # fail-closed: fraction of candidates needing >=2 fresh bars
 
 
@@ -246,6 +258,13 @@ def main():
 
     data["emitted_at_utc"] = now_iso
     data.setdefault("meta", {})["last_price_refresh"] = now_iso
+    # Refresh the canonical staleness contract on the freshly-overlaid data (F260702)
+    # so the client + watchdog read a current contract every cloud cycle.
+    try:
+        if staleness_contract:
+            data["staleness"] = staleness_contract.build_staleness(data, "equity", now_utc_iso=now_iso)
+    except Exception as _e:
+        print(f"[staleness] equity overlay build skipped: {_e}", file=sys.stderr)
     DATA_JSON.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
     print("OK wrote " + DATA_JSON.name)
     return 0
