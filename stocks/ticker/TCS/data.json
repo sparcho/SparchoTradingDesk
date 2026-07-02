@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "TCS",
-  "emitted_at_utc": "2026-07-02T03:23:14+00:00",
+  "emitted_at_utc": "2026-07-02T11:00:05+00:00",
   "public": {
     "ticker": "TCS",
     "name": "Tata Consultancy Services",
@@ -43,9 +43,9 @@
     "level_id_date": null,
     "last_stock_ta": "none",
     "live": {
-      "price": 1982.6,
-      "day_chg_pct": 0.0,
-      "week_chg_pct": -5.993361782835471,
+      "price": 2068.1001,
+      "day_chg_pct": 4.313,
+      "week_chg_pct": -1.9393029871977188,
       "date": "2026-07-02"
     },
     "chart_kind": "candles",
@@ -5330,108 +5330,116 @@
       ],
       [
         "2026-07-02",
-        2039.9,
-        2052.0,
-        1976.8,
-        1982.6
+        2008.0,
+        2076.8999,
+        2002.5,
+        2068.1001
       ]
     ],
     "sr_levels": [
       {
         "method": "classical_pivot",
         "kind": "PIVOT",
-        "price": 2003.8,
+        "price": 2049.17,
         "as_of": "2026-07-02"
       },
       {
         "method": "classical_pivot",
         "kind": "R1",
-        "price": 2030.8,
+        "price": 2095.83,
         "as_of": "2026-07-02"
       },
       {
         "method": "classical_pivot",
         "kind": "R2",
-        "price": 2079.0,
+        "price": 2123.57,
         "as_of": "2026-07-02"
       },
       {
         "method": "classical_pivot",
         "kind": "R3",
-        "price": 2106.0,
+        "price": 2170.23,
         "as_of": "2026-07-02"
       },
       {
         "method": "classical_pivot",
         "kind": "S1",
-        "price": 1955.6,
+        "price": 2021.43,
         "as_of": "2026-07-02"
       },
       {
         "method": "classical_pivot",
         "kind": "S2",
-        "price": 1928.6,
+        "price": 1974.77,
         "as_of": "2026-07-02"
       },
       {
         "method": "classical_pivot",
         "kind": "S3",
-        "price": 1880.4,
+        "price": 1947.03,
         "as_of": "2026-07-02"
       },
       {
         "method": "swing_high",
         "kind": "SH1",
         "price": 2446.9,
-        "as_of": "2026-07-01"
+        "as_of": "2026-07-02"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 2246.0,
-        "as_of": "2026-07-01"
+        "as_of": "2026-07-02"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 2269.65,
-        "as_of": "2026-07-01"
+        "price": 2260.58,
+        "as_of": "2026-07-02"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 2774.08,
-        "as_of": "2026-07-01"
+        "price": 2768.8,
+        "as_of": "2026-07-02"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 3462.0,
-        "as_of": "2026-07-01"
+        "as_of": "2026-07-02"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 1982.6,
-        "as_of": "2026-07-01"
+        "as_of": "2026-07-02"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
+        "label": "INVALIDATION",
+        "price": 1982.6,
+        "dir": "below",
+        "kind": "inv",
+        "why": "52-week low",
+        "auto": true
+      },
+      {
         "label": "SUPPORT",
-        "price": 1955.6,
+        "price": 2049.17,
         "dir": "below",
         "kind": "watch",
-        "why": "pivot S1",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 2003.8,
+        "price": 2095.83,
         "dir": "above",
         "kind": "trim",
-        "why": "classical pivot",
+        "why": "pivot R1",
         "auto": true
       },
       {
@@ -5446,25 +5454,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "RESISTANCE",
-        "price": 2003.8,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 1.0693029355391932
-      },
-      {
         "label": "SUPPORT",
-        "price": 1955.6,
+        "price": 2049.17,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -1.3618480782810451
+        "dist_pct": -0.915337705365424
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 2095.83,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 1.340839352988756
+      },
+      {
+        "label": "INVALIDATION",
+        "price": 1982.6,
+        "dir": "below",
+        "kind": "inv",
+        "dist_pct": -4.1342341214528355
       },
       {
         "label": "UPSIDE",
         "price": 3462.0,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 74.61918692625845
+        "dist_pct": 67.40002091774957
       }
     ],
     "scenario_ladder": [
@@ -5477,8 +5492,8 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 1982.6,
-        "note": "holds current band; reclaim Rs2774 (200-SMA) to flip constructive"
+        "level": 2068.1001,
+        "note": "holds current band; reclaim Rs2769 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
