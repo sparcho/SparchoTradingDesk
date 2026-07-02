@@ -28,6 +28,7 @@ import json
 import os
 import subprocess
 import sys
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -135,8 +136,126 @@ def trigger(workflow: str) -> bool:
     return r.returncode == 0
 
 
+
+# ── HEAL_ACTIONS registry + contract-driven auto-probe (F260702) ──────────────
+# The closed loop: ANYTHING the client would render GRAYED is a `staleness` contract
+# item with is_stale=true; each item's `heal` key maps HERE to how the watchdog fixes
+# it. This is what closes the "green doctor + gray UI" blind spot — the old emit-age
+# checks below never saw daytrade_fires / regime / silver_prices going stale.
+HEAL_ACTIONS = {
+    "refresh_prices_equity": {"inline": "stocks/generators/refresh_prices.py", "workflow": "refresh-stocks-live.yml"},
+    "regime_refresh":        {"inline": "stocks/engine/ci_regime_refresh.py",  "workflow": "refresh-stocks-live.yml"},
+    "refresh_prices_silver": {"inline": None, "workflow": "refresh-dashboard.yml"},  # family-data-sensitive: no inline
+    "silver_book_reemit_nudge": {"nudge": "re-run the silver emit locally so deployment & P&L reflect the live book"},
+    "book_reemit":              {"nudge": "drop a fresh broker snapshot so the held book reflects live positions"},
+}
+
+
+def read_contract(path):
+    try:
+        d = json.loads(path.read_text(encoding="utf-8"))
+        return d.get("staleness") or {}
+    except Exception:
+        return {}
+
+
+def _item_still_stale(path, item_id):
+    for it in read_contract(path).get("items", []):
+        if it.get("id") == item_id:
+            return bool(it.get("is_stale"))
+    return None  # item vanished => can't confirm
+
+
+def probe_and_heal_contract(path, desk, events, ran_inline, triggered):
+    """Auto-probe every stale staleness-contract item on `path`, firing its mapped
+    heal (inline re-run + workflow re-trigger). Inline runs + triggers are deduped via
+    the shared ran_inline/triggered so nothing fires twice in a cycle. Honesty: only
+    an inline heal we RE-VERIFY flipped the item fresh is logged 'fixed'."""
+    sc = read_contract(path)
+    for it in sc.get("items", []):
+        if not it.get("is_stale"):
+            continue
+        heal = it.get("heal")
+        act = HEAL_ACTIONS.get(heal) if heal else None
+        if not act:
+            continue  # informational item with no heal path (e.g. operator-book info)
+        subsystem = desk + ":" + str(it.get("id"))
+        spotted = str(it.get("label")) + " stale — " + str(it.get("reason"))
+        if "nudge" in act:  # operator-driven; nudge once per IST day
+            feed_now = nf.load_feed(FEED)
+            today = nf.now_ist().date().isoformat()
+            if any(e.get("subsystem") == subsystem and str(e.get("ts", ""))[:10] == today
+                   for e in feed_now.get("events", [])):
+                continue
+            events.append(nf.make_event("🟡", subsystem, spotted, "nudge: " + act["nudge"], "pending", SOURCE))
+            continue
+        # active heal — inline (once per cmd), then re-verify, then workflow (once per wf)
+        cmd = act.get("inline")
+        inline_ok = None
+        if cmd:
+            if cmd in ran_inline:
+                inline_ok = ran_inline[cmd]
+            else:
+                try:
+                    pr = subprocess.run([sys.executable, cmd], cwd=str(ROOT),
+                                        capture_output=True, text=True, timeout=300)
+                    inline_ok = (pr.returncode == 0)
+                except Exception:
+                    inline_ok = False
+                ran_inline[cmd] = inline_ok
+        healed = (inline_ok is True) and (_item_still_stale(path, it.get("id")) is False)
+        wf = act.get("workflow")
+        if wf and wf not in triggered:
+            trigger(wf)          # fire the re-trigger; dispatch may be throttled (best-effort)
+            triggered.add(wf)    # mark attempted so we don't re-fire the same wf this cycle
+        if healed:
+            events.append(nf.make_event("🟢", subsystem, spotted,
+                                        "auto-probe: re-ran heal inline (item now fresh)" + (" + re-triggered " + wf if wf else ""),
+                                        "fixed", SOURCE))
+        else:
+            act_txt = (("re-ran heal inline + " if cmd else "") + ("re-triggered " + wf if wf else "no workflow mapped"))
+            sev = "🔴" if it.get("severity") == "alert" else "🟡"
+            events.append(nf.make_event(sev, subsystem, spotted, "auto-probe: " + act_txt, "pending", SOURCE))
+
+
+PAGES = "https://sparcho.github.io/SparchoTradingDesk"
+
+
+def fetch_live(url_path):
+    try:
+        req = urllib.request.Request(PAGES + url_path,
+                                     headers={"Cache-Control": "no-cache", "User-Agent": "watchdog"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            return json.loads(r.read().decode("utf-8", "replace"))
+    except Exception:
+        return None
+
+
+def check_live_parity(events):
+    """Laptop-off GH-Pages parity (F260702). The contract auto-probe reads the LOCAL repo
+    file the cloud just committed -- but if the GH-Pages build/CDN is stuck, the OPERATOR
+    still sees stale. Fetch the LIVE published aggregate; if ITS staleness contract shows a
+    dim-stale item, the site the operator actually looks at is grayed -> log it loudly."""
+    for desk, path in (("equity", "/stocks/data/equity_dashboard_aggregate.json"),
+                       ("silver", "/silver/data/silver_dashboard_aggregate.json")):
+        live = fetch_live(path)
+        if not live:
+            continue
+        sc = live.get("staleness") or {}
+        dim = [i for i in sc.get("items", []) if i.get("is_stale") and (i.get("dim") or i.get("severity") == "alert")]
+        if dim:
+            names = ", ".join(str(i.get("id")) for i in dim)
+            sev = "🔴" if any(i.get("severity") == "alert" for i in dim) else "🟡"
+            events.append(nf.make_event(
+                sev, desk + ":live-parity",
+                "LIVE site shows " + str(len(dim)) + " grayed item(s): " + names,
+                "logged - auto-probe re-triggered the desk refresh; persists => GH-Pages build/CDN stuck",
+                "pending", SOURCE))
+
+
 def main() -> int:
     events = []
+    ran_inline, triggered = {}, set()
 
     # ── EQUITY ───────────────────────────────────────────────────────────────
     if not is_weekend():
@@ -159,6 +278,8 @@ def main() -> int:
                 inline_ok = False
             new_age = agg_age_min(EQUITY_AGG)
             trig = trigger("refresh-stocks-live.yml")
+            ran_inline["stocks/generators/refresh_prices.py"] = inline_ok
+            triggered.add("refresh-stocks-live.yml")
             if inline_ok and new_age is not None and new_age <= tol:
                 outcome, action = "fixed", "re-ran price overlay inline (now fresh) + re-triggered live Action"
                 sev = "🟢"
@@ -178,6 +299,7 @@ def main() -> int:
         if failed:
             spotted += " + last silver-refresh Action FAILED"
         trig = trigger("refresh-dashboard.yml")
+        triggered.add("refresh-dashboard.yml")
         action = ("re-triggered silver 20-min refresh Action" if trig
                   else "tried to re-trigger silver Action (dispatch failed)")
         events.append(nf.make_event("🔴" if failed else "🟡", "silver-dashboard",
@@ -201,6 +323,14 @@ def main() -> int:
             events.append(nf.make_event("🟡", "silver-book", spotted,
                                         "nudge: re-run the silver emit locally so deployment & P&L reflect the live book",
                                         "pending", SOURCE))
+
+    # ── CONTRACT-DRIVEN AUTO-PROBE (F260702) — the closed loop: anything the client
+    # would render GRAYED (a staleness-contract item) auto-probes its mapped heal here.
+    # Covers daytrade_fires / regime / silver_prices that the emit-age checks above miss.
+    if not is_weekend():
+        probe_and_heal_contract(EQUITY_AGG, "equity", events, ran_inline, triggered)
+    probe_and_heal_contract(SILVER_AGG, "silver", events, ran_inline, triggered)
+    check_live_parity(events)  # F260702 — laptop-off GH-Pages parity (operator-visible gray)
 
     # ── cross-desk reconciliation (silver desk vs equity SILVERBEES) ──────────
     # Only emits where BOTH dashboard passwords exist (operator laptop / vault watchdog); in the
