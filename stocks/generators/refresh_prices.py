@@ -216,10 +216,26 @@ def main():
         print("fire-candidate coverage: " + str(covered) + "/" + str(len(candidates)))
         if coverage >= MIN_COVERAGE:
             rows, price_as_of = daytrade_core.build_panel(candidates, ohlc, held_set)
-            data.setdefault("screeners", {})["daytrade_panel"] = rows
-            data["daytrade_freshness"] = daytrade_core.daytrade_freshness(price_as_of, refreshed_at_utc=now_iso)
-            print("  fires re-scored: " + str(len(rows)) + " | price_as_of " + str(price_as_of)
-                  + " | " + data["daytrade_freshness"]["status"])
+            # Freshness-regression guard (F138 / 260701 grayed-fires incident): a live
+            # yfinance pull off-hours sometimes LAGS a session — its newest bar is the
+            # prior day's, not the latest close. Re-scoring on that laggier pull would
+            # regress price_as_of and stamp the panel STALE, clobbering a fresher panel
+            # already published and graying the dashboard's day-trade card. Never regress:
+            # only overwrite when the live pull is at least as fresh as what's published.
+            _prior_paf = (data.get("daytrade_freshness") or {}).get("price_as_of")
+            if _prior_paf and price_as_of and str(price_as_of) < str(_prior_paf):
+                fr = dict(data.get("daytrade_freshness") or {})
+                fr["refreshed_at_utc"] = now_iso
+                fr["error"] = ("live pull lagged (price_as_of " + str(price_as_of)
+                               + " < published " + str(_prior_paf) + "); kept fresher panel — no regression")
+                data["daytrade_freshness"] = fr
+                print("  NO-REGRESS: live pull " + str(price_as_of) + " older than published "
+                      + str(_prior_paf) + " — kept fresher panel (F138)", file=sys.stderr)
+            else:
+                data.setdefault("screeners", {})["daytrade_panel"] = rows
+                data["daytrade_freshness"] = daytrade_core.daytrade_freshness(price_as_of, refreshed_at_utc=now_iso)
+                print("  fires re-scored: " + str(len(rows)) + " | price_as_of " + str(price_as_of)
+                      + " | " + data["daytrade_freshness"]["status"])
         else:
             fr = dict(data.get("daytrade_freshness") or {})
             fr["status"] = "STALE"
