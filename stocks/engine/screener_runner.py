@@ -694,6 +694,12 @@ def run_screener(name, fundamentals, historical, daily, historical_with_vol=None
     return rows
 
 
+# Set True by the main() talib preflight when a FULL-lens run finds talib missing:
+# de-cascade proceeds but Kaarin-TA's G5 gate is inert. Read in write_outputs() to
+# stamp last_run.json (F138 / 260701).
+_KAARIN_G5_DEGRADED = False
+
+
 def write_outputs(name, rows, today):
     spec = SCREENER_REGISTRY[name]
     outdir = OUT_ROOT / name
@@ -786,6 +792,11 @@ def write_outputs(name, rows, today):
         "md_path": str(md_path),
         "status": "ok",
     }
+    # Tell-on-itself: if the talib preflight de-cascaded (full-lens run, talib absent),
+    # Kaarin-TA's G5 gate was inert this run. Record it so system_doctor flags YELLOW
+    # rather than the gate silently returning no fires (F138 / 260701).
+    if name == 'Kaarin-TA' and globals().get('_KAARIN_G5_DEGRADED', False):
+        last_run["degraded"] = "G5/CDLENGULFING inert (talib not importable) -- fail-soft de-cascade per F138"
     # Atomic write — prevents truncated last_run.json on mid-write interruption
     # (260603 broken-lens incident; see atomic_io.py).
     from atomic_io import atomic_write_json
@@ -817,15 +828,34 @@ def main():
             import numpy as _np  # noqa: F401
         except ImportError as _ie:
             import sys as _sys
+            _kaarin_only = (args.screener == 'Kaarin-TA')
             print("=" * 72, file=_sys.stderr)
-            print("PRE-FLIGHT FAIL: screener_runner.py / Kaarin-TA", file=_sys.stderr)
-            print("=" * 72, file=_sys.stderr)
+            if _kaarin_only:
+                # Single-lens intent (`--screener Kaarin-TA`): G5 IS the point of this
+                # run, so a missing talib is genuinely fatal -> hard-halt (unchanged).
+                print("PRE-FLIGHT FAIL: screener_runner.py / Kaarin-TA", file=_sys.stderr)
+                print("=" * 72, file=_sys.stderr)
+                print(f"  TA-Lib not importable: {_ie}", file=_sys.stderr)
+                print("  Kaarin-TA's CDLENGULFING gate (G5) requires the talib library.", file=_sys.stderr)
+                print("  Fix: pip install TA-Lib --break-system-packages", file=_sys.stderr)
+                print("  Then re-run. Halting (single-lens run needs G5).", file=_sys.stderr)
+                print("=" * 72, file=_sys.stderr)
+                return 2
+            # Full-lens run: fail-SOFT + DE-CASCADE (F138). A flaky C-extension import
+            # in an ephemeral cloud container must NOT nuke the other 4 lenses +
+            # watchlists + report -- none of which use talib. Kaarin-TA still runs; its
+            # G5/CDLENGULFING gate self-reports 'TALIB-NOT-INSTALLED' and simply does not
+            # fire. Marked DEGRADED in last_run.json (NOT silent) so system_doctor
+            # surfaces a YELLOW -- honouring the 2026-05-15 "no silent dead gate" intent
+            # without the collateral cascade the fail-closed halt caused (260701 incident).
+            global _KAARIN_G5_DEGRADED
+            _KAARIN_G5_DEGRADED = True
+            print("DEGRADED (non-fatal): screener_runner.py / Kaarin-TA G5", file=_sys.stderr)
             print(f"  TA-Lib not importable: {_ie}", file=_sys.stderr)
-            print("  Kaarin-TA's CDLENGULFING gate (G5) requires the talib library.", file=_sys.stderr)
-            print("  Fix: pip install TA-Lib --break-system-packages", file=_sys.stderr)
-            print("  Then re-run. Halting per fail-closed discipline (was fail-open before 2026-05-15).", file=_sys.stderr)
+            print("  Kaarin-TA's CDLENGULFING gate (G5) will NOT fire this run; the other", file=_sys.stderr)
+            print("  4 lenses + watchlists + report proceed (de-cascade per F138).", file=_sys.stderr)
+            print("  Restore G5 with: pip install TA-Lib --break-system-packages", file=_sys.stderr)
             print("=" * 72, file=_sys.stderr)
-            return 2
 
     if args.list:
         for k, v in SCREENER_REGISTRY.items():
