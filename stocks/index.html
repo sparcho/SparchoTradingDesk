@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1782241583">
-<meta name="x-built-at" content="2026-06-23T19:06:21+00:00">
+<meta name="x-build-id" content="1782976948">
+<meta name="x-built-at" content="2026-07-02T07:22:22+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1782241583",BUILT_AT="2026-06-23T19:06:21+00:00";
+  var BID="1782976948",BUILT_AT="2026-07-02T07:22:22+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1674,6 +1674,22 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   window.drawPerf=function(){ try{ renderPerf(); }catch(e){} };
 
 
+  // Contract-driven staleness render (F260702): the client dims + banners STRICTLY
+  // from DATA.staleness -- the SAME contract the watchdog auto-probes and the doctor
+  // reads. Nothing grays without a contract row; every gray carries its reason.
+  function renderStaleness(DATA){ try{
+    var sc=(DATA&&DATA.staleness)||{}, items=sc.items||[];
+    items.forEach(function(it){ (it.ui_targets||[]).forEach(function(id){ var el=$(id); if(!el) return;
+      if(it.is_stale && it.dim){ el.style.opacity='0.5'; el.setAttribute('data-stale',it.id); el.title=it.reason||'stale'; }
+      else if(el.getAttribute('data-stale')===it.id){ el.style.opacity=''; el.removeAttribute('data-stale'); el.title=''; } }); });
+    var sb=$('stale-banner'); if(!sb) return;
+    var stale=items.filter(function(i){return i.is_stale;});
+    if(!stale.length){ sb.style.display='none'; sb.innerHTML=''; return; }
+    var ic=(sc.worst==='alert')?'🔴':'🟡';
+    sb.style.display='flex';
+    sb.innerHTML='<span>'+ic+'</span><span><b>'+stale.length+' stale signal'+(stale.length>1?'s':'')+'.</b> '+stale.map(function(i){return esc(i.label)+' — '+esc(i.reason);}).join(' · ')+' <span style="opacity:.72">· self-healing watchdog re-probes every cycle.</span></span>';
+  }catch(e){ if(window.__reportErr)__reportErr('staleness',e); } }
+
   function renderAll(){
     if(!DATA) return;
     const sc=DATA.screeners||{}, reg=DATA.regime||{}, dr=DATA.dr||{};
@@ -1756,12 +1772,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       h+='<div class="c-lbl" style="margin-top:13px"><span class="d"></span>Regime · last 10 sessions'+HT('The market-regime call over recent sessions: GREEN = deploy-friendly, YELLOW = selective, RED = risk-off (manage, don’t add). The number is the regime score; it gates how aggressively the book deploys.')+'<span class="age">history</span></div>'+(function(){ var rh=(DATA.regime_history||[]).slice(-10); if(!rh.length) return pending('Regime history','regime_history not in this emit yet — host re-run pending.'); return '<div class="rhstrip">'+rh.map(function(r){ var z=String(r.zone||'').toUpperCase(); var col=z.indexOf('RED')>=0?'var(--neg)':(z.indexOf('GREEN')>=0?'var(--pos)':'var(--watch)'); return '<div class="rhc" title="'+esc(String(r.date||'')+' · '+String(r.zone||'')+(r.score!=null?(' · '+r.score):''))+'"><span class="rhb" style="background:'+col+'"></span><span class="rhd">'+esc(String(r.date||'').slice(5))+'</span><span class="rhz" style="color:'+col+'">'+esc(r.score!=null?String(r.score):z.slice(0,3))+'</span></div>'; }).join('')+'</div>'; })();
       $('card-fires').innerHTML=h; }catch(e){__reportErr('fires',e);}
 
-    try{ var _fr=DATA.daytrade_freshness||{}, _sb=$('stale-banner');
-      if(_sb){ var _ss=+_fr.sessions_stale||0, _bad=((_fr.status&&_fr.status!=='OK')||_ss>0);
-        if(_bad){ _sb.style.display='flex';
-          _sb.innerHTML='\u26a0 <b>Day-trade fires may be stale.</b> Prices as of <b>'+esc(_fr.price_as_of||'?')+'</b> \u00b7 <b>'+_ss+'</b> NSE session'+(_ss===1?'':'s')+' behind ('+esc(_fr.status||'?')+'). The EOD refresh re-scores on the latest close.';
-          var _cf=$('card-fires'); if(_cf) _cf.style.opacity='0.5'; }
-        else { _sb.style.display='none'; var _cf2=$('card-fires'); if(_cf2) _cf2.style.opacity=''; } } }catch(e){__reportErr('fires-fresh',e);}
+    try{ renderStaleness(DATA); }catch(e){__reportErr('fires-fresh',e);}
 
     // SWING + POSITIONAL fires — continuity parity with Day-Trade fires. Mirrors system_autotrade_logger.select_signals:
     // bubble_set composite leaders, held-EXCLUDED, one ranking split across horizons — top-2 = bubble-swing, next-2 = composite-positional.
