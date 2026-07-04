@@ -1193,7 +1193,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 
   <script>
   /* ═══ EQUITY DESK · data layer — bind-or-PENDING, additive (no emit/aggregate changes) ═══ */
-  const LENS_ORDER = ['Rajiv-10G','Rajiv-DIV','Sanjeev-8G','Kaarin-TA'];
+  const LENS_ORDER = ['10-Gate','DIV','8-Gate','TA'];
   const TV_SPECIAL = { BLUESTAR:'BLUESTARCO', KPIT:'KPITTECH', PBFINTECH:'POLICYBZR' };
   const tvSymbol = (t)=> 'NSE:' + (TV_SPECIAL[t]||t);
   const tvHref = (t)=> 'https://www.tradingview.com/chart/?symbol='+encodeURIComponent(tvSymbol(t));
@@ -1876,7 +1876,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     else if(tl){ box2='<div class="dt-nodata">no realized signal-trade closes yet.</div>'; }
     else { box2='<div class="dt-nodata">🔒 unlock to view the realized signal-trade equity curve.</div>'; }
     el.innerHTML='<div class="c-lbl"><span class="d"></span>Screener signal quality · positional'+HT('How good the positional screens are at flagging multi-week winners — NOT your executed trades. Alpha = a signal’s return minus the Nifty over the same window (so a “win” means it beat just buying the index). Measured on episodes (one name’s continuous run = one episode) at 1-week / 1-month / 3-month checkpoints.')+'<span class="age">alpha vs Nifty · 1w/1m/3m · episodes · NOT executed trades</span></div>'+
-      '<div class="sigbanner">⚠ <b>Screener SIGNAL quality, not your trades.</b> How well the positional screens (Rajiv-10G · DIV · Sanjeev-8G · Kaarin-TA) flag multi-week winners — measured as alpha (excess over Nifty) on deduplicated episodes. 1m/3m fill in as signals age.</div>'+
+      '<div class="sigbanner">⚠ <b>Screener SIGNAL quality, not your trades.</b> How well the positional screens (10-Gate · DIV · 8-Gate · TA) flag multi-week winners — measured as alpha (excess over Nifty) on deduplicated episodes. 1m/3m fill in as signals age.</div>'+
       kpis+
       '<div class="sq5">'+
         '<div class="sq5-l">'+
