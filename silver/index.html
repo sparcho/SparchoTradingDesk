@@ -2,28 +2,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- DEPLOY-STAMP:BEGIN (deploy_common) -->
-<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1782976948">
-<meta name="x-built-at" content="2026-07-02T07:22:22+00:00">
-<style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
-<script>(function(){
-  var BID="1782976948",BUILT_AT="2026-07-02T07:22:22+00:00";
-  window.__BUILD={id:BID,built_at:BUILT_AT};
-  function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
-  function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
-  if(document.readyState!=='loading')show();else document.addEventListener('DOMContentLoaded',show);
-  if(!BID||BID.indexOf('__')===0)return;
-  try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(v){
-    if(!v||!v.build_id)return; window.__BUILD.live=v;
-    if(String(v.build_id)!==String(BID)){var k='sthealed_'+v.build_id;
-      if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');badge('updating… (cache ~1 min)',true);location.replace(location.pathname+'?v='+v.build_id);}
-      else{badge('updating… (cache ~1 min)',true);}}
-  }).catch(function(){});}catch(_){}
-})();</script>
-<!-- DEPLOY-STAMP:END -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Silver Desk — Sparcho</title>
@@ -704,7 +682,7 @@
 
   async function bootstrap(){
     try{
-      const r=await fetch('data/silver_dashboard_aggregate.json?v=1782976948&t='+Date.now(),{cache:'no-store'});
+      const r=await fetch('data/silver_dashboard_aggregate.json?t='+Date.now(),{cache:'no-store'});
       if(!r.ok) throw new Error('HTTP '+r.status);
       DATA=await r.json();
       reapplyUnlock();
@@ -855,7 +833,7 @@
       function lvRow(lbl,xagtxt,xv,c,why){ return '<div class="sr-row '+(c||'')+'"><span class="lvl">'+xagtxt+'</span><span class="tag">'+esc(lbl)+' &middot; '+sbOf(xv)+'</span><span class="dist">'+esc(why||'')+'</span></div>'; }
       var inv=lv.invalidation||{}, hf=lv.hard_floor||{}, fz=lv.floor_zone||{}, core=lv.core_line||{}, ez=lv.exit_zone||{};
       var fzx=(fz.xag&&fz.xag.length)?fz.xag:[50,53], ezx=(ez.xag&&ez.xag.length)?ez.xag:[75,82];
-      var levels='<div class="card"><div class="c-lbl"><span class="d"></span>Silver level markers &middot; XAGUSD &harr; live SB'+H('Kaarin-fib levels in XAGUSD with the LIVE SilverBees conversion (SB = XAG x live ratio '+rr.toFixed(2)+'x). Final-tranche buy = the $50-53 floor zone.')+'</div>'+
+      var levels='<div class="card"><div class="c-lbl"><span class="d"></span>Silver level markers &middot; XAGUSD &harr; live SB'+H('confluence-fib levels in XAGUSD with the LIVE SilverBees conversion (SB = XAG x live ratio '+rr.toFixed(2)+'x). Final-tranche buy = the $50-53 floor zone.')+'</div>'+
         '<div class="srgrid">'+
           lvRow('Exit','$'+ezx[0]+'-'+ezx[1],ezx[1],'r','1.618-1.886 fib - TACTICAL sell')+
           lvRow('Core','$'+(core.xag||60),core.xag||60,'r','1.272 fib')+
@@ -865,7 +843,7 @@
           lvRow('Invalidation','&lt;$'+(inv.xag||47),inv.xag||47,'s','sustained close = thesis break')+
         '</div></div>';
 
-      var _pub='<div id="silver-macro-public" style="margin-top:16px"><div class="c-lbl" style="font-size:13px"><span class="d"></span>Silver signposts &amp; levels'+H('Public macro signposts (Groman 5-asset + DXY apex), the backwardation guardrail, and Kaarin-fib level markers. ADVISORY.')+'</div>'+sig+'<div class="mrow2" style="margin-top:12px">'+guard+levels+'</div></div>';
+      var _pub='<div id="silver-macro-public" style="margin-top:16px"><div class="c-lbl" style="font-size:13px"><span class="d"></span>Silver signposts &amp; levels'+H('Public macro signposts (Groman 5-asset + DXY apex), the backwardation guardrail, and confluence-fib level markers. ADVISORY.')+'</div>'+sig+'<div class="mrow2" style="margin-top:12px">'+guard+levels+'</div></div>';
       var _op='<div id="silver-deploy-module" style="margin-top:16px"><div class="c-lbl" style="font-size:13px"><span class="d"></span>Silver deploy &middot; core/tactical + cap'+H('Operator deployment doctrine: the per-tranche core-vs-tactical rule + the 4Cr cap tracker. ADVISORY - no auto buy/sell.')+'</div><div class="mrow2" style="margin-top:12px">'+coreTac+capCard+'</div></div>';
       return {pub:_pub, op:_op};
     }catch(e){ return {pub:'',op:''}; }
