@@ -662,11 +662,13 @@
   .rgladr .rgd.pos{ color:var(--pos); } .rgladr .rgd.neg{ color:var(--neg); }
   .rg-lock{ font-family:var(--font-mono); font-size:10.5px; color:var(--faint); padding:22px 0; text-align:center; }
   .concwrap{ display:flex; gap:16px; align-items:center; }
-  .concring{ flex:0 0 92px; width:92px; height:92px; border-radius:50%; -webkit-mask:radial-gradient(circle, transparent 42%, black 43%); mask:radial-gradient(circle, transparent 42%, black 43%); }
-  .cleglist{ display:flex; flex-direction:column; gap:4px; flex:1 1 auto; min-width:0; }
+  .concring{ flex:0 0 104px; width:104px; height:104px; border-radius:50%; -webkit-mask:radial-gradient(circle, transparent 42%, black 43%); mask:radial-gradient(circle, transparent 42%, black 43%); }
+  .cleglist{ display:flex; flex-direction:column; gap:5px; flex:0 1 auto; min-width:0; max-width:220px; }
   .cleg{ display:flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:10px; }
   .cleg .cdot{ width:8px; height:8px; border-radius:2px; flex:0 0 auto; }
   .cleg .cpct{ margin-left:auto; color:var(--ink2); font-weight:700; }
+  .concrow{ display:grid; grid-template-columns:0.85fr 1.65fr; gap:13px; align-items:start; }
+  .concwrap{ padding:6px 0 2px; }
   .bubble-wrap.bubble-dom{ height:440px; }
   .colstack{ display:flex; flex-direction:column; gap:13px; }
 
@@ -867,7 +869,7 @@
     .zone{ padding:16px 14px 24px; }
     .opbar{ padding:8px 14px; gap:12px; font-size:10px; } .opbar .spacer{ display:none; }
     .kpis{ grid-template-columns:repeat(2,1fr); }
-    .grid2,.grid2b,.grid3,.today,.dtwrap{ grid-template-columns:1fr; }
+    .grid2,.grid2b,.grid3,.today,.dtwrap,.concrow{ grid-template-columns:1fr; }
     .bubble-wrap.bubble-dom{ height:340px; }
     .tgrid{ grid-template-columns:repeat(2,1fr); }
     .hero .eye{ font-size:10px; letter-spacing:0.24em; }
@@ -2627,7 +2629,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     } else concHTML=isLocked?_lock('unlock to load concentration by %MV'):pending('Concentration','no held values in this emit.');
     var _ag=(gates||[]).slice().sort(function(a,b){return Math.abs(a.distance_pct==null?999:a.distance_pct)-Math.abs(b.distance_pct==null?999:b.distance_pct);}).slice(0,12);
     var ladderHTML=_ag.length?_ag.map(function(g){ var d=g.distance_pct; var w=Math.max(4,100-Math.min(Math.abs(d==null?20:d),20)/20*100); return '<div class="rgladr"><span class="rgtk">'+tkA(g.ticker,esc(g.ticker))+'</span><span class="rglab">'+esc(String(g.label||g.level||g.kind||g.gate||'gate'))+'</span><span class="rgbar"><span class="rgfill '+cls(d)+'" style="width:'+w.toFixed(0)+'%"></span></span><span class="rgd '+cls(d)+'">'+(d!=null?fmtPct(d,0):'—')+'</span></div>'; }).join(''):(isLocked?_lock('unlock to load the V-18 risk-gate ladder'):pending('Risk-gate ladder','no gates in this emit.'));
-    var concLadderRow='<div class="grid2" style="margin-top:14px"><div class="card"><div class="c-lbl"><span class="d"></span>Concentration'+HT('Share of book market value by held name (%MV). Unlock-gated — the values live in the encrypted book.')+'<span class="age">by ticker · %MV</span></div>'+concHTML+'</div><div class="card"><div class="c-lbl"><span class="d"></span>Risk-gate ladder · V-18'+HT('Distance-to-stop for every held-name gate, closest first — the risk instrument. Amber/red = near a trigger. Unlock-gated.')+'<span class="age">distance-to-stop · closest first</span></div>'+ladderHTML+'</div></div>';
+    var concLadderRow='<div class="concrow" style="margin-top:14px"><div class="card"><div class="c-lbl"><span class="d"></span>Concentration'+HT('Share of book market value by held name (%MV). Unlock-gated — the values live in the encrypted book.')+'<span class="age">by ticker · %MV</span></div>'+concHTML+'</div><div class="card"><div class="c-lbl"><span class="d"></span>Risk-gate ladder · V-18'+HT('Distance-to-stop for every held-name gate, closest first — the risk instrument. Amber/red = near a trigger. Unlock-gated.')+'<span class="age">distance-to-stop · closest first</span></div>'+ladderHTML+'</div></div>';
     setFace('z-port',
       kpis+
       hero+
