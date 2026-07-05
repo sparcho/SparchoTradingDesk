@@ -641,6 +641,32 @@
   .grid2{ display:grid; grid-template-columns:1.5fr 1fr; gap:13px; }
   .grid2b{ display:grid; grid-template-columns:1fr 1fr; gap:13px; }
   .grid3{ display:grid; grid-template-columns:1fr 1.3fr 1fr; gap:13px; }
+  /* ── E3 Portfolio v2 · held table + V-18 ladder + concentration (visual-upgrade §4.3) ── */
+  .heldtblwrap{ overflow-x:auto; }
+  .heldtbl{ min-width:640px; }
+  .heldtbl td.hn{ text-align:left; font-weight:700; color:var(--ink); white-space:nowrap; }
+  .heldtbl td.hn .star{ color:var(--watch); }
+  .heldtbl td.hn .hcl{ font-family:var(--font-mono); font-size:8px; font-weight:400; color:var(--faint); margin-left:8px; text-transform:uppercase; letter-spacing:0.04em; }
+  .heldtbl td.lenscell{ text-align:center; }
+  .heldtbl td.gatecell{ font-weight:700; }
+  .heldtbl td.sens{ color:var(--ink2); }
+  .heldtbl td.pos{ color:var(--pos); } .heldtbl td.neg{ color:var(--neg); }
+  .rgladr{ display:grid; grid-template-columns:70px 1fr 96px 46px; gap:10px; align-items:center; padding:6px 0; border-bottom:1px solid var(--hair); }
+  .rgladr:last-child{ border-bottom:none; }
+  .rgladr .rgtk{ font-family:var(--font-mono); font-size:11px; font-weight:700; }
+  .rgladr .rglab{ font-size:9.5px; color:var(--mut); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rgladr .rgbar{ height:6px; border-radius:4px; background:var(--hair); overflow:hidden; }
+  .rgladr .rgfill{ display:block; height:100%; border-radius:4px; background:var(--mut); }
+  .rgladr .rgfill.pos{ background:var(--pos); } .rgladr .rgfill.neg{ background:var(--neg); }
+  .rgladr .rgd{ font-family:var(--font-mono); font-size:11px; font-weight:700; text-align:right; color:var(--ink2); }
+  .rgladr .rgd.pos{ color:var(--pos); } .rgladr .rgd.neg{ color:var(--neg); }
+  .rg-lock{ font-family:var(--font-mono); font-size:10.5px; color:var(--faint); padding:22px 0; text-align:center; }
+  .concwrap{ display:flex; gap:16px; align-items:center; }
+  .concring{ flex:0 0 92px; width:92px; height:92px; border-radius:50%; -webkit-mask:radial-gradient(circle, transparent 42%, black 43%); mask:radial-gradient(circle, transparent 42%, black 43%); }
+  .cleglist{ display:flex; flex-direction:column; gap:4px; flex:1 1 auto; min-width:0; }
+  .cleg{ display:flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:10px; }
+  .cleg .cdot{ width:8px; height:8px; border-radius:2px; flex:0 0 auto; }
+  .cleg .cpct{ margin-left:auto; color:var(--ink2); font-weight:700; }
   .bubble-wrap.bubble-dom{ height:440px; }
   .colstack{ display:flex; flex-direction:column; gap:13px; }
 
@@ -2565,39 +2591,47 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     const lensByTk=window.__lensByTk||{};
     const isLocked=document.body.classList.contains('locked');
     const gatesByTk={}; (gates||[]).forEach(function(g){ (gatesByTk[g.ticker]=gatesByTk[g.ticker]||[]).push(g); });
-    function cardFor(h){
-      const GN=5;
-      const gl=(gatesByTk[h.ticker]||[]).slice().sort(function(a,b){return (b.distance_pct||0)-(a.distance_pct||0);}).slice(0,GN);
-      let glHTML = gl.map(function(g){
-        const lab=esc(String(g.label||g.level||g.kind||g.gate||'gate'));
-        return '<div class="grung2"><span class="gdot '+cls(g.distance_pct)+'"></span><span class="gl">'+lab+'</span><span class="gv sens '+cls(g.distance_pct)+'">'+(g.distance_pct!=null?fmtPct(g.distance_pct,0):'—')+'</span></div>';
-      }).join('');
-      if(!gl.length){ glHTML='<div class="hc-gpend">'+(isLocked?'🔒 unlock to load gate ladder':'auto-derived V-18 · awaiting emit')+'</div>'; }
-      else { for(var _p=gl.length; _p<GN; _p++){ glHTML+='<div class="grung2 gpad"><span class="gdot"></span><span class="gl">—</span><span class="gv">·</span></div>'; } }
-      return '<div class="hcard"><div class="hc-top"><span class="sym"><span class="star">★</span> '+tkA(h.ticker,esc(h.ticker))+'</span><span class="sec">'+esc(h.sector||h.cluster||'')+'</span></div>'+
-        '<div class="hc-price"><span class="ltp">'+fmtNum(h.current_price,2)+'</span><span class="dchg '+cls(h.day_chg_pct)+'">'+fmtPct(h.day_chg_pct)+'</span></div>'+
-        '<div class="hc-stats"><span class="sens">'+(h.qty!=null?(h.qty+' sh'):'🔒')+'</span><span class="sens">'+(h.current_value!=null?fmtINR(h.current_value,{compact:true}):'🔒')+'</span><span class="sens">avg '+(h.avg_cost!=null?fmtNum(h.avg_cost,1):'—')+'</span></div>'+
-        '<div class="hc-unreal"><span>Unreal</span><b class="sens '+cls(h.unreal_pct)+'">'+(h.unreal_pct!=null?fmtPct(h.unreal_pct):'🔒')+'</b></div>'+
-        '<div class="hc-lens">'+(lensByTk[h.ticker]?lensDots(lensByTk[h.ticker]):'')+'</div>'+
-        '<div class="hc-gates"><div class="hc-gl">Risk gates · V-18 · ladder ↑res ↓sup</div>'+glHTML+'</div></div>';
+    function heldRow(h){
+      var lens=lensByTk[h.ticker]?lensDots(lensByTk[h.ticker]):'';
+      var gg=(gatesByTk[h.ticker]||[]).slice().sort(function(a,b){return Math.abs(a.distance_pct==null?999:a.distance_pct)-Math.abs(b.distance_pct==null?999:b.distance_pct);})[0];
+      var gd=gg?('<span class="'+cls(gg.distance_pct)+'">'+fmtPct(gg.distance_pct,0)+'</span>'):(isLocked?'🔒':'—');
+      var mv=(h.current_value!=null&&_mv)?(h.current_value/_mv*100):null;
+      return '<tr><td class="hn"><span class="star">★</span> '+tkA(h.ticker,esc(h.ticker))+'<span class="hcl">'+esc(h.sector||h.cluster||'')+'</span></td>'+
+        '<td class="sens">'+(h.qty!=null?fmtNum(h.qty):'🔒')+'</td>'+
+        '<td class="sens">'+(h.avg_cost!=null?fmtNum(h.avg_cost,1):'🔒')+'</td>'+
+        '<td>'+fmtNum(h.current_price,2)+'</td>'+
+        '<td class="'+cls(h.day_chg_pct)+'">'+fmtPct(h.day_chg_pct)+'</td>'+
+        '<td class="sens '+cls(h.unreal_pct)+'">'+(h.unreal_pct!=null?fmtPct(h.unreal_pct):'🔒')+'</td>'+
+        '<td class="sens">'+(mv!=null?fmtPct(mv,0):'🔒')+'</td>'+
+        '<td class="lenscell">'+lens+'</td>'+
+        '<td class="gatecell '+(gg?cls(gg.distance_pct):'')+'">'+gd+'</td></tr>';
     }
-    window.__cardFor=cardFor;
+    window.__heldRow=heldRow;
     var acctMap={'SPARCHO-HDFC (you)':held};
     (function(){ var ra=(DATA.rajiv_account&&DATA.rajiv_account.holdings)||{}; (ra.per_stock||[]).forEach(function(st){ var accs=st.accounts||{}; Object.keys(accs).forEach(function(an){ var a=accs[an]||{}; (acctMap[an]=acctMap[an]||[]).push({ticker:st.ticker,sector:'',current_price:st.price,day_chg_pct:st.day_change_pct,qty:a.qty,current_value:a.value,invested:a.cost,avg_cost:(a.qty?a.cost/a.qty:null),unreal_pct:(a.cost?((a.value-a.cost)/a.cost*100):null)}); }); }); Object.keys(acctMap).forEach(function(k){ if(k!=='SPARCHO-HDFC (you)') acctMap[k].sort(function(x,y){return (y.current_value||0)-(x.current_value||0);}); }); })();
     window.__acctMap=acctMap;
     if(!window.__selAcct||!acctMap[window.__selAcct]) window.__selAcct='SPARCHO-HDFC (you)';
-    window.__renderHeld=function(){ var m=window.__acctMap||{}; var sel=window.__selAcct||'SPARCHO-HDFC (you)'; if(!m[sel]) sel='SPARCHO-HDFC (you)'; var r=document.getElementById('hc-row'); if(r&&window.__cardFor) r.innerHTML=(m[sel]||[]).map(window.__cardFor).join(''); var hh=document.getElementById('hc-acct'); if(hh) hh.textContent=sel; document.querySelectorAll('.acctrow').forEach(function(tr){ tr.classList.toggle('on', tr.getAttribute('data-acct')===sel); }); };
+    window.__renderHeld=function(){ var m=window.__acctMap||{}; var sel=window.__selAcct||'SPARCHO-HDFC (you)'; if(!m[sel]) sel='SPARCHO-HDFC (you)'; var r=document.getElementById('hc-row'); if(r&&window.__heldRow) r.innerHTML=(m[sel]||[]).map(window.__heldRow).join(''); var hh=document.getElementById('hc-acct'); if(hh) hh.textContent=sel; document.querySelectorAll('.acctrow').forEach(function(tr){ tr.classList.toggle('on', tr.getAttribute('data-acct')===sel); }); };
     window.selAccount=function(n){ window.__selAcct=n; window.__renderHeld(); };
     var _selA=window.__selAcct, _selList=acctMap[_selA]||held;
     const hero = (held.length||_selList.length) ?
-      ('<div class="hcwrap"><div class="hchead"><span class="t"><span class="d"></span>Held names · <b id="hc-acct" style="color:var(--cyan)">'+esc(_selA)+'</b></span><span class="sp"></span>'+
-       '<button class="hc-nav" id="hc-prev" aria-label="scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"></polyline></svg></button>'+
-       '<button class="hc-nav" id="hc-next" aria-label="scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"></polyline></svg></button>'+
-       '</div><div class="hcards" id="hc-row">'+_selList.map(cardFor).join('')+'</div></div>')
+      ('<div class="card hccard"><div class="c-lbl"><span class="d"></span>Held names · <b id="hc-acct" style="color:var(--cyan)">'+esc(_selA)+'</b>'+HT('Your held book — one row per name. Sensitive columns (qty · avg · unrealised · %MV · gate distance) stay 🔒 until AES-GCM unlock; LTP, day move and the 4-lens dots are public.')+'<span class="age">'+_selList.length+' names · 🔒 = locked until unlock</span></div>'+
+       '<div class="heldtblwrap"><table class="tbl heldtbl"><thead><tr><th>Name</th><th>Qty</th><th>Avg</th><th>LTP</th><th>Day</th><th>Unreal</th><th>%MV</th><th>10G·DIV·8G·TA</th><th>Gate</th></tr></thead><tbody id="hc-row">'+_selList.map(heldRow).join('')+'</tbody></table></div></div>')
       : '<div class="card" style="margin-bottom:14px">'+pending('Held names','no held names in this emit.')+'</div>';
+    var _lock=function(m){return '<div class="rg-lock">🔒 '+esc(m)+'</div>';};
+    var _cd=_selList.filter(function(h){return h.current_value!=null;}).map(function(h){return {tk:h.ticker,v:h.current_value};}).sort(function(a,b){return b.v-a.v;});
+    var _ct=_cd.reduce(function(s,x){return s+x.v;},0); var concHTML;
+    if(_cd.length&&_ct>0){ var _acc=0; var _stops=_cd.map(function(x,i){ var pct=x.v/_ct*100; var seg=SECTOR_PAL[i%SECTOR_PAL.length]+' '+_acc.toFixed(2)+'% '+(_acc+pct).toFixed(2)+'%'; _acc+=pct; return seg; }).join(', ');
+      var _leg=_cd.map(function(x,i){ return '<div class="cleg"><span class="cdot" style="background:'+SECTOR_PAL[i%SECTOR_PAL.length]+'"></span>'+tkA(x.tk,esc(x.tk))+'<span class="cpct">'+Math.round(x.v/_ct*100)+'%</span></div>'; }).join('');
+      concHTML='<div class="concwrap"><div class="concring" style="background:conic-gradient('+_stops+')"></div><div class="cleglist">'+_leg+'</div></div>';
+    } else concHTML=isLocked?_lock('unlock to load concentration by %MV'):pending('Concentration','no held values in this emit.');
+    var _ag=(gates||[]).slice().sort(function(a,b){return Math.abs(a.distance_pct==null?999:a.distance_pct)-Math.abs(b.distance_pct==null?999:b.distance_pct);}).slice(0,12);
+    var ladderHTML=_ag.length?_ag.map(function(g){ var d=g.distance_pct; var w=Math.max(4,100-Math.min(Math.abs(d==null?20:d),20)/20*100); return '<div class="rgladr"><span class="rgtk">'+tkA(g.ticker,esc(g.ticker))+'</span><span class="rglab">'+esc(String(g.label||g.level||g.kind||g.gate||'gate'))+'</span><span class="rgbar"><span class="rgfill '+cls(d)+'" style="width:'+w.toFixed(0)+'%"></span></span><span class="rgd '+cls(d)+'">'+(d!=null?fmtPct(d,0):'—')+'</span></div>'; }).join(''):(isLocked?_lock('unlock to load the V-18 risk-gate ladder'):pending('Risk-gate ladder','no gates in this emit.'));
+    var concLadderRow='<div class="grid2" style="margin-top:14px"><div class="card"><div class="c-lbl"><span class="d"></span>Concentration'+HT('Share of book market value by held name (%MV). Unlock-gated — the values live in the encrypted book.')+'<span class="age">by ticker · %MV</span></div>'+concHTML+'</div><div class="card"><div class="c-lbl"><span class="d"></span>Risk-gate ladder · V-18'+HT('Distance-to-stop for every held-name gate, closest first — the risk instrument. Amber/red = near a trigger. Unlock-gated.')+'<span class="age">distance-to-stop · closest first</span></div>'+ladderHTML+'</div></div>';
     setFace('z-port',
       kpis+
       hero+
+      concLadderRow+
       '<div class="grid2b"><div class="card"><div class="c-lbl"><span class="d"></span>Accounts · multi-account book<span class="age">click a row → load its holdings above</span></div>'+(function(){ var ra=(DATA.rajiv_account&&DATA.rajiv_account.holdings)||{}; var ats=(ra.account_totals||[]); var gt=ra.grand_totals||{}; var rows=[];
       if(_mv!=null) rows.push({a:'SPARCHO-HDFC (you)',v:_mv,c:tot.invested,p:_ur,n:held.length,you:true});
       ats.forEach(function(x){ rows.push({a:x.account,v:x.value,c:x.cost,p:(x.cost?((x.value-x.cost)/x.cost*100):null),n:x.n_stocks}); });
