@@ -669,6 +669,18 @@
   .cleg .cpct{ margin-left:auto; color:var(--ink2); font-weight:700; }
   .concrow{ display:grid; grid-template-columns:0.85fr 1.65fr; gap:13px; align-items:start; }
   .concwrap{ padding:6px 0 2px; }
+  /* ── E2 Trade Lab v2 · locked structure-preview (visual-upgrade §4.2 · structure visible pre-unlock) ── */
+  .tlk-grid{ display:grid; grid-template-columns:1.9fr 1fr; gap:13px; margin:13px 0; }
+  @media(max-width:900px){ .tlk-grid{ grid-template-columns:1fr; } }
+  .tlk-b{ display:inline-block; height:11px; border-radius:5px; background:linear-gradient(90deg,var(--hair),var(--glass) 60%,var(--hair)); vertical-align:middle; opacity:0.85; }
+  .kpis .kv .tlk-b{ height:17px; }
+  .tlk-tbl td{ padding:7px; }
+  .tlk-form{ display:flex; flex-direction:column; gap:10px; }
+  .tlk-field{ display:flex; align-items:center; gap:11px; font-family:var(--font-mono); font-size:8.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--mut); }
+  .tlk-field span{ flex:0 0 62px; }
+  .tlk-field .tlk-b{ flex:1 1 auto; height:22px; border-radius:6px; }
+  .tlk-cta{ margin-top:4px; padding:15px 18px; border:1px solid var(--border); border-radius:12px; background:var(--glass); font-size:11.5px; color:var(--ink2); line-height:1.55; text-align:center; }
+  .tlk-cta .tlk-lk{ font-size:15px; margin-right:4px; }
   .bubble-wrap.bubble-dom{ height:440px; }
   .colstack{ display:flex; flex-direction:column; gap:13px; }
 
@@ -2571,7 +2583,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         dtPerfKpis+'</div>';
             html+=dtPerfCard+tlLeaderboardCard(tl.stop_policy_leaderboard)+'<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>'+esc(TLVLBL[view])+' trade ledger'+HT('Your logged trades of the selected type, newest first, 25 per page. Switch type with the toggle above. Expand a row for the full hero card.')+'<span class="age">'+(vCnt[view]||0)+' '+esc(TLVLBL[view])+' trades</span></div><div id="tl-ledger"></div></div>';
     } else {
-      html+='<div class="card"><div class="c-lbl"><span class="d"></span>Deliberate-trade ledger</div>'+pending('Trade ledger','🔒 unlock to view your logged open trades, scorecard and operator/system split.')+'</div>';
+      var _sk=function(w){return '<span class="tlk-b" style="width:'+w+'"></span>';};
+      var _trow=function(){return '<tr>'+['20%','12%','12%','12%','40px','40px','30%'].map(function(w){return '<td>'+_sk(w)+'</td>';}).join('')+'</tr>';};
+      html+='<div class="tlk-wrap">'+
+        '<div class="kpis">'+['Hit rate','Avg R','Expectancy','Open risk'].map(function(l){return '<div class="kpi"><div class="kl">'+l+'</div><div class="kv sm">'+_sk('64%')+'</div><div class="ks">'+_sk('82%')+'</div></div>';}).join('')+'</div>'+
+        '<div class="tlk-grid">'+
+          '<div class="card"><div class="c-lbl"><span class="d"></span>Open trades'+HT('Your live deliberate trades — entry, stop, target, R-multiple, age and thesis. Unlock to load.')+'<span class="age">ticker · entry · stop · target · R · age · thesis</span></div><table class="tbl tlk-tbl"><thead><tr>'+['Ticker','Entry','Stop','Target','R','Age','Thesis'].map(function(h,i){return '<th'+(i===0?' style="text-align:left"':'')+'>'+h+'</th>';}).join('')+'</tr></thead><tbody>'+_trow()+_trow()+_trow()+_trow()+'</tbody></table></div>'+
+          '<div class="card"><div class="c-lbl"><span class="d"></span>Log a trade<span class="age">planned</span></div><div class="tlk-form">'+['Ticker','Direction','Entry','Stop','Size','Thesis'].map(function(f){return '<div class="tlk-field"><span>'+f+'</span>'+_sk('100%')+'</div>';}).join('')+'</div></div>'+
+        '</div>'+
+        '<div class="card"><div class="c-lbl"><span class="d"></span>Scorecard · closed-trade review'+HT('Your resolved trades — realized R and the lesson captured per trade. Unlock to load.')+'<span class="age">R realized · lesson</span></div><table class="tbl tlk-tbl"><tbody>'+_trow()+_trow()+'</tbody></table></div>'+
+        '<div class="tlk-cta"><span class="tlk-lk">🔒</span> Trade Lab is operator-private (AES-GCM). Unlock to load your live open trades, scorecard and expectancy — the structure above fills in with your ledger.</div>'+
+      '</div>';
     }
     setFace('z-lab', html);
     if(tl){ try{ window.tlRenderHist(); window.tlRenderLedger(); }catch(e3){__reportErr('lab-tl',e3);} }
