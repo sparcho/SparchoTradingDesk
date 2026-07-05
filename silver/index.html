@@ -393,6 +393,18 @@
   .stl-vd{ font-family:var(--font-mono); font-size:7.5px; font-weight:700; margin-top:4px; letter-spacing:0.02em; }
   .stl-vd.pos{ color:var(--pos); } .stl-vd.watch{ color:var(--watch); } .stl-vd.mut{ color:var(--mut); }
   .cotseq-flag{ margin-top:10px; padding:7px 9px; border:1px dashed var(--hair); border-radius:8px; font-size:9.5px; color:var(--mut); line-height:1.45; }
+  /* ── S2 Operator · F109 fib deployment ladder (visual-upgrade §3.2) ── */
+  .f109{ margin-top:8px; }
+  .f109row{ display:grid; grid-template-columns:66px 40px 74px 1fr; gap:10px; align-items:center; padding:6px 9px; border-bottom:1px solid var(--hair); font-family:var(--font-mono); font-size:11px; border-radius:6px; }
+  .f109row.above{ opacity:0.66; }
+  .f109row.ftzone{ background:rgba(216,178,90,0.10); border:1px solid var(--acc); }
+  .f109row .f9px{ font-weight:700; color:var(--ink); }
+  .f109row .f9rt{ color:var(--faint); font-size:9px; }
+  .f109row .f9tag{ font-size:8px; font-weight:700; padding:1px 7px; border-radius:999px; text-align:center; }
+  .f109row .f9tag.core{ background:var(--pos-soft); color:var(--pos); } .f109row .f9tag.tac{ background:var(--watch-soft); color:var(--watch); }
+  .f109row .f9st{ font-size:9px; color:var(--mut); text-align:right; }
+  .f109spotrow{ display:flex; align-items:center; gap:9px; padding:7px 9px; font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--acc); background:linear-gradient(90deg, rgba(216,178,90,0.16), transparent); border-radius:6px; margin:2px 0; }
+  .f109spotrow::before{ content:""; width:10px; height:10px; border-radius:50%; background:var(--acc); box-shadow:0 0 8px var(--acc); flex:0 0 auto; }
 </style>
 </head>
 <body class="dark locked">
@@ -999,7 +1011,16 @@
     // (7) recommender (lock-gated; computed client-side, recomputes on toggle)
     var recSection='<div class="c-lbl" style="margin:16px 0 8px"><span class="d"></span>Recommender · daily pacer'+HT('Advisory ₹/day deploy or trim suggestion from your directional view + the deploy gates + the family book. Not an order.')+AB(DATA.emitted_at_utc)+'</div>'+
       '<div class="card reccard"><div class="rectoggle"><span class="reclbl">Your view →</span><button class="recbtn" data-lean="up">▲ Up</button><button class="recbtn" data-lean="neutral">● Neutral</button><button class="recbtn" data-lean="down">▼ Down</button></div><div id="rec-out"></div></div>';
-    setFace('z-operator', caveat+kpis+acctHeader+acctGrid+heroRow+probSection+stratSection+recSection+(window.silverMacroModule?(window.silverMacroModule().op||''):''));
+    var _ss=(DATA.silver_strategy||{}); var _fib=(_ss.fib||{}).ladder_xag||{}; var _cvt=(_ss.core_vs_tactical||{}).threshold_xag||60; var _ft=(_ss.final_tranche||{}); var _ftz=_ft.zone_xag||[50,52];
+    var _rungs=Object.keys(_fib).map(function(k){return {ratio:k,px:+_fib[k]};}).filter(function(r){return r.px>=45&&r.px<=100;}).sort(function(a,b){return b.px-a.px;});
+    if(xp!=null){ var _si=_rungs.findIndex(function(r){return r.px<xp;}); if(_si<0)_si=_rungs.length; _rungs.splice(_si,0,{spot:true,px:xp}); }
+    var f109Body=_rungs.map(function(r){
+      if(r.spot) return '<div class="f109spotrow">spot '+fmtUSD(r.px)+'</div>';
+      var isCore=r.px<_cvt; var rel=(xp!=null)?(r.px>xp?'above':'below'):''; var inFt=(r.px>=_ftz[0]-0.5&&r.px<=_ftz[1]+0.5);
+      return '<div class="f109row '+rel+(inFt?' ftzone':'')+'"><span class="f9px">'+fmtUSD(r.px)+'</span><span class="f9rt">'+esc(r.ratio)+'x</span><span class="f9tag '+(isCore?'core':'tac')+'">'+(isCore?'CORE':'TACTICAL')+'</span><span class="f9st">'+(inFt?('final tranche · '+fmtNum(_ft.units||0)+'u'):(rel==='above'?'sell-into-recovery':'deploy zone'))+'</span></div>';
+    }).join('');
+    var f109Section='<div class="card" style="margin-top:14px"><div class="c-lbl"><span class="d"></span>F109 deployment ladder · fib-anchored'+HT('The re-entry ladder off the 12-month fib (anchored $3.57 → $48.18). Entries under $'+_cvt+' XAG are CORE (retain — long-term debasement hold); $'+_cvt+'+ are TACTICAL (sell into the recovery). The $'+_ftz[0]+'-'+_ftz[1]+' zone is the final tranche. Per-tranche allocations stay 🔒 until unlock; the price rungs are public strategy.')+AB(DATA.emitted_at_utc)+'<span class="age">spot '+fmtUSD(xp)+' · core/tactical line $'+_cvt+'</span></div><div class="f109">'+f109Body+'</div></div>';
+    setFace('z-operator', caveat+kpis+f109Section+acctHeader+acctGrid+heroRow+probSection+stratSection+recSection+(window.silverMacroModule?(window.silverMacroModule().op||''):''));
     try{ if(window.__recRender) window.__recRender(); }catch(e){}
   }catch(e){__reportErr('operator',e);} }
 
