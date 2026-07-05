@@ -640,6 +640,8 @@
 
   .grid2{ display:grid; grid-template-columns:1.5fr 1fr; gap:13px; }
   .grid2b{ display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+  .grid3{ display:grid; grid-template-columns:1fr 1.3fr 1fr; gap:13px; }
+  .bubble-wrap.bubble-dom{ height:440px; }
   .colstack{ display:flex; flex-direction:column; gap:13px; }
 
   .tbl{ width:100%; border-collapse:collapse; font-size:11px; }
@@ -839,7 +841,8 @@
     .zone{ padding:16px 14px 24px; }
     .opbar{ padding:8px 14px; gap:12px; font-size:10px; } .opbar .spacer{ display:none; }
     .kpis{ grid-template-columns:repeat(2,1fr); }
-    .grid2,.grid2b,.today,.dtwrap{ grid-template-columns:1fr; }
+    .grid2,.grid2b,.grid3,.today,.dtwrap{ grid-template-columns:1fr; }
+    .bubble-wrap.bubble-dom{ height:340px; }
     .tgrid{ grid-template-columns:repeat(2,1fr); }
     .hero .eye{ font-size:10px; letter-spacing:0.24em; }
   }
@@ -1016,27 +1019,35 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         <div class="na"><div class="lbl">Next action</div><div class="v" id="f1-next">—</div></div>
       </div>
       <div class="kpis" id="f1-kpis"></div>
-      <div class="grid2">
-        <div class="card">
-          <div class="c-lbl"><span class="d"></span>Screener bubble map <span class="ihelp" tabindex="0">?<span class="ihpop">Every screened name as a bubble: x = composite score (further right = stronger), y = directional lean (up = bullish), bubble size = how many screens flag it. Top-right and big = high-conviction multi-screen longs. ★ = held. Click a bubble to open it in TradingView.</span></span><span class="age">x=composite · y=lean · size=lenses</span></div>
-          <div class="bubble-wrap"><canvas id="bubble"></canvas><div class="btip" id="btip"></div></div>
-          <div class="bfoot">Top-right big = high-conviction multi-lens longs · bottom-right = strong-but-bearish. ★ held. Click a bubble → TradingView.</div>
-        </div>
-        <div class="card" id="card-fires"></div>
+      <!-- DOMINANT: bubble map, full width (E1 read→act→scan · visual-upgrade v2 §4.1) -->
+      <div class="card">
+        <div class="c-lbl"><span class="d"></span>Screener bubble map <span class="ihelp" tabindex="0">?<span class="ihpop">Every screened name as a bubble: x = composite score (further right = stronger), y = directional lean (up = bullish), bubble size = how many screens flag it. Top-right and big = high-conviction multi-screen longs. ★ = held. Click a bubble to open it in TradingView.</span></span><span class="age">x=composite · y=lean · size=lenses · quadrants: act / watch / fade / ignore</span></div>
+        <div class="bubble-wrap bubble-dom"><canvas id="bubble"></canvas><div class="btip" id="btip"></div></div>
+        <div class="bfoot">Top-right big = high-conviction multi-lens longs · bottom-right = strong-but-bearish. ★ held. Click a bubble → TradingView.</div>
       </div>
+      <!-- ACT: day-trade fires beside the composite leaderboard -->
+      <div class="grid2" style="margin-top:13px">
+        <div class="card" id="card-fires"></div>
+        <div class="card">
+          <div class="c-lbl"><span class="d"></span>Composite leaderboard <span class="ihelp" tabindex="0">?<span class="ihpop">The top 8 names by composite score (0–100), which blends all four screens. Each row shows whether each screen passed (✓), nearly passed (~) or failed (·): 10G = 10-gate value, DIV = dividend, 8G = 8-gate quality, TA = technical. Price is live; 1d is today’s move; ★ = you hold it.</span></span><span class="age">top 8 · per-lens ✓/~/· · live price</span></div>
+          <div class="lb" id="f1-lb"></div>
+        </div>
+      </div>
+      <!-- ACT: swing + positional fire detail (top-2 / next-2 by composite) -->
       <div class="grid2b" style="margin-top:13px">
         <div class="card" id="card-swing"></div>
         <div class="card" id="card-positional"></div>
       </div>
-      <!-- F1 retrospective graphs (signal quality + day-trade backtest) moved to the Performance tab (260620) -->
-      <div class="card" style="margin-top:13px">
-        <div class="c-lbl"><span class="d"></span>Composite leaderboard <span class="ihelp" tabindex="0">?<span class="ihpop">The top 8 names by composite score (0–100), which blends all four screens. Each row shows whether each screen passed (✓), nearly passed (~) or failed (·): 10G = 10-gate value, DIV = dividend, 8G = 8-gate quality, TA = technical. Price is live; 1d is today’s move; ★ = you hold it.</span></span><span class="age">top 8 of 63 · per-lens ✓/~/· · live price · click → ticker page</span></div>
-        <div class="lbdesc">Composite is a <b>0–100</b> score blending all four screens — <b>10-gate value (10G)</b>, <b>dividend (DIV)</b>, <b>8-gate quality (8G)</b> and <b>technical (TA)</b> — tilted by directional lean. The per-lens cells show ✓ pass · ~ near · · fail for each screen; Price is live. ★ = currently held; 1d is today’s move.</div>
-        <div class="lb" id="f1-lb"></div>
-      </div>
+      <!-- SCAN: hit matrix beside cluster heat -->
       <div class="grid2b" style="margin-top:13px">
+        <div class="card" id="f1-hm"></div>
         <div class="card" id="f1-heat"></div>
+      </div>
+      <!-- SCAN: promotion candidates · full watchlist · order-book/backlog -->
+      <div class="grid3 scan3" style="margin-top:13px">
+        <div class="card" id="f1-promo"></div>
         <div class="card" id="f1-rundown"></div>
+        <div class="card" id="f1-orderbook"></div>
       </div>
     </section>
 
@@ -1794,7 +1805,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var _fireTk=fires.filter(function(f){return f.confirmed;}).map(function(f){return f.ticker;});
       var _qp=function(desc,tk){ return '<div class="kqd">'+desc+'</div><div class="kqt">'+tk+'</div>'; };
       $('f1-kpis').innerHTML=[
-        ['Regime','<div class="kv sm '+regC+'">'+esc(zone)+(reg.score!=null?' · '+esc(String(reg.score)):'')+'</div>','<b>'+esc(reg.attack_mode||'QUICK_EXIT')+'</b> · '+((reg.binding_gate||{}).id||'')+' binding','<div class="kqd">Operator-signed market regime + score. attack_mode = the live stop-management regime the resolver executes (QUICK_EXIT = Profit-Lock + Stall Exit; STANDARD = belock_r1). RED = risk-off; YELLOW = selective; GREEN = deploy.</div>'],
+        ['Regime','<div class="kv sm '+regC+'">'+esc(zone)+(reg.score!=null?' · '+esc(String(reg.score)):'')+'</div>',(reg.attack_mode||'QUICK_EXIT')+' · '+((reg.binding_gate||{}).id||'')+' binding','<div class="kqd">Operator-signed market regime + score. attack_mode = the live stop-management regime the resolver executes (QUICK_EXIT = Profit-Lock + Stall Exit; STANDARD = belock_r1). RED = risk-off; YELLOW = selective; GREEN = deploy.</div>'],
         ['Clean passers','<div class="kv">'+cleanN+'</div>','4/4 of '+univ,_qp('Names passing ALL four screens (10-gate value, dividend, 8-gate quality, technical) this run. Zero is normal in a RED regime.',_tkl(_cleanTk))],
         ['Promotion','<div class="kv">'+promoN+'</div>','candidates',_qp('Names one gate short of clean-passing — promotion candidates to watch for an upgrade.',_tkl(_promoTk))],
         ['Watch · bull','<div class="kv sm pos">'+bullN+'</div>','lean long',_qp('Names with a positive directional lean (&gt; +0.15) across the lenses.',_tkl(_bullTk))],
@@ -1872,6 +1883,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       $('f1-lb').innerHTML=h; }catch(e){__reportErr('leaderboard',e);}
 
     renderHeat(sc,rundown);
+    try{ var _obm=((DATA.order_book||{}).momentum_summary)||[]; var _obEl=$('f1-orderbook');
+      if(_obEl) _obEl.innerHTML='<div class="c-lbl"><span class="d"></span>Order-book / backlog'+HT('Corporate order-book momentum (F100) — book-to-bill, order-book coverage, execution rate.')+'<span class="age">'+_obm.length+' names</span></div>'+(_obm.length?('<div class="obtiles">'+_obm.map(function(m){ var b2b=parseFloat(m.book_to_bill); var bc=isNaN(b2b)?'':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg')); return '<div class="obtile"><div class="obt-h">'+tkA(m.company,esc(m.company))+'<span class="obt-b2b '+bc+'">B2B '+esc(m.book_to_bill!=null?m.book_to_bill:'—')+'</span></div><div class="obt-m"><span><b>'+esc(m.ob_cover!=null?m.ob_cover:'—')+'</b> OB cover</span><span><b>'+esc(m.execution_rate!=null?m.execution_rate:'—')+'</b> exec</span></div>'+(m.note?('<div class="obt-n">'+esc(m.note)+'</div>'):'')+'</div>'; }).join('')+'</div>'):pending('Order-book / backlog','no backlog momentum in this emit.')); }catch(e){__reportErr('orderbook',e);}
     try{ renderPerf(); }catch(e){__reportErr('perf',e);}
     renderLab();
     renderPort(held,tot,DATA.risk_gates||[]);
@@ -1967,7 +1980,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     const hmHTML='<table class="hm"><thead><tr><th>Name</th><th>10G</th><th>DIV</th><th>8G</th><th>TA</th></tr></thead><tbody>'+hm.map(r=>'<tr><td>'+(r.held?'★ ':'')+tkA(r.ticker,esc(r.ticker))+'</td>'+LENS_ORDER.map(k=>'<td>'+lensCell(r.lens&&r.lens[k]&&r.lens[k].status)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
     const rd=rundown.slice().sort((a,b)=>((b.moves&&b.moves.d1)||0)-((a.moves&&a.moves.d1)||0));  // A3 — full watchlist (container scrolls)
     const rdHTML='<div class="rundown"><div class="rdrow h"><span>Ticker</span><span>1d</span><span>3d</span><span>5d</span></div>'+rd.map(r=>{ const m=r.moves||{}; return '<div class="rdrow"><span class="tk">'+(r.tag==='held'?'★ ':'')+tkA(r.ticker,esc(r.ticker))+'<span class="cl">'+esc(r.cluster||r.sector||'')+'</span></span><span class="w '+cls(m.d1)+'">'+fmtPct(m.d1)+'</span><span class="w '+cls(m.d3)+'">'+fmtPct(m.d3)+'</span><span class="w '+cls(m.d5)+'">'+fmtPct(m.d5)+'</span></div>'; }).join('')+'</div>';
-    var heatEl=$('f1-heat'); if(heatEl) heatEl.innerHTML='<div class="c-lbl"><span class="d"></span>Cluster heat'+HT('Each bar is a sector/cluster, ranked by the average composite score of its names. Longer/greener = the cluster is screening stronger today. The number is avg composite; the right figure is the cluster’s average 1-day move.')+'<span class="age">names · avg composite · avg 1d</span></div>'+heat+'<div class="c-lbl" style="margin-top:13px"><span class="d"></span>Promotion candidates'+HT('Names flagged by multiple screens this run that aren’t held yet — candidates worth a closer look for the watchlist.')+'</div>'+promoChips;
+    var hmEl=$('f1-hm'); if(hmEl) hmEl.innerHTML='<div class="c-lbl"><span class="d"></span>Hit matrix'+HT('Each top-ranked name against the four screens — 10G value / DIV dividend / 8G quality / TA technical — as pass ✓ / near ~ / fail ·. The at-a-glance grid of which names clear which gates.')+'<span class="age">ticker × lens · ✓ pass / ~ near / · fail</span></div>'+hmHTML;
+    var heatEl=$('f1-heat'); if(heatEl) heatEl.innerHTML='<div class="c-lbl"><span class="d"></span>Cluster heat'+HT('Each bar is a sector/cluster, ranked by the average composite score of its names. Longer/greener = the cluster is screening stronger today. The number is avg composite; the right figure is the cluster’s average 1-day move.')+'<span class="age">names · avg composite · avg 1d</span></div>'+heat;
+    var promoEl=$('f1-promo'); if(promoEl) promoEl.innerHTML='<div class="c-lbl"><span class="d"></span>Promotion candidates'+HT('Names flagged by multiple screens this run that aren’t held yet — candidates worth a closer look for the watchlist.')+'<span class="age">multi-lens · not held</span></div>'+promoChips;
     var rdEl=$('f1-rundown'); if(rdEl) rdEl.innerHTML='<div class="c-lbl"><span class="d"></span>Full watchlist rundown'+HT('Every name in the screener universe, sorted by today’s move. 1d/3d/5d are the % changes over those trading windows. Scroll for the full list.')+'<span class="age">'+rd.length+' names · scroll · 1d / 3d / 5d</span></div>'+rdHTML;
   }catch(e){__reportErr('heat',e);} }
 
@@ -2698,7 +2713,6 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '<div class="rr-support">'+
         '<div class="card"><div class="c-lbl"><span class="d"></span>Company news'+HT('Live headlines per stock, vetted by the JOURNALIST rules - source credibility, relevance, sentiment and materiality. Refreshes every ~5 min during market hours; the left colour bar shows sentiment, the line under each headline is why it matters.')+'<span class="age">'+news.length+' items'+(window.NEWS_ASOF?(' · as of '+esc(String(window.NEWS_ASOF).replace("T"," ").slice(5,16))):'')+(window.NEWS_STALE?' · ⚠ stale':'')+'</span></div>'+newsV+'</div>'+
         '<div class="rr-support-2">'+
-          (obHTML?('<div class="card"><div class="c-lbl"><span class="d"></span>Order-book / backlog'+HT('Corporate order-book momentum (F100) - book-to-bill, order-book coverage, execution rate. (Rehomes to the Screener tab when E1 ships.)')+'</div>'+obHTML+'</div>'):'')+
           '<div class="card resref"><div class="c-lbl"><span class="d"></span>Stop-policy glossary'+HT('Plain-English definitions of every stop term and policy - R / risk-unit, breakeven, ratchet, trail, scratch, Stall Exit, and each policy (baseline, belock_r1, grace_k, trail_priorlow, trail_atr, stall_exit_2) - used in the Trade Lab.')+'</div><a class="drbrief" href="stop-policy-glossary.html" target="_blank" rel="noopener"><span class="drttl">Stop &amp; Policy Glossary</span><span class="drpdf">DOC</span></a></div>'+
         '</div>'+
       '</div>');
