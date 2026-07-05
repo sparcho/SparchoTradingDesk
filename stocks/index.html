@@ -54,6 +54,7 @@
   .pos{ color:var(--pos); } .neg{ color:var(--neg); } .watch{ color:var(--watch); }
 
   #gl{ position:fixed; inset:0; z-index:0; }
+  body.solo #gl{ display:none; }   /* visual-upgrade v2 §1.A: drop the 3D showpiece in the working deck; keep the twilight .scene gradient as calm backdrop */
   .scene{ position:fixed; inset:0; z-index:-1; transition:background .6s; }
   body.dark .scene{ background:
     radial-gradient(60% 50% at 76% 6%, rgba(66,219,230,0.16), transparent 60%),
@@ -252,6 +253,62 @@
   .newstile.good{ border-left:3px solid var(--pos); } .newstile.good .nsrc{ color:var(--pos); }
   .newstile.bad{ border-left:3px solid var(--neg); } .newstile.bad .nsrc{ color:var(--neg); }
   .newstile.neutral{ border-left:3px solid var(--mut); }
+  /* ── E4 Research v2 · three-lane briefing room (260705 visual-upgrade plan §4.4) ── */
+  .rr-health{ margin-bottom:12px; }
+  .rr-hchips{ display:flex; flex-wrap:wrap; gap:7px; margin-top:2px; }
+  .rr-hchip{ display:inline-flex; align-items:baseline; gap:6px; font-size:10.5px; padding:5px 12px; border-radius:999px; background:var(--glass); border:1px solid var(--border); color:var(--mut); }
+  .rr-hchip b{ font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--ink); line-height:1; }
+  .rr-hchip.warn{ border-color:var(--watch-soft); background:var(--watch-soft); color:var(--watch); } .rr-hchip.warn b{ color:var(--watch); }
+  .rr-hchip.dr{ border-color:rgba(154,140,255,0.3); color:var(--violet); } .rr-hchip.dr b{ color:var(--violet); }
+  /* three-lane grid — left=time (25) · center=theses (50) · right=risk (25) */
+  .rr-room{ display:grid; grid-template-columns:0.9fr 2fr 1.15fr; gap:12px; align-items:start; }
+  @media(max-width:1080px){ .rr-room{ grid-template-columns:1fr; } }
+  .rr-lane{ display:flex; flex-direction:column; gap:12px; min-width:0; }
+  .rr-lane .card{ margin:0; }
+  /* left lane — vertical catalyst spine */
+  .rr-tl{ position:relative; padding:6px 2px 2px 4px; max-height:560px; overflow:auto; }
+  .rr-tlnode{ position:relative; padding:0 0 15px 21px; cursor:default; }
+  .rr-tlnode::before{ content:""; position:absolute; left:3px; top:3px; width:9px; height:9px; border-radius:50%; background:var(--mut); z-index:2; transition:transform .18s; }
+  .rr-tlnode::after{ content:""; position:absolute; left:7px; top:11px; bottom:-3px; width:1px; background:var(--hair); }
+  .rr-tlnode:last-child::after{ display:none; }
+  .rr-tlnode:hover::before{ transform:scale(1.3); }
+  .rr-tlnode.hi::before{ background:var(--watch); box-shadow:0 0 9px var(--watch); }
+  .rr-tlnode.md::before{ background:var(--violet); box-shadow:0 0 8px rgba(154,140,255,0.55); }
+  .rr-tlnode.held::before{ background:var(--cyan); box-shadow:0 0 9px var(--cyan); }
+  .rr-tld{ font-family:var(--font-mono); font-size:9px; color:var(--cyan); }
+  .rr-tld .dd{ color:var(--faint); }
+  .rr-tlt{ font-size:11px; color:var(--ink2); line-height:1.35; margin-top:2px; }
+  .rr-tlt .heldtag{ font-family:var(--font-mono); font-size:8px; color:var(--cyan); margin-left:5px; white-space:nowrap; }
+  /* center lane — cross-thesis convergence + DR streams */
+  .rr-cross{ border-color:rgba(154,140,255,0.35)!important; box-shadow:0 0 20px rgba(154,140,255,0.08); }
+  .rr-cross .c-lbl .d{ background:var(--violet); }
+  .rr-cross .age{ color:var(--violet); }
+  .rr-xrow{ display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--hair); }
+  .rr-xrow:last-child{ border-bottom:none; }
+  .rr-xtk{ flex:0 0 84px; font-family:var(--font-mono); font-size:11px; font-weight:700; }
+  .rr-xtk.held::before{ content:"\2605 "; color:var(--cyan); }
+  .rr-xbody{ min-width:0; }
+  .rr-xstory{ font-size:11px; color:var(--ink2); line-height:1.4; }
+  .rr-xin{ display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
+  .rr-xin span{ font-family:var(--font-mono); font-size:8px; color:var(--violet); border:1px solid rgba(154,140,255,0.3); border-radius:999px; padding:1px 7px; }
+  /* right lane — the watch column */
+  .rr-trig{ display:flex; flex-direction:column; gap:6px; }
+  .rr-trow{ display:grid; grid-template-columns:1fr auto; gap:8px; align-items:start; padding:7px 9px; border:1px solid var(--hair); border-left:2px solid var(--mut); border-radius:7px; background:var(--glass); }
+  .rr-trow.armed{ border-left-color:var(--neg); }
+  .rr-trig-t{ font-size:10.5px; color:var(--ink2); line-height:1.35; }
+  .rr-trig-s{ font-family:var(--font-mono); font-size:8.5px; color:var(--mut); margin-top:3px; line-height:1.4; }
+  .rr-tdir{ font-family:var(--font-mono); font-size:8px; font-weight:700; padding:2px 7px; border-radius:999px; white-space:nowrap; height:fit-content; }
+  .rr-tdir.neg{ background:var(--neg-soft); color:var(--neg); } .rr-tdir.pos{ background:var(--pos-soft); color:var(--pos); } .rr-tdir.watch{ background:var(--watch-soft); color:var(--watch); }
+  .rr-cov{ display:flex; flex-direction:column; gap:6px; }
+  .rr-covrow{ display:flex; gap:8px; align-items:baseline; font-size:10.5px; color:var(--ink2); line-height:1.4; }
+  .rr-covrow::before{ content:"\25CB"; color:var(--faint); font-size:9px; flex:0 0 auto; }
+  .rr-none{ font-size:10.5px; color:var(--mut); padding:6px 0; }
+  /* support row — sections preserved from the old tab (data-fidelity gate: nothing dropped) */
+  .rr-support{ margin-top:14px; padding-top:14px; border-top:1px solid var(--hair); display:grid; grid-template-columns:1.5fr 1fr; gap:12px; align-items:start; }
+  @media(max-width:980px){ .rr-support{ grid-template-columns:1fr; } }
+  .rr-support .card{ margin:0; }
+  .rr-support-2{ display:flex; flex-direction:column; gap:12px; }
+  .rr-kbscroll{ max-height:520px; overflow:auto; }
   /* DR column */
   .thbubbles{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:15px; }
   .thbub{ display:flex; flex-direction:column; gap:2px; padding:8px 13px; border-radius:14px; background:var(--glass); border:1px solid var(--border); backdrop-filter:blur(16px) saturate(150%); -webkit-backdrop-filter:blur(16px) saturate(150%); }
@@ -1182,7 +1239,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var mx=0,my=0,cx=0,cy=0; window.addEventListener('mousemove',function(e){ mx=(e.clientX/window.innerWidth-0.5); my=(e.clientY/window.innerHeight-0.5); });
       var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; var t0=performance.now(); var hidden=false;
       document.addEventListener('visibilitychange',function(){ hidden=document.hidden; });
-      function loop(){ requestAnimationFrame(loop); if(hidden) return; var t=(performance.now()-t0)/1000; cx+=(mx-cx)*0.05; cy+=(my-cy)*0.05;
+      function loop(){ requestAnimationFrame(loop); if(hidden||document.body.classList.contains('solo')) return; var t=(performance.now()-t0)/1000; cx+=(mx-cx)*0.05; cy+=(my-cy)*0.05;
         if(!reduce){ grp.rotation.y+=0.0028; grp.rotation.x=Math.sin(t*0.25)*0.13+cy*0.34; grp.rotation.z=cx*0.15; shell.rotation.y-=0.0017; core.rotation.y-=0.0044; grp.position.y=Math.sin(t*0.6)*0.07; }
         camera.position.x=cx*0.8; camera.position.y=-cy*0.6; camera.lookAt(0,0,0); renderer.render(scene,camera); }
       loop();
@@ -2529,33 +2586,73 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   function renderResearch(D,dr){ try{
     function md(ds){ var p=String(ds||'').split('-'); if(p.length<3) return ds||''; var mm=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][(+p[1])-1]||p[1]; return mm+' '+(+p[2]); }
     var asOf=String((D&&(D.emitted_at_utc||D.generated_date))||'').slice(0,10);
-    // ── TOP BAND — catalyst timeline (data-tip nodes → #tip-portal, fixed max-height) ──
+    dr=dr||{};
+
+    // shared reductions
     var cats=(D.catalysts||[]).slice(0,16);
-    var tlHTML = cats.length ? ('<div class="tline">'+cats.map(function(c){
+    var cross=(dr.cross_thesis_names||[]);
+    var trigAll=(dr.falsifiable_triggers||[]);
+    function _armed(st){ return !/✅|❌/.test(String(st||'')); }   // armed = not yet resolved / broken
+    var themes=(dr.active_themes||[]);
+    var cov=(dr.coverage_gaps||[]);
+    var fl=D.flags||{}; var flatFlags=[].concat(fl.P0||[],fl.P1||[]);
+    var nArmed=trigAll.filter(function(t){return _armed(t.status);}).length;
+
+    // thesis-health strip (derived counts, no new data)
+    function hchip(lbl,n,cls){ return '<span class="rr-hchip'+(cls?(' '+cls):'')+'"><b>'+n+'</b> '+esc(lbl)+'</span>'; }
+    var healthHTML='<div class="rr-hchips">'+
+      hchip('active themes',themes.length,'')+
+      hchip('names in ≥2 briefs',cross.length,'dr')+
+      hchip('triggers armed',nArmed, nArmed?'warn':'')+
+      hchip('coverage gaps',cov.length,'')+
+      hchip('open F-flags',flatFlags.length, flatFlags.length?'warn':'')+'</div>';
+
+    // LEFT LANE - vertical catalyst spine (today -> forward; held-name events accent-flagged)
+    var tlHTML = cats.length ? ('<div class="rr-tl">'+cats.map(function(c){
       var dd=Math.round((new Date(c.date).getTime()-Date.now())/86400000);
-      var w=String(c.weight||'').toLowerCase(); var wc=(w==='high')?'hi':((w==='med'||w==='medium')?'md':'lo');
-      var ev=String(c.event||''); var shrt=ev.split('—')[0].split('(')[0].trim().slice(0,40);
+      var isHeld=(String(c.kind||'').toLowerCase()==='earnings');   // emit only adds earnings rows for HELD names
+      var w=String(c.weight||'').toLowerCase(); var wc=isHeld?'held':((w==='high')?'hi':((w==='med'||w==='medium')?'md':'lo'));
+      var ev=String(c.event||''); var shrt=ev.split('—')[0].split('(')[0].trim();
       var ddl=isNaN(dd)?'':(dd===0?'today':(dd>0?'+'+dd+'d':dd+'d'));
-      return '<div class="tlnode '+wc+'" data-tip="'+esc(ev)+'" data-tipsub="'+esc(String(c.kind||'').toUpperCase()+' · '+(c.weight||'')+' · '+c.date+(ddl?(' · '+ddl):''))+'"><div class="tldot"></div><div class="tlmeta"><div class="tldate">'+esc(md(c.date))+(ddl?(' · '+esc(ddl)):'')+'</div><div class="tlttl">'+esc(shrt)+'</div></div></div>';
+      return '<div class="rr-tlnode '+wc+'" data-tip="'+esc(ev)+'" data-tipsub="'+esc(String(c.kind||'').toUpperCase()+' · '+(c.weight||'')+' · '+c.date+(ddl?(' · '+ddl):''))+'">'+
+        '<div class="rr-tld">'+esc(md(c.date))+(ddl?(' <span class="dd">'+esc(ddl)+'</span>'):'')+'</div>'+
+        '<div class="rr-tlt">'+esc(shrt)+(isHeld?'<span class="heldtag">● HELD</span>':'')+'</div></div>';
     }).join('')+'</div>') : pending('Catalyst timeline','no catalysts in this emit.');
 
-    // ── COL 1 — KNOWLEDGE BASE / DR STREAM (anchor) ──
+    // CENTER LANE (dominant) - cross-thesis convergence card + DR streams
+    var xHTML=cross.length ? cross.slice(0,10).map(function(x){
+      var ins=(x.appears_in||[]).map(function(a){return '<span>'+esc(a)+'</span>';}).join('');
+      return '<div class="rr-xrow"><span class="rr-xtk'+(x.held?' held':'')+'">'+tkA(x.ticker,esc(x.ticker))+'</span>'+
+        '<div class="rr-xbody"><div class="rr-xstory">'+esc(x.story||'')+'</div>'+(ins?('<div class="rr-xin">'+ins+'</div>'):'')+'</div></div>';
+    }).join('') : '<div class="rr-none">No names appear in ≥2 live briefs yet.</div>';
+
     function drFresh(a){ return (a<30)?'green':((a<=60)?'amber':'red'); }
-    var streams=(dr&&dr.streams)||[];
+    var streams=(dr.streams)||[];
     var grpLbl={company:'Company', comparison:'Comparison', thematic:'Thematic'}, grpOrder=['company','comparison','thematic'];
     var byType={}; streams.forEach(function(s){ var t=s.type||'other'; (byType[t]=byType[t]||[]).push(s); });
     var drGroups=grpOrder.filter(function(g){return byType[g];}).map(function(g){
       var items=byType[g].slice().sort(function(a,b){return a.age_days-b.age_days;});
       return '<div class="drgrp"><div class="drgrp-h">'+esc(grpLbl[g]||g)+'<span class="drgrp-n">'+items.length+'</span></div>'+
         items.map(function(s){ var f=drFresh(s.age_days);
-          var badge='<span class="drfresh '+f+'" data-tip="'+esc('Brief dated '+(s.date||'?')+' · '+(s.age_days)+' days old ('+(f==='green'?'fresh <30d':(f==='amber'?'aging 30–60d':'stale >60d'))+')')+'">'+(s.age_days===0?'today':(s.age_days+'d'))+'</span>';
+          var badge='<span class="drfresh '+f+'" data-tip="'+esc('Brief dated '+(s.date||'?')+' · '+(s.age_days)+' days old ('+(f==='green'?'fresh <30d':(f==='amber'?'aging 30-60d':'stale >60d'))+')')+'">'+(s.age_days===0?'today':(s.age_days+'d'))+'</span>';
           var inner='<span class="drttl">'+esc(s.title)+'</span>'+(s.fmt==='pdf'?'<span class="drpdf">PDF</span>':'')+badge;
           return s.link?('<a class="drbrief" href="'+esc(s.link)+'">'+inner+'</a>'):('<div class="drbrief nolink">'+inner+'</div>'); }).join('')+
         '</div>'; }).join('');
-    var drBody=streams.length?drGroups:pending('Knowledge base','no deep-research briefs found.');
+    var drBody=streams.length?drGroups:pending('Deep-research streams','no deep-research briefs found.');
 
-    // ── COL 2 — COMPANY NEWS (vertical, no x-scroll) ──
-    var news=(window.NEWS&&window.NEWS.length)?window.NEWS:(D.news||(D.research&&D.research.news)||(dr&&dr.news)||[]);
+    // RIGHT LANE - the watch column: triggers (armed=red border) / themes / coverage gaps / flags
+    var trHTML=trigAll.length?('<div class="rr-trig">'+trigAll.slice(0,10).map(function(t){
+      var armed=_armed(t.status); var d=String(t.direction||'').toLowerCase();
+      var dc=/bear|trim|de-risk|risk/.test(d)?'neg':(/bull|confirm|dovish|track/.test(d)?'pos':'watch');
+      return '<div class="rr-trow'+(armed?' armed':'')+'"><div><div class="rr-trig-t">'+esc(t.trigger)+'</div>'+(t.status?('<div class="rr-trig-s">'+esc(t.status)+'</div>'):'')+'</div><span class="rr-tdir '+dc+'">'+esc(t.direction||'')+'</span></div>';
+    }).join('')+'</div>'):pending('Falsifiable triggers','none defined.');
+    var tcMap={warning:'watch',positive:'pos',info:'cyan',accent:'violet'};
+    var thHTML=themes.length?('<div class="thbubbles">'+themes.slice(0,8).map(function(t){var k=tcMap[t.color]||'cyan';return '<div class="thbub '+k+'"><span class="thn">'+esc(t.theme)+'</span>'+(t.key_date?('<span class="thd">key '+esc(t.key_date)+'</span>'):'')+'</div>';}).join('')+'</div>'):pending('Active themes','no active themes in this emit.');
+    var covHTML=cov.length?('<div class="rr-cov">'+cov.map(function(c){return '<div class="rr-covrow">'+esc(typeof c==='string'?c:(c.area||c.name||''))+'</div>';}).join('')+'</div>'):'<div class="rr-none">No coverage gaps flagged.</div>';
+    var flHTML=flatFlags.length?flatFlags.slice(0,8).map(function(f){var _id=(typeof f==='string')?f:(f.flag_id||f.id||f.title||'flag');var _tk=(f&&f.ticker&&f.ticker!=='MULTI')?(' · '+f.ticker):'';return '<div class="flag"><span class="fd" style="background:var(--watch)"></span><span class="ft">'+esc(_id)+'<span style="color:var(--faint)">'+esc(_tk)+'</span></span><span class="fs watch">open</span></div>';}).join(''):'<div class="rr-none">No open P0/P1 flags in this aggregate.</div>';
+
+    // SUPPORT ROW - preserved sections (data-fidelity gate: simplify container, never drop data)
+    var news=(window.NEWS&&window.NEWS.length)?window.NEWS:(D.news||(D.research&&D.research.news)||(dr.news)||[]);
     function _newsTime(s){ if(!s) return ''; try{ var d=new Date(s); if(isNaN(d.getTime())) return String(s).slice(0,16); var p=function(x){return ('0'+x).slice(-2);}; return p(d.getDate())+'/'+p(d.getMonth()+1)+' '+p(d.getHours())+':'+p(d.getMinutes()); }catch(_){ return String(s).slice(0,16); } }
     var newsV = news.length ? ('<div class="newsv">'+news.map(function(n){ try{
       var tks=(n.tickers&&n.tickers.length)?n.tickers:(n.ticker?[n.ticker]:[]);
@@ -2564,31 +2661,36 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       return '<div class="newsvi '+(n.sentiment||'neutral')+'"><div class="nvh"><span class="nvs">'+esc(n.source||n.publisher||'news')+'</span><span class="nvt">'+esc(_newsTime(n.published_at||n.time||n.date))+'</span></div>'+hh+
         (n.why?('<div class="nvw">'+esc(n.why)+'</div>'):'')+
         (tks.length?('<div class="nvk">'+tks.slice(0,5).map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'):'')+'</div>';
-    }catch(_){ return ''; } }).join('')+'</div>') : pending('Company news','no live news yet — the 5-min JOURNALIST feed populates during market hours.');
-
-    // ── COL 3 — falsifiable triggers · flags & coverage · theme strength · order-book ──
-    var trig=(dr.falsifiable_triggers||[]).slice(0,8);
-    var trHTML=trig.length?trig.map(function(t){var dc=t.direction==='bear'?'neg':(t.direction==='bull'?'pos':'watch');return '<div class="gate" style="grid-template-columns:1fr auto"><span style="font-size:11px;color:var(--ink2)">'+esc(t.trigger)+' <span style="color:var(--faint)">· '+esc(t.status||'')+'</span></span><span class="ds '+dc+'">'+esc(t.direction||'')+'</span></div>';}).join(''):pending('Falsifiable triggers','none defined.');
-    var fl=D.flags||{}; var flatFlags=[].concat(fl.P0||[],fl.P1||[]).slice(0,6);
-    var flHTML=flatFlags.length?flatFlags.map(function(f){return '<div class="flag"><span class="fd" style="background:var(--watch)"></span><span class="ft">'+esc(f.title||f.id||f)+'</span><span class="fs watch">open</span></div>';}).join(''):'<div style="font-size:10.5px;color:var(--mut);padding:6px 0">No dashboard-block flags in this aggregate.</div>';
-    var cov=(dr.coverage_gaps||[]); var covHTML=cov.length?('<div class="chips" style="margin-top:9px">'+cov.map(function(c){return '<span class="chip">'+esc(typeof c==='string'?c:(c.area||c.name||''))+'</span>';}).join('')+'</div>'):'';
-    var themes=(dr.active_themes||[]).slice(0,8); var tcMap={warning:'watch',positive:'pos',info:'cyan',accent:'violet'};
-    var thHTML=themes.length?('<div class="thbubbles">'+themes.map(function(t){var k=tcMap[t.color]||'cyan';return '<div class="thbub '+k+'"><span class="thn">'+esc(t.theme)+'</span>'+(t.key_date?('<span class="thd">key '+esc(t.key_date)+'</span>'):'')+'</div>';}).join('')+'</div>'):pending('Theme strength','no active themes in this emit.');
+    }catch(_){ return ''; } }).join('')+'</div>') : pending('Company news','no live news yet - the 5-min JOURNALIST feed populates during market hours.');
     var obm=((D.order_book||{}).momentum_summary)||[];
     var obHTML=obm.length?('<div class="obtiles">'+obm.map(function(m){ var b2b=parseFloat(m.book_to_bill); var bc=isNaN(b2b)?'':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg')); return '<div class="obtile"><div class="obt-h">'+tkA(m.company,esc(m.company))+'<span class="obt-b2b '+bc+'">B2B '+esc(m.book_to_bill!=null?m.book_to_bill:'—')+'</span></div><div class="obt-m"><span><b>'+esc(m.ob_cover!=null?m.ob_cover:'—')+'</b> OB cover</span><span><b>'+esc(m.execution_rate!=null?m.execution_rate:'—')+'</b> exec</span></div>'+(m.note?('<div class="obt-n">'+esc(m.note)+'</div>'):'')+'</div>'; }).join('')+'</div>'):'';
 
     setFace('z-research',
-      '<div class="card resTop"><div class="c-lbl"><span class="d"></span>Catalyst timeline'+HT('Upcoming events that could move the book — earnings, policy, economic data. Hover a node for the full detail.')+'<span class="age">today → forward · '+cats.length+' events'+(asOf?(' · as of '+esc(asOf)):'')+'</span></div><div class="tlclip">'+tlHTML+'</div></div>'+
-      '<div class="resbento">'+
-        '<div class="card rescol res-kb"><div class="c-lbl"><span class="d"></span>Knowledge base · deep research'+HT('Every deep-research brief, grouped by Company / Comparison / Thematic, with an age badge: green = under 30 days, amber = 30–60 days, red = over 60 days. This is the growing research library — click a brief to open it (PDF-only briefs open the rendered PDF in a new tab).')+'<span class="age">'+streams.length+' briefs</span></div>'+drBody+'</div>'+
-        '<div class="card rescol"><div class="c-lbl"><span class="d"></span>Company news'+HT('Live headlines per stock, vetted by the JOURNALIST rules — source credibility, relevance, sentiment and materiality. Refreshes every ~5 min during market hours; the left colour bar shows sentiment, the line under each headline is why it matters.')+'<span class="age">'+news.length+' items'+(window.NEWS_ASOF?(' · as of '+esc(String(window.NEWS_ASOF).replace("T"," ").slice(5,16))):'')+(window.NEWS_STALE?' · \u26a0 stale':'')+'</span></div>'+newsV+'</div>'+
-        '<div class="rescol resstack">'+
-          '<div class="card"><div class="c-lbl"><span class="d"></span>Falsifiable triggers'+HT('Specific, checkable conditions that would prove a thesis right or wrong — the things to watch next.')+'</div>'+trHTML+'</div>'+
-          '<div class="card"><div class="c-lbl"><span class="d"></span>Open flags &amp; coverage gaps'+HT('Tracked open issues (P0/P1) and research areas not yet covered.')+'</div>'+flHTML+covHTML+'</div>'+
-          '<div class="card"><div class="c-lbl"><span class="d"></span>Theme strength'+HT('The active macro / sector themes driving the book, and their key dates.')+'</div>'+thHTML+'</div>'+
-          (obHTML?('<div class="card"><div class="c-lbl"><span class="d"></span>Order-book / backlog'+HT('Corporate order-book momentum (F100) — book-to-bill, order-book coverage, execution rate.')+'</div>'+obHTML+'</div>'):'')+
+      // thesis-health strip
+      '<div class="card rr-health"><div class="c-lbl"><span class="d"></span>Thesis health'+HT('State of the research book in one glance - derived counts from the briefs, triggers, coverage gaps and open flags below.')+'<span class="age">'+(asOf?('as of '+esc(asOf)):'derived')+'</span></div>'+healthHTML+'</div>'+
+      // three-lane briefing room: left = time, center = theses, right = risk
+      '<div class="rr-room">'+
+        '<div class="rr-lane">'+
+          '<div class="card"><div class="c-lbl"><span class="d"></span>Catalyst timeline'+HT('Upcoming events that could move the book - earnings, policy, economic data - on a today-forward spine. Held-name earnings are ringed in accent. Hover a node for full detail.')+'<span class="age">today → forward · '+cats.length+' events</span></div>'+tlHTML+'</div>'+
         '</div>'+
-        '<div class="card resref"><div class="c-lbl"><span class="d"></span>Stop-policy glossary'+HT('Plain-English definitions of every stop term and policy — R / risk-unit, breakeven, ratchet, trail, scratch, Stall Exit, and each policy (baseline, belock_r1, grace_k, trail_priorlow, trail_atr, stall_exit_2) — used in the Trade Lab.')+'</div><a class="drbrief" href="stop-policy-glossary.html" target="_blank" rel="noopener"><span class="drttl">Stop &amp; Policy Glossary</span><span class="drpdf">DOC</span></a></div>'+'<div class="card res-soon"><div class="rs-ic">⚗</div><div class="rs-t">Research → trade decisions</div><div class="rs-m">Coming soon — the layer that turns this knowledge base + catalysts + triggers into concrete entry / exit calls. Designed next.</div></div>'+
+        '<div class="rr-lane">'+
+          '<div class="card rr-cross"><div class="c-lbl"><span class="d"></span>Cross-thesis convergence'+HT('Names that appear across two or more live deep-research briefs - the highest-conviction structural bets, where multiple theses point at the same company. ★ = currently held.')+'<span class="age">'+cross.length+' names in ≥2 briefs</span></div>'+xHTML+'</div>'+
+          '<div class="card res-kb"><div class="c-lbl"><span class="d"></span>Deep-research streams'+HT('Every deep-research brief, grouped by Company / Comparison / Thematic, with an age badge: green = under 30 days, amber = 30-60 days, red = over 60 days. This is the growing research library - click a brief to open it (PDF-only briefs open the rendered PDF in a new tab).')+'<span class="age">'+streams.length+' briefs</span></div>'+'<div class="rr-kbscroll">'+drBody+'</div></div>'+
+        '</div>'+
+        '<div class="rr-lane">'+
+          '<div class="card"><div class="c-lbl"><span class="d"></span>Falsifiable triggers'+HT('Specific, checkable conditions that would prove a thesis right or wrong - the risk edge. Rows with a red left-border are still armed (not yet confirmed or broken).')+'<span class="age">'+nArmed+' armed</span></div>'+trHTML+'</div>'+
+          '<div class="card"><div class="c-lbl"><span class="d"></span>Active themes'+HT('The active macro / sector themes driving the book, and their key dates.')+'</div>'+thHTML+'</div>'+
+          '<div class="card"><div class="c-lbl"><span class="d"></span>Coverage gaps'+HT('Sectors / names not yet covered by a deep-research brief - the DR / journalist backlog.')+'</div>'+covHTML+'</div>'+
+          '<div class="card"><div class="c-lbl"><span class="d"></span>Open flags'+HT('Tracked open issues (P0 / P1) surfaced in this aggregate.')+'</div>'+flHTML+'</div>'+
+        '</div>'+
+      '</div>'+
+      // support row - company news + order-book + glossary (preserved, not in the mockup hero)
+      '<div class="rr-support">'+
+        '<div class="card"><div class="c-lbl"><span class="d"></span>Company news'+HT('Live headlines per stock, vetted by the JOURNALIST rules - source credibility, relevance, sentiment and materiality. Refreshes every ~5 min during market hours; the left colour bar shows sentiment, the line under each headline is why it matters.')+'<span class="age">'+news.length+' items'+(window.NEWS_ASOF?(' · as of '+esc(String(window.NEWS_ASOF).replace("T"," ").slice(5,16))):'')+(window.NEWS_STALE?' · ⚠ stale':'')+'</span></div>'+newsV+'</div>'+
+        '<div class="rr-support-2">'+
+          (obHTML?('<div class="card"><div class="c-lbl"><span class="d"></span>Order-book / backlog'+HT('Corporate order-book momentum (F100) - book-to-bill, order-book coverage, execution rate. (Rehomes to the Screener tab when E1 ships.)')+'</div>'+obHTML+'</div>'):'')+
+          '<div class="card resref"><div class="c-lbl"><span class="d"></span>Stop-policy glossary'+HT('Plain-English definitions of every stop term and policy - R / risk-unit, breakeven, ratchet, trail, scratch, Stall Exit, and each policy (baseline, belock_r1, grace_k, trail_priorlow, trail_atr, stall_exit_2) - used in the Trade Lab.')+'</div><a class="drbrief" href="stop-policy-glossary.html" target="_blank" rel="noopener"><span class="drttl">Stop &amp; Policy Glossary</span><span class="drpdf">DOC</span></a></div>'+
+        '</div>'+
       '</div>');
   }catch(e){__reportErr('research',e);} }
 
