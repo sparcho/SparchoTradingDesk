@@ -1,1 +1,606 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.6"><title>Sparcho Trading Desk</title><link rel="stylesheet" href="/SparchoTradingDesk/_astro/cockpit.DFw5k-Gv.css"><link rel="stylesheet" href="/SparchoTradingDesk/_astro/zones.BjusDJx0.css"></head><body class="cockpit-body"><style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(c,s,d)=>s in c?g(c,s,{enumerable:!0,configurable:!0,writable:!0,value:d}):c[s]=d;var l=(c,s,d)=>w(c,typeof s!="symbol"?s+"":s,d);var E=new Set(["__proto__","constructor","prototype"]);{let c={0:t=>y(t),1:t=>d(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(d(t)),5:t=>new Set(d(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in c?c[p](e):void 0},d=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let n=this.querySelectorAll("astro-slot"),r={},i=this.querySelectorAll("template[data-astro-template]");for(let o of i){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of n){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let a=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(a+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${a}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,r,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),n.disconnect(),this.childrenConnectedCallback()},n=new MutationObserver(()=>{var r;((r=this.lastChild)==null?void 0:r.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});n.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let n=new URL(e,document.baseURI),r=`astro-retry=${Date.now()}`,i=n.hash.replace(/^#/,"");return n.hash=i?`${i}&${r}`:r,n.toString()}async importWithRetry(e){try{return await import(e)}catch(n){return await new Promise(r=>setTimeout(r,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let n=this.getAttribute("component-url"),r=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:n}});this.dispatchEvent(r)&&console.error(`[astro-island] Error hydrating ${n}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),n=this.getAttribute("client");if(Astro[n]===void 0){window.addEventListener(`astro:${n}`,()=>this.start(),{once:!0});return}try{await Astro[n](async()=>{let r=this.getAttribute("renderer-url");try{let[i,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),r?this.importWithRetry(r):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=i;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=i[h]}return this.hydrator=u,this.hydrate}catch(i){return this.handleHydrationError(i),()=>{}}},e,this)}catch(r){this.handleHydrationError(r)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="1Nlb3W" prefix="r1" component-url="/SparchoTradingDesk/_astro/LandingPage.CVARr87t.js" component-export="default" renderer-url="/SparchoTradingDesk/_astro/client.DW6xmEpB.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;LandingPage&quot;,&quot;value&quot;:true}" await-children><div class="ck-loading">Loading hub…</div><!--astro:end--></astro-island></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<!-- DEPLOY-STAMP:BEGIN (deploy_common) -->
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="x-build-id" content="1782976948">
+<meta name="x-built-at" content="2026-07-02T07:22:22+00:00">
+<style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
+<script>(function(){
+  var BID="1782976948",BUILT_AT="2026-07-02T07:22:22+00:00";
+  window.__BUILD={id:BID,built_at:BUILT_AT};
+  function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
+  function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
+  if(document.readyState!=='loading')show();else document.addEventListener('DOMContentLoaded',show);
+  if(!BID||BID.indexOf('__')===0)return;
+  try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(v){
+    if(!v||!v.build_id)return; window.__BUILD.live=v;
+    if(String(v.build_id)!==String(BID)){var k='sthealed_'+v.build_id;
+      if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');badge('updating… (cache ~1 min)',true);location.replace(location.pathname+'?v='+v.build_id);}
+      else{badge('updating… (cache ~1 min)',true);}}
+  }).catch(function(){});}catch(_){}
+})();</script>
+<!-- DEPLOY-STAMP:END -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sparcho Trading Desk</title>
+<link rel="stylesheet" href="assets/design/styles.css">
+<style>
+/* ── Hub · Ember & Tide — page styles author against design tokens ONLY.
+     No hardcoded hex below this line; chromatic alphas via color-mix. ── */
+*{ box-sizing:border-box; margin:0; padding:0; }
+a{ color:inherit; text-decoration:none; }
+html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+body{ font-family:var(--font-sans); color:var(--text-body); background:var(--tw-bg-2); font-size:15px; line-height:1.5; position:relative; min-height:100vh; overflow-x:hidden; }
+.mono{ font-family:var(--font-mono); font-variant-numeric:tabular-nums; letter-spacing:-0.01em; }
+
+/* ── DAWN FIELD + DEPTH ── */
+.field{ position:fixed; inset:0; z-index:0; background:var(--tw-bg-grad); }
+.orb{ position:fixed; z-index:0; border-radius:50%; filter:blur(70px); pointer-events:none; will-change:transform; }
+.orb.ember{ top:-12%; left:-6%; width:620px; height:620px; background:radial-gradient(circle, var(--ember-glow), transparent 66%); opacity:0.55; }
+.orb.tide{ top:-16%; right:-8%; width:680px; height:680px; background:radial-gradient(circle, var(--tide-glow), transparent 66%); opacity:0.55; }
+.orb.deep{ bottom:-30%; left:38%; width:760px; height:760px; background:radial-gradient(circle, color-mix(in srgb, var(--tw-ink-2) 10%, transparent), transparent 64%); }
+.floorlines{ position:fixed; left:50%; bottom:-40%; width:200%; height:70%; z-index:0; transform:translateX(-50%) perspective(700px) rotateX(72deg); transform-origin:center top;
+  background-image:linear-gradient(color-mix(in srgb, var(--tide) 12%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ember) 10%, transparent) 1px, transparent 1px); background-size:70px 70px;
+  -webkit-mask-image:radial-gradient(ellipse 44% 60% at 50% 0%, black 4%, transparent 70%); mask-image:radial-gradient(ellipse 44% 60% at 50% 0%, black 4%, transparent 70%); }
+.grain{ position:fixed; inset:0; z-index:0; opacity:0.04; mix-blend-mode:multiply; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+.wrap{ position:relative; z-index:2; max-width:1120px; margin:0 auto; padding:26px 34px 60px; }
+
+/* faint HUD ticks */
+.tick{ position:fixed; z-index:3; width:14px; height:14px; border:1.5px solid color-mix(in srgb, var(--tw-ink) 16%, transparent); pointer-events:none; }
+.tick.tl{ top:18px; left:18px; border-right:none; border-bottom:none; }
+.tick.tr{ top:18px; right:18px; border-left:none; border-bottom:none; }
+.tick.bl{ bottom:18px; left:18px; border-right:none; border-top:none; }
+.tick.br{ bottom:18px; right:18px; border-left:none; border-top:none; }
+
+/* ── HEADER ── */
+header.top{ display:flex; align-items:center; justify-content:space-between; gap:18px; padding-bottom:8px; }
+.brand{ display:flex; align-items:center; gap:12px; }
+.disc{ width:28px; height:28px; border-radius:50%; background:conic-gradient(from 210deg, var(--ember), var(--tw-bg-1) 40%, var(--tide) 75%, var(--ember)); box-shadow:0 2px 14px var(--tide-glow), inset 0 0 6px var(--glass-border); flex-shrink:0; }
+.brand .wm{ font-family:var(--font-display); font-size:20px; font-weight:700; letter-spacing:-0.02em; color:var(--tw-ink); }
+.brand .wm i{ font-style:normal; font-weight:400; color:var(--tw-ink-2); }
+.top-right{ display:flex; align-items:center; gap:14px; }
+.tag-pf{ font-size:12px; color:var(--text-label); }
+.live{ display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--sig-up); background:var(--sig-up-soft); padding:5px 11px; border-radius:999px; }
+.live .ld{ width:6px; height:6px; border-radius:50%; background:var(--sig-up); animation:pulse 2.4s infinite; }
+@keyframes pulse{ 0%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--sig-up) 50%, transparent);} 70%{ box-shadow:0 0 0 5px transparent;} 100%{ box-shadow:0 0 0 0 transparent;} }
+
+/* ── HERO ── */
+.hero{ display:grid; grid-template-columns:1.08fr 0.92fr; gap:34px; align-items:center; padding:34px 0 24px; }
+.hero .eyebrow{ font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.2em; color:var(--tide-deep); margin-bottom:18px; display:flex; align-items:center; gap:9px; }
+.hero .eyebrow::before{ content:""; width:26px; height:1px; background:var(--signature-grad); }
+.hero h1{ font-family:var(--font-display); font-weight:600; font-size:58px; line-height:0.96; letter-spacing:-0.04em; color:var(--tw-ink); }
+.hero h1 .g{ background:var(--signature-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero .lede{ font-size:15.5px; color:var(--text-body); margin-top:20px; max-width:42ch; line-height:1.6; }
+.doctrine{ margin-top:24px; display:flex; gap:8px; flex-wrap:wrap; }
+.chip{ font-size:11.5px; color:var(--tw-ink-2); background:var(--glass); border:1px solid var(--glass-hair); padding:5px 12px; border-radius:999px; backdrop-filter:blur(8px); }
+
+/* hero family panel (glass, dimensional) */
+.famcard{ position:relative; background:var(--glass-strong); border:1px solid var(--glass-border); border-radius:22px; box-shadow:var(--glass-shadow-lift); backdrop-filter:blur(22px) saturate(160%); -webkit-backdrop-filter:blur(22px) saturate(160%); padding:24px 26px; transform:perspective(1600px) rotateY(-5deg) rotateX(2deg); }
+.famcard .fc-lbl{ font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-label); font-weight:700; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.reg-badge{ font-family:var(--font-mono); font-size:9.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:3px 9px; border-radius:999px; color:var(--sig-neutral); background:var(--sig-neutral-soft); white-space:nowrap; }
+.reg-badge.reg-green{ color:var(--sig-up); background:var(--sig-up-soft); }
+.reg-badge.reg-yellow{ color:var(--sig-watch); background:var(--sig-watch-soft); }
+.reg-badge.reg-red{ color:var(--sig-down); background:var(--sig-down-soft); }
+.fc-big{ font-family:var(--font-mono); font-size:46px; font-weight:700; color:var(--tw-ink); line-height:1; margin-top:12px; letter-spacing:-0.025em; }
+.fc-big .cur{ font-size:21px; color:var(--tw-ink-2); font-weight:400; }
+.fc-delta{ display:flex; align-items:baseline; gap:9px; margin-top:11px; flex-wrap:wrap; }
+.fc-delta .v{ font-family:var(--font-mono); font-size:17px; font-weight:700; color:var(--sig-up); }
+.fc-delta .v.neg{ color:var(--sig-down); }
+.fc-delta .t{ font-size:12.5px; color:var(--text-label); }
+/* locked top-line (privacy: figures stay behind each desk's AES-GCM unlock) */
+.lock-pill{ font-family:var(--font-mono); font-size:9.5px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--tw-ink-mute); background:var(--sig-neutral-soft); border:1px solid var(--glass-hair); padding:3px 9px; border-radius:999px; white-space:nowrap; }
+.fc-big.locked, .dc-mv.locked{ color:var(--tw-ink-faint); }
+/* allocation bar — ember (silver) vs tide (equity) */
+.alloc{ margin-top:20px; }
+.alloc .bar{ height:9px; border-radius:6px; overflow:hidden; display:flex; box-shadow:inset 0 0 0 1px var(--glass-hair); background:var(--glass-quiet); }
+.alloc .bar .s-em{ background:linear-gradient(90deg, var(--ember), var(--ember-lum)); }
+.alloc .bar .s-ti{ background:linear-gradient(90deg, var(--tide-lum), var(--tide)); }
+.alloc .leg{ display:flex; justify-content:space-between; margin-top:9px; font-size:11px; }
+.alloc .leg .l{ display:flex; align-items:center; gap:6px; color:var(--text-label); }
+.alloc .leg .l .sw{ width:8px; height:8px; border-radius:2px; }
+.alloc .leg .l .sw.em{ background:var(--ember); } .alloc .leg .l .sw.ti{ background:var(--tide); }
+.alloc .leg .l b{ color:var(--tw-ink-2); font-weight:700; font-family:var(--font-mono); }
+
+/* ── SECTION HEAD ── */
+.sec-h{ display:flex; align-items:baseline; gap:13px; margin:44px 0 18px; }
+.sec-h .n{ font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--tide-deep); }
+.sec-h h2{ font-family:var(--font-display); font-size:23px; font-weight:600; color:var(--tw-ink); letter-spacing:-0.025em; }
+.sec-h .rule{ flex:1; height:1px; background:var(--glass-hair); }
+.sec-h .aside{ font-size:11.5px; color:var(--text-label); }
+
+/* ── DESK CARDS (floating, perspective) ── */
+.desks{ display:grid; grid-template-columns:1fr 1fr; gap:22px; perspective:1800px; }
+.desk-card{ position:relative; background:var(--glass); border:1px solid var(--glass-border); border-radius:18px; backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%); padding:22px 24px; transition:transform .25s, box-shadow .25s; cursor:pointer; }
+.dc-silver{ box-shadow:0 18px 44px color-mix(in srgb, var(--ember-deep) 13%, transparent), 0 0 0 1px var(--ember-soft), 0 0 30px var(--ember-soft); }
+.dc-equity{ box-shadow:0 18px 44px color-mix(in srgb, var(--tide-deep) 13%, transparent), 0 0 0 1px var(--tide-soft), 0 0 30px var(--tide-soft); }
+.desk-card:hover{ transform:translateY(-3px); box-shadow:var(--glass-shadow-lift); }
+.dc-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+.dc-name{ font-family:var(--font-display); font-size:25px; font-weight:600; letter-spacing:-0.025em; color:var(--tw-ink); line-height:1; }
+.dc-sub{ font-size:12px; color:var(--text-label); margin-top:6px; }
+.dc-dom{ font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:3px 9px; border-radius:999px; }
+.dc-silver .dc-dom{ color:var(--ember-deep); background:var(--ember-soft); }
+.dc-equity .dc-dom{ color:var(--tide-deep); background:var(--tide-soft); }
+.dc-body{ display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center; margin-top:20px; }
+.dc-mv{ font-family:var(--font-mono); font-size:33px; font-weight:700; color:var(--tw-ink); line-height:1; letter-spacing:-0.025em; }
+.dc-mv .cur{ font-size:17px; color:var(--tw-ink-2); font-weight:400; }
+.dc-stats{ display:flex; gap:18px; margin-top:13px; }
+.dc-stat .l{ font-size:10px; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-label); font-weight:700; }
+.dc-stat .v{ font-family:var(--font-mono); font-size:15px; font-weight:700; margin-top:2px; color:var(--tw-ink-2); }
+.pos{ color:var(--sig-up); } .neg{ color:var(--sig-down); }
+/* per-desk radial gauge */
+.gauge{ position:relative; width:84px; height:84px; }
+.gauge .gv{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.gauge .gv .p{ font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--tw-ink); }
+.gauge .gv .pl{ font-size:8px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint); margin-top:1px; }
+.dc-foot{ display:flex; align-items:center; justify-content:space-between; margin-top:20px; padding-top:14px; border-top:1px solid var(--glass-hair); }
+.dc-refresh{ font-size:11.5px; color:var(--text-label); display:flex; align-items:center; gap:6px; }
+.dc-refresh .rd{ width:5px; height:5px; border-radius:50%; }
+.dc-silver .rd{ background:var(--ember); } .dc-equity .rd{ background:var(--tide); }
+.dc-refresh .rd.stale{ background:var(--sig-watch); }
+.open-aff{ display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; }
+.dc-silver .open-aff{ color:var(--ember-deep); } .dc-equity .open-aff{ color:var(--tide-deep); }
+.open-aff .arrow{ transition:transform .2s; }
+.desk-card:hover .open-aff .arrow{ transform:translateX(3px); }
+
+.browse{ margin-top:16px; display:flex; align-items:center; justify-content:center; gap:8px; font-size:13px; color:var(--text-label); background:var(--glass-quiet); border:1px solid var(--glass-hair); border-radius:12px; padding:13px; backdrop-filter:blur(8px); flex-wrap:wrap; }
+.browse a{ color:var(--tide-deep); font-weight:600; }
+
+/* ── STATUS + ACTIVITY ── */
+.two-col{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.panel{ background:var(--glass); border:1px solid var(--glass-border); border-radius:16px; box-shadow:var(--glass-shadow); backdrop-filter:blur(16px) saturate(150%); -webkit-backdrop-filter:blur(16px) saturate(150%); padding:19px 21px; }
+.panel .ph{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:13px; gap:12px; }
+.panel .ph h3{ font-family:var(--font-display); font-size:17px; font-weight:600; color:var(--tw-ink); white-space:nowrap; letter-spacing:-0.02em; }
+.panel .ph .meta{ font-size:10.5px; color:var(--text-label); text-align:right; }
+.ev{ display:grid; grid-template-columns:auto 1fr auto; gap:11px; padding:11px 0; border-bottom:1px solid var(--glass-hair); align-items:start; }
+.ev:last-child{ border-bottom:none; }
+.ev .body{ min-width:0; }
+.ev .dot{ width:9px; height:9px; border-radius:50%; margin-top:4px; }
+.ev .dot.clear{ background:var(--sig-up); }
+.ev .dot.warn{ background:var(--sig-watch); }
+.ev .dot.alert{ background:var(--sig-down); }
+.ev .body .sub{ font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tw-ink-2); font-weight:700; }
+.ev .body .txt{ font-size:13px; color:var(--text-body); margin-top:2px; line-height:1.45; }
+.ev .body .txt b{ color:var(--tw-ink-2); font-weight:600; }
+.ev .right{ text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
+.ev .when{ font-size:11px; color:var(--text-faint); font-family:var(--font-mono); white-space:nowrap; }
+.outcome{ font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; padding:2px 7px; border-radius:6px; white-space:nowrap; }
+.outcome.fixed{ color:var(--sig-up); background:var(--sig-up-soft); }
+.outcome.clear{ color:var(--tw-ink-mute); background:var(--sig-neutral-soft); }
+.outcome.pending{ color:var(--sig-watch); background:var(--sig-watch-soft); }
+.outcome.failed{ color:var(--sig-down); background:var(--sig-down-soft); }
+.feed-empty{ font-size:12px; color:var(--text-faint); font-style:italic; padding:8px 0; }
+.act{ display:grid; grid-template-columns:auto 1fr auto; gap:11px; padding:10px 0; border-bottom:1px solid var(--glass-hair); align-items:baseline; }
+.act:last-child{ border-bottom:none; }
+.act .msg{ min-width:0; font-size:12.5px; color:var(--text-body); line-height:1.4; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.act .msg .src{ font-family:var(--font-mono); font-size:11px; color:var(--tide-deep); }
+.act .who{ font-size:13px; width:18px; text-align:center; }
+.act .when{ font-size:11px; color:var(--text-faint); font-family:var(--font-mono); white-space:nowrap; }
+
+footer{ margin-top:48px; padding-top:20px; border-top:1px solid var(--glass-hair); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--text-faint); }
+footer .mono{ color:var(--tw-ink-mute); }
+
+/* ── MOTION DISCIPLINE ── */
+@media (prefers-reduced-motion: reduce){
+  .live .ld{ animation:none; }
+  .orb{ transform:none !important; }
+}
+
+/* ── MOBILE ── */
+@media (max-width:780px){
+  .wrap{ padding:18px 18px 44px; }
+  header.top{ flex-wrap:wrap; gap:10px; }
+  .hero{ grid-template-columns:1fr; gap:26px; padding:18px 0 8px; }
+  .hero h1{ font-size:42px; }
+  .famcard{ transform:none; }
+  .fc-big{ font-size:40px; }
+  .desks{ grid-template-columns:1fr; }
+  .two-col{ grid-template-columns:1fr; }
+  .floorlines{ display:none; }
+}
+</style>
+</head>
+<body class="theme-twilight">
+  <!-- PEAK GATE: site-wide curtain (sessionStorage; bypassable; holdings remain AES-GCM) -->
+  <div id="peakgate">
+    <div class="pg-card">
+      <div class="pg-disc"></div>
+      <div class="pg-eye">SPARCHO &middot; TRADING DESK</div>
+      <div class="pg-h">Private family book</div>
+      <div class="pg-sub">Enter the desk password to continue.</div>
+      <form class="pg-form" id="pg-form">
+        <input id="pg-input" type="password" placeholder="password" autocomplete="off" spellcheck="false">
+        <button type="submit">Enter &rarr;</button>
+      </form>
+      <div class="pg-msg" id="pg-msg"></div>
+      <div class="pg-foot">[ curtain &middot; per-session ]</div>
+    </div>
+  </div>
+  <style>
+  html.pg-open,body.pg-open{overflow:hidden!important}
+  #peakgate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(62% 52% at 50% 34%,#16131b,#080709 72%,#050406);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:1;transition:opacity .55s ease}
+  #peakgate.hide{opacity:0;pointer-events:none}
+  #peakgate .pg-card{position:relative;width:min(92vw,394px);padding:38px 34px 24px;border-radius:18px;text-align:center;background:linear-gradient(158deg,rgba(255,255,255,.055),rgba(255,255,255,.004) 42%),rgba(15,14,19,.74);border:1px solid rgba(255,255,255,.09);box-shadow:0 34px 90px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.08);-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%)}
+  #peakgate .pg-disc{width:34px;height:34px;border-radius:50%;margin:0 auto 16px;background:radial-gradient(circle at 32% 28%,#fbe9bf,#d8b25a 52%,#8a6a22 120%);box-shadow:0 0 22px rgba(216,178,90,.5)}
+  #peakgate .pg-eye{font-family:'Space Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.22em;color:#8d8472;text-transform:uppercase}
+  #peakgate .pg-h{font-family:'Space Grotesk',system-ui,sans-serif;font-size:21px;font-weight:700;color:#f3ece0;margin:11px 0 4px;letter-spacing:-.02em}
+  #peakgate .pg-sub{font-family:'Space Grotesk',system-ui,sans-serif;font-size:12.5px;color:#9a93a6;margin-bottom:20px}
+  #peakgate .pg-form{display:flex;gap:8px}
+  #peakgate .pg-form input{flex:1;min-width:0;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.13);border-radius:11px;padding:11px 14px;color:#f3ece0;font-size:14px;font-family:'Space Grotesk',system-ui,sans-serif;outline:none;transition:border-color .25s,box-shadow .25s}
+  #peakgate .pg-form input:focus{border-color:rgba(216,178,90,.6);box-shadow:0 0 0 3px rgba(216,178,90,.13)}
+  #peakgate .pg-form button{background:linear-gradient(135deg,#f0d384,#b88f33);border:none;border-radius:11px;padding:0 16px;color:#1a1408;font-weight:700;font-size:13px;font-family:'Space Grotesk',system-ui,sans-serif;cursor:pointer;white-space:nowrap;transition:filter .2s,transform .08s}
+  #peakgate .pg-form button:hover{filter:brightness(1.08)}
+  #peakgate .pg-form button:active{transform:translateY(1px)}
+  #peakgate .pg-msg{height:15px;margin-top:12px;font-family:'Space Mono',monospace;font-size:11px;color:#e8859a;letter-spacing:.02em}
+  #peakgate .pg-foot{margin-top:13px;font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:#5d5648;text-transform:uppercase}
+  @keyframes pg-shake{0%,100%{transform:translateX(0)}18%,58%{transform:translateX(-7px)}38%,78%{transform:translateX(7px)}}
+  #peakgate.bad .pg-card{animation:pg-shake .4s}
+  .deskswitch{display:flex;gap:2px;align-items:center;background:var(--glass);border:1px solid var(--glass-hair);border-radius:999px;padding:3px}
+  .deskswitch .ds{font-family:var(--font-sans);font-size:11.5px;font-weight:700;padding:6px 13px;border-radius:999px;color:var(--tw-ink-mute);text-decoration:none;white-space:nowrap;transition:color .25s,background .25s,box-shadow .25s}
+  .deskswitch .ds:hover{color:var(--tw-ink)}
+  .deskswitch .ds.on{color:var(--tw-ink);background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--glass-hair)}
+  .deskswitch .ds[href*="silver"]:hover{color:var(--ember)}
+  .deskswitch .ds[href*="stocks"]:hover{color:var(--tide)}
+  @media(max-width:640px){header.top{flex-wrap:wrap}.deskswitch{order:3}}
+  </style>
+  <script>
+  (function(){var K='std_peak_ok';var g=document.getElementById('peakgate');
+    try{if(sessionStorage.getItem(K)==='1'){if(g)g.classList.add('hide');return;}}catch(e){}
+    document.documentElement.classList.add('pg-open');
+    var f=document.getElementById('pg-form'),i=document.getElementById('pg-input'),m=document.getElementById('pg-msg');
+    function ok(){try{sessionStorage.setItem(K,'1');}catch(e){}document.documentElement.classList.remove('pg-open');g.classList.add('hide');setTimeout(function(){if(g&&g.parentNode)g.parentNode.removeChild(g);},650);}
+    if(f)f.addEventListener('submit',function(e){e.preventDefault();
+      if((i.value||'').trim().toLowerCase()==='peak'){if(m)m.textContent='';ok();}
+      else{if(m)m.textContent='incorrect — try again';g.classList.add('bad');i.select();setTimeout(function(){g.classList.remove('bad');},420);}});
+    if(i)setTimeout(function(){i.focus();},60);
+  })();
+  </script>
+
+  <div class="field"></div>
+  <div class="orb ember parallax" data-d="0.5"></div>
+  <div class="orb tide parallax" data-d="0.7"></div>
+  <div class="orb deep parallax" data-d="0.3"></div>
+  <div class="floorlines"></div>
+  <div class="grain"></div>
+  <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="disc" aria-hidden="true"></div>
+        <div class="wm">Sparcho <i>Trading Desk</i></div>
+      </div>
+      <nav class="deskswitch" aria-label="Switch desk">
+        <a class="ds" href="silver/">Silver</a>
+        <a class="ds" href="stocks/">Equity</a>
+        <a class="ds on" href="./">Hub</a>
+      </nav>
+      <div class="top-right">
+        <span class="tag-pf">private family book</span>
+        <span class="live"><span class="ld"></span>Live</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">The family desk · at a glance</div>
+        <h1>Two books.<br>One <span class="g">discipline.</span></h1>
+        <p class="lede">Silver conviction and an India-equity screener, read as one book. The top line lives here; the detail stays locked on each desk.</p>
+        <div class="doctrine">
+          <span class="chip">Light-forward</span>
+          <span class="chip">60·30·10</span>
+          <span class="chip">Signal-disciplined</span>
+          <span class="chip">No fabricated numbers</span>
+        </div>
+      </div>
+      <div class="famcard">
+        <div class="fc-lbl"><span>Family book · market value</span><span class="reg-badge" id="reg-badge">Regime · —</span></div>
+        <div class="fc-big locked" id="fam-fig"><span class="cur">Rs </span>···</div>
+        <div class="fc-delta" id="fam-delta"><span class="lock-pill">Top-line · locked</span><span class="t">figures unlock on each desk (AES-GCM)</span></div>
+        <div class="alloc" id="fam-alloc" hidden>
+          <div class="bar"><div class="s-em" id="alloc-em" style="width:0%"></div><div class="s-ti" id="alloc-ti" style="width:0%"></div></div>
+          <div class="leg">
+            <span class="l"><span class="sw em"></span>Silver <b id="leg-em">—</b></span>
+            <span class="l"><span class="sw ti"></span>Equity <b id="leg-ti">—</b></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sec-h"><span class="n">01</span><h2>The desks</h2><span class="rule"></span><span class="aside">live market value · unrealized</span></div>
+    <div class="desks">
+      <a class="desk-card dc-silver" href="silver/">
+        <div class="dc-head">
+          <div><div class="dc-name">Silver Desk</div><div class="dc-sub">Family SilverBees · Acct A · Acct B · Acct C</div></div>
+          <span class="dc-dom">Commodity</span>
+        </div>
+        <div class="dc-body">
+          <div>
+            <div class="dc-mv locked" id="s-mv"><span class="cur">Rs </span>···</div>
+            <div class="dc-stats">
+              <div class="dc-stat"><div class="l" id="s-stat1-l">Unrealized</div><div class="v" id="s-stat1-v">locked</div></div>
+              <div class="dc-stat"><div class="l" id="s-stat2-l">XAG spot</div><div class="v" id="s-stat2-v">—</div></div>
+            </div>
+          </div>
+          <div class="gauge" title="unrealized P&amp;L · ring full-scale = ±15%">
+            <svg viewBox="0 0 84 84" fill="none"><circle cx="42" cy="42" r="34" stroke="var(--glass-hair)" stroke-width="6"/><circle id="s-gauge-arc" cx="42" cy="42" r="34" stroke="var(--ember)" stroke-width="6" stroke-linecap="round" stroke-dasharray="214" stroke-dashoffset="214" transform="rotate(-90 42 42)"/></svg>
+            <div class="gv"><span class="p" id="s-gauge-p">—</span><span class="pl">unreal</span></div>
+          </div>
+        </div>
+        <div class="dc-foot"><span class="dc-refresh"><span class="rd" id="s-rd"></span><span id="s-refresh">refresh —</span></span><span class="open-aff">Open desk <span class="arrow">→</span></span></div>
+      </a>
+
+      <a class="desk-card dc-equity" href="stocks/">
+        <div class="dc-head">
+          <div><div class="dc-name">Equity Desk</div><div class="dc-sub" id="e-sub">India screener · SPARCHO-HDFC book</div></div>
+          <span class="dc-dom">Equity</span>
+        </div>
+        <div class="dc-body">
+          <div>
+            <div class="dc-mv locked" id="e-mv"><span class="cur">Rs </span>···</div>
+            <div class="dc-stats">
+              <div class="dc-stat"><div class="l">Unrealized</div><div class="v" id="e-stat1-v">locked</div></div>
+              <div class="dc-stat"><div class="l" id="e-stat2-l">Held</div><div class="v" id="e-stat2-v">—</div></div>
+            </div>
+          </div>
+          <div class="gauge" title="unrealized P&amp;L · ring full-scale = ±15%">
+            <svg viewBox="0 0 84 84" fill="none"><circle cx="42" cy="42" r="34" stroke="var(--glass-hair)" stroke-width="6"/><circle id="e-gauge-arc" cx="42" cy="42" r="34" stroke="var(--tide)" stroke-width="6" stroke-linecap="round" stroke-dasharray="214" stroke-dashoffset="214" transform="rotate(-90 42 42)"/></svg>
+            <div class="gv"><span class="p" id="e-gauge-p">—</span><span class="pl">unreal</span></div>
+          </div>
+        </div>
+        <div class="dc-foot"><span class="dc-refresh"><span class="rd" id="e-rd"></span><span id="e-refresh">refresh —</span></span><span class="open-aff">Open desk <span class="arrow">→</span></span></div>
+      </a>
+    </div>
+    <div class="browse">Browse all <a href="stocks/ticker/">per-ticker research pages →</a> <span id="browse-count">&nbsp;</span></div>
+
+    <div class="sec-h"><span class="n">02</span><h2>System &amp; activity</h2><span class="rule"></span><span class="aside">self-healing watchdog · last builds</span></div>
+    <div class="two-col">
+      <div class="panel">
+        <div class="ph"><h3>System status</h3><span class="meta" id="status-meta">self-healing · spotted → fixed · no email</span></div>
+        <div id="status-list"><div class="feed-empty">loading watchdog feed…</div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><h3>Recent activity</h3><span class="meta">latest commits · <a href="https://github.com/sparcho/SparchoTradingDesk/commits/main" target="_blank" rel="noopener" style="color:var(--tide-deep)">main</a></span></div>
+        <div id="activity-list"><div class="feed-empty">fetching commits…</div></div>
+      </div>
+    </div>
+
+    <footer>
+      <span>Sparcho Trading Desk · private family book · twilight doctrine v2 · Ember &amp; Tide · <a href="system/map/" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor;">system map</a></span>
+      <span class="mono">doctrine V-31/V-32/V-33 · F107 silver + F108 equity · 🔒 detail behind AES-GCM on each desk</span>
+    </footer>
+  </div>
+
+<script>
+"use strict";
+/* Hub runtime — data-driven, no fabrication (V-01/V-26), no browser storage.
+   All figures bind from the two aggregates; privacy-locked fields render
+   an explicit LOCKED state, never a silent fallback or fake number. */
+window.__renderErrors = [];
+
+function esc(s){ return String(s ?? "").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function fmtINR(n){ /* returns HTML: Rs (not the rupee glyph), mono digits, Cr/L shorthand */
+  if (n == null || isNaN(n)) return null;
+  const a = Math.abs(n), sign = n < 0 ? "−" : "";
+  if (a >= 1e7)  return '<span class="cur">Rs </span>' + sign + (a/1e7).toFixed(2) + '<span class="cur"> Cr</span>';
+  if (a >= 1e5)  return '<span class="cur">Rs </span>' + sign + (a/1e5).toFixed(2) + '<span class="cur"> L</span>';
+  return '<span class="cur">Rs </span>' + sign + Math.round(a).toLocaleString("en-IN");
+}
+function fmtINRText(n){
+  if (n == null || isNaN(n)) return "—";
+  const a = Math.abs(n), sign = n < 0 ? "−" : "";
+  if (a >= 1e7) return "Rs " + sign + (a/1e7).toFixed(2) + " Cr";
+  if (a >= 1e5) return "Rs " + sign + (a/1e5).toFixed(2) + " L";
+  return "Rs " + sign + Math.round(a).toLocaleString("en-IN");
+}
+function fmtPct(n, d){ d = (d==null)?2:d; return (n==null||isNaN(n)) ? "—" : (n>=0?"+":"−") + Math.abs(Number(n)).toFixed(d) + "%"; }
+function ago(iso){
+  if (!iso) return "—";
+  const t = new Date(iso).getTime(); if (isNaN(t)) return "—";
+  const s = Math.floor((Date.now()-t)/1000);
+  if (s < 60) return s + "s ago";
+  if (s < 3600) return Math.floor(s/60) + "m ago";
+  if (s < 86400) return Math.floor(s/3600) + "h ago";
+  return Math.floor(s/86400) + "d ago";
+}
+function agoMin(iso){ const t = iso ? new Date(iso).getTime() : NaN; return isNaN(t) ? null : (Date.now()-t)/60000; }
+function setGauge(arcId, pId, pct){
+  const arc = document.getElementById(arcId), p = document.getElementById(pId);
+  if (!arc || !p) return;
+  if (pct == null || isNaN(pct)) { arc.setAttribute("stroke-dashoffset","214"); p.textContent = "—"; p.className = "p"; return; }
+  const C = 214, fill = Math.min(Math.abs(pct)/15, 1);            /* ring full-scale = ±15% */
+  arc.setAttribute("stroke-dashoffset", String(Math.round(C - C*fill)));
+  p.textContent = fmtPct(pct, 1);
+  p.className = "p " + (pct >= 0 ? "pos" : "neg");
+}
+function setRefresh(rdId, txtId, iso, sc){
+  const rd = document.getElementById(rdId), tx = document.getElementById(txtId);
+  const m = agoMin(iso);
+  const stItems = (sc && sc.any_stale) ? (sc.items||[]).filter(i=>i.is_stale) : [];   /* F260702: desk staleness contract */
+  const stale = (m != null && m > 120) || stItems.length > 0;
+  if (tx) tx.textContent = iso ? ("refreshed " + ago(iso) + (stale ? (" · stale" + (stItems.length?(" ("+stItems.length+")"):"")) : "")) : "refresh —";
+  if (rd){ if (stale) rd.classList.add("stale"); else rd.classList.remove("stale"); }  /* amber = watch/stale, per signal doctrine */
+  if (rd && stItems.length) rd.title = stItems.map(i=>i.label+': '+i.reason).join(" · ");
+}
+
+function renderLanding(P){
+  try {
+    const s = P.silver || {}, q = P.equity || {};
+    /* ---- silver card ---- */
+    const ft = s.family_totals || {};
+    const sMV = ft.current_value_inr ?? ft.market_value_inr ?? null;
+    const sInv = ft.invested_inr ?? null;
+    const sUnrealPct = (sMV != null && sInv) ? ((sMV - sInv)/sInv*100) : null;
+    const sLocked = (sMV == null);
+    const sMvEl = document.getElementById("s-mv");
+    if (!sLocked) { sMvEl.innerHTML = fmtINR(sMV); sMvEl.classList.remove("locked"); }
+    const s1 = document.getElementById("s-stat1-v");
+    if (sUnrealPct != null) { s1.textContent = fmtPct(sUnrealPct, 1); s1.className = "v " + (sUnrealPct >= 0 ? "pos" : "neg"); }
+    else { s1.textContent = "locked"; s1.className = "v"; }
+    const xag = (s.current_market && s.current_market.xagusd) ?? s.live_xagusd_used_for_ladders ?? null;
+    document.getElementById("s-stat2-v").textContent = (typeof xag === "number") ? ("$" + xag.toFixed(2)) : "—";
+    setGauge("s-gauge-arc","s-gauge-p", sUnrealPct);
+    setRefresh("s-rd","s-refresh", s.emitted_at_utc || (s.meta && s.meta.last_synced), s.staleness);
+
+    /* ---- equity card ---- */
+    const tot = (q.book && q.book.totals) || {};
+    const eMV = tot.current_value ?? null;
+    const eUnreal = tot.unrealized_pnl_pct ?? null;
+    const eLocked = (eMV == null);
+    const eMvEl = document.getElementById("e-mv");
+    if (!eLocked) { eMvEl.innerHTML = fmtINR(eMV); eMvEl.classList.remove("locked"); }
+    const e1 = document.getElementById("e-stat1-v");
+    if (eUnreal != null) { e1.textContent = fmtPct(eUnreal, 1); e1.className = "v " + (eUnreal >= 0 ? "pos" : "neg"); }
+    else { e1.textContent = "locked"; e1.className = "v"; }
+    const held = Array.isArray(q.held) ? q.held : [];
+    if (eLocked) {
+      document.getElementById("e-stat2-l").textContent = "Held";
+      document.getElementById("e-stat2-v").textContent = held.length ? (held.length + " names") : "—";
+    } else {
+      document.getElementById("e-stat2-l").textContent = "Today";
+      const day = tot.change_today_pct ?? null;
+      const e2 = document.getElementById("e-stat2-v");
+      e2.textContent = fmtPct(day, 1); e2.className = "v " + ((day ?? 0) >= 0 ? "pos" : "neg");
+    }
+    setGauge("e-gauge-arc","e-gauge-p", eUnreal);
+    setRefresh("e-rd","e-refresh", q.emitted_at_utc || (q.meta && q.meta.last_price_refresh), q.staleness);
+    /* sub-line: held count + dominant cluster (public ops metadata only) */
+    if (held.length) {
+      const counts = {};
+      for (const h of held) { const c = h.cluster || h.sector; if (c) counts[c] = (counts[c]||0)+1; }
+      const top = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+      document.getElementById("e-sub").textContent =
+        "India screener · " + held.length + " held" + (top ? " · " + top[0] + " lean" : "");
+    }
+
+    /* ---- family book (only when BOTH desks publish totals; else stays locked) ---- */
+    if (!sLocked && !eLocked) {
+      const famMV = sMV + eMV;
+      const famEl = document.getElementById("fam-fig");
+      famEl.innerHTML = fmtINR(famMV); famEl.classList.remove("locked");
+      const eInv = (eUnreal != null) ? eMV/(1+eUnreal/100) : null;
+      const unrealAbs = (sInv != null && eInv != null) ? (famMV - sInv - eInv) : null;
+      const unrealPct = (unrealAbs != null && (sInv+eInv)) ? unrealAbs/(sInv+eInv)*100 : null;
+      if (unrealAbs != null) {
+        document.getElementById("fam-delta").innerHTML =
+          '<span class="v ' + (unrealAbs>=0?"":"neg") + '">' + (unrealAbs>=0?"+":"−") + esc(fmtINRText(Math.abs(unrealAbs))) + '</span>' +
+          '<span class="t">unrealized · <b style="color:var(' + (unrealAbs>=0?"--sig-up":"--sig-down") + ')">' + fmtPct(unrealPct,1) + '</b> across two desks</span>';
+      }
+      const alloc = document.getElementById("fam-alloc");
+      alloc.hidden = false;
+      const emW = famMV ? (sMV/famMV*100) : 0;
+      document.getElementById("alloc-em").style.width = emW.toFixed(1) + "%";
+      document.getElementById("alloc-ti").style.width = (100-emW).toFixed(1) + "%";
+      document.getElementById("leg-em").textContent = fmtINRText(sMV);
+      document.getElementById("leg-ti").textContent = fmtINRText(eMV);
+    }
+
+    /* ---- regime badge (public, from equity aggregate; PENDING if absent) ---- */
+    const rg = q.regime || {};
+    const badge = document.getElementById("reg-badge");
+    if (rg.zone) {
+      const z = String(rg.zone).toUpperCase();
+      badge.textContent = "Regime · " + z.charAt(0) + z.slice(1).toLowerCase() + (rg.score != null ? " " + rg.score : "");
+      badge.className = "reg-badge " + ({GREEN:"reg-green", YELLOW:"reg-yellow", RED:"reg-red"}[z] || "");
+    } else { badge.textContent = "Regime · pending"; }
+
+    /* ---- browse line: universe count (public) ---- */
+    const uc = q.screeners && q.screeners.universe_count;
+    document.getElementById("browse-count").textContent =
+      uc ? ("· " + uc + " names tracked across four lenses") : "";
+
+    /* ---- system-status watchdog feed (ops metadata only) ---- */
+    const wrap = document.getElementById("status-list");
+    const events = (P.status && Array.isArray(P.status.events)) ? P.status.events : null;
+    if (events === null) {
+      wrap.innerHTML = '<div class="feed-empty">watchdog feed unavailable</div>';
+    } else if (!events.length) {
+      wrap.innerHTML = '<div class="feed-empty">no events yet — watchdog will post on its next run</div>';
+    } else {
+      wrap.innerHTML = "";
+      for (const e of events.slice(0, 8)) {
+        const lvl = e.level || ({"🟢":"clear","🟡":"warn","🔴":"alert"}[e.severity] || "warn");
+        const oc = ["fixed","clear","pending","failed"].includes(e.outcome) ? e.outcome : "pending";
+        const sub = esc(e.subsystem), spotted = esc(e.spotted), action = esc(e.action_taken);
+        const txt = (sub === "heartbeat")
+          ? spotted
+          : spotted + (action ? ' — <b>' + action + '</b>' : '');
+        const row = document.createElement("div");
+        row.className = "ev";
+        row.innerHTML =
+          '<span class="dot ' + lvl + '"></span>' +
+          '<div class="body"><div class="sub">' + sub + '</div>' +
+          '<div class="txt">' + txt + '</div></div>' +
+          '<div class="right"><span class="outcome ' + oc + '">' + esc(oc) + '</span>' +
+          '<span class="when">' + ago(e.ts_utc || e.ts) + '</span></div>';
+        wrap.appendChild(row);
+      }
+      const meta = document.getElementById("status-meta");
+      if (meta && P.status.updated_at_utc) meta.textContent = "updated " + ago(P.status.updated_at_utc) + " · spotted → fixed · no email";
+    }
+
+    /* ---- recent commits ---- */
+    const aWrap = document.getElementById("activity-list");
+    if (!Array.isArray(P.commits)) {
+      aWrap.innerHTML = '<div class="feed-empty">unable to fetch recent commits</div>';
+    } else {
+      aWrap.innerHTML = "";
+      for (const c of P.commits.slice(0, 8)) {
+        const msg = esc(((c.commit && c.commit.message) || "").split("\n")[0]);
+        const author = (c.commit && c.commit.author && c.commit.author.name) || (c.author && c.author.login) || "—";
+        const isBot = /\[bot\]|github-actions/i.test(author);
+        const row = document.createElement("div");
+        row.className = "act";
+        row.innerHTML =
+          '<span class="who">' + (isBot ? "🤖" : "👤") + '</span>' +
+          '<div class="msg" title="' + msg + '">' + msg + '</div>' +
+          '<span class="when">' + ago(c.commit && c.commit.author && c.commit.author.date) + '</span>';
+        aWrap.appendChild(row);
+      }
+      if (!P.commits.length) aWrap.innerHTML = '<div class="feed-empty">no recent commits</div>';
+    }
+  } catch (err) {
+    window.__renderErrors.push(String(err && err.stack || err));
+    console.error("renderLanding:", err);
+  }
+}
+window.renderLanding = renderLanding;
+
+/* ---- boot: fetch all feeds (each guarded), render once ---- */
+window.__landingDone = (async function(){
+  async function j(url){ try { const r = await fetch(url, {cache:"no-store"}); return r.ok ? await r.json() : null; } catch(e){ console.error(url, e); return null; } }
+  const results = await Promise.all([
+    j("silver/data/silver_dashboard_aggregate.json"),
+    j("stocks/data/equity_dashboard_aggregate.json"),
+    j("status/notifications.json"),
+    j("https://api.github.com/repos/sparcho/SparchoTradingDesk/commits?per_page=8"),
+  ]);
+  renderLanding({ silver: results[0], equity: results[1], status: results[2], commits: results[3] });
+})();
+
+/* ---- orb parallax — decorative only; honors prefers-reduced-motion ---- */
+(function(){
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const layers = [].slice.call(document.querySelectorAll(".parallax"));
+  if (!layers.length) return;
+  let tx=0, ty=0, cx=0, cy=0, running=true;
+  window.addEventListener("mousemove", function(e){
+    tx = (e.clientX/window.innerWidth - 0.5); ty = (e.clientY/window.innerHeight - 0.5);
+  });
+  document.addEventListener("visibilitychange", function(){ running = !document.hidden; if (running) tick(); });
+  function tick(){
+    if (!running) return;
+    cx += (tx-cx)*0.05; cy += (ty-cy)*0.05;
+    for (const l of layers){ const d = parseFloat(l.dataset.d) || 0.4; l.style.transform = "translate(" + (cx*d*40) + "px," + (cy*d*34) + "px)"; }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>
