@@ -19,6 +19,7 @@
   .pos{ color:var(--pos); } .neg{ color:var(--neg); } .watch{ color:var(--watch); }
 
   #gl{ position:fixed; inset:0; z-index:0; }
+  body.solo #gl{ display:none; }   /* visual-upgrade §1.A: drop the 3D showpiece in the working deck; calm .scene gradient backdrop */
   .scene{ position:fixed; inset:0; z-index:-1; transition:background .6s; }
   body.dark .scene{ background:radial-gradient(72% 60% at 50% 30%, #1a150e, var(--bg1) 58%, var(--deep) 100%); }
   body.light .scene{ background:radial-gradient(74% 62% at 50% 28%, #fdfdfe, #e8ecf1 54%, #d7dde5 100%); }
@@ -367,6 +368,19 @@
   .ppsrc{ font-family:var(--font-mono); font-size:8.5px; color:var(--faint); }
   .pp-banner{ display:flex; align-items:center; gap:7px; background:var(--watch-soft); border:1px solid var(--watch); border-radius:8px; padding:7px 10px; font-size:10px; color:var(--ink2); margin-top:10px; } .pp-banner b{ color:var(--ink); }
   .ppanchor{ font-size:9.5px; color:var(--mut); margin-top:8px; line-height:1.45; }
+  /* ── S1 floor-proximity band (visual-upgrade §3.1 · replaces the radial floor gauge) ── */
+  .fpb-ends{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:10.5px; font-weight:700; margin:8px 2px 12px; }
+  .fpb-end.neg{ color:var(--neg); } .fpb-end.pos{ color:var(--pos); }
+  .fpb-wrap{ position:relative; padding:26px 6px 40px; }
+  .fpb-track{ position:relative; height:18px; border-radius:9px; background:linear-gradient(90deg, var(--neg-soft), var(--hair) 22%, var(--hair) 74%, var(--pos-soft)); border:1px solid var(--hair); }
+  .fpb-tier{ position:absolute; top:-1px; bottom:-1px; background:rgba(216,178,90,0.26); border-left:1.5px solid var(--acc); border-right:1.5px solid var(--acc); border-radius:2px; }
+  .fpb-spot{ position:absolute; top:50%; transform:translate(-50%,-50%); z-index:4; }
+  .fpb-dot{ display:block; width:15px; height:15px; border-radius:50%; background:var(--acc); box-shadow:0 0 11px var(--acc); border:2px solid var(--deep); }
+  .fpb-splab{ position:absolute; bottom:16px; left:50%; transform:translateX(-50%); white-space:nowrap; font-family:var(--font-mono); font-size:10px; font-weight:700; color:var(--ink); }
+  .fpb-ticks{ position:absolute; left:6px; right:6px; top:44px; height:0; }
+  .fpb-tick{ position:absolute; transform:translateX(-50%); text-align:center; }
+  .fpb-tick .fpb-tl{ display:block; width:1px; height:7px; background:var(--faint); margin:0 auto 3px; }
+  .fpb-tick .fpb-tx{ display:block; font-family:var(--font-mono); font-size:8px; color:var(--faint); white-space:nowrap; }
 </style>
 </head>
 <body class="dark locked">
@@ -626,7 +640,7 @@
       var mx=0,my=0,cx=0,cy=0; window.addEventListener('mousemove',function(e){ mx=(e.clientX/window.innerWidth-0.5); my=(e.clientY/window.innerHeight-0.5); });
       var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; var t0=performance.now(); var hidden=false;
       document.addEventListener('visibilitychange',function(){ hidden=document.hidden; });
-      function loop(){ requestAnimationFrame(loop); if(hidden) return; var t=(performance.now()-t0)/1000; cx+=(mx-cx)*0.05; cy+=(my-cy)*0.05;
+      function loop(){ requestAnimationFrame(loop); if(hidden||document.body.classList.contains('solo')) return; var t=(performance.now()-t0)/1000; cx+=(mx-cx)*0.05; cy+=(my-cy)*0.05;
         if(!reduce){ grp.rotation.y+=0.0026; grp.rotation.x=Math.sin(t*0.25)*0.13+cy*0.34; grp.rotation.z=cx*0.15; shell.rotation.y-=0.0016; core.rotation.y-=0.0042; grp.position.y=Math.sin(t*0.6)*0.07; }
         camera.position.x=cx*0.8; camera.position.y=-cy*0.6; camera.lookAt(0,0,0); renderer.render(scene,camera); }
       loop();
@@ -886,7 +900,20 @@
       var nodes=items.map(function(h){ var sn=(h.sentiment||'neutral'); var lab=esc(String(h.source||'news').slice(0,12)); var tip=esc(String(h.headline||'').slice(0,220)); var sub=esc(String(h.source||'')+' · '+_dm(h.date)); return '<div class="node '+esc(sn)+'" data-tip="'+tip+'" data-tipsub="'+sub+'"><div class="nlab">'+lab+'</div><div class="dotrow"><div class="dotn"></div></div><div class="nd">'+esc(_dm(h.date))+'</div></div>'; }).join('');
       return '<div class="card" style="margin-top:14px"><div class="c-lbl"><span class="d"></span>News timeline · sentiment'+HT('Recent silver-relevant headlines, coloured good/bad for price.')+AB(items[items.length-1].date)+'</div><div class="htl"><div class="track">'+nodes+'</div></div></div>';
     })();
-    setFace('z-macro',_heroK+'<div class="mrow2" style="margin-top:14px">'+leftCard+srCard+'</div>'+(window.silverMacroModule?(window.silverMacroModule().pub||''):''));
+    // ── S1 floor-proximity BAND (dominant · plan §3.1: a wide band reads faster than the radial gauge) ──
+    var _bx=function(p){ return Math.max(0,Math.min(100,(p-GLO)/(GHI-GLO)*100)); };
+    var _bandMarks=[{p:GLO,l:'$'+GLO+' stop'},{p:59,l:'$59'},{p:65,l:'$65'},{p:69,l:'$69'},{p:72,l:'$72'},{p:78,l:'$78 range top'},{p:GHI,l:'$'+GHI+' no-floor'}];
+    var _spotPct=xp!=null?_bx(xp):null;
+    var _tierLo=tier?tier.band_low:null, _tierHi=tier?(tier.band_high||GHI):null;
+    var _ticks=_bandMarks.map(function(m){ return '<span class="fpb-tick" style="left:'+_bx(m.p).toFixed(1)+'%"><span class="fpb-tl"></span><span class="fpb-tx">'+esc(m.l)+'</span></span>'; }).join('');
+    var _tierShade=(_tierLo!=null)?'<span class="fpb-tier" style="left:'+_bx(_tierLo).toFixed(1)+'%;width:'+(_bx(_tierHi)-_bx(_tierLo)).toFixed(1)+'%"></span>':'';
+    var _spotMk=_spotPct!=null?'<span class="fpb-spot" style="left:'+_spotPct.toFixed(1)+'%"><span class="fpb-splab">spot '+fmtUSD(xp)+'</span><span class="fpb-dot"></span></span>':'';
+    var _toStop=xp!=null?fmtPct((GLO/xp-1)*100):'—', _toCeil=xp!=null?fmtPct((GHI/xp-1)*100):'—';
+    var floorBand='<div class="card fpb-card" style="margin-top:14px"><div class="c-lbl"><span class="d"></span>Floor proximity · '+esc(ff.v_id||'V-13')+HT('Where silver sits between the $52 hard-stop floor and the $84 no-floor ceiling; the amber zone is the current deployment tier. A wide band reads distance-to-floor faster than a dial.')+AB(DATA.emitted_at_utc)+'<span class="age">tier '+esc(tier?tier.tier:'—')+' · spot '+fmtUSD(xp)+'</span></div>'+
+      '<div class="fpb-ends"><span class="fpb-end neg">'+_toStop+' to stop</span><span class="fpb-end pos">'+_toCeil+' to ceiling</span></div>'+
+      '<div class="fpb-wrap"><div class="fpb-track">'+_tierShade+_spotMk+'</div><div class="fpb-ticks">'+_ticks+'</div></div></div>';
+    var radarCard='<div class="card">'+_radInner+'</div>';
+    setFace('z-macro',_heroK+floorBand+'<div class="mrow2" style="margin-top:14px">'+radarCard+srCard+'</div>'+(window.silverMacroModule?(window.silverMacroModule().pub||''):''));
   }catch(e){__reportErr('macro',e);} }
 
   function renderOperator(ft,accts,prob,LOCKED,xp,gsr){ try{
