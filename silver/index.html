@@ -381,6 +381,18 @@
   .fpb-tick{ position:absolute; transform:translateX(-50%); text-align:center; }
   .fpb-tick .fpb-tl{ display:block; width:1px; height:7px; background:var(--faint); margin:0 auto 3px; }
   .fpb-tick .fpb-tx{ display:block; font-family:var(--font-mono); font-size:8px; color:var(--faint); white-space:nowrap; }
+  /* ── S3 Intel · strategy timeline chronology + COT-series flag (visual-upgrade §3.3) ── */
+  .stl{ display:flex; gap:0; overflow-x:auto; padding:22px 6px 10px; position:relative; }
+  .stl::before{ content:""; position:absolute; left:14px; right:14px; top:30px; height:2px; background:linear-gradient(90deg,transparent,var(--hair) 4%,var(--hair) 96%,transparent); }
+  .stl-node{ flex:0 0 122px; text-align:center; position:relative; padding:0 6px; cursor:default; }
+  .stl-node .stl-dot{ width:12px; height:12px; border-radius:50%; margin:0 auto; z-index:2; position:relative; background:var(--mut); transition:transform .15s; }
+  .stl-node:hover .stl-dot{ transform:scale(1.3); }
+  .stl-dot.pos{ background:var(--pos); box-shadow:0 0 8px var(--pos); } .stl-dot.watch{ background:var(--watch); box-shadow:0 0 8px var(--watch); }
+  .stl-dt{ font-family:var(--font-mono); font-size:8.5px; color:var(--acc); margin-top:10px; }
+  .stl-ti{ font-size:9.5px; color:var(--ink2); line-height:1.3; margin-top:3px; }
+  .stl-vd{ font-family:var(--font-mono); font-size:7.5px; font-weight:700; margin-top:4px; letter-spacing:0.02em; }
+  .stl-vd.pos{ color:var(--pos); } .stl-vd.watch{ color:var(--watch); } .stl-vd.mut{ color:var(--mut); }
+  .cotseq-flag{ margin-top:10px; padding:7px 9px; border:1px dashed var(--hair); border-radius:8px; font-size:9.5px; color:var(--mut); line-height:1.45; }
 </style>
 </head>
 <body class="dark locked">
@@ -995,7 +1007,7 @@
     const cotPos=cot.mm_net_k!=null?cot.mm_net_k:null;
     const cotCard='<div class="card"><div class="c-lbl"><span class="d"></span>COT · managed money'+HT('The weekly US futures positioning report — who is long or short silver.')+AB(cot.survey_date)+'</div>'+
       '<div class="gmeta" style="line-height:2">MM net <b class="'+cls(cotPos)+'">'+(cotPos!=null?cotPos+'K':'—')+'</b> · OI <b>'+(cot.oi_k!=null?cot.oi_k+'K':'—')+'</b><br>WoW Δ <b class="'+cls(cot.wow_delta_k)+'">'+(cot.wow_delta_k!=null?(cot.wow_delta_k>=0?'+':'')+cot.wow_delta_k+'K':'—')+'</b> · '+esc(cot.g8_status||'')+'<br><b style="color:var(--acc2)">'+esc(cot.ladder_rung||'')+'</b></div>'+
-      (cot.read?'<div style="font-size:10.5px;color:var(--mut);margin-top:9px;line-height:1.5">'+esc(String(cot.read).slice(0,160))+'</div>':'')+'</div>';
+      (cot.read?'<div style="font-size:10.5px;color:var(--mut);margin-top:9px;line-height:1.5">'+esc(String(cot.read).slice(0,160))+'</div>':'')+'<div class="cotseq-flag">⏳ MM-net <b>print-sequence chart</b> pending the COT historical-series data add (flagged 260531 _DIRECTION).</div>'+'</div>';
     const items=(inv.items||[]).slice(0,6);
     const invCard='<div class="card"><div class="c-lbl"><span class="d"></span>Global inventory'+HT('Physical silver in COMEX/LBMA/Shanghai vaults and its trend.')+AB(inv.last_updated)+'</div>'+
       (items.length?items.map(it=>{ const b=/bull/i.test(it.bias||'')?'pos':(/bear/i.test(it.bias||'')?'neg':'watch'); return '<div class="ind"><span class="inn">'+esc(it.venue)+'</span><span class="inv">'+esc(it.value||'')+'</span><span class="inc '+b+'">'+esc(it.change||'')+'</span></div>'; }).join(''):pending('Inventory','global_inventory empty.'))+'</div>';
@@ -1014,7 +1026,9 @@
     var _ppban=_pp.lease_pending?('<div class="pp-banner">⏳ <b>1M lease rate exact: PENDING</b> · '+esc(_pp.lease_note||'')+'</div>'):'';
     var _ppanc=_pp.anchor_note?('<div class="ppanchor">'+esc(_pp.anchor_note)+'</div>'):'';
     var ppCard=_pp.composite?('<div class="card"><div class="c-lbl"><span class="d"></span>Paper-physical divergence · GAP-11'+HT('Physical-tightness signals (backwardation, lease rates, China premium, vault drain) vs the paper price.')+AB(_pp.as_of)+'</div><div class="ppchip '+_ppcls+'">'+esc(_pp.composite)+(_pp.component_count?(' · '+esc(_pp.component_count)):'')+'</div>'+_pprows+_ppban+_ppanc+'</div>'):'';
-    setFace('z-intel','<div class="grid3">'+cotCard+invCard+calCard+'</div><div style="margin-top:14px">'+ppCard+'</div><div style="margin-top:14px">'+newsCard+'</div>');
+    var _stl=(DATA.strategy_timeline_public||[]);
+    var stlHTML=_stl.length?('<div class="card"><div class="c-lbl"><span class="d"></span>Strategy timeline · F98 &#8594; F109'+HT('The silver strategy arc as a chronology — each doctrine event (deploy, trim, suspend, re-entry) with its verdict; hover a node for the detail. Newest at right.')+AB(_stl[_stl.length-1].date)+'</div><div class="stl">'+_stl.map(function(e){ var vd=String(e.verdict||''); var vc=/DEFENSIVE|COMPRESS|BEAR|RED|SUSPEN/i.test(vd)?'watch':(/BULL|EXECUTED|CONSTRUCTIVE/i.test(vd)?'pos':'mut'); var vdt=vd.replace(/[^\x00-\x7F]/g,'').trim(); return '<div class="stl-node" data-tip="'+esc(String(e.summary||e.title||''))+'" data-tipsub="'+esc(String(e.version||'')+' · '+String(e.date||''))+'"><div class="stl-dot '+vc+'"></div><div class="stl-dt">'+esc(_DM(e.date))+'</div><div class="stl-ti">'+esc(String(e.title||'').slice(0,40))+'</div><div class="stl-vd '+vc+'">'+esc(vdt)+'</div></div>'; }).join('')+'</div></div>'):'';
+    setFace('z-intel','<div class="grid3">'+cotCard+invCard+calCard+'</div>'+(stlHTML?('<div style="margin-top:14px">'+stlHTML+'</div>'):'')+'<div class="mrow2" style="margin-top:14px">'+newsCard+ppCard+'</div>');
   }catch(e){__reportErr('intel',e);} }
 
   (function(){
