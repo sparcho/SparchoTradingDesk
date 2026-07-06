@@ -393,6 +393,9 @@
   .stl-vd{ font-family:var(--font-mono); font-size:7.5px; font-weight:700; margin-top:4px; letter-spacing:0.02em; }
   .stl-vd.pos{ color:var(--pos); } .stl-vd.watch{ color:var(--watch); } .stl-vd.mut{ color:var(--mut); }
   .cotseq-flag{ margin-top:10px; padding:7px 9px; border:1px dashed var(--hair); border-radius:8px; font-size:9.5px; color:var(--mut); line-height:1.45; }
+  .cotfresh{ font-family:var(--font-mono); font-size:8.5px; color:var(--faint); margin-top:10px; letter-spacing:0.02em; }
+  .cot-note{ margin-top:7px; padding:7px 9px; border:1px solid var(--watch-soft); background:var(--watch-soft); border-radius:7px; font-size:9.5px; color:var(--watch); line-height:1.45; }
+  .cot-alert{ margin-top:7px; padding:7px 9px; border:1px solid var(--neg); background:var(--neg-soft); border-radius:7px; font-size:9.5px; color:var(--neg); line-height:1.45; }
   /* ── S2 Operator · F109 fib deployment ladder (visual-upgrade §3.2) ── */
   .f109{ margin-top:8px; }
   .f109row{ display:grid; grid-template-columns:66px 40px 74px 1fr; gap:10px; align-items:center; padding:6px 9px; border-bottom:1px solid var(--hair); font-family:var(--font-mono); font-size:11px; border-radius:6px; }
@@ -1026,9 +1029,14 @@
 
   function renderIntel(cot,inv,cats,news){ try{
     const cotPos=cot.mm_net_k!=null?cot.mm_net_k:null;
+    var _cotFresh=(function(){ var fa=cot.cot_fetched_at?String(cot.cot_fetched_at).slice(0,10):null; var nx=cot.cot_next_expected||null;
+      var base='CFTC report '+esc(cot.survey_date||'—')+(fa?(' · fetched '+esc(fa)):'')+(nx?(' · next release ~'+esc(nx)):'');
+      var note=cot.cot_fetch_stale?'<div class="cot-alert">⚠ COT fetcher hasn’t run in &gt;8 days — a pipeline issue, not a CFTC delay. Investigate the data_metalscot task.</div>'
+        :(cot.cot_delayed?'<div class="cot-note">⏳ This IS the latest CFTC print (fetched fresh) — the next weekly release is holiday-delayed (Juneteenth / Jul-4), not stale data.</div>':'');
+      return '<div class="cotfresh">'+base+'</div>'+note; })();
     const cotCard='<div class="card"><div class="c-lbl"><span class="d"></span>COT · managed money'+HT('The weekly US futures positioning report — who is long or short silver.')+AB(cot.survey_date)+'</div>'+
       '<div class="gmeta" style="line-height:2">MM net <b class="'+cls(cotPos)+'">'+(cotPos!=null?cotPos+'K':'—')+'</b> · OI <b>'+(cot.oi_k!=null?cot.oi_k+'K':'—')+'</b><br>WoW Δ <b class="'+cls(cot.wow_delta_k)+'">'+(cot.wow_delta_k!=null?(cot.wow_delta_k>=0?'+':'')+cot.wow_delta_k+'K':'—')+'</b> · '+esc(cot.g8_status||'')+'<br><b style="color:var(--acc2)">'+esc(cot.ladder_rung||'')+'</b></div>'+
-      (cot.read?'<div style="font-size:10.5px;color:var(--mut);margin-top:9px;line-height:1.5">'+esc(String(cot.read).slice(0,160))+'</div>':'')+'<div class="cotseq-flag">⏳ MM-net <b>print-sequence chart</b> pending the COT historical-series data add (flagged 260531 _DIRECTION).</div>'+'</div>';
+      (cot.read?'<div style="font-size:10.5px;color:var(--mut);margin-top:9px;line-height:1.5">'+esc(String(cot.read).slice(0,160))+'</div>':'')+_cotFresh+'<div class="cotseq-flag">⏳ MM-net <b>print-sequence chart</b> pending the COT historical-series data add (flagged 260531 _DIRECTION).</div>'+'</div>';
     const items=(inv.items||[]).slice(0,6);
     const invCard='<div class="card"><div class="c-lbl"><span class="d"></span>Global inventory'+HT('Physical silver in COMEX/LBMA/Shanghai vaults and its trend.')+AB(inv.last_updated)+'</div>'+
       (items.length?items.map(it=>{ const b=/bull/i.test(it.bias||'')?'pos':(/bear/i.test(it.bias||'')?'neg':'watch'); return '<div class="ind"><span class="inn">'+esc(it.venue)+'</span><span class="inv">'+esc(it.value||'')+'</span><span class="inc '+b+'">'+esc(it.change||'')+'</span></div>'; }).join(''):pending('Inventory','global_inventory empty.'))+'</div>';
