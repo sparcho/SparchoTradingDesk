@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1783433461">
-<meta name="x-built-at" content="2026-07-07T14:10:57+00:00">
+<meta name="x-build-id" content="1783441335">
+<meta name="x-built-at" content="2026-07-07T16:22:11+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1783433461",BUILT_AT="2026-07-07T14:10:57+00:00";
+  var BID="1783441335",BUILT_AT="2026-07-07T16:22:11+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -452,6 +452,14 @@
   .trow.tl-r-live td:first-child{ box-shadow:inset 2px 0 0 var(--pos); }
   .trow.tl-r-missed > td, .trow.tl-r-done > td{ opacity:.6; }
   .trow.tl-r-missed:hover > td, .trow.tl-r-done:hover > td{ opacity:1; }
+  /* ---- Perf tab Phase-3 (260707 shared time-range control + unified empty/pending/locked) ---- */
+  .pf-shared-ctrl{ display:flex; align-items:center; gap:10px; margin:0 0 18px; flex-wrap:wrap; }
+  .pf-shared-lbl{ font-family:var(--font-mono); font-size:10px; color:var(--mut); letter-spacing:.04em; }
+  .pf-shared-hint{ font-family:var(--font-mono); font-size:9px; color:var(--faint); }
+  .pf-state{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; text-align:center; padding:26px 16px; height:100%; }
+  .pf-state-ic{ font-size:22px; opacity:.85; }
+  .pf-state-t{ font-size:13px; font-weight:700; color:var(--ink); }
+  .pf-state-m{ font-size:11px; color:var(--mut); max-width:360px; line-height:1.45; }
   .pf-sec{ --perf-card-h:320px; margin-bottom:26px; }
   .pf-sh{ display:flex; align-items:baseline; gap:10px; margin:0 0 13px; padding-bottom:7px; border-bottom:1px solid var(--hair); }
   .pf-sh .pf-n{ font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--cyan); }
@@ -1595,12 +1603,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   function pcRegister(id,cfg){ var st=(window.__PC[id]&&window.__PC[id].state)||{}; window.__PC[id]={cfg:cfg, state:{ sk:(st.sk||cfg.defaultSeriesKey||(cfg.series[0]&&cfg.series[0].key)), bucket:(st.bucket||'D'), overlay:(st.overlay!=null?st.overlay:!!cfg.overlayDefault) }}; }
   window.pcSeries=function(id,k){ var e=window.__PC[id]; if(!e) return; e.state.sk=k; pcRender(id); window.pcSyncBar(id); };
   window.pcBucketSet=function(id,m){ var e=window.__PC[id]; if(!e) return; e.state.bucket=m; pcRender(id); window.pcSyncBar(id); };
+  window.__pcBucket=window.__pcBucket||'D'; //@pure
+  window.pcBucketAll=function(m,ids){ ids=ids||['pf-edge','pf-types','pf-sigq','pf-mlday']; window.__pcBucket=m; ids.forEach(function(id){ var e=window.__PC[id]; if(!e) return; e.state.bucket=m; if(typeof document!=='undefined'&&document.getElementById(id)) pcRender(id); if(typeof document!=='undefined'&&document.getElementById(id+'-bar')) window.pcSyncBar(id); }); if(typeof document!=='undefined'){ var bar=document.getElementById('pf-shared-tf'); if(bar){ var bs=bar.getElementsByTagName('button'); for(var i=0;i<bs.length;i++){ bs[i].className=(bs[i].getAttribute('data-m')===m?'on':''); } } } }; //@pure
   window.pcOverlay=function(id){ var e=window.__PC[id]; if(!e) return; e.state.overlay=!e.state.overlay; pcRender(id); window.pcSyncBar(id); };
   // chrome bar (series switch · overlay · D/W/M) — extracted so it can render inline (default) OR in an expander (hero charts, cfg.chromeless)
   function pcBarHTML(id){ var E=window.__PC[id]; if(!E) return ''; var cfg=E.cfg, st=E.state, mode=cfg.mode||'select'; var tb='';
     if(mode==='select' && cfg.series.length>1){ tb+='<div class="pc-seg pc-series">'+cfg.series.map(function(s){ return '<button class="'+(s.key===st.sk?'on':'')+'" onclick="pcSeries(\''+id+'\',\''+s.key+'\')">'+esc(s.label)+'</button>'; }).join('')+'</div>'; }
     if(cfg.overlay){ tb+='<button class="pc-ov '+(st.overlay?'on':'')+'" onclick="pcOverlay(\''+id+'\')">'+esc(cfg.overlayLabel||'overlay')+'</button>'; }
-    tb+='<div class="pc-seg pc-tf">'+[['D','Daily'],['W','Weekly'],['M','Monthly']].map(function(t){ return '<button class="'+(t[0]===st.bucket?'on':'')+'" onclick="pcBucketSet(\''+id+'\',\''+t[0]+'\')">'+t[1]+'</button>'; }).join('')+'</div>';
+    if(!cfg.sharedBucket) tb+='<div class="pc-seg pc-tf">'+[['D','Daily'],['W','Weekly'],['M','Monthly']].map(function(t){ return '<button class="'+(t[0]===st.bucket?'on':'')+'" onclick="pcBucketSet(\''+id+'\',\''+t[0]+'\')">'+t[1]+'</button>'; }).join('')+'</div>';
     return tb; }
   window.pcSyncBar=function(id){ var b=document.getElementById(id+'-bar'); if(b) b.innerHTML=pcBarHTML(id); };
   window.pfScroll=function(id){ var e=document.getElementById(id); if(e){ try{ e.scrollIntoView({behavior:'smooth',block:'start'}); }catch(x){ e.scrollIntoView(); } } };
@@ -1621,7 +1631,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(mode==='all') drawn.forEach(function(s){ legItems.push('<span><i style="background:'+(s.color||'var(--cyan)')+'"></i>'+esc(s.label)+'</span>'); });
     ovList.forEach(function(o){ legItems.push('<span><i class="dash" style="background:'+(o.color||'var(--mut)')+'"></i>'+esc(o.label)+'</span>'); });
     var legend=legItems.length?('<div class="pc-legend">'+legItems.join('')+'</div>'):'';
-    var cap=(n>=2)?('<span>'+esc(pcLabel(axis[0],st.bucket))+'</span><span>'+esc(cfg.cap||'')+'</span><span>'+esc(pcLabel(axis[n-1],st.bucket))+'</span>'):('<span></span><span>'+esc(cfg.cap||'')+'</span><span></span>');
+    var cap=(n>=2)?('<span>'+esc(pcLabel(axis[0],st.bucket))+'</span><span></span><span>'+esc(pcLabel(axis[n-1],st.bucket))+'</span>'):'<span></span><span></span><span></span>';
     // skeleton first so .pc-scroll has its flex height to measure against
     host.innerHTML=tb+legend+'<div class="pc-scroll"><div class="pc-inner" id="'+id+'-in"></div></div><div class="dtcap">'+cap+'</div>';
     var inner=document.getElementById(id+'-in'); if(!inner) return;
@@ -1711,6 +1721,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     return '<div class="tt-h">'+esc(label)+'</div>'+rows;
   }
 
+  // pfState (Phase 3): ONE empty/pending/locked card component (was ad-hoc pending() variants).
+  window.pfState=function(kind,title,msg){ var ic=(kind==='locked'?'🔒':(kind==='pending'?'⏳':'•')); return '<div class="pf-state pf-state-'+kind+'"><div class="pf-state-ic">'+ic+'</div><div class="pf-state-t">'+title+'</div><div class="pf-state-m">'+msg+'</div></div>'; }; //@pure
   // ---- the Performance tab orchestrator -------------------------------------------
   function renderPerf(){ try{
     if(!DATA){ return; }
@@ -1750,6 +1762,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       VC.push({pop:'real',q:'My money vs the system',val:val,arr:'',st:st,sub:sub,go:'pf-sec-3'}); })();
     html+='<div class="pf-verdict">'+VC.map(function(c){ return '<div class="vcard '+c.st+'" onclick="pfScroll(\''+c.go+'\')"><span class="pop '+c.pop+'">'+(c.pop==='real'?'REAL':'SIGNALS')+'</span><div class="vq">'+esc(c.q)+'</div><div class="vv">'+c.val+(c.arr?(' '+c.arr):'')+'</div><div class="vs">'+esc(c.sub)+' →</div></div>'; }).join('')+'</div>';
 
+    html+='<div class="pf-shared-ctrl"><span class="pf-shared-lbl">Time range</span><div class="pc-seg pf-shared-tf" id="pf-shared-tf">'+[['D','Daily'],['W','Weekly'],['M','Monthly']].map(function(t){ return '<button data-m="'+t[0]+'" class="'+((window.__pcBucket||'D')===t[0]?'on':'')+'" onclick="pcBucketAll(&quot;'+t[0]+'&quot;)">'+t[1]+'</button>'; }).join('')+'</div><span class="pf-shared-hint">applies to every chart on this tab</span></div>';
+
     // ===== SECTION 1 — SCREEN EDGE (SIGNALS · positional by construction) ====================
     html+='<div class="pf-sec" id="pf-sec-1"><div class="pf-sh"><span class="pf-n">01</span><h3>Screen Edge</h3>'
       +'<span class="pop sig">SIGNALS</span><span class="uchip">% vs Nifty</span><span class="uchip scope">Positional · by construction</span>'
@@ -1763,7 +1777,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         var _tail=((_bs['4']&&_bs['2']&&_bs['4'].alpha!=null&&_bs['2'].alpha!=null)?(' — edge '+((_bs['4'].alpha-_bs['2'].alpha)>0?'concentrates':'does not concentrate')+' with agreement ('+(+_bs['4'].alpha).toFixed(1)+'%/pick at 4-agree vs '+(+_bs['2'].alpha).toFixed(1)+'% at 2-agree)'):'');
         html+='<div class="pf-take '+(_beat?'good':'bad')+'">All-4-agree picks are '+(_beat?'beating':'trailing')+' Nifty by <b class="'+(_beat?'pos':'neg')+'">'+(_av>0?'+':'')+(+_av).toFixed(1)+'%</b> cumulatively across '+_neps+' matured picks'+_tail+'.</div>';
       } else { html+='<div class="pf-take unclear">Positional edge is still maturing — not enough resolved 1-month episodes yet.</div>'; }
-      pcRegister('pf-edge',{ chromeless:true, mode:'select', defaultSeriesKey:'4', zero:true, zeroLabel:'Nifty parity (0)', yLabel:'cum alpha % vs Nifty',
+      pcRegister('pf-edge',{ chromeless:true, sharedBucket:true, mode:'select', defaultSeriesKey:'4', zero:true, zeroLabel:'Nifty parity (0)', yLabel:'cum alpha % vs Nifty',
         yFmt:function(v){return (v>0?'+':'')+v.toFixed(1)+'%';},
         cap:'each node = an entry session (different stocks) · above 0 = beating Nifty · scroll ↔ · hover = that session’s tickers',
         empty:'not enough resolved 1m episodes at this tier yet — 1m alpha needs ~21 sessions to age.',
@@ -1781,7 +1795,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       Object.keys(byd).concat(Object.keys(dtByd)).filter(function(v,i,a){return a.indexOf(v)===i;}).sort().forEach(function(d){ if(dtByd[d]!=null) dtS.push({d:d,y:dtByd[d]}); if(byd[d]&&byd[d].sw!=null) swS.push({d:d,y:byd[d].sw}); if(byd[d]&&byd[d].po!=null) poS.push({d:d,y:byd[d].po}); });
       var hasTypes=(dtS.length+swS.length+poS.length>1);
       if(hasTypes){
-        pcRegister('pf-types',{ mode:'all', bucketMode:'avg', zero:true, zeroLabel:'0', yLabel:'per-session score %',
+        pcRegister('pf-types',{ sharedBucket:true, mode:'all', bucketMode:'avg', zero:true, zeroLabel:'0', yLabel:'per-session score %',
           yFmt:function(v){return (v>0?'+':'')+v.toFixed(1)+'%';},
           cap:'one node / session · day-trade 1d return · swing 1w alpha · positional 1m alpha',
           empty:'scoreboard fills in as signals resolve at each horizon.',
@@ -1794,7 +1808,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         +'<div class="pc-extbar" id="pf-edge-bar"></div>'
         +(hasTypes?('<div class="card pf-card full" style="margin-top:6px"><div class="c-lbl"><span class="d"></span>Per-type signal scoreboard'+HT('The screen edge split by holding horizon, one node per session: day-trade (next-day return), swing (1-week alpha) and positional (1-month alpha) together. Signal quality by horizon — not executed trades.')+'<span class="age">day-trade / swing / positional · signals</span></div><div id="pf-types" class="pc-host"></div></div>'):'')
         +'</details>';
-    } else { html+='<div class="pf-grid"><div class="card pf-card full">'+pending('Screen Edge','positional assessment pending — builds after the signal ledger runs.')+'</div></div>'; }
+    } else { html+='<div class="pf-grid"><div class="card pf-card full">'+window.pfState('pending','Screen Edge','positional assessment pending — builds after the signal ledger runs.')+'</div></div>'; }
     html+='</div>';
 
     // ===== SECTION 2 — SIGNAL QUALITY (SIGNALS · day-trade by definition) ====================
@@ -1811,14 +1825,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var dates=Object.keys(byDate).sort();
       function dtTierSeries(thr){ var eq=100, out=[]; dates.forEach(function(d){ var fs=(byDate[d]||[]).filter(function(x){ return x.r1!=null && (thr<0 || (x.pc!=null && x.pc>=thr)); }); fs.sort(function(a,b){ return (b.pc||0)-(a.pc||0) || String(a.tk).localeCompare(String(b.tk)); }); fs=fs.slice(0,5); if(!fs.length) return; var avg=fs.reduce(function(a,b){return a+b.r1;},0)/fs.length; eq=eq*(1+avg/100); out.push({d:d,y:eq-100,tickers:fs.map(function(x){return {tk:x.tk,r:x.r1};}),n:fs.length}); }); return out; }
       var tiers=[ ['-1','All'],['2','≥2/5'],['3','≥3/5'],['4','≥4/5'],['5','5/5'] ];
-      pcRegister('pf-sigq',{ chromeless:true, mode:'select', defaultSeriesKey:'3', zero:true, zeroLabel:'0% (flat backtest)', yLabel:'cumulative P&L %',
+      pcRegister('pf-sigq',{ chromeless:true, sharedBucket:true, mode:'select', defaultSeriesKey:'3', zero:true, zeroLabel:'0% (flat backtest)', yLabel:'cumulative P&L %',
         yFmt:function(v){return (v>0?'+':'')+v.toFixed(1)+'%';},
         cap:'top-5 highest-confluence fires/day · 1 session (close→next-close) · compounded · SIGNALS not executed trades',
         empty:'not enough resolved sessions at this tier yet.',
         series:tiers.map(function(t){ return {key:t[0],label:t[1],color:(t[0]==='-1'?'var(--mut)':(t[0]==='5'?'var(--cyan)':(t[0]==='4'?'#7ad9a0':(t[0]==='3'?'var(--watch)':'#b58cff')))),data:dtTierSeries(+t[0])}; }), nodeTip:pcTipPct });
       html+='<div class="pf-grid"><div class="card pf-card full"><div class="c-lbl"><span class="d"></span>Confluence backtest · ≥3/5 equity curve'+HT('Hero = the ≥3/5-confluence tier. Backtest of the top-5 DayTrade-Confluence fires each day, held one session (close→next-close), compounded. Open details to change the confluence tier (≥2/3/4/5) or re-bucket D/W/M. Hover a node for that session’s fires. These are SIGNALS (a backtest), not executed trades.')+'<span class="age">top-5/day · 1-session · signals</span></div><div id="pf-sigq" class="pc-host"></div></div></div>';
       html+='<details class="pf-more"><summary>details &amp; power tools — confluence tier (≥2/3/4/5) · D/W/M</summary><div class="pc-extbar" id="pf-sigq-bar"></div></details>';
-    } else { html+='<div class="pf-grid"><div class="card pf-card full">'+pending('Signal Quality','signal_perf pending — day-trade backtest builds after the ledger runs.')+'</div></div>'; }
+    } else { html+='<div class="pf-grid"><div class="card pf-card full">'+window.pfState('pending','Signal Quality','signal_perf pending — day-trade backtest builds after the ledger runs.')+'</div></div>'; }
     html+='</div>';
 
     // ===== SECTION 3 — MASTER LEDGER (PAPER + REAL · toggle lives here) ======================
@@ -1837,7 +1851,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       html+='<div class="card full pf-kpi-card">'+fyKpi+'</div>';
       var hasMlCurve=(dtCurve.length>1);
       if(hasMlCurve){
-        pcRegister('pf-mlday',{ chromeless:true, mode:'select', zero:true, zeroLabel:'0R (breakeven)', yLabel:'cumulative R',
+        pcRegister('pf-mlday',{ chromeless:true, sharedBucket:true, mode:'select', zero:true, zeroLabel:'0R (breakeven)', yLabel:'cumulative R',
           yFmt:function(v){return (v>0?'+':'')+v.toFixed(1)+'R';},
           cap:'day-trade only (1–3 sessions) · realized R · one node / session · hover = that session’s tickers',
           empty:'not enough resolved day-trades yet.',
@@ -1864,12 +1878,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       }
     } else {
       html+='<div class="pf-take unclear">Unlock (🔒) to read your realized-R ledger — system-paper (PAPER) vs your own money (REAL), split by horizon.</div>';
-      html+='<div class="card full pf-kpi-card">'+fyKpi+'</div><div class="pf-grid"><div class="card pf-card full">'+pending('Master ledger','🔒 unlock to view the master-ledger realized-R performance (system-paper + operator-real).')+'</div></div>';
+      html+='<div class="card full pf-kpi-card">'+fyKpi+'</div><div class="pf-grid"><div class="card pf-card full">'+window.pfState('locked','Master ledger','Unlock to view the master-ledger realized-R performance (system-paper + operator-real).')+'</div></div>';
     }
     html+='</div>';
 
     setFace('z-perf', html);
-    ['pf-edge','pf-types','pf-sigq','pf-mlday'].forEach(function(cid){ if(window.__PC[cid]&&document.getElementById(cid)) pcRender(cid); });
+    ['pf-edge','pf-types','pf-sigq','pf-mlday'].forEach(function(cid){ if(window.__PC[cid]){ window.__PC[cid].state.bucket=(window.__pcBucket||'D'); if(document.getElementById(cid)) pcRender(cid); } });
     ['pf-edge','pf-sigq','pf-mlday'].forEach(function(cid){ if(document.getElementById(cid+'-bar')) window.pcSyncBar(cid); });
   }catch(e){__reportErr('perf',e);} }
   window.drawPerf=function(){ try{ renderPerf(); }catch(e){} };
