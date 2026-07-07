@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1782241583">
-<meta name="x-built-at" content="2026-06-23T19:06:21+00:00">
+<meta name="x-build-id" content="1783427094">
+<meta name="x-built-at" content="2026-07-07T12:24:50+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1782241583",BUILT_AT="2026-06-23T19:06:21+00:00";
+  var BID="1783427094",BUILT_AT="2026-07-07T12:24:50+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -396,6 +396,45 @@
   .dtdays{ max-height:228px; overflow-y:auto; }
   .dtdays .dtdrow{ cursor:pointer; } .dtdays .dtdrow:hover td{ color:var(--ink); }
   /* ---- Performance tab (260620 · contained CSS grid 260620b) ---- */
+  /* ---- Performance tab v2 (260707 · answer-first IA · verdict strip + population/unit grammar) ---- */
+  .pf-verdict{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:11px; margin:2px 0 22px; }
+  @media(max-width:900px){ .pf-verdict{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media(max-width:540px){ .pf-verdict{ grid-template-columns:1fr; } }
+  .vcard{ position:relative; border:1px solid var(--border); border-radius:12px; padding:11px 13px 10px 16px; background:var(--glass); cursor:pointer; overflow:hidden; transition:transform .13s ease, box-shadow .13s ease, border-color .13s ease; }
+  .vcard:hover{ transform:translateY(-2px); border-color:var(--cyan); }
+  .vcard::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--mut); }
+  .vcard.good::before{ background:var(--pos); } .vcard.bad::before{ background:var(--neg); } .vcard.unclear::before{ background:var(--mut); }
+  .vcard .vq{ font-size:11px; color:var(--ink2); line-height:1.32; min-height:29px; }
+  .vcard .vv{ font-size:24px; font-weight:800; letter-spacing:-.5px; margin-top:6px; line-height:1; color:var(--ink); }
+  .vcard.good .vv{ color:var(--pos); } .vcard.bad .vv{ color:var(--neg); } .vcard.unclear .vv{ color:var(--ink2); }
+  .vcard .varrow{ font-size:15px; }
+  .vcard .vs{ font-size:9.5px; color:var(--mut); margin-top:5px; line-height:1.3; font-family:var(--font-mono); }
+  /* population badge — the population channel (was prose) */
+  .pop{ display:inline-block; font-size:8.5px; font-weight:800; letter-spacing:.6px; padding:1px 6px; border-radius:4px; border:1px solid var(--border); vertical-align:middle; line-height:1.5; }
+  .pop.sig{ background:var(--glass2); color:var(--ink2); }
+  .pop.pap{ background:transparent; color:var(--mut); border-style:dashed; }
+  .pop.real{ background:var(--cyan); color:#04121a; border-color:transparent; }
+  .vcard .pop{ position:absolute; top:11px; right:12px; }
+  /* unit + scope + maturation chips */
+  .uchip{ display:inline-block; font-size:9px; padding:1px 8px; border-radius:9px; background:var(--glass2); color:var(--mut); vertical-align:middle; font-family:var(--font-mono); }
+  .uchip.scope{ border:1px dashed var(--border); background:transparent; }
+  .matchip{ display:inline-block; font-size:9px; padding:1px 8px; border-radius:9px; background:var(--watch-soft); color:var(--watch); vertical-align:middle; cursor:help; font-family:var(--font-mono); }
+  .pf-sh .pop, .pf-sh .uchip, .pf-sh .matchip{ margin-left:6px; }
+  /* computed takeaway — the stated answer under each section header */
+  .pf-take{ font-size:13px; line-height:1.42; color:var(--ink); font-weight:600; margin:0 0 13px; padding:2px 0 2px 11px; border-left:3px solid var(--cyan); }
+  .pf-take.good{ border-color:var(--pos); } .pf-take.bad{ border-color:var(--neg); } .pf-take.unclear{ border-color:var(--mut); color:var(--ink2); }
+  .pf-take b.pos{ color:var(--pos); } .pf-take b.neg{ color:var(--neg); }
+  /* progressive-disclosure expander (power tools live here) */
+  .pf-more{ margin:2px 0 8px; border-top:1px solid var(--hair); }
+  .pf-more > summary{ cursor:pointer; font-family:var(--font-mono); font-size:10px; color:var(--mut); padding:8px 0 4px; list-style:none; user-select:none; letter-spacing:.02em; }
+  .pf-more > summary::-webkit-details-marker{ display:none; }
+  .pf-more > summary::before{ content:"\25b8  "; }
+  .pf-more[open] > summary::before{ content:"\25be  "; }
+  .pf-more[open] > summary{ color:var(--ink2); }
+  /* external chart-control bar (the pc-bar, relocated into the expander for hero charts) */
+  .pc-extbar{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:8px 0 4px; }
+  .pc-extbar .pc-seg.pc-tf{ margin-left:0; }
+  .pf-toggle-wrap{ display:inline-flex; align-items:center; gap:6px; margin-left:6px; }
   .pf-sec{ --perf-card-h:320px; margin-bottom:26px; }
   .pf-sh{ display:flex; align-items:baseline; gap:10px; margin:0 0 13px; padding-bottom:7px; border-bottom:1px solid var(--hair); }
   .pf-sh .pf-n{ font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--cyan); }
@@ -1537,9 +1576,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   function pcMap(b){ var m={}; b.forEach(function(p){ m[p.d]=p; }); return m; }
   window.__PC=window.__PC||{};
   function pcRegister(id,cfg){ var st=(window.__PC[id]&&window.__PC[id].state)||{}; window.__PC[id]={cfg:cfg, state:{ sk:(st.sk||cfg.defaultSeriesKey||(cfg.series[0]&&cfg.series[0].key)), bucket:(st.bucket||'D'), overlay:(st.overlay!=null?st.overlay:!!cfg.overlayDefault) }}; }
-  window.pcSeries=function(id,k){ var e=window.__PC[id]; if(!e) return; e.state.sk=k; pcRender(id); };
-  window.pcBucketSet=function(id,m){ var e=window.__PC[id]; if(!e) return; e.state.bucket=m; pcRender(id); };
-  window.pcOverlay=function(id){ var e=window.__PC[id]; if(!e) return; e.state.overlay=!e.state.overlay; pcRender(id); };
+  window.pcSeries=function(id,k){ var e=window.__PC[id]; if(!e) return; e.state.sk=k; pcRender(id); window.pcSyncBar(id); };
+  window.pcBucketSet=function(id,m){ var e=window.__PC[id]; if(!e) return; e.state.bucket=m; pcRender(id); window.pcSyncBar(id); };
+  window.pcOverlay=function(id){ var e=window.__PC[id]; if(!e) return; e.state.overlay=!e.state.overlay; pcRender(id); window.pcSyncBar(id); };
+  // chrome bar (series switch · overlay · D/W/M) — extracted so it can render inline (default) OR in an expander (hero charts, cfg.chromeless)
+  function pcBarHTML(id){ var E=window.__PC[id]; if(!E) return ''; var cfg=E.cfg, st=E.state, mode=cfg.mode||'select'; var tb='';
+    if(mode==='select' && cfg.series.length>1){ tb+='<div class="pc-seg pc-series">'+cfg.series.map(function(s){ return '<button class="'+(s.key===st.sk?'on':'')+'" onclick="pcSeries(\''+id+'\',\''+s.key+'\')">'+esc(s.label)+'</button>'; }).join('')+'</div>'; }
+    if(cfg.overlay){ tb+='<button class="pc-ov '+(st.overlay?'on':'')+'" onclick="pcOverlay(\''+id+'\')">'+esc(cfg.overlayLabel||'overlay')+'</button>'; }
+    tb+='<div class="pc-seg pc-tf">'+[['D','Daily'],['W','Weekly'],['M','Monthly']].map(function(t){ return '<button class="'+(t[0]===st.bucket?'on':'')+'" onclick="pcBucketSet(\''+id+'\',\''+t[0]+'\')">'+t[1]+'</button>'; }).join('')+'</div>';
+    return tb; }
+  window.pcSyncBar=function(id){ var b=document.getElementById(id+'-bar'); if(b) b.innerHTML=pcBarHTML(id); };
+  window.pfScroll=function(id){ var e=document.getElementById(id); if(e){ try{ e.scrollIntoView({behavior:'smooth',block:'start'}); }catch(x){ e.scrollIntoView(); } } };
   function pcPortalTip(){ var t=document.getElementById('pc-portal-tip'); if(!t){ t=document.createElement('div'); t.id='pc-portal-tip'; t.className='dttip pc-portal'; document.body.appendChild(t); } return t; }
   function pcRender(id){
     var E=window.__PC[id]; if(!E) return; var host=document.getElementById(id); if(!host) return;
@@ -1552,10 +1599,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     ovList.forEach(function(o){ Object.keys(ovmap[o.key]).forEach(function(d){ dset[d]=1; }); });
     var axis=Object.keys(dset).sort(); var n=axis.length;
     // chrome above the chart
-    var tb='<div class="pc-bar">';
-    if(mode==='select' && cfg.series.length>1){ tb+='<div class="pc-seg pc-series">'+cfg.series.map(function(s){ return '<button class="'+(s.key===st.sk?'on':'')+'" onclick="pcSeries(\''+id+'\',\''+s.key+'\')">'+esc(s.label)+'</button>'; }).join('')+'</div>'; }
-    if(cfg.overlay){ tb+='<button class="pc-ov '+(st.overlay?'on':'')+'" onclick="pcOverlay(\''+id+'\')">'+esc(cfg.overlayLabel||'overlay')+'</button>'; }
-    tb+='<div class="pc-seg pc-tf">'+[['D','Daily'],['W','Weekly'],['M','Monthly']].map(function(t){ return '<button class="'+(t[0]===st.bucket?'on':'')+'" onclick="pcBucketSet(\''+id+'\',\''+t[0]+'\')">'+t[1]+'</button>'; }).join('')+'</div></div>';
+    var tb=cfg.chromeless?'':('<div class="pc-bar">'+pcBarHTML(id)+'</div>');
     var legItems=[];
     if(mode==='all') drawn.forEach(function(s){ legItems.push('<span><i style="background:'+(s.color||'var(--cyan)')+'"></i>'+esc(s.label)+'</span>'); });
     ovList.forEach(function(o){ legItems.push('<span><i class="dash" style="background:'+(o.color||'var(--mut)')+'"></i>'+esc(o.label)+'</span>'); });
@@ -1655,18 +1699,54 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(!DATA){ return; }
     var pa=DATA.positional_assessment||null, sp=DATA.signal_perf||null, tl=(DATA&&DATA.trade_lab)||null, tot=(DATA.book&&DATA.book.totals)||{};
     var LOCKED=!!(DATA.privacy&&DATA.privacy.locked&&DATA.sensitive_enc&&!DATA._unlocked);
-    var html='';
-
-    // ===== SECTION 1 — SCREEN EDGE ===================================================
     var __pv=window.__tlView; if(['daytrade','swing','positional'].indexOf(__pv)<0){ try{__pv=localStorage.getItem('tlView');}catch(e){} } if(['daytrade','swing','positional'].indexOf(__pv)<0)__pv='daytrade'; window.__tlView=__pv;
     var __PVLBL={daytrade:'Day-Trade',swing:'Swing',positional:'Positional'};
-    html+='<div class="dtseg" style="margin:0 0 12px">'+['daytrade','swing','positional'].map(function(k){return '<button class="'+(k===__pv?'on':'')+'" onclick="perfSetView(\''+k+'\')">'+__PVLBL[k]+'</button>';}).join('')+'<span class="age" style="margin-left:8px;color:var(--mut)">trade type · synced with Trade Lab</span></div>';
-    html+='<div class="pf-sec"><div class="pf-sh"><span class="pf-n">01</span><h3>Screen Edge</h3><span class="pf-sx">are the screens picking winners? · alpha vs Nifty'+(pa&&pa.generated_date?(' · as of '+esc(pa.generated_date)):'')+'</span></div>';
-    if(pa){ html+='<div class="pf-matnote">\u23f3 Positional picks enter this chart only after their ~'+(pa.maturation_window_sessions||21)+'-trading-day alpha window completes \u2014 entries after <b>'+esc(pa.latest_matured_date||'\u2014')+'</b> are still maturing'+(pa.n_maturing?(' (<b>'+pa.n_maturing+'</b> episodes still maturing)'):'')+'. Sparse stretches = few clean screener passers in that regime, not missing data.</div>'; }
+    var html='';
+
+    // ---- verdict helpers (every number = an existing payload field; no new generator math) ----
+    function _arrow(arr,key){ if(!arr||arr.length<2) return ''; var a=arr[arr.length-1][key], b=arr[arr.length-2][key]; if(a==null||b==null||a===b) return ''; return a>b?'<span class="varrow pos">▲</span>':'<span class="varrow neg">▼</span>'; }
+    function _dtTier(thr){ if(!sp||!sp.dt_fires) return null; var byD={}; sp.dt_fires.forEach(function(f){ if(f.r1==null) return; (byD[f.d]=byD[f.d]||[]).push(f); }); var eq=100,used=[]; Object.keys(byD).sort().forEach(function(d){ var fs=byD[d].filter(function(x){ return x.r1!=null && (thr<0 || (x.pc!=null && x.pc>=thr)); }); fs.sort(function(a,b){ return (b.pc||0)-(a.pc||0) || String(a.tk).localeCompare(String(b.tk)); }); fs=fs.slice(0,5); if(!fs.length) return; var avg=fs.reduce(function(a,b){return a+b.r1;},0)/fs.length; eq=eq*(1+avg/100); fs.forEach(function(x){used.push(x);}); }); if(!used.length) return null; return { cum:eq-100, hit:used.filter(function(x){return x.r1>0;}).length/used.length*100, n:used.length }; }
+
+    // ===== VERDICT STRIP — 4 computed answers, plain language, one number each ==============
+    var VC=[];
+    (function(){ var t4=(pa&&pa.tier_curves&&pa.tier_curves['4'])||[]; var st,val,sub,arr='';
+      if(t4.length){ var av=t4[t4.length-1].cum_alpha; var neps=t4.reduce(function(s,n){return s+(n.n||0);},0);
+        st=(neps<8||av==null)?'unclear':(av>0?'good':'bad'); val=(av>0?'+':'')+(+av).toFixed(1)+'%'; arr=_arrow(t4,'cum_alpha');
+        sub='All-4-agree tier · '+neps+' matured picks'; }
+      else { st='unclear'; val='—'; sub='maturing — need resolved 1m episodes'; }
+      VC.push({pop:'sig',q:'Are the screens finding edge?',val:val,arr:arr,st:st,sub:sub,go:'pf-sec-1'}); })();
+    (function(){ var bs=(pa&&pa.combo&&pa.combo.by_size)||{}; var st,val,sub;
+      if(bs['4']&&bs['2']&&bs['4'].alpha!=null&&bs['2'].alpha!=null){ var d=bs['4'].alpha-bs['2'].alpha; var n4=bs['4'].n||0;
+        st=(n4<8)?'unclear':(d>0.5?'good':(d<-0.5?'bad':'unclear')); val=(st==='good'?'YES':(st==='bad'?'NO':'~'));
+        sub='4-agree '+(+bs['4'].alpha).toFixed(1)+'% vs 2-agree '+(+bs['2'].alpha).toFixed(1)+'% ('+(d>0?'+':'')+d.toFixed(1)+'pts)'; }
+      else { st='unclear'; val='—'; sub='not enough tiered episodes yet'; }
+      VC.push({pop:'sig',q:'More agreement = more edge?',val:val,arr:'',st:st,sub:sub,go:'pf-sec-1'}); })();
+    (function(){ var c=_dtTier(3); var st,val,sub;
+      if(c){ st=(c.n<20)?'unclear':(c.cum>0?'good':'bad'); val=(c.cum>0?'+':'')+c.cum.toFixed(1)+'%'; sub='≥3/5 backtest · hit '+Math.round(c.hit)+'% · '+c.n+' fires'; }
+      else { st='unclear'; val='—'; sub='day-trade backtest maturing'; }
+      VC.push({pop:'sig',q:'Is the day-trade engine positive?',val:val,arr:'',st:st,sub:sub,go:'pf-sec-2'}); })();
+    (function(){ var st,val,sub;
+      if(LOCKED||!tl){ st='unclear'; val='🔒'; sub='unlock for your money vs system'; }
+      else { var m=tl.metrics||{}, oa=tl.operator_alpha||{}, nop=0; Object.keys(oa).forEach(function(k){ nop+=(oa[k].n_op||0); }); var opa=m.operator_alpha;
+        if(opa==null||nop<5){ st='unclear'; val=(opa!=null?((opa>0?'+':'')+(+opa).toFixed(2)+'R'):'—'); sub='collecting · '+nop+' operator trade'+(nop===1?'':'s'); }
+        else { st=(opa>0.05?'good':(opa<-0.05?'bad':'unclear')); val=(opa>0?'+':'')+(+opa).toFixed(2)+'R'; sub='your avg-R − system · FY 🔒'; } }
+      VC.push({pop:'real',q:'My money vs the system',val:val,arr:'',st:st,sub:sub,go:'pf-sec-3'}); })();
+    html+='<div class="pf-verdict">'+VC.map(function(c){ return '<div class="vcard '+c.st+'" onclick="pfScroll(\''+c.go+'\')"><span class="pop '+c.pop+'">'+(c.pop==='real'?'REAL':'SIGNALS')+'</span><div class="vq">'+esc(c.q)+'</div><div class="vv">'+c.val+(c.arr?(' '+c.arr):'')+'</div><div class="vs">'+esc(c.sub)+' →</div></div>'; }).join('')+'</div>';
+
+    // ===== SECTION 1 — SCREEN EDGE (SIGNALS · positional by construction) ====================
+    html+='<div class="pf-sec" id="pf-sec-1"><div class="pf-sh"><span class="pf-n">01</span><h3>Screen Edge</h3>'
+      +'<span class="pop sig">SIGNALS</span><span class="uchip">% vs Nifty</span><span class="uchip scope">Positional · by construction</span>'
+      +((pa&&(pa.n_maturing||pa.latest_matured_date))?('<span class="matchip" title="Positional picks enter this chart only after their ~'+(pa.maturation_window_sessions||21)+'-session alpha window completes. Entries after '+esc(pa.latest_matured_date||'—')+' are still maturing. Sparse stretches = few clean screener passers in that regime, not missing data.">⏳ '+(pa.n_maturing||0)+' maturing · last '+esc(pa.latest_matured_date||'—')+'</span>'):'')
+      +'<span class="pf-sx">are the screens picking winners?'+(pa&&pa.generated_date?(' · as of '+esc(pa.generated_date)):'')+'</span></div>';
     if(pa && pa.tier_curves){
       var tc=pa.tier_curves;
       var mk=function(arr){ return (arr||[]).map(function(p){ return {d:p.d,y:p.cum_alpha,eps:p.eps,n:p.n}; }); };
-      pcRegister('pf-edge',{ mode:'select', defaultSeriesKey:'4', zero:true, zeroLabel:'Nifty 0', yLabel:'cum alpha % vs Nifty',
+      var _t4=tc['4']||[], _bs=(pa.combo&&pa.combo.by_size)||{};
+      if(_t4.length){ var _av=_t4[_t4.length-1].cum_alpha, _neps=_t4.reduce(function(s,n){return s+(n.n||0);},0), _beat=(_av>0);
+        var _tail=((_bs['4']&&_bs['2']&&_bs['4'].alpha!=null&&_bs['2'].alpha!=null)?(' — edge '+((_bs['4'].alpha-_bs['2'].alpha)>0?'concentrates':'does not concentrate')+' with agreement ('+(+_bs['4'].alpha).toFixed(1)+'%/pick at 4-agree vs '+(+_bs['2'].alpha).toFixed(1)+'% at 2-agree)'):'');
+        html+='<div class="pf-take '+(_beat?'good':'bad')+'">All-4-agree picks are '+(_beat?'beating':'trailing')+' Nifty by <b class="'+(_beat?'pos':'neg')+'">'+(_av>0?'+':'')+(+_av).toFixed(1)+'%</b> cumulatively across '+_neps+' matured picks'+_tail+'.</div>';
+      } else { html+='<div class="pf-take unclear">Positional edge is still maturing — not enough resolved 1-month episodes yet.</div>'; }
+      pcRegister('pf-edge',{ chromeless:true, mode:'select', defaultSeriesKey:'4', zero:true, zeroLabel:'Nifty parity (0)', yLabel:'cum alpha % vs Nifty',
         yFmt:function(v){return (v>0?'+':'')+v.toFixed(1)+'%';},
         cap:'each node = an entry session (different stocks) · above 0 = beating Nifty · scroll ↔ · hover = that session’s tickers',
         empty:'not enough resolved 1m episodes at this tier yet — 1m alpha needs ~21 sessions to age.',
@@ -1678,7 +1758,6 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         overlay: (pa.nifty_overlay&&pa.nifty_overlay.length>1)?[ {key:'Picks',label:'Picks (abs)',color:'#7ad9a0',data:pa.nifty_overlay.map(function(p){return {d:p.d,y:p.pick_cum};})},
                   {key:'Nifty',label:'Nifty (abs)',color:'var(--mut)',data:pa.nifty_overlay.map(function(p){return {d:p.d,y:p.nifty_cum};})} ]:null,
         overlayLabel:'literal Nifty', overlayDefault:false, nodeTip:pcTipAlpha });
-      // companion — per-type scoreboard (daytrade/swing/positional side-by-side)
       var ts=pa.type_scoreboard||[]; var byd={}; ts.forEach(function(p){ byd[p.d]={sw:p.swing_alpha,po:p.pos_alpha}; });
       var dtByd={}; if(sp&&sp.by_day){ sp.by_day.forEach(function(b){ dtByd[b.date]=b.avg_ret1; }); }
       var dtS=[],swS=[],poS=[];
@@ -1693,72 +1772,88 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                    {key:'sw',label:'Swing (1w α)',color:'var(--watch)',data:swS},
                    {key:'po',label:'Positional (1m α)',color:'#7ad9a0',data:poS} ], nodeTip:pcTipScore });
       }
-      var edgeCard='<div class="card pf-card'+(hasTypes?'':' full')+'"><div class="c-lbl"><span class="d"></span>Screen edge · cumulative alpha by lens-agreement tier'+HT('Each node is a different entry session — the running edge of whatever the screens flagged, NOT a fixed basket. The dashed line is Nifty parity (the metric is already excess-over-Nifty, so above 0 = beating the index). Switch the line to see whether more screens agreeing means more alpha (the All-4 line should be strongest). Hover any node for that session’s tickers and each one’s 1-month alpha. Toggle "literal Nifty" for the picks’ absolute basket return vs an absolute Nifty line. Daily/Weekly/Monthly re-buckets the x-axis.')+'<span class="age">excess vs Nifty @1m · by # of lenses agreeing</span></div><div id="pf-edge" class="pc-host"></div></div>';
-      var typesCard=hasTypes?('<div class="card pf-card"><div class="c-lbl"><span class="d"></span>Per-type signal scoreboard'+HT('The screen edge split by holding horizon, one node per session: day-trade (next-day return), swing (1-week alpha vs Nifty) and positional (1-month alpha) shown together. Daily/Weekly/Monthly re-buckets the series. This is signal quality by horizon — not executed trades.')+'<span class="age">day-trade / swing / positional · signals</span></div><div id="pf-types" class="pc-host"></div></div>'):'';
-      html+='<div class="pf-grid">'+edgeCard+typesCard+'</div>';
+      html+='<div class="pf-grid"><div class="card pf-card full"><div class="c-lbl"><span class="d"></span>Screen edge · All-4-agree vs Nifty'+HT('Hero = the strongest-agreement tier (all 4 screens flag the same name). Each node is a different entry session — the running edge of whatever the screens flagged, NOT a fixed basket. Dashed line = Nifty parity (metric is already excess-over-Nifty, so above 0 = beating the index). Open details to switch the agreement tier, overlay literal Nifty, or re-bucket D/W/M. Hover any node for that session’s tickers and each one’s 1-month alpha.')+'<span class="age">excess vs Nifty @1m · hero = strongest agreement tier</span></div><div id="pf-edge" class="pc-host"></div></div></div>';
+      html+='<details class="pf-more"><summary>details &amp; power tools — switch agreement tier · literal-Nifty overlay · per-horizon scoreboard · D/W/M</summary>'
+        +'<div class="pc-extbar" id="pf-edge-bar"></div>'
+        +(hasTypes?('<div class="card pf-card full" style="margin-top:6px"><div class="c-lbl"><span class="d"></span>Per-type signal scoreboard'+HT('The screen edge split by holding horizon, one node per session: day-trade (next-day return), swing (1-week alpha) and positional (1-month alpha) together. Signal quality by horizon — not executed trades.')+'<span class="age">day-trade / swing / positional · signals</span></div><div id="pf-types" class="pc-host"></div></div>'):'')
+        +'</details>';
     } else { html+='<div class="pf-grid"><div class="card pf-card full">'+pending('Screen Edge','positional assessment pending — builds after the signal ledger runs.')+'</div></div>'; }
     html+='</div>';
 
-    // ===== SECTION 2 — SIGNAL QUALITY ================================================
+    // ===== SECTION 2 — SIGNAL QUALITY (SIGNALS · day-trade by definition) ====================
     var _sqAsof=(sp&&sp.by_day&&sp.by_day.length)?sp.by_day[sp.by_day.length-1].date:((DATA&&DATA.generated_date)||'');
-    html+='<div class="pf-sec"><div class="pf-sh"><span class="pf-n">02</span><h3>Signal Quality</h3><span class="pf-sx">DayTrade-Confluence top-5/day · 1-session backtest'+(_sqAsof?(' · as of '+esc(_sqAsof)):'')+'</span></div>';
-    if(sp){ html+='<div class="pf-matnote">\u23f3 The latest 1\u20132 sessions are pending their forward-return window \u2014 each fire resolves one session after entry (close\u2192next-close), so the freshest bars fill in a day later. Not missing data.</div>'; }
+    html+='<div class="pf-sec" id="pf-sec-2"><div class="pf-sh"><span class="pf-n">02</span><h3>Signal Quality</h3>'
+      +'<span class="pop sig">SIGNALS</span><span class="uchip">% abs (compounded)</span><span class="uchip scope">Day-trade · by definition</span>'
+      +(sp?'<span class="matchip" title="Each fire resolves one session after entry (close→next-close), so the freshest 1–2 bars fill in a day later. Not missing data.">⏳ latest 1–2 sessions resolving</span>':'')
+      +'<span class="pf-sx">DayTrade-Confluence top-5/day · 1-session backtest'+(_sqAsof?(' · as of '+esc(_sqAsof)):'')+'</span></div>';
     if(sp && sp.dt_fires){
+      var _c3=_dtTier(3);
+      if(_c3){ html+='<div class="pf-take '+(_c3.cum>0?'good':'bad')+'">The ≥3/5-confluence day-trade backtest is <b class="'+(_c3.cum>0?'pos':'neg')+'">'+(_c3.cum>0?'+':'')+_c3.cum.toFixed(1)+'%</b> cumulative at '+Math.round(_c3.hit)+'% hit across '+_c3.n+' fires — the engine is '+(_c3.cum>0?'net positive':'underwater')+' as a signal.</div>'; }
+      else { html+='<div class="pf-take unclear">Day-trade backtest is still resolving — not enough forward-return windows yet.</div>'; }
       var byDate={}; (sp.dt_fires||[]).forEach(function(f){ if(f.r1==null) return; (byDate[f.d]=byDate[f.d]||[]).push(f); });
       var dates=Object.keys(byDate).sort();
       function dtTierSeries(thr){ var eq=100, out=[]; dates.forEach(function(d){ var fs=(byDate[d]||[]).filter(function(x){ return x.r1!=null && (thr<0 || (x.pc!=null && x.pc>=thr)); }); fs.sort(function(a,b){ return (b.pc||0)-(a.pc||0) || String(a.tk).localeCompare(String(b.tk)); }); fs=fs.slice(0,5); if(!fs.length) return; var avg=fs.reduce(function(a,b){return a+b.r1;},0)/fs.length; eq=eq*(1+avg/100); out.push({d:d,y:eq-100,tickers:fs.map(function(x){return {tk:x.tk,r:x.r1};}),n:fs.length}); }); return out; }
       var tiers=[ ['-1','All'],['2','≥2/5'],['3','≥3/5'],['4','≥4/5'],['5','5/5'] ];
-      pcRegister('pf-sigq',{ mode:'select', defaultSeriesKey:'3', zero:true, zeroLabel:'0%', yLabel:'cumulative P&L %',
+      pcRegister('pf-sigq',{ chromeless:true, mode:'select', defaultSeriesKey:'3', zero:true, zeroLabel:'0% (flat backtest)', yLabel:'cumulative P&L %',
         yFmt:function(v){return (v>0?'+':'')+v.toFixed(1)+'%';},
         cap:'top-5 highest-confluence fires/day · 1 session (close→next-close) · compounded · SIGNALS not executed trades',
         empty:'not enough resolved sessions at this tier yet.',
         series:tiers.map(function(t){ return {key:t[0],label:t[1],color:(t[0]==='-1'?'var(--mut)':(t[0]==='5'?'var(--cyan)':(t[0]==='4'?'#7ad9a0':(t[0]==='3'?'var(--watch)':'#b58cff')))),data:dtTierSeries(+t[0])}; }), nodeTip:pcTipPct });
-      html+='<div class="sigbanner pf-banner">⚠ <b>Day-trade SIGNAL quality, not your trades.</b> A backtest of the top-5 daily DayTrade-Confluence fires — what the screen flagged, not what you executed. Your actual day-trades live in section 03 below.</div>'+
-        '<div class="pf-grid"><div class="card pf-card full"><div class="c-lbl"><span class="d"></span>Confluence backtest · equity curve'+HT('Backtest of the top-5 DayTrade-Confluence fires each day, held one session (close→next-close), compounded. The confluence toggle (≥2/3/4/5) filters by how many of the 5 day-trade gates fired. Hover a node for that session’s fires. Daily/Weekly/Monthly re-buckets the x-axis. These are SIGNALS (a backtest), not executed trades.')+'<span class="age">≥2/3/4/5 confluence · top-5/day · 1-session · signals</span></div><div id="pf-sigq" class="pc-host"></div></div></div>';
+      html+='<div class="pf-grid"><div class="card pf-card full"><div class="c-lbl"><span class="d"></span>Confluence backtest · ≥3/5 equity curve'+HT('Hero = the ≥3/5-confluence tier. Backtest of the top-5 DayTrade-Confluence fires each day, held one session (close→next-close), compounded. Open details to change the confluence tier (≥2/3/4/5) or re-bucket D/W/M. Hover a node for that session’s fires. These are SIGNALS (a backtest), not executed trades.')+'<span class="age">top-5/day · 1-session · signals</span></div><div id="pf-sigq" class="pc-host"></div></div></div>';
+      html+='<details class="pf-more"><summary>details &amp; power tools — confluence tier (≥2/3/4/5) · D/W/M</summary><div class="pc-extbar" id="pf-sigq-bar"></div></details>';
     } else { html+='<div class="pf-grid"><div class="card pf-card full">'+pending('Signal Quality','signal_perf pending — day-trade backtest builds after the ledger runs.')+'</div></div>'; }
     html+='</div>';
 
-    // ===== SECTION 3 — MASTER LEDGER PERFORMANCE =====================================
-    html+='<div class="pf-sec"><div class="pf-sh"><span class="pf-n">03</span><h3>Master Ledger Performance</h3><span class="pf-sx">all logged trades · system-paper + operator-real · realized R by horizon</span></div>';
+    // ===== SECTION 3 — MASTER LEDGER (PAPER + REAL · toggle lives here) ======================
+    html+='<div class="pf-sec" id="pf-sec-3"><div class="pf-sh"><span class="pf-n">03</span><h3>Master Ledger</h3>'
+      +'<span class="pop pap">PAPER</span><span class="pop real">REAL</span><span class="uchip">R · ₹ FY</span>'
+      +'<span class="pf-sx">executed trades · system-paper + operator-real · realized R</span>'
+      +'<span class="pf-toggle-wrap"><span class="dtseg">'+['daytrade','swing','positional'].map(function(k){return '<button class="'+(k===__pv?'on':'')+'" onclick="perfSetView(\''+k+'\')">'+__PVLBL[k]+'</button>';}).join('')+'</span></span></div>';
     var fyVal=(tot.realized_fy!=null)?tot.realized_fy:null;
     var fyKpi='<div class="kpis pf-kpis"><div class="kpi"><div class="kl">Realized FY · real money</div><div class="kv sm sens '+(fyVal!=null?(fyVal>0?'pos':'neg'):'')+'">'+(LOCKED?'🔒':(fyVal!=null?fmtINR(fyVal,{compact:true}):'—'))+'</div><div class="ks">'+(tot.realized_fy_as_of?('cap-gains · as of '+esc(String(tot.realized_fy_as_of))):'broker cap-gains series')+'</div></div>'+
       (tl?('<div class="kpi"><div class="kl">Ledger trades</div><div class="kv sm">'+(tl.n_trades||0)+'</div><div class="ks">'+(tl.n_system||0)+' system-paper · '+(tl.n_operator||0)+' operator-real</div></div>'):'')+
       (tl&&tl.metrics?('<div class="kpi"><div class="kl">Expectancy · all</div><div class="kv sm '+(tl.metrics.expectancy>0?'pos':'neg')+'">'+(tl.metrics.expectancy!=null?((tl.metrics.expectancy>0?'+':'')+(+tl.metrics.expectancy).toFixed(2)+'R'):'—')+'</div><div class="ks">mean R / trade · realized</div></div>'):'')+'</div>';
     if(tl){
-      html+='<div class="sigbanner pf-banner">▸ <b>The master ledger itself</b> — every logged trade (system paper-fires + your deliberate trades), dissected by horizon. System-paper validates the screens; operator-real is your own money. They are <b>never</b> the same line.</div>'+
-        '<div class="card full pf-kpi-card">'+fyKpi+'</div>';
       var dtv=(tl.trade_lab_views&&tl.trade_lab_views[__pv])||{}, dtCurve=(dtv.curve||[]).map(function(p){ return {d:p.date,y:p.cum_r,tickers:p.tickers,n:p.n}; });
+      var _cr=dtv.cum_r, _nn=dtv.n, _exp=(tl.metrics&&tl.metrics.expectancy);
+      html+='<div class="pf-take '+(_cr>0?'good':(_cr<0?'bad':'unclear'))+'">Your '+esc(__PVLBL[__pv])+' book is <b class="'+(_cr>0?'pos':'neg')+'">'+(_cr!=null?((_cr>0?'+':'')+(+_cr).toFixed(1)+'R'):'—')+'</b> across '+(_nn||0)+' trade'+((_nn===1)?'':'s')+((_exp!=null)?(' · ledger expectancy '+((_exp>0?'+':'')+(+_exp).toFixed(2)+'R/trade')):'')+'.</div>';
+      html+='<div class="card full pf-kpi-card">'+fyKpi+'</div>';
       var hasMlCurve=(dtCurve.length>1);
       if(hasMlCurve){
-        pcRegister('pf-mlday',{ mode:'select', zero:true, zeroLabel:'0R', yLabel:'cumulative R',
+        pcRegister('pf-mlday',{ chromeless:true, mode:'select', zero:true, zeroLabel:'0R (breakeven)', yLabel:'cumulative R',
           yFmt:function(v){return (v>0?'+':'')+v.toFixed(1)+'R';},
           cap:'day-trade only (1–3 sessions) · realized R · one node / session · hover = that session’s tickers',
           empty:'not enough resolved day-trades yet.',
           series:[ {key:'dt',label:esc(__PVLBL[__pv])+' R',color:'var(--cyan)',data:dtCurve} ], nodeTip:pcTipR });
       }
       var oa=tl.operator_alpha||{}, byOgn=tl.scorecard_by_origin||{};
-      function rcell(o,isOp){ if(!o||o.n==null){ return '<div class="pf-orow '+(isOp?'op':'sys')+'"><span class="pf-ogn">'+(isOp?'Operator-real':'System-paper')+'</span><span class="pf-ov mut">no trades yet</span></div>'; }
+      function rcell(o,isOp){ if(!o||o.n==null){ return '<div class="pf-orow '+(isOp?'op':'sys')+'"><span class="pf-ogn">'+(isOp?'<span class="pop real">REAL</span> Operator':'<span class="pop pap">PAPER</span> System')+'</span><span class="pf-ov mut">no trades yet</span></div>'; }
         var wr=(o.win_rate!=null?Math.round(o.win_rate*100)+'%':'—'), ar=(o.avg_r!=null?((o.avg_r>0?'+':'')+o.avg_r+'R'):'—'), arc=(o.avg_r>0?'pos':(o.avg_r<0?'neg':'mut'));
-        return '<div class="pf-orow '+(isOp?'op':'sys')+'"><span class="pf-ogn">'+(isOp?'Operator-real':'System-paper')+'</span><span class="pf-ov">'+(o.n_closed||o.n||0)+' cl · win <b>'+wr+'</b> · avg <b class="'+arc+'">'+ar+'</b></span></div>'; }
+        return '<div class="pf-orow '+(isOp?'op':'sys')+'"><span class="pf-ogn">'+(isOp?'<span class="pop real">REAL</span> Operator':'<span class="pop pap">PAPER</span> System')+'</span><span class="pf-ov">'+(o.n_closed||o.n||0)+' cl · win <b>'+wr+'</b> · avg <b class="'+arc+'">'+ar+'</b></span></div>'; }
       function horizCard(hzLbl,methSys){
         var sysCard=(byOgn.system&&byOgn.system[methSys])||null, opCard=null;
         Object.keys(byOgn.operator||{}).forEach(function(m){ if(!opCard) opCard=byOgn.operator[m]; });
         return '<div class="pf-hz"><div class="pf-hzh">'+esc(hzLbl)+'<span class="pf-hzx">checkpoint · win-rate + avg R</span></div>'+rcell(sysCard,false)+rcell(opCard,true)+'</div>';
       }
-      var scoreCard='<div class="card pf-card scroll-y'+(hasMlCurve?'':' full')+'"><div class="c-lbl"><span class="d"></span>Swing &amp; Positional · checkpoint scoreboards'+HT('Swing (5–10d) and positional (10–30d) trades are scored at their horizon — win-rate and average realized R — NOT a daily compounded line (that only suits day-trades). Each shows the system-paper book vs your operator-real trades, kept separate. Origin split below: operator-alpha = your avg R minus the system’s.')+'<span class="age">win-rate + avg R · system-paper vs operator-real</span></div>'+
-        '<div class="pf-cardbody"><div class="pf-hzwrap">'+horizCard('Swing · 5–10d','bubble-swing')+horizCard('Positional · 10–30d','composite-positional')+'</div>'+
-        '<div class="pf-osplit-h">Origin split · avg R by horizon</div>'+
+      var scoreInner='<div class="pf-hzwrap">'+horizCard('Swing · 5–10d','bubble-swing')+horizCard('Positional · 10–30d','composite-positional')+'</div>'+
+        '<div class="pf-osplit-h">Origin split · operator-alpha (your avg R − system) by horizon</div>'+
         '<div class="scgrid imet-tier" style="grid-template-columns:repeat(3,1fr)">'+
-        ['intraday','swing','positional'].map(function(k){ var a=oa[k]||{}; var al=a.alpha; return '<div><span class="sck">'+k+'</span><span class="scv '+(al==null?'mut':(al>0?'pos':'neg'))+'">'+(al!=null?((al>0?'+':'')+al+'R'):'—')+'</span><span class="scs">sys '+(a.system_avg_r!=null?a.system_avg_r+'R':'—')+(a.n_op?(' · op '+(a.operator_avg_r!=null?a.operator_avg_r+'R':'—')):' · no op')+'</span></div>'; }).join('')+'</div></div></div>';
-      var curveCard=hasMlCurve?('<div class="card pf-card"><div class="c-lbl"><span class="d"></span>'+esc(__PVLBL[__pv])+' · realized-R daily curve'+HT('The master ledger’s DAY-TRADE trades only (resolve in 1–3 sessions), as a cumulative realized-R curve, one node per session. A daily compounded curve only makes sense for day-trades — swing/positional are scored at their checkpoints instead. Daily/Weekly/Monthly re-buckets the x-axis.')+'<span class="age">horizon = day-trade · realized R</span></div><div id="pf-mlday" class="pc-host"></div></div>'):'';
-      html+='<div class="pf-grid">'+curveCard+scoreCard+'</div>';
+        ['intraday','swing','positional'].map(function(k){ var a=oa[k]||{}; var al=a.alpha; return '<div><span class="sck">'+k+'</span><span class="scv '+(al==null?'mut':(al>0?'pos':'neg'))+'">'+(al!=null?((al>0?'+':'')+al+'R'):'—')+'</span><span class="scs">sys '+(a.system_avg_r!=null?a.system_avg_r+'R':'—')+(a.n_op?(' · op '+(a.operator_avg_r!=null?a.operator_avg_r+'R':'—')):' · no op')+'</span></div>'; }).join('')+'</div>';
+      if(hasMlCurve){
+        html+='<div class="pf-grid"><div class="card pf-card full"><div class="c-lbl"><span class="d"></span>'+esc(__PVLBL[__pv])+' · realized-R daily curve'+HT('The master ledger’s DAY-TRADE trades only (resolve in 1–3 sessions), as a cumulative realized-R curve, one node per session. A daily compounded curve only suits day-trades — swing/positional are scored at their checkpoints (in details). Open details to re-bucket D/W/M.')+'<span class="age">horizon = day-trade · realized R</span></div><div id="pf-mlday" class="pc-host"></div></div></div>';
+        html+='<details class="pf-more" open><summary>swing &amp; positional checkpoint scoreboards · origin split · D/W/M</summary><div class="pc-extbar" id="pf-mlday-bar"></div><div class="card pf-card full scroll-y" style="height:auto;margin-top:4px"><div class="pf-cardbody">'+scoreInner+'</div></div></details>';
+      } else {
+        html+='<div class="pf-grid"><div class="card pf-card full scroll-y" style="height:auto"><div class="c-lbl"><span class="d"></span>Swing &amp; Positional · checkpoint scoreboards'+HT('Swing (5–10d) and positional (10–30d) trades are scored at their horizon — win-rate and average realized R — not a daily compounded line. System-paper (PAPER) vs your operator-real (REAL), kept separate. Origin split = operator-alpha (your avg R minus the system’s).')+'<span class="age">win-rate + avg R · PAPER vs REAL</span></div><div class="pf-cardbody">'+scoreInner+'</div></div></div>';
+      }
     } else {
+      html+='<div class="pf-take unclear">Unlock (🔒) to read your realized-R ledger — system-paper (PAPER) vs your own money (REAL), split by horizon.</div>';
       html+='<div class="card full pf-kpi-card">'+fyKpi+'</div><div class="pf-grid"><div class="card pf-card full">'+pending('Master ledger','🔒 unlock to view the master-ledger realized-R performance (system-paper + operator-real).')+'</div></div>';
     }
     html+='</div>';
 
     setFace('z-perf', html);
     ['pf-edge','pf-types','pf-sigq','pf-mlday'].forEach(function(cid){ if(window.__PC[cid]&&document.getElementById(cid)) pcRender(cid); });
+    ['pf-edge','pf-sigq','pf-mlday'].forEach(function(cid){ if(document.getElementById(cid+'-bar')) window.pcSyncBar(cid); });
   }catch(e){__reportErr('perf',e);} }
   window.drawPerf=function(){ try{ renderPerf(); }catch(e){} };
 
