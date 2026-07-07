@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1783432659">
-<meta name="x-built-at" content="2026-07-07T13:57:36+00:00">
+<meta name="x-build-id" content="1783433461">
+<meta name="x-built-at" content="2026-07-07T14:10:57+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1783432659",BUILT_AT="2026-07-07T13:57:36+00:00";
+  var BID="1783433461",BUILT_AT="2026-07-07T14:10:57+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -435,6 +435,23 @@
   .pc-extbar{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:8px 0 4px; }
   .pc-extbar .pc-seg.pc-tf{ margin-left:0; }
   .pf-toggle-wrap{ display:inline-flex; align-items:center; gap:6px; margin-left:6px; }
+  /* ---- Trade Lab Phase-2 (260707 · needs-attention rail · population channel · ladder glyph · hierarchy) ---- */
+  .tl-attn{ margin-bottom:13px; border-color:var(--watch); }
+  .tl-attn-row{ display:flex; align-items:center; gap:8px; padding:6px 2px; border-top:1px solid var(--hair); font-size:11px; }
+  .tl-attn-row:first-of-type{ border-top:none; }
+  .tl-attn-why{ margin-left:auto; color:var(--watch); font-family:var(--font-mono); font-size:10px; white-space:nowrap; }
+  .tl-attn-empty{ padding:8px 2px; color:var(--mut); font-size:11px; }
+  .tl-attn-today{ padding:7px 2px 1px; border-top:1px solid var(--hair); font-size:11px; color:var(--ink2); }
+  .tl-attn-row .dot.live{ width:8px; height:8px; border-radius:50%; background:var(--pos); box-shadow:0 0 0 3px var(--pos-soft); flex:none; display:inline-block; }
+  .pop.paper{ background:transparent; color:var(--mut); border-style:dashed; }
+  .popmini{ font-size:8px; padding:0 4px; margin-right:5px; }
+  .tllad{ font-family:var(--font-mono); font-size:9px; margin-left:6px; white-space:nowrap; }
+  .tllad .lad-e{ color:var(--ink2); } .tllad .lad-s{ color:var(--neg); }
+  .tllad .lad-t{ color:var(--mut); } .tllad .lad-t.bk{ color:var(--pos); font-weight:700; }
+  .tllad .lad-sep{ color:var(--faint); margin:0 1px; } .tllad .lad-run{ color:var(--watch); margin-left:2px; }
+  .trow.tl-r-live td:first-child{ box-shadow:inset 2px 0 0 var(--pos); }
+  .trow.tl-r-missed > td, .trow.tl-r-done > td{ opacity:.6; }
+  .trow.tl-r-missed:hover > td, .trow.tl-r-done:hover > td{ opacity:1; }
   .pf-sec{ --perf-card-h:320px; margin-bottom:26px; }
   .pf-sh{ display:flex; align-items:baseline; gap:10px; margin:0 0 13px; padding-bottom:7px; border-bottom:1px solid var(--hair); }
   .pf-sh .pf-n{ font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--cyan); }
@@ -2223,6 +2240,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       window.__tlOpen=open; window.__tlClosed=closed; window.__tlDailyR=dailyR;
       if(window.__tlDayWin==null) window.__tlDayWin=1;
       window.tlActDate=function(t){ var st=String((t&&t.status)||'').toUpperCase(); if(st==='CLOSED'||st==='REVIEWED') return String(t.exit_at||t.logged_at||'').split(' ')[0].slice(0,10); if(st==='OPEN'||st==='FILLED'||st==='ACTIVE') return String(t.entry_filled_at||t.logged_at||'').split(' ')[0].slice(0,10); return window.tlNextSession(String((t&&t.logged_at)||'').split(' ')[0].slice(0,10)); }; //@pure
+      // tlNeedsAttn (Phase 2): does this trade need the operator's eye right now? live position that is
+      // <=1 session from its time-cap, or has a booked partial with a runner still live.
+      // tlPop (Phase 2): population channel — operator-real (your money) vs system-paper (screen fires).
+      // tlKpiDelta (Phase 2): today's change from the canonical per-session series (daily_r), only when its
+      // right edge is actually today — otherwise no delta is shown (never a stale 'today').
+      // tlLadder (Phase 2): compact entry->targets/stop model for the micro-ladder glyph. A rung is
+      // 'booked' when a target fill sits at its price; 'runner' = an OPEN trade with unbooked size left.
+      window.tlLadder=function(t){ var st=String((t&&t.status)||'').toUpperCase(), fills=(t&&t.fills)||[]; var booked=0; fills.forEach(function(f){ booked+=(f.frac||0); }); var rungs=((t&&t.targets)||[]).map(function(x){ var bk=fills.some(function(f){ return f.kind==='target' && Math.abs((f.px||0)-(x.px||0))<0.01; }); return {px:x.px, booked:!!bk}; }); var live=(st==='OPEN'||st==='FILLED'||st==='ACTIVE'); return {entry:(t&&(t.entry_filled!=null?t.entry_filled:t.entry_trigger)), stop:(t&&t.invalidation), rungs:rungs, runner:(live && fills.length>0 && (1-booked)>0.001)}; }; //@pure
+      window.tlKpiDelta=function(dailyR,today){ var a=(dailyR||[]); if(!a.length) return null; var last=a[a.length-1]; if(String(last.date).slice(0,10)!==String(today).slice(0,10)) return null; return {net_r:last.net_r, n:last.n, w:last.w, l:last.l}; }; //@pure
+      window.tlPop=function(t,opSet){ var tt=String((t&&t.trade_type)||'').toLowerCase(); if(tt==='operator') return 'real'; if(opSet&&t&&opSet[t.methodology]) return 'real'; return 'paper'; }; //@pure
+      window.tlNeedsAttn=function(t){ var st=String((t&&t.status)||'').toUpperCase(); if(st!=='OPEN'&&st!=='FILLED'&&st!=='ACTIVE') return {need:false}; var se=(t&&t.sessions_elapsed), mh=(t&&t.max_hold_sessions); var fills=(t&&t.fills)||[]; if(se!=null&&mh&&se>=mh-1) return {need:true,kind:'cap',reason:(mh-se<=0?'at time-cap · auto-closes next session':'1 session to time-cap')}; if(fills.length) return {need:true,kind:'runner',reason:'partial booked · runner live'}; return {need:false}; }; //@pure
       window.tlSignalLine=function(t,fmt){ fmt=fmt||function(x){return x;}; var st=String((t&&t.status)||'').toUpperCase(); var lg=String((t&&t.logged_at)||'').split(' ')[0].slice(0,10); var efd=String((t&&t.entry_filled_at)||'').slice(0,10); var act=(typeof window!=='undefined'&&window.tlActDate)?window.tlActDate(t):''; if(efd) return (efd!==lg?('signal '+fmt(lg)+' · '):'')+'entry '+fmt(efd); if(st==='PLANNED') return (act&&act!==lg)?('signal '+fmt(lg)+' · for '+fmt(act)):('logged '+fmt(lg)); if((st==='CLOSED'||st==='REVIEWED')&&t&&t.exit_at) return 'signal '+fmt(lg)+' · exited '+fmt(String(t.exit_at).slice(0,10)); return 'logged '+fmt(lg); }; //@pure
         window.tlStatusMeta=function(t){ var st=String((t&&t.status)||'').toUpperCase(), staged=(st==='PLANNED'&&t&&t.stage==='staged'), nf=(t&&(t.exit_kind==='no-fill'||t.exit_kind==='expired')); if(st==='PLANNED') return {word:staged?'watch · staged':'watch'}; if((st==='CLOSED'||st==='REVIEWED')&&nf) return {word:'missed'}; return {}; }; //@pure
       // F260618 block (c) — vertical zone/price ladder (SVG, no charting lib): stop / entry / target
@@ -2452,9 +2480,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         var staged=(st==='PLANNED' && t.stage==='staged');   // F260619 — 9:15-staged, awaiting 9:30 establish
         var _sm=window.tlStatusMeta(t)||{}; var _hxdt=window.tlSignalLine(t,window.tlFmtDay);
         var statusWord=liveFilled?'filled (live)':(isActive?'active':(_sm.word||(nontraded?'missed':'reviewed')));
-        var statusTd='<td><span class="st '+stc+'" style="color:'+stCol+'">'+esc(statusWord)+'</span>'+partial+'</td>';
+        var _pop=window.tlPop(t,opMeth), _popB='<span class="pop '+_pop+' popmini" title="'+(_pop==='real'?'operator-real (your money)':'system-paper (screen fire)')+'">'+(_pop==='real'?'R':'P')+'</span>'; var _rowcls=(isActive?'tl-r-live':(st==='PLANNED'?'tl-r-watch':(nontraded?'tl-r-missed':'tl-r-done')));
+        var statusTd='<td>'+_popB+'<span class="st '+stc+'" style="color:'+stCol+'">'+esc(statusWord)+'</span>'+(isActive?window.tlLadGlyph(t):partial)+'</td>';
         // status moved to immediately after the coloured signal light: [light] [status] [logged] [ticker] …
-        var row='<tr class="trow exp" onclick="tlToggle(\''+did+'\')"><td>'+tlLight(liveFilled?'OPEN':t.status)+'</td>'+statusTd+'<td style="color:var(--faint)" title="session this trade belongs to">'+esc(window.tlFmtDay(window.tlActDate(t)||lg))+'</td><td>'+tkA(t.ticker,esc(t.ticker))+'</td><td style="text-align:center;color:var(--mut)">'+esc(t.methodology||'')+'</td><td>'+fmtNum(ent,1)+'</td><td class="neg">'+fmtNum(t.invalidation,1)+'</td><td class="pos">'+(tgt!=null?fmtNum(tgt,1):'—')+'</td><td>'+fmtNum(last,1)+dot+'</td>'+durCell+perf+'<td class="mut" style="font-size:9px;text-align:center">'+esc(window.tlStopRule(t).short)+'</td><td>'+close+'<span class="expi">▾</span></td></tr>';
+        var row='<tr class="trow exp '+_rowcls+'" onclick="tlToggle(\''+did+'\')"><td>'+tlLight(liveFilled?'OPEN':t.status)+'</td>'+statusTd+'<td style="color:var(--faint)" title="session this trade belongs to">'+esc(window.tlFmtDay(window.tlActDate(t)||lg))+'</td><td>'+tkA(t.ticker,esc(t.ticker))+'</td><td style="text-align:center;color:var(--mut)">'+esc(t.methodology||'')+'</td><td>'+fmtNum(ent,1)+'</td><td class="neg">'+fmtNum(t.invalidation,1)+'</td><td class="pos">'+(tgt!=null?fmtNum(tgt,1):'—')+'</td><td>'+fmtNum(last,1)+dot+'</td>'+durCell+perf+'<td class="mut" style="font-size:9px;text-align:center">'+esc(window.tlStopRule(t).short)+'</td><td>'+close+'<span class="expi">▾</span></td></tr>';
         // ── F131 (260616) hero-card expand panel (A/B/D) — reads like an expanded _index hero card ──
         var heroCls=isClosed?(nontraded?'flat':(rr>0?'pos':'neg')):(isActive?'live':'plan');
         var risk=(ent!=null&&t.invalidation!=null)?(ent-t.invalidation):null;
@@ -2648,6 +2677,13 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<div class="tldv-bar"><div class="c-lbl" style="margin:0"><span class="d"></span>'+esc(TLVLBL[view])+' Performance'+_glossHT+'</div>'+tlToggle+'</div>'+
         '<div class="sigbanner">▸ <b>Your executed '+esc(TLVLBL[view])+' trades</b> (system + operator) — not a signal backtest.'+(v.model_note?(' <i style="color:var(--faint);font-style:normal">'+esc(v.model_note)+'</i>'):'')+'</div>'+
         dtPerfKpis+'</div>';
+            window.tlLadGlyph=function(t){ var L=window.tlLadder(t); if(!L||!L.rungs) return ''; var g='<span class="lad-e" title="entry">E</span>'; L.rungs.forEach(function(r,i){ g+='<span class="lad-sep">▸</span><span class="lad-t'+(r.booked?' bk':'')+'" title="T'+(i+1)+' '+fmtNum(r.px,1)+(r.booked?' · booked':'')+'">'+(r.booked?'✓':('T'+(i+1)))+'</span>'; }); g+='<span class="lad-sep">·</span><span class="lad-s" title="stop">S</span>'+(L.runner?'<span class="lad-run" title="runner live">◤</span>':''); return '<span class="tllad">'+g+'</span>'; };
+            var _attn=(open||[]).map(function(t){ var a=window.tlNeedsAttn(t); return a.need?{t:t,a:a}:null; }).filter(Boolean);
+            var _railBody=_attn.length?_attn.map(function(x){ var t=x.t, pop=window.tlPop(t,opMeth); return '<div class="tl-attn-row"><span class="dot live"></span>'+tkA(t.ticker,esc(t.ticker))+'<span class="pop '+pop+' popmini">'+pop.toUpperCase()+'</span>'+window.tlLadGlyph(t)+'<span class="tl-attn-why">'+esc(x.a.reason)+'</span></div>'; }).join(''):'<div class="tl-attn-empty">✓ Nothing needs you today — no live trade near its time-cap or mid-runner.</div>';
+            var _kd=window.tlKpiDelta(dailyR, window.tlTodayStr()); var _tR=_kd?(+(_kd.net_r||0)):0;
+            var _todayLine=_kd?('<div class="tl-attn-today">Today: <b class="'+(_tR>0?'pos':(_tR<0?'neg':''))+'">'+(_tR>0?'+':'')+_tR.toFixed(2)+'R</b> · '+(_kd.n||0)+' close'+((_kd.n===1)?'':'s')+'</div>'):'';
+            var _rail='<div class="card tl-attn"><div class="c-lbl"><span class="d"></span>Needs attention'+HT('Live trades that want your eye: within one session of the time-cap, or a booked partial with a runner still live. Empty = nothing needs you.')+'<span class="age">'+_attn.length+' now</span></div>'+_railBody+_todayLine+'</div>';
+            html=_rail+html;
             html+=dtPerfCard+tlLeaderboardCard(tl.stop_policy_leaderboard)+'<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>'+esc(TLVLBL[view])+' trade ledger'+HT('Your logged trades of the selected type, newest first, 25 per page. Switch type with the toggle above. Expand a row for the full hero card.')+'<span class="age">'+(vCnt[view]||0)+' '+esc(TLVLBL[view])+' trades</span></div><div id="tl-ledger"></div></div>';
     } else {
       var _sk=function(w){return '<span class="tlk-b" style="width:'+w+'"></span>';};
