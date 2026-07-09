@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1783441335">
-<meta name="x-built-at" content="2026-07-07T16:22:11+00:00">
+<meta name="x-build-id" content="1783578495">
+<meta name="x-built-at" content="2026-07-09T06:28:15+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1783441335",BUILT_AT="2026-07-07T16:22:11+00:00";
+  var BID="1783578495",BUILT_AT="2026-07-09T06:28:15+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -686,6 +686,50 @@
   .today .lbl{ font-family:var(--font-mono); font-size:8.5px; text-transform:uppercase; letter-spacing:0.1em; color:var(--mut); margin-bottom:6px; }
   .today .rd .v{ font-family:var(--font-display); font-size:17px; font-weight:600; color:var(--ink); line-height:1.25; letter-spacing:-0.01em; }
   .today .na .v{ font-size:13px; color:var(--ink2); line-height:1.5; } .today .na .v b{ color:var(--cyan); }
+  /* --- F260709 screener reorg --- */
+  .readwrap{ display:grid; grid-template-columns:1fr 250px; gap:13px; margin-bottom:13px; }
+  .readheroes{ display:grid; grid-template-columns:repeat(auto-fit,minmax(188px,1fr)); gap:10px; align-content:start; }
+  .rhero{ background:var(--glass); border:1px solid var(--border); border-radius:12px; padding:12px 14px; display:flex; flex-direction:column; gap:5px; min-height:80px; }
+  .rhero .rh-t{ font-family:var(--font-mono); font-size:8.5px; text-transform:uppercase; letter-spacing:0.11em; color:var(--cyan); }
+  .rhero .rh-h{ font-family:var(--font-display); font-size:14px; font-weight:650; color:var(--ink); line-height:1.22; letter-spacing:-0.01em; }
+  .rhero .rh-d{ font-family:var(--font-sans); font-size:11px; color:var(--ink2); line-height:1.42; }
+  .naside{ padding:14px 16px; border-radius:12px; background:linear-gradient(135deg, rgba(66,219,230,0.12), rgba(66,219,230,0.03)); border:1px solid var(--border); }
+  .naside .lbl{ font-family:var(--font-mono); font-size:8.5px; text-transform:uppercase; letter-spacing:0.1em; color:var(--mut); margin-bottom:6px; }
+  .naside .v{ font-size:13px; color:var(--ink2); line-height:1.5; } .naside .v b{ color:var(--cyan); }
+  .dtnav{ display:inline-flex; align-items:center; gap:7px; margin:5px 0 3px; }
+  .dtnav button{ font:700 12px/1 inherit; width:24px; height:22px; border-radius:6px; border:1px solid var(--border); background:var(--glass); color:var(--ink2); cursor:pointer; }
+  .dtnav button:disabled{ opacity:0.35; cursor:default; }
+  .dtnav .dtnl{ font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--ink); }
+  .dtnav .dtnk{ font-family:var(--font-mono); font-size:8.5px; text-transform:uppercase; letter-spacing:0.08em; padding:2px 6px; border-radius:5px; }
+  .dtnav .dtnk.today{ background:var(--watch); color:#0b0b0c; } .dtnav .dtnk.tomorrow{ background:rgba(66,219,230,0.18); color:var(--cyan); } .dtnav .dtnk.hist{ background:var(--glass2); color:var(--mut); }
+  .dtperf{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+  .dtpc{ background:var(--glass); border:1px solid var(--hair); border-radius:11px; padding:10px 11px; display:flex; flex-direction:column; gap:4px; }
+  .dtpc .dtp-tk{ font-family:var(--font-mono); font-size:11.5px; font-weight:700; color:var(--ink); }
+  .dtpc .dtp-r{ font-family:var(--font-mono); font-size:14px; font-weight:750; }
+  .dtpc .dtp-r.pos{ color:var(--pos); } .dtpc .dtp-r.neg{ color:var(--neg); } .dtpc .dtp-r.mut{ color:var(--mut); } .dtpc .dtp-r.active{ color:var(--watch); font-size:11px; }
+  .dtpc .dtp-s{ font-family:var(--font-mono); font-size:9px; color:var(--faint); }
+  .sigsc{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-bottom:11px; }
+  .sigsc .ssc{ background:var(--glass); border:1px solid var(--hair); border-radius:11px; padding:9px 11px; }
+  .sigsc .ssc .sl{ font-family:var(--font-mono); font-size:8.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--mut); }
+  .sigsc .ssc .sv{ font-family:var(--font-display); font-size:17px; font-weight:650; }
+  .sigsc .ssc .sv.pos{ color:var(--pos); } .sigsc .ssc .sv.neg{ color:var(--neg); } .sigsc .ssc .sv.mut{ color:var(--ink); }
+  .sigsc .ssc .ss{ font-family:var(--font-mono); font-size:9px; color:var(--faint); }
+  .alphastrip{ display:flex; align-items:flex-end; gap:2px; height:34px; margin-top:9px; }
+  .alphastrip .ab{ flex:1; border-radius:2px 2px 0 0; min-height:2px; }
+  .wlfilters{ display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 9px; }
+  .wlfilters button{ font:600 9.5px/1 var(--font-mono); text-transform:uppercase; letter-spacing:0.05em; padding:4px 8px; border-radius:6px; border:1px solid var(--border); background:var(--glass); color:var(--ink2); cursor:pointer; }
+  .wlfilters button.on{ background:var(--cyan); color:#0b0b0c; border-color:var(--cyan); }
+  .cperf{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px; }
+  .cperf .cpc{ background:var(--glass); border:1px solid var(--hair); border-radius:12px; padding:12px 14px; }
+  .cperf .cph{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:6px; }
+  .cperf .cpn{ font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--ink); }
+  .cperf .cpseg{ font-family:var(--font-sans); font-size:10px; color:var(--mut); margin-bottom:7px; }
+  .cperf .cpm{ display:flex; gap:14px; font-family:var(--font-mono); font-size:10px; color:var(--ink2); }
+  .cperf .cpm b{ color:var(--ink); }
+  .b2b{ font-family:var(--font-mono); font-size:9px; font-weight:700; padding:2px 6px; border-radius:5px; }
+  .b2b.pos{ background:rgba(74,222,128,0.15); color:var(--pos); } .b2b.watch{ background:var(--watch-soft); color:var(--watch); } .b2b.neg{ background:rgba(248,113,113,0.15); color:var(--neg); }
+  .hmwrap{ max-height:340px; overflow-y:auto; }
+  .livedot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--pos); box-shadow:0 0 6px var(--pos); margin-right:5px; vertical-align:middle; }
 
   .card{ position:relative; background:var(--glass); border:1px solid var(--border); border-radius:13px; padding:14px 16px; backdrop-filter:blur(20px) saturate(160%); -webkit-backdrop-filter:blur(20px) saturate(160%); overflow:hidden; }
   .card::before{ content:""; position:absolute; inset:0 0 auto 0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent); }
@@ -1090,40 +1134,49 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     <section class="face active" id="z-screen">
       <div class="zone-h"><span class="zn">01</span><h2>Screener</h2><span class="zr"></span><span class="zx">bubble_set · day_trade_fires · leaderboard</span><span class="zasof" id="zasof-screen"></span></div>
       <div class="stale-banner" id="stale-banner"></div>
-      <div class="today">
-        <div class="rd"><div class="lbl">Today's read</div><div class="v" id="f1-read">—</div></div>
-        <div class="na"><div class="lbl">Next action</div><div class="v" id="f1-next">—</div></div>
+      <div class="readwrap">
+        <div class="readheroes" id="f1-readheroes"></div>
+        <div class="naside"><div class="lbl">Next action</div><div class="v" id="f1-next">—</div></div>
       </div>
       <div class="kpis" id="f1-kpis"></div>
-      <!-- DOMINANT: bubble map, full width (E1 read→act→scan · visual-upgrade v2 §4.1) -->
-      <div class="card">
+      <!-- LANDING: C bubble map beside D composite leaderboard (F260709) -->
+      <div class="grid2">
+        <div class="card">
         <div class="c-lbl"><span class="d"></span>Screener bubble map <span class="ihelp" tabindex="0">?<span class="ihpop">Every screened name as a bubble: x = composite score (further right = stronger), y = directional lean (up = bullish), bubble size = how many screens flag it. Top-right and big = high-conviction multi-screen longs. ★ = held. Click a bubble to open it in TradingView.</span></span><span class="age">x=composite · y=lean · size=lenses · quadrants: act / watch / fade / ignore</span></div>
-        <div class="bubble-wrap bubble-dom"><canvas id="bubble"></canvas><div class="btip" id="btip"></div></div>
-        <div class="bfoot">Top-right big = high-conviction multi-lens longs · bottom-right = strong-but-bearish. ★ held. Click a bubble → TradingView.</div>
-      </div>
-      <!-- ACT: day-trade fires beside the composite leaderboard -->
-      <div class="grid2" style="margin-top:13px">
-        <div class="card" id="card-fires"></div>
+          <div class="bubble-wrap bubble-dom"><canvas id="bubble"></canvas><div class="btip" id="btip"></div></div>
+          <div class="bfoot">Top-right big = high-conviction multi-lens longs · bottom-right = strong-but-bearish. ★ held. Click a bubble → TradingView.</div>
+        </div>
         <div class="card">
           <div class="c-lbl"><span class="d"></span>Composite leaderboard <span class="ihelp" tabindex="0">?<span class="ihpop">The top 8 names by composite score (0–100), which blends all four screens. Each row shows whether each screen passed (✓), nearly passed (~) or failed (·): 10G = 10-gate value, DIV = dividend, 8G = 8-gate quality, TA = technical. Price is live; 1d is today’s move; ★ = you hold it.</span></span><span class="age">top 8 · per-lens ✓/~/· · live price</span></div>
           <div class="lb" id="f1-lb"></div>
         </div>
       </div>
-      <!-- ACT: swing + positional fire detail (top-2 / next-2 by composite) -->
-      <div class="grid2b" style="margin-top:13px">
-        <div class="card" id="card-swing"></div>
-        <div class="card" id="card-positional"></div>
+      <!-- E: day-trade fires (date-nav) beside day-trade performance -->
+      <div class="grid2" style="margin-top:13px">
+        <div class="card" id="card-fires"></div>
+        <div class="card" id="card-dtperf"></div>
       </div>
-      <!-- SCAN: hit matrix beside cluster heat -->
+      <!-- F: swing fires beside swing performance -->
+      <div class="grid2" style="margin-top:13px">
+        <div class="card" id="card-swing"></div>
+        <div class="card" id="card-swingperf"></div>
+      </div>
+      <!-- G: positional fires beside positional performance -->
+      <div class="grid2" style="margin-top:13px">
+        <div class="card" id="card-positional"></div>
+        <div class="card" id="card-posperf"></div>
+      </div>
+      <!-- SCAN: hit matrix beside full watchlist -->
       <div class="grid2b" style="margin-top:13px">
         <div class="card" id="f1-hm"></div>
-        <div class="card" id="f1-heat"></div>
-      </div>
-      <!-- SCAN: promotion candidates · full watchlist · order-book/backlog -->
-      <div class="grid3 scan3" style="margin-top:13px">
-        <div class="card" id="f1-promo"></div>
         <div class="card" id="f1-rundown"></div>
-        <div class="card" id="f1-orderbook"></div>
+      </div>
+      <!-- Company performance (full width) -->
+      <div class="card" id="f1-companyperf" style="margin-top:13px"></div>
+      <!-- relocated below Company performance: cluster heat + promotion candidates -->
+      <div class="grid2b" style="margin-top:13px">
+        <div class="card" id="f1-heat"></div>
+        <div class="card" id="f1-promo"></div>
       </div>
     </section>
 
@@ -1347,6 +1400,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   <script>
   /* ═══ EQUITY DESK · data layer — bind-or-PENDING, additive (no emit/aggregate changes) ═══ */
   const LENS_ORDER = ['10-Gate','DIV','8-Gate','TA'];
+  // F260709: lens keys in the live aggregate are 'Rajiv-10G'/'Rajiv-DIV'/'Sanjeev-8G'/'Kaarin-TA';
+  // resolve display abbreviations to whatever alias the emit produced (fixes blank hit-matrix + leaderboard cells).
+  const LENS_ALIAS={'10-Gate':['10-Gate','Rajiv-10G','10G'],'DIV':['DIV','Rajiv-DIV'],'8-Gate':['8-Gate','Sanjeev-8G','8G'],'TA':['TA','Kaarin-TA']};
+  function lensStat(lensObj,k){ if(!lensObj) return null; var al=LENS_ALIAS[k]||[k]; for(var i=0;i<al.length;i++){ var c=lensObj[al[i]]; if(c&&c.status!=null) return c.status; } return null; }
   const TV_SPECIAL = { BLUESTAR:'BLUESTARCO', KPIT:'KPITTECH', PBFINTECH:'POLICYBZR' };
   const tvSymbol = (t)=> 'NSE:' + (TV_SPECIAL[t]||t);
   const tvHref = (t)=> 'https://www.tradingview.com/chart/?symbol='+encodeURIComponent(tvSymbol(t));
@@ -1369,7 +1426,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   const pending=(t,m)=>'<div class="pending"><div class="pt">⏳ '+esc(t)+'</div><div class="pm">'+esc(m)+'</div></div>';
   const $=(id)=>document.getElementById(id);
 
-  function lensDots(lensObj){ return '<span class="lens">'+LENS_ORDER.map(k=>{ const s=(lensObj&&lensObj[k]&&lensObj[k].status); const c=s==='pass'?'pass':(s==='near'?'near':'fail'); return '<i class="'+c+'"></i>'; }).join('')+'</span>'; }
+  function lensDots(lensObj){ return '<span class="lens">'+LENS_ORDER.map(k=>{ const s=lensStat(lensObj,k); const c=s==='pass'?'pass':(s==='near'?'near':'fail'); return '<i class="'+c+'"></i>'; }).join('')+'</span>'; }
   function lensCell(status){ const c=status==='pass'?'pass':(status==='near'?'near':'fail'); const g=status==='pass'?'✓':(status==='near'?'~':'·'); return '<span class="cell '+c+'">'+g+'</span>'; }
   function leanPill(lean){ const c=lean>0.15?'bull':(lean<-0.15?'bear':'neut'); const t=lean>0.15?'BULL':(lean<-0.15?'BEAR':'NEUT'); return '<span class="lean '+c+'">'+t+'</span>'; }
   function setFace(id,bodyHTML){ const f=$(id); if(!f) return; const zh=f.querySelector('.zone-h'); f.innerHTML=(zh?zh.outerHTML:'')+bodyHTML; }
@@ -1905,6 +1962,106 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     sb.innerHTML='<span>'+ic+'</span><span><b>'+stale.length+' stale signal'+(stale.length>1?'s':'')+'.</b> '+stale.map(function(i){return esc(i.label)+' — '+esc(i.reason);}).join(' · ')+' <span style="opacity:.72">· self-healing watchdog re-probes every cycle.</span></span>';
   }catch(e){ if(window.__reportErr)__reportErr('staleness',e); } }
 
+  // ===== F260709 screener-reorg render helpers =====
+  function buildReadHeroes(hl){
+    var host=$('f1-readheroes'); if(!host) return;
+    hl=(hl||'').trim();
+    if(!hl){ host.innerHTML='<div class="rhero"><div class="rh-h">—</div></div>'; return; }
+    var parts=hl.split(/\.\s+(?=[A-Z0-9(])/).map(function(p){return p.trim().replace(/\.$/,'');}).filter(Boolean);
+    if(!parts.length) parts=[hl];
+    function tagOf(s){ var t=s.toLowerCase();
+      if(/regime/.test(t)) return 'Regime';
+      if(/rail|tnx|us cash|10y|yield|steepen/.test(t)) return 'Rates / rails';
+      if(/dxy|dollar/.test(t)) return 'Dollar';
+      if(/usdinr|rupee|\binr\b/.test(t)) return 'Rupee';
+      if(/brent|crude|\boil\b/.test(t)) return 'Oil';
+      if(/rbi|reserve|\bfx\b/.test(t)) return 'RBI / FX';
+      if(/book|deploy|\bhold\b|position|initiat/.test(t)) return 'Book';
+      if(/earning|result|\bq[1-4]\b|fy2/.test(t)) return 'Earnings';
+      if(/nifty|breadth|index/.test(t)) return 'Market';
+      return (s.split(/[\s—–:,-]/)[0]||'Read');
+    }
+    host.innerHTML=parts.map(function(p){
+      var head=p.split(/\s[—–:]\s|,\s/)[0];
+      var desc=p.slice(head.length).replace(/^[\s—–:,]+/,'');
+      return '<div class="rhero"><div class="rh-t">'+esc(tagOf(p))+'</div><div class="rh-h">'+esc(head)+'</div>'+(desc?('<div class="rh-d">'+esc(desc)+'</div>'):'')+'</div>';
+    }).join('');
+  }
+  function _dtMon(d){ var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; var m=String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})/); return m?(parseInt(m[3],10)+' '+M[parseInt(m[2],10)-1]):String(d||''); }
+  window.__dtIdx=(typeof window.__dtIdx==='number')?window.__dtIdx:null;
+  function renderDayTrade(){
+    var D=DATA; if(!D) return;
+    var scr=D.screeners||{}, fires=scr.daytrade_panel||[], ns=D.next_session||null, fr=D.daytrade_freshness||{};
+    var DTF=(D.signal_perf&&D.signal_perf.dt_fires)||[];
+    var seen={},hist=[]; DTF.forEach(function(r){ if(!seen[r.d]){seen[r.d]=1;hist.push(r.d);} }); hist.sort();
+    var today=fr.price_as_of||hist[hist.length-1]||'';
+    var views=[]; hist.forEach(function(d){ if(d!==today) views.push({date:d,kind:'hist'}); });
+    views.push({date:today,kind:'today'});
+    var nsReady=!!(ns&&(ns.rows||[]).length);
+    if(nsReady) views.push({date:ns.session_date||'',kind:'tomorrow'});
+    var todayIdx=0; for(var i=0;i<views.length;i++){ if(views[i].kind==='today'){todayIdx=i;break;} }
+    var istH=((Date.now()/3600000)%24+5.5+24)%24;
+    if(window.__dtIdx==null){ window.__dtIdx=(istH<9.25&&nsReady)?(views.length-1):todayIdx; }
+    if(window.__dtIdx<0)window.__dtIdx=0; if(window.__dtIdx>views.length-1)window.__dtIdx=views.length-1;
+    var cur=views[window.__dtIdx]||views[todayIdx]; var kl=cur.kind;
+    var nav='<div class="dtnav"><button onclick="dtStep(-1)"'+(window.__dtIdx<=0?' disabled':'')+'>&#9664;</button><span class="dtnl">'+esc(_dtMon(cur.date))+'</span><span class="dtnk '+kl+'">'+(kl==='today'?'today':(kl==='tomorrow'?'next session':'history'))+'</span><button onclick="dtStep(1)"'+(window.__dtIdx>=views.length-1?' disabled':'')+'>&#9654;</button></div>';
+    var sigHTML='', perfRows=[];
+    if(kl==='today'){
+      var top=fires.slice().sort(function(a,b){return b.score-a.score;}).slice(0,6);
+      if(!top.length) sigHTML=pending('Day-trade fires','no daytrade_panel rows in this emit.');
+      top.forEach(function(f){ var st=f.confirmed?'active':(f.vol_spike?'wait':'cool'), stt=f.confirmed?'confirmed':(f.vol_spike?'vol spike':'watch');
+        sigHTML+='<div class="fire"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(f.ticker,esc(f.ticker))+'<span class="sec">'+esc(f.sector||'')+'</span><span class="st '+st+'">'+stt+'</span></span><span class="sc">'+Math.round(f.score)+'</span><span class="mv '+cls(f.d1)+'">'+fmtPct(f.d1)+'</span></div><div class="note">'+esc(f.descriptor||'')+(f.rsi_today!=null?(' · <b>RSI '+Math.round(f.rsi_today)+'</b>'):'')+'</div></div>';
+        perfRows.push({tk:f.ticker,r1:null,r5:null}); });
+    } else if(kl==='tomorrow'){
+      var nr=(ns.rows||[]).slice().sort(function(a,b){return (b.score||0)-(a.score||0);}).slice(0,6);
+      if(!nr.length) sigHTML=pending('Next session','next-session candidates not computed yet.');
+      nr.forEach(function(f){ sigHTML+='<div class="fire"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(f.ticker,esc(f.ticker))+'<span class="sec">'+esc(f.sector||'')+'</span><span class="st cool">planned</span></span><span class="sc">'+Math.round(f.score||0)+'</span></div><div class="note">'+esc(f.descriptor||f.note||'next-session candidate')+'</div></div>';
+        perfRows.push({tk:f.ticker,r1:null,r5:null}); });
+    } else {
+      var day=cur.date; var rows=DTF.filter(function(r){return r.d===day;}).slice().sort(function(a,b){return (b.pc||0)-(a.pc||0);}).slice(0,6);
+      if(!rows.length) sigHTML=pending('Day-trade fires','no fires recorded for this session.');
+      rows.forEach(function(r){ sigHTML+='<div class="fire"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(r.tk,esc(r.tk))+'</span><span class="sc">'+(r.pc!=null?('pc '+r.pc):'')+'</span><span class="mv '+cls(r.r1)+'">'+(r.r1!=null?fmtPct(r.r1):'—')+'</span></div><div class="note">confluence fire · '+esc(day)+'</div></div>';
+        perfRows.push({tk:r.tk,r1:r.r1,r5:r.r5}); });
+    }
+    var rh=(D.regime_history||[]).slice(-10);
+    var strip=rh.length?('<div class="rhstrip">'+rh.map(function(r){ var z=String(r.zone||'').toUpperCase(); var col=z.indexOf('RED')>=0?'var(--neg)':(z.indexOf('GREEN')>=0?'var(--pos)':'var(--watch)'); return '<div class="rhc" title="'+esc(String(r.date||'')+' · '+String(r.zone||'')+(r.score!=null?(' · '+r.score):''))+'"><span class="rhb" style="background:'+col+'"></span><span class="rhd">'+esc(String(r.date||'').slice(5))+'</span><span class="rhz" style="color:'+col+'">'+esc(r.score!=null?String(r.score):z.slice(0,3))+'</span></div>'; }).join('')+'</div>'):pending('Regime history','regime_history not in this emit yet.');
+    var fh='<div class="c-lbl"><span class="d"></span>⚡ Day-trade fires'+HT('The highest-confluence intraday setups for the selected session. Use the arrows to page through past sessions (history) or the next session. Score ranks them; confirmed = momentum + volume aligned.')+'<span class="age">F129 · '+fires.length+' scored today</span></div>'+nav+sigHTML+'<div class="c-lbl" style="margin-top:13px"><span class="d"></span>Regime · last 10 sessions'+HT('The market-regime call over recent sessions: GREEN = deploy, YELLOW = selective, RED = risk-off. Spans the full width of the day-trade panel.')+'<span class="age">history</span></div>'+strip;
+    var el=$('card-fires'); if(el) el.innerHTML=fh;
+    var ph='<div class="c-lbl"><span class="d"></span>📊 Day-trade performance'+HT('Forward result of each day-trade fire for the selected session — 1-day return (and 5-day). Active = still open (today’s fires resolve in 1–3 sessions). Signals on the left, their performance on the right.')+'<span class="age">'+esc(_dtMon(cur.date))+' · 1d / 5d · max 6/day</span></div>';
+    if(!perfRows.length){ ph+=pending('Day-trade performance','no fires to score for this session.'); }
+    else if(kl==='tomorrow'){ ph+='<div class="dt-nodata">Next-session fires are planned — performance appears once the session trades.</div>'; }
+    else { ph+='<div class="dtperf">'+perfRows.slice(0,6).map(function(r){ var resolved=(r.r1!=null); var c1=r.r1>0?'pos':(r.r1<0?'neg':'mut'); var badge=resolved?('<span class="dtp-r '+c1+'">'+(r.r1>0?'+':'')+(+r.r1).toFixed(2)+'%</span>'):'<span class="dtp-r active">● active</span>'; var sub=resolved?('5d '+(r.r5!=null?((r.r5>0?'+':'')+(+r.r5).toFixed(2)+'%'):'—')):'awaiting close'; return '<div class="dtpc"><div class="dtp-tk">'+tkA(r.tk,esc(r.tk))+'</div>'+badge+'<div class="dtp-s">'+esc(sub)+'</div></div>'; }).join('')+'</div>'; }
+    var pe=$('card-dtperf'); if(pe) pe.innerHTML=ph;
+  }
+  window.dtStep=function(delta){ if(window.__dtIdx==null) window.__dtIdx=0; window.__dtIdx+=delta; try{ renderDayTrade(); }catch(e){} };
+  function renderHorizonPerf(hostId,label,icon,alphaKey,nKey,fires){
+    var el=$(hostId); if(!el) return;
+    var pa=(DATA&&DATA.positional_assessment)||{}, ts=pa.type_scoreboard||[];
+    var vals=ts.map(function(r){return +r[alphaKey];}).filter(function(v){return !isNaN(v);});
+    var avg=vals.length?vals.reduce(function(a,b){return a+b;},0)/vals.length:null;
+    var hit=vals.length?Math.round(vals.filter(function(v){return v>0;}).length/vals.length*100):null;
+    var nsum=ts.reduce(function(a,r){return a+(+r[nKey]||0);},0);
+    function ap(v){ return v==null?'—':((v>0?'+':'')+v.toFixed(2)+'%'); }
+    function ac(v){ return v==null?'mut':(v>0?'pos':'neg'); }
+    var sc='<div class="sigsc"><div class="ssc"><div class="sl">Avg alpha</div><div class="sv '+ac(avg)+'">'+ap(avg)+'</div><div class="ss">vs Nifty · per session</div></div><div class="ssc"><div class="sl">Hit rate</div><div class="sv mut">'+(hit!=null?hit+'%':'—')+'</div><div class="ss">sessions beating index</div></div><div class="ssc"><div class="sl">Episodes</div><div class="sv mut">'+nsum+'</div><div class="ss">'+ts.length+' sessions</div></div></div>';
+    var recent=ts.slice(-16);
+    var mx=Math.max.apply(null,recent.map(function(r){return Math.abs(+r[alphaKey]||0);}).concat([1]));
+    var strip='<div class="alphastrip">'+recent.map(function(r){ var v=+r[alphaKey]||0; var h=Math.round(Math.abs(v)/mx*34); return '<span class="ab" title="'+esc(r.d+' · '+ap(v))+'" style="height:'+Math.max(2,h)+'px;background:'+(v>=0?'var(--pos)':'var(--neg)')+'"></span>'; }).join('')+'</div>';
+    var active=''; if(fires&&fires.length){ active='<div class="dtperf" style="margin-top:10px">'+fires.map(function(b){ return '<div class="dtpc"><div class="dtp-tk">'+tkA(b.ticker,esc(b.ticker))+'</div><span class="dtp-r active">● active</span><div class="dtp-s">comp '+Math.round(+b.composite||0)+' · resolving</div></div>'; }).join('')+'</div>'; }
+    el.innerHTML='<div class="c-lbl"><span class="d"></span>'+icon+' '+label+HT('The realized edge of this horizon’s screener fires — average alpha (excess vs Nifty) and hit-rate across sessions, from positional_assessment. Below: the current fires (left panel) shown active until they resolve. Signals left, performance right.')+'<span class="age">alpha vs Nifty · '+ts.length+' sessions</span></div>'+sc+active+strip;
+  }
+  function renderCompanyPerf(){
+    var el=$('f1-companyperf'); if(!el) return;
+    var ob=(DATA&&DATA.order_book)||{}, comps=ob.companies||[], mom=ob.momentum_summary||[];
+    var head='<div class="c-lbl"><span class="d"></span>Company performance'+HT('Company-level operating signal — starting with corporate order-book / backlog momentum (book-to-bill, order-book coverage, execution). Expands with more company fundamentals later; for now it tracks the order-book book we have.')+'<span class="age">'+comps.length+' companies · order-book phase</span></div>';
+    if(!comps.length && !mom.length){ el.innerHTML=head+pending('Company performance','no company order-book data in this emit.'); return; }
+    var byTk={}; mom.forEach(function(m){ byTk[m.company]=m; });
+    var src=comps.length?comps:mom;
+    var cards=src.map(function(c){ var tk=c.company||c.ticker||'—'; var m=byTk[tk]||c; var b2b=parseFloat(m.book_to_bill); var bc=isNaN(b2b)?'watch':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg')); var seg=c.segment||c.full_name||''; var held=c.held?'★ ':'';
+      return '<div class="cpc"><div class="cph"><span class="cpn">'+held+tkA(tk,esc(tk))+'</span>'+(m.book_to_bill!=null?('<span class="b2b '+bc+'">B2B '+esc(m.book_to_bill)+'</span>'):'')+'</div>'+(seg?('<div class="cpseg">'+esc(seg)+'</div>'):'')+'<div class="cpm"><span><b>'+esc(m.ob_cover!=null?m.ob_cover:'—')+'</b> OB cover</span><span><b>'+esc(m.execution_rate!=null?m.execution_rate:'—')+'</b> exec</span></div>'+(m.note?('<div class="cpseg" style="margin-top:6px">'+esc(m.note)+'</div>'):'')+'</div>'; }).join('');
+    el.innerHTML=head+'<div class="cperf">'+cards+'</div>';
+  }
+  window.wlFilter=function(btn){ try{ var val=(btn&&btn.getAttribute('data-wl'))||'*'; var wrap=btn.closest('.card'); if(!wrap) return; Array.prototype.forEach.call(wrap.querySelectorAll('.wlfilters button'),function(b){ b.classList.remove('on'); }); btn.classList.add('on'); Array.prototype.forEach.call(wrap.querySelectorAll('.rundown .rdrow'),function(row){ if(row.classList.contains('h')) return; var cl=row.getAttribute('data-cl')||''; row.style.display=(val==='*'||cl===val)?'':'none'; }); }catch(e){} };
   function renderAll(){
     if(!DATA) return;
     const sc=DATA.screeners||{}, reg=DATA.regime||{}, dr=DATA.dr||{};
@@ -1929,7 +2086,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       const bg=reg.binding_gate||{};
       (function(){ var _ch=function(c,h){return '<span class="ch"><span class="dt2" style="background:'+c+'"></span><span>'+h+'</span></span>';}; var _rc=zone==='RED'?'var(--neg)':(zone==='GREEN'?'var(--pos)':'var(--watch)'); var _fc=fires.filter(function(f){return f.confirmed;}), _fn=_fc.slice(0,4).map(function(f){return esc(f.ticker);}).join(', '); var _tb=bubble.slice().filter(function(b){return +b.lean>0;}).sort(function(a,b){return b.composite-a.composite;})[0]; var _pd=(DATA.daytrade_freshness||{}).price_as_of||''; var H='<div class="wcaph">Today\u2019s action'+(_pd?(' \u00b7 as of '+esc(_pd)):'')+'</div>'; H+=_ch(_rc,'Regime <b>'+esc(zone)+(reg.score!=null?(' \u00b7 '+esc(String(reg.score))):'')+'</b>'+(reg.attack_mode?(' \u00b7 '+esc(reg.attack_mode)):'')); if(bg.id) H+=_ch('var(--watch)','Gate <b>'+esc(bg.id)+'</b> '+esc(bg.status||'')+' '+esc(bg.reading||'')+(bg.threshold?(' ('+esc(bg.threshold)+')'):'')); H+=_ch(_fc.length?'var(--pos)':'var(--mut)',_fc.length?('<b>'+_fc.length+'</b> fire'+(_fc.length>1?'s':'')+' today \u00b7 '+_fn+(_fc.length>4?(' +'+(_fc.length-4)):'')):'No confirmed fires today'); if(_tb) H+=_ch('var(--cyan)','Top conviction <b>'+esc(_tb.ticker)+'</b> \u00b7 composite '+Math.round(_tb.composite)); if(cat&&cat.event) H+=_ch('var(--violet)','Next \u00b7 '+esc((cat.event||'').trim())); $('op-changed').innerHTML=H; })(); }catch(e){__reportErr('opbar',e);}
 
-    try{ $('f1-read').innerHTML=(function(){ var hl=(reg.headline||'').trim(); if(!hl) return '—'; var parts=hl.split(/\.\s+(?=[A-Z0-9(])/).map(function(p){return p.trim().replace(/\.$/,'');}).filter(Boolean); if(parts.length<2) return esc(hl); return '<ul class="headbul">'+parts.map(function(p){return '<li>'+esc(p)+'</li>';}).join('')+'</ul>'; })();
+    try{ buildReadHeroes((reg.headline||'').trim());
       const topBull=bubble.slice().filter(b=>+b.lean>0).sort((a,b)=>b.composite-a.composite)[0];
       $('f1-next').innerHTML = zone==='RED' ? 'Risk-off — no new initiations; manage held to gates.'
         : ('Lean '+esc(String(zone).toLowerCase())+'. '+(topBull?('Top conviction <b>'+esc(topBull.ticker)+'</b> · composite '+Math.round(topBull.composite)+'.'):'No clean long lean.')); }catch(e){__reportErr('f1-today',e);}
@@ -1961,31 +2118,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 
     try{ window.BUB=bubble.map(b=>({tk:b.ticker,sec:b.sector||b.cluster||'',comp:+b.composite,lean:+b.lean,lens:+b.multi_hit_count,held:!!b.held})); if(window.drawBubble) window.drawBubble(); }catch(e){__reportErr('bubble',e);}
 
-    try{
-      if(!window.dtView){ window.dtView=function(v){ window.__dtView=v; try{renderAll();}catch(e){} }; }
-      var __ns=(DATA.next_session||null);
-      var __istH=((Date.now()/3600000)%24+5.5+24)%24;                 // IST hour (UTC+5:30)
-      var __vw=window.__dtView||(__istH<9.25?'tomorrow':'today');     // rollover: pre-open default = Tomorrow
-      // F260626 WO-2: do NOT force-revert to today when tomorrow is empty -- let the toggle switch; empty renders the pending state below.
-      var __src=(__vw==='tomorrow'&&__ns)?(__ns.rows||[]):fires;
-      var __bb=function(on,v,lbl){ return '<button onclick="dtView(\''+v+'\')" style="font:700 10px/1 inherit;padding:2px 7px;border-radius:5px;border:1px solid var(--line);margin-left:5px;cursor:pointer;background:'+(on?'var(--watch)':'transparent')+';color:'+(on?'#0b0b0c':'var(--ink2)')+'">'+lbl+'</button>'; };
-      var __badge='';
-      if(__vw==='tomorrow'&&__ns){ var __bz=(__ns.basis==='overnight_refreshed')?'overnight-refreshed':'on the close'; __badge=' <span class="age" style="color:var(--watch)">&#9656; '+esc(__ns.session_date||'next')+' &middot; '+__bz+' &middot; '+esc(__ns.as_of_ist||'')+(__ns.overnight_bias?(' &middot; '+esc(__ns.overnight_bias)):'')+'</span>'; }
-      var __MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var __istD=new Date(Date.now()+5.5*3600000);
-      var __todayLbl='Today '+__istD.getUTCDate()+' '+__MON[__istD.getUTCMonth()];
-      var __tmRaw=(__ns&&__ns.session_date)?(''+__ns.session_date):'';
-      var __tmM=__tmRaw.match(/^(\d{4})-(\d{2})-(\d{2})/);
-      var __nsReady=!!(__ns&&(__ns.rows||[]).length);
-      var __tmLbl='Tomorrow'+(__tmM?(' '+parseInt(__tmM[3],10)+' '+__MON[parseInt(__tmM[2],10)-1]):(__tmRaw?(' '+__tmRaw):''))+(__nsReady?'':' · WIP');
-      var __dtBar='<div style="margin:4px 0 2px">'+__bb(__vw==='today','today',__todayLbl)+__bb(__vw==='tomorrow','tomorrow',__tmLbl)+__badge+'</div>';
-      const top=__src.slice().sort((a,b)=>b.score-a.score).slice(0,6);
-      let h='<div class="c-lbl"><span class="d"></span>⚡ Day-trade fires'+HT('Today’s highest-confluence intraday setups from the DayTrade-Confluence screen. Score ranks them; “confirmed” = momentum + volume aligned, “vol spike” = unusual volume, “watch” = forming. These are signals to consider, not auto-trades.')+'<span class="age">F129 · '+fires.length+' scored · '+esc((DATA.daytrade_freshness||{}).price_as_of||'')+'</span></div>';
-      h+=__dtBar; if(!top.length) h+=pending('Day-trade fires',(__vw==='tomorrow'?(__nsReady?'no next-session candidates in this cut.':'⚙ WIP — next-session analysis is prepared after the close (evening / pre-open run). Tomorrow’s fires aren’t computed yet.'):'no daytrade_panel rows in this emit.'));
-      else top.forEach(f=>{ const st=f.confirmed?'active':(f.vol_spike?'wait':'cool'), stt=f.confirmed?'confirmed':(f.vol_spike?'vol spike':'watch');
-        h+='<div class="fire"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(f.ticker,esc(f.ticker))+'<span class="sec">'+esc(f.sector||'')+'</span><span class="st '+st+'">'+stt+'</span></span><span class="sc">'+Math.round(f.score)+'</span><span class="mv '+cls(f.d1)+'">'+fmtPct(f.d1)+'</span></div><div class="note">'+esc(f.descriptor||'')+(f.rsi_today!=null?(' · <b>RSI '+Math.round(f.rsi_today)+'</b>'):'')+'</div></div>'; });
-      h+='<div class="c-lbl" style="margin-top:13px"><span class="d"></span>Regime · last 10 sessions'+HT('The market-regime call over recent sessions: GREEN = deploy-friendly, YELLOW = selective, RED = risk-off (manage, don’t add). The number is the regime score; it gates how aggressively the book deploys.')+'<span class="age">history</span></div>'+(function(){ var rh=(DATA.regime_history||[]).slice(-10); if(!rh.length) return pending('Regime history','regime_history not in this emit yet — host re-run pending.'); return '<div class="rhstrip">'+rh.map(function(r){ var z=String(r.zone||'').toUpperCase(); var col=z.indexOf('RED')>=0?'var(--neg)':(z.indexOf('GREEN')>=0?'var(--pos)':'var(--watch)'); return '<div class="rhc" title="'+esc(String(r.date||'')+' · '+String(r.zone||'')+(r.score!=null?(' · '+r.score):''))+'"><span class="rhb" style="background:'+col+'"></span><span class="rhd">'+esc(String(r.date||'').slice(5))+'</span><span class="rhz" style="color:'+col+'">'+esc(r.score!=null?String(r.score):z.slice(0,3))+'</span></div>'; }).join('')+'</div>'; })();
-      $('card-fires').innerHTML=h; }catch(e){__reportErr('fires',e);}
+    try{ renderDayTrade(); }catch(e){__reportErr('fires',e);}
 
     try{ renderStaleness(DATA); }catch(e){__reportErr('fires-fresh',e);}
 
@@ -2009,6 +2142,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       };
       firesPan('card-swing', rankedF.slice(0,2), 'swing', '🌀', 'Swing fires', 'bubble-swing · top 2 composite · held-excluded');
       firesPan('card-positional', rankedF.slice(2,4), 'positional', '📈', 'Positional fires', 'composite-positional · next 2 · held-excluded');
+      try{ renderHorizonPerf('card-swingperf','Swing performance','🌀','swing_alpha','n_swing', rankedF.slice(0,2)); }catch(e){__reportErr('swingperf',e);}
+      try{ renderHorizonPerf('card-posperf','Positional performance','📈','pos_alpha','n_pos', rankedF.slice(2,4)); }catch(e){__reportErr('posperf',e);}
     }catch(e){__reportErr('fires2',e);}
 
     // A2 — Composite leaderboard with the Hit Matrix folded in (per-lens ✓/~/· cells) + live price column
@@ -2016,13 +2151,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       let h='<div class="lbrow head"><span class="rk">#</span><span class="nm">Name</span><span>10G</span><span>DIV</span><span>8G</span><span>TA</span><span>Lean</span><span class="lbcl">Cluster</span><span class="lbpx">Price</span><span>Comp</span><span class="dm">1d</span></div>';
       lb.forEach((b,i)=>{ const rd=rundown.find(r=>r.ticker===b.ticker), d1=rd&&rd.moves?rd.moves.d1:null;
         const lp=priceFor(b.ticker), px=(lp&&lp.last!=null)?lp.last:null;
-        const cells=LENS_ORDER.map(k=>lensCell(b.lens&&b.lens[k]&&b.lens[k].status)).join('');
+        const cells=LENS_ORDER.map(k=>lensCell(lensStat(b.lens,k))).join('');
         h+='<div class="lbrow'+(b.held?' held':'')+'"><span class="rk">'+(i+1)+'</span><span class="nm">'+(b.held?'★ ':'')+tkA(b.ticker,esc(b.ticker))+'<span class="sec">'+esc(b.sector||'')+'</span></span>'+cells+leanPill(+b.lean)+'<span class="read lbcl">'+esc(b.cluster||'—')+'</span><span class="lbpx">'+(px!=null?fmtNum(px,1):'—')+'</span><span class="cv">'+Math.round(b.composite)+'</span><span class="dm '+cls(d1)+'">'+(d1!=null?fmtPct(d1):'—')+'</span></div>'; });
       $('f1-lb').innerHTML=h; }catch(e){__reportErr('leaderboard',e);}
 
     renderHeat(sc,rundown);
-    try{ var _obm=((DATA.order_book||{}).momentum_summary)||[]; var _obEl=$('f1-orderbook');
-      if(_obEl) _obEl.innerHTML='<div class="c-lbl"><span class="d"></span>Order-book / backlog'+HT('Corporate order-book momentum (F100) — book-to-bill, order-book coverage, execution rate.')+'<span class="age">'+_obm.length+' names</span></div>'+(_obm.length?('<div class="obtiles">'+_obm.map(function(m){ var b2b=parseFloat(m.book_to_bill); var bc=isNaN(b2b)?'':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg')); return '<div class="obtile"><div class="obt-h">'+tkA(m.company,esc(m.company))+'<span class="obt-b2b '+bc+'">B2B '+esc(m.book_to_bill!=null?m.book_to_bill:'—')+'</span></div><div class="obt-m"><span><b>'+esc(m.ob_cover!=null?m.ob_cover:'—')+'</b> OB cover</span><span><b>'+esc(m.execution_rate!=null?m.execution_rate:'—')+'</b> exec</span></div>'+(m.note?('<div class="obt-n">'+esc(m.note)+'</div>'):'')+'</div>'; }).join('')+'</div>'):pending('Order-book / backlog','no backlog momentum in this emit.')); }catch(e){__reportErr('orderbook',e);}
+    try{ renderCompanyPerf(); }catch(e){__reportErr('companyperf',e);}
     try{ renderPerf(); }catch(e){__reportErr('perf',e);}
     renderLab();
     renderPort(held,tot,DATA.risk_gates||[]);
@@ -2114,14 +2248,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     const maxc=Math.max.apply(null,rows.map(r=>r.comp).concat([1]));
     const heat='<div class="heat">'+rows.map(r=>{ const col=r.comp>=60?'var(--pos)':(r.comp>=48?'var(--watch)':'var(--neg)'); return '<div class="heatrow"><span class="ly">'+esc(r.k)+'<span class="ct">'+r.n+'</span></span><span class="hb"><span class="hf" style="width:'+Math.round(r.comp/maxc*100)+'%;background:'+col+'"></span></span><span class="av">'+Math.round(r.comp)+'</span><span class="mvc '+cls(r.d1)+'">'+fmtPct(r.d1)+'</span></div>'; }).join('')+'</div>';
     const promo=(sc.promotion_candidates||[]); const promoChips=promo.length?('<div class="chips">'+promo.map(p=>'<span class="chip">'+esc(p.ticker)+' '+(p.multi_hit_count||0)+'/4</span>').join('')+'</div>'):pending('Promotion candidates','none flagged this run.');
-    const hm=(sc.hit_matrix||[]).slice().sort((a,b)=>b.multi_hit_count-a.multi_hit_count).slice(0,8);
-    const hmHTML='<table class="hm"><thead><tr><th>Name</th><th>10G</th><th>DIV</th><th>8G</th><th>TA</th></tr></thead><tbody>'+hm.map(r=>'<tr><td>'+(r.held?'★ ':'')+tkA(r.ticker,esc(r.ticker))+'</td>'+LENS_ORDER.map(k=>'<td>'+lensCell(r.lens&&r.lens[k]&&r.lens[k].status)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
+    const hm=(Array.isArray(sc.hit_matrix)?sc.hit_matrix:[]).slice().sort((a,b)=>b.multi_hit_count-a.multi_hit_count);
+    const hmHTML='<div class="hmwrap"><table class="hm"><thead><tr><th>Name</th><th>10G</th><th>DIV</th><th>8G</th><th>TA</th></tr></thead><tbody>'+hm.map(r=>'<tr><td>'+(r.held?'★ ':'')+tkA(r.ticker,esc(r.ticker))+'</td>'+LENS_ORDER.map(k=>'<td>'+lensCell(lensStat(r.lens,k))+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
     const rd=rundown.slice().sort((a,b)=>((b.moves&&b.moves.d1)||0)-((a.moves&&a.moves.d1)||0));  // A3 — full watchlist (container scrolls)
-    const rdHTML='<div class="rundown"><div class="rdrow h"><span>Ticker</span><span>1d</span><span>3d</span><span>5d</span></div>'+rd.map(r=>{ const m=r.moves||{}; return '<div class="rdrow"><span class="tk">'+(r.tag==='held'?'★ ':'')+tkA(r.ticker,esc(r.ticker))+'<span class="cl">'+esc(r.cluster||r.sector||'')+'</span></span><span class="w '+cls(m.d1)+'">'+fmtPct(m.d1)+'</span><span class="w '+cls(m.d3)+'">'+fmtPct(m.d3)+'</span><span class="w '+cls(m.d5)+'">'+fmtPct(m.d5)+'</span></div>'; }).join('')+'</div>';
-    var hmEl=$('f1-hm'); if(hmEl) hmEl.innerHTML='<div class="c-lbl"><span class="d"></span>Hit matrix'+HT('Each top-ranked name against the four screens — 10G value / DIV dividend / 8G quality / TA technical — as pass ✓ / near ~ / fail ·. The at-a-glance grid of which names clear which gates.')+'<span class="age">ticker × lens · ✓ pass / ~ near / · fail</span></div>'+hmHTML;
+    const rdHTML='<div class="rundown"><div class="rdrow h"><span>Ticker</span><span>1d</span><span>3d</span><span>5d</span></div>'+rd.map(r=>{ const m=r.moves||{}; return '<div class="rdrow" data-cl="'+esc((r.cluster||r.sector||'').toLowerCase())+'"><span class="tk">'+(r.tag==='held'?'★ ':'')+tkA(r.ticker,esc(r.ticker))+'<span class="cl">'+esc(r.cluster||r.sector||'')+'</span></span><span class="w '+cls(m.d1)+'">'+fmtPct(m.d1)+'</span><span class="w '+cls(m.d3)+'">'+fmtPct(m.d3)+'</span><span class="w '+cls(m.d5)+'">'+fmtPct(m.d5)+'</span></div>'; }).join('')+'</div>';
+    var _hmAsof=((typeof DATA!=='undefined'&&DATA&&DATA.daytrade_freshness)||{}).price_as_of||''; var hmEl=$('f1-hm'); if(hmEl) hmEl.innerHTML='<div class="c-lbl"><span class="d"></span>Hit matrix'+HT('Each screened name against the four screens — 10G value / DIV dividend / 8G quality / TA technical — as pass ✓ / near ~ / fail ·. Live, all names; scroll for more.')+'<span class="age"><span class="livedot"></span>'+hm.length+' names · as of '+esc(_hmAsof)+'</span></div>'+hmHTML;
     var heatEl=$('f1-heat'); if(heatEl) heatEl.innerHTML='<div class="c-lbl"><span class="d"></span>Cluster heat'+HT('Each bar is a sector/cluster, ranked by the average composite score of its names. Longer/greener = the cluster is screening stronger today. The number is avg composite; the right figure is the cluster’s average 1-day move.')+'<span class="age">names · avg composite · avg 1d</span></div>'+heat;
     var promoEl=$('f1-promo'); if(promoEl) promoEl.innerHTML='<div class="c-lbl"><span class="d"></span>Promotion candidates'+HT('Names flagged by multiple screens this run that aren’t held yet — candidates worth a closer look for the watchlist.')+'<span class="age">multi-lens · not held</span></div>'+promoChips;
-    var rdEl=$('f1-rundown'); if(rdEl) rdEl.innerHTML='<div class="c-lbl"><span class="d"></span>Full watchlist rundown'+HT('Every name in the screener universe, sorted by today’s move. 1d/3d/5d are the % changes over those trading windows. Scroll for the full list.')+'<span class="age">'+rd.length+' names · scroll · 1d / 3d / 5d</span></div>'+rdHTML;
+    var _wlc={}; rd.forEach(function(r){ var c=(r.cluster||r.sector||'—'); _wlc[c]=(_wlc[c]||0)+1; }); var _wlk=Object.keys(_wlc).sort(function(a,b){return _wlc[b]-_wlc[a];}); var _wlb='<div class="wlfilters"><button class="on" data-wl="*" onclick="wlFilter(this)">All '+rd.length+'</button>'+_wlk.slice(0,12).map(function(c){return '<button data-wl="'+esc(c.toLowerCase())+'" onclick="wlFilter(this)">'+esc(c)+' '+_wlc[c]+'</button>';}).join('')+'</div>'; var rdEl=$('f1-rundown'); if(rdEl) rdEl.innerHTML='<div class="c-lbl"><span class="d"></span>Full watchlist'+HT('Every name in the screener universe, sorted by the latest move. Filter by cluster with the buttons; 1d/3d/5d are the % moves over those windows.')+'<span class="age">'+rd.length+' names · filter · 1d / 3d / 5d</span></div>'+_wlb+rdHTML;
   }catch(e){__reportErr('heat',e);} }
 
   var TL_LEGEND='<div class="tlegend"><div class="lh">Trade status</div>'+
