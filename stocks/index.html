@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1783578495">
-<meta name="x-built-at" content="2026-07-09T06:28:15+00:00">
+<meta name="x-build-id" content="1783587809">
+<meta name="x-built-at" content="2026-07-09T09:03:29+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1783578495",BUILT_AT="2026-07-09T06:28:15+00:00";
+  var BID="1783587809",BUILT_AT="2026-07-09T09:03:29+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -730,6 +730,33 @@
   .b2b.pos{ background:rgba(74,222,128,0.15); color:var(--pos); } .b2b.watch{ background:var(--watch-soft); color:var(--watch); } .b2b.neg{ background:rgba(248,113,113,0.15); color:var(--neg); }
   .hmwrap{ max-height:340px; overflow-y:auto; }
   .livedot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--pos); box-shadow:0 0 6px var(--pos); margin-right:5px; vertical-align:middle; }
+  /* --- F260709-v2: landing shrink + rich trade cards + day/week nav --- */
+  .bubble-wrap.bubble-dom{ height:362px; }
+  .rhero{ min-height:56px; padding:9px 12px; gap:3px; }
+  .readheroes{ gap:8px; }
+  .readwrap{ gap:11px; margin-bottom:11px; }
+  #z-screen .grid2.dtpair{ align-items:start; }
+  .tcgrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:9px; }
+  .tcgrid.dt{ grid-template-columns:repeat(3,1fr); }
+  .tcard{ background:var(--glass); border:1px solid var(--hair); border-radius:11px; padding:10px 11px; display:flex; flex-direction:column; gap:5px; transition:border-color .15s, transform .1s; }
+  .tcard[onclick]:hover{ border-color:var(--cyan); transform:translateY(-1px); }
+  .tcard .tc-top{ display:flex; align-items:center; gap:6px; }
+  .tcard .tc-tk{ font-family:var(--font-mono); font-size:11.5px; font-weight:700; color:var(--ink); }
+  .tcard .tc-sec{ font-family:var(--font-mono); font-size:8px; color:var(--mut); text-transform:uppercase; letter-spacing:0.04em; margin-right:auto; }
+  .tcard .tc-main{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .tcard .tc-score{ font-family:var(--font-mono); font-size:9.5px; color:var(--ink2); }
+  .tcard .tc-ret{ font-family:var(--font-mono); font-size:14px; font-weight:750; }
+  .tcard .tc-ret.pos{ color:var(--pos); } .tcard .tc-ret.neg{ color:var(--neg); } .tcard .tc-ret.mut{ color:var(--mut); } .tcard .tc-ret.active{ color:var(--watch); font-size:11px; }
+  .tcard .tc-stats{ display:flex; flex-wrap:wrap; gap:9px; font-family:var(--font-mono); font-size:9px; color:var(--faint); }
+  .tcard .tc-stats b{ color:var(--ink2); }
+  .tcard .tc-lens{ display:inline-flex; }
+  .tcard .tc-sub{ font-family:var(--font-mono); font-size:9px; color:var(--faint); }
+  .tcard .tc-go{ font-family:var(--font-mono); font-size:8.5px; color:var(--cyan); opacity:0.72; }
+  .tc-lockmsg{ font-family:var(--font-mono); font-size:10px; color:var(--mut); padding:10px 2px 2px; line-height:1.5; }
+  .perseg{ display:inline-flex; gap:2px; background:var(--glass); border:1px solid var(--border); border-radius:7px; padding:2px; margin-right:4px; }
+  .perseg button{ font:700 9px/1 var(--font-mono); text-transform:uppercase; letter-spacing:0.04em; padding:3px 7px; border-radius:5px; border:0; background:transparent; color:var(--ink2); cursor:pointer; }
+  .perseg button.on{ background:var(--cyan); color:#0b0b0c; }
+  .fclick{ transition:background .12s; border-radius:7px; } .fclick:hover{ background:var(--glass2); }
 
   .card{ position:relative; background:var(--glass); border:1px solid var(--border); border-radius:13px; padding:14px 16px; backdrop-filter:blur(20px) saturate(160%); -webkit-backdrop-filter:blur(20px) saturate(160%); overflow:hidden; }
   .card::before{ content:""; position:absolute; inset:0 0 auto 0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent); }
@@ -1005,6 +1032,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   .tip-portal{ display:none; position:fixed; z-index:9999; max-width:300px; padding:9px 12px; border-radius:9px; background:#0d1118; border:1px solid var(--border); box-shadow:0 12px 34px rgba(0,0,0,0.6); font-family:var(--font-sans,inherit); font-size:10.5px; line-height:1.55; color:var(--ink2); pointer-events:none; text-align:left; white-space:normal; }
   body.light .tip-portal{ background:#fff; color:#2a2f3a; box-shadow:0 12px 34px rgba(0,0,0,0.18); }
   .tip-portal .tp-sub{ margin-top:6px; font-size:8.5px; color:var(--mut); font-family:var(--font-mono); }
+  /* F260709-v2b landing shrink */
+  #z-screen .bubble-wrap.bubble-dom{ height:360px; }
+  #z-screen .lbrow{ padding:4px 12px; }
+  #z-screen .rhero{ min-height:0; padding:8px 11px; gap:2px; }
+  #z-screen .rhero .rh-t{ font-size:8px; letter-spacing:0.1em; }
+  #z-screen .rhero .rh-h{ font-size:12.5px; line-height:1.18; }
+  #z-screen .rhero .rh-d{ font-size:10px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  #z-screen .readheroes{ gap:7px; }
 </style>
 </head>
 <body class="dark locked">
@@ -1152,17 +1187,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         </div>
       </div>
       <!-- E: day-trade fires (date-nav) beside day-trade performance -->
-      <div class="grid2" style="margin-top:13px">
+      <div class="grid2 dtpair" style="margin-top:13px">
         <div class="card" id="card-fires"></div>
         <div class="card" id="card-dtperf"></div>
       </div>
       <!-- F: swing fires beside swing performance -->
-      <div class="grid2" style="margin-top:13px">
+      <div class="grid2 dtpair" style="margin-top:13px">
         <div class="card" id="card-swing"></div>
         <div class="card" id="card-swingperf"></div>
       </div>
       <!-- G: positional fires beside positional performance -->
-      <div class="grid2" style="margin-top:13px">
+      <div class="grid2 dtpair" style="margin-top:13px">
         <div class="card" id="card-positional"></div>
         <div class="card" id="card-posperf"></div>
       </div>
@@ -1989,7 +2024,74 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   }
   function _dtMon(d){ var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; var m=String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})/); return m?(parseInt(m[3],10)+' '+M[parseInt(m[2],10)-1]):String(d||''); }
   window.__dtIdx=(typeof window.__dtIdx==='number')?window.__dtIdx:null;
-  function renderDayTrade(){
+  function renderCompanyPerf(){
+    var el=$('f1-companyperf'); if(!el) return;
+    var ob=(DATA&&DATA.order_book)||{}, comps=ob.companies||[], mom=ob.momentum_summary||[];
+    var head='<div class="c-lbl"><span class="d"></span>Company performance'+HT('Company-level operating signal — starting with corporate order-book / backlog momentum (book-to-bill, order-book coverage, execution). Expands with more company fundamentals later; for now it tracks the order-book book we have.')+'<span class="age">'+comps.length+' companies · order-book phase</span></div>';
+    if(!comps.length && !mom.length){ el.innerHTML=head+pending('Company performance','no company order-book data in this emit.'); return; }
+    var byTk={}; mom.forEach(function(m){ byTk[m.company]=m; });
+    var src=comps.length?comps:mom;
+    var cards=src.map(function(c){ var tk=c.company||c.ticker||'—'; var m=byTk[tk]||c; var b2b=parseFloat(m.book_to_bill); var bc=isNaN(b2b)?'watch':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg')); var seg=c.segment||c.full_name||''; var held=c.held?'★ ':'';
+      return '<div class="cpc"><div class="cph"><span class="cpn">'+held+tkA(tk,esc(tk))+'</span>'+(m.book_to_bill!=null?('<span class="b2b '+bc+'">B2B '+esc(m.book_to_bill)+'</span>'):'')+'</div>'+(seg?('<div class="cpseg">'+esc(seg)+'</div>'):'')+'<div class="cpm"><span><b>'+esc(m.ob_cover!=null?m.ob_cover:'—')+'</b> OB cover</span><span><b>'+esc(m.execution_rate!=null?m.execution_rate:'—')+'</b> exec</span></div>'+(m.note?('<div class="cpseg" style="margin-top:6px">'+esc(m.note)+'</div>'):'')+'</div>'; }).join('');
+    el.innerHTML=head+'<div class="cperf">'+cards+'</div>';
+  }
+  window.wlFilter=function(btn){ try{ var val=(btn&&btn.getAttribute('data-wl'))||'*'; var wrap=btn.closest('.card'); if(!wrap) return; Array.prototype.forEach.call(wrap.querySelectorAll('.wlfilters button'),function(b){ b.classList.remove('on'); }); btn.classList.add('on'); Array.prototype.forEach.call(wrap.querySelectorAll('.rundown .rdrow'),function(row){ if(row.classList.contains('h')) return; var cl=row.getAttribute('data-cl')||''; row.style.display=(val==='*'||cl===val)?'':'none'; }); }catch(e){} };
+  // ===== F260709-v2 screener trade-pairs (rich cards · clickable → Trade Lab · day/week nav) =====
+  var _MONS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function _ymd(s){ var m=String(s||'').match(/(\d{4})-(\d{2})-(\d{2})/); return m?{y:+m[1],mo:+m[2],d:+m[3]}:null; }
+  function _dLabel(s){ var p=_ymd(s); return p?(p.d+' '+_MONS[p.mo-1]):String(s||''); }
+  function _mondayOf(s){ var p=_ymd(s); if(!p) return s; var dt=new Date(p.y,p.mo-1,p.d); var wd=(dt.getDay()+6)%7; dt.setDate(dt.getDate()-wd); var q=function(x){return (x<10?'0':'')+x;}; return dt.getFullYear()+'-'+q(dt.getMonth()+1)+'-'+q(dt.getDate()); }
+  function _bucketKey(s,grain){ var p=_ymd(s); if(!p) return String(s||''); if(grain==='month') return p.y+'-'+(p.mo<10?'0':'')+p.mo; if(grain==='week') return _mondayOf(s); return String(s).slice(0,10); }
+  function _bucketLabel(s,grain){ var p=_ymd(s); if(!p) return String(s||''); if(grain==='month') return _MONS[p.mo-1]+' '+p.y; if(grain==='week') return 'wk '+_dLabel(_mondayOf(s)); return _dLabel(s); }
+  function _tlRet(t){ if(!t) return null; if(t.realized_r!=null) return {v:+t.realized_r,unit:'R',kind:'realized'}; var e=(t.entry_filled!=null?t.entry_filled:t.entry_trigger), l=t.last_close; if(e&&l) return {v:(l-e)/e*100,unit:'%',kind:'open'}; return null; }
+  function _tlStatusCls(st){ st=String(st||'').toUpperCase(); return (st==='OPEN'||st==='FILLED'||st==='ACTIVE')?'active':(st==='PLANNED'?'wait':'cool'); }
+
+  // Unified rich, clickable trade card (held-card density).
+  function tradeCard(o){
+    var tk=o.tk||'—';
+    var click=o.view?(' onclick="tlOpenTrade(\''+esc(tk)+'\',\''+esc(o.view)+'\')" title="open '+esc(tk)+' in Trade Lab" style="cursor:pointer"'):'';
+    var stCls=o.statusCls||_tlStatusCls(o.status);
+    var stLbl=o.statusLbl||String(o.status||'').toLowerCase()||'active';
+    var retHTML='';
+    if(o.ret){ var rc=(o.ret.v>0?'pos':(o.ret.v<0?'neg':'mut')); var rv=(o.ret.v>0?'+':'')+(+o.ret.v).toFixed(2)+(o.ret.unit||'%'); retHTML='<span class="tc-ret '+rc+'">'+rv+'</span>'; }
+    else { retHTML='<span class="tc-ret active">● active</span>'; }
+    var stats=[];
+    if(o.entry!=null) stats.push('<span>entry <b>'+fmtNum(o.entry,1)+'</b></span>');
+    if(o.stop!=null) stats.push('<span>stop <b>'+fmtNum(o.stop,1)+'</b></span>');
+    if(o.lensN!=null) stats.push('<span><b>'+o.lensN+'</b> lens</span>');
+    var lensHTML=o.lensObj?('<span class="tc-lens">'+lensDots(o.lensObj)+'</span>'):'';
+    return '<div class="tcard"'+click+'>'+
+      '<div class="tc-top"><span class="tc-tk">'+tkA(tk,esc(tk))+'</span>'+(o.sector?'<span class="tc-sec">'+esc(o.sector)+'</span>':'')+'<span class="st '+stCls+'">'+esc(stLbl)+'</span></div>'+
+      '<div class="tc-main"><span class="tc-score">'+(o.score!=null?(o.scoreLbl||'score')+' '+Math.round(o.score):'')+'</span>'+retHTML+'</div>'+
+      (stats.length?('<div class="tc-stats">'+stats.join('')+'</div>'):'')+
+      (lensHTML||(o.sub?'<div class="tc-sub">'+esc(o.sub)+'</div>':''))+
+      (o.view?'<div class="tc-go">→ Trade Lab '+esc(o.view)+'</div>':'')+
+      '</div>';
+  }
+
+  // Deep-link: open a specific ticker's trade in the Trade Lab tab (unlock-gated; graceful when locked).
+  window.tlOpenTrade=function(tk,view){ try{
+    if(view && window.tlSetView) window.tlSetView(view);
+    var nb=document.querySelector('.navpills [data-z="z-lab"]'); if(nb) nb.click();
+    setTimeout(function(){ try{
+      var rows=document.querySelectorAll('#z-lab .trow[data-tk="'+tk+'"]');
+      if(rows.length){ var r=rows[0]; try{ r.click(); }catch(e){} try{ r.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} }
+    }catch(e){} }, 80);
+  }catch(e){} };
+
+  // period navigator (grain toggle + arrows + label).
+  function perNav(cfg){
+    var h='<div class="dtnav">';
+    if(cfg.grains && cfg.grains.length>1){ h+='<span class="perseg">'+cfg.grains.map(function(g){ return '<button class="'+(g===cfg.grain?'on':'')+'" onclick="'+cfg.grainFn+'(\''+g+'\')">'+g+'</button>'; }).join('')+'</span>'; }
+    h+='<button onclick="'+cfg.stepFn+'(-1)"'+(cfg.idx<=0?' disabled':'')+'>&#9664;</button>';
+    h+='<span class="dtnl">'+esc(cfg.curLabel)+'</span><span class="dtnk '+cfg.curTag+'">'+(cfg.curTag==='current'?'current':'history')+'</span>';
+    h+='<button onclick="'+cfg.stepFn+'(1)"'+(cfg.idx>=cfg.n-1?' disabled':'')+'>&#9654;</button></div>';
+    return h;
+  }
+
+  // ---------- DAY-TRADE pair (public dt_fires; Day granularity) ----------
+  window.__dtIdx=(typeof window.__dtIdx==='number')?window.__dtIdx:null;
+  function renderDayTradePair(){
     var D=DATA; if(!D) return;
     var scr=D.screeners||{}, fires=scr.daytrade_panel||[], ns=D.next_session||null, fr=D.daytrade_freshness||{};
     var DTF=(D.signal_perf&&D.signal_perf.dt_fires)||[];
@@ -2004,64 +2106,79 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(window.__dtIdx==null){ window.__dtIdx=(istH<9.25&&nsReady)?(views.length-1):todayIdx; }
     if(window.__dtIdx<0)window.__dtIdx=0; if(window.__dtIdx>views.length-1)window.__dtIdx=views.length-1;
     var cur=views[window.__dtIdx]||views[todayIdx]; var kl=cur.kind;
-    var nav='<div class="dtnav"><button onclick="dtStep(-1)"'+(window.__dtIdx<=0?' disabled':'')+'>&#9664;</button><span class="dtnl">'+esc(_dtMon(cur.date))+'</span><span class="dtnk '+kl+'">'+(kl==='today'?'today':(kl==='tomorrow'?'next session':'history'))+'</span><button onclick="dtStep(1)"'+(window.__dtIdx>=views.length-1?' disabled':'')+'>&#9654;</button></div>';
-    var sigHTML='', perfRows=[];
+    var nav=perNav({stepFn:'dtStep',idx:window.__dtIdx,n:views.length,curLabel:_dLabel(cur.date),curTag:(kl==='hist'?'history':'current')});
+    var sigHTML='', cards=[];
     if(kl==='today'){
       var top=fires.slice().sort(function(a,b){return b.score-a.score;}).slice(0,6);
       if(!top.length) sigHTML=pending('Day-trade fires','no daytrade_panel rows in this emit.');
       top.forEach(function(f){ var st=f.confirmed?'active':(f.vol_spike?'wait':'cool'), stt=f.confirmed?'confirmed':(f.vol_spike?'vol spike':'watch');
-        sigHTML+='<div class="fire"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(f.ticker,esc(f.ticker))+'<span class="sec">'+esc(f.sector||'')+'</span><span class="st '+st+'">'+stt+'</span></span><span class="sc">'+Math.round(f.score)+'</span><span class="mv '+cls(f.d1)+'">'+fmtPct(f.d1)+'</span></div><div class="note">'+esc(f.descriptor||'')+(f.rsi_today!=null?(' · <b>RSI '+Math.round(f.rsi_today)+'</b>'):'')+'</div></div>';
-        perfRows.push({tk:f.ticker,r1:null,r5:null}); });
+        sigHTML+='<div class="fire fclick" onclick="tlOpenTrade(\''+esc(f.ticker)+'\',\'daytrade\')" style="cursor:pointer"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(f.ticker,esc(f.ticker))+'<span class="sec">'+esc(f.sector||'')+'</span><span class="st '+st+'">'+stt+'</span></span><span class="sc">'+Math.round(f.score)+'</span><span class="mv '+cls(f.d1)+'">'+fmtPct(f.d1)+'</span></div><div class="note">'+esc(f.descriptor||'')+(f.rsi_today!=null?(' · <b>RSI '+Math.round(f.rsi_today)+'</b>'):'')+'</div></div>';
+        cards.push(tradeCard({tk:f.ticker,sector:f.sector,status:'active',score:f.score,entry:(f.entry_trigger!=null?f.entry_trigger:null),lensObj:(window.__lensByTk||{})[f.ticker],ret:null,view:'daytrade'})); });
     } else if(kl==='tomorrow'){
       var nr=(ns.rows||[]).slice().sort(function(a,b){return (b.score||0)-(a.score||0);}).slice(0,6);
       if(!nr.length) sigHTML=pending('Next session','next-session candidates not computed yet.');
       nr.forEach(function(f){ sigHTML+='<div class="fire"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(f.ticker,esc(f.ticker))+'<span class="sec">'+esc(f.sector||'')+'</span><span class="st cool">planned</span></span><span class="sc">'+Math.round(f.score||0)+'</span></div><div class="note">'+esc(f.descriptor||f.note||'next-session candidate')+'</div></div>';
-        perfRows.push({tk:f.ticker,r1:null,r5:null}); });
+        cards.push(tradeCard({tk:f.ticker,sector:f.sector,status:'PLANNED',statusLbl:'planned',score:f.score,ret:null,view:'daytrade'})); });
     } else {
       var day=cur.date; var rows=DTF.filter(function(r){return r.d===day;}).slice().sort(function(a,b){return (b.pc||0)-(a.pc||0);}).slice(0,6);
       if(!rows.length) sigHTML=pending('Day-trade fires','no fires recorded for this session.');
-      rows.forEach(function(r){ sigHTML+='<div class="fire"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(r.tk,esc(r.tk))+'</span><span class="sc">'+(r.pc!=null?('pc '+r.pc):'')+'</span><span class="mv '+cls(r.r1)+'">'+(r.r1!=null?fmtPct(r.r1):'—')+'</span></div><div class="note">confluence fire · '+esc(day)+'</div></div>';
-        perfRows.push({tk:r.tk,r1:r.r1,r5:r.r5}); });
+      rows.forEach(function(r){ sigHTML+='<div class="fire fclick" onclick="tlOpenTrade(\''+esc(r.tk)+'\',\'daytrade\')" style="cursor:pointer"><div class="top"><span class="rk">🔥</span><span class="tk">'+tkA(r.tk,esc(r.tk))+'</span><span class="sc">'+(r.pc!=null?('pc '+r.pc):'')+'</span><span class="mv '+cls(r.r1)+'">'+(r.r1!=null?fmtPct(r.r1):'—')+'</span></div><div class="note">confluence fire · '+esc(_dLabel(day))+'</div></div>';
+        cards.push(tradeCard({tk:r.tk,status:'CLOSED',statusLbl:'closed',lensN:r.pc,ret:(r.r1!=null?{v:r.r1,unit:'%',kind:'realized'}:null),sub:(r.r5!=null?('5d '+(r.r5>0?'+':'')+(+r.r5).toFixed(2)+'%'):''),view:'daytrade'})); });
     }
     var rh=(D.regime_history||[]).slice(-10);
     var strip=rh.length?('<div class="rhstrip">'+rh.map(function(r){ var z=String(r.zone||'').toUpperCase(); var col=z.indexOf('RED')>=0?'var(--neg)':(z.indexOf('GREEN')>=0?'var(--pos)':'var(--watch)'); return '<div class="rhc" title="'+esc(String(r.date||'')+' · '+String(r.zone||'')+(r.score!=null?(' · '+r.score):''))+'"><span class="rhb" style="background:'+col+'"></span><span class="rhd">'+esc(String(r.date||'').slice(5))+'</span><span class="rhz" style="color:'+col+'">'+esc(r.score!=null?String(r.score):z.slice(0,3))+'</span></div>'; }).join('')+'</div>'):pending('Regime history','regime_history not in this emit yet.');
-    var fh='<div class="c-lbl"><span class="d"></span>⚡ Day-trade fires'+HT('The highest-confluence intraday setups for the selected session. Use the arrows to page through past sessions (history) or the next session. Score ranks them; confirmed = momentum + volume aligned.')+'<span class="age">F129 · '+fires.length+' scored today</span></div>'+nav+sigHTML+'<div class="c-lbl" style="margin-top:13px"><span class="d"></span>Regime · last 10 sessions'+HT('The market-regime call over recent sessions: GREEN = deploy, YELLOW = selective, RED = risk-off. Spans the full width of the day-trade panel.')+'<span class="age">history</span></div>'+strip;
+    var fh='<div class="c-lbl"><span class="d"></span>⚡ Day-trade fires'+HT('Highest-confluence intraday setups for the selected session. Arrows page past sessions / the next session. Click a fire to open it in Trade Lab.')+'<span class="age">F129 · '+fires.length+' scored today</span></div>'+nav+sigHTML+'<div class="c-lbl" style="margin-top:12px"><span class="d"></span>Regime · last 10 sessions'+HT('Market-regime call over recent sessions: GREEN deploy · YELLOW selective · RED risk-off. Spans the panel width.')+'<span class="age">history</span></div>'+strip;
     var el=$('card-fires'); if(el) el.innerHTML=fh;
-    var ph='<div class="c-lbl"><span class="d"></span>📊 Day-trade performance'+HT('Forward result of each day-trade fire for the selected session — 1-day return (and 5-day). Active = still open (today’s fires resolve in 1–3 sessions). Signals on the left, their performance on the right.')+'<span class="age">'+esc(_dtMon(cur.date))+' · 1d / 5d · max 6/day</span></div>';
-    if(!perfRows.length){ ph+=pending('Day-trade performance','no fires to score for this session.'); }
-    else if(kl==='tomorrow'){ ph+='<div class="dt-nodata">Next-session fires are planned — performance appears once the session trades.</div>'; }
-    else { ph+='<div class="dtperf">'+perfRows.slice(0,6).map(function(r){ var resolved=(r.r1!=null); var c1=r.r1>0?'pos':(r.r1<0?'neg':'mut'); var badge=resolved?('<span class="dtp-r '+c1+'">'+(r.r1>0?'+':'')+(+r.r1).toFixed(2)+'%</span>'):'<span class="dtp-r active">● active</span>'; var sub=resolved?('5d '+(r.r5!=null?((r.r5>0?'+':'')+(+r.r5).toFixed(2)+'%'):'—')):'awaiting close'; return '<div class="dtpc"><div class="dtp-tk">'+tkA(r.tk,esc(r.tk))+'</div>'+badge+'<div class="dtp-s">'+esc(sub)+'</div></div>'; }).join('')+'</div>'; }
+    var ph='<div class="c-lbl"><span class="d"></span>📊 Day-trade performance'+HT('Forward result of each fire for the selected session — active until it resolves (1–3 sessions), then 1-day / 5-day return. Signals left, performance right. Click a card → the trade in Trade Lab.')+'<span class="age">'+esc(_dLabel(cur.date))+' · click → Trade Lab</span></div>';
+    if(!cards.length) ph+=pending('Day-trade performance','no fires to score for this session.');
+    else ph+='<div class="tcgrid dt">'+cards.join('')+'</div>';
     var pe=$('card-dtperf'); if(pe) pe.innerHTML=ph;
   }
-  window.dtStep=function(delta){ if(window.__dtIdx==null) window.__dtIdx=0; window.__dtIdx+=delta; try{ renderDayTrade(); }catch(e){} };
-  function renderHorizonPerf(hostId,label,icon,alphaKey,nKey,fires){
-    var el=$(hostId); if(!el) return;
-    var pa=(DATA&&DATA.positional_assessment)||{}, ts=pa.type_scoreboard||[];
-    var vals=ts.map(function(r){return +r[alphaKey];}).filter(function(v){return !isNaN(v);});
-    var avg=vals.length?vals.reduce(function(a,b){return a+b;},0)/vals.length:null;
-    var hit=vals.length?Math.round(vals.filter(function(v){return v>0;}).length/vals.length*100):null;
-    var nsum=ts.reduce(function(a,r){return a+(+r[nKey]||0);},0);
-    function ap(v){ return v==null?'—':((v>0?'+':'')+v.toFixed(2)+'%'); }
-    function ac(v){ return v==null?'mut':(v>0?'pos':'neg'); }
-    var sc='<div class="sigsc"><div class="ssc"><div class="sl">Avg alpha</div><div class="sv '+ac(avg)+'">'+ap(avg)+'</div><div class="ss">vs Nifty · per session</div></div><div class="ssc"><div class="sl">Hit rate</div><div class="sv mut">'+(hit!=null?hit+'%':'—')+'</div><div class="ss">sessions beating index</div></div><div class="ssc"><div class="sl">Episodes</div><div class="sv mut">'+nsum+'</div><div class="ss">'+ts.length+' sessions</div></div></div>';
-    var recent=ts.slice(-16);
-    var mx=Math.max.apply(null,recent.map(function(r){return Math.abs(+r[alphaKey]||0);}).concat([1]));
-    var strip='<div class="alphastrip">'+recent.map(function(r){ var v=+r[alphaKey]||0; var h=Math.round(Math.abs(v)/mx*34); return '<span class="ab" title="'+esc(r.d+' · '+ap(v))+'" style="height:'+Math.max(2,h)+'px;background:'+(v>=0?'var(--pos)':'var(--neg)')+'"></span>'; }).join('')+'</div>';
-    var active=''; if(fires&&fires.length){ active='<div class="dtperf" style="margin-top:10px">'+fires.map(function(b){ return '<div class="dtpc"><div class="dtp-tk">'+tkA(b.ticker,esc(b.ticker))+'</div><span class="dtp-r active">● active</span><div class="dtp-s">comp '+Math.round(+b.composite||0)+' · resolving</div></div>'; }).join('')+'</div>'; }
-    el.innerHTML='<div class="c-lbl"><span class="d"></span>'+icon+' '+label+HT('The realized edge of this horizon’s screener fires — average alpha (excess vs Nifty) and hit-rate across sessions, from positional_assessment. Below: the current fires (left panel) shown active until they resolve. Signals left, performance right.')+'<span class="age">alpha vs Nifty · '+ts.length+' sessions</span></div>'+sc+active+strip;
+  window.dtStep=function(delta){ if(window.__dtIdx==null) window.__dtIdx=0; window.__dtIdx+=delta; try{ renderDayTradePair(); }catch(e){} };
+
+  // ---------- SWING / POSITIONAL pair (public bubble_set now; unlocked ledger history) ----------
+  function _liveFires(view){ var bubble=((DATA.screeners||{}).bubble_set)||[]; var ranked=bubble.filter(function(b){return !b.held;}).slice().sort(function(a,b){return (+b.composite||-1)-(+a.composite||-1);}); return view==='swing'?ranked.slice(0,2):ranked.slice(2,4); }
+  function _horizonPair(cfg){
+    var view=cfg.view;
+    var grain=window[cfg.grainKey]||cfg.grains[0];
+    if(cfg.grains.indexOf(grain)<0){ grain=cfg.grains[0]; window[cfg.grainKey]=grain; }
+    var tl=(DATA&&DATA._unlocked)?DATA.trade_lab:null;
+    var buckets=[];
+    if(tl && window.tlViewOf){ var all=(tl.open||[]).concat(tl.closed||[]).filter(function(t){return window.tlViewOf(t)===view;});
+      var by={}; all.forEach(function(t){ var d=(window.tlActDate?window.tlActDate(t):String(t.logged_at||'').slice(0,10))||''; var k=_bucketKey(d,grain); if(!by[k]) by[k]={key:k,label:_bucketLabel(d,grain),trades:[]}; by[k].trades.push(t); });
+      buckets=Object.keys(by).sort().map(function(k){return by[k];}); }
+    var views=buckets.map(function(b){return {kind:'hist',bucket:b,label:b.label};});
+    views.push({kind:'current',label:(grain==='month'?'this month':(grain==='week'?'this week':'today'))});
+    var idx=window[cfg.idxKey]; if(typeof idx!=='number'||idx>views.length-1) idx=views.length-1; if(idx<0)idx=0; window[cfg.idxKey]=idx;
+    var cur=views[idx];
+    var nav=perNav({stepFn:cfg.stepFn,idx:idx,n:views.length,curLabel:cur.label,curTag:(cur.kind==='current'?'current':'history'),grain:grain,grains:cfg.grains,grainFn:cfg.grainFn});
+    var sigHTML='', cards=[], sub='';
+    if(cur.kind==='current'){
+      var lf=_liveFires(view);
+      if(!lf.length) sigHTML=pending(cfg.label,'no composite-ranked candidates (held-excluded) in this emit.');
+      lf.forEach(function(b,i){ var nl=(+b.multi_hit_count||0); var comp=Math.round(+b.composite||0);
+        sigHTML+='<div class="fire fclick" onclick="tlOpenTrade(\''+esc(b.ticker)+'\',\''+view+'\')" style="cursor:pointer"><div class="top"><span class="rk">'+cfg.icon+'</span><span class="tk">'+tkA(b.ticker,esc(b.ticker))+'<span class="sec">'+esc(b.sector||b.cluster||'')+'</span></span><span class="sc">'+comp+'</span><span class="mv '+(nl>=3?'pos':(nl>=1?'watch':'mut'))+'">'+nl+' lens</span></div><div class="note">'+(i===0?'top fire':'fire #'+(i+1))+' · '+(b.lean>0.15?'bull lean':(b.lean<-0.15?'bear lean':'neutral'))+' → Trade Lab '+view+'</div></div>';
+        cards.push(tradeCard({tk:b.ticker,sector:b.sector||b.cluster,status:'active',score:b.composite,scoreLbl:'comp',lensObj:b.lens,lensN:nl,ret:null,view:view})); });
+      sub='live fires · resolving';
+    } else {
+      var ts=cur.bucket.trades.slice().sort(function(a,b){ var ra=_tlRet(a),rb=_tlRet(b); return ((rb?rb.v:-999)-(ra?ra.v:-999)); });
+      ts.forEach(function(t){ var ret=_tlRet(t); var e=(t.entry_filled!=null?t.entry_filled:t.entry_trigger);
+        sigHTML+='<div class="fire fclick" onclick="tlOpenTrade(\''+esc(t.ticker)+'\',\''+view+'\')" style="cursor:pointer"><div class="top"><span class="rk">'+cfg.icon+'</span><span class="tk">'+tkA(t.ticker,esc(t.ticker))+'<span class="sec">'+esc(t.sector||t.cluster||'')+'</span><span class="st '+_tlStatusCls(t.status)+'">'+esc(String(t.status||'').toLowerCase())+'</span></span>'+(t.signal_score!=null?'<span class="sc">'+Math.round(t.signal_score)+'</span>':'')+(ret?'<span class="mv '+(ret.v>0?'pos':(ret.v<0?'neg':'mut'))+'">'+(ret.v>0?'+':'')+ret.v.toFixed(2)+ret.unit+'</span>':'')+'</div><div class="note">'+(window.tlSignalLine?esc(window.tlSignalLine(t,_dLabel)):'')+' → Trade Lab</div></div>';
+        cards.push(tradeCard({tk:t.ticker,sector:t.sector||t.cluster,status:t.status,score:t.signal_score,scoreLbl:'score',entry:e,stop:t.invalidation,lensObj:(window.__lensByTk||{})[t.ticker],ret:ret,view:view})); });
+      sub=cur.bucket.trades.length+' trades';
+    }
+    var el=$(cfg.firesEl); if(el) el.innerHTML='<div class="c-lbl"><span class="d"></span>'+cfg.icon+' '+cfg.label+HT('System fires for this horizon (composite leaders, held-excluded). Current = live bubble_set picks; page back for logged history (unlock required). Click a fire → the trade in Trade Lab.')+'<span class="age">'+view+' · '+esc(String(cur.label))+'</span></div>'+nav+(sigHTML||pending(cfg.label,'no fires in this bucket.'));
+    var pe=$(cfg.perfEl); if(pe){ var ph='<div class="c-lbl"><span class="d"></span>📊 '+cfg.label.replace('fires','performance')+HT('How this horizon’s fires performed. Current picks show active; historical buckets show realized return / R from the trade ledger. Click a card → the trade in Trade Lab.')+'<span class="age">'+esc(String(cur.label))+' · '+esc(sub)+'</span></div>';
+      ph+=(cards.length?('<div class="tcgrid">'+cards.join('')+'</div>'):pending('Performance','no trades in this bucket.'));
+      if(cur.kind==='current' && !(DATA&&DATA._unlocked)){ ph+='<div class="tc-lockmsg">🔒 Unlock to page through logged '+view+' history &amp; performance by '+cfg.grains.join(' / ')+'.</div>'; }
+      pe.innerHTML=ph; }
   }
-  function renderCompanyPerf(){
-    var el=$('f1-companyperf'); if(!el) return;
-    var ob=(DATA&&DATA.order_book)||{}, comps=ob.companies||[], mom=ob.momentum_summary||[];
-    var head='<div class="c-lbl"><span class="d"></span>Company performance'+HT('Company-level operating signal — starting with corporate order-book / backlog momentum (book-to-bill, order-book coverage, execution). Expands with more company fundamentals later; for now it tracks the order-book book we have.')+'<span class="age">'+comps.length+' companies · order-book phase</span></div>';
-    if(!comps.length && !mom.length){ el.innerHTML=head+pending('Company performance','no company order-book data in this emit.'); return; }
-    var byTk={}; mom.forEach(function(m){ byTk[m.company]=m; });
-    var src=comps.length?comps:mom;
-    var cards=src.map(function(c){ var tk=c.company||c.ticker||'—'; var m=byTk[tk]||c; var b2b=parseFloat(m.book_to_bill); var bc=isNaN(b2b)?'watch':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg')); var seg=c.segment||c.full_name||''; var held=c.held?'★ ':'';
-      return '<div class="cpc"><div class="cph"><span class="cpn">'+held+tkA(tk,esc(tk))+'</span>'+(m.book_to_bill!=null?('<span class="b2b '+bc+'">B2B '+esc(m.book_to_bill)+'</span>'):'')+'</div>'+(seg?('<div class="cpseg">'+esc(seg)+'</div>'):'')+'<div class="cpm"><span><b>'+esc(m.ob_cover!=null?m.ob_cover:'—')+'</b> OB cover</span><span><b>'+esc(m.execution_rate!=null?m.execution_rate:'—')+'</b> exec</span></div>'+(m.note?('<div class="cpseg" style="margin-top:6px">'+esc(m.note)+'</div>'):'')+'</div>'; }).join('');
-    el.innerHTML=head+'<div class="cperf">'+cards+'</div>';
-  }
-  window.wlFilter=function(btn){ try{ var val=(btn&&btn.getAttribute('data-wl'))||'*'; var wrap=btn.closest('.card'); if(!wrap) return; Array.prototype.forEach.call(wrap.querySelectorAll('.wlfilters button'),function(b){ b.classList.remove('on'); }); btn.classList.add('on'); Array.prototype.forEach.call(wrap.querySelectorAll('.rundown .rdrow'),function(row){ if(row.classList.contains('h')) return; var cl=row.getAttribute('data-cl')||''; row.style.display=(val==='*'||cl===val)?'':'none'; }); }catch(e){} };
+  function renderSwingPair(){ _horizonPair({view:'swing',firesEl:'card-swing',perfEl:'card-swingperf',icon:'🌀',label:'Swing fires',grains:['day','week'],grainKey:'__swGrain',idxKey:'__swIdx',stepFn:'swStep',grainFn:'swGrain'}); }
+  function renderPositionalPair(){ _horizonPair({view:'positional',firesEl:'card-positional',perfEl:'card-posperf',icon:'📈',label:'Positional fires',grains:['week','month'],grainKey:'__poGrain',idxKey:'__poIdx',stepFn:'poStep',grainFn:'poGrain'}); }
+  window.swStep=function(delta){ if(typeof window.__swIdx!=='number') window.__swIdx=0; window.__swIdx+=delta; try{ renderSwingPair(); }catch(e){} };
+  window.poStep=function(delta){ if(typeof window.__poIdx!=='number') window.__poIdx=0; window.__poIdx+=delta; try{ renderPositionalPair(); }catch(e){} };
+  window.swGrain=function(g){ window.__swGrain=g; window.__swIdx=null; try{ renderSwingPair(); }catch(e){} };
+  window.poGrain=function(g){ window.__poGrain=g; window.__poIdx=null; try{ renderPositionalPair(); }catch(e){} };
   function renderAll(){
     if(!DATA) return;
     const sc=DATA.screeners||{}, reg=DATA.regime||{}, dr=DATA.dr||{};
@@ -2118,7 +2235,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 
     try{ window.BUB=bubble.map(b=>({tk:b.ticker,sec:b.sector||b.cluster||'',comp:+b.composite,lean:+b.lean,lens:+b.multi_hit_count,held:!!b.held})); if(window.drawBubble) window.drawBubble(); }catch(e){__reportErr('bubble',e);}
 
-    try{ renderDayTrade(); }catch(e){__reportErr('fires',e);}
+    try{ renderDayTradePair(); }catch(e){__reportErr('fires',e);}
 
     try{ renderStaleness(DATA); }catch(e){__reportErr('fires-fresh',e);}
 
@@ -2140,10 +2257,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         el.innerHTML=h;
         Array.prototype.forEach.call(el.querySelectorAll('.firepan'), function(row){ if(row.querySelector('a')){ row.querySelector('a').addEventListener('click',function(ev){ ev.stopPropagation(); }); } row.addEventListener('click', function(){ firePan(row.getAttribute('data-view')); }); });
       };
-      firesPan('card-swing', rankedF.slice(0,2), 'swing', '🌀', 'Swing fires', 'bubble-swing · top 2 composite · held-excluded');
-      firesPan('card-positional', rankedF.slice(2,4), 'positional', '📈', 'Positional fires', 'composite-positional · next 2 · held-excluded');
-      try{ renderHorizonPerf('card-swingperf','Swing performance','🌀','swing_alpha','n_swing', rankedF.slice(0,2)); }catch(e){__reportErr('swingperf',e);}
-      try{ renderHorizonPerf('card-posperf','Positional performance','📈','pos_alpha','n_pos', rankedF.slice(2,4)); }catch(e){__reportErr('posperf',e);}
+      try{ renderSwingPair(); }catch(e){__reportErr('swing',e);}
+      try{ renderPositionalPair(); }catch(e){__reportErr('positional',e);}
     }catch(e){__reportErr('fires2',e);}
 
     // A2 — Composite leaderboard with the Hit Matrix folded in (per-lens ✓/~/· cells) + live price column
@@ -2631,7 +2746,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         var _pop=window.tlPop(t,opMeth), _popB='<span class="pop '+_pop+' popmini" title="'+(_pop==='real'?'operator-real (your money)':'system-paper (screen fire)')+'">'+(_pop==='real'?'R':'P')+'</span>'; var _rowcls=(isActive?'tl-r-live':(st==='PLANNED'?'tl-r-watch':(nontraded?'tl-r-missed':'tl-r-done')));
         var statusTd='<td>'+_popB+'<span class="st '+stc+'" style="color:'+stCol+'">'+esc(statusWord)+'</span>'+(isActive?window.tlLadGlyph(t):partial)+'</td>';
         // status moved to immediately after the coloured signal light: [light] [status] [logged] [ticker] …
-        var row='<tr class="trow exp '+_rowcls+'" onclick="tlToggle(\''+did+'\')"><td>'+tlLight(liveFilled?'OPEN':t.status)+'</td>'+statusTd+'<td style="color:var(--faint)" title="session this trade belongs to">'+esc(window.tlFmtDay(window.tlActDate(t)||lg))+'</td><td>'+tkA(t.ticker,esc(t.ticker))+'</td><td style="text-align:center;color:var(--mut)">'+esc(t.methodology||'')+'</td><td>'+fmtNum(ent,1)+'</td><td class="neg">'+fmtNum(t.invalidation,1)+'</td><td class="pos">'+(tgt!=null?fmtNum(tgt,1):'—')+'</td><td>'+fmtNum(last,1)+dot+'</td>'+durCell+perf+'<td class="mut" style="font-size:9px;text-align:center">'+esc(window.tlStopRule(t).short)+'</td><td>'+close+'<span class="expi">▾</span></td></tr>';
+        var row='<tr class="trow exp '+_rowcls+'" data-tk="'+esc(t.ticker)+'" onclick="tlToggle(\''+did+'\')"><td>'+tlLight(liveFilled?'OPEN':t.status)+'</td>'+statusTd+'<td style="color:var(--faint)" title="session this trade belongs to">'+esc(window.tlFmtDay(window.tlActDate(t)||lg))+'</td><td>'+tkA(t.ticker,esc(t.ticker))+'</td><td style="text-align:center;color:var(--mut)">'+esc(t.methodology||'')+'</td><td>'+fmtNum(ent,1)+'</td><td class="neg">'+fmtNum(t.invalidation,1)+'</td><td class="pos">'+(tgt!=null?fmtNum(tgt,1):'—')+'</td><td>'+fmtNum(last,1)+dot+'</td>'+durCell+perf+'<td class="mut" style="font-size:9px;text-align:center">'+esc(window.tlStopRule(t).short)+'</td><td>'+close+'<span class="expi">▾</span></td></tr>';
         // ── F131 (260616) hero-card expand panel (A/B/D) — reads like an expanded _index hero card ──
         var heroCls=isClosed?(nontraded?'flat':(rr>0?'pos':'neg')):(isActive?'live':'plan');
         var risk=(ent!=null&&t.invalidation!=null)?(ent-t.invalidation):null;
