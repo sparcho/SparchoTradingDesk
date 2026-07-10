@@ -79,3 +79,26 @@ jobs:
             fi
           done <<< "$LEAK_DENYLIST"
           exit $fail
+
+  workflow-lint:
+    # F260710: an invalid workflow YAML (e.g. an unquoted `auto:` colon in a step name) makes GitHub
+    # startup_failure that workflow on EVERY run — a SILENT producer death (next-session.yml was dead
+    # for days, freezing the day-trade planned block, with nothing surfacing it). Parse every workflow
+    # file here so a broken one is caught on the pushing commit instead of rotting invisibly.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet pyyaml
+      - name: Every workflow file is valid YAML
+        run: |
+          set -uo pipefail
+          fail=0
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            if ! python3 -c "import yaml,sys; yaml.safe_load(open(sys.argv[1], encoding='utf-8'))" "$f" 2>/dev/null; then
+              echo "::error file=$f::invalid workflow YAML — GitHub will startup_failure this workflow (silent producer death)"; fail=1
+            fi
+          done < <(git ls-files '.github/workflows/*.yml' '.github/workflows/*.yaml')
+          echo "checked $(git ls-files '.github/workflows/*.yml' '.github/workflows/*.yaml' | wc -l) workflow files"
+          exit $fail
