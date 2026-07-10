@@ -135,6 +135,68 @@ def trigger(workflow: str) -> bool:
     r = gh("workflow", "run", workflow, "--repo", REPO)
     return r.returncode == 0
 
+# ---- L3 (F260710): persistent-workflow-failure monitor -----------------------
+# A producer workflow that FAILS every run (invalid-YAML startup_failure, a persistent
+# code/data break) dies SILENTLY: the emit-age checks never see it because the price
+# overlay keeps emitted_at_utc fresh. next-session.yml was dead for days, freezing the
+# day-trade planned block, with nothing surfacing it. Watch each critical workflow's
+# recent conclusions; >=CONSEC_FAIL_ALERT in a row => a loud RED on the existing feed.
+CRITICAL_WORKFLOWS = {
+    "next-session.yml":             "day-trade next_session planned-preview producer",
+    "refresh-stocks-live.yml":      "live equity prices + regime overlay",
+    "refresh-stocks-dashboard.yml": "post-close EOD equity pull",
+    "refresh-dashboard.yml":        "silver dashboard refresh",
+    "refresh-news.yml":             "company news feed",
+}
+CONSEC_FAIL_ALERT = 3
+_FAIL_CONCLUSIONS = ("failure", "startup_failure", "cancelled", "timed_out")
+
+
+def workflow_fail_streak(workflow: str, limit: int = 8):
+    """Leading count of consecutive FAILED completed runs (newest first). None if the run
+    list can't be read -- never false-alarm on a gh/network miss."""
+    r = gh("run", "list", "--repo", REPO, "--workflow", workflow, "--limit", str(limit),
+           "--json", "conclusion,status")
+    if r.returncode != 0:
+        return None
+    try:
+        arr = json.loads(r.stdout or "[]")
+    except Exception:
+        return None
+    streak = 0
+    for run in arr:
+        if (run.get("status") or "").lower() != "completed":
+            continue  # in-progress/queued -> look past it
+        if (run.get("conclusion") or "").lower() in _FAIL_CONCLUSIONS:
+            streak += 1
+        else:
+            break
+    return streak
+
+
+def check_workflow_health(events):
+    """L3: RED when a critical workflow has failed CONSEC_FAIL_ALERT+ runs in a row. Re-triggers
+    it (best-effort); a streak that survives a re-trigger means the workflow FILE is broken
+    (verify-gates workflow-lint catches that on push). Deduped once per IST day per workflow."""
+    feed_now = nf.load_feed(FEED)
+    today = nf.now_ist().date().isoformat()
+    for wf, desc in CRITICAL_WORKFLOWS.items():
+        streak = workflow_fail_streak(wf)
+        if streak is None or streak < CONSEC_FAIL_ALERT:
+            continue
+        subsystem = "workflow:" + wf
+        if any(e.get("subsystem") == subsystem and str(e.get("ts", ""))[:10] == today
+               for e in feed_now.get("events", [])):
+            continue
+        trig = trigger(wf)
+        events.append(nf.make_event(
+            "🔴", subsystem,
+            wf + " FAILED " + str(streak) + " runs in a row (" + desc + ") -- producer likely DEAD "
+            "(prices stay fresh so emit-age checks miss it)",
+            ("re-triggered" if trig else "re-trigger dispatch failed")
+            + "; if it startup-fails the workflow YAML itself is broken (see verify-gates workflow-lint)",
+            "pending", SOURCE))
+
 
 
 # ── HEAL_ACTIONS registry + contract-driven auto-probe (F260702) ──────────────
@@ -331,6 +393,7 @@ def main() -> int:
         probe_and_heal_contract(EQUITY_AGG, "equity", events, ran_inline, triggered)
     probe_and_heal_contract(SILVER_AGG, "silver", events, ran_inline, triggered)
     check_live_parity(events)  # F260702 — laptop-off GH-Pages parity (operator-visible gray)
+    check_workflow_health(events)  # L3 (F260710): persistent-workflow-failure monitor
 
     # ── cross-desk reconciliation (silver desk vs equity SILVERBEES) ──────────
     # Only emits where BOTH dashboard passwords exist (operator laptop / vault watchdog); in the
