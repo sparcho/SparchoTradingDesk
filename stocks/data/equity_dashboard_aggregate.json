@@ -1,7 +1,7 @@
 {
   "schema_version": "v1.1",
   "doc_type": "equity_dashboard_aggregate",
-  "emitted_at_utc": "2026-07-10T10:13:07+00:00",
+  "emitted_at_utc": "2026-07-10T11:03:28+00:00",
   "meta": {
     "account": "SPARCHO-HDFC",
     "doctrine_refs": [
@@ -11,7 +11,7 @@
     ],
     "next_session_cut": "morning",
     "next_session_at": "2026-07-10T04:34:10+00:00",
-    "last_price_refresh": "2026-07-10T10:13:07+00:00"
+    "last_price_refresh": "2026-07-10T11:03:28+00:00"
   },
   "book": {
     "as_of": "2026-07-04",
@@ -8685,7 +8685,7 @@
     "sessions_stale": 0,
     "status": "OK",
     "score_version": "F128",
-    "refreshed_at_utc": "2026-07-10T10:13:07+00:00"
+    "refreshed_at_utc": "2026-07-10T11:03:28+00:00"
   },
   "risk_gates": [],
   "dr": {
@@ -30612,11 +30612,11 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-07-10T10:13:07+00:00",
+    "computed_at_utc": "2026-07-10T11:03:28+00:00",
     "desk": "equity",
     "any_stale": true,
     "any_dim": false,
-    "worst": "info",
+    "worst": "warn",
     "items": [
       {
         "id": "daytrade_fires",
@@ -30675,6 +30675,20 @@
         "since": "2026-07-04",
         "age_min": null,
         "sessions_stale": 5,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "equity_analysis_freshness",
+        "subsystem": "equity",
+        "label": "STOCK-TA reads",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "12 STOCK-TA read(s) >60d old (oldest GRAPHITE 68d)",
+        "since": null,
+        "age_min": null,
+        "sessions_stale": 12,
         "heal": null,
         "ui_targets": []
       }
