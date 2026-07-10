@@ -41,6 +41,11 @@ SILVER_PRICE_TOL_MIN = 90
 # Operator-driven book staleness (they drop when they trade) — informational nudge only.
 BOOK_STALE_SESSIONS = 2       # >= this many sessions behind -> surface (not dim)
 SILVER_BOOK_TOL_DAYS = 10
+# F145 analysis-input freshness: operator-fed chart reads (SILV-TA weekly / STOCK-TA).
+# Severity ladder per F260706-F145 (>30d warn, >60d alert for SILV-TA). Informational (dim=False).
+SILV_TA_WARN_DAYS = 30
+SILV_TA_ALERT_DAYS = 60
+STOCK_TA_WARN_DAYS = 60
 
 
 def _now_utc(now_utc_iso=None) -> datetime:
@@ -170,6 +175,31 @@ def _equity_items(data, now):
     except Exception:
         pass
 
+    # 5. Analysis-input freshness (F145): stale STOCK-TA chart reads across covered tickers.
+    try:
+        stmap = ((data.get("analysis") or {}).get("stock_ta")) or {}
+        today_ist = now.astimezone(_IST).date()
+        ages = {}
+        for tk, ds in stmap.items():
+            pd = _parse_iso(ds)
+            if pd:
+                probe = pd.date() if hasattr(pd, "date") else pd
+                ages[tk] = (today_ist - probe).days
+        stale_tks = {tk: a for tk, a in ages.items() if a > STOCK_TA_WARN_DAYS}
+        oldest = max(ages.items(), key=lambda kv: kv[1]) if ages else None
+        stale = bool(stale_tks)
+        items.append(_item(
+            id="equity_analysis_freshness", subsystem="equity", label="STOCK-TA reads",
+            is_stale=stale, severity="warn" if stale else "info", dim=False,
+            reason=(f"{len(stale_tks)} STOCK-TA read(s) >{STOCK_TA_WARN_DAYS}d old"
+                    + (f" (oldest {oldest[0]} {oldest[1]}d)" if oldest else "")) if stale
+                   else (f"fresh - {len(ages)} covered, oldest {oldest[1]}d" if oldest else "no STOCK-TA dates emitted"),
+            since=None, sessions_stale=len(stale_tks) or None,
+            heal=None, ui_targets=[],
+        ))
+    except Exception:
+        pass
+
     return items
 
 
@@ -223,6 +253,49 @@ def _silver_items(data, now):
                    else f"refreshed {int(age)}m ago" if age is not None else "unknown",
             age_min=age, heal="refresh_prices_silver", ui_targets=[],
         ))
+    except Exception:
+        pass
+
+    # 4. Analysis-input freshness (F145): stale operator SILV-TA chart read.
+    try:
+        an = data.get("analysis") or {}
+        last = an.get("last_silv_ta")
+        dd = _parse_iso(last)
+        days = None
+        if dd:
+            probe = dd.date() if hasattr(dd, "date") else dd
+            days = (now.astimezone(_IST).date() - probe).days
+        alert = days is not None and days > SILV_TA_ALERT_DAYS
+        warn = days is not None and days > SILV_TA_WARN_DAYS
+        stale = bool(warn or alert)
+        items.append(_item(
+            id="silver_analysis_freshness", subsystem="silver", label="Silver TA read",
+            is_stale=stale, severity=("alert" if alert else "warn") if stale else "info", dim=False,
+            reason=(f"latest SILV-TA {days}d old (warn >{SILV_TA_WARN_DAYS}d, alert >{SILV_TA_ALERT_DAYS}d)") if stale
+                   else (f"fresh - latest SILV-TA {days}d ago ({last})" if days is not None else "no SILV-TA date emitted"),
+            since=last, age_min=(days * 1440 if days is not None else None),
+            heal=None, ui_targets=["silver-ta-card"],
+        ))
+    except Exception:
+        pass
+
+    # 6. COT-fetch freshness (F145 addendum): distinguish a dead fetcher from a
+    #    holiday-delayed-but-fresh CFTC print. Reads booleans the emit already computed.
+    try:
+        fetch_stale = bool(data.get("cot_fetch_stale"))
+        delayed = bool(data.get("cot_delayed"))
+        fage = data.get("cot_fetch_age_days")
+        rage = data.get("cot_report_age_days")
+        if data.get("cot_fetched_at") is not None or fetch_stale or delayed:
+            items.append(_item(
+                id="cot_fetch_freshness", subsystem="silver", label="COT fetch",
+                is_stale=fetch_stale, severity="alert" if fetch_stale else "info", dim=False,
+                reason=(f"fetcher stale {fage}d (>8d = pipeline problem)") if fetch_stale
+                       else (f"latest CFTC print is holiday-delayed ({rage}d) but fetch is fresh" if delayed
+                             else f"fresh - fetched {fage}d ago" if fage is not None else "fetched"),
+                since=data.get("cot_fetched_at"), age_min=(fage * 1440 if isinstance(fage,(int,float)) else None),
+                heal=None, ui_targets=["cot-card"],
+            ))
     except Exception:
         pass
 
