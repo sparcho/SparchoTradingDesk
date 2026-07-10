@@ -38,7 +38,7 @@ jobs:
       - name: Install yfinance
         run: pip install --quiet yfinance
 
-      - name: Compute next-session snapshot (auto: morning vs evening by IST hour)
+      - name: "Compute next-session snapshot (auto: morning vs evening by IST hour)"
         run: python stocks/generators/next_session_snapshot.py --cut auto
 
       - name: Commit + push if changed
