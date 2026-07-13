@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1782241583">
-<meta name="x-built-at" content="2026-06-23T19:06:21+00:00">
+<meta name="x-build-id" content="1783959075">
+<meta name="x-built-at" content="2026-07-13T16:10:47+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1782241583",BUILT_AT="2026-06-23T19:06:21+00:00";
+  var BID="1783959075",BUILT_AT="2026-07-13T16:10:47+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2947,7 +2947,13 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
             var _todayLine=_kd?('<div class="tl-attn-today">Today: <b class="'+(_tR>0?'pos':(_tR<0?'neg':''))+'">'+(_tR>0?'+':'')+_tR.toFixed(2)+'R</b> · '+(_kd.n||0)+' close'+((_kd.n===1)?'':'s')+'</div>'):'';
             var _rail='<div class="card tl-attn"><div class="c-lbl"><span class="d"></span>Needs attention'+HT('Live trades that want your eye: within one session of the time-cap, or a booked partial with a runner still live. Empty = nothing needs you.')+'<span class="age">'+_attn.length+' now</span></div>'+_railBody+_todayLine+'</div>';
             html=_rail+html;
-            html+=dtPerfCard+tlLeaderboardCard(tl.stop_policy_leaderboard)+'<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>'+esc(TLVLBL[view])+' trade ledger'+HT('Your logged trades of the selected type, newest first, 25 per page. Switch type with the toggle above. Expand a row for the full hero card.')+'<span class="age">'+(vCnt[view]||0)+' '+esc(TLVLBL[view])+' trades</span></div><div id="tl-ledger"></div></div>';
+            var _ts=(tl&&tl.thesis_scorecard)||null; var _sq=(tl&&tl.level_study_queue)||[]; var fibCard='';
+            if(_ts||(_sq&&_sq.length)){
+              var _tb=function(o,lbl){ o=o||{}; var cr=(o.confirmed_rate!=null?Math.round(o.confirmed_rate*100)+'%':'\u2014'); return '<div class="kpi"><div class="kl">'+lbl+'</div><div class="kv sm '+(o.confirmed_rate!=null?(o.confirmed_rate>=0.5?'pos':'neg'):'')+'">'+cr+'</div><div class="ks">'+(o.confirmed||0)+'\u2713 / '+(o.invalidated||0)+'\u2717 \u00b7 '+(o.n||0)+' graded</div></div>'; };
+              var _sqRows=(_sq||[]).slice(0,8).map(function(q){ return '<div class="fprow"><span class="fpl">'+esc(q.ticker||'')+'</span><span class="fpv">'+esc(q.signal_class||'')+' \u00b7 '+esc(String(q.reason||'needs level read').slice(0,44))+'</span></div>'; }).join('');
+              fibCard='<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>Fib analysis quality'+HT('F260713 \u2014 every set-up now carries a fib read (verified hand-drawn, or METHOD-B auto-computed). Confirmed = the fib zone-to-zone read reached its target zone; invalidated = broke the fib stop. Study queue = fires BLOCKED because they need your hand fib read (swings never trade without one).')+'<span class="age">confirmed-rate by fib source \u00b7 the analysis learning loop</span></div>'+'<div class="kpis kpis4">'+_tb(_ts&&_ts.verified,'Verified fib')+_tb(_ts&&_ts.method_b,'METHOD-B auto')+_tb(_ts&&_ts.all,'All set-ups')+'<div class="kpi"><div class="kl">Needs your read</div><div class="kv sm '+((_sq&&_sq.length)?'watch':'')+'">'+((_sq&&_sq.length)||0)+'</div><div class="ks">swings blocked \u00b7 study queue</div></div>'+'</div>'+(_sqRows?('<div class="imet"><div class="imet-col"><div class="c-lbl sub"><span class="d"></span>Study queue \u2014 needs your fib read<span class="age">blocked until studied</span></div>'+_sqRows+'</div></div>'):'')+'</div>';
+            }
+            html+=dtPerfCard+fibCard+tlLeaderboardCard(tl.stop_policy_leaderboard)+'<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>'+esc(TLVLBL[view])+' trade ledger'+HT('Your logged trades of the selected type, newest first, 25 per page. Switch type with the toggle above. Expand a row for the full hero card.')+'<span class="age">'+(vCnt[view]||0)+' '+esc(TLVLBL[view])+' trades</span></div><div id="tl-ledger"></div></div>';
     } else {
       var _sk=function(w){return '<span class="tlk-b" style="width:'+w+'"></span>';};
       var _trow=function(){return '<tr>'+['20%','12%','12%','12%','40px','40px','30%'].map(function(w){return '<td>'+_sk(w)+'</td>';}).join('')+'</tr>';};
