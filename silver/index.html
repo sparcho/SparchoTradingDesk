@@ -2,6 +2,28 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- DEPLOY-STAMP:BEGIN (deploy_common) -->
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="x-build-id" content="1784026717">
+<meta name="x-built-at" content="2026-07-14T10:58:11+00:00">
+<style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
+<script>(function(){
+  var BID="1784026717",BUILT_AT="2026-07-14T10:58:11+00:00";
+  window.__BUILD={id:BID,built_at:BUILT_AT};
+  function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
+  function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
+  if(document.readyState!=='loading')show();else document.addEventListener('DOMContentLoaded',show);
+  if(!BID||BID.indexOf('__')===0)return;
+  try{fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(v){
+    if(!v||!v.build_id)return; window.__BUILD.live=v;
+    if(String(v.build_id)!==String(BID)){var k='sthealed_'+v.build_id;
+      if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');badge('updating… (cache ~1 min)',true);location.replace(location.pathname+'?v='+v.build_id);}
+      else{badge('updating… (cache ~1 min)',true);}}
+  }).catch(function(){});}catch(_){}
+})();</script>
+<!-- DEPLOY-STAMP:END -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Silver Desk — Sparcho</title>
@@ -19,7 +41,6 @@
   .pos{ color:var(--pos); } .neg{ color:var(--neg); } .watch{ color:var(--watch); }
 
   #gl{ position:fixed; inset:0; z-index:0; }
-  body.solo #gl{ display:none; }   /* visual-upgrade §1.A: drop the 3D showpiece in the working deck; calm .scene gradient backdrop */
   .scene{ position:fixed; inset:0; z-index:-1; transition:background .6s; }
   body.dark .scene{ background:radial-gradient(72% 60% at 50% 30%, #1a150e, var(--bg1) 58%, var(--deep) 100%); }
   body.light .scene{ background:radial-gradient(74% 62% at 50% 28%, #fdfdfe, #e8ecf1 54%, #d7dde5 100%); }
@@ -368,46 +389,6 @@
   .ppsrc{ font-family:var(--font-mono); font-size:8.5px; color:var(--faint); }
   .pp-banner{ display:flex; align-items:center; gap:7px; background:var(--watch-soft); border:1px solid var(--watch); border-radius:8px; padding:7px 10px; font-size:10px; color:var(--ink2); margin-top:10px; } .pp-banner b{ color:var(--ink); }
   .ppanchor{ font-size:9.5px; color:var(--mut); margin-top:8px; line-height:1.45; }
-  /* ── S1 floor-proximity band (visual-upgrade §3.1 · replaces the radial floor gauge) ── */
-  .fpb-ends{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:10.5px; font-weight:700; margin:8px 2px 12px; }
-  .fpb-end.neg{ color:var(--neg); } .fpb-end.pos{ color:var(--pos); }
-  .fpb-wrap{ position:relative; padding:26px 6px 40px; }
-  .fpb-track{ position:relative; height:18px; border-radius:9px; background:linear-gradient(90deg, var(--neg-soft), var(--hair) 22%, var(--hair) 74%, var(--pos-soft)); border:1px solid var(--hair); }
-  .fpb-tier{ position:absolute; top:-1px; bottom:-1px; background:rgba(216,178,90,0.26); border-left:1.5px solid var(--acc); border-right:1.5px solid var(--acc); border-radius:2px; }
-  .fpb-spot{ position:absolute; top:50%; transform:translate(-50%,-50%); z-index:4; }
-  .fpb-dot{ display:block; width:15px; height:15px; border-radius:50%; background:var(--acc); box-shadow:0 0 11px var(--acc); border:2px solid var(--deep); }
-  .fpb-splab{ position:absolute; bottom:16px; left:50%; transform:translateX(-50%); white-space:nowrap; font-family:var(--font-mono); font-size:10px; font-weight:700; color:var(--ink); }
-  .fpb-ticks{ position:absolute; left:6px; right:6px; top:44px; height:0; }
-  .fpb-tick{ position:absolute; transform:translateX(-50%); text-align:center; }
-  .fpb-tick .fpb-tl{ display:block; width:1px; height:7px; background:var(--faint); margin:0 auto 3px; }
-  .fpb-tick .fpb-tx{ display:block; font-family:var(--font-mono); font-size:8px; color:var(--faint); white-space:nowrap; }
-  /* ── S3 Intel · strategy timeline chronology + COT-series flag (visual-upgrade §3.3) ── */
-  .stl{ display:flex; gap:0; overflow-x:auto; padding:22px 6px 10px; position:relative; }
-  .stl::before{ content:""; position:absolute; left:14px; right:14px; top:30px; height:2px; background:linear-gradient(90deg,transparent,var(--hair) 4%,var(--hair) 96%,transparent); }
-  .stl-node{ flex:0 0 122px; text-align:center; position:relative; padding:0 6px; cursor:default; }
-  .stl-node .stl-dot{ width:12px; height:12px; border-radius:50%; margin:0 auto; z-index:2; position:relative; background:var(--mut); transition:transform .15s; }
-  .stl-node:hover .stl-dot{ transform:scale(1.3); }
-  .stl-dot.pos{ background:var(--pos); box-shadow:0 0 8px var(--pos); } .stl-dot.watch{ background:var(--watch); box-shadow:0 0 8px var(--watch); }
-  .stl-dt{ font-family:var(--font-mono); font-size:8.5px; color:var(--acc); margin-top:10px; }
-  .stl-ti{ font-size:9.5px; color:var(--ink2); line-height:1.3; margin-top:3px; }
-  .stl-vd{ font-family:var(--font-mono); font-size:7.5px; font-weight:700; margin-top:4px; letter-spacing:0.02em; }
-  .stl-vd.pos{ color:var(--pos); } .stl-vd.watch{ color:var(--watch); } .stl-vd.mut{ color:var(--mut); }
-  .cotseq-flag{ margin-top:10px; padding:7px 9px; border:1px dashed var(--hair); border-radius:8px; font-size:9.5px; color:var(--mut); line-height:1.45; }
-  .cotfresh{ font-family:var(--font-mono); font-size:8.5px; color:var(--faint); margin-top:10px; letter-spacing:0.02em; }
-  .cot-note{ margin-top:7px; padding:7px 9px; border:1px solid var(--watch-soft); background:var(--watch-soft); border-radius:7px; font-size:9.5px; color:var(--watch); line-height:1.45; }
-  .cot-alert{ margin-top:7px; padding:7px 9px; border:1px solid var(--neg); background:var(--neg-soft); border-radius:7px; font-size:9.5px; color:var(--neg); line-height:1.45; }
-  /* ── S2 Operator · F109 fib deployment ladder (visual-upgrade §3.2) ── */
-  .f109{ margin-top:8px; }
-  .f109row{ display:grid; grid-template-columns:66px 40px 74px 1fr; gap:10px; align-items:center; padding:6px 9px; border-bottom:1px solid var(--hair); font-family:var(--font-mono); font-size:11px; border-radius:6px; }
-  .f109row.above{ opacity:0.66; }
-  .f109row.ftzone{ background:rgba(216,178,90,0.10); border:1px solid var(--acc); }
-  .f109row .f9px{ font-weight:700; color:var(--ink); }
-  .f109row .f9rt{ color:var(--faint); font-size:9px; }
-  .f109row .f9tag{ font-size:8px; font-weight:700; padding:1px 7px; border-radius:999px; text-align:center; }
-  .f109row .f9tag.core{ background:var(--pos-soft); color:var(--pos); } .f109row .f9tag.tac{ background:var(--watch-soft); color:var(--watch); }
-  .f109row .f9st{ font-size:9px; color:var(--mut); text-align:right; }
-  .f109spotrow{ display:flex; align-items:center; gap:9px; padding:7px 9px; font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--acc); background:linear-gradient(90deg, rgba(216,178,90,0.16), transparent); border-radius:6px; margin:2px 0; }
-  .f109spotrow::before{ content:""; width:10px; height:10px; border-radius:50%; background:var(--acc); box-shadow:0 0 8px var(--acc); flex:0 0 auto; }
 </style>
 </head>
 <body class="dark locked">
@@ -667,7 +648,7 @@
       var mx=0,my=0,cx=0,cy=0; window.addEventListener('mousemove',function(e){ mx=(e.clientX/window.innerWidth-0.5); my=(e.clientY/window.innerHeight-0.5); });
       var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; var t0=performance.now(); var hidden=false;
       document.addEventListener('visibilitychange',function(){ hidden=document.hidden; });
-      function loop(){ requestAnimationFrame(loop); if(hidden||document.body.classList.contains('solo')) return; var t=(performance.now()-t0)/1000; cx+=(mx-cx)*0.05; cy+=(my-cy)*0.05;
+      function loop(){ requestAnimationFrame(loop); if(hidden) return; var t=(performance.now()-t0)/1000; cx+=(mx-cx)*0.05; cy+=(my-cy)*0.05;
         if(!reduce){ grp.rotation.y+=0.0026; grp.rotation.x=Math.sin(t*0.25)*0.13+cy*0.34; grp.rotation.z=cx*0.15; shell.rotation.y-=0.0016; core.rotation.y-=0.0042; grp.position.y=Math.sin(t*0.6)*0.07; }
         camera.position.x=cx*0.8; camera.position.y=-cy*0.6; camera.lookAt(0,0,0); renderer.render(scene,camera); }
       loop();
@@ -723,7 +704,7 @@
 
   async function bootstrap(){
     try{
-      const r=await fetch('data/silver_dashboard_aggregate.json?t='+Date.now(),{cache:'no-store'});
+      const r=await fetch('data/silver_dashboard_aggregate.json?v=1784026717&t='+Date.now(),{cache:'no-store'});
       if(!r.ok) throw new Error('HTTP '+r.status);
       DATA=await r.json();
       reapplyUnlock();
@@ -927,20 +908,7 @@
       var nodes=items.map(function(h){ var sn=(h.sentiment||'neutral'); var lab=esc(String(h.source||'news').slice(0,12)); var tip=esc(String(h.headline||'').slice(0,220)); var sub=esc(String(h.source||'')+' · '+_dm(h.date)); return '<div class="node '+esc(sn)+'" data-tip="'+tip+'" data-tipsub="'+sub+'"><div class="nlab">'+lab+'</div><div class="dotrow"><div class="dotn"></div></div><div class="nd">'+esc(_dm(h.date))+'</div></div>'; }).join('');
       return '<div class="card" style="margin-top:14px"><div class="c-lbl"><span class="d"></span>News timeline · sentiment'+HT('Recent silver-relevant headlines, coloured good/bad for price.')+AB(items[items.length-1].date)+'</div><div class="htl"><div class="track">'+nodes+'</div></div></div>';
     })();
-    // ── S1 floor-proximity BAND (dominant · plan §3.1: a wide band reads faster than the radial gauge) ──
-    var _bx=function(p){ return Math.max(0,Math.min(100,(p-GLO)/(GHI-GLO)*100)); };
-    var _bandMarks=[{p:GLO,l:'$'+GLO+' stop'},{p:59,l:'$59'},{p:65,l:'$65'},{p:69,l:'$69'},{p:72,l:'$72'},{p:78,l:'$78 range top'},{p:GHI,l:'$'+GHI+' no-floor'}];
-    var _spotPct=xp!=null?_bx(xp):null;
-    var _tierLo=tier?tier.band_low:null, _tierHi=tier?(tier.band_high||GHI):null;
-    var _ticks=_bandMarks.map(function(m){ return '<span class="fpb-tick" style="left:'+_bx(m.p).toFixed(1)+'%"><span class="fpb-tl"></span><span class="fpb-tx">'+esc(m.l)+'</span></span>'; }).join('');
-    var _tierShade=(_tierLo!=null)?'<span class="fpb-tier" style="left:'+_bx(_tierLo).toFixed(1)+'%;width:'+(_bx(_tierHi)-_bx(_tierLo)).toFixed(1)+'%"></span>':'';
-    var _spotMk=_spotPct!=null?'<span class="fpb-spot" style="left:'+_spotPct.toFixed(1)+'%"><span class="fpb-splab">spot '+fmtUSD(xp)+'</span><span class="fpb-dot"></span></span>':'';
-    var _toStop=xp!=null?fmtPct((GLO/xp-1)*100):'—', _toCeil=xp!=null?fmtPct((GHI/xp-1)*100):'—';
-    var floorBand='<div class="card fpb-card" style="margin-top:14px"><div class="c-lbl"><span class="d"></span>Floor proximity · '+esc(ff.v_id||'V-13')+HT('Where silver sits between the $52 hard-stop floor and the $84 no-floor ceiling; the amber zone is the current deployment tier. A wide band reads distance-to-floor faster than a dial.')+AB(DATA.emitted_at_utc)+'<span class="age">tier '+esc(tier?tier.tier:'—')+' · spot '+fmtUSD(xp)+'</span></div>'+
-      '<div class="fpb-ends"><span class="fpb-end neg">'+_toStop+' to stop</span><span class="fpb-end pos">'+_toCeil+' to ceiling</span></div>'+
-      '<div class="fpb-wrap"><div class="fpb-track">'+_tierShade+_spotMk+'</div><div class="fpb-ticks">'+_ticks+'</div></div></div>';
-    var radarCard='<div class="card">'+_radInner+'</div>';
-    setFace('z-macro',_heroK+floorBand+'<div class="mrow2" style="margin-top:14px">'+radarCard+srCard+'</div>'+(window.silverMacroModule?(window.silverMacroModule().pub||''):''));
+    setFace('z-macro',_heroK+'<div class="mrow2" style="margin-top:14px">'+leftCard+srCard+'</div>'+(window.silverMacroModule?(window.silverMacroModule().pub||''):''));
   }catch(e){__reportErr('macro',e);} }
 
   function renderOperator(ft,accts,prob,LOCKED,xp,gsr){ try{
@@ -1014,29 +982,15 @@
     // (7) recommender (lock-gated; computed client-side, recomputes on toggle)
     var recSection='<div class="c-lbl" style="margin:16px 0 8px"><span class="d"></span>Recommender · daily pacer'+HT('Advisory ₹/day deploy or trim suggestion from your directional view + the deploy gates + the family book. Not an order.')+AB(DATA.emitted_at_utc)+'</div>'+
       '<div class="card reccard"><div class="rectoggle"><span class="reclbl">Your view →</span><button class="recbtn" data-lean="up">▲ Up</button><button class="recbtn" data-lean="neutral">● Neutral</button><button class="recbtn" data-lean="down">▼ Down</button></div><div id="rec-out"></div></div>';
-    var _ss=(DATA.silver_strategy||{}); var _fib=(_ss.fib||{}).ladder_xag||{}; var _cvt=(_ss.core_vs_tactical||{}).threshold_xag||60; var _ft=(_ss.final_tranche||{}); var _ftz=_ft.zone_xag||[50,52];
-    var _rungs=Object.keys(_fib).map(function(k){return {ratio:k,px:+_fib[k]};}).filter(function(r){return r.px>=45&&r.px<=100;}).sort(function(a,b){return b.px-a.px;});
-    if(xp!=null){ var _si=_rungs.findIndex(function(r){return r.px<xp;}); if(_si<0)_si=_rungs.length; _rungs.splice(_si,0,{spot:true,px:xp}); }
-    var f109Body=_rungs.map(function(r){
-      if(r.spot) return '<div class="f109spotrow">spot '+fmtUSD(r.px)+'</div>';
-      var isCore=r.px<_cvt; var rel=(xp!=null)?(r.px>xp?'above':'below'):''; var inFt=(r.px>=_ftz[0]-0.5&&r.px<=_ftz[1]+0.5);
-      return '<div class="f109row '+rel+(inFt?' ftzone':'')+'"><span class="f9px">'+fmtUSD(r.px)+'</span><span class="f9rt">'+esc(r.ratio)+'x</span><span class="f9tag '+(isCore?'core':'tac')+'">'+(isCore?'CORE':'TACTICAL')+'</span><span class="f9st">'+(inFt?('final tranche · '+fmtNum(_ft.units||0)+'u'):(rel==='above'?'sell-into-recovery':'deploy zone'))+'</span></div>';
-    }).join('');
-    var f109Section='<div class="card" style="margin-top:14px"><div class="c-lbl"><span class="d"></span>F109 deployment ladder · fib-anchored'+HT('The re-entry ladder off the 12-month fib (anchored $3.57 → $48.18). Entries under $'+_cvt+' XAG are CORE (retain — long-term debasement hold); $'+_cvt+'+ are TACTICAL (sell into the recovery). The $'+_ftz[0]+'-'+_ftz[1]+' zone is the final tranche. Per-tranche allocations stay 🔒 until unlock; the price rungs are public strategy.')+AB(DATA.emitted_at_utc)+'<span class="age">spot '+fmtUSD(xp)+' · core/tactical line $'+_cvt+'</span></div><div class="f109">'+f109Body+'</div></div>';
-    setFace('z-operator', caveat+kpis+f109Section+acctHeader+acctGrid+heroRow+probSection+stratSection+recSection+(window.silverMacroModule?(window.silverMacroModule().op||''):''));
+    setFace('z-operator', caveat+kpis+acctHeader+acctGrid+heroRow+probSection+stratSection+recSection+(window.silverMacroModule?(window.silverMacroModule().op||''):''));
     try{ if(window.__recRender) window.__recRender(); }catch(e){}
   }catch(e){__reportErr('operator',e);} }
 
   function renderIntel(cot,inv,cats,news){ try{
     const cotPos=cot.mm_net_k!=null?cot.mm_net_k:null;
-    var _cotFresh=(function(){ var fa=cot.cot_fetched_at?String(cot.cot_fetched_at).slice(0,10):null; var nx=cot.cot_next_expected||null;
-      var base='CFTC report '+esc(cot.survey_date||'—')+(fa?(' · fetched '+esc(fa)):'')+(nx?(' · next release ~'+esc(nx)):'');
-      var note=cot.cot_fetch_stale?'<div class="cot-alert">⚠ COT fetcher hasn’t run in &gt;8 days — a pipeline issue, not a CFTC delay. Investigate the data_metalscot task.</div>'
-        :(cot.cot_delayed?'<div class="cot-note">⏳ This IS the latest CFTC print (fetched fresh) — the next weekly release is holiday-delayed (Juneteenth / Jul-4), not stale data.</div>':'');
-      return '<div class="cotfresh">'+base+'</div>'+note; })();
     const cotCard='<div class="card"><div class="c-lbl"><span class="d"></span>COT · managed money'+HT('The weekly US futures positioning report — who is long or short silver.')+AB(cot.survey_date)+'</div>'+
       '<div class="gmeta" style="line-height:2">MM net <b class="'+cls(cotPos)+'">'+(cotPos!=null?cotPos+'K':'—')+'</b> · OI <b>'+(cot.oi_k!=null?cot.oi_k+'K':'—')+'</b><br>WoW Δ <b class="'+cls(cot.wow_delta_k)+'">'+(cot.wow_delta_k!=null?(cot.wow_delta_k>=0?'+':'')+cot.wow_delta_k+'K':'—')+'</b> · '+esc(cot.g8_status||'')+'<br><b style="color:var(--acc2)">'+esc(cot.ladder_rung||'')+'</b></div>'+
-      (cot.read?'<div style="font-size:10.5px;color:var(--mut);margin-top:9px;line-height:1.5">'+esc(String(cot.read).slice(0,160))+'</div>':'')+_cotFresh+'<div class="cotseq-flag">⏳ MM-net <b>print-sequence chart</b> pending the COT historical-series data add (flagged 260531 _DIRECTION).</div>'+'</div>';
+      (cot.read?'<div style="font-size:10.5px;color:var(--mut);margin-top:9px;line-height:1.5">'+esc(String(cot.read).slice(0,160))+'</div>':'')+'</div>';
     const items=(inv.items||[]).slice(0,6);
     const invCard='<div class="card"><div class="c-lbl"><span class="d"></span>Global inventory'+HT('Physical silver in COMEX/LBMA/Shanghai vaults and its trend.')+AB(inv.last_updated)+'</div>'+
       (items.length?items.map(it=>{ const b=/bull/i.test(it.bias||'')?'pos':(/bear/i.test(it.bias||'')?'neg':'watch'); return '<div class="ind"><span class="inn">'+esc(it.venue)+'</span><span class="inv">'+esc(it.value||'')+'</span><span class="inc '+b+'">'+esc(it.change||'')+'</span></div>'; }).join(''):pending('Inventory','global_inventory empty.'))+'</div>';
@@ -1055,9 +1009,7 @@
     var _ppban=_pp.lease_pending?('<div class="pp-banner">⏳ <b>1M lease rate exact: PENDING</b> · '+esc(_pp.lease_note||'')+'</div>'):'';
     var _ppanc=_pp.anchor_note?('<div class="ppanchor">'+esc(_pp.anchor_note)+'</div>'):'';
     var ppCard=_pp.composite?('<div class="card"><div class="c-lbl"><span class="d"></span>Paper-physical divergence · GAP-11'+HT('Physical-tightness signals (backwardation, lease rates, China premium, vault drain) vs the paper price.')+AB(_pp.as_of)+'</div><div class="ppchip '+_ppcls+'">'+esc(_pp.composite)+(_pp.component_count?(' · '+esc(_pp.component_count)):'')+'</div>'+_pprows+_ppban+_ppanc+'</div>'):'';
-    var _stl=(DATA.strategy_timeline_public||[]);
-    var stlHTML=_stl.length?('<div class="card"><div class="c-lbl"><span class="d"></span>Strategy timeline · F98 &#8594; F109'+HT('The silver strategy arc as a chronology — each doctrine event (deploy, trim, suspend, re-entry) with its verdict; hover a node for the detail. Newest at right.')+AB(_stl[_stl.length-1].date)+'</div><div class="stl">'+_stl.map(function(e){ var vd=String(e.verdict||''); var vc=/DEFENSIVE|COMPRESS|BEAR|RED|SUSPEN/i.test(vd)?'watch':(/BULL|EXECUTED|CONSTRUCTIVE/i.test(vd)?'pos':'mut'); var vdt=vd.replace(/[^\x00-\x7F]/g,'').trim(); return '<div class="stl-node" data-tip="'+esc(String(e.summary||e.title||''))+'" data-tipsub="'+esc(String(e.version||'')+' · '+String(e.date||''))+'"><div class="stl-dot '+vc+'"></div><div class="stl-dt">'+esc(_DM(e.date))+'</div><div class="stl-ti">'+esc(String(e.title||'').slice(0,40))+'</div><div class="stl-vd '+vc+'">'+esc(vdt)+'</div></div>'; }).join('')+'</div></div>'):'';
-    setFace('z-intel','<div class="grid3">'+cotCard+invCard+calCard+'</div>'+(stlHTML?('<div style="margin-top:14px">'+stlHTML+'</div>'):'')+'<div class="mrow2" style="margin-top:14px">'+newsCard+ppCard+'</div>');
+    setFace('z-intel','<div class="grid3">'+cotCard+invCard+calCard+'</div><div style="margin-top:14px">'+ppCard+'</div><div style="margin-top:14px">'+newsCard+'</div>');
   }catch(e){__reportErr('intel',e);} }
 
   (function(){
