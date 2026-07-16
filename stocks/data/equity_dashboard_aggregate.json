@@ -1,14 +1,15 @@
 {
   "schema_version": "v1.1",
   "doc_type": "equity_dashboard_aggregate",
-  "emitted_at_utc": "2026-07-16T10:58:34+00:00",
+  "emitted_at_utc": "2026-07-16T11:26:53+00:00",
   "meta": {
     "account": "SPARCHO-HDFC",
     "doctrine_refs": [
       "V-31",
       "V-32",
       "V-33"
-    ]
+    ],
+    "last_price_refresh": "2026-07-16T11:26:53+00:00"
   },
   "book": {
     "as_of": "2026-07-15",
@@ -17,7 +18,15 @@
     "sessions_stale": 1,
     "fetched_at": "2026-07-15T19:11:03+05:30",
     "staleness": null,
-    "ledger_available": true
+    "ledger_available": true,
+    "totals": {
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unrealized_pnl_abs": 0.0,
+      "unrealized_pnl_pct": 0,
+      "change_today_abs": 0.0,
+      "change_today_pct": 0
+    }
   },
   "held": [
     {
@@ -25,44 +34,64 @@
       "name": "Gujarat Mineral Development Corporation",
       "sector": "Minerals & Mining",
       "cluster": "minerals-mining",
-      "current_price": 596.1,
-      "day_chg_pct": 1.72,
+      "current_price": 586.65,
+      "day_chg_pct": -1.59,
       "ltp_date": "2026-07-16",
       "tv_symbol": "GMDCLTD",
-      "tv_exchange": "BSE"
+      "tv_exchange": "BSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "VEDPOWER",
       "name": "Vedanta Power",
       "sector": "Power",
       "cluster": "power-generation",
-      "current_price": 39.18,
-      "day_chg_pct": -2.15,
+      "current_price": 39.33,
+      "day_chg_pct": 0.38,
       "ltp_date": "2026-07-16",
       "tv_symbol": "VEDPOWER",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "MTARTECH",
       "name": "MTAR Technologies Limited",
       "sector": "Capital Goods",
       "cluster": "capital-goods",
-      "current_price": 6698.5,
-      "day_chg_pct": 4.52,
+      "current_price": 6364.0,
+      "day_chg_pct": -4.99,
       "ltp_date": "2026-07-16",
       "tv_symbol": "MTARTECH",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "TARIL",
       "name": "Transformers and Rectifiers India",
       "sector": "Capital Goods",
       "cluster": "capital-goods",
-      "current_price": 337.25,
-      "day_chg_pct": 0.07,
+      "current_price": 333.45,
+      "day_chg_pct": -1.13,
       "ltp_date": "2026-07-16",
       "tv_symbol": "TARIL",
-      "tv_exchange": "BSE"
+      "tv_exchange": "BSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "NSDL",
@@ -73,7 +102,8 @@
       "day_chg_pct": -0.6,
       "ltp_date": "2026-07-16",
       "tv_symbol": "NSDL",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "concentration_pct": 0
     }
   ],
   "screeners": {
@@ -8683,7 +8713,7 @@
     "sessions_stale": 0,
     "status": "OK",
     "score_version": "F128",
-    "refreshed_at_utc": "2026-07-16T10:58:34+00:00"
+    "refreshed_at_utc": "2026-07-16T11:26:53+00:00"
   },
   "risk_gates": [],
   "dr": {
@@ -10953,14 +10983,14 @@
       {
         "id": "TNX",
         "status": "FAIL",
-        "reading": "4.545",
+        "reading": "4.55%",
         "threshold": "<4.45%",
         "note": "4.545 vs <4.45% -> FAIL (auto-refreshed 2026-07-16 16:27 IST) -- binding deploy gate (S5.2 new-tranche block)"
       },
       {
         "id": "DXY",
         "status": "OK",
-        "reading": "100.544",
+        "reading": "100.59",
         "threshold": "<102",
         "note": "100.544 vs <102 -> OK (auto-refreshed 2026-07-16 16:27 IST) -- >102 weekly close = reduce-50 (V-06)"
       },
@@ -10974,7 +11004,7 @@
       {
         "id": "HORMUZ",
         "status": "OK",
-        "reading": "84.68",
+        "reading": "oil $84.68",
         "threshold": "oil <$105",
         "note": "84.68 vs oil <$105 -> OK (auto-refreshed 2026-07-16 16:27 IST) -- war-premium / S10.1 correlated-cascade gate (Brent proxy)"
       },
@@ -10995,25 +11025,25 @@
     ],
     "macro": {
       "TNX": {
-        "value": 4.545,
+        "value": 4.545000076293945,
         "as_of": "2026-07-16T16:27:07+0530",
         "gate_status": "FAIL",
         "gate_threshold": "<4.45%"
       },
       "USDINR": {
-        "value": 96.335,
+        "value": 96.33499908447266,
         "as_of": "2026-07-16T16:27:07+0530",
         "gate_status": "REDUCE",
         "gate_threshold": "<94 / <96 wkly"
       },
       "DXY": {
-        "value": 100.544,
+        "value": 100.58999633789062,
         "as_of": "2026-07-16T16:27:07+0530",
         "gate_status": "OK",
         "gate_threshold": "<102"
       },
       "BRENT": {
-        "value": 84.68,
+        "value": 84.68000030517578,
         "as_of": "2026-07-16T16:27:07+0530",
         "gate_status": "OK",
         "gate_threshold": "oil <$105"
@@ -38355,7 +38385,7 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-07-16T10:58:37+00:00",
+    "computed_at_utc": "2026-07-16T11:26:53+00:00",
     "desk": "equity",
     "any_stale": true,
     "any_dim": false,
@@ -38386,7 +38416,7 @@
         "dim": false,
         "reason": "refreshed 0m ago",
         "since": null,
-        "age_min": 0.06251185,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_equity",
         "ui_targets": []
