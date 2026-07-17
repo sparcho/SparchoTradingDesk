@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1784276774">
-<meta name="x-built-at" content="2026-07-17T08:25:45+00:00">
+<meta name="x-build-id" content="1784279749">
+<meta name="x-built-at" content="2026-07-17T09:15:25+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1784276774",BUILT_AT="2026-07-17T08:25:45+00:00";
+  var BID="1784279749",BUILT_AT="2026-07-17T09:15:25+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -715,6 +715,21 @@
   .fc-mini[open]>summary{ border-bottom:1px solid var(--hair); margin-bottom:5px; }
   .fcm-body{ padding:0 9px 8px; }
   .fc-book{ color:var(--cyan); font-size:9px; }
+  .fc2{ border-left:3px solid var(--hair); padding:9px 11px 8px; border-radius:9px; background:linear-gradient(135deg,var(--bg2),rgba(255,255,255,.015)); display:flex; flex-direction:column; }
+  .fc2.buy{ border-left-color:var(--pos); } .fc2.watchbuy{ border-left-color:var(--watch,#e6b34a); } .fc2.resist{ border-left-color:#e6873a; } .fc2.avoid{ border-left-color:var(--neg); } .fc2.watch{ border-left-color:var(--hair); }
+  .fc2-hd{ display:flex; align-items:center; gap:6px; margin-bottom:3px; }
+  .fc2-tk{ font-size:18px; font-weight:800; letter-spacing:-0.02em; }
+  .fc2-sc{ margin-left:auto; font-family:var(--font-mono); font-size:12px; font-weight:800; color:var(--mut); }
+  .fc2-situ{ font-size:12px; color:var(--ink2); line-height:1.35; }
+  .fc2-act{ margin-top:9px; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .fc2-lbl{ font-size:11.5px; font-weight:700; }
+  .fc2.buy .fc2-lbl{ color:var(--pos); } .fc2.watchbuy .fc2-lbl{ color:var(--watch,#e6b34a); } .fc2.resist .fc2-lbl{ color:#e6873a; } .fc2.avoid .fc2-lbl{ color:var(--neg); } .fc2.watch .fc2-lbl{ color:var(--mut); }
+  .fc2-px{ font-family:var(--font-mono); font-size:16px; font-weight:800; letter-spacing:-0.01em; }
+  .fc2.buy .fc2-px{ color:var(--pos); }
+  .fc2-live{ font-family:var(--font-mono); font-size:11px; color:var(--mut); margin-top:2px; } .fc2-live b{ color:var(--ink2); font-weight:700; }
+  .fc2-q{ font-size:9.5px; color:var(--mut); margin-top:6px; border-top:1px solid var(--hair); padding-top:4px; line-height:1.3; }
+  .fc-mini.watchbuy{ border-left-color:var(--watch,#e6b34a); } .fc-mini.resist{ border-left-color:#e6873a; } .fc-mini.avoid{ border-left-color:var(--neg); } .fc-mini.watch{ border-left-color:var(--hair); } .fc-mini.buy{ border-left-color:var(--pos); }
+  .fcm-v.buy{ color:var(--pos); } .fcm-v.watchbuy{ color:var(--watch,#e6b34a); } .fcm-v.resist{ color:#e6873a; } .fcm-v.avoid{ color:var(--neg); } .fcm-v.watch{ color:var(--mut); }
   .fc-card{ border-left:2px solid var(--hair); }
   /* F149 Conviction & System Analytics (operator-private, unlocked-only) */
   .f149-wrap{ margin:14px 0 4px; display:flex; flex-direction:column; gap:10px; }
@@ -2572,7 +2587,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var arrow=function(s){return s==='above'?'▲':(s==='below'?'▼':'·');};
     var SETUP={'buy-support':['buy','BUY-SUPPORT'],'at-support':['buy','AT-SUPPORT'],'falling-knife':['knife','KNIFE'],'at-resistance':['res','AT-RESISTANCE'],'approaching':['watch','APPROACHING'],'watch':['watch','WATCH']};
     var srcOf=function(p){ var s=(p.tfs||[]).join('+'); if(p.ma_hits&&p.ma_hits.length) s+='+'+p.ma_hits.join('+'); return s; };
-    // F260717e ranking: held + active fires FIRST, then nearest-to-price. Top 10 hero cards; rest mini.
+    // F260717e/f ranking: held + active fires FIRST, then nearest-to-price. Top 10 hero; rest mini.
     var _held={}, _fires={};
     try{ (DATA.held||[]).forEach(function(h){ var t=(h&&h.ticker)||h; if(t) _held[String(t).toUpperCase()]=1; }); }catch(e){}
     try{ ((DATA.screeners&&DATA.screeners.daytrade_panel)||[]).forEach(function(r){ if(r&&r.ticker) _fires[String(r.ticker).toUpperCase()]=1; }); }catch(e){}
@@ -2580,11 +2595,26 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var _dist=function(n){ var d=(n.nearest_dist_pct!=null)?n.nearest_dist_pct:((n.points&&n.points[0]&&n.points[0].dist_pct!=null)?n.points[0].dist_pct:9999); return Math.abs(d); };
     var _ranked=fc.names.slice().sort(function(a,b){ var ba=_isBook(a.ticker)?0:1, bb=_isBook(b.ticker)?0:1; if(ba!==bb) return ba-bb; return _dist(a)-_dist(b); });
     var _HERO=10, _heroes=_ranked.slice(0,_HERO), _minis=_ranked.slice(_HERO);
-    var _detail=function(n){ var pts=n.points||[]; var sub=pts.slice(0,3).map(function(p){return '₹'+p.px+' <span class="fc-src">'+esc(srcOf(p))+'</span> '+arrow(p.side)+p.dist_pct+'%';}).join('<br>'); var more=pts.length>1?(' <span class="fc-more">+'+(pts.length-1)+' more</span>'):''; return '<div class="rh-d">'+sub+'</div><div class="fc-meta">@ ₹'+n.current_px+' · trend '+esc(n.trend||'—')+' · '+n.n_points+' pt'+(n.n_points===1?'':'s')+more+'</div>'; };
+    var _rup=function(v){ return (v==null||isNaN(+v))?'—':'₹'+Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}); };
+    // F260717f classify: ONLY at-and-holding support (dist<=0.75%) is a potential buy. A zone price
+    // merely being approached may reject & retest first -> a WATCH, never a buy. Resistance = watch/trim.
+    var _classify=function(n){ var p0=(n.points||[])[0]||{}; var lvl=(p0.px!=null)?p0.px:n.current_px;
+      var support=(p0.side==='below'), resist=(p0.side==='above');
+      var dist=Math.abs((p0.dist_pct!=null)?p0.dist_pct:(n.nearest_dist_pct!=null?n.nearest_dist_pct:99));
+      var atLvl=(!!n.at_confluence)&&dist<=0.75;
+      var kind,situ,lbl;
+      if(n.setup==='falling-knife'){ kind='avoid'; situ='Falling into support · downtrend'; lbl="Avoid — don't catch"; }
+      else if(support&&atLvl){ kind='buy'; situ='At support · holding'; lbl='Potential buy'; }
+      else if(support){ kind='watchbuy'; situ='Approaching support from above'; lbl='Watch to buy if it holds'; }
+      else if(resist){ kind='resist'; situ=(dist<=1.5?'At resistance':'Approaching resistance'); lbl='Not a buy · watch / trim'; }
+      else { kind='watch'; situ='In range'; lbl='Watch'; }
+      return {kind:kind,situ:situ,lbl:lbl,px:lvl}; };
+    var _qual=function(n){ var p0=(n.points||[])[0]||{}; var q=[]; if(p0.n_ladders) q.push(p0.n_ladders+' fib ladder'+(p0.n_ladders>1?'s':'')); if(p0.ma_hits&&p0.ma_hits.length) q.push(esc(p0.ma_hits.join(' + '))); return 'Confluence: '+(q.join(' + ')||'single ladder')+(p0.tf_max?(' · up to '+p0.tf_max+'M'):'')+(n.grade?(' · '+esc(n.grade)):''); };
     var _bk=function(n){ return _isBook(n.ticker)?'<span class="fc-book" title="held or active fire">●</span>':''; };
-    var heroHTML=_heroes.map(function(n){ var su=SETUP[n.setup]||['watch',String(n.setup||'').toUpperCase()]; var gr=(n.grade||'WATCH').toLowerCase(); var atb=n.at_confluence?'<span class="fc-at">AT</span>':''; return '<div class="rhero fc-card '+su[0]+(n.at_confluence?' fc-hot':'')+'">'+'<div class="rh-t">'+esc(n.ticker)+_bk(n)+atb+'<span class="fc-grade '+gr+'">'+esc(n.grade||'')+'</span></div>'+'<div class="rh-h"><span class="fc-setup '+su[0]+'">'+su[1]+'</span><span class="fc-score">'+(n.score!=null?n.score:'—')+'</span></div>'+_detail(n)+'</div>'; }).join('');
-    var _SV={'buy-support':'BUY','at-support':'@SUP','falling-knife':'KNIFE','at-resistance':'@RES','approaching':'APPR','watch':'WATCH'};
-    var miniHTML=_minis.length?('<div class="fc-mini-wrap">'+_minis.map(function(n){ var su=SETUP[n.setup]||['watch',String(n.setup||'').toUpperCase()]; var atb=n.at_confluence?'<span class="fc-at">AT</span>':''; return '<details class="fc-mini '+su[0]+(n.at_confluence?' fc-hot':'')+'"><summary><span class="fcm-tk">'+esc(n.ticker)+'</span>'+_bk(n)+atb+'<span class="fcm-v '+su[0]+'">'+(_SV[n.setup]||String(su[1]).slice(0,5))+'</span></summary><div class="fcm-body">'+_detail(n)+'</div></details>'; }).join('')+'</div>'):'';
+    var _body=function(n,c){ return '<div class="fc2-situ">'+esc(c.situ)+'</div><div class="fc2-act"><span class="fc2-lbl">'+esc(c.lbl)+'</span><span class="fc2-px">'+_rup(c.px)+'</span></div><div class="fc2-live">Live <b>'+_rup(n.current_px)+'</b> · '+esc(n.trend||'—')+'</div><div class="fc2-q">'+_qual(n)+'</div>'; };
+    var heroHTML=_heroes.map(function(n){ var c=_classify(n); return '<div class="rhero fc2 '+c.kind+'"><div class="fc2-hd"><span class="fc2-tk">'+esc(n.ticker)+'</span>'+_bk(n)+'<span class="fc2-sc">'+(n.score!=null?n.score:'')+'</span></div>'+_body(n,c)+'</div>'; }).join('');
+    var _SV={buy:'BUY',watchbuy:'WATCH',resist:'@RES',avoid:'KNIFE',watch:'WATCH'};
+    var miniHTML=_minis.length?('<div class="fc-mini-wrap">'+_minis.map(function(n){ var c=_classify(n); return '<details class="fc-mini '+c.kind+'"><summary><span class="fcm-tk">'+esc(n.ticker)+'</span>'+_bk(n)+'<span class="fcm-v '+c.kind+'">'+_SV[c.kind]+'</span></summary><div class="fcm-body">'+_body(n,c)+'</div></details>'; }).join('')+'</div>'):'';
     var miniLbl=_minis.length?('<div class="fc-mini-lbl">'+_minis.length+' more · nearest-price order · tap to expand</div>'):'';
     return '<div class="card fc-wrap" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>Fib confluence radar · engine-scored'+
       ((typeof HT!=="undefined")?HT('Cross-ladder fib-box confluences from the verified level banks (box_engine), scored LIVE 0-100. A confluence = where box edges from 2+ fib ladders line up (~1.5%); the score rewards how many independent sources stack there (fib ladders + the EMA21/SMA50/EMA200 stack, computed from price with no chart), how close price is, the timeframe weight, and trend alignment (support in an uptrend scores up; support in a downtrend = a falling knife, scored down). Updates every price refresh. Observations to validate over time — not trade calls.'):'')+
