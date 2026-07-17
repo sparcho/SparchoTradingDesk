@@ -71,6 +71,23 @@ def _next_session(d: date):
     return n
 
 
+def _upcoming_session(now):
+    """The session the forward-guidance tab should target. Pre-open (before 09:15 IST) on a trading
+    day -> TODAY (the imminent session); otherwise the next session strictly after today. Mirrors the
+    vault emit so both producers agree, and fixes the morning cut labelling today's session as
+    tomorrow (F260717c)."""
+    from datetime import time as _t
+    d = now.date()
+    try:
+        sys.path.insert(0, str(HERE.parent / "engine"))
+        from nse_calendar import is_session
+    except Exception:
+        is_session = lambda x: x.weekday() < 5
+    if is_session(d) and now.time() < _t(9, 15):
+        return d
+    return _next_session(d)
+
+
 def _read_json(p, default):
     try:
         return json.loads(p.read_text(encoding="utf-8"))
@@ -147,7 +164,7 @@ def main():
         "basis": "overnight_refreshed" if cut == "morning" else "nse_close",
         "as_of_utc": now_iso,
         "as_of_ist": now.strftime("%Y-%m-%d %H:%M IST"),
-        "session_date": _next_session(now.date()).isoformat(),
+        "session_date": _upcoming_session(now).isoformat(),
         "price_as_of": price_as_of,
         "n": len(rows),
         "rows": rows,
