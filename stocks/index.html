@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1784120080">
-<meta name="x-built-at" content="2026-07-15T12:54:19+00:00">
+<meta name="x-build-id" content="1784259222">
+<meta name="x-built-at" content="2026-07-17T03:33:14+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1784120080",BUILT_AT="2026-07-15T12:54:19+00:00";
+  var BID="1784259222",BUILT_AT="2026-07-17T03:33:14+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2530,7 +2530,21 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<div class="f149-elhead"><span>Class</span><span>Verdict</span><span>n</span><span>excess</span><span>Reason</span></div>'+er+
         '<div class="f149-note">A class earns real capital only on positive excess-over-universe with n\u2265'+(el.min_sample||20)+'. Non-destructive \u2014 nothing stops logging.</div></div>';
     }
-    var parts=[conv,reg,elig].filter(Boolean); if(!parts.length) return '';
+    var wsh=''; var ws=tl.watch_shadow;
+    if(ws&&(ws.watch_gate||ws.all_limit)){
+      var wrow=function(l,d,hi){ if(!d) return ''; return '<div class="f149-rgrow'+(hi?' f149-hi':'')+'"><span class="f149-rglab">'+esc(l)+'</span>'+
+        '<span class="f149-rgn">n='+(d.n!=null?d.n:'—')+'</span>'+
+        '<span style="color:'+sgn(d.actual_avg_r)+'">'+fR(d.actual_avg_r)+' act</span>'+
+        '<span style="color:'+sgn(d.shadow_avg_r)+'">'+fR(d.shadow_avg_r)+' shdw</span>'+
+        '<span style="color:'+sgn(d.delta_avg_r)+'">'+fR(d.delta_avg_r)+' Δ</span></div>'; };
+      var wnf=(ws.watch_gate&&ws.watch_gate.n_actual_nofill!=null)?(' · '+ws.watch_gate.n_actual_nofill+' no-fill'):'';
+      wsh='<div class="f149-card"><div class="f149-h">🕵️ Watch-Shadow <span class="f149-sub">anti-chase gate: booked R vs enter-at-open · measurement-only'+wnf+'</span></div>'+
+        '<div class="f149-rghead"><span></span><span></span><span>actual</span><span>shadow</span><span>Δ avg</span></div>'+
+        wrow('Anti-chase gate (live)',ws.watch_gate,true)+wrow('All limits (incl. legacy)',ws.all_limit)+
+        '<div class="f149-note">'+esc(ws.note||'Δ = shadow(enter-at-open) − actual(booked). Small Δ on the live gate = the anti-chase rule costs ~nothing (vindicated).')+'</div></div>';
+    }
+
+    var parts=[conv,reg,elig,wsh].filter(Boolean); if(!parts.length) return '';
     return '<div class="f149-wrap"><div class="f149-title">Conviction &amp; System Analytics <span class="f149-tag">F149 \u00b7 operator-private</span></div>'+parts.join('')+'</div>';
   }
   function fibConflHTML(){
