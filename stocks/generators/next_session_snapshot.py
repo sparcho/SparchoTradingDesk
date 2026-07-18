@@ -130,6 +130,14 @@ def _overnight_bias(ctx):
     return " · ".join(bits) if bits else "overnight rails unavailable"
 
 
+def _vault_owns(data):
+    """True if the published next_session is the vault's GATED plans view (basis 'on the close').
+    Gated-plans is authoritative (F260717-NEXTSESSION-DUALITY) -- the cloud must not clobber it; it
+    only bootstraps the block when the vault has not produced one."""
+    ns = (data or {}).get("next_session") or {}
+    return ns.get("basis") == "on the close" and ns.get("rows") is not None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cut", choices=["evening", "morning", "auto"], default="auto")
@@ -142,6 +150,10 @@ def main():
     if not DATA_JSON.exists():
         print("ERROR: %s not found" % DATA_JSON, file=sys.stderr); return 1
     data = json.loads(DATA_JSON.read_text(encoding="utf-8"))
+    if _vault_owns(data):
+        print("next_session: vault gated-plans present (basis 'on the close') -> preserving "
+              "(authoritative, F260717-NEXTSESSION-DUALITY)")
+        return 0
     di = data.get("daytrade_inputs") or {}
     candidates = di.get("candidates") or {}
     held = di.get("held") or [h.get("ticker") for h in data.get("held", [])]
