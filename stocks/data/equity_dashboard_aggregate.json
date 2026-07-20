@@ -1,14 +1,15 @@
 {
   "schema_version": "v1.1",
   "doc_type": "equity_dashboard_aggregate",
-  "emitted_at_utc": "2026-07-20T16:34:07+00:00",
+  "emitted_at_utc": "2026-07-20T17:00:27+00:00",
   "meta": {
     "account": "SPARCHO-HDFC",
     "doctrine_refs": [
       "V-31",
       "V-32",
       "V-33"
-    ]
+    ],
+    "last_price_refresh": "2026-07-20T17:00:27+00:00"
   },
   "book": {
     "as_of": "2026-07-15",
@@ -17,7 +18,15 @@
     "sessions_stale": 5,
     "fetched_at": "2026-07-20T19:00:00+05:30",
     "staleness": null,
-    "ledger_available": true
+    "ledger_available": true,
+    "totals": {
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unrealized_pnl_abs": 0.0,
+      "unrealized_pnl_pct": 0,
+      "change_today_abs": 0.0,
+      "change_today_pct": 0
+    }
   },
   "held": [
     {
@@ -25,44 +34,64 @@
       "name": "Gujarat Mineral Development Corporation",
       "sector": "Minerals & Mining",
       "cluster": "minerals-mining",
-      "current_price": 596.1,
-      "day_chg_pct": 1.72,
+      "current_price": 577.35,
+      "day_chg_pct": -0.71,
       "ltp_date": "2026-07-20",
       "tv_symbol": "GMDCLTD",
-      "tv_exchange": "BSE"
+      "tv_exchange": "BSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "VEDPOWER",
       "name": "Vedanta Power",
       "sector": "Power",
       "cluster": "power-generation",
-      "current_price": 39.18,
-      "day_chg_pct": -2.15,
+      "current_price": 38.31,
+      "day_chg_pct": 1.08,
       "ltp_date": "2026-07-20",
       "tv_symbol": "VEDPOWER",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "MTARTECH",
       "name": "MTAR Technologies Limited",
       "sector": "Capital Goods",
       "cluster": "capital-goods",
-      "current_price": 6698.5,
-      "day_chg_pct": 4.52,
+      "current_price": 5744.0,
+      "day_chg_pct": -5.0,
       "ltp_date": "2026-07-20",
       "tv_symbol": "MTARTECH",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "TARIL",
       "name": "Transformers and Rectifiers India",
       "sector": "Capital Goods",
       "cluster": "capital-goods",
-      "current_price": 337.25,
-      "day_chg_pct": 0.07,
+      "current_price": 333.6,
+      "day_chg_pct": 0.33,
       "ltp_date": "2026-07-20",
       "tv_symbol": "TARIL",
-      "tv_exchange": "BSE"
+      "tv_exchange": "BSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "NSDL",
@@ -73,7 +102,8 @@
       "day_chg_pct": -0.6,
       "ltp_date": "2026-07-20",
       "tv_symbol": "NSDL",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "concentration_pct": 0
     }
   ],
   "screeners": {
@@ -7512,16 +7542,16 @@
         "fresh": false,
         "vol_spike": true,
         "stddev_10d_pct": 7.95,
-        "d1": 3.23,
-        "d3": 0.91,
-        "d5": 8.17,
+        "d1": 2.17,
+        "d3": 0.31,
+        "d5": -5.26,
         "confirmed": true,
         "descriptor": "Confirmation candle: green, closed strong on a volume spike",
         "extended": false,
         "sector": "L5_APPS",
         "rsi_today": 62.31440057045191,
         "held": false,
-        "score": 66.6
+        "score": 65.6
       },
       {
         "ticker": "ADANIGREEN",
@@ -7562,6 +7592,25 @@
         "score": 58.1
       },
       {
+        "ticker": "HSCL",
+        "composite": 29.7,
+        "lean": 0,
+        "multi_hit_count": 0,
+        "fresh": false,
+        "vol_spike": true,
+        "stddev_10d_pct": 4.66,
+        "d1": 3.82,
+        "d3": 12.96,
+        "d5": 16.11,
+        "confirmed": true,
+        "descriptor": "Confirmation candle: green, closed strong on a volume spike",
+        "extended": false,
+        "sector": "CHEMICALS",
+        "rsi_today": 68.67054063769422,
+        "held": false,
+        "score": 58.1
+      },
+      {
         "ticker": "ANANTRAJ",
         "composite": 28.6,
         "lean": 0,
@@ -7581,23 +7630,61 @@
         "score": 56.4
       },
       {
-        "ticker": "HSCL",
-        "composite": 29.7,
+        "ticker": "MCX",
+        "composite": 27.8,
+        "lean": 0,
+        "multi_hit_count": 1,
+        "fresh": false,
+        "vol_spike": true,
+        "stddev_10d_pct": 2.57,
+        "d1": 2.57,
+        "d3": -2.58,
+        "d5": 1.29,
+        "confirmed": true,
+        "descriptor": "Confirmation candle: green, closed strong on a volume spike",
+        "extended": false,
+        "sector": "NBFC",
+        "rsi_today": 43.81271041071768,
+        "held": false,
+        "score": 55.4
+      },
+      {
+        "ticker": "VOLTAS",
+        "composite": 23.3,
         "lean": 0,
         "multi_hit_count": 0,
         "fresh": false,
         "vol_spike": true,
-        "stddev_10d_pct": 4.66,
-        "d1": 6.58,
-        "d3": 14.67,
-        "d5": 16.57,
+        "stddev_10d_pct": 3.34,
+        "d1": 1.12,
+        "d3": -1.45,
+        "d5": 0.59,
         "confirmed": true,
         "descriptor": "Confirmation candle: green, closed strong on a volume spike",
         "extended": false,
-        "sector": "CHEMICALS",
-        "rsi_today": 68.67054063769422,
+        "sector": "-",
+        "rsi_today": 55.59929055721175,
         "held": false,
-        "score": 55.3
+        "score": 54.7
+      },
+      {
+        "ticker": "PACEDIGITK",
+        "composite": 56.8,
+        "lean": 0,
+        "multi_hit_count": 0,
+        "fresh": false,
+        "vol_spike": false,
+        "stddev_10d_pct": 2.04,
+        "d1": 0.22,
+        "d3": -2.57,
+        "d5": -4.62,
+        "confirmed": true,
+        "descriptor": "Confirmation candle: green, closed strong (volume light)",
+        "extended": false,
+        "sector": "TELECOM",
+        "rsi_today": 50.01481230130117,
+        "held": false,
+        "score": 54.3
       },
       {
         "ticker": "SOLARINDS",
@@ -7657,44 +7744,6 @@
         "score": 53.2
       },
       {
-        "ticker": "MCX",
-        "composite": 27.8,
-        "lean": 0,
-        "multi_hit_count": 1,
-        "fresh": false,
-        "vol_spike": true,
-        "stddev_10d_pct": 2.57,
-        "d1": 0.09,
-        "d3": -2.54,
-        "d5": 1.71,
-        "confirmed": true,
-        "descriptor": "Confirmation candle: green, closed strong on a volume spike",
-        "extended": false,
-        "sector": "NBFC",
-        "rsi_today": 43.81271041071768,
-        "held": false,
-        "score": 52.5
-      },
-      {
-        "ticker": "DIXON",
-        "composite": 21.4,
-        "lean": 0,
-        "multi_hit_count": 1,
-        "fresh": false,
-        "vol_spike": true,
-        "stddev_10d_pct": 3.39,
-        "d1": 1.81,
-        "d3": 6.87,
-        "d5": 8.15,
-        "confirmed": true,
-        "descriptor": "Confirmation candle: green, closed strong on a volume spike",
-        "extended": false,
-        "sector": "SEMI_EMS",
-        "rsi_today": 71.61468341019311,
-        "held": false,
-        "score": 48.8
-      },
-      {
         "ticker": "PARAS",
         "composite": 17.6,
         "lean": 0,
@@ -7702,35 +7751,16 @@
         "fresh": false,
         "vol_spike": false,
         "stddev_10d_pct": 4.19,
-        "d1": 0.8,
-        "d3": 0.36,
-        "d5": -3.71,
+        "d1": 2.58,
+        "d3": -0.85,
+        "d5": -1.46,
         "confirmed": true,
         "descriptor": "Confirmation candle: green, closed strong (volume light)",
         "extended": false,
         "sector": "-",
         "rsi_today": 48.84296676326513,
         "held": false,
-        "score": 47.1
-      },
-      {
-        "ticker": "HCLTECH",
-        "composite": 11.5,
-        "lean": 0,
-        "multi_hit_count": 1,
-        "fresh": false,
-        "vol_spike": true,
-        "stddev_10d_pct": 2.16,
-        "d1": 1.45,
-        "d3": 4.56,
-        "d5": 0.01,
-        "confirmed": true,
-        "descriptor": "Confirmation candle: green, closed strong on a volume spike",
-        "extended": false,
-        "sector": "IT",
-        "rsi_today": 58.3665721477137,
-        "held": false,
-        "score": 46.1
+        "score": 49.2
       }
     ]
   },
@@ -8578,7 +8608,7 @@
     "sessions_stale": 0,
     "status": "OK",
     "score_version": "F128",
-    "refreshed_at_utc": "2026-07-20T16:34:08+00:00"
+    "refreshed_at_utc": "2026-07-20T17:00:27+00:00"
   },
   "risk_gates": [],
   "dr": {
@@ -10848,28 +10878,28 @@
       {
         "id": "TNX",
         "status": "FAIL",
-        "reading": "4.541",
+        "reading": "4.60%",
         "threshold": "<4.45%",
         "note": "4.541 vs <4.45% -> FAIL (auto-refreshed 2026-07-20 08:54 IST) -- binding deploy gate (S5.2 new-tranche block)"
       },
       {
         "id": "DXY",
         "status": "OK",
-        "reading": "100.729",
+        "reading": "101.00",
         "threshold": "<102",
         "note": "100.729 vs <102 -> OK (auto-refreshed 2026-07-20 08:54 IST) -- >102 weekly close = reduce-50 (V-06)"
       },
       {
         "id": "USDINR",
         "status": "REDUCE",
-        "reading": "96.27",
+        "reading": "96.435",
         "threshold": "<94 / <96 wkly",
         "note": "96.27 vs <94 / <96 wkly -> REDUCE (auto-refreshed 2026-07-20 08:54 IST) -- pause new tranches >94; reduce-25 >96 weekly close"
       },
       {
         "id": "HORMUZ",
         "status": "OK",
-        "reading": "90.1",
+        "reading": "oil $88.33",
         "threshold": "oil <$105",
         "note": "90.1 vs oil <$105 -> OK (auto-refreshed 2026-07-20 08:54 IST) -- war-premium / S10.1 correlated-cascade gate (Brent proxy)"
       },
@@ -10890,25 +10920,25 @@
     ],
     "macro": {
       "TNX": {
-        "value": 4.541,
+        "value": 4.6020002365112305,
         "as_of": "2026-07-20T15:47:01+0530",
         "gate_status": "FAIL",
         "gate_threshold": "<4.45%"
       },
       "USDINR": {
-        "value": 96.445,
+        "value": 96.43499755859375,
         "as_of": "2026-07-20T15:47:01+0530",
         "gate_status": "REDUCE",
         "gate_threshold": "<94 / <96 wkly"
       },
       "DXY": {
-        "value": 100.796,
+        "value": 101.00199890136719,
         "as_of": "2026-07-20T15:47:01+0530",
         "gate_status": "OK",
         "gate_threshold": "<102"
       },
       "BRENT": {
-        "value": 88.21,
+        "value": 88.33000183105469,
         "as_of": "2026-07-20T15:47:01+0530",
         "gate_status": "OK",
         "gate_threshold": "oil <$105"
@@ -45789,7 +45819,7 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-07-20T16:34:14+00:00",
+    "computed_at_utc": "2026-07-20T17:00:27+00:00",
     "desk": "equity",
     "any_stale": true,
     "any_dim": false,
@@ -45820,7 +45850,7 @@
         "dim": false,
         "reason": "refreshed 0m ago",
         "since": null,
-        "age_min": 0.13208305,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_equity",
         "ui_targets": []
