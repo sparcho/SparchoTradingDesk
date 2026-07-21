@@ -1,14 +1,15 @@
 {
   "schema_version": "v1.1",
   "doc_type": "equity_dashboard_aggregate",
-  "emitted_at_utc": "2026-07-21T18:23:06+00:00",
+  "emitted_at_utc": "2026-07-21T19:42:55+00:00",
   "meta": {
     "account": "SPARCHO-HDFC",
     "doctrine_refs": [
       "V-31",
       "V-32",
       "V-33"
-    ]
+    ],
+    "last_price_refresh": "2026-07-21T19:42:55+00:00"
   },
   "book": {
     "as_of": "2026-07-15",
@@ -17,7 +18,15 @@
     "sessions_stale": 6,
     "fetched_at": "2026-07-21T19:10:00+05:30",
     "staleness": null,
-    "ledger_available": true
+    "ledger_available": true,
+    "totals": {
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unrealized_pnl_abs": 0.0,
+      "unrealized_pnl_pct": 0,
+      "change_today_abs": 0.0,
+      "change_today_pct": 0
+    }
   },
   "held": [
     {
@@ -25,44 +34,64 @@
       "name": "Gujarat Mineral Development Corporation",
       "sector": "Minerals & Mining",
       "cluster": "minerals-mining",
-      "current_price": 596.1,
-      "day_chg_pct": 1.72,
+      "current_price": 577.35,
+      "day_chg_pct": -0.71,
       "ltp_date": "2026-07-21",
       "tv_symbol": "GMDCLTD",
-      "tv_exchange": "BSE"
+      "tv_exchange": "BSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "VEDPOWER",
       "name": "Vedanta Power",
       "sector": "Power",
       "cluster": "power-generation",
-      "current_price": 39.18,
-      "day_chg_pct": -2.15,
+      "current_price": 38.31,
+      "day_chg_pct": 1.08,
       "ltp_date": "2026-07-21",
       "tv_symbol": "VEDPOWER",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "MTARTECH",
       "name": "MTAR Technologies Limited",
       "sector": "Capital Goods",
       "cluster": "capital-goods",
-      "current_price": 6698.5,
-      "day_chg_pct": 4.52,
+      "current_price": 5744.0,
+      "day_chg_pct": -5.0,
       "ltp_date": "2026-07-21",
       "tv_symbol": "MTARTECH",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "TARIL",
       "name": "Transformers and Rectifiers India",
       "sector": "Capital Goods",
       "cluster": "capital-goods",
-      "current_price": 337.25,
-      "day_chg_pct": 0.07,
+      "current_price": 333.6,
+      "day_chg_pct": 0.33,
       "ltp_date": "2026-07-21",
       "tv_symbol": "TARIL",
-      "tv_exchange": "BSE"
+      "tv_exchange": "BSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "NSDL",
@@ -73,7 +102,8 @@
       "day_chg_pct": -0.6,
       "ltp_date": "2026-07-21",
       "tv_symbol": "NSDL",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "concentration_pct": 0
     }
   ],
   "screeners": {
@@ -8613,7 +8643,8 @@
     "sessions_stale": 0,
     "status": "OK",
     "score_version": "F128",
-    "refreshed_at_utc": "2026-07-21T18:23:06+00:00"
+    "refreshed_at_utc": "2026-07-21T19:42:55+00:00",
+    "error": "live pull lagged (price_as_of 2026-07-20 < published 2026-07-21); kept fresher panel — no regression"
   },
   "risk_gates": [],
   "dr": {
@@ -10883,28 +10914,28 @@
       {
         "id": "TNX",
         "status": "FAIL",
-        "reading": "4.598",
+        "reading": "4.63%",
         "threshold": "<4.45%",
         "note": "4.598 vs <4.45% -> FAIL (auto-refreshed 2026-07-21 16:50 IST) -- binding deploy gate (S5.2 new-tranche block)"
       },
       {
         "id": "DXY",
         "status": "OK",
-        "reading": "100.933",
+        "reading": "101.17",
         "threshold": "<102",
         "note": "100.933 vs <102 -> OK (auto-refreshed 2026-07-21 16:50 IST) -- >102 weekly close = reduce-50 (V-06)"
       },
       {
         "id": "USDINR",
         "status": "REDUCE",
-        "reading": "96.235",
+        "reading": "96.225",
         "threshold": "<94 / <96 wkly",
         "note": "96.235 vs <94 / <96 wkly -> REDUCE (auto-refreshed 2026-07-21 16:50 IST) -- pause new tranches >94; reduce-25 >96 weekly close"
       },
       {
         "id": "HORMUZ",
         "status": "OK",
-        "reading": "89.9",
+        "reading": "oil $91.38",
         "threshold": "oil <$105",
         "note": "89.9 vs oil <$105 -> OK (auto-refreshed 2026-07-21 16:50 IST) -- war-premium / S10.1 correlated-cascade gate (Brent proxy)"
       },
@@ -10925,25 +10956,25 @@
     ],
     "macro": {
       "TNX": {
-        "value": 4.598,
+        "value": 4.627999782562256,
         "as_of": "2026-07-21T16:27:11+0530",
         "gate_status": "FAIL",
         "gate_threshold": "<4.45%"
       },
       "USDINR": {
-        "value": 96.235,
+        "value": 96.2249984741211,
         "as_of": "2026-07-21T16:50:58+0530",
         "gate_status": "REDUCE",
         "gate_threshold": "<94 / <96 wkly"
       },
       "DXY": {
-        "value": 100.984,
+        "value": 101.16899871826172,
         "as_of": "2026-07-21T16:50:58+0530",
         "gate_status": "OK",
         "gate_threshold": "<102"
       },
       "BRENT": {
-        "value": 90.37,
+        "value": 91.37999725341797,
         "as_of": "2026-07-21T16:50:58+0530",
         "gate_status": "OK",
         "gate_threshold": "oil <$105"
@@ -38952,7 +38983,7 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-07-21T18:23:09+00:00",
+    "computed_at_utc": "2026-07-21T19:42:55+00:00",
     "desk": "equity",
     "any_stale": true,
     "any_dim": false,
@@ -38983,7 +39014,7 @@
         "dim": false,
         "reason": "refreshed 0m ago",
         "since": null,
-        "age_min": 0.05682205,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_equity",
         "ui_targets": []
@@ -38998,7 +39029,7 @@
         "reason": "fresh — YELLOW (score 53, 2026-07-21)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": "regime_refresh",
         "ui_targets": [
           "regime-card"
@@ -39025,7 +39056,7 @@
         "is_stale": true,
         "severity": "warn",
         "dim": false,
-        "reason": "13 STOCK-TA read(s) >60d old (oldest GRAPHITE 79d)",
+        "reason": "13 STOCK-TA read(s) >60d old (oldest GRAPHITE 80d)",
         "since": null,
         "age_min": null,
         "sessions_stale": 13,
@@ -39039,10 +39070,10 @@
         "is_stale": true,
         "severity": "warn",
         "dim": false,
-        "reason": "STALE — as-of 2026-05-16 is 47 session(s) behind today (tolerance 20); produced by emit on the laptop substrate.",
+        "reason": "STALE — as-of 2026-05-16 is 48 session(s) behind today (tolerance 20); produced by emit on the laptop substrate.",
         "since": "2026-05-16",
         "age_min": null,
-        "sessions_stale": 47,
+        "sessions_stale": 48,
         "heal": null,
         "ui_targets": []
       },
@@ -39053,10 +39084,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39081,10 +39112,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39109,10 +39140,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-10 (7 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-10 (8 session(s) behind)",
         "since": "2026-07-10",
         "age_min": null,
-        "sessions_stale": 7,
+        "sessions_stale": 8,
         "heal": null,
         "ui_targets": []
       },
@@ -39123,10 +39154,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39137,10 +39168,10 @@
         "is_stale": true,
         "severity": "alert",
         "dim": false,
-        "reason": "STALE — as-of 2026-07-15 is 4 session(s) behind today (tolerance 3); produced by flag ledger on the laptop substrate.",
+        "reason": "STALE — as-of 2026-07-15 is 5 session(s) behind today (tolerance 3); produced by flag ledger on the laptop substrate.",
         "since": "2026-07-15",
         "age_min": null,
-        "sessions_stale": 4,
+        "sessions_stale": 5,
         "heal": null,
         "ui_targets": []
       },
@@ -39151,10 +39182,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39165,10 +39196,10 @@
         "is_stale": true,
         "severity": "alert",
         "dim": false,
-        "reason": "STALE — as-of 2026-07-16 is 3 session(s) behind today (tolerance 2); produced by refresh-news.yml on the cloud substrate.",
+        "reason": "STALE — as-of 2026-07-16 is 4 session(s) behind today (tolerance 2); produced by refresh-news.yml on the cloud substrate.",
         "since": "2026-07-16",
         "age_min": null,
-        "sessions_stale": 3,
+        "sessions_stale": 4,
         "heal": null,
         "ui_targets": []
       },
@@ -39179,10 +39210,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39193,24 +39224,10 @@
         "is_stale": true,
         "severity": "warn",
         "dim": false,
-        "reason": "STALE — as-of 2026-06-04 is 33 session(s) behind today (tolerance 10); produced by order_book_emit (F100) on the laptop substrate.",
+        "reason": "STALE — as-of 2026-06-04 is 34 session(s) behind today (tolerance 10); produced by order_book_emit (F100) on the laptop substrate.",
         "since": "2026-06-04",
         "age_min": null,
-        "sessions_stale": 33,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:perf_private",
-        "subsystem": "equity",
-        "label": "Block perf_private",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-07-15 (4 session(s) behind)",
-        "since": "2026-07-15",
-        "age_min": null,
-        "sessions_stale": 4,
+        "sessions_stale": 34,
         "heal": null,
         "ui_targets": []
       },
@@ -39221,24 +39238,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:family_account_b",
-        "subsystem": "equity",
-        "label": "Block family_account_b",
-        "is_stale": true,
-        "severity": "warn",
-        "dim": false,
-        "reason": "STALE — as-of 2026-06-06 is 32 session(s) behind today (tolerance 10); produced by propagate/account pull on the operator substrate.",
-        "since": "2026-06-06",
-        "age_min": null,
-        "sessions_stale": 32,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39249,10 +39252,10 @@
         "is_stale": true,
         "severity": "warn",
         "dim": false,
-        "reason": "STALE — as-of 2026-05-05 is 55 session(s) behind today (tolerance 3); produced by trade_tracker_emit.py on the laptop substrate.",
-        "since": "2026-05-05",
+        "reason": "NO PROVENANCE — no as-of date can be derived, so this block can never be proven fresh OR stale. Producer trade_tracker_emit.py must stamp it.",
+        "since": null,
         "age_min": null,
-        "sessions_stale": 55,
+        "sessions_stale": null,
         "heal": null,
         "ui_targets": []
       },
@@ -39277,10 +39280,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39291,10 +39294,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39305,7 +39308,7 @@
         "is_stale": true,
         "severity": "alert",
         "dim": false,
-        "reason": "NO PROVENANCE — no as-of date can be derived, so this block can never be proven fresh OR stale. Producer emit must stamp it. shipped EMPTY on 2026-07-21, uncovered by any check",
+        "reason": "EMPTY — emit produces this on the laptop substrate and it came out empty. shipped EMPTY on 2026-07-21, uncovered by any check",
         "since": null,
         "age_min": null,
         "sessions_stale": null,
@@ -39319,10 +39322,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -39333,24 +39336,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-07-21 (1 session(s) behind)",
         "since": "2026-07-21",
         "age_min": null,
-        "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:trade_lab_private",
-        "subsystem": "equity",
-        "label": "Block trade_lab_private",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-07-21 (0 session(s) behind)",
-        "since": "2026-07-21",
-        "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       }
