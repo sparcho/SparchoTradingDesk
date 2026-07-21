@@ -382,7 +382,7 @@ def _sessions_between(d_str, today):
 
 
 def _blk(owner, substrate, max_sessions, asof=None, allow_empty=False,
-         severity="alert", label=None, note="", count=None):
+         severity="alert", label=None, note="", count=None, public_as=None):
     """One block's declared contract.
 
     owner      — the producer responsible for the block
@@ -394,7 +394,7 @@ def _blk(owner, substrate, max_sessions, asof=None, allow_empty=False,
     """
     return dict(owner=owner, substrate=substrate, max_sessions=max_sessions,
                 asof=asof, allow_empty=allow_empty, severity=severity,
-                label=label, note=note, count=count)
+                label=label, note=note, count=count, public_as=public_as)
 
 
 # substrate legend:
@@ -429,10 +429,14 @@ EQUITY_BLOCKS = {
     "daytrade_inputs":       _blk("screener_runner.py", "laptop", 1,
                                   note="carries no as-of field — needs a producer stamp"),
     "signal_perf":           _blk("signal_ledger.py", "laptop", 1),
-    "fib_confluences":       _blk("fib_confluence_feed.py", "laptop", 1,
+    "fib_confluences":       _blk("ci_fib_refresh.py (cloud) / fib_confluence_feed.py", "cloud", 1,
                                   _key_date("price_as_of"),
-                                  note="F260721-FIBPROV: now stamps price_as_of/basis. Scored on "
-                                       "the LAST CLOSE, never intraday - the card must say so."),
+                                  note="F260721-FIBPROV: stamps price_as_of/basis. Scored on the "
+                                       "LAST CLOSE, never intraday - the card must say so. "
+                                       "F260721-LEVELSCLOUD: substrate is now CLOUD - the banked "
+                                       "levels ship encrypted and refresh-stocks-dashboard.yml "
+                                       "rebuilds this block post-close, so laptop-off is NO LONGER "
+                                       "an excuse for it being stale."),
     "positional_assessment": _blk("signal_ledger.py", "laptop", 2),
     "regime_history":        _blk("regime_history_append.py", "laptop", 3),
     "flags":                 _blk("flag ledger", "laptop", 3),
@@ -446,6 +450,17 @@ EQUITY_BLOCKS = {
                                   _key_date("emitted_at"), severity="warn"),
     "dr":                    _blk("DR pipeline", "laptop", 20, severity="warn"),
     "analysis":              _blk("emit", "laptop", 20, severity="warn"),
+
+    # --- operator-private: encrypted into sensitive_enc and stripped from the public
+    # aggregate. They MUST still report freshness, but under a codename (see the detector).
+    "rajiv_account":         _blk("propagate/account pull", "operator", 10, severity="warn",
+                                  public_as="family_account_b", allow_empty=True),
+    "performance":           _blk("parse_capital_gains.py", "laptop", 10, severity="warn",
+                                  public_as="perf_private", allow_empty=True),
+    "trade_lab":             _blk("trade_tracker_emit.py", "laptop", 2, severity="warn",
+                                  public_as="trade_lab_private", allow_empty=True),
+    "conviction":            _blk("conviction_book", "laptop", 10, severity="warn",
+                                  public_as="conviction_private", allow_empty=True),
 
     # --- operator-driven
     "book":                  _blk("operator broker drop", "operator", 5, severity="warn"),
@@ -466,9 +481,16 @@ def _block_items(data, now, registry, desk):
     items = []
     for name in sorted((data or {}).keys()):
         spec = registry.get(name)
+        # F260721-CONTRACTLEAK: this runs BEFORE _apply_privacy strips the operator-private
+        # blocks, so a raw key name here lands on a PUBLIC surface. `rajiv_account` did exactly
+        # that - the DATA was stripped, and the health metadata describing it put the family
+        # name back. It also evaded privacy_scrub, whose halt-on-survivor check is word-boundary
+        # based and cannot see a name embedded in an identifier. Private blocks must still be
+        # REPORTED (silence is the other failure mode) - just never by their own key.
+        pub = (spec or {}).get("public_as") or name
         if spec is None:
             items.append(_item(
-                id="block:" + name, subsystem=desk, label="Block %s" % name,
+                id="block:" + pub, subsystem=desk, label="Block %s" % pub,
                 is_stale=True, severity="warn", dim=False,
                 reason=("UNREGISTERED BLOCK — present in the aggregate but absent from the "
                         "block contract, so its staleness can never be proven. Add it to "
@@ -479,7 +501,7 @@ def _block_items(data, now, registry, desk):
             continue
 
         blk = data.get(name)
-        label = spec.get("label") or ("Block %s" % name)
+        label = spec.get("label") or ("Block %s" % pub)
         # A detector that explodes becomes a FINDING. The old contract wrapped every
         # detector in `try/except: pass`, so a renamed field silently dropped the item
         # and the doctor reported "clean - fewer items, none stale" (F260721).
@@ -492,7 +514,7 @@ def _block_items(data, now, registry, desk):
                 n = len(blk) if isinstance(blk, (list, dict, str)) else None
             if blk is None or (n == 0 and not spec["allow_empty"]):
                 items.append(_item(
-                    id="block:" + name, subsystem=desk, label=label,
+                    id="block:" + pub, subsystem=desk, label=label,
                     is_stale=True, severity=spec["severity"], dim=False,
                     reason=("EMPTY — %s produces this on the %s substrate and it came out "
                             "empty. %s" % (spec["owner"], spec["substrate"], spec["note"])).strip(),
@@ -504,7 +526,7 @@ def _block_items(data, now, registry, desk):
                 if spec["max_sessions"] is None:
                     continue
                 items.append(_item(
-                    id="block:" + name, subsystem=desk, label=label,
+                    id="block:" + pub, subsystem=desk, label=label,
                     is_stale=True, severity=spec["severity"], dim=False,
                     reason=("NO PROVENANCE — no as-of date can be derived, so this block can "
                             "never be proven fresh OR stale. Producer %s must stamp it. %s"
@@ -520,7 +542,7 @@ def _block_items(data, now, registry, desk):
             stale = (spec["max_sessions"] is not None
                      and sess is not None and sess > spec["max_sessions"])
             items.append(_item(
-                id="block:" + name, subsystem=desk, label=label,
+                id="block:" + pub, subsystem=desk, label=label,
                 is_stale=stale, severity=spec["severity"] if stale else "info", dim=False,
                 since=asof, sessions_stale=sess,
                 reason=(("STALE — as-of %s is %d session(s) behind today (tolerance %d); "
@@ -531,7 +553,7 @@ def _block_items(data, now, registry, desk):
             ))
         except Exception as e:
             items.append(_item(
-                id="block:" + name, subsystem=desk, label=label,
+                id="block:" + pub, subsystem=desk, label=label,
                 is_stale=True, severity="alert", dim=False,
                 reason="DETECTOR ERROR on this block: %s: %s" % (type(e).__name__, e),
             ))
