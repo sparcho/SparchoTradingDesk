@@ -305,6 +305,239 @@ def _silver_items(data, now):
 _SEV_RANK = {"ok": 0, "info": 1, "warn": 2, "alert": 3}
 
 
+# ------------------------------------------------------- D1: BLOCK PROVENANCE CONTRACT
+# F260721-BLOCKROT. The equity aggregate is ~27 INDEPENDENTLY-PRODUCED blocks living
+# under ONE `emitted_at_utc`, and the cloud price overlay re-stamps that container every
+# 5 minutes. So the envelope is *always* fresh while any individual block can be frozen
+# for weeks. Not hypothetical: on 2026-07-21 the live desk served order_book last-dated
+# 2026-06-04 (47d), analysis 2026-05-16 (66d), an empty next_session.rows and a
+# fib_confluences block carrying NO DATE FIELD AT ALL — under a container stamped minutes
+# earlier, with the doctor reporting 30 green.
+_DATE_LEN = 10
+
+
+def _looks_like_date(s):
+    return (len(s) == _DATE_LEN and s[4] == "-" and s[7] == "-"
+            and s[:4].isdigit() and s[5:7].isdigit() and s[8:].isdigit())
+
+
+def _iter_dates(obj, budget=4000):
+    """Yield every YYYY-MM-DD-looking string prefix in a nested structure (bounded)."""
+    stack = [obj]
+    seen = 0
+    while stack and seen < budget:
+        x = stack.pop()
+        if isinstance(x, dict):
+            stack.extend(x.values())
+        elif isinstance(x, (list, tuple)):
+            stack.extend(x[:400])
+        elif isinstance(x, str):
+            seen += 1
+            s = x[:_DATE_LEN]
+            if _looks_like_date(s):
+                yield s
+
+
+def _max_date(obj):
+    """Newest date string anywhere inside a block, or None — the generic as-of fallback."""
+    best = None
+    for d in _iter_dates(obj):
+        if best is None or d > best:
+            best = d
+    return best
+
+
+def _key_date(*path):
+    """as-of extractor reading an explicit key path — preferred over the deep date scan."""
+    def _get(blk):
+        cur = blk
+        for k in path:
+            if not isinstance(cur, dict):
+                return None
+            cur = cur.get(k)
+        if cur is None:
+            return None
+        s = str(cur)[:_DATE_LEN]
+        return s if _looks_like_date(s) else None
+    return _get
+
+
+def _sessions_between(d_str, today):
+    """Weekday sessions between an ISO date and today. Holidays are ignored here (the NSE
+    calendar lives outside this stdlib-only module); the doctor refines the count."""
+    from datetime import date as _date
+    try:
+        y, m, d = (int(x) for x in str(d_str)[:10].split("-"))
+        cur = _date(y, m, d)
+    except Exception:
+        return None
+    if cur >= today:
+        return 0
+    n = 0
+    while cur < today:
+        cur = cur + timedelta(days=1)
+        if cur.weekday() < 5:
+            n += 1
+    return n
+
+
+def _blk(owner, substrate, max_sessions, asof=None, allow_empty=False,
+         severity="alert", label=None, note="", count=None):
+    """One block's declared contract.
+
+    owner      — the producer responsible for the block
+    substrate  — 'cloud' (GitHub Actions, survives laptop-off) | 'laptop' (Task Scheduler,
+                 dies when the operator is away) | 'operator' | 'struct' (no freshness meaning)
+    max_sessions — how many NSE sessions behind TODAY the block may fall (None = exempt)
+    asof       — callable(block) -> 'YYYY-MM-DD'; falls back to the deep date scan
+    allow_empty— emptiness is a legitimate state for this block
+    """
+    return dict(owner=owner, substrate=substrate, max_sessions=max_sessions,
+                asof=asof, allow_empty=allow_empty, severity=severity,
+                label=label, note=note, count=count)
+
+
+# substrate legend:
+#   cloud    — GitHub Actions; survives the laptop being off
+#   laptop   — Windows Task Scheduler / daily_driver; DIES when the operator is away.
+#              These are the surfaces that rot silently while prices keep ticking.
+#   operator — only moves when the operator drops data
+#   struct   — structural/metadata; EXEMPT BY DECLARATION, never by omission
+EQUITY_BLOCKS = {
+    "schema_version":        _blk("emit", "struct", None, severity="info"),
+    "doc_type":              _blk("emit", "struct", None, severity="info"),
+    "meta":                  _blk("emit", "struct", None, severity="info"),
+    "privacy":               _blk("emit", "struct", None, severity="info"),
+    "staleness":             _blk("staleness_contract.py", "struct", None, severity="info"),
+    "sensitive_enc":         _blk("emit (AES-GCM)", "struct", None, severity="info"),
+    "emitted_at_utc":        _blk("emit", "struct", None, severity="info"),
+
+    # --- cloud-produced: current every session
+    "held":                  _blk("refresh_prices.py", "cloud", 1),
+    "regime":                _blk("regime_auto_refresh.py", "cloud", 1,
+                                  _key_date("last_updated")),
+    "daytrade_freshness":    _blk("refresh_prices.py", "cloud", 1,
+                                  _key_date("price_as_of")),
+    "news":                  _blk("refresh-news.yml", "cloud", 2),
+    "next_session":          _blk("next_session_snapshot.py / emit", "cloud", 1,
+                                  _key_date("as_of_ist"),
+                                  count=lambda b: len((b or {}).get("rows") or []),
+                                  note="rows=[] is the F260717 failure mode — empty is NOT legal"),
+
+    # --- laptop-produced: the surfaces that rot when the operator is away
+    "screeners":             _blk("screener_runner.py", "laptop", 1),
+    "daytrade_inputs":       _blk("screener_runner.py", "laptop", 1,
+                                  note="carries no as-of field — needs a producer stamp"),
+    "signal_perf":           _blk("signal_ledger.py", "laptop", 1),
+    "fib_confluences":       _blk("fib_confluence_feed.py", "laptop", 1,
+                                  _key_date("price_as_of"),
+                                  note="F260721-FIBPROV: now stamps price_as_of/basis. Scored on "
+                                       "the LAST CLOSE, never intraday - the card must say so."),
+    "positional_assessment": _blk("signal_ledger.py", "laptop", 2),
+    "regime_history":        _blk("regime_history_append.py", "laptop", 3),
+    "flags":                 _blk("flag ledger", "laptop", 3),
+    "risk_gates":            _blk("emit", "laptop", 2,
+                                  note="shipped EMPTY on 2026-07-21, uncovered by any check"),
+    "recent_trades":         _blk("trade_tracker_emit.py", "laptop", 3,
+                                  allow_empty=True, severity="warn"),
+    "recent_closed":         _blk("trade_tracker_emit.py", "laptop", 3,
+                                  allow_empty=True, severity="warn"),
+    "order_book":            _blk("order_book_emit (F100)", "laptop", 10,
+                                  _key_date("emitted_at"), severity="warn"),
+    "dr":                    _blk("DR pipeline", "laptop", 20, severity="warn"),
+    "analysis":              _blk("emit", "laptop", 20, severity="warn"),
+
+    # --- operator-driven
+    "book":                  _blk("operator broker drop", "operator", 5, severity="warn"),
+    "catalysts":             _blk("catalyst ledger", "operator", None, severity="info",
+                                  note="forward-dated by nature; not a freshness signal"),
+}
+
+
+def _block_items(data, now, registry, desk):
+    """Generic per-block freshness, judged against TODAY — the D1 detector.
+
+    Two rules keep this self-extending rather than scar-shaped:
+      * a block in the aggregate but MISSING from the registry is itself a finding, so
+        adding a block to the emit forces a contract entry;
+      * a block whose as-of cannot be derived is a finding, because an undated block can
+        never be proven stale — unfalsifiable is treated as broken.
+    """
+    items = []
+    for name in sorted((data or {}).keys()):
+        spec = registry.get(name)
+        if spec is None:
+            items.append(_item(
+                id="block:" + name, subsystem=desk, label="Block %s" % name,
+                is_stale=True, severity="warn", dim=False,
+                reason=("UNREGISTERED BLOCK — present in the aggregate but absent from the "
+                        "block contract, so its staleness can never be proven. Add it to "
+                        "EQUITY_BLOCKS (F260721-BLOCKROT)."),
+            ))
+            continue
+        if spec["substrate"] == "struct":
+            continue
+
+        blk = data.get(name)
+        label = spec.get("label") or ("Block %s" % name)
+        # A detector that explodes becomes a FINDING. The old contract wrapped every
+        # detector in `try/except: pass`, so a renamed field silently dropped the item
+        # and the doctor reported "clean - fewer items, none stale" (F260721).
+        try:
+            # `count` lets a block declare WHERE its real payload lives. next_session is a
+            # 4-key dict that never looks empty even when rows:[] blanks the whole card.
+            if spec.get("count"):
+                n = spec["count"](blk)
+            else:
+                n = len(blk) if isinstance(blk, (list, dict, str)) else None
+            if blk is None or (n == 0 and not spec["allow_empty"]):
+                items.append(_item(
+                    id="block:" + name, subsystem=desk, label=label,
+                    is_stale=True, severity=spec["severity"], dim=False,
+                    reason=("EMPTY — %s produces this on the %s substrate and it came out "
+                            "empty. %s" % (spec["owner"], spec["substrate"], spec["note"])).strip(),
+                ))
+                continue
+
+            asof = spec["asof"](blk) if spec["asof"] else _max_date(blk)
+            if asof is None:
+                if spec["max_sessions"] is None:
+                    continue
+                items.append(_item(
+                    id="block:" + name, subsystem=desk, label=label,
+                    is_stale=True, severity=spec["severity"], dim=False,
+                    reason=("NO PROVENANCE — no as-of date can be derived, so this block can "
+                            "never be proven fresh OR stale. Producer %s must stamp it. %s"
+                            % (spec["owner"], spec["note"])).strip(),
+                ))
+                continue
+
+            # Age against TODAY — never against another copy (the F260721 relative-lag trap:
+            # two equally-stale copies agree, so copy-vs-copy reads "fresh" on a dead pipeline).
+            sess = _sessions_between(asof, now.astimezone(_IST).date())
+            # max_sessions None = age-exempt by declaration (e.g. forward-dated catalysts):
+            # report the derived as-of, never judge it.
+            stale = (spec["max_sessions"] is not None
+                     and sess is not None and sess > spec["max_sessions"])
+            items.append(_item(
+                id="block:" + name, subsystem=desk, label=label,
+                is_stale=stale, severity=spec["severity"] if stale else "info", dim=False,
+                since=asof, sessions_stale=sess,
+                reason=(("STALE — as-of %s is %d session(s) behind today (tolerance %d); "
+                         "produced by %s on the %s substrate."
+                         % (asof, sess, spec["max_sessions"], spec["owner"], spec["substrate"]))
+                        if stale else
+                        "fresh — as-of %s (%s session(s) behind)" % (asof, sess)),
+            ))
+        except Exception as e:
+            items.append(_item(
+                id="block:" + name, subsystem=desk, label=label,
+                is_stale=True, severity="alert", dim=False,
+                reason="DETECTOR ERROR on this block: %s: %s" % (type(e).__name__, e),
+            ))
+    return items
+
+
 def build_staleness(data, desk, now_utc_iso=None):
     """Build the canonical staleness contract block for an aggregate.
 
@@ -313,7 +546,11 @@ def build_staleness(data, desk, now_utc_iso=None):
     """
     now = _now_utc(now_utc_iso)
     if desk == "equity":
+        # bespoke detectors (the scar-tissue layer, kept for their UI dim targets + heal keys)
         items = _equity_items(data, now)
+        # + the generic per-block contract (D1 / F260721-BLOCKROT): judges EVERY block
+        # against TODAY so a frozen block can no longer hide under a fresh envelope.
+        items = items + _block_items(data, now, EQUITY_BLOCKS, "equity")
     elif desk == "silver":
         items = _silver_items(data, now)
     else:
