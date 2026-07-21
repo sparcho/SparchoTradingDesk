@@ -135,7 +135,13 @@ def _vault_owns(data):
     Gated-plans is authoritative (F260717-NEXTSESSION-DUALITY) -- the cloud must not clobber it; it
     only bootstraps the block when the vault has not produced one."""
     ns = (data or {}).get("next_session") or {}
-    return ns.get("basis") == "on the close" and ns.get("rows") is not None
+    rows = ns.get("rows")
+    # F260721-NEXTSESSION-EMPTY: this tested `rows is not None`, and `[] is not None` is True --
+    # so the cloud deferred to an EMPTY vault block and self-exited. The vault's 09:31 publish
+    # blanked rows to [] on 2026-07-21 and the cloud repair path never fired again after 07-17.
+    # A populated vault block still wins; an empty one must NOT.
+    return (ns.get("basis") == "on the close"
+            and isinstance(rows, list) and len(rows) > 0)
 
 
 def main():
