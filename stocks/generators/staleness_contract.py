@@ -446,8 +446,10 @@ EQUITY_BLOCKS = {
                                   allow_empty=True, severity="warn"),
     "recent_closed":         _blk("trade_tracker_emit.py", "laptop", 3,
                                   allow_empty=True, severity="warn"),
-    "order_book":            _blk("order_book_emit (F100)", "laptop", 10,
-                                  _key_date("emitted_at"), severity="warn"),
+    "order_book":            _blk("order_book_tracker.py (F100)", "laptop", 70,
+                                  _key_date("emitted_at"), severity="warn",
+                                  note="quarterly-cadence backlog data — refresh on results, "
+                                       "never daily-restamp without new data (260723 triage)"),
     "dr":                    _blk("DR pipeline", "laptop", 20, severity="warn"),
     "analysis":              _blk("emit", "laptop", 20, severity="warn"),
 
@@ -524,6 +526,19 @@ def _block_items(data, now, registry, desk):
             asof = spec["asof"](blk) if spec["asof"] else _max_date(blk)
             if asof is None:
                 if spec["max_sessions"] is None:
+                    continue
+                # 260723 triage: an EMPTY allow_empty block is the complete statement
+                # "nothing here" — it has no content to date, and escalating every quiet
+                # day to a finding is the cry-wolf failure (invariant #7). A NON-empty
+                # undatable block remains a finding (invariant #4 — unfalsifiable is broken).
+                if spec["allow_empty"] and n == 0:
+                    items.append(_item(
+                        id="block:" + pub, subsystem=desk, label=label,
+                        is_stale=False, severity="info", dim=False,
+                        reason="empty by declaration (allow_empty) — nothing to date; "
+                               "producer %s liveness is judged by its dated sibling blocks"
+                               % spec["owner"],
+                    ))
                     continue
                 items.append(_item(
                     id="block:" + pub, subsystem=desk, label=label,
