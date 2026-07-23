@@ -266,7 +266,14 @@ def main(argv=None) -> int:
             agg = json.loads(out_p.read_text(encoding="utf-8"))
             _sanity(agg)
             assert_public_clean(agg)
-            verify_seal_roundtrip(agg, _pw)   # the blob must OPEN, not merely exist (482c94d)
+            # verify with the pw AS THE EMIT READ IT (file round-trip), fingerprinting both —
+            # isolates env-string vs file-content vs blob corruption (482c94d forensics)
+            import hashlib as _hl2
+            _pw_file = pw_p.read_text(encoding="utf-8").strip()
+            print("[silver-cloud] verify fps env=%s file=%s (equal=%s)"
+                  % (_hl2.sha256(_pw.encode()).hexdigest()[:8],
+                     _hl2.sha256(_pw_file.encode()).hexdigest()[:8], _pw == _pw_file))
+            verify_seal_roundtrip(agg, _pw_file)  # the blob must OPEN, not merely exist (482c94d)
         except SilverRefreshAbort as e:
             print(f"[silver-cloud] ABORT: {e}", file=sys.stderr)
             return 4
