@@ -83,6 +83,10 @@ SPECIAL = {
     'AREM':      ['ARE%26M.NS','AMARAJABAT.NS'],  # ARE&M (Amara Raja Energy & Mobility); legacy 'AMARAJABAT' as fallback
     'PARAS':     ['PARAS.NS','PARASDEFEN.NS'],    # Paras Defence & Space — verify symbol on first fetch (260601)
     'PACEDIGITK':['PACEDIGITK.NS','PACE.NS'],     # Pace Digitek — recently listed; verify symbol on first fetch (260601)
+    'VEDPOWER':  ['VEDPOWER.NS'],                 # Vedanta Power — demerger listed 15-Jun-2026 (sync from vault copy 260723)
+    'NSDL':      ['NSDL.BO'],                     # NSDL — trades BSE on Yahoo (NSDL.NS empty); verified 260715 (sync from vault copy 260723)
+    'SHILCHAR':  ['531201.BO'],                   # Shilchar Technologies — BSE numeric scrip only on Yahoo (SHILCHAR.NS AND .BO both 404); closes verified vs banked fib read 260723. Fixes the per-run 404 in ci_fib_refresh.
+    'NTPC':      ['NTPC.NS', 'NTPC.BO'],          # NTPC — intermittent Yahoo 400s on .NS; BSE fallback verified 260723
 }
 
 # F33 fix (260427): intermarket scalars used in QT synthesis (USDINR, DXY, TNX).
