@@ -173,6 +173,30 @@ def write_price_csv(rows, path: Path) -> None:
             prev = c
 
 
+def verify_seal_roundtrip(agg: dict, pw: str) -> None:
+    """PROVE the blob about to ship re-opens with the sealing password — abort otherwise.
+
+    First-deploy forensics 2026-07-23: commit 482c94d shipped a sensitive_enc that did NOT
+    decrypt with the correct password (InvalidTag). A locked card the family can never open
+    renders exactly like a healthy locked desk — the silent-failure class this whole port
+    exists to end. Whatever the corruption mechanism, this gate turns it into a loud abort.
+    """
+    import hashlib
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    enc = (agg or {}).get("sensitive_enc") or {}
+    try:
+        key = hashlib.pbkdf2_hmac("sha256", pw.encode("utf-8"),
+                                  base64.b64decode(enc["salt"]), int(enc["iter"]), 32)
+        sens = json.loads(AESGCM(key).decrypt(
+            base64.b64decode(enc["iv"]), base64.b64decode(enc["ct"]), None).decode("utf-8"))
+    except Exception as e:                                       # noqa: BLE001
+        raise SilverRefreshAbort(
+            "seal round-trip FAILED (%s) — the blob about to ship would not open with the "
+            "sealing password. Refusing to publish an unopenable book." % type(e).__name__)
+    if not sens.get("accounts"):
+        raise SilverRefreshAbort("seal round-trip opened but carries no accounts — degenerate book")
+
+
 def _sanity(agg: dict) -> None:
     """Refuse to publish a degenerate or unlocked book over a good one."""
     if not agg.get("sensitive_enc"):
@@ -242,6 +266,7 @@ def main(argv=None) -> int:
             agg = json.loads(out_p.read_text(encoding="utf-8"))
             _sanity(agg)
             assert_public_clean(agg)
+            verify_seal_roundtrip(agg, _pw)   # the blob must OPEN, not merely exist (482c94d)
         except SilverRefreshAbort as e:
             print(f"[silver-cloud] ABORT: {e}", file=sys.stderr)
             return 4
