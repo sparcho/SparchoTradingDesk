@@ -218,7 +218,12 @@ def main(argv=None) -> int:
         yaml_p.write_text(bundle["yaml_text"], encoding="utf-8")
         pw_p = work / ".dashboard_pw"
         try:
-            pw_p.write_text(load_desk_pw(), encoding="utf-8")
+            _pw = load_desk_pw()
+            # non-reversible fingerprint so a seal/unlock mismatch can be diagnosed from the
+            # public run log without ever exposing the password (8 hex chars of sha256)
+            import hashlib as _hl
+            print("[silver-cloud] pw fp %s (len %d)" % (_hl.sha256(_pw.encode()).hexdigest()[:8], len(_pw)))
+            pw_p.write_text(_pw, encoding="utf-8")
         except SilverRefreshAbort as e:
             print(f"[silver-cloud] ABORT: {e}", file=sys.stderr)
             return 2
