@@ -243,10 +243,9 @@ def main(argv=None) -> int:
         pw_p = work / ".dashboard_pw"
         try:
             _pw = load_desk_pw()
-            # non-reversible fingerprint so a seal/unlock mismatch can be diagnosed from the
-            # public run log without ever exposing the password (8 hex chars of sha256)
-            import hashlib as _hl
-            print("[silver-cloud] pw fp %s (len %d)" % (_hl.sha256(_pw.encode()).hexdigest()[:8], len(_pw)))
+            # NO password fingerprints in the log: this repo is public, and even a truncated
+            # hash is an offline-testable oracle that bypasses the KDF cost. (Learned 260723:
+            # a debug fp briefly shipped; the runs were deleted and the print removed.)
             pw_p.write_text(_pw, encoding="utf-8")
         except SilverRefreshAbort as e:
             print(f"[silver-cloud] ABORT: {e}", file=sys.stderr)
@@ -261,21 +260,25 @@ def main(argv=None) -> int:
 
         import silver_dashboard_emit as SE
         SE.INPUT_YAML, SE.PRICE_CSV, SE.PW_FILE, SE.OUTPUT_JSON = yaml_p, price_p, pw_p, out_p
-        try:
-            SE.emit()
-            agg = json.loads(out_p.read_text(encoding="utf-8"))
-            _sanity(agg)
-            assert_public_clean(agg)
-            # verify with the pw AS THE EMIT READ IT (file round-trip), fingerprinting both —
-            # isolates env-string vs file-content vs blob corruption (482c94d forensics)
-            import hashlib as _hl2
-            _pw_file = pw_p.read_text(encoding="utf-8").strip()
-            print("[silver-cloud] verify fps env=%s file=%s (equal=%s)"
-                  % (_hl2.sha256(_pw.encode()).hexdigest()[:8],
-                     _hl2.sha256(_pw_file.encode()).hexdigest()[:8], _pw == _pw_file))
-            verify_seal_roundtrip(agg, _pw_file)  # the blob must OPEN, not merely exist (482c94d)
-        except SilverRefreshAbort as e:
-            print(f"[silver-cloud] ABORT: {e}", file=sys.stderr)
+        # Seal-corruption forensics (260723): 2 of the first 6 cloud runs produced a blob that
+        # did NOT re-open with the sealing password (root cause OPEN — never reproduced
+        # locally; blob 482c94d preserved). The round-trip gate turns that into an abort; ONE
+        # re-emit retry rides over an intermittent bad seal while a systematic failure still
+        # aborts loudly. Never loosen the gate itself.
+        agg = None
+        for attempt in (1, 2):
+            try:
+                SE.emit()
+                cand = json.loads(out_p.read_text(encoding="utf-8"))
+                _sanity(cand)
+                assert_public_clean(cand)
+                verify_seal_roundtrip(cand, _pw)  # the blob must OPEN, not merely exist
+                agg = cand
+                break
+            except SilverRefreshAbort as e:
+                print(f"[silver-cloud] attempt {attempt} ABORT: {e}", file=sys.stderr)
+        if agg is None:
+            print("[silver-cloud] ABORT: both seal attempts failed verification", file=sys.stderr)
             return 4
         print("[silver-cloud] book emitted LOCKED (%db ct) · price %s"
               % (len((agg.get("sensitive_enc") or {}).get("ct", "")),
