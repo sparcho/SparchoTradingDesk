@@ -1,0 +1,71 @@
+name: Refresh silver family book (cloud)
+
+# D5-SILVER ([[OFFLINE_RESILIENCE]] §2): rebuild the silver FAMILY BOOK in the cloud so the
+# silver desk's SUBSTANCE — not just its price overlay — refreshes with the laptop off.
+# The private holdings YAML travels as AES-256-GCM ciphertext (silver/data/book_enc.json,
+# machine key SILVER_BOOK_KEY); this job decrypts it in a workspace OUTSIDE the repo tree,
+# runs the SAME layout-flexible silver_dashboard_emit the vault runs, seals the sensitive
+# block under DESK_UNLOCK_PW, scans the public portion for family tokens (ABORT on any hit),
+# and commits ONLY the locked aggregate. The 20-min price overlay keeps running on top.
+on:
+  schedule:
+    # Post-close daily, 11:00 UTC = 16:30 IST (bar settled after 15:45 IST).
+    - cron: '0 11 * * 1-5'
+  push:
+    paths:
+      - 'silver/generators/ci_silver_refresh.py'
+      - 'silver/data/book_enc.json'
+  workflow_dispatch:
+
+concurrency:
+  group: sparcho-desk-main-push        # F143: every main-branch pusher shares ONE queue
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-book:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      SILVER_BOOK_KEY: ${{ secrets.SILVER_BOOK_KEY }}
+      DESK_UNLOCK_PW: ${{ secrets.DESK_UNLOCK_PW }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install requests pyyaml cryptography
+
+      - name: Rebuild the family book (decrypt -> emit -> leak-gate)
+        run: python silver/generators/ci_silver_refresh.py
+
+      - name: Commit + push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add silver/data/silver_dashboard_aggregate.json
+          if git diff --cached --quiet; then
+            echo "No book changes — skipping commit"; exit 0
+          fi
+          git commit -m "cloud: silver family book refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if git push; then echo "pushed (fast path)"; exit 0; fi
+          echo "push rejected — remote moved; rebasing and retrying"
+          for i in 1 2 3 4 5; do
+            git fetch origin main || { sleep 4; continue; }
+            git stash --include-untracked || true
+            git reset --hard origin/main
+            python silver/generators/ci_silver_refresh.py || { echo "::error::re-run failed"; exit 1; }
+            git add silver/data/silver_dashboard_aggregate.json
+            if git diff --cached --quiet; then echo "no net change after re-run — done"; exit 0; fi
+            git commit -m "cloud: silver family book refresh (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
+            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+          done
+          echo "::error::could not push after rebuild retries"; exit 1
