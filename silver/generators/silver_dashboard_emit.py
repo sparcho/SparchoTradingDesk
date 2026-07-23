@@ -164,9 +164,16 @@ def _redact_holdings(obj):
 
 
 def _assert_no_family_leak(out):
-    """No-corners self-check: fail the emit rather than write a leak. Scans the FULL serialized
-    public output for personal-name tokens + any surviving holdings-quantity pattern."""
-    blob = json.dumps(out, ensure_ascii=False, default=str)
+    """No-corners self-check: fail the emit rather than write a leak. Scans the serialized
+    PUBLIC output for personal-name tokens + any surviving holdings-quantity pattern.
+
+    sensitive_enc is EXCLUDED (fixed 2026-07-23, caught by the cloud run): the ct is base64
+    over a fresh random salt/iv, so ~2% of emits the ciphertext happened to contain a family
+    token as a raw substring and the gate randomly ABORTED a clean emit — a gate that cries
+    wolf on dice-rolls gets ignored (invariant #7). The ciphertext being unreadable is the
+    point of the envelope; the leak surface is everything OUTSIDE it."""
+    blob = json.dumps({k: v for k, v in out.items() if k != "sensitive_enc"},
+                      ensure_ascii=False, default=str)
     hits = [t for t in _LEAK_TOKENS if t in blob]
     if _HOLDINGS_QTY_RE.search(blob):
         hits.append("<holdings-qty>")
