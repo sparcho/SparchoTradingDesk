@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "BIOCON",
-  "emitted_at_utc": "2026-07-22T03:24:13+00:00",
+  "emitted_at_utc": "2026-07-23T15:48:44+00:00",
   "public": {
     "ticker": "BIOCON",
     "name": "BIOCON",
@@ -24,7 +24,7 @@
     "regime_global": {
       "zone": "YELLOW",
       "score": 53,
-      "as_of": "2026-07-22"
+      "as_of": "2026-07-23"
     },
     "regime_zone": null,
     "regime_lens": null,
@@ -43,10 +43,10 @@
     "level_id_date": null,
     "last_stock_ta": null,
     "live": {
-      "price": 440.3,
-      "day_chg_pct": 0.0,
-      "week_chg_pct": 0.686027898467871,
-      "date": "2026-07-22"
+      "price": 435.2,
+      "day_chg_pct": -0.628,
+      "week_chg_pct": 0.1380579843534206,
+      "date": "2026-07-23"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5414,90 +5414,103 @@
       ],
       [
         "2026-07-22",
-        435.8,
-        441.6,
-        434.5,
-        440.3
+        435.0,
+        441.5,
+        426.35,
+        437.95
+      ],
+      [
+        "2026-07-23",
+        435.75,
+        437.75,
+        428.45,
+        435.2
       ]
     ],
     "sr_levels": [
       {
         "method": "classical_pivot",
         "kind": "PIVOT",
-        "price": 438.8,
-        "as_of": "2026-07-22"
+        "price": 433.8,
+        "as_of": "2026-07-23"
       },
       {
         "method": "classical_pivot",
         "kind": "R1",
-        "price": 443.1,
-        "as_of": "2026-07-22"
+        "price": 439.15,
+        "as_of": "2026-07-23"
       },
       {
         "method": "classical_pivot",
         "kind": "R2",
-        "price": 445.9,
-        "as_of": "2026-07-22"
+        "price": 443.1,
+        "as_of": "2026-07-23"
       },
       {
         "method": "classical_pivot",
         "kind": "R3",
-        "price": 450.2,
-        "as_of": "2026-07-22"
+        "price": 448.45,
+        "as_of": "2026-07-23"
       },
       {
         "method": "classical_pivot",
         "kind": "S1",
-        "price": 436.0,
-        "as_of": "2026-07-22"
+        "price": 429.85,
+        "as_of": "2026-07-23"
       },
       {
         "method": "classical_pivot",
         "kind": "S2",
-        "price": 431.7,
-        "as_of": "2026-07-22"
+        "price": 424.5,
+        "as_of": "2026-07-23"
       },
       {
         "method": "classical_pivot",
         "kind": "S3",
-        "price": 428.9,
-        "as_of": "2026-07-22"
+        "price": 420.55,
+        "as_of": "2026-07-23"
       },
       {
         "method": "swing_high",
         "kind": "SH1",
         "price": 436.15,
-        "as_of": "2026-07-21"
+        "as_of": "2026-07-23"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
+        "price": 397.05,
+        "as_of": "2026-07-23"
+      },
+      {
+        "method": "swing_low",
+        "kind": "SL2",
         "price": 409.25,
-        "as_of": "2026-07-21"
+        "as_of": "2026-07-23"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 421.77,
-        "as_of": "2026-07-21"
+        "price": 422.5,
+        "as_of": "2026-07-23"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 388.11,
-        "as_of": "2026-07-21"
+        "price": 388.98,
+        "as_of": "2026-07-23"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 440.7,
-        "as_of": "2026-07-21"
+        "as_of": "2026-07-23"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 338.9,
-        "as_of": "2026-07-21"
+        "as_of": "2026-07-23"
       }
     ],
     "operator_levels": [],
@@ -5512,10 +5525,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 438.8,
+        "price": 433.8,
         "dir": "below",
         "kind": "watch",
         "why": "classical pivot",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 436.15,
+        "dir": "above",
+        "kind": "trim",
+        "why": "60-day swing high",
         "auto": true
       },
       {
@@ -5525,45 +5546,37 @@
         "kind": "trim",
         "why": "52-week high",
         "auto": true
-      },
-      {
-        "label": "RESISTANCE",
-        "price": 443.1,
-        "dir": "above",
-        "kind": "trim",
-        "why": "pivot R1",
-        "auto": true
       }
     ],
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 436.15,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.21829044117646798
+      },
+      {
+        "label": "SUPPORT",
+        "price": 433.8,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.32169117647058304
+      },
+      {
         "label": "UPSIDE",
         "price": 440.7,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 0.09084714967067392
-      },
-      {
-        "label": "SUPPORT",
-        "price": 438.8,
-        "dir": "below",
-        "kind": "watch",
-        "dist_pct": -0.34067681126504656
-      },
-      {
-        "label": "RESISTANCE",
-        "price": 443.1,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 0.6359300476947561
+        "dist_pct": 1.2637867647058825
       },
       {
         "label": "INVALIDATION",
         "price": 338.9,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -23.029752441517154
+        "dist_pct": -22.12775735294118
       }
     ],
     "scenario_ladder": [
@@ -5576,7 +5589,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 440.3,
+        "level": 435.2,
         "note": "holds current band"
       },
       {
