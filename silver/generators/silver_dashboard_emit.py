@@ -499,12 +499,29 @@ def _merge_live_cot(yaml_cot: dict) -> dict:
         if s.get("date"):
             out["survey_date"] = s["date"]
             if s.get("mm_net") is not None:
+                out["mm_net"] = s["mm_net"]                 # F260716: raw headline number must win (was left stale)
                 out["mm_net_k"] = round(s["mm_net"] / 1000.0, 1)
             if s.get("oi") is not None:
+                out["oi"] = s["oi"]                         # F260716: raw OI must win too (was left stale)
                 out["oi_k"] = round(s["oi"] / 1000.0, 1)
             if s.get("mm_net_pct_oi") is not None:
                 out["mm_net_pct_oi"] = s["mm_net_pct_oi"]
-            out["cot_source"] = "live_fetcher (cot_metals.json)"
+            # F150 (260716): RANK-based percentile computed off the canonical combined series' own
+            # ~200wk history (per COT_CANONICAL_SOURCE.md) WINS over the curated/linear proxy.
+            if s.get("mm_net_percentile") is not None:
+                out["mm_net_percentile"] = s["mm_net_percentile"]
+                out["mm_net_pctile_window_wks"] = s.get("mm_net_pctile_window_wks")
+                out["mm_net_pctile_basis"] = "rank vs own %swk combined-MM history" % (s.get("mm_net_pctile_window_wks") or 200)
+            if s.get("mm_net_wow") is not None:
+                out["wow_delta_k"] = round(s["mm_net_wow"] / 1000.0, 1)
+            if s.get("scope"):
+                out["scope"] = s["scope"]   # futures_and_options_combined (canonical)
+            # F260716: flag when the live survey has advanced past the survey the curated prose was written
+            # for, so downstream can show numbers-live / narrative-refreshing instead of a silent contradiction.
+            _prose_survey = (yaml_cot or {}).get("survey_date")
+            out["cot_prose_survey"] = _prose_survey
+            out["cot_prose_stale"] = bool(_prose_survey and _prose_survey != s["date"])
+            out["cot_source"] = "live_fetcher (cot_metals.json · CFTC F&O combined kh3c-gbw2)"
         # F260706 permanent fix — freshness metadata that distinguishes a genuinely-latest-but-
         # holiday-DELAYED CFTC print (report old, fetch fresh) from a DEAD FETCHER (fetch stale).
         fa = cache.get("_fetched_at")
@@ -1415,6 +1432,11 @@ def emit() -> Path:
     # freshness metadata only (no sensitive data).
     try:
         if staleness_contract:
+            try:  # F145: stamp analysis-input freshness before the contract reads it
+                import analysis_freshness
+                out["analysis"] = analysis_freshness.compute("silver")
+            except Exception as _af:
+                print(f"[analysis-freshness] silver skipped: {_af}", file=sys.stderr)
             out["staleness"] = staleness_contract.build_staleness(out, "silver")
     except Exception as _e:
         print(f"[staleness] silver build skipped: {_e}", file=sys.stderr)
