@@ -1,7 +1,7 @@
 {
   "schema_version": "v2",
   "doc_type": "silver_dashboard_aggregate",
-  "emitted_at_utc": "2026-07-24T12:17:48+00:00",
+  "emitted_at_utc": "2026-07-24T12:47:37+00:00",
   "meta": {
     "source_excel": "My Stocks (Google Sheets, father-maintained)",
     "source_excel_drive_id": "1L6QZtyhrCN198GuLWGmpBZTaCoEWMH54IrTT-ts630I",
@@ -16,7 +16,8 @@
     "related_flag": "F260518-F109_silver-re-entry-v2_lower-floor-thesis",
     "last_regraded": "2026-06-14",
     "obsidian_reference_dashboard": "00_SYSTEM/DASHBOARDS/SILVER_DASHBOARD.md (v1.6)",
-    "book_local_emit_utc": "2026-07-24T12:17:48+00:00"
+    "book_local_emit_utc": "2026-07-24T12:17:48+00:00",
+    "last_price_overlay_utc": "2026-07-24T12:47:37+00:00"
   },
   "current_price": {
     "primary_inr": 210.96,
@@ -50,10 +51,10 @@
       "yahoo_symbol": "SI=F",
       "currency": "USD",
       "market_state": null,
-      "price": 58.705,
+      "price": 58.735,
       "prev_close": 58.054,
-      "day_chg_pct": 1.1213697591897134,
-      "as_of_utc": "2026-07-24T12:07:47+00:00"
+      "day_chg_pct": 1.173045784958827,
+      "as_of_utc": "2026-07-24T12:37:32+00:00"
     },
     "usdinr": {
       "status": "ok",
@@ -72,39 +73,40 @@
       "yahoo_symbol": "DX-Y.NYB",
       "currency": "USD",
       "market_state": null,
-      "price": 101.439,
+      "price": 101.474,
       "prev_close": 101.444,
-      "day_chg_pct": -0.00492882772762279,
-      "as_of_utc": "2026-07-24T12:07:46+00:00"
+      "day_chg_pct": 0.029572966365680707,
+      "as_of_utc": "2026-07-24T12:37:35+00:00"
     },
     "gold": {
       "status": "ok",
       "ticker": "GOLD",
       "yahoo_symbol": "GC=F",
-      "price": 4058.2,
+      "currency": "USD",
+      "price": 4059.0,
       "prev_close": 4050.2,
-      "as_of_utc": "2026-07-24T12:07:47+00:00",
-      "currency": "USD"
+      "day_chg_pct": 0.21727322107550692,
+      "as_of_utc": "2026-07-24T12:37:32+00:00"
     },
     "wti": {
       "status": "ok",
       "ticker": "WTI",
       "yahoo_symbol": "CL=F",
-      "price": 89.87,
+      "currency": "USD",
+      "price": 89.22,
       "prev_close": 92.19,
-      "day_chg_pct": -2.5165419242867917,
-      "as_of_utc": "2026-07-24T12:07:47+00:00",
-      "currency": "USD"
+      "day_chg_pct": -3.221607549625772,
+      "as_of_utc": "2026-07-24T12:37:34+00:00"
     },
     "tnx": {
       "status": "ok",
       "ticker": "TNX",
       "yahoo_symbol": "^TNX",
-      "price": 4.703,
-      "prev_close": 4.657,
-      "day_chg_pct": 0.9877603607472678,
-      "as_of_utc": "2026-07-23T18:59:55+00:00",
-      "currency": "USD"
+      "currency": "USD",
+      "price": 4.681,
+      "prev_close": 4.703,
+      "day_chg_pct": -0.46778651924304143,
+      "as_of_utc": "2026-07-24T12:32:33+00:00"
     },
     "mcx_silver": {
       "status": "ok",
@@ -122,12 +124,12 @@
     "gsr": {
       "status": "ok",
       "ticker": "GSR",
-      "value": 69.1286943190529,
+      "value": 69.10700604409637,
       "derivation": "GOLD / XAGUSD (spot/spot)"
     },
-    "fetched_at_utc": "2026-07-24T12:17:48+00:00"
+    "fetched_at_utc": "2026-07-24T12:47:37+00:00"
   },
-  "live_xagusd_used_for_ladders": 58.705,
+  "live_xagusd_used_for_ladders": 58.735,
   "snapshot_tickers": [
     {
       "label": "Silver Spot",
@@ -871,11 +873,11 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-07-24T12:17:48+00:00",
+    "computed_at_utc": "2026-07-24T12:47:37+00:00",
     "desk": "silver",
-    "any_stale": true,
+    "any_stale": false,
     "any_dim": false,
-    "worst": "warn",
+    "worst": "ok",
     "items": [
       {
         "id": "silver_prices",
@@ -886,7 +888,7 @@
         "dim": false,
         "reason": "fresh — 0m ago",
         "since": null,
-        "age_min": 0.014013216666666667,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_silver",
         "ui_targets": [
@@ -897,12 +899,12 @@
         "id": "silver_book",
         "subsystem": "silver",
         "label": "Silver book",
-        "is_stale": true,
-        "severity": "warn",
+        "is_stale": false,
+        "severity": "info",
         "dim": false,
-        "reason": "book emit 41d old (tol 10d)",
-        "since": "2026-06-14",
-        "age_min": 58337.814013216666,
+        "reason": "current — emitted 0.0d ago",
+        "since": "2026-07-24T12:17:48+00:00",
+        "age_min": 29.816666666666666,
         "sessions_stale": null,
         "heal": "silver_book_reemit_nudge",
         "ui_targets": []
@@ -916,7 +918,7 @@
         "dim": false,
         "reason": "refreshed 0m ago",
         "since": null,
-        "age_min": 0.014013216666666667,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_silver",
         "ui_targets": []
