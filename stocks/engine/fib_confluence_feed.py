@@ -148,13 +148,25 @@ def _trend_of(cur, ma):
     return "mixed"
 
 
-def _price_as_of():
-    """The session date the scoring prices came from — read from the price cache the feed
-    actually scored against, never assumed to be 'today'."""
+# F260726-FIBBASIS — the macro/INTERMARKET series are written UNCONDITIONALLY (they trade on
+# Indian holidays) while equity rows are session-gated (EQUITY_DASHBOARD_ARCHITECTURE §2.1). So
+# they contribute dates the EQUITY scoring never saw, and must be excluded from the basis. The
+# bank declared a Saturday (2026-07-25) as its scoring close because of exactly this.
+MACRO_SERIES = ("TNX", "DXY", "USDINR", "USDJPY", "BRENT", "XAGUSD")
+
+
+def _price_as_of(daily_csv=None):
+    """The session date the EQUITY scoring prices came from — read from the price cache the feed
+    actually scored against, never assumed to be 'today'.
+
+    Macro rows are excluded: on a Saturday they legitimately carry a later date than any equity
+    close, and inheriting it makes the declared basis a session that never happened — which both
+    misleads the card and makes a stale radar measure as fresh."""
     try:
         import csv as _csv
-        rows = list(_csv.DictReader(DAILY_CSV.open(encoding="utf-8")))
-        ds = sorted({r.get("date") for r in rows if r.get("date")})
+        with (daily_csv or DAILY_CSV).open(encoding="utf-8") as fh:
+            ds = sorted({r["date"] for r in _csv.DictReader(fh)
+                         if r.get("date") and r.get("ticker") not in MACRO_SERIES})
         return ds[-1] if ds else None
     except Exception:
         return None

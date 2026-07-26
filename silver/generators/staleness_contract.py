@@ -437,6 +437,24 @@ EQUITY_BLOCKS = {
                                        "levels ship encrypted and refresh-stocks-dashboard.yml "
                                        "rebuilds this block post-close, so laptop-off is NO LONGER "
                                        "an excuse for it being stale."),
+    "fib_radar":             _blk("fib_confluence_source.py via emit", "cloud", 1,
+                                  _key_date("price_as_of"),
+                                  count=lambda b: len((b or {}).get("fires") or []),
+                                  allow_empty=True, severity="warn",
+                                  note="F260725: the desk's actionable fire surface. Derived from "
+                                       "fib_confluences, so it inherits that block's CLOUD "
+                                       "substrate and its last-close basis. fires=[] is LEGAL - a "
+                                       "day where no verified bank sits at a support with 1.5 R:R "
+                                       "genuinely fires nothing - but it must still be DATED, or "
+                                       "'no fires' is indistinguishable from 'radar is dead'."),
+    "fib_coverage":          _blk("emit (EDGE/LEVELS x lens universe)", "operator", None,
+                                  severity="info",
+                                  count=lambda b: (b or {}).get("verified"),
+                                  note="F260725 C1: fib study coverage, the tracker that replaced "
+                                       "the retired screener-alpha panel. Moves only when the "
+                                       "operator banks a new read, so it has no freshness SLA - "
+                                       "but the count must be non-zero, since zero verified banks "
+                                       "means the fire gate can never fire."),
     "positional_assessment": _blk("signal_ledger.py", "laptop", 2),
     "regime_history":        _blk("regime_history_append.py", "laptop", 3),
     "flags":                 _blk("flag ledger", "laptop", 3),
