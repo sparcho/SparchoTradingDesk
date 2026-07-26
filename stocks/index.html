@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785070641">
-<meta name="x-built-at" content="2026-07-26T12:56:53+00:00">
+<meta name="x-build-id" content="1785070956">
+<meta name="x-built-at" content="2026-07-26T13:02:05+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785070641",BUILT_AT="2026-07-26T12:56:53+00:00";
+  var BID="1785070956",BUILT_AT="2026-07-26T13:02:05+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2114,6 +2114,29 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<span class="rk">🎯</span><span class="tk">The Radar<span class="sec">verified fib banks</span></span>'+
         '<span class="sc">'+(rc.fire||0)+'</span></div>'+
         '<div class="note">fires only where price sits ON a hand-verified multi-source support with 1.5+ R:R to the next banked level → open the Radar</div></div>';
+    // NEXT SESSION. Retiring the firehose removed the only renderer of DATA.next_session — it
+    // lived in the firehose's "tomorrow" page — so a live block carrying real rows for the next
+    // session went DARK. An unrendered but still-produced block is exactly the silent-rot class
+    // the desk is built to catch (and desk_consumer_verify duly caught it). So it stays visible,
+    // dated, and explicitly labelled as the LEGACY day-desk model — informational, not a fire.
+    // Operator decision pending: render-as-legacy (this) vs retire the block + its cloud producer.
+    var ns=D.next_session||null, nsRows=(ns&&ns.rows)||[];
+    var fr2=D.daytrade_freshness||{};
+    var sessLbl=(typeof _dLabel==='function')?_dLabel(fr2.price_as_of||''):String(fr2.price_as_of||'');
+    fh+='<div class="dtnav" style="margin-top:12px"><span class="dtnl">'+esc(sessLbl)+'</span>'+
+        '<span class="dtnk">current</span></div>';
+    fh+='<div class="c-lbl" style="margin-top:10px"><span class="d"></span>Next session · planned (legacy day-desk model)'+
+      ((typeof HT!=="undefined")?HT('The next-session candidate list still produced by the old day-desk model. It is shown for continuity and so the block cannot rot unseen — it is NOT what the desk fires on. Fires come from the Radar.'):'')+
+      '<span class="age">'+esc(String((ns&&(ns.session_date||ns.as_of_ist))||'not computed'))+' · '+nsRows.length+' row(s)</span></div>';
+    if(!nsRows.length){
+      fh+='<div class="dt-empty fc-note">No next-session rows in this emit. That is the honest state of the legacy block — not a broken feed, and not a Radar fire either.</div>';
+    } else {
+      fh+=nsRows.slice().sort(function(a,b){return (b.score||0)-(a.score||0);}).slice(0,6).map(function(f){
+        return '<div class="fire"><div class="top"><span class="rk">&#128198;</span>'+
+          '<span class="tk">'+tkA(f.ticker,esc(f.ticker))+'<span class="sec">'+esc(f.sector||'')+'</span>'+
+          '<span class="st cool">planned</span></span><span class="sc">'+Math.round(f.score||0)+'</span></div>'+
+          '<div class="note">'+esc(f.descriptor||f.note||'legacy next-session candidate')+' · informational only</div></div>'; }).join('');
+    }
     var rh=(D.regime_history||[]).slice(-10);
     var strip=rh.length?('<div class="rhstrip">'+rh.map(function(r){ var z=String(r.zone||'').toUpperCase(); var col=z.indexOf('RED')>=0?'var(--neg)':(z.indexOf('GREEN')>=0?'var(--pos)':'var(--watch)'); return '<div class="rhc" title="'+esc(String(r.date||'')+' · '+String(r.zone||'')+(r.score!=null?(' · '+r.score):''))+'"><span class="rhb" style="background:'+col+'"></span><span class="rhd">'+esc(String(r.date||'').slice(5))+'</span><span class="rhz" style="color:'+col+'">'+esc(r.score!=null?String(r.score):z.slice(0,3))+'</span></div>'; }).join('')+'</div>'):pending('Regime history','regime_history not in this emit yet.');
     fh+='<div class="c-lbl" style="margin-top:12px"><span class="d"></span>Regime · last 10 sessions'+((typeof HT!=="undefined")?HT('Market-regime call over recent sessions: GREEN deploy · YELLOW selective · RED risk-off.'):'')+'<span class="age">history</span></div>'+strip;
