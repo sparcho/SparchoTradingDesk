@@ -10,10 +10,21 @@ name: Day-Trade next-session snapshot (forward guidance)
 # Last-good: a failed compute never blanks a prior good snapshot. GIFT Nifty futures have no free
 # feed (reported feeds_missing, never fabricated).
 
+# RETIRED 2026-07-26 (operator decision, F260725 A1 follow-through).
+# The day desk is off the actionable path, and this producer wrote a `next_session` block that:
+#   * ranked by the gate-count score the 16,754-signal ledger showed is INVERSELY related to
+#     forward return;
+#   * proposed names carrying NO verified fib read, which A2 forbids outright; and
+#   * contradicted the Radar directly — its last run rested a buy on HSCL at 688.7 while the
+#     Radar EXCLUDED HSCL as in-supply-zone with unconfirmed supply overhead.
+# It also emitted no targets, so it could not state an R:R for anything it proposed.
+# The schedule is disabled rather than the file deleted: workflow_dispatch still allows a manual
+# run, and re-enabling is a two-line revert. If it IS revived, re-register `next_session` in
+# staleness_contract.EQUITY_BLOCKS FIRST or it lands as an UNREGISTERED BLOCK finding.
 on:
-  schedule:
-    - cron: '0 12 * * 1-5'   # 17:30 IST — evening cut (post-close)
-    - cron: '0 3 * * 1-5'    # 08:30 IST — morning overnight refresh (pre-open)
+  # schedule:
+  #   - cron: '0 12 * * 1-5'   # 17:30 IST — evening cut (post-close)
+  #   - cron: '0 3 * * 1-5'    # 08:30 IST — morning overnight refresh (pre-open)
   workflow_dispatch:
 
 permissions:

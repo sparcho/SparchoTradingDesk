@@ -419,12 +419,9 @@ EQUITY_BLOCKS = {
     "daytrade_freshness":    _blk("refresh_prices.py", "cloud", 1,
                                   _key_date("price_as_of")),
     "news":                  _blk("refresh-news.yml", "cloud", 2),
-    "next_session":          _blk("next_session_snapshot.py / emit", "cloud", 1,
-                                  _key_date("as_of_ist"),
-                                  count=lambda b: len((b or {}).get("rows") or []),
-                                  note="rows=[] is the F260717 failure mode — empty is NOT legal"),
-
-    # --- laptop-produced: the surfaces that rot when the operator is away
+    # "next_session" RETIRED 2026-07-26 with the day desk — no producer, no surface, so no
+    # contract entry. Re-add here first if it is ever revived, or it lands as an
+    # UNREGISTERED BLOCK finding.
     "screeners":             _blk("screener_runner.py", "laptop", 1),
     "daytrade_inputs":       _blk("screener_runner.py", "laptop", 1,
                                   note="carries no as-of field — needs a producer stamp"),
