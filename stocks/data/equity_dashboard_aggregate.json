@@ -1,14 +1,15 @@
 {
   "schema_version": "v1.1",
   "doc_type": "equity_dashboard_aggregate",
-  "emitted_at_utc": "2026-07-27T16:52:13+00:00",
+  "emitted_at_utc": "2026-07-27T17:57:06+00:00",
   "meta": {
     "account": "SPARCHO-HDFC",
     "doctrine_refs": [
       "V-31",
       "V-32",
       "V-33"
-    ]
+    ],
+    "last_price_refresh": "2026-07-27T17:57:06+00:00"
   },
   "book": {
     "as_of": "2026-07-15",
@@ -17,7 +18,15 @@
     "sessions_stale": 11,
     "fetched_at": "2026-07-27T19:10:11+05:30",
     "staleness": null,
-    "ledger_available": true
+    "ledger_available": true,
+    "totals": {
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unrealized_pnl_abs": 0.0,
+      "unrealized_pnl_pct": 0,
+      "change_today_abs": 0.0,
+      "change_today_pct": 0
+    }
   },
   "held": [
     {
@@ -25,44 +34,64 @@
       "name": "Gujarat Mineral Development Corporation",
       "sector": "Minerals & Mining",
       "cluster": "minerals-mining",
-      "current_price": 596.1,
-      "day_chg_pct": 1.72,
+      "current_price": 562.15,
+      "day_chg_pct": -0.07,
       "ltp_date": "2026-07-27",
       "tv_symbol": "GMDCLTD",
-      "tv_exchange": "BSE"
+      "tv_exchange": "BSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "VEDPOWER",
       "name": "Vedanta Power",
       "sector": "Power",
       "cluster": "power-generation",
-      "current_price": 39.18,
-      "day_chg_pct": -2.15,
+      "current_price": 36.97,
+      "day_chg_pct": 5.6,
       "ltp_date": "2026-07-27",
       "tv_symbol": "VEDPOWER",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "MTARTECH",
       "name": "MTAR Technologies Limited",
       "sector": "Capital Goods",
       "cluster": "capital-goods",
-      "current_price": 6698.5,
-      "day_chg_pct": 4.52,
+      "current_price": 5754.5,
+      "day_chg_pct": -0.87,
       "ltp_date": "2026-07-27",
       "tv_symbol": "MTARTECH",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "TARIL",
       "name": "Transformers and Rectifiers India",
       "sector": "Capital Goods",
       "cluster": "capital-goods",
-      "current_price": 337.25,
-      "day_chg_pct": 0.07,
+      "current_price": 302.5,
+      "day_chg_pct": 2.54,
       "ltp_date": "2026-07-27",
       "tv_symbol": "TARIL",
-      "tv_exchange": "BSE"
+      "tv_exchange": "BSE",
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unreal_inr": 0.0,
+      "unreal_pct": 0,
+      "concentration_pct": 0
     },
     {
       "ticker": "NSDL",
@@ -73,7 +102,8 @@
       "day_chg_pct": -0.6,
       "ltp_date": "2026-07-27",
       "tv_symbol": "NSDL",
-      "tv_exchange": "NSE"
+      "tv_exchange": "NSE",
+      "concentration_pct": 0
     }
   ],
   "screeners": {
@@ -8614,7 +8644,7 @@
     "sessions_stale": 0,
     "status": "OK",
     "score_version": "F128",
-    "refreshed_at_utc": "2026-07-27T16:52:13+00:00"
+    "refreshed_at_utc": "2026-07-27T17:57:06+00:00"
   },
   "dr": {
     "source": "live",
@@ -10929,28 +10959,28 @@
       {
         "id": "TNX",
         "status": "FAIL",
-        "reading": "4.679",
+        "reading": "4.65%",
         "threshold": "<4.45%",
         "note": "4.679 vs <4.45% -> FAIL (auto-refreshed 2026-07-27 16:28 IST) -- binding deploy gate (S5.2 new-tranche block)"
       },
       {
         "id": "DXY",
         "status": "OK",
-        "reading": "101.265",
+        "reading": "101.53",
         "threshold": "<102",
         "note": "101.265 vs <102 -> OK (auto-refreshed 2026-07-27 16:28 IST) -- >102 weekly close = reduce-50 (V-06)"
       },
       {
         "id": "USDINR",
         "status": "PAUSE",
-        "reading": "95.9",
+        "reading": "95.900",
         "threshold": "<94 / <96 wkly",
         "note": "95.9 vs <94 / <96 wkly -> PAUSE (auto-refreshed 2026-07-27 16:28 IST) -- pause new tranches >94; reduce-25 >96 weekly close"
       },
       {
         "id": "HORMUZ",
         "status": "OK",
-        "reading": "88.91",
+        "reading": "oil $89.08",
         "threshold": "oil <$105",
         "note": "88.91 vs oil <$105 -> OK (auto-refreshed 2026-07-27 16:28 IST) -- war-premium / S10.1 correlated-cascade gate (Brent proxy)"
       },
@@ -10971,25 +11001,25 @@
     ],
     "macro": {
       "TNX": {
-        "value": 4.679,
+        "value": 4.651000022888184,
         "as_of": "2026-07-27T16:27:13+0530",
         "gate_status": "FAIL",
         "gate_threshold": "<4.45%"
       },
       "USDINR": {
-        "value": 95.9,
+        "value": 95.9000015258789,
         "as_of": "2026-07-27T16:27:13+0530",
         "gate_status": "PAUSE",
         "gate_threshold": "<94 / <96 wkly"
       },
       "DXY": {
-        "value": 101.265,
+        "value": 101.5250015258789,
         "as_of": "2026-07-27T16:27:13+0530",
         "gate_status": "OK",
         "gate_threshold": "<102"
       },
       "BRENT": {
-        "value": 88.91,
+        "value": 89.08000183105469,
         "as_of": "2026-07-27T16:27:13+0530",
         "gate_status": "OK",
         "gate_threshold": "oil <$105"
@@ -24256,11 +24286,11 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-07-27T16:52:15+00:00",
+    "computed_at_utc": "2026-07-27T17:57:06+00:00",
     "desk": "equity",
     "any_stale": true,
     "any_dim": false,
-    "worst": "warn",
+    "worst": "info",
     "items": [
       {
         "id": "daytrade_fires",
@@ -24287,7 +24317,7 @@
         "dim": false,
         "reason": "refreshed 0m ago",
         "since": null,
-        "age_min": 0.045218850000000005,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_equity",
         "ui_targets": []
@@ -24491,20 +24521,6 @@
         "ui_targets": []
       },
       {
-        "id": "block:perf_private",
-        "subsystem": "equity",
-        "label": "Block perf_private",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-07-15 (8 session(s) behind)",
-        "since": "2026-07-15",
-        "age_min": null,
-        "sessions_stale": 8,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
         "id": "block:positional_assessment",
         "subsystem": "equity",
         "label": "Block positional_assessment",
@@ -24515,48 +24531,6 @@
         "since": "2026-07-27",
         "age_min": null,
         "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:family_account_b",
-        "subsystem": "equity",
-        "label": "Block family_account_b",
-        "is_stale": true,
-        "severity": "warn",
-        "dim": false,
-        "reason": "STALE — as-of 2026-06-06 is 36 session(s) behind today (tolerance 10); produced by propagate/account pull on the operator substrate.",
-        "since": "2026-06-06",
-        "age_min": null,
-        "sessions_stale": 36,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:recent_closed",
-        "subsystem": "equity",
-        "label": "Block recent_closed",
-        "is_stale": true,
-        "severity": "warn",
-        "dim": false,
-        "reason": "STALE — as-of 2026-05-05 is 59 session(s) behind today (tolerance 3); produced by trade_tracker_emit.py on the laptop substrate.",
-        "since": "2026-05-05",
-        "age_min": null,
-        "sessions_stale": 59,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:recent_trades",
-        "subsystem": "equity",
-        "label": "Block recent_trades",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "empty by declaration (allow_empty) — nothing to date; producer trade_tracker_emit.py liveness is judged by its dated sibling blocks",
-        "since": null,
-        "age_min": null,
-        "sessions_stale": null,
         "heal": null,
         "ui_targets": []
       },
@@ -24589,20 +24563,6 @@
         "ui_targets": []
       },
       {
-        "id": "block:risk_gates",
-        "subsystem": "equity",
-        "label": "Block risk_gates",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-07-27 (0 session(s) behind)",
-        "since": "2026-07-27",
-        "age_min": null,
-        "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
         "id": "block:screeners",
         "subsystem": "equity",
         "label": "Block screeners",
@@ -24620,20 +24580,6 @@
         "id": "block:signal_perf",
         "subsystem": "equity",
         "label": "Block signal_perf",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-07-27 (0 session(s) behind)",
-        "since": "2026-07-27",
-        "age_min": null,
-        "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:trade_lab_private",
-        "subsystem": "equity",
-        "label": "Block trade_lab_private",
         "is_stale": false,
         "severity": "info",
         "dim": false,
