@@ -41,11 +41,11 @@ SILVER_PRICE_TOL_MIN = 90
 # Operator-driven book staleness (they drop when they trade) — informational nudge only.
 BOOK_STALE_SESSIONS = 2       # >= this many sessions behind -> surface (not dim)
 SILVER_BOOK_TOL_DAYS = 10
-# F145 analysis-input freshness: operator-fed chart reads (SILV-TA weekly / STOCK-TA).
-# Severity ladder per F260706-F145 (>30d warn, >60d alert for SILV-TA). Informational (dim=False).
+# F145 analysis-input freshness: the operator-fed SILV-TA weekly chart read.
+# Severity ladder per F260706-F145 (>30d warn, >60d alert). Informational (dim=False).
+# STOCK_TA_WARN_DAYS retired 2026-07-27 with the equity `analysis` block (F260723-ANALYSIS-RETIRE).
 SILV_TA_WARN_DAYS = 30
 SILV_TA_ALERT_DAYS = 60
-STOCK_TA_WARN_DAYS = 60
 
 
 def _now_utc(now_utc_iso=None) -> datetime:
@@ -175,30 +175,14 @@ def _equity_items(data, now):
     except Exception:
         pass
 
-    # 5. Analysis-input freshness (F145): stale STOCK-TA chart reads across covered tickers.
-    try:
-        stmap = ((data.get("analysis") or {}).get("stock_ta")) or {}
-        today_ist = now.astimezone(_IST).date()
-        ages = {}
-        for tk, ds in stmap.items():
-            pd = _parse_iso(ds)
-            if pd:
-                probe = pd.date() if hasattr(pd, "date") else pd
-                ages[tk] = (today_ist - probe).days
-        stale_tks = {tk: a for tk, a in ages.items() if a > STOCK_TA_WARN_DAYS}
-        oldest = max(ages.items(), key=lambda kv: kv[1]) if ages else None
-        stale = bool(stale_tks)
-        items.append(_item(
-            id="equity_analysis_freshness", subsystem="equity", label="STOCK-TA reads",
-            is_stale=stale, severity="warn" if stale else "info", dim=False,
-            reason=(f"{len(stale_tks)} STOCK-TA read(s) >{STOCK_TA_WARN_DAYS}d old"
-                    + (f" (oldest {oldest[0]} {oldest[1]}d)" if oldest else "")) if stale
-                   else (f"fresh - {len(ages)} covered, oldest {oldest[1]}d" if oldest else "no STOCK-TA dates emitted"),
-            since=None, sessions_stale=len(stale_tks) or None,
-            heal=None, ui_targets=[],
-        ))
-    except Exception:
-        pass
+    # 5. RETIRED 2026-07-27 (F260723-ANALYSIS-RETIRE, operator decision) — `equity_analysis_freshness`.
+    #    It measured the age of STOCK-TA chart reads, a PDF-era cycle retired on 2026-07-06, and so
+    #    could only ever age. It sat permanently warn ("13 STOCK-TA read(s) >60d old") on a desk
+    #    where nothing consumed the block it read from — a stale row that can never go green trains
+    #    the eye to ignore the banner, which is the same failure as a permanently red test suite.
+    #    Retired together with its producer in the emit and the `analysis` EQUITY_BLOCKS entry;
+    #    "how fresh is the operator's analysis" is now carried by fib_coverage + the fib bank's
+    #    studied dates. The silver detector below is UNAFFECTED — that surface is live.
 
     return items
 
@@ -474,7 +458,11 @@ EQUITY_BLOCKS = {
                                   note="quarterly-cadence backlog data — refresh on results, "
                                        "never daily-restamp without new data (260723 triage)"),
     "dr":                    _blk("DR pipeline", "laptop", 20, severity="warn"),
-    "analysis":              _blk("emit", "laptop", 20, severity="warn"),
+    # "analysis" RETIRED 2026-07-27 (F260723-ANALYSIS-RETIRE, operator decision) — orphaned (no
+    # renderer), 66d stale, and tracking two permanently-retired PDF cycles. Producer removed from
+    # equity_dashboard_emit and the equity_analysis_freshness detector removed with it, so no half
+    # of the pair survives. Re-add here FIRST if it is ever revived, or it lands as an
+    # UNREGISTERED BLOCK finding.
 
     # --- operator-private: encrypted into sensitive_enc and stripped from the public
     # aggregate. They MUST still report freshness, but under a codename (see the detector).

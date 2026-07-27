@@ -41,11 +41,11 @@ SILVER_PRICE_TOL_MIN = 90
 # Operator-driven book staleness (they drop when they trade) — informational nudge only.
 BOOK_STALE_SESSIONS = 2       # >= this many sessions behind -> surface (not dim)
 SILVER_BOOK_TOL_DAYS = 10
-# F145 analysis-input freshness: operator-fed chart reads (SILV-TA weekly / STOCK-TA).
-# Severity ladder per F260706-F145 (>30d warn, >60d alert for SILV-TA). Informational (dim=False).
+# F145 analysis-input freshness: the operator-fed SILV-TA weekly chart read.
+# Severity ladder per F260706-F145 (>30d warn, >60d alert). Informational (dim=False).
+# STOCK_TA_WARN_DAYS retired 2026-07-27 with the equity `analysis` block (F260723-ANALYSIS-RETIRE).
 SILV_TA_WARN_DAYS = 30
 SILV_TA_ALERT_DAYS = 60
-STOCK_TA_WARN_DAYS = 60
 
 
 def _now_utc(now_utc_iso=None) -> datetime:
@@ -175,30 +175,14 @@ def _equity_items(data, now):
     except Exception:
         pass
 
-    # 5. Analysis-input freshness (F145): stale STOCK-TA chart reads across covered tickers.
-    try:
-        stmap = ((data.get("analysis") or {}).get("stock_ta")) or {}
-        today_ist = now.astimezone(_IST).date()
-        ages = {}
-        for tk, ds in stmap.items():
-            pd = _parse_iso(ds)
-            if pd:
-                probe = pd.date() if hasattr(pd, "date") else pd
-                ages[tk] = (today_ist - probe).days
-        stale_tks = {tk: a for tk, a in ages.items() if a > STOCK_TA_WARN_DAYS}
-        oldest = max(ages.items(), key=lambda kv: kv[1]) if ages else None
-        stale = bool(stale_tks)
-        items.append(_item(
-            id="equity_analysis_freshness", subsystem="equity", label="STOCK-TA reads",
-            is_stale=stale, severity="warn" if stale else "info", dim=False,
-            reason=(f"{len(stale_tks)} STOCK-TA read(s) >{STOCK_TA_WARN_DAYS}d old"
-                    + (f" (oldest {oldest[0]} {oldest[1]}d)" if oldest else "")) if stale
-                   else (f"fresh - {len(ages)} covered, oldest {oldest[1]}d" if oldest else "no STOCK-TA dates emitted"),
-            since=None, sessions_stale=len(stale_tks) or None,
-            heal=None, ui_targets=[],
-        ))
-    except Exception:
-        pass
+    # 5. RETIRED 2026-07-27 (F260723-ANALYSIS-RETIRE, operator decision) — `equity_analysis_freshness`.
+    #    It measured the age of STOCK-TA chart reads, a PDF-era cycle retired on 2026-07-06, and so
+    #    could only ever age. It sat permanently warn ("13 STOCK-TA read(s) >60d old") on a desk
+    #    where nothing consumed the block it read from — a stale row that can never go green trains
+    #    the eye to ignore the banner, which is the same failure as a permanently red test suite.
+    #    Retired together with its producer in the emit and the `analysis` EQUITY_BLOCKS entry;
+    #    "how fresh is the operator's analysis" is now carried by fib_coverage + the fib bank's
+    #    studied dates. The silver detector below is UNAFFECTED — that surface is live.
 
     return items
 
@@ -419,12 +403,9 @@ EQUITY_BLOCKS = {
     "daytrade_freshness":    _blk("refresh_prices.py", "cloud", 1,
                                   _key_date("price_as_of")),
     "news":                  _blk("refresh-news.yml", "cloud", 2),
-    "next_session":          _blk("next_session_snapshot.py / emit", "cloud", 1,
-                                  _key_date("as_of_ist"),
-                                  count=lambda b: len((b or {}).get("rows") or []),
-                                  note="rows=[] is the F260717 failure mode — empty is NOT legal"),
-
-    # --- laptop-produced: the surfaces that rot when the operator is away
+    # "next_session" RETIRED 2026-07-26 with the day desk — no producer, no surface, so no
+    # contract entry. Re-add here first if it is ever revived, or it lands as an
+    # UNREGISTERED BLOCK finding.
     "screeners":             _blk("screener_runner.py", "laptop", 1),
     "daytrade_inputs":       _blk("screener_runner.py", "laptop", 1,
                                   note="carries no as-of field — needs a producer stamp"),
@@ -437,6 +418,32 @@ EQUITY_BLOCKS = {
                                        "levels ship encrypted and refresh-stocks-dashboard.yml "
                                        "rebuilds this block post-close, so laptop-off is NO LONGER "
                                        "an excuse for it being stale."),
+    "fib_radar":             _blk("fib_confluence_source.py via emit", "cloud", 1,
+                                  _key_date("price_as_of"),
+                                  count=lambda b: len((b or {}).get("fires") or []),
+                                  allow_empty=True, severity="warn",
+                                  note="F260725: the desk's actionable fire surface. Derived from "
+                                       "fib_confluences, so it inherits that block's CLOUD "
+                                       "substrate and its last-close basis. fires=[] is LEGAL - a "
+                                       "day where no verified bank sits at a support with 1.5 R:R "
+                                       "genuinely fires nothing - but it must still be DATED, or "
+                                       "'no fires' is indistinguishable from 'radar is dead'."),
+    "decisions":             _blk("decision_ledger.py", "operator", None, severity="info",
+                                  count=lambda b: len((b or {}).get("open") or []),
+                                  allow_empty=True,
+                                  note="F260727 routing layer: open decisions with owners and "
+                                       "deadlines, derived from FLAGS frontmatter. allow_empty is "
+                                       "correct - zero open decisions is a real and good state. "
+                                       "It has no freshness SLA because it moves only when a flag "
+                                       "does; what matters is that OVERDUE items reach the desk."),
+    "fib_coverage":          _blk("emit (EDGE/LEVELS x lens universe)", "operator", None,
+                                  severity="info",
+                                  count=lambda b: (b or {}).get("verified"),
+                                  note="F260725 C1: fib study coverage, the tracker that replaced "
+                                       "the retired screener-alpha panel. Moves only when the "
+                                       "operator banks a new read, so it has no freshness SLA - "
+                                       "but the count must be non-zero, since zero verified banks "
+                                       "means the fire gate can never fire."),
     "positional_assessment": _blk("signal_ledger.py", "laptop", 2),
     "regime_history":        _blk("regime_history_append.py", "laptop", 3),
     "flags":                 _blk("flag ledger", "laptop", 3),
@@ -451,7 +458,11 @@ EQUITY_BLOCKS = {
                                   note="quarterly-cadence backlog data — refresh on results, "
                                        "never daily-restamp without new data (260723 triage)"),
     "dr":                    _blk("DR pipeline", "laptop", 20, severity="warn"),
-    "analysis":              _blk("emit", "laptop", 20, severity="warn"),
+    # "analysis" RETIRED 2026-07-27 (F260723-ANALYSIS-RETIRE, operator decision) — orphaned (no
+    # renderer), 66d stale, and tracking two permanently-retired PDF cycles. Producer removed from
+    # equity_dashboard_emit and the equity_analysis_freshness detector removed with it, so no half
+    # of the pair survives. Re-add here FIRST if it is ever revived, or it lands as an
+    # UNREGISTERED BLOCK finding.
 
     # --- operator-private: encrypted into sensitive_enc and stripped from the public
     # aggregate. They MUST still report freshness, but under a codename (see the detector).
