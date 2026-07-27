@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar rework — preview · Sparcho</title>
+<style>
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  a{ color:inherit; text-decoration:none; }
+  :root{
+    --pos:#3fcf7a; --neg:#ff6b6b; --watch:#ffb44d;
+    --pos-soft:rgba(63,207,122,0.15); --neg-soft:rgba(255,107,107,0.14); --watch-soft:rgba(255,180,77,0.16);
+    --font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --font-mono:"Space Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  body{ font-family:var(--font-sans); transition:background .5s,color .5s; min-height:100vh; }
+  body.dark{ --ink:#eaf3ff; --ink2:#a9c2e6; --mut:#6f86b0; --faint:#48587d;
+    --cyan:#42dbe6; --violet:#9a8cff; --acc:#42dbe6;
+    --glass:rgba(26,40,68,0.42); --glass2:rgba(12,20,38,0.82);
+    --border:rgba(120,200,230,0.30); --hair:rgba(130,190,230,0.14);
+    color:#eaf3ff; background:#070b16; }
+  body.light{ --ink:#0e1b30; --ink2:#33486b; --mut:#5b6e90; --faint:#8d9db9;
+    --cyan:#1f9fb5; --violet:#6f5fe0; --acc:#1f9fb5;
+    --glass:rgba(255,255,255,0.62); --glass2:rgba(255,255,255,0.9);
+    --border:rgba(30,50,80,0.16); --hair:rgba(30,50,80,0.11);
+    color:#0e1b30; background:#eaf0f9; }
+  body.dark .scene{ background:
+    radial-gradient(60% 50% at 76% 6%, rgba(66,219,230,0.16), transparent 60%),
+    radial-gradient(50% 40% at 12% 88%, rgba(154,140,255,0.13), transparent 62%),
+    linear-gradient(180deg,#070c18,#0b1326); }
+  body.light .scene{ background:linear-gradient(180deg,#eaf0f9,#e0e9f6); }
+  .scene{ position:fixed; inset:0; z-index:-1; }
+  .mono{ font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+
+  .wrap{ max-width:1280px; margin:0 auto; padding:22px 20px 90px; }
+
+  /* ---- preview banner: this is NOT the desk ---------------------------------------------- */
+  .pvb{ display:flex; gap:12px; align-items:flex-start; padding:12px 15px; border-radius:12px;
+        background:var(--watch-soft); border:1px solid rgba(255,180,77,0.42); margin-bottom:22px; }
+  .pvb .ic{ font-size:17px; line-height:1.2; }
+  .pvb b{ color:var(--watch); }
+  .pvb .t{ font-size:12.5px; color:var(--ink2); line-height:1.55; }
+
+  header.top{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px; }
+  header.top h1{ font-size:25px; font-weight:700; letter-spacing:-.4px; }
+  header.top .sub{ font-size:12px; color:var(--mut); }
+  .modebtn{ margin-left:auto; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.09em;
+    text-transform:uppercase; padding:6px 12px; border-radius:999px; cursor:pointer;
+    background:var(--glass); border:1px solid var(--border); color:var(--ink2); }
+
+  /* ---- THE FIX THE OPERATOR ASKED FOR FIRST: section titles you can actually read --------- */
+  .sec{ margin-top:26px; }
+  .sec-h{ display:flex; align-items:center; gap:10px; margin-bottom:3px; flex-wrap:wrap; }
+  .sec-h .ic{ font-size:17px; }
+  .sec-h h2{ font-size:17.5px; font-weight:650; letter-spacing:-.2px; color:var(--ink); }
+  .sec-h .cnt{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--mut); margin-left:auto; }
+  .sec-sub{ font-size:12.5px; color:var(--mut); line-height:1.6; margin-bottom:13px; max-width:900px; }
+  .card{ background:var(--glass); border:1px solid var(--hair); border-radius:14px; padding:16px 17px;
+         backdrop-filter:blur(9px); }
+
+  /* ---- the grid --------------------------------------------------------------------------- */
+  .gridwrap{ overflow-x:auto; }
+  table.board{ border-collapse:separate; border-spacing:0; width:100%; min-width:640px; }
+  table.board th{ font-family:var(--font-mono); font-size:10px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--mut); font-weight:400; padding:0 0 9px; text-align:left; }
+  table.board th.tr-h{ text-align:left; padding-left:6px; }
+  table.board td{ vertical-align:top; padding:7px 6px; border-top:1px solid var(--hair); }
+  td.rowlbl{ width:150px; padding-right:14px; }
+  .rl-n{ font-size:13px; font-weight:600; color:var(--ink); display:block; }
+  .rl-d{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:.06em; text-transform:uppercase;
+         color:var(--faint); display:block; margin-top:2px; }
+  .cell{ display:flex; flex-wrap:wrap; gap:5px; min-height:26px; align-content:flex-start; }
+  .cell.empty::after{ content:"—"; color:var(--faint); font-size:13px; padding:3px 2px; }
+
+  /* chips: identity is the LABEL + the glyph + the column it sits in. Colour is reinforcement
+     only — the desk's green/amber/red are ~4 ΔE apart under protanopia, so nothing here may
+     depend on hue alone. */
+  .chip{ display:inline-flex; align-items:center; gap:5px; padding:4px 9px; border-radius:7px;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.03em; cursor:pointer;
+    background:var(--glass2); border:1px solid var(--hair); color:var(--ink2);
+    transition:transform .13s, border-color .13s; }
+  .chip:hover{ transform:translateY(-1px); border-color:var(--border); color:var(--ink); }
+  .chip .g{ font-size:9px; opacity:.85; }
+  .chip.fire{ border-color:rgba(63,207,122,0.55); background:var(--pos-soft); color:var(--ink); }
+  .chip.fire::after{ content:"FIRE"; font-size:8.5px; letter-spacing:.1em; color:var(--pos); }
+  .chip.watchv{ border-color:rgba(255,180,77,0.45); }
+  .chip.watchv::after{ content:"WATCH"; font-size:8.5px; letter-spacing:.1em; color:var(--watch); }
+  .chip.on{ outline:2px solid var(--acc); outline-offset:1px; }
+
+  .rowline{ display:flex; align-items:center; gap:9px; margin:14px 0 4px; }
+  .rowline .lbl{ font-family:var(--font-mono); font-size:10px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--mut); }
+  .rowline .ln{ flex:1; height:1px; background:var(--hair); }
+  .clearf{ font-family:var(--font-mono); font-size:10px; letter-spacing:.06em; color:var(--acc);
+    cursor:pointer; text-transform:uppercase; }
+
+  /* ---- the tracks -------------------------------------------------------------------------- */
+  .trk{ display:grid; grid-template-columns:118px 1fr 190px; gap:13px; align-items:center;
+        padding:9px 4px; border-top:1px solid var(--hair); }
+  .trk:first-of-type{ border-top:0; }
+  .trk .tk{ font-size:12.5px; font-weight:600; color:var(--ink); }
+  .trk .tk .st{ display:block; font-family:var(--font-mono); font-size:9px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--faint); margin-top:2px; }
+  .rail{ position:relative; height:34px; }
+  .rail .bar{ position:absolute; left:0; right:0; top:16px; height:2px; background:var(--hair); border-radius:2px; }
+  .rail .cap{ position:absolute; top:11px; width:2px; height:12px; border-radius:2px; }
+  .rail .cap.lo{ left:0; background:var(--pos); }
+  .rail .cap.hi{ right:0; background:var(--neg); }
+  .rail .dot{ position:absolute; top:11px; width:12px; height:12px; border-radius:50%;
+    transform:translateX(-6px); border:2px solid var(--glass2); }
+  .rail .px{ position:absolute; top:-2px; transform:translateX(-50%); font-family:var(--font-mono);
+    font-size:9.5px; color:var(--ink2); white-space:nowrap; }
+  .rail .e{ position:absolute; top:26px; font-family:var(--font-mono); font-size:9px; color:var(--faint); white-space:nowrap; }
+  .rail .e.lo{ left:0; } .rail .e.hi{ right:0; text-align:right; }
+  .trk .rr{ font-family:var(--font-mono); font-size:11px; color:var(--ink2); text-align:right; }
+  .trk .rr b{ color:var(--ink); }
+  .trk .why{ grid-column:2 / -1; font-size:11px; color:var(--faint); line-height:1.45;
+    padding:0; margin-top:-4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .nb{ display:grid; grid-template-columns:118px 1fr; gap:13px; padding:8px 4px;
+       border-top:1px solid var(--hair); align-items:baseline; }
+  .nb .msg{ font-size:11.5px; color:var(--mut); }
+
+  /* ---- fires ------------------------------------------------------------------------------- */
+  .fires{ display:grid; grid-template-columns:repeat(auto-fit,minmax(400px,1fr)); gap:13px; }
+  .fc{ background:var(--glass2); border:1px solid rgba(63,207,122,0.4); border-radius:13px; padding:15px 16px; }
+  .fc .h{ display:flex; align-items:center; gap:9px; margin-bottom:12px; }
+  .fc .h .t{ font-size:16px; font-weight:700; letter-spacing:-.2px; }
+  .fc .h .v{ font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; padding:2px 7px;
+    border-radius:5px; background:var(--pos-soft); color:var(--pos); }
+  .fc .h .sp{ margin-left:auto; font-family:var(--font-mono); font-size:10.5px; color:var(--mut); }
+  .fc .g{ display:grid; grid-template-columns:repeat(4,1fr); gap:11px; }
+  .fc .g>div .k{ display:block; font-family:var(--font-mono); font-size:9px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--mut); }
+  .fc .g>div .v{ display:block; font-family:var(--font-mono); font-size:16px; margin-top:3px; }
+  .fc .g>div .s{ display:block; font-size:10px; color:var(--faint); margin-top:2px; }
+  .fc .note{ font-size:11.5px; color:var(--mut); line-height:1.55; margin-top:12px;
+    padding-top:11px; border-top:1px solid var(--hair); }
+
+  .slot{ border:1px dashed var(--border); border-radius:13px; padding:18px; text-align:center;
+    color:var(--mut); font-size:12.5px; line-height:1.6; }
+  .err{ padding:15px; border-radius:11px; background:var(--neg-soft); color:var(--neg); font-size:13px; }
+  @media(max-width:720px){
+    .trk{ grid-template-columns:100px 1fr; } .trk .rr{ grid-column:2; text-align:left; }
+    td.rowlbl{ width:104px; }
+  }
+</style>
+</head>
+<body class="dark">
+<div class="scene"></div>
+<div class="wrap">
+
+  <div class="pvb">
+    <span class="ic">👁</span>
+    <span class="t"><b>This is a preview, not the desk.</b> Nothing here is live and nothing on
+      your working desk has changed. It exists so you can <i>look</i> at the proposed Radar before
+      it replaces anything — a sketch was not enough last time. The live desk is
+      <a href="../" style="color:var(--acc)">over here</a>.</span>
+  </div>
+
+  <header class="top">
+    <h1>Radar <span style="color:var(--mut);font-weight:400">— proposed</span></h1>
+    <span class="sub" id="asof">loading…</span>
+    <button class="modebtn" id="mode">Light</button>
+  </header>
+
+  <div id="root"></div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){ return document.getElementById(id); };
+  var esc=function(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+
+  // -- DATES, PLAIN ----------------------------------------------------------------------------
+  // Operator, 27-Jul: "wherever there is a label mentioning any date, please don't use the number
+  // format, it is never readable... always use dates with the month name and date, year is always
+  // implied or can be used MAX with a '26 suffix."  2026-07-27 -> "27 Jul".
+  var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function fmtDate(s,withYear){
+    var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(s||""));
+    if(!m) return esc(s||"—");
+    var d=(+m[3])+" "+MON[(+m[2])-1];
+    return withYear ? d+" '"+m[1].slice(2) : d;
+  }
+  function money(n){
+    if(n==null) return "—";
+    return "₹"+(+n).toLocaleString("en-IN",{maximumFractionDigits:2});
+  }
+
+  // -- the six states, in the order price travels through them ---------------------------------
+  var ROWS=[
+    {key:"on-support",  name:"On support",     desc:"the buy zone",        setups:["at-support"]},
+    {key:"approaching", name:"Approaching",    desc:"moving toward a level",setups:["approaching"]},
+    {key:"in-range",    name:"In range",       desc:"between levels",      setups:["in-zone"]},
+    {key:"at-resist",   name:"At resistance",  desc:"trim / don't chase",  setups:["at-resistance"]},
+    {key:"in-supply",   name:"In supply",      desc:"not accepted above",  setups:["in-supply-zone","at-supply"]},
+    {key:"knife",       name:"Falling knife",  desc:"no floor holding",    setups:["falling-knife"]}
+  ];
+  var TRENDS=[{k:"up",n:"Uptrend",g:"▲"},{k:"mixed",n:"Mixed",g:"◆"},{k:"down",n:"Downtrend",g:"▼"}];
+
+  var FILTER=null, BOARD=[], RAD={};
+
+  function rowFor(setup){
+    for(var i=0;i<ROWS.length;i++){ if(ROWS[i].setups.indexOf(setup)>=0) return ROWS[i].key; }
+    return "in-range";
+  }
+  function band(r){
+    var e=r.entry, t=r.target, p=r.current_px;
+    if(e==null||t==null||p==null||t===e) return null;
+    return {lo:e, hi:t, px:p, pct:Math.max(0,Math.min(100,(p-e)/(t-e)*100))};
+  }
+
+  // -- the grid ---------------------------------------------------------------------------------
+  function gridHTML(){
+    var h='<div class="gridwrap"><table class="board"><thead><tr><th></th>';
+    TRENDS.forEach(function(t){ h+='<th class="tr-h">'+t.n+'</th>'; });
+    h+='</tr></thead><tbody>';
+    ROWS.forEach(function(row){
+      var inRow=BOARD.filter(function(b){ return rowFor(b.setup)===row.key; });
+      if(!inRow.length) return;
+      h+='<tr><td class="rowlbl"><span class="rl-n">'+row.name+'</span>'+
+         '<span class="rl-d">'+row.desc+' · '+inRow.length+'</span></td>';
+      TRENDS.forEach(function(t){
+        var cs=inRow.filter(function(b){ return b.trend===t.k; });
+        h+='<td><div class="cell'+(cs.length?"":" empty")+'">'+cs.map(function(b){
+          var cls=b.verdict==="FIRE"?" fire":(b.verdict==="WATCH"?" watchv":"");
+          var bd=band(b);
+          var tip=b.ticker+" · "+b.setup+" · "+t.n.toLowerCase()+
+                  (bd?(" · "+Math.round(bd.pct)+"% of the way from its banked support to the next level"):" · no band to measure")+
+                  "\n"+(b.why||[]).join(" · ");
+          return '<span class="chip'+cls+(FILTER===b.ticker?" on":"")+'" title="'+esc(tip)+'" '+
+                 'data-tk="'+esc(b.ticker)+'"><span class="g">'+t.g+'</span>'+esc(b.ticker)+'</span>';
+        }).join("")+'</div></td>';
+      });
+      h+='</tr>';
+    });
+    return h+'</tbody></table></div>';
+  }
+
+  // -- the tracks -------------------------------------------------------------------------------
+  function trackHTML(b){
+    var bd=band(b), tcol=b.trend==="up"?"var(--pos)":(b.trend==="down"?"var(--neg)":"var(--watch)");
+    if(!bd){
+      return '<div class="nb"><div class="tk mono" style="font-size:12.5px">'+esc(b.ticker)+'</div>'+
+        '<div class="msg">'+(b.target==null
+          ? "no banked level overhead — nothing to measure a reward against"
+          : "no banked floor beneath — nothing to measure a risk against")+
+        ' · <span class="mono">'+esc(b.setup)+'</span></div></div>';
+    }
+    var rr=b.rr!=null?((+b.rr).toFixed(2)+" : 1"):"—";
+    return '<div class="trk">'+
+      '<div class="tk">'+esc(b.ticker)+'<span class="st">'+esc(b.setup.replace(/-/g," "))+'</span></div>'+
+      '<div class="rail">'+
+        '<div class="bar"></div><div class="cap lo"></div><div class="cap hi"></div>'+
+        '<div class="dot" style="left:'+bd.pct.toFixed(1)+'%;background:'+tcol+'"></div>'+
+        '<div class="px" style="left:'+bd.pct.toFixed(1)+'%">'+money(bd.px)+'</div>'+
+        '<div class="e lo">'+money(bd.lo)+' banked support</div>'+
+        '<div class="e hi">next level '+money(bd.hi)+'</div>'+
+      '</div>'+
+      '<div class="rr">'+esc(b.trend)+' · <b>'+rr+'</b></div>'+
+      '<div class="why">'+esc((b.why||[])[0]||"")+'</div>'+
+    '</div>';
+  }
+
+  function tracksHTML(){
+    var list=BOARD.slice().filter(function(b){ return !FILTER || b.ticker===FILTER; });
+    list.sort(function(a,b){
+      var x=band(a), y=band(b);
+      if(!x&&!y) return a.ticker<b.ticker?-1:1;
+      if(!x) return 1; if(!y) return -1;
+      return x.pct-y.pct;
+    });
+    return list.map(trackHTML).join("");
+  }
+
+  // -- fires -------------------------------------------------------------------------------------
+  function fireHTML(f){
+    var riskPct=(f.entry&&f.stop!=null)?((f.entry-f.stop)/f.entry*100):null;
+    function cell(k,v,s,c){ return '<div><span class="k">'+k+'</span><span class="v" '+
+      (c?'style="color:'+c+'"':'')+'>'+v+'</span><span class="s">'+s+'</span></div>'; }
+    return '<div class="fc"><div class="h"><span class="t">'+esc(f.ticker)+'</span>'+
+      '<span class="v">FIRE</span><span class="sp">spot '+money(f.current_px)+'</span></div>'+
+      '<div class="g">'+
+        cell("Entry",money(f.entry),"banked support")+
+        cell("Stop",money(f.stop),(riskPct!=null?("−"+riskPct.toFixed(1)+"% · zone floor"):"invalidation"),"var(--neg)")+
+        cell("Target",money(f.target),"next banked level","var(--pos)")+
+        cell("R : R",(f.rr!=null?(+f.rr).toFixed(2)+" : 1":"—"),"floor 1.5",(f.rr>=2?"var(--pos)":"var(--watch)"))+
+      '</div><div class="note">'+esc((f.why||[]).join(" · "))+'</div></div>';
+  }
+
+  function render(){
+    var c=RAD.counts||{};
+    var h='';
+
+    // 1. FIRES
+    h+='<div class="sec"><div class="sec-h"><span class="ic">🎯</span><h2>Fires</h2>'+
+       '<span class="cnt">'+(c.fire||0)+' of '+BOARD.length+' names</span></div>'+
+       '<div class="sec-sub">Is there a trade today? Price is sitting on a support you verified by '+
+       'hand, in an up or mixed trend, with at least 1.5 to 1 reward against risk. Entry, stop and '+
+       'target are banked structure — scored on the <b>'+fmtDate(RAD.price_as_of)+'</b> close, never intraday.</div>'+
+       (RAD.fires&&RAD.fires.length
+         ? '<div class="fires">'+RAD.fires.map(fireHTML).join("")+'</div>'
+         : '<div class="card" style="color:var(--mut);font-size:12.5px">No fire today. Nothing verified is sitting on a qualifying support with enough room to the next level — a real no-fire day, not a broken feed.</div>')+
+       '</div>';
+
+    // 2. ENGINE MAP (unchanged; slots in here)
+    h+='<div class="sec"><div class="sec-h"><span class="ic">🧭</span><h2>Confluence radar · engine-scored</h2>'+
+       '<span class="cnt">unchanged</span></div>'+
+       '<div class="sec-sub">Where does the structure agree? The box engine looks for places two or '+
+       'more <i>different</i> fib ladders put a box edge within about 1.5% of each other. It makes no '+
+       'call — it is a map, not a decision.</div>'+
+       '<div class="slot">The hero cards you already have slot in here, exactly as they are.<br>'+
+       'They are operator-locked, so they can\'t render on this open preview page.</div></div>';
+
+    // 3. THE BOARD
+    h+='<div class="sec"><div class="sec-h"><span class="ic">🗺️</span><h2>The board</h2>'+
+       '<span class="cnt">'+BOARD.length+' names · '+fmtDate(RAD.price_as_of)+' close</span></div>'+
+       '<div class="sec-sub">What is <b>everything</b> doing? Every name with a verified bank, placed by '+
+       'where price is standing in its own structure. The desk always knew this — it just published '+
+       'the six that passed the buy gate and showed you the number '+(c.exclude||0)+' for the rest.</div>'+
+       '<div class="card">'+gridHTML()+
+       '<div class="rowline"><span class="lbl">'+(FILTER?("Showing "+esc(FILTER)):"Tracks · nearest support first")+'</span>'+
+       '<span class="ln"></span>'+(FILTER?'<span class="clearf" id="clr">show all</span>':'')+'</div>'+
+       tracksHTML()+'</div></div>';
+
+    $("root").innerHTML=h;
+
+    Array.prototype.forEach.call(document.querySelectorAll(".chip"),function(el){
+      el.addEventListener("click",function(){
+        var tk=el.getAttribute("data-tk");
+        FILTER=(FILTER===tk)?null:tk; render();
+      });
+    });
+    if($("clr")) $("clr").addEventListener("click",function(){ FILTER=null; render(); });
+  }
+
+  $("mode").addEventListener("click",function(){
+    var d=document.body.classList.contains("dark");
+    document.body.className=d?"light":"dark";
+    this.textContent=d?"Dark":"Light";
+  });
+
+  fetch("../data/equity_dashboard_aggregate.json",{cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+    .then(function(d){
+      RAD=(d&&d.fib_radar)||{};
+      BOARD=RAD.board||[];
+      if(!BOARD.length){
+        $("root").innerHTML='<div class="err">The aggregate has no <code>board</code> block yet. '+
+          'It ships with the emit that added it — if you are seeing this, the published data is older than the change.</div>';
+        return;
+      }
+      $("asof").textContent="on the "+fmtDate(RAD.price_as_of)+" close · "+BOARD.length+" names with a verified bank";
+      render();
+    })
+    .catch(function(e){
+      $("root").innerHTML='<div class="err">Could not load the desk data: '+esc(e.message)+'</div>';
+    });
+})();
+</script>
+</body>
+</html>
