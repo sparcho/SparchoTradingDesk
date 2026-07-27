@@ -835,9 +835,15 @@
   .card{ position:relative; background:var(--glass); border:1px solid var(--border); border-radius:13px; padding:14px 16px; backdrop-filter:blur(20px) saturate(160%); -webkit-backdrop-filter:blur(20px) saturate(160%); overflow:hidden; }
   .card::before{ content:""; position:absolute; inset:0 0 auto 0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent); }
   body.dark .card{ box-shadow:0 10px 30px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.08); } body.light .card{ box-shadow:0 10px 26px rgba(40,60,90,0.1), inset 0 1px 0 rgba(255,255,255,0.6); }
-  .c-lbl{ font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:0.1em; color:var(--mut); display:flex; align-items:center; gap:7px; margin-bottom:11px; }
-  .c-lbl .d{ width:5px; height:5px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
-  .c-lbl .age{ margin-left:auto; font-size:8.5px; color:var(--faint); letter-spacing:0; }
+  /* F260727 — section titles you can actually read. Operator, 27-Jul: "each of the sections, lets
+     highlight the title of each section a bit clearer, right now its tough to see what the title
+     is." The desk carried TWO title styles: the readable .f149-h (Conviction Book, Regime Alpha)
+     and this one — 9px grey uppercase mono — on 60+ sections, which is why the top half of every
+     tab read as an undifferentiated wall. They converge here on the readable one. The dot, the
+     right-hand .age meta and .c-lbl.sub keep their old weight so nothing else reflows. */
+  .c-lbl{ font-family:var(--font-sans); font-size:12.5px; font-weight:650; letter-spacing:-0.1px; color:var(--ink); display:flex; align-items:center; gap:8px; margin-bottom:11px; }
+  .c-lbl .d{ width:5px; height:5px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); flex:0 0 auto; }
+  .c-lbl .age{ margin-left:auto; font-family:var(--font-mono); font-size:8.5px; font-weight:400; text-transform:uppercase; letter-spacing:0.06em; color:var(--faint); }
 
   .kpis{ display:grid; grid-template-columns:repeat(6,1fr); gap:9px; margin-bottom:13px; }
   .kpi{ position:relative; background:var(--glass); border:1px solid var(--border); border-radius:12px; padding:11px 13px; overflow:hidden; }
@@ -1082,7 +1088,46 @@
 .tlperf{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.9fr);gap:16px;align-items:start}
 @media(max-width:760px){.tlperf{grid-template-columns:1fr}}
 .tlperf-l,.tlperf-r{min-width:0}
-.c-lbl.sub{font-size:10px;opacity:.85;margin-bottom:7px}
+.c-lbl.sub{font-size:11px;font-weight:600;color:var(--ink2);opacity:1;margin-bottom:7px}
+/* F260727 THE BOARD — grid (what is everything doing) + tracks (how far). Uses only existing
+   :root tokens; no new palette. Identity never rests on hue: the trend is the COLUMN and a glyph. */
+.bd-grid{margin-top:4px;overflow-x:auto}
+.bd-hr,.bd-r{display:grid;grid-template-columns:132px repeat(3,minmax(0,1fr));gap:8px;align-items:start}
+.bd-hr{padding-bottom:7px}
+.bd-th{font-family:var(--font-mono);font-size:8.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--mut)}
+.bd-r{padding:8px 0;border-top:1px solid var(--hair)}
+.bd-rl b{display:block;font-size:12px;font-weight:600;color:var(--ink)}
+.bd-rl i{display:block;font-family:var(--font-mono);font-size:8.5px;font-style:normal;text-transform:uppercase;letter-spacing:0.05em;color:var(--faint);margin-top:2px}
+.bd-c{display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;min-height:22px}
+.bd-e{color:var(--faint);font-size:12px;padding:2px}
+.bd-k{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:6px;font-family:var(--font-mono);font-size:10px;background:var(--glass2);border:1px solid var(--hair);color:var(--ink2);cursor:default;transition:border-color .14s,color .14s}
+.bd-k:hover{border-color:var(--border);color:var(--ink)}
+.bd-k i{font-size:8px;font-style:normal;opacity:.8}
+.bd-k.fire{border-color:rgba(63,207,122,0.55);background:var(--pos-soft);color:var(--ink)}
+.bd-k.fire::after{content:"FIRE";font-size:7.5px;letter-spacing:0.1em;color:var(--pos)}
+.bd-k.wch{border-color:rgba(255,180,77,0.45)}
+.bd-k.wch::after{content:"WATCH";font-size:7.5px;letter-spacing:0.1em;color:var(--watch)}
+.bd-t{display:grid;grid-template-columns:118px minmax(0,1fr) 132px;gap:11px;align-items:center;padding:8px 0 6px;border-top:1px solid var(--hair)}
+.bd-tk{font-size:12px;font-weight:600;color:var(--ink)}
+.bd-tk i{display:block;font-family:var(--font-mono);font-size:8px;font-style:normal;text-transform:uppercase;letter-spacing:0.05em;color:var(--faint);margin-top:1px}
+.bd-rail{position:relative;height:30px}
+.bd-bar{position:absolute;left:0;right:0;top:14px;height:2px;background:var(--hair);border-radius:2px}
+.bd-cap{position:absolute;top:9px;width:2px;height:12px;border-radius:2px}
+.bd-cap.lo{left:0;background:var(--pos)} .bd-cap.hi{right:0;background:var(--neg)}
+.bd-dot{position:absolute;top:9px;width:11px;height:11px;border-radius:50%;transform:translateX(-5.5px);border:2px solid var(--glass2)}
+.bd-px{position:absolute;top:-3px;transform:translateX(-50%);font-family:var(--font-mono);font-size:9px;color:var(--ink2);white-space:nowrap}
+.bd-en{position:absolute;top:23px;font-family:var(--font-mono);font-size:8px;color:var(--faint);white-space:nowrap}
+.bd-en.lo{left:0} .bd-en.hi{right:0}
+.bd-rr{font-family:var(--font-mono);font-size:10px;color:var(--mut);text-align:right}
+.bd-rr b{color:var(--ink)}
+.bd-why{grid-column:2/-1;font-size:10.5px;color:var(--faint);line-height:1.4;margin-top:-3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bd-nbh{margin-top:11px;font-family:var(--font-mono);font-size:8.5px;text-transform:uppercase;letter-spacing:0.09em;color:var(--mut)}
+.bd-nb{display:grid;grid-template-columns:118px minmax(0,1fr);gap:11px;padding:6px 0;border-top:1px solid var(--hair);font-size:12px;color:var(--ink)}
+.bd-nb span{font-size:10.5px;color:var(--mut)}
+@media(max-width:760px){
+  .bd-hr,.bd-r{grid-template-columns:96px repeat(3,minmax(0,1fr));gap:5px}
+  .bd-t{grid-template-columns:96px minmax(0,1fr)} .bd-rr{grid-column:2;text-align:left}
+}
 .tldv-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
 .tldv-seg{flex:0 0 auto}
 .tldv-h{font-size:10.5px;font-weight:700;letter-spacing:.04em;margin:2px 0 6px;text-transform:uppercase}
@@ -1534,6 +1579,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(o.compact){ if(a>=1e7)return '₹'+(n/1e7).toFixed(2)+'Cr'; if(a>=1e5)return '₹'+(n/1e5).toFixed(2)+'L'; return '₹'+n.toLocaleString('en-IN',{maximumFractionDigits:0}); }
     return '₹'+n.toLocaleString('en-IN',{maximumFractionDigits:o.dp??0}); };
   const fmtNum=(n,dp=0)=>(n==null||isNaN(n))?'—':(+n).toLocaleString('en-IN',{maximumFractionDigits:dp});
+  // F260727 — dates in words, never digits. Operator, 27-Jul: "wherever there is a label mentioning
+  // any date, please don't use the number format, it is never readable... always use dates with the
+  // month name and date, year is always implied or can be used MAX with a '26 suffix."
+  // 2026-07-27 -> "27 Jul"   ·   fmtD(s,true) -> "27 Jul '26" when the year is genuinely load-bearing.
+  // Own array, not the `_MONS` declared further down: that one is a `var` assigned inside a later
+  // block, so reusing it would make this helper silently order-dependent. (The shell now has three
+  // month-name arrays — worth consolidating, but not in a change that touches the live desk.)
+  const _FMTD_MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtD(s,withYear){ const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(s==null?'':s));
+    if(!m) return esc(s==null?'—':s);
+    const d=(+m[3])+' '+_FMTD_MON[(+m[2])-1]; return withYear?(d+" '"+m[1].slice(2)):d; }
   const cls=(n)=> n==null?'':(n>0?'pos':(n<0?'neg':''));
   const PEND_EMIT='awaiting emit — not produced by the aggregate pipeline yet (additive-only · never fabricated).';
   const pending=(t,m)=>'<div class="pending"><div class="pt">⏳ '+esc(t)+'</div><div class="pm">'+esc(m)+'</div></div>';
@@ -1802,7 +1858,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     return '<div class="card hv-wrap full" style="margin-bottom:13px">'+
       '<div class="c-lbl"><span class="d"></span>The honest verdict'+
       ((typeof HT!=="undefined")?HT('What the ledger actually says, stated plainly rather than curve-fitted. Two measured findings: (1) a higher gate-count score did NOT predict a better forward return - across most lenses the relationship inverts, and the top-scored tier was the worst; (2) the edge that did survive came from the pre-filtered universe and from full technical confluence. That is why the desk stopped ranking by score and now fires off hand-verified fib structure. The retired day-trade book below is the evidence, kept visible on purpose.'):'')+
-      '<span class="age">'+(sp.n_total||0)+' ledger signals &middot; as of '+esc(String(sp.as_of||'?'))+'</span></div>'+
+      '<span class="age">'+(sp.n_total||0)+' ledger signals &middot; as of '+fmtD(sp.as_of)+'</span></div>'+
       '<div class="hv-claims">'+
         '<div class="hv-claim neg"><span class="hvc-k">Score does not rank</span><span class="hvc-v">a higher gate count did not mean a better forward return - across most lenses the relationship inverts, and the best-scored tier performed worst</span></div>'+
         '<div class="hv-claim pos"><span class="hvc-k">What did carry edge</span><span class="hvc-v">the pre-filtered universe, and FULL technical confluence - so fires now come from verified fib structure, never from a score</span></div>'+
@@ -1858,8 +1914,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // ===== SECTION 1 — SCREEN EDGE (SIGNALS · positional by construction) ====================
     html+='<div class="pf-sec" id="pf-sec-1"><div class="pf-sh"><span class="pf-n">01</span><h3>Screen Edge</h3>'
       +'<span class="pop sig">SIGNALS</span><span class="uchip">% vs Nifty</span><span class="uchip scope">Positional · by construction</span>'
-      +((pa&&(pa.n_maturing||pa.latest_matured_date))?('<span class="matchip" title="Positional picks enter this chart only after their ~'+(pa.maturation_window_sessions||21)+'-session alpha window completes. Entries after '+esc(pa.latest_matured_date||'—')+' are still maturing. Sparse stretches = few clean screener passers in that regime, not missing data.">⏳ '+(pa.n_maturing||0)+' maturing · last '+esc(pa.latest_matured_date||'—')+'</span>'):'')
-      +'<span class="pf-sx">are the screens picking winners?'+(pa&&pa.generated_date?(' · as of '+esc(pa.generated_date)):'')+'</span></div>';
+      +((pa&&(pa.n_maturing||pa.latest_matured_date))?('<span class="matchip" title="Positional picks enter this chart only after their ~'+(pa.maturation_window_sessions||21)+'-session alpha window completes. Entries after '+fmtD(pa.latest_matured_date)+' are still maturing. Sparse stretches = few clean screener passers in that regime, not missing data.">⏳ '+(pa.n_maturing||0)+' maturing · last '+fmtD(pa.latest_matured_date)+'</span>'):'')
+      +'<span class="pf-sx">are the screens picking winners?'+(pa&&pa.generated_date?(' · as of '+fmtD(pa.generated_date)):'')+'</span></div>';
     if(pa && pa.tier_curves){
       var tc=pa.tier_curves;
       var mk=function(arr){ return (arr||[]).map(function(p){ return {d:p.d,y:p.cum_alpha,eps:p.eps,n:p.n}; }); };
@@ -1932,7 +1988,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       +'<span class="pf-sx">executed trades · system-paper + operator-real · realized R</span>'
       +'<span class="pf-toggle-wrap"><span class="dtseg">'+['fib','swing','positional'].map(function(k){return '<button class="'+(k===__pv?'on':'')+'" onclick="perfSetView(\''+k+'\')">'+__PVLBL[k]+'</button>';}).join('')+'</span></span></div>';
     var fyVal=(tot.realized_fy!=null)?tot.realized_fy:null;
-    var fyKpi='<div class="kpis pf-kpis"><div class="kpi"><div class="kl">Realized FY · real money</div><div class="kv sm sens '+(fyVal!=null?(fyVal>0?'pos':'neg'):'')+'">'+(LOCKED?'🔒':(fyVal!=null?fmtINR(fyVal,{compact:true}):'—'))+'</div><div class="ks">'+(tot.realized_fy_as_of?('cap-gains · as of '+esc(String(tot.realized_fy_as_of))):'broker cap-gains series')+'</div></div>'+
+    var fyKpi='<div class="kpis pf-kpis"><div class="kpi"><div class="kl">Realized FY · real money</div><div class="kv sm sens '+(fyVal!=null?(fyVal>0?'pos':'neg'):'')+'">'+(LOCKED?'🔒':(fyVal!=null?fmtINR(fyVal,{compact:true}):'—'))+'</div><div class="ks">'+(tot.realized_fy_as_of?('cap-gains · as of '+fmtD(tot.realized_fy_as_of)):'broker cap-gains series')+'</div></div>'+
       (tl?('<div class="kpi"><div class="kl">Ledger trades</div><div class="kv sm">'+(tl.n_trades||0)+'</div><div class="ks">'+(tl.n_system||0)+' system-paper · '+(tl.n_operator||0)+' operator-real</div></div>'):'')+
       (tl&&tl.metrics?('<div class="kpi"><div class="kl">Expectancy · all</div><div class="kv sm '+(tl.metrics.expectancy>0?'pos':'neg')+'">'+(tl.metrics.expectancy!=null?((tl.metrics.expectancy>0?'+':'')+(+tl.metrics.expectancy).toFixed(2)+'R'):'—')+'</div><div class="ks">mean R / trade · realized</div></div>'):'')+'</div>';
     if(tl){
@@ -2132,7 +2188,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     fh+='<div class="c-lbl" style="margin-top:12px"><span class="d"></span>Regime · last 10 sessions'+((typeof HT!=="undefined")?HT('Market-regime call over recent sessions: GREEN deploy · YELLOW selective · RED risk-off.'):'')+'<span class="age">history</span></div>'+strip;
     var el=$('card-fires'); if(el) el.innerHTML=fh;
     // right-hand pane: the live Radar fires, so the Screener still SHOWS what the desk is acting on
-    var ph='<div class="c-lbl"><span class="d"></span>🎯 Radar fires'+((typeof HT!=="undefined")?HT('The names the desk is actually firing on now: price at a verified fib support, STRONG grade, 3+ independent sources, R:R at least 1.5 to the next banked level. Entry/stop/target are BANKED structure, scored on the last close.'):'')+'<span class="age">'+esc(rad.price_as_of||'?')+' close · click → Radar</span></div>';
+    var ph='<div class="c-lbl"><span class="d"></span>🎯 Radar fires'+((typeof HT!=="undefined")?HT('The names the desk is actually firing on now: price at a verified fib support, STRONG grade, 3+ independent sources, R:R at least 1.5 to the next banked level. Entry/stop/target are BANKED structure, scored on the last close.'):'')+'<span class="age">'+fmtD(rad.price_as_of)+' close · click → Radar</span></div>';
     var FR=(rad.fires||[]);
     if(!FR.length) ph+=pending('Radar fires','no verified bank sits at a qualifying support in this emit — a genuine no-fire day, not a broken feed.');
     else ph+=FR.map(function(f){ return '<div class="fire fclick" onclick="tlOpenTrade(\''+esc(f.ticker)+'\',\'fib\')" style="cursor:pointer">'+
@@ -2208,7 +2264,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       const min=DATA.emitted_at_utc?Math.floor((Date.now()-new Date(DATA.emitted_at_utc).getTime())/60000):null;
       $('op-age').innerHTML='<span class="dot"></span>data <b>'+(min==null?'—':(min<90?min+'m':Math.floor(min/60)+'h'))+'</b> old';
       const bg=reg.binding_gate||{};
-      (function(){ var _ch=function(c,h){return '<span class="ch"><span class="dt2" style="background:'+c+'"></span><span>'+h+'</span></span>';}; var _rc=zone==='RED'?'var(--neg)':(zone==='GREEN'?'var(--pos)':'var(--watch)'); var _fc=fires.filter(function(f){return f.confirmed;}), _fn=_fc.slice(0,4).map(function(f){return esc(f.ticker);}).join(', '); var _tb=bubble.slice().filter(function(b){return +b.lean>0;}).sort(function(a,b){return b.composite-a.composite;})[0]; var _pd=(DATA.daytrade_freshness||{}).price_as_of||''; var H='<div class="wcaph">Today\u2019s action'+(_pd?(' \u00b7 as of '+esc(_pd)):'')+'</div>'; H+=_ch(_rc,'Regime <b>'+esc(zone)+(reg.score!=null?(' \u00b7 '+esc(String(reg.score))):'')+'</b>'+(reg.attack_mode?(' \u00b7 '+esc(reg.attack_mode)):'')); if(bg.id) H+=_ch('var(--watch)','Gate <b>'+esc(bg.id)+'</b> '+esc(bg.status||'')+' '+esc(bg.reading||'')+(bg.threshold?(' ('+esc(bg.threshold)+')'):'')); H+=_ch(_fc.length?'var(--pos)':'var(--mut)',_fc.length?('<b>'+_fc.length+'</b> fire'+(_fc.length>1?'s':'')+' today \u00b7 '+_fn+(_fc.length>4?(' +'+(_fc.length-4)):'')):'No confirmed fires today'); if(_tb) H+=_ch('var(--cyan)','Top conviction <b>'+esc(_tb.ticker)+'</b> \u00b7 composite '+Math.round(_tb.composite)); if(cat&&cat.event) H+=_ch('var(--violet)','Next \u00b7 '+esc((cat.event||'').trim())); $('op-changed').innerHTML=H; })(); }catch(e){__reportErr('opbar',e);}
+      (function(){ var _ch=function(c,h){return '<span class="ch"><span class="dt2" style="background:'+c+'"></span><span>'+h+'</span></span>';}; var _rc=zone==='RED'?'var(--neg)':(zone==='GREEN'?'var(--pos)':'var(--watch)'); var _fc=fires.filter(function(f){return f.confirmed;}), _fn=_fc.slice(0,4).map(function(f){return esc(f.ticker);}).join(', '); var _tb=bubble.slice().filter(function(b){return +b.lean>0;}).sort(function(a,b){return b.composite-a.composite;})[0]; var _pd=(DATA.daytrade_freshness||{}).price_as_of||''; var H='<div class="wcaph">Today\u2019s action'+(_pd?(' \u00b7 as of '+fmtD(_pd)):'')+'</div>'; H+=_ch(_rc,'Regime <b>'+esc(zone)+(reg.score!=null?(' \u00b7 '+esc(String(reg.score))):'')+'</b>'+(reg.attack_mode?(' \u00b7 '+esc(reg.attack_mode)):'')); if(bg.id) H+=_ch('var(--watch)','Gate <b>'+esc(bg.id)+'</b> '+esc(bg.status||'')+' '+esc(bg.reading||'')+(bg.threshold?(' ('+esc(bg.threshold)+')'):'')); H+=_ch(_fc.length?'var(--pos)':'var(--mut)',_fc.length?('<b>'+_fc.length+'</b> fire'+(_fc.length>1?'s':'')+' today \u00b7 '+_fn+(_fc.length>4?(' +'+(_fc.length-4)):'')):'No confirmed fires today'); if(_tb) H+=_ch('var(--cyan)','Top conviction <b>'+esc(_tb.ticker)+'</b> \u00b7 composite '+Math.round(_tb.composite)); if(cat&&cat.event) H+=_ch('var(--violet)','Next \u00b7 '+esc((cat.event||'').trim())); $('op-changed').innerHTML=H; })(); }catch(e){__reportErr('opbar',e);}
 
     try{ buildReadHeroes((reg.headline||'').trim());
       const topBull=bubble.slice().filter(b=>+b.lean>0).sort((a,b)=>b.composite-a.composite)[0];
@@ -2535,7 +2591,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(!fc.names||!fc.names.length){ if(!fc.locked) return '';
       return '<div class="card fc-wrap" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>Fib confluence radar · engine-scored'+
         '<span class="age">'+(fc.n_names||0)+' names · '+(fc.n_points||0)+' points · 🔒 locked</span></div>'+
-        '<div class="fc-note">engine-scored on the <b>'+esc(String(fc.price_as_of||'?'))+'</b> close (not intraday) · 🔒 unlock to view the levels · operator-private · AES-GCM</div></div>'; }
+        '<div class="fc-note">engine-scored on the <b>'+fmtD(fc.price_as_of)+'</b> close (not intraday) · 🔒 unlock to view the levels · operator-private · AES-GCM</div></div>'; }
     var arrow=function(s){return s==='above'?'▲':(s==='below'?'▼':'·');};
     var SETUP={'buy-support':['buy','BUY-SUPPORT'],'at-support':['buy','AT-SUPPORT'],'falling-knife':['knife','KNIFE'],'at-resistance':['res','AT-RESISTANCE'],'approaching':['watch','APPROACHING'],'watch':['watch','WATCH']};
     var srcOf=function(p){ var s=(p.tfs||[]).join('+'); if(p.ma_hits&&p.ma_hits.length) s+='+'+p.ma_hits.join('+'); return s; };
@@ -2647,10 +2703,100 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '<div class="c-lbl"><span class="d"></span>&#127919; The Radar &middot; fib-confluence fires'+
       ((typeof HT!=="undefined")?HT('The desk fires here. A FIRE means price is sitting ON a hand-verified fib support built from 3+ independent sources, graded STRONG, in an up or mixed trend, with at least 1.5 R:R to the next banked level overhead. Entry, stop and target are BANKED STRUCTURE - not fire-day price action. Scored on the last close, never intraday. Each fire shows both takes: the level-ID read (which gates the fire) and the automatic composite read (the co-equal second opinion) - where they disagree, that is information, not noise.'):'')+
       '<span class="age">'+(rc.fire||0)+' fire &middot; '+(rc.watch||0)+' watch &middot; '+(rc.exclude||0)+' excluded</span></div>'+
-      '<div class="fc-note">gated on the <b>'+esc(rad.price_as_of||'?')+'</b> close (not intraday) &middot; <b>verified banks only, permanently</b> &mdash; the desk never fires on a level you have not read yourself. Unstudied names are a work queue, not a widening trigger.</div>'+
+      '<div class="fc-note">gated on the <b>'+fmtD(rad.price_as_of)+'</b> close (not intraday) &middot; <b>verified banks only, permanently</b> &mdash; the desk never fires on a level you have not read yourself. Unstudied names are a work queue, not a widening trigger.</div>'+
       body+
       (watch.length?('<div class="c-lbl sub" style="margin-top:11px"><span class="d"></span>Watch &middot; structurally sound, not actionable yet<span class="age">'+watch.length+' names</span></div>'+watch.map(watchRow).join('')):'')+
       '</div>';
+  }
+
+  // -- THE BOARD (F260727) -----------------------------------------------------------------------
+  // "you're telling me besides these 2 fires and the 4 watch, there's no move being made from all
+  // the stocks? technically each stock that has a verified fib bank should be doing something in
+  // relation to its levels that the system can highlight." — operator, 27-Jul.
+  //
+  // They were right, and the read already existed: every EXCLUDED name carries a setup, a trend, a
+  // grade, a score, an R:R and a written reason. The emit binned all of it and published the
+  // integer 35. It now publishes `fib_radar.board` — every scored name through the same public
+  // allowlist as the fires — and this renders it.
+  //
+  // Two encodings, deliberately: the GRID answers "what is everything doing" at a glance (the
+  // empty top-left cell — on support AND in an uptrend — is itself the read on a day like today),
+  // and the TRACKS answer "how far", which no bucket can. Identity is never colour alone: trend is
+  // the COLUMN plus a glyph, verdicts are spelled out. The desk's green/amber/red sit ~4 ΔE apart
+  // under red-green colourblindness, so nothing here may depend on hue.
+  var _BROWS=[
+    {key:'at-support',   name:'On support',    desc:'the buy zone'},
+    {key:'approaching',  name:'Approaching',   desc:'moving toward a level'},
+    {key:'in-zone',      name:'In range',      desc:'between levels'},
+    {key:'at-resistance',name:'At resistance', desc:"trim / don't chase"},
+    {key:'in-supply',    name:'In supply',     desc:'not accepted above', alt:['in-supply-zone','at-supply']},
+    {key:'falling-knife',name:'Falling knife', desc:'no floor holding'}
+  ];
+  var _BTRENDS=[{k:'up',n:'Uptrend',g:'▲'},{k:'mixed',n:'Mixed',g:'◆'},{k:'down',n:'Downtrend',g:'▼'}];
+  function _bRow(setup){ for(var i=0;i<_BROWS.length;i++){ var r=_BROWS[i];
+      if(r.key===setup || (r.alt&&r.alt.indexOf(setup)>=0)) return r.key; } return 'in-zone'; }
+  // The band is entry (nearest banked support) -> target (next banked level). A name missing either
+  // has NO band, and is listed apart rather than pinned to an axis it does not sit on — a faked
+  // position is exactly the "absence rendered as a value" this desk keeps getting bitten by.
+  function _bBand(b){ var e=b.entry,t=b.target,p=b.current_px;
+    if(e==null||t==null||p==null||t===e) return null;
+    return {lo:e,hi:t,px:p,pct:Math.max(0,Math.min(100,(p-e)/(t-e)*100))}; }
+
+  function fibBoardHTML(){
+    var rad=(DATA&&DATA.fib_radar)||null; if(!rad) return '';
+    var board=rad.board||[];
+    if(!board.length) return '';
+    var g='<div class="bd-grid"><div class="bd-hr"><span></span>'+_BTRENDS.map(function(t){
+        return '<span class="bd-th">'+t.n+'</span>'; }).join('')+'</div>';
+    _BROWS.forEach(function(row){
+      var inRow=board.filter(function(b){ return _bRow(b.setup)===row.key; });
+      if(!inRow.length) return;
+      g+='<div class="bd-r"><span class="bd-rl"><b>'+esc(row.name)+'</b><i>'+esc(row.desc)+' · '+inRow.length+'</i></span>';
+      _BTRENDS.forEach(function(t){
+        var cs=inRow.filter(function(b){ return b.trend===t.k; });
+        g+='<span class="bd-c">'+(cs.length?cs.map(function(b){
+          var cl=b.verdict==='FIRE'?' fire':(b.verdict==='WATCH'?' wch':'');
+          var bd=_bBand(b);
+          var tip=b.ticker+' · '+String(b.setup||'').replace(/-/g,' ')+' · '+t.n.toLowerCase()+
+                  (bd?(' · '+Math.round(bd.pct)+'% of the way from its banked support to the next level'):' · no band to measure')+
+                  ' — '+(b.why||[]).join(' · ');
+          return '<span class="bd-k'+cl+'" title="'+esc(tip)+'"><i>'+t.g+'</i>'+esc(b.ticker)+'</span>';
+        }).join(''):'<span class="bd-e">—</span>')+'</span>';
+      });
+      g+='</div>';
+    });
+    g+='</div>';
+
+    var withBand=[], noBand=[];
+    board.forEach(function(b){ (_bBand(b)?withBand:noBand).push(b); });
+    withBand.sort(function(x,y){ return _bBand(x).pct-_bBand(y).pct; });
+    var tr=withBand.map(function(b){
+      var bd=_bBand(b), tc=b.trend==='up'?'var(--pos)':(b.trend==='down'?'var(--neg)':'var(--watch)');
+      return '<div class="bd-t"><span class="bd-tk">'+tkA(b.ticker,esc(b.ticker))+
+        '<i>'+esc(String(b.setup||'').replace(/-/g,' '))+'</i></span>'+
+        '<span class="bd-rail"><span class="bd-bar"></span><span class="bd-cap lo"></span><span class="bd-cap hi"></span>'+
+          '<span class="bd-dot" style="left:'+bd.pct.toFixed(1)+'%;background:'+tc+'"></span>'+
+          '<span class="bd-px" style="left:'+bd.pct.toFixed(1)+'%">'+fmtINR(bd.px,{dp:2})+'</span>'+
+          '<span class="bd-en lo">'+fmtINR(bd.lo,{dp:2})+' banked support</span>'+
+          '<span class="bd-en hi">next level '+fmtINR(bd.hi,{dp:2})+'</span>'+
+        '</span>'+
+        '<span class="bd-rr">'+esc(b.trend)+' · <b>'+(b.rr!=null?((+b.rr).toFixed(2)+' : 1'):'—')+'</b></span>'+
+        '<span class="bd-why">'+esc((b.why||[])[0]||'')+'</span></div>';
+    }).join('');
+    var nb=noBand.length?('<div class="bd-nbh">'+noBand.length+' with no band to measure</div>'+
+      noBand.map(function(b){ return '<div class="bd-nb">'+tkA(b.ticker,esc(b.ticker))+
+        '<span>'+(b.target==null?'no banked level overhead — nothing to size a reward against'
+                                :'no banked floor beneath — nothing to size a risk against')+
+        ' · '+esc(String(b.setup||'').replace(/-/g,' '))+'</span></div>'; }).join('')):'';
+
+    var c=rad.counts||{};
+    return '<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>The board'+
+      ((typeof HT!=="undefined")?HT('Every name with a hand-verified fib bank, placed by where price is standing in its own structure. The grid answers "what is everything doing" — the row is the position, the column is the trend, so the top-left cell (on support AND in an uptrend) is the ideal set-up and an empty one is itself a read. The tracks below answer "how far", sorted nearest-support first. This exists because the desk used to compute all of this and then publish only the handful that passed the buy gate.'):'')+
+      '<span class="age">'+board.length+' names · '+fmtD(rad.price_as_of)+' close</span></div>'+
+      '<div class="fc-note">what <b>everything</b> is doing — not just the '+((c.fire||0)+(c.watch||0))+' that clear the buy gate</div>'+
+      g+
+      '<div class="c-lbl sub" style="margin-top:13px"><span class="d"></span>Tracks<span class="age">nearest support first</span></div>'+
+      tr+nb+'</div>';
   }
 
   // -- DECISION LEDGER (F260727) -----------------------------------------------------------------
@@ -2675,7 +2821,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<span class="dec-o">'+esc(String(i.owner||''))+'</span>'+
         '<span class="dec-d">'+(od
             ? ('<b>OVERDUE '+i.days_overdue+'d</b>')
-            : ('due '+esc(String(i.decide_by||'&mdash;'))))+'</span>'+
+            : ('due '+(i.decide_by?fmtD(i.decide_by,true):'&mdash;')))+'</span>'+
         '<span class="dec-a">open '+(i.days_open!=null?i.days_open+'d':'&mdash;')+'</span></div>';
     };
     return '<div class="card dec-wrap'+((c.overdue||0)?' has-od':'')+'" style="margin-bottom:13px">'+
@@ -2690,11 +2836,16 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     const sp=(DATA&&DATA.signal_perf)||null;
     const _MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
     const fmtDay=function(s){ var p=String(s||'').split(' ')[0].split('-'); if(p.length<3) return esc(String(s||'')); var m=_MON[(+p[1])-1]||''; return (+p[2])+' '+m; };
-    if(!tl && !sp){ setFace('z-lab', decisionsHTML()+fibRadarHTML()+
+    if(!tl && !sp){ setFace('z-lab', decisionsHTML()+fibRadarHTML()+fibConflHTML()+fibBoardHTML()+
       '<div class="card empty-face"><div class="ef-ic">🧪</div><div class="ef-t">Radar</div>'+
-      '<div class="ef-m">🔒 Unlock to view the deliberate-trade ledger. The Radar above is public — it carries levels only, never holdings.</div>'+
-      '<div class="ef-tag">operator-private · AES-GCM</div></div>'+fibConflHTML()); return; }
-    let html=decisionsHTML()+fibRadarHTML();   // F260727 decisions outrank fires; F260725 — the Radar leads the zone, locked or not
+      '<div class="ef-m">🔒 Unlock to view the deliberate-trade ledger. The fires, the engine map and the board above are public — they carry levels only, never holdings.</div>'+
+      '<div class="ef-tag">operator-private · AES-GCM</div></div>'); return; }
+    // F260727 zone order, operator-specified 27-Jul: fires -> engine map -> board. The engine map
+    // used to be appended at the very BOTTOM of the zone, below the whole ledger; "after the fib
+    // confluence fires section, I actually want you to place the fib confluence radar - engine
+    // scored". Fires answer "is this a trade", the map answers "where does structure agree", the
+    // board answers "what is everything doing" — decision, map, sweep.
+    let html=decisionsHTML()+fibRadarHTML()+fibConflHTML()+fibBoardHTML();
     // F260617: confluence day-trade backtest (signal quality) relocated to the Screener panel (renderDTConf -> #f1-dtconf).
     if(tl){
       const open=tl.open||[], closed=tl.closed||[], dailyR=tl.daily_r||[], sc=tl.scorecard||{}, byO=tl.scorecard_by_origin||{};
@@ -3182,10 +3333,15 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '</div>';
       var tlToggle='<div class="dtseg">'+TLVIEWS.map(function(k){ return '<button data-view="'+k+'" class="'+(k===view?'on':'')+'" onclick="tlSetView(\''+k+'\')">'+TLVLBL[k]+(vCnt[k]?(' '+vCnt[k]):'')+'</button>'; }).join('')+'</div>';
       var _glossHT=HT('What the numbers mean — “risk” is the amount you would lose if the trade hit its stop (the entry-to-stop distance). “% of risk” = profit as a percentage of that amount (+49% = made about half your risk). “× risk” = profit in multiples of it (+8.9× = banked about 9 trades’ worth of risk). “Win rate” = share of trades that closed in profit. “Breakeven” = closed without a loss.');
-      var dtPerfCard='<div class="card" style="margin-bottom:13px">'+
+      // F260727 — hidden until something has actually CLOSED. Operator, 27-Jul: "I don't think this
+      // is relevant firstly, cause its blank and we aren't technically making any trades as of now."
+      // It is blank because nothing has RESOLVED yet (3 are logged and open), not because nothing is
+      // logged — so it is gated rather than deleted, and returns the day a trade closes. A card of
+      // dashes teaches the eye to skip the section it sits in.
+      var dtPerfCard=(v&&v.n)?('<div class="card" style="margin-bottom:13px">'+
         '<div class="tldv-bar"><div class="c-lbl" style="margin:0"><span class="d"></span>'+esc(TLVLBL[view])+' Performance'+_glossHT+'</div>'+tlToggle+'</div>'+
         '<div class="sigbanner">▸ <b>Your executed '+esc(TLVLBL[view])+' trades</b> (system + operator) — not a signal backtest.'+(v.model_note?(' <i style="color:var(--faint);font-style:normal">'+esc(v.model_note)+'</i>'):'')+'</div>'+
-        dtPerfKpis+'</div>';
+        dtPerfKpis+'</div>'):'';
             window.tlLadGlyph=function(t){ var L=window.tlLadder(t); if(!L||!L.rungs) return ''; var g='<span class="lad-e" title="entry">E</span>'; L.rungs.forEach(function(r,i){ g+='<span class="lad-sep">▸</span><span class="lad-t'+(r.booked?' bk':'')+'" title="T'+(i+1)+' '+fmtNum(r.px,1)+(r.booked?' · booked':'')+'">'+(r.booked?'✓':('T'+(i+1)))+'</span>'; }); g+='<span class="lad-sep">·</span><span class="lad-s" title="stop">S</span>'+(L.runner?'<span class="lad-run" title="runner live">◤</span>':''); return '<span class="tllad">'+g+'</span>'; };
             var _attn=(open||[]).map(function(t){ var a=window.tlNeedsAttn(t); return a.need?{t:t,a:a}:null; }).filter(Boolean);
             var _railBody=_attn.length?_attn.map(function(x){ var t=x.t, pop=window.tlPop(t,opMeth); return '<div class="tl-attn-row"><span class="dot live"></span>'+tkA(t.ticker,esc(t.ticker))+'<span class="pop '+pop+' popmini">'+pop.toUpperCase()+'</span>'+window.tlLadGlyph(t)+'<span class="tl-attn-why">'+esc(x.a.reason)+'</span></div>'; }).join(''):'<div class="tl-attn-empty">✓ Nothing needs you today — no live trade near its time-cap or mid-runner.</div>';
@@ -3213,9 +3369,11 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<div class="tlk-cta"><span class="tlk-lk">🔒</span> Trade Lab is operator-private (AES-GCM). Unlock to load your live open trades, scorecard and expectancy — the structure above fills in with your ledger.</div>'+
       '</div>';
     }
-    // F260725 - the Radar already leads `html`; the locked full-bank stub and the F149 panels
-    // sit BELOW it, so the actionable surface is what the operator sees first.
-    html = html + fibConflHTML() + f149PanelsHTML();
+    // F260725 - the Radar already leads `html`; the F149 panels sit BELOW it, so the actionable
+    // surface is what the operator sees first. F260727: fibConflHTML moved OUT of this tail and up
+    // to directly after the fires (operator-specified order) — appending it here too would render
+    // the engine map twice.
+    html = html + f149PanelsHTML();
     setFace('z-lab', html);
     if(tl){ try{ window.tlRenderHist(); window.tlRenderLedger(); }catch(e3){__reportErr('lab-tl',e3);} }
   }catch(e){__reportErr('lab',e);} }
@@ -3274,7 +3432,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       ats.forEach(function(x){ rows.push({a:x.account,v:x.value,c:x.cost,p:(x.cost?((x.value-x.cost)/x.cost*100):null),n:x.n_stocks}); });
       if(!rows.length) return pending('Multi-account book','unlock to load the family account book. '+PEND_EMIT);
       return '<table class="tbl"><thead><tr><th style="text-align:left">Account</th><th>Value</th><th>Cost</th><th>P&amp;L %</th><th>Names</th></tr></thead><tbody>'+rows.map(function(r){ return '<tr class="acctrow'+(r.a===window.__selAcct?' on':'')+'" data-acct="'+esc(r.a)+'" onclick="selAccount(this.dataset.acct)"><td style="text-align:left">'+(r.you?'<span class="star" style="color:var(--watch)">★</span> ':'')+esc(r.a)+'</td><td class="sens">'+(r.v!=null?fmtINR(r.v,{compact:true}):'—')+'</td><td class="sens">'+(r.c!=null?fmtINR(r.c,{compact:true}):'—')+'</td><td class="sens '+cls(r.p)+'">'+(r.p!=null?fmtPct(r.p):'—')+'</td><td>'+(r.n!=null?r.n:'—')+'</td></tr>'; }).join('')+(gt.current_value!=null?('<tr style="border-top:1px solid var(--border)"><td style="text-align:left;color:var(--cyan)">Family grand total</td><td class="sens">'+fmtINR(gt.current_value,{compact:true})+'</td><td class="sens">'+(gt.total_cost!=null?fmtINR(gt.total_cost,{compact:true}):'—')+'</td><td class="sens '+cls(gt.roi_pct)+'">'+(gt.roi_pct!=null?fmtPct(gt.roi_pct):'—')+'</td><td>'+(gt.n_stocks!=null?gt.n_stocks:'—')+'</td></tr>'):'')+'</tbody></table>'; })()+'</div>'+
-      '<div class="card"><div class="c-lbl"><span class="d"></span>Closed trades · realized P&amp;L</div>'+(function(){ var cl=(DATA.recent_closed||[]); if(!cl.length) return pending('Closed trades','no positions closed in this window.'); return '<table class="tbl"><thead><tr><th>Ticker</th><th>Cluster</th><th>Exit</th><th>Realized</th><th>Reason</th></tr></thead><tbody>'+cl.map(function(c){ return '<tr><td>'+esc(c.ticker)+'</td><td style="text-align:left;color:var(--mut)">'+esc(c.cluster||'')+'</td><td>'+esc(c.exit_date||'')+'</td><td class="sens '+cls(c.realised_pnl)+'">'+(c.realised_pnl!=null?fmtINR(c.realised_pnl,{compact:true}):'—')+'</td><td style="text-align:left;color:var(--faint)">'+esc(c.exit_reason||'')+'</td></tr>'; }).join('')+'</tbody></table>'; })()+'</div></div>');
+      '<div class="card"><div class="c-lbl"><span class="d"></span>Closed trades · realized P&amp;L</div>'+(function(){ var cl=(DATA.recent_closed||[]); if(!cl.length) return pending('Closed trades','no positions closed in this window.'); return '<table class="tbl"><thead><tr><th>Ticker</th><th>Cluster</th><th>Exit</th><th>Realized</th><th>Reason</th></tr></thead><tbody>'+cl.map(function(c){ return '<tr><td>'+esc(c.ticker)+'</td><td style="text-align:left;color:var(--mut)">'+esc(c.cluster||'')+'</td><td>'+fmtD(c.exit_date)+'</td><td class="sens '+cls(c.realised_pnl)+'">'+(c.realised_pnl!=null?fmtINR(c.realised_pnl,{compact:true}):'—')+'</td><td style="text-align:left;color:var(--faint)">'+esc(c.exit_reason||'')+'</td></tr>'; }).join('')+'</tbody></table>'; })()+'</div></div>');
     const row=$('hc-row'); if(row){ const scc=function(d){ row.scrollBy({left:d*250,behavior:'smooth'}); }; const p=$('hc-prev'),nn=$('hc-next'); if(p)p.onclick=function(){scc(-1);}; if(nn)nn.onclick=function(){scc(1);}; }
   }catch(e){__reportErr('port',e);} }
 
@@ -3343,7 +3501,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       return '<div class="rr-trow'+(armed?' armed':'')+'"><div><div class="rr-trig-t">'+esc(t.trigger)+'</div>'+(t.status?('<div class="rr-trig-s">'+esc(t.status)+'</div>'):'')+'</div><span class="rr-tdir '+dc+'">'+esc(t.direction||'')+'</span></div>';
     }).join('')+'</div>'):pending('Falsifiable triggers','none defined.');
     var tcMap={warning:'watch',positive:'pos',info:'cyan',accent:'violet'};
-    var thHTML=themes.length?('<div class="thbubbles">'+themes.slice(0,8).map(function(t){var k=tcMap[t.color]||'cyan';return '<div class="thbub '+k+'"><span class="thn">'+esc(t.theme)+'</span>'+(t.key_date?('<span class="thd">key '+esc(t.key_date)+'</span>'):'')+'</div>';}).join('')+'</div>'):pending('Active themes','no active themes in this emit.');
+    var thHTML=themes.length?('<div class="thbubbles">'+themes.slice(0,8).map(function(t){var k=tcMap[t.color]||'cyan';return '<div class="thbub '+k+'"><span class="thn">'+esc(t.theme)+'</span>'+(t.key_date?('<span class="thd">key '+fmtD(t.key_date)+'</span>'):'')+'</div>';}).join('')+'</div>'):pending('Active themes','no active themes in this emit.');
     var covHTML=cov.length?('<div class="rr-cov">'+cov.map(function(c){return '<div class="rr-covrow">'+esc(typeof c==='string'?c:(c.area||c.name||''))+'</div>';}).join('')+'</div>'):'<div class="rr-none">No coverage gaps flagged.</div>';
     var flHTML=flatFlags.length?flatFlags.slice(0,8).map(function(f){var _id=(typeof f==='string')?f:(f.flag_id||f.id||f.title||'flag');var _tk=(f&&f.ticker&&f.ticker!=='MULTI')?(' · '+f.ticker):'';return '<div class="flag"><span class="fd" style="background:var(--watch)"></span><span class="ft">'+esc(_id)+'<span style="color:var(--faint)">'+esc(_tk)+'</span></span><span class="fs watch">open</span></div>';}).join(''):'<div class="rr-none">No open P0/P1 flags in this aggregate.</div>';
 
