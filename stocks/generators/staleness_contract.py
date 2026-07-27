@@ -444,6 +444,14 @@ EQUITY_BLOCKS = {
                                        "day where no verified bank sits at a support with 1.5 R:R "
                                        "genuinely fires nothing - but it must still be DATED, or "
                                        "'no fires' is indistinguishable from 'radar is dead'."),
+    "decisions":             _blk("decision_ledger.py", "operator", None, severity="info",
+                                  count=lambda b: len((b or {}).get("open") or []),
+                                  allow_empty=True,
+                                  note="F260727 routing layer: open decisions with owners and "
+                                       "deadlines, derived from FLAGS frontmatter. allow_empty is "
+                                       "correct - zero open decisions is a real and good state. "
+                                       "It has no freshness SLA because it moves only when a flag "
+                                       "does; what matters is that OVERDUE items reach the desk."),
     "fib_coverage":          _blk("emit (EDGE/LEVELS x lens universe)", "operator", None,
                                   severity="info",
                                   count=lambda b: (b or {}).get("verified"),
