@@ -2538,21 +2538,31 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
           '<span style="color:'+(pnl==null?'var(--mut)':(pnl>=0?'var(--pos)':'var(--neg)'))+'">'+(pnl==null?'\u2014':((pnl>=0?'+':'')+pnl.toFixed(1)+'%'))+'</span></div>';
       }).join('');
       var bt=cv.by_tier||{}, ct='C '+((bt.conviction||[]).length)+' \u00b7 N '+((bt.narrative||[]).length)+' \u00b7 R '+((bt.reject||[]).length)+' \u00b7 U '+((bt.unscored||[]).length);
+      // F260727 \u2014 the book must state what it does NOT cover. On 27-Jul it showed two rows and read
+      // as complete while just ONE of five holdings had a thesis on file (the other row is a watch
+      // name that is not owned). Thesis scores are operator judgment and are never invented, so the
+      // gap is surfaced instead: a book that cannot judge 4 of your 5 positions should say so.
+      var cvg=cv.coverage||{}, gap='';
+      if(cvg.held!=null){
+        var miss=cvg.missing_thesis||[];
+        gap='<div class="f149-note" style="border-top:1px solid var(--hair);padding-top:7px;margin-top:6px">'+
+          '<b style="color:'+(miss.length?'var(--watch)':'var(--pos)')+'">'+cvg.held_with_thesis+' of '+cvg.held+
+          ' held names have a thesis ('+cvg.pct+'%)</b>'+
+          (miss.length?(' &mdash; no thesis on file for <b>'+miss.map(esc).join(', ')+'</b>. The long-term book cannot judge a position it has never written up.'):'')+
+          ((cvg.thesis_not_held&&cvg.thesis_not_held.length)?(' Watch-only (not held): '+cvg.thesis_not_held.map(esc).join(', ')+'.'):'')+
+          '</div>';
+      }
       conv='<div class="f149-card"><div class="f149-h">\ud83c\udfaf Conviction Book <span class="f149-sub">long-term thesis-anchored \u00b7 '+esc(ct)+'</span></div>'+
         '<div class="f149-cvhead"><span>Name</span><span>Tier</span><span>Thesis score</span><span>Status</span><span>Unreal</span></div>'+rows+
-        '<div class="f149-note">'+esc(cv.note||'Thesis-scored, multi-quarter book \u2014 separates real moat from narrative bet.')+'</div></div>';
+        '<div class="f149-note">'+esc(cv.note||'Thesis-scored, multi-quarter book \u2014 separates real moat from narrative bet.')+'</div>'+gap+'</div>';
     }
-    var reg=''; var ra=tl.regime_analytics;
-    if(ra&&ra.all){
-      var mk=function(l,d,hi){ if(!d) return ''; return '<div class="f149-rgrow'+(hi?' f149-hi':'')+'"><span class="f149-rglab">'+esc(l)+'</span>'+
-        '<span class="f149-rgn">n='+(d.n!=null?d.n:'\u2014')+'</span><span style="color:'+sgn(d.expectancy_r)+'">'+fR(d.expectancy_r)+'</span>'+
-        '<span class="f149-rgwin">'+fP(d.win_rate)+' win</span><span style="color:'+sgn(d.mean_excess_3d)+'">'+fX(d.mean_excess_3d)+' exc</span></div>'; };
-      var br=ra.by_regime_bucket||{};
-      reg='<div class="f149-card"><div class="f149-h">\ud83d\udcca Regime Alpha <span class="f149-sub">expectancy &amp; excess-over-universe by regime</span></div>'+
-        '<div class="f149-rghead"><span></span><span></span><span>exp</span><span>win</span><span>excess/3d</span></div>'+
-        mk('ALL settled',ra.all,true)+mk('Favorable regime',br.favorable)+mk('Unfavorable regime',br.unfavorable)+
-        '<div class="f149-note">'+esc(ra.note||'Excess = return over universe median (alpha vs beta). Negative = picks underperform the tape.')+'</div></div>';
-    }
+    // F260727 RETIRED — Regime Alpha. Every one of its 260 settled trades belongs to a class
+    // retired on 25-Jul (intraday-fire / bubble-swing / composite-positional); ZERO are
+    // fib-confluence. It recomputed an autopsy daily and rendered it as if current, while its
+    // conclusion was already banked as doctrine in the 260709 rules rebuild. The METHOD is worth
+    // reviving once fib fires have a settled population — the producer's summary function is kept
+    // dormant for exactly that. Retired at BOTH ends so no half survives — the 260726 lesson, where
+    // retiring one side of a producer/renderer pair left a block still produced and shown nowhere.
     var elig=''; var el=tl.eligibility;
     if(el&&el.by_class){
       var live=el.live_eligible_classes||[];
@@ -2566,21 +2576,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<div class="f149-elhead"><span>Class</span><span>Verdict</span><span>n</span><span>excess</span><span>Reason</span></div>'+er+
         '<div class="f149-note">A class earns real capital only on positive excess-over-universe with n\u2265'+(el.min_sample||20)+'. Non-destructive \u2014 nothing stops logging.</div></div>';
     }
-    var wsh=''; var ws=tl.watch_shadow;
-    if(ws&&(ws.watch_gate||ws.all_limit)){
-      var wrow=function(l,d,hi){ if(!d) return ''; return '<div class="f149-rgrow'+(hi?' f149-hi':'')+'"><span class="f149-rglab">'+esc(l)+'</span>'+
-        '<span class="f149-rgn">n='+(d.n!=null?d.n:'—')+'</span>'+
-        '<span style="color:'+sgn(d.actual_avg_r)+'">'+fR(d.actual_avg_r)+' act</span>'+
-        '<span style="color:'+sgn(d.shadow_avg_r)+'">'+fR(d.shadow_avg_r)+' shdw</span>'+
-        '<span style="color:'+sgn(d.delta_avg_r)+'">'+fR(d.delta_avg_r)+' Δ</span></div>'; };
-      var wnf=(ws.watch_gate&&ws.watch_gate.n_actual_nofill!=null)?(' · '+ws.watch_gate.n_actual_nofill+' no-fill'):'';
-      wsh='<div class="f149-card"><div class="f149-h">🕵️ Watch-Shadow <span class="f149-sub">anti-chase gate: booked R vs enter-at-open · measurement-only'+wnf+'</span></div>'+
-        '<div class="f149-rghead"><span></span><span></span><span>actual</span><span>shadow</span><span>Δ avg</span></div>'+
-        wrow('Anti-chase gate (live)',ws.watch_gate,true)+wrow('All limits (incl. legacy)',ws.all_limit)+
-        '<div class="f149-note">'+esc(ws.note||'Δ = shadow(enter-at-open) − actual(booked). Small Δ on the live gate = the anti-chase rule costs ~nothing (vindicated).')+'</div></div>';
-    }
-
-    var parts=[conv,reg,elig,wsh].filter(Boolean); if(!parts.length) return '';
+    // F260727 RETIRED — Watch-Shadow. Measurement-only by design, and its question ('is the
+    // anti-chase gate costing us?') was asked, answered and the gate VINDICATED. What remained was
+    // a daily re-measurement of fill behaviour for a limit model that no longer exists.
+    var parts=[conv,elig].filter(Boolean);   // F260727: reg + wsh retired if(!parts.length) return '';
     return '<div class="f149-wrap"><div class="f149-title">Conviction &amp; System Analytics <span class="f149-tag">F149 \u00b7 operator-private</span></div>'+parts.join('')+'</div>';
   }
   function fibConflHTML(){
@@ -3355,7 +3354,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               var _sqRows=(_sq||[]).slice(0,8).map(function(q){ return '<div class="fprow"><span class="fpl">'+esc(q.ticker||'')+'</span><span class="fpv">'+esc(q.signal_class||'')+' \u00b7 '+esc(String(q.reason||'needs level read').slice(0,44))+'</span></div>'; }).join('');
               fibCard='<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>Fib analysis quality'+HT('F260713 \u2014 every set-up now carries a fib read (verified hand-drawn, or METHOD-B auto-computed). Confirmed = the fib zone-to-zone read reached its target zone; invalidated = broke the fib stop. Study queue = fires BLOCKED because they need your hand fib read (swings never trade without one).')+'<span class="age">confirmed-rate by fib source \u00b7 the analysis learning loop</span></div>'+'<div class="kpis kpis4">'+_tb(_ts&&_ts.verified,'Verified fib')+_tb(_ts&&_ts.method_b,'METHOD-B auto')+_tb(_ts&&_ts.all,'All set-ups')+'<div class="kpi"><div class="kl">Needs your read</div><div class="kv sm '+((_sq&&_sq.length)?'watch':'')+'">'+((_sq&&_sq.length)||0)+'</div><div class="ks">swings blocked \u00b7 study queue</div></div>'+'</div>'+(_sqRows?('<div class="imet"><div class="imet-col"><div class="c-lbl sub"><span class="d"></span>Study queue \u2014 needs your fib read<span class="age">blocked until studied</span></div>'+_sqRows+'</div></div>'):'')+'</div>';
             }
-            html+=dtPerfCard+fibCard+tlLeaderboardCard(tl.stop_policy_leaderboard)+'<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>'+esc(TLVLBL[view])+' trade ledger'+HT('Your logged trades of the selected type, newest first, 25 per page. Switch type with the toggle above. Expand a row for the full hero card.')+'<span class="age">'+(vCnt[view]||0)+' '+esc(TLVLBL[view])+' trades</span></div><div id="tl-ledger"></div></div>';
+            html+=dtPerfCard+fibCard+'<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>'+esc(TLVLBL[view])+' trade ledger'+HT('Your logged trades of the selected type, newest first, 25 per page. Switch type with the toggle above. Expand a row for the full hero card.')+'<span class="age">'+(vCnt[view]||0)+' '+esc(TLVLBL[view])+' trades</span></div><div id="tl-ledger"></div></div>';
     } else {
       var _sk=function(w){return '<span class="tlk-b" style="width:'+w+'"></span>';};
       var _trow=function(){return '<tr>'+['20%','12%','12%','12%','40px','40px','30%'].map(function(w){return '<td>'+_sk(w)+'</td>';}).join('')+'</tr>';};
