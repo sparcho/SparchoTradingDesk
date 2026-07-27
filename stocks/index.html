@@ -1189,13 +1189,11 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       </nav>
     </div>
     <div class="navpills" id="navpills">
-      <!-- F260727 layout B: ordered by how soon you act, not by data category. The desk used to
-           open on the Screener because the Screener used to fire the trades; it does not any more. -->
-      <button data-z="z-lab" class="on">Radar</button>
+      <button data-z="z-screen" class="on">Screener</button>
+      <button data-z="z-lab">Radar</button>
+      <button data-z="z-perf">Performance</button>
       <button data-z="z-port">Portfolio</button>
-      <button data-z="z-screen">Screener</button>
       <button data-z="z-research">Research</button>
-      <button data-z="z-perf">Scorecard</button>
       <button data-z="z-tickers">Tickers</button>
     </div>
     <div class="tr">
@@ -1221,7 +1219,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     <div class="pillars">
       <button class="pillar" data-z="z-screen"><div class="pn">01</div><div class="pt">Screener</div><div class="pd">Bubble map · day-trade fires · leaderboard</div></button>
       <button class="pillar" data-z="z-lab"><div class="pn">03</div><div class="pt">Radar <span class="lk">🔒</span></div><div class="pd">Fib fires · banked levels · two-take</div></button>
-      <button class="pillar" data-z="z-perf"><div class="pn">P</div><div class="pt">Scorecard</div><div class="pd">Screen edge / signal quality / master ledger</div></button>
+      <button class="pillar" data-z="z-perf"><div class="pn">P</div><div class="pt">Performance</div><div class="pd">Screen edge / signal quality / master ledger</div></button>
       <button class="pillar" data-z="z-port"><div class="pn">04</div><div class="pt">Portfolio <span class="lk">🔒</span></div><div class="pd">Book · held · gates · closed trades</div></button>
       <button class="pillar" data-z="z-research"><div class="pn">05</div><div class="pt">Research</div><div class="pd">Catalysts · DR · news · triggers · flags</div></button>
       <button class="pillar" data-z="z-tickers"><div class="pn">06</div><div class="pt">Tickers</div><div class="pd">91-name index · per-ticker pages</div></button>
@@ -1242,7 +1240,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     <div class="deck">
     <div class="prism" id="prism">
     <!-- 01 SCREENER -->
-    <section class="face" id="z-screen">
+    <section class="face active" id="z-screen">
       <div class="zone-h"><span class="zn">01</span><h2>Screener</h2><span class="zr"></span><span class="zx">bubble_set · day_trade_fires · leaderboard</span><span class="zasof" id="zasof-screen"></span></div>
       <div class="stale-banner" id="stale-banner"></div>
       <div class="readwrap">
@@ -1296,10 +1294,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     </section>
 
     <!-- 03 TRADE LAB -->
-    <section class="face active" id="z-lab"><div class="zone-h"><span class="zn">03</span><h2>Radar</h2><span class="lkpill">🔒 ledger private · AES-GCM</span><span class="zr"></span><span class="zx">fib fires · banked levels · two-take · forward-scored</span><span class="zasof" id="zasof-lab"></span></div></section>
+    <section class="face" id="z-lab"><div class="zone-h"><span class="zn">03</span><h2>Radar</h2><span class="lkpill">🔒 ledger private · AES-GCM</span><span class="zr"></span><span class="zx">fib fires · banked levels · two-take · forward-scored</span><span class="zasof" id="zasof-lab"></span></div></section>
 
     <!-- 03b PERFORMANCE -->
-    <section class="face" id="z-perf"><div class="zone-h"><span class="zn">05</span><h2>Scorecard</h2><span class="zr"></span><span class="zx">screen edge / signal quality / master ledger</span><span class="zasof" id="zasof-perf"></span></div></section>
+    <section class="face" id="z-perf"><div class="zone-h"><span class="zn">P</span><h2>Performance</h2><span class="zr"></span><span class="zx">screen edge / signal quality / master ledger</span><span class="zasof" id="zasof-perf"></span></div></section>
 
     <!-- 04 PORTFOLIO -->
     <section class="face" id="z-port"><div class="zone-h"><span class="zn">04</span><h2>Portfolio</h2><span class="lkpill">🔒 holdings · AES-GCM</span><span class="zr"></span><span class="zx">book.totals · held · risk_gates · realized</span><span class="zasof" id="zasof-port"></span></div></section>
@@ -1323,7 +1321,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   <script src="assets/profit_lock_eval.js"></script>
   <script>
   (function(){
-    var topbar=document.getElementById('topbar'); var zones=['z-lab','z-port','z-screen','z-research','z-perf','z-tickers'];
+    var topbar=document.getElementById('topbar'); var zones=['z-screen','z-lab','z-perf','z-port','z-research','z-tickers'];
     var n=zones.length, active=0;
     function applyRot(){ var pr=document.getElementById('prism'); if(pr) pr.style.transform='translateX('+(-active*100)+'%)'; }
     function layout(){ applyRot(); }
@@ -1544,13 +1542,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   function lensDots(lensObj){ return '<span class="lens">'+LENS_ORDER.map(k=>{ const s=lensStat(lensObj,k); const c=s==='pass'?'pass':(s==='near'?'near':'fail'); return '<i class="'+c+'"></i>'; }).join('')+'</span>'; }
   function lensCell(status){ const c=status==='pass'?'pass':(status==='near'?'near':'fail'); const g=status==='pass'?'✓':(status==='near'?'~':'·'); return '<span class="cell '+c+'">'+g+'</span>'; }
   function leanPill(lean){ const c=lean>0.15?'bull':(lean<-0.15?'bear':'neut'); const t=lean>0.15?'BULL':(lean<-0.15?'BEAR':'NEUT'); return '<span class="lean '+c+'">'+t+'</span>'; }
-  function setFace(id,bodyHTML){ const f=$(id); if(!f) return; const zh=f.querySelector('.zone-h');
-    f.innerHTML=(zh?zh.outerHTML:'')+bodyHTML;
-    // F260727: setFace rebuilds the zone from zone-h + body, so it wipes the headline. Re-paint
-    // HERE rather than at each call site — a zone that re-renders on click (perf, tickers) would
-    // otherwise silently lose its headline, which is the very defect the headline exists to fix.
-    try{ paintHeadline(id); }catch(e){}
-  }
+  function setFace(id,bodyHTML){ const f=$(id); if(!f) return; const zh=f.querySelector('.zone-h'); f.innerHTML=(zh?zh.outerHTML:'')+bodyHTML; }
 
   let DATA=null, _eqUnlocked=null;
   function __reportErr(section,e){ console.error(section+' failed:',e); window.__renderErrors=window.__renderErrors||[]; window.__renderErrors.push(section+': '+(e&&e.message||e)); const el=$('render-errors'); if(el){ el.style.display='block'; el.textContent='⚠ '+window.__renderErrors.join(' | '); } }
@@ -2305,7 +2297,6 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     renderPort(held,tot,DATA.risk_gates||[]);
     renderResearch(DATA,dr);
     renderTickers(bubble);
-    try{ paintHeadlines(); }catch(e){__reportErr('headlines',e);}
     const lbl=$('lock-label'); if(lbl) lbl.textContent=LOCKED?'Locked':'Unlocked';
     document.body.classList.add('bound');   // lift the anti-flash deck guard once real data is bound
   }
@@ -2692,72 +2683,6 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       ((typeof HT!=="undefined")?HT('Findings that imply a change, each with an owner and a deadline. This exists because a correct finding once sat 26 days in a markdown file with nothing to surface it: on 29-Jun the edge readback identified the day-trade class as the entire negative edge, and it was not acted on until 25-Jul. A decision with no stated deadline is given one automatically (opened + 14 days, the same stale-flag window the session-discovery protocol uses) — a deadline-less decision is the exact failure this prevents.'):'')+
       '<span class="age">'+(c.open||0)+' open'+((c.overdue||0)?(' &middot; '+c.overdue+' OVERDUE'):'')+'</span></div>'+
       '<div class="dec-tbl">'+open.map(row).join('')+'</div></div>';
-  }
-
-  // -- ZONE HEADLINES (F260727 layout B) -----------------------------------------------------------
-  // One sentence per tab, stating the question that tab ANSWERS, computed from live data. The desk
-  // needed a paragraph of explanation per section to be usable; that is a layout defect, not a
-  // documentation gap. Putting the answer at the top of each zone moves the legend onto the page.
-  function zoneHeadline(z){
-    var D=DATA||{}; try{
-      if(z==='z-lab'){
-        var r=(D.fib_radar||{}).counts||{}, dc=(D.decisions||{}).counts||{};
-        var lead=(r.fire||0)?((r.fire)+' fire'+((r.fire)>1?'s':'')+' ready'):'No fire today';
-        var w=(r.watch||0)?(' · '+r.watch+' on watch'):'';
-        var d=(dc.open||0)?(' · '+dc.open+' decision'+((dc.open)>1?'s':'')+' pending'
-              +((dc.overdue||0)?(' ('+dc.overdue+' OVERDUE)'):'')):'';
-        return lead+w+d;
-      }
-      if(z==='z-port'){
-        var bk=D.book||{}, t=bk.totals||{}, n=(D.held||[]).length;
-        var up=(t.unreal_pct!=null)?((t.unreal_pct>0?'+':'')+(+t.unreal_pct).toFixed(1)+'%'):null;
-        return n+' name'+(n===1?'':'s')+' held'+(up?(' · '+up+' unrealised'):'')
-               +(bk.snapshot_date?(' · book '+bk.snapshot_date):'');
-      }
-      if(z==='z-screen'){
-        var rad=D.fib_radar||{}, fires=(rad.fires||[]);
-        var byTk={}; ((D.screeners&&D.screeners.bubble_set)||[]).forEach(function(b){byTk[b.ticker]=b;});
-        var agree=fires.filter(function(f){ var b=byTk[f.ticker];
-          return b && ((+b.multi_hit_count||0)>=1 || (+b.composite||0)>=50); }).length;
-        if(!fires.length) return 'No fires to check against today · second opinion only';
-        return 'The screen agrees with '+agree+' of '+fires.length+' fire'+(fires.length>1?'s':'')
-               +(agree<fires.length?' — disagreement is signal, not noise':'');
-      }
-      if(z==='z-research'){
-        var cats=(D.catalysts||[]).length, dr=(D.dr||{});
-        var _cnt=function(v){ return (v&&v.length!=null)?v.length:(typeof v==='number'?v:null); };
-        var n=_cnt(dr.briefs); if(n==null) n=_cnt(dr.streams);
-        return 'Why you hold the slow book'+(n!=null?(' · '+n+' research streams'):'')
-               +(cats?(' · '+cats+' catalysts ahead'):'');
-      }
-      if(z==='z-perf'){
-        var rd=((D.trade_lab||{}).retired_daytrade)||{};
-        return 'Score does not rank — the universe and full confluence are the only measured edges'
-               +((rd.n)?(' · retired day desk '+((rd.avg_r>0?'+':'')+rd.avg_r)+'R over '+rd.n+' closes'):'');
-      }
-      if(z==='z-tickers'){
-        var c=D.fib_coverage||{};
-        return (c.verified||0)+' of '+(c.universe||0)+' names carry a verified read · '
-               +(c.to_study||0)+' cannot fire until studied';
-      }
-    }catch(e){}
-    return '';
-  }
-  // Plain declaration, NOT window.* — test_confluence_ranking extracts a slice of this shell and
-  // runs it under Node, where `window` does not exist. (V-31's own family caught this.)
-  function paintHeadline(z){
-    try{
-      var sec=document.getElementById(z); if(!sec) return;
-      var h=sec.querySelector('.zone-h'); if(!h) return;
-      var txt=zoneHeadline(z); if(!txt) return;
-      var el=sec.querySelector(':scope > .zhead');
-      if(!el){ el=document.createElement('div'); el.className='zhead';
-               h.parentNode.insertBefore(el, h.nextSibling); }
-      el.innerHTML='<span class="zh-c">&#10095;</span>'+esc(txt);
-    }catch(e){ __reportErr('headline:'+z, e); }
-  }
-  function paintHeadlines(){
-    ['z-lab','z-port','z-screen','z-research','z-perf','z-tickers'].forEach(function(z){ paintHeadline(z); });
   }
 
   function renderLab(){ try{
@@ -3733,11 +3658,5 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .dec-row.od .dec-d{color:var(--watch)}
 @media(max-width:760px){.dec-row{grid-template-columns:30px 1fr;gap:2px}
   .dec-o,.dec-a{display:none}.dec-d{text-align:left}}
-/* -- F260727 zone headlines (layout B) ----------------------------------------------------------- */
-.zhead{display:flex;gap:7px;align-items:baseline;margin:-4px 0 12px;padding:7px 11px;
-  background:var(--glass);border:1px solid rgba(255,255,255,.06);border-radius:9px;
-  font-family:var(--font-mono);font-size:11.5px;line-height:1.5;color:var(--fg)}
-.zhead .zh-c{color:var(--acc);font-weight:700}
-@media(max-width:760px){.zhead{font-size:10.5px}}
 </style>
 </body></html>
