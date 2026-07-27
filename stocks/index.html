@@ -2653,16 +2653,48 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '</div>';
   }
 
+  // -- DECISION LEDGER (F260727) -----------------------------------------------------------------
+  // What is waiting on a decision, and for how long. Built because the 260629 edge readback named
+  // the desk's loss centre and then aged 26 DAYS on a surface nobody reads. Overdue items are
+  // rendered loudly and FIRST: a routing layer nobody sees is the original bug in a new hat.
+  function decisionsHTML(){
+    var dl=(DATA&&DATA.decisions)||null;
+    if(!dl) return '';
+    var c=dl.counts||{}, open=(dl.open||[]);
+    if(!open.length){
+      return '<div class="card dec-wrap" style="margin-bottom:13px">'+
+        '<div class="c-lbl"><span class="d"></span>Decisions pending'+
+        '<span class="age">nothing awaiting you</span></div>'+
+        '<div class="fc-note">No open decisions. This is a real and good state &mdash; the ledger is empty, not broken.</div></div>';
+    }
+    var row=function(i){
+      var od=i.overdue;
+      return '<div class="dec-row'+(od?' od':'')+'">'+
+        '<span class="dec-p '+esc(String(i.priority||'').toLowerCase())+'">'+esc(String(i.priority||''))+'</span>'+
+        '<span class="dec-t">'+esc(String(i.title||i.flag_id||''))+'</span>'+
+        '<span class="dec-o">'+esc(String(i.owner||''))+'</span>'+
+        '<span class="dec-d">'+(od
+            ? ('<b>OVERDUE '+i.days_overdue+'d</b>')
+            : ('due '+esc(String(i.decide_by||'&mdash;'))))+'</span>'+
+        '<span class="dec-a">open '+(i.days_open!=null?i.days_open+'d':'&mdash;')+'</span></div>';
+    };
+    return '<div class="card dec-wrap'+((c.overdue||0)?' has-od':'')+'" style="margin-bottom:13px">'+
+      '<div class="c-lbl"><span class="d"></span>Decisions pending'+
+      ((typeof HT!=="undefined")?HT('Findings that imply a change, each with an owner and a deadline. This exists because a correct finding once sat 26 days in a markdown file with nothing to surface it: on 29-Jun the edge readback identified the day-trade class as the entire negative edge, and it was not acted on until 25-Jul. A decision with no stated deadline is given one automatically (opened + 14 days, the same stale-flag window the session-discovery protocol uses) — a deadline-less decision is the exact failure this prevents.'):'')+
+      '<span class="age">'+(c.open||0)+' open'+((c.overdue||0)?(' &middot; '+c.overdue+' OVERDUE'):'')+'</span></div>'+
+      '<div class="dec-tbl">'+open.map(row).join('')+'</div></div>';
+  }
+
   function renderLab(){ try{
     const tl=(DATA&&DATA.trade_lab)||null;
     const sp=(DATA&&DATA.signal_perf)||null;
     const _MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
     const fmtDay=function(s){ var p=String(s||'').split(' ')[0].split('-'); if(p.length<3) return esc(String(s||'')); var m=_MON[(+p[1])-1]||''; return (+p[2])+' '+m; };
-    if(!tl && !sp){ setFace('z-lab', fibRadarHTML()+
+    if(!tl && !sp){ setFace('z-lab', decisionsHTML()+fibRadarHTML()+
       '<div class="card empty-face"><div class="ef-ic">🧪</div><div class="ef-t">Radar</div>'+
       '<div class="ef-m">🔒 Unlock to view the deliberate-trade ledger. The Radar above is public — it carries levels only, never holdings.</div>'+
       '<div class="ef-tag">operator-private · AES-GCM</div></div>'+fibConflHTML()); return; }
-    let html=fibRadarHTML();   // F260725 — the Radar leads the zone, locked or not
+    let html=decisionsHTML()+fibRadarHTML();   // F260727 decisions outrank fires; F260725 — the Radar leads the zone, locked or not
     // F260617: confluence day-trade backtest (signal quality) relocated to the Screener panel (renderDTConf -> #f1-dtconf).
     if(tl){
       const open=tl.open||[], closed=tl.closed||[], dailyR=tl.daily_r||[], sc=tl.scorecard||{}, byO=tl.scorecard_by_origin||{};
@@ -3612,5 +3644,19 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .cvb-pnl.pos{color:var(--pos)}.cvb-pnl.neg{color:var(--neg)}.cvb-pnl.mut{color:var(--mut)}
 @media(max-width:760px){.rdr-grid{grid-template-columns:1fr}.rdr-take{flex-direction:column;gap:1px}
   .rdr-take .tkl{min-width:0}.hv-claim{flex-direction:column;gap:3px}.hvc-k{min-width:0}}
+/* -- F260727 decision ledger -------------------------------------------------------------------- */
+.dec-wrap.has-od{border-color:color-mix(in srgb,var(--watch) 40%,transparent)}
+.dec-tbl{font-family:var(--font-mono);font-size:10.5px}
+.dec-row{display:grid;grid-template-columns:30px 1fr 74px 116px 74px;gap:8px;align-items:baseline;
+  padding:5px 4px;border-bottom:1px solid rgba(255,255,255,.05)}
+.dec-row.od{background:color-mix(in srgb,var(--watch) 7%,transparent);border-radius:6px}
+.dec-p{font-size:8.5px;letter-spacing:.08em;color:var(--mut)}
+.dec-p.p0,.dec-p.p1{color:var(--neg)}
+.dec-t{line-height:1.45}
+.dec-o,.dec-a{font-size:9px;color:var(--mut);text-align:right}
+.dec-d{font-size:9px;text-align:right;color:var(--mut)}
+.dec-row.od .dec-d{color:var(--watch)}
+@media(max-width:760px){.dec-row{grid-template-columns:30px 1fr;gap:2px}
+  .dec-o,.dec-a{display:none}.dec-d{text-align:left}}
 </style>
 </body></html>
