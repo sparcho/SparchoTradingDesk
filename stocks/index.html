@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785236364">
-<meta name="x-built-at" content="2026-07-28T10:58:53+00:00">
+<meta name="x-build-id" content="1785246153">
+<meta name="x-built-at" content="2026-07-28T13:42:06+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785236364",BUILT_AT="2026-07-28T10:58:53+00:00";
+  var BID="1785246153",BUILT_AT="2026-07-28T13:42:06+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1279,7 +1279,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     <div class="navpills" id="navpills">
       <button data-z="z-screen" class="on">Screener</button>
       <button data-z="z-lab">Radar</button>
-      <button data-z="z-perf">Performance</button>
+      <button data-z="z-perf">Scorecard</button>
       <button data-z="z-port">Portfolio</button>
       <button data-z="z-research">Research</button>
       <button data-z="z-tickers">Tickers</button>
@@ -1307,7 +1307,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     <div class="pillars">
       <button class="pillar" data-z="z-screen"><div class="pn">01</div><div class="pt">Screener</div><div class="pd">Bubble map · day-trade fires · leaderboard</div></button>
       <button class="pillar" data-z="z-lab"><div class="pn">03</div><div class="pt">Radar <span class="lk">🔒</span></div><div class="pd">Fib fires · banked levels · two-take</div></button>
-      <button class="pillar" data-z="z-perf"><div class="pn">P</div><div class="pt">Performance</div><div class="pd">Screen edge / signal quality / master ledger</div></button>
+      <button class="pillar" data-z="z-perf"><div class="pn">P</div><div class="pt">Scorecard <span class="lk">🔒</span></div><div class="pd">Your real money · broker capital-gains record</div></button>
       <button class="pillar" data-z="z-port"><div class="pn">04</div><div class="pt">Portfolio <span class="lk">🔒</span></div><div class="pd">Book · held · gates · closed trades</div></button>
       <button class="pillar" data-z="z-research"><div class="pn">05</div><div class="pt">Research</div><div class="pd">Catalysts · DR · news · triggers · flags</div></button>
       <button class="pillar" data-z="z-tickers"><div class="pn">06</div><div class="pt">Tickers</div><div class="pd">91-name index · per-ticker pages</div></button>
@@ -1385,7 +1385,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     <section class="face" id="z-lab"><div class="zone-h"><span class="zn">03</span><h2>Radar</h2><span class="lkpill">🔒 ledger private · AES-GCM</span><span class="zr"></span><span class="zx">fib fires · banked levels · two-take · forward-scored</span><span class="zasof" id="zasof-lab"></span></div></section>
 
     <!-- 03b PERFORMANCE -->
-    <section class="face" id="z-perf"><div class="zone-h"><span class="zn">P</span><h2>Performance</h2><span class="zr"></span><span class="zx">screen edge / signal quality / master ledger</span><span class="zasof" id="zasof-perf"></span></div></section>
+    <section class="face" id="z-perf"><div class="zone-h"><span class="zn">P</span><h2>Scorecard</h2><span class="lkpill">🔒 real money · AES-GCM</span><span class="zr"></span><span class="zx">what your own trades actually did · broker capital-gains record</span><span class="zasof" id="zasof-perf"></span></div></section>
 
     <!-- 04 PORTFOLIO -->
     <section class="face" id="z-port"><div class="zone-h"><span class="zn">04</span><h2>Portfolio</h2><span class="lkpill">🔒 holdings · AES-GCM</span><span class="zr"></span><span class="zx">book.totals · held · risk_gates · realized</span><span class="zasof" id="zasof-port"></span></div></section>
@@ -1669,6 +1669,11 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     }
     DATA.risk_gates=u.risk_gates||DATA.risk_gates||[]; DATA.recent_closed=u.recent_closed||[]; DATA.family_account_b=u.family_account_b||DATA.family_account_b||null;
     if(u.trade_lab!=null) DATA.trade_lab=u.trade_lab;
+    // F260728-SCORECARD - the operator's REAL-money record and the capital-gains series it
+    // is built from. Both ride inside the ciphertext (real rupees, public repo), so without
+    // these two lines the Scorecard tab stays locked forever even after a correct unlock.
+    if(u.real_scorecard!=null) DATA.real_scorecard=u.real_scorecard;
+    if(u.performance!=null) DATA.performance=u.performance;
     if(u.conviction!=null) DATA.conviction=u.conviction;
     // F260721-FIBLOCK: the fib ANALYSIS (names/points) rides inside the ciphertext; the public
     // aggregate carries only a level-free provenance stub. Merge so as-of/counts survive both states.
@@ -1914,8 +1919,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '</div>';
   }
 
-  function renderPerf(){ try{
-    if(!DATA){ return; }
+  // The SCREENER's own report card. It measures the system, never the operator, so it is
+  // mounted under the Radar (where system signals live) and is fenced out of the Scorecard.
+  function signalsFace(){ try{
+    if(!DATA){ return ''; }
     var pa=DATA.positional_assessment||null, sp=DATA.signal_perf||null, tl=(DATA&&DATA.trade_lab)||null, tot=(DATA.book&&DATA.book.totals)||{};
     var LOCKED=!!(DATA.privacy&&DATA.privacy.locked&&DATA.sensitive_enc&&!DATA._unlocked);
     var __pv=window.__tlView; if(['fib','swing','positional'].indexOf(__pv)<0){ try{__pv=localStorage.getItem('tlView');}catch(e){} } if(['fib','swing','positional'].indexOf(__pv)<0)__pv='fib'; window.__tlView=__pv;
@@ -2072,11 +2079,174 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     }
     html+='</div>';
 
-    setFace('z-perf', honestVerdictHTML()+html);
+    return honestVerdictHTML()+html;
+  }catch(e){__reportErr('signals',e); return '';} }
+  // The signal charts paint into hosts that only exist once the Radar face is in the DOM.
+  window.__signalsMount=function(){ try{
     ['pf-edge','pf-types','pf-sigq','pf-mlday'].forEach(function(cid){ if(window.__PC[cid]){ window.__PC[cid].state.bucket=(window.__pcBucket||'D'); if(document.getElementById(cid)) pcRender(cid); } });
     ['pf-edge','pf-sigq','pf-mlday'].forEach(function(cid){ if(document.getElementById(cid+'-bar')) window.pcSyncBar(cid); });
-  }catch(e){__reportErr('perf',e);} }
+  }catch(e){} };
+  // A collapsed, plainly-labelled block. Open by nobody's default: it is a backtest of the
+  // screener, and calling it "performance" is exactly the mistake this rebuild undoes.
+  function signalsBlockHTML(){
+    var body=signalsFace(); if(!body) return '';
+    return '<details class="pf-more sig-block"><summary>System signal report card — PAPER, the screener grading itself · not your money</summary>'+
+      '<div class="fc-note" style="margin:6px 0 8px">Everything inside is a backtest of the screens, or trades the system logged on paper. None of it is a rupee you made or lost — that lives on the <b>Scorecard</b> tab.</div>'+body+'</details>';
+  }
   window.drawPerf=function(){ try{ renderPerf(); }catch(e){} };
+
+  /* SCORECARD:BEGIN ---------------------------------------------------------------------------
+     F260728-SCORECARD. This tab shows the operator's REAL money and nothing else.
+
+     It used to render screener backtests and a paper ledger under the word "Performance". On
+     2026-07-28 that same confusion produced a wrong answer about the operator's own trading: a
+     ledger of 280 simulated fires and 3 real trades was quoted as their record. The fix is not a
+     disclaimer, it is a boundary - every figure below traces to the HDFC capital-gains reports or
+     to the broker book, and test_scorecard_wiring.py fails the build if a screener source is ever
+     wired back in between these two fences.
+
+     The screener's own report card still exists, in full, under the Radar tab - labelled PAPER.
+  ------------------------------------------------------------------------------------------- */
+  // A loss must read as a loss at a glance: the sign goes in FRONT of the money, not between
+  // the symbol and the digits, where the eye skips it.
+  window.scMoney=function(n,compact){ return (n==null)?'—':((n<0?'−':'')+fmtINR(Math.abs(n),{compact:!!compact})); };   //@pure
+  window.scSign=function(n){ return (n==null)?'':(n>0?'pos':(n<0?'neg':'')); };   //@pure
+  // The four questions the operator actually asks their own book, each answered by ONE number
+  // that a broker report can back. Nothing here is a projection or a grade.
+  window.scVerdicts=function(sc){ if(!sc) return [];
+    var c=sc.closed||{}, ob=sc.open_book||null, k=sc.concentration||{}, out=[];
+    out.push({q:'Am I up or down this year?', val:sc.realized_fy, kind:'inr',
+      st:(sc.realized_fy==null?'unclear':(sc.realized_fy>0?'good':'bad')),
+      sub:'booked \u00b7 '+(c.n_names||0)+' names closed and settled', go:'sc-sec-1'});
+    out.push({q:'And the money still in the market?', val:(ob?ob.unrealized:null), kind:'inr',
+      st:(!ob||ob.unrealized==null?'unclear':(ob.unrealized>0?'good':'bad')),
+      sub:(ob?((ob.n_held||0)+' names still open \u00b7 not yet booked'):'no broker drop loaded'),
+      go:'sc-sec-4'});
+    out.push({q:'Do I win often enough for my payoff?', val:c.hit_rate_pct, kind:'pct',
+      st:((c.hit_rate_pct==null||c.breakeven_hit_pct==null)?'unclear':(c.hit_rate_pct>=c.breakeven_hit_pct?'good':'bad')),
+      sub:(c.breakeven_hit_pct!=null?('you win '+c.hit_rate_pct+'% of names; at a '+c.payoff+'x payoff you need '+c.breakeven_hit_pct+'%'):'not enough closed names'),
+      go:'sc-sec-2'});
+    out.push({q:'Is one position doing the damage?', val:k.worst_share_of_losses_pct, kind:'pct',
+      st:(k.worst_share_of_losses_pct==null?'unclear':(k.worst_share_of_losses_pct>=25?'bad':'good')),
+      sub:(k.worst_name?(k.worst_name+' is '+k.worst_share_of_losses_pct+'% of every rupee you lost'):'no losing names'),
+      go:'sc-sec-3'});
+    return out; };
+
+  function renderPerf(){ try{
+    if(!DATA) return;
+    var sc=DATA.real_scorecard||null;
+    var LOCKED=!!(DATA.privacy&&DATA.privacy.locked&&DATA.sensitive_enc&&!DATA._unlocked);
+    var srcNote='<div class="sc-src">Every number on this tab comes from your HDFC capital-gains reports and your broker book. The system\u2019s own screener results are <b>not</b> on this tab \u2014 they grade the screens, not you, and they live under the Radar.</div>';
+    if(LOCKED){ setFace('z-perf', srcNote+'<div class="pf-grid"><div class="card pf-card full">'+
+      window.pfState('locked','Your scorecard','This is your real money, so it ships encrypted. Unlock (\ud83d\udd12, top right) to load the capital-gains record.')+'</div></div>'); return; }
+    if(!sc){ setFace('z-perf', srcNote+'<div class="pf-grid"><div class="card pf-card full">'+
+      window.pfState('pending','Your scorecard','No capital-gains report has been parsed yet. Drop the latest HDFC report into 07_POSITIONS/SPARCHO-HDFC/CAPITAL GAINS REPORTS and re-run the emit. Nothing is estimated in its place.')+'</div></div>'); return; }
+
+    var c=sc.closed||{}, k=sc.concentration||{}, a=sc.activity||{}, ob=sc.open_book||null;
+    var html=srcNote;
+
+    // ---- verdict strip ----------------------------------------------------------------
+    html+='<div class="pf-verdict">'+window.scVerdicts(sc).map(function(v){
+      var val=(v.val==null)?'\u2014':((v.kind==='inr')?scMoney(v.val,true):((v.val>0&&v.kind!=='pct')?'+':'')+v.val+'%');
+      return '<div class="vcard '+v.st+'" onclick="pfScroll(\''+v.go+'\')"><span class="pop real">REAL</span>'+
+        '<div class="vq">'+esc(v.q)+'</div><div class="vv sens">'+val+'</div>'+
+        '<div class="vs">'+esc(v.sub)+' \u2192</div></div>'; }).join('')+'</div>';
+
+    // ---- 01 the money ----------------------------------------------------------------
+    html+='<div class="pf-sec" id="sc-sec-1"><div class="pf-sh"><span class="pf-n">01</span><h3>The money</h3><span class="pop real">REAL</span><span class="uchip">\u20b9 \u00b7 net of charges</span><span class="pf-sx">booked, open, and the two together \u00b7 as of '+fmtD(sc.as_of)+'</span></div>';
+    var comb=sc.combined_fy;
+    html+='<div class="pf-take '+(comb==null?'unclear':(comb>0?'good':'bad'))+'">Counting both what you have banked and what is still open, you are <b class="'+scSign(comb)+' sens">'+scMoney(comb)+'</b> this financial year.</div>';
+    html+='<div class="card full pf-kpi-card"><div class="kpis pf-kpis">'+
+      '<div class="kpi"><div class="kl">Booked this FY</div><div class="kv sm sens '+scSign(sc.realized_fy)+'">'+scMoney(sc.realized_fy)+'</div><div class="ks">realised \u00b7 '+esc(String(sc.source_file||''))+'</div></div>'+
+      '<div class="kpi"><div class="kl">Still open</div><div class="kv sm sens '+scSign(ob&&ob.unrealized)+'">'+scMoney(ob&&ob.unrealized)+'</div><div class="ks">'+(ob?((ob.n_held||0)+' names \u00b7 '+scMoney(ob.invested,true)+' invested'):'no broker drop')+'</div></div>'+
+      '<div class="kpi"><div class="kl">Both together</div><div class="kv sm sens '+scSign(comb)+'">'+scMoney(comb)+'</div><div class="ks">booked + open</div></div>'+
+      '<div class="kpi"><div class="kl">Money cycled</div><div class="kv sm sens">'+scMoney(a.gross_buy_value,true)+'</div><div class="ks">bought this FY'+(a.turnover_x_book!=null?(' \u00b7 '+a.turnover_x_book+'\u00d7 the current book'):'')+'</div></div>'+
+      '</div></div>';
+    var curve=(sc.realized_curve||[]).filter(function(p){ return p.cum!=null; });
+    if(curve.length>1){
+      pcRegister('sc-curve',{ chromeless:true, zero:true, zeroLabel:'\u20b90 (flat on the year)', yLabel:'booked P&L \u20b9', mode:'select', defaultSeriesKey:'fy',
+        yFmt:function(v){ return (v>0?'+':'')+Math.round(v/1000)+'k'; },
+        cap:'one node per capital-gains report \u00b7 real booked rupees',
+        empty:'needs at least two capital-gains reports.',
+        series:[{key:'fy',label:'Booked P&L',color:'var(--cyan)',data:curve.map(function(p){ return {d:p.date,y:p.cum,delta:p.delta,n:p.n_names}; })}], nodeTip:scTipCurve });
+      html+='<div class="pf-grid"><div class="card pf-card full"><div class="c-lbl"><span class="d"></span>Booked P&amp;L across the year'+HT('Your realised profit and loss to date, one point per capital-gains report you dropped. It is a STEP line, not a daily curve \u2014 it only moves when a new broker report arrives, so flat stretches mean no report, not no trading.')+'<span class="age">'+(sc.n_reports||0)+' reports since '+fmtD(sc.first_report_date)+'</span></div><div id="sc-curve" class="pc-host"></div></div></div>';
+    }
+    html+='</div>';
+
+    // ---- 02 how you win and lose ------------------------------------------------------
+    html+='<div class="pf-sec" id="sc-sec-2"><div class="pf-sh"><span class="pf-n">02</span><h3>How you win and lose</h3><span class="pop real">REAL</span><span class="uchip">closed names</span><span class="pf-sx">'+(c.n_names||0)+' names fully bought and sold this FY</span></div>';
+    if(c.hit_rate_pct!=null&&c.breakeven_hit_pct!=null){
+      var gap=Math.round((c.hit_rate_pct-c.breakeven_hit_pct)*10)/10, ok=(gap>=0);
+      html+='<div class="pf-take '+(ok?'good':'bad')+'">You win on <b>'+c.hit_rate_pct+'%</b> of the names you close, and your winners are <b>'+c.payoff+'\u00d7</b> the size of your losers. At that payoff, breaking even needs a <b>'+c.breakeven_hit_pct+'%</b> win rate \u2014 so you are <b class="'+(ok?'pos':'neg')+'">'+(ok?'ahead of':'short of')+' that bar by '+Math.abs(gap)+' points</b>.</div>';
+    }
+    html+='<div class="card pf-card full" style="height:auto"><div class="sc-stats">'+
+      '<div><span class="sck">Won</span><span class="scv pos">'+(c.n_win||0)+'</span><span class="scs">names</span></div>'+
+      '<div><span class="sck">Lost</span><span class="scv neg">'+(c.n_loss||0)+'</span><span class="scs">names</span></div>'+
+      '<div><span class="sck">Average win</span><span class="scv pos sens">'+scMoney(c.avg_win)+'</span><span class="scs">per winning name</span></div>'+
+      '<div><span class="sck">Average loss</span><span class="scv neg sens">'+scMoney(c.avg_loss)+'</span><span class="scs">per losing name</span></div>'+
+      '<div><span class="sck">Biggest win</span><span class="scv pos sens">'+scMoney((c.best||{}).realized)+'</span><span class="scs">'+esc(String((c.best||{}).name||'\u2014'))+'</span></div>'+
+      '<div><span class="sck">Biggest loss</span><span class="scv neg sens">'+scMoney((c.worst||{}).realized)+'</span><span class="scs">'+esc(String((c.worst||{}).name||'\u2014'))+'</span></div>'+
+      '<div><span class="sck">Total won</span><span class="scv pos sens">'+scMoney(c.gross_profit,true)+'</span><span class="scs">before the losses</span></div>'+
+      '<div><span class="sck">Total lost</span><span class="scv neg sens">'+scMoney(c.gross_loss,true)+'</span><span class="scs">'+(c.profit_factor!=null?('you keep \u20b9'+c.profit_factor+' for every \u20b91 lost'):'')+'</span></div>'+
+      '</div></div>';
+    html+='</div>';
+
+    // ---- 03 where the money went ------------------------------------------------------
+    html+='<div class="pf-sec" id="sc-sec-3"><div class="pf-sh"><span class="pf-n">03</span><h3>Where the money went</h3><span class="pop real">REAL</span><span class="uchip">\u20b9 booked per name</span><span class="pf-sx">every name you closed this year, best to worst</span></div>';
+    if(k.worst_name&&k.worst_share_of_losses_pct!=null){
+      html+='<div class="pf-take '+(k.worst_share_of_losses_pct>=25?'bad':'unclear')+'"><b>'+esc(String(k.worst_name))+'</b> alone is <b class="neg">'+k.worst_share_of_losses_pct+'%</b> of every rupee you lost this year'+(k.top3_share_of_losses_pct!=null?(', and your three worst names are <b class="neg">'+k.top3_share_of_losses_pct+'%</b>'):'')+'. The losses are concentrated, not spread \u2014 that is a position-size question, not a stock-picking one.</div>';
+    }
+    var rows=(sc.names||[]), mx=1;
+    rows.forEach(function(n){ var v=Math.abs(n.realized||0); if(v>mx) mx=v; });
+    html+='<div class="card pf-card full scroll-y" style="height:auto"><div class="c-lbl"><span class="d"></span>Booked P&amp;L by name'+HT('One row per security in the capital-gains report. The report is cumulative for the whole financial year per SECURITY, so if you traded a name more than once those trades are summed into a single row here \u2014 it cannot show them separately. The percentage is the return on the money you actually put into that name.')+'<span class="age">'+rows.length+' names \u00b7 as of '+fmtD(sc.as_of)+'</span></div><div class="sc-tbl">'+rows.map(function(n){
+      var v=n.realized||0, w=Math.max(2,Math.round(Math.abs(v)/mx*100));
+      return '<div class="sc-row"><span class="sc-nm">'+esc(String(n.ticker||n.security||''))+'</span>'+
+        '<span class="sc-bar '+(v>=0?'p':'n')+'"><i style="width:'+w+'%"></i></span>'+
+        '<span class="sc-v sens '+scSign(v)+'">'+scMoney(v)+'</span>'+
+        '<span class="sc-p '+scSign(n.return_pct)+'">'+(n.return_pct==null?'\u2014':((n.return_pct>0?'+':'')+n.return_pct+'%'))+'</span></div>';
+    }).join('')+'</div></div></div>';
+
+    // ---- 04 what is still open --------------------------------------------------------
+    html+='<div class="pf-sec" id="sc-sec-4"><div class="pf-sh"><span class="pf-n">04</span><h3>Still open</h3><span class="pop real">REAL</span><span class="uchip">\u20b9 unbooked</span><span class="pf-sx">'+(ob?('from your broker book \u00b7 as of '+fmtD(ob.as_of)):'no broker drop loaded')+'</span></div>';
+    if(ob&&(ob.held||[]).length){
+      html+='<div class="pf-take '+(ob.unrealized>0?'good':'bad')+'">Your open book is <b class="'+scSign(ob.unrealized)+' sens">'+scMoney(ob.unrealized)+'</b> ('+(ob.unrealized_pct!=null?((ob.unrealized_pct>0?'+':'')+ob.unrealized_pct+'%'):'\u2014')+') on <b class="sens">'+scMoney(ob.invested,true)+'</b> invested. None of this is booked yet \u2014 it moves with the price.</div>';
+      var omx=1; ob.held.forEach(function(h){ var v=Math.abs(h.unreal||0); if(v>omx) omx=v; });
+      html+='<div class="card pf-card full" style="height:auto"><div class="c-lbl"><span class="d"></span>Open positions'+HT('Straight from the latest broker drop \u2014 quantity and average cost as the broker reports them, marked against the last price. Unbooked: it becomes part of the capital-gains record only when you sell.')+'<span class="age">'+ob.n_held+' names</span></div><div class="sc-tbl">'+
+        ob.held.map(function(h){ var v=h.unreal||0, w=Math.max(2,Math.round(Math.abs(v)/omx*100));
+          return '<div class="sc-row"><span class="sc-nm">'+esc(String(h.ticker||''))+'</span>'+
+            '<span class="sc-bar '+(v>=0?'p':'n')+'"><i style="width:'+w+'%"></i></span>'+
+            '<span class="sc-v sens '+scSign(v)+'">'+scMoney(v)+'</span>'+
+            '<span class="sc-p '+scSign(h.unreal_pct)+'">'+(h.unreal_pct==null?'\u2014':((h.unreal_pct>0?'+':'')+h.unreal_pct+'%'))+'</span></div>';
+        }).join('')+'</div></div>';
+    } else { html+='<div class="pf-grid"><div class="card pf-card full">'+window.pfState('pending','Open book','No broker drop is loaded, so the open side is blank rather than guessed.')+'</div></div>'; }
+    html+='</div>';
+
+    // ---- 05 the honest edges of the source --------------------------------------------
+    html+='<div class="pf-sec" id="sc-sec-5"><div class="pf-sh"><span class="pf-n">05</span><h3>What this record cannot tell you</h3><span class="uchip">source limits</span><span class="pf-sx">stated, not approximated</span></div>';
+    html+='<div class="card pf-card full" style="height:auto"><div class="c-lbl"><span class="d"></span>Limits of the capital-gains report<span class="age">'+esc(String(sc.source_file||''))+'</span></div>'+
+      '<ul class="sc-list">'+(sc.cannot_answer||[]).map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul>'+
+      '<div class="c-lbl sub" style="margin-top:10px"><span class="d"></span>What you could give me that would sharpen it</div>'+
+      '<ul class="sc-list want">'+(sc.would_sharpen_this||[]).map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul>'+
+      '<div class="fc-note" style="margin-top:9px">'+esc(String(sc.basis||''))+'</div>'+
+      '<div class="fc-note">'+esc(String(sc.excluded_by_design||''))+'</div></div>';
+    html+='</div>';
+
+    setFace('z-perf', html);
+    try{ var _z=document.getElementById('zasof-perf'); if(_z) _z.textContent='as of '+fmtD(sc.as_of); }catch(e0){}
+    if(window.__PC['sc-curve'] && document.getElementById('sc-curve')) pcRender('sc-curve');
+  }catch(e){__reportErr('scorecard',e);} }
+
+  function scTipCurve(d,label,smap){
+    var p=(smap.fy&&smap.fy[d])||null; if(!p) return '<div class="tt-h">'+esc(label)+'</div>';
+    var nd=(p.nodes&&p.nodes[p.nodes.length-1])||{};
+    return '<div class="tt-ctx">Your booked P&amp;L \u2014 real money, from the broker report.</div>'+
+      '<div class="tt-h">'+esc(label)+'</div>'+
+      '<div class="tt-h2">'+((p.y>0?'+':'')+Math.round(p.y).toLocaleString('en-IN'))+'</div>'+
+      (nd.delta!=null?('<div class="tt-r"><span>since the last report</span><b class="'+(nd.delta>0?'pos':'neg')+'">'+((nd.delta>0?'+':'')+Math.round(nd.delta).toLocaleString('en-IN'))+'</b></div>'):'')+
+      (nd.n!=null?('<div class="tt-r"><span>names in the report</span><b>'+nd.n+'</b></div>'):'');
+  }
+  /* SCORECARD:END --------------------------------------------------------------------------- */
+
 
 
   // Contract-driven staleness render (F260702): the client dims + banners STRICTLY
@@ -3089,7 +3259,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(!tl && !sp){ setFace('z-lab', decisionsHTML()+fibRadarHTML()+fibConflHTML()+fibBoardHTML()+
       '<div class="card empty-face"><div class="ef-ic">🧪</div><div class="ef-t">Radar</div>'+
       '<div class="ef-m">🔒 Unlock to view the deliberate-trade ledger. The fires, the engine map and the board above are public — they carry levels only, never holdings.</div>'+
-      '<div class="ef-tag">operator-private · AES-GCM</div></div>'); return; }
+      '<div class="ef-tag">operator-private · AES-GCM</div></div>'+signalsBlockHTML()); try{ window.__signalsMount(); }catch(e2){} return; }
     // F260727 zone order, operator-specified 27-Jul: fires -> engine map -> board. The engine map
     // used to be appended at the very BOTTOM of the zone, below the whole ledger; "after the fib
     // confluence fires section, I actually want you to place the fib confluence radar - engine
@@ -3565,7 +3735,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         (function(){ var ex=window.__tlExpandedIds||{}; for(var id in ex){ var d=document.getElementById(id); if(d) d.style.display='table-row'; } })(); };
       window.tlLedgerPage=function(delta){ window.__tlPage=(window.__tlPage||0)+delta; window.tlRenderLedger(); };
       window.tlSetView=function(vw){ window.__tlView=vw; try{localStorage.setItem('tlView',vw);}catch(e){} window.__tlPage=0; window.__tlSpSeg=({fib:'fib-confluence',swing:'bubble-swing',positional:'composite-positional'})[vw]||'fib-confluence'; renderLab(); };
-      window.perfSetView=function(vw){ window.__tlView=vw; try{localStorage.setItem('tlView',vw);}catch(e){} window.__tlSpSeg=({fib:'fib-confluence',swing:'bubble-swing',positional:'composite-positional'})[vw]||'fib-confluence'; try{renderPerf();}catch(e){} try{ if(document.getElementById('tl-ledger')) renderLab(); }catch(e){} };
+      window.perfSetView=function(vw){ window.__tlView=vw; try{localStorage.setItem('tlView',vw);}catch(e){} window.__tlSpSeg=({fib:'fib-confluence',swing:'bubble-swing',positional:'composite-positional'})[vw]||'fib-confluence'; try{ renderLab(); }catch(e){} };
       // F260618 — Trade Lab toggled by trade type. Perf card: segmented toggle in the header,
       // graph LEFT + KPI 2×2 grid RIGHT, driven by tl.trade_lab_views[view]. Default Day-Trade,
       // persisted in localStorage. The toggle re-renders graph + KPIs + ledger for the selected type.
@@ -3623,8 +3793,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // surface is what the operator sees first. F260727: fibConflHTML moved OUT of this tail and up
     // to directly after the fires (operator-specified order) — appending it here too would render
     // the engine map twice.
-    html = html + f149PanelsHTML();
+    html = html + f149PanelsHTML() + signalsBlockHTML();
     setFace('z-lab', html);
+    try{ window.__signalsMount(); }catch(e2){}
     if(tl){ try{ window.tlRenderHist(); window.tlRenderLedger(); }catch(e3){__reportErr('lab-tl',e3);} }
   }catch(e){__reportErr('lab',e);} }
 
@@ -4052,6 +4223,31 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .cvb-pnl.pos{color:var(--pos)}.cvb-pnl.neg{color:var(--neg)}.cvb-pnl.mut{color:var(--mut)}
 @media(max-width:760px){.rdr-grid{grid-template-columns:1fr}.rdr-take{flex-direction:column;gap:1px}
   .rdr-take .tkl{min-width:0}.hv-claim{flex-direction:column;gap:3px}.hvc-k{min-width:0}}
+/* -- F260728-SCORECARD: the real-money tab. Existing tokens only, no new palette. ------- */
+.sc-src{font-size:11px;line-height:1.6;color:var(--mut);background:var(--glass);border:1px solid rgba(255,255,255,.07);border-left:2px solid var(--acc);border-radius:9px;padding:9px 11px;margin-bottom:12px}
+/* A stat cell is label ABOVE value ABOVE sub-label. The bare .scgrid is only styled under
+   .sccard, so reusing it here rendered every cell as run-together text ("Won14names") -
+   present in the DOM and unreadable on screen. Same bug the Radar level-set hit. */
+.sc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px 12px}
+.sc-stats>div{display:flex;flex-direction:column;gap:1px;min-width:0}
+.sc-stats .sck{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+.sc-stats .scv{font-family:var(--font-mono);font-size:15px;font-weight:600;line-height:1.15}
+.sc-stats .scv.pos{color:var(--pos)}.sc-stats .scv.neg{color:var(--neg)}
+.sc-stats .scs{font-family:var(--font-mono);font-size:8.5px;line-height:1.35;color:var(--mut)}
+.sc-tbl{font-family:var(--font-mono);font-size:10.5px}
+.sc-row{display:grid;grid-template-columns:132px 1fr 104px 66px;gap:9px;align-items:center;padding:4px 2px;border-bottom:1px solid rgba(255,255,255,.04)}
+.sc-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.02em}
+.sc-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;display:block}
+.sc-bar i{display:block;height:100%}
+.sc-bar.p i{background:linear-gradient(90deg,var(--pos),color-mix(in srgb,var(--pos) 55%,transparent))}
+.sc-bar.n i{background:linear-gradient(90deg,var(--neg),color-mix(in srgb,var(--neg) 55%,transparent))}
+.sc-v,.sc-p{text-align:right}
+.sc-v.pos,.sc-p.pos{color:var(--pos)}.sc-v.neg,.sc-p.neg{color:var(--neg)}
+.sc-list{margin:4px 0 0;padding-left:17px;font-size:11px;line-height:1.65;color:var(--mut)}
+.sc-list li{margin-bottom:4px}
+.sc-list.want li{color:var(--ink)}
+.sig-block>summary{color:var(--mut)}
+@media(max-width:760px){.sc-row{grid-template-columns:100px 1fr 84px 54px;gap:6px}}
 /* -- F260727 decision ledger -------------------------------------------------------------------- */
 .dec-wrap.has-od{border-color:color-mix(in srgb,var(--watch) 40%,transparent)}
 .dec-tbl{font-family:var(--font-mono);font-size:10.5px}
