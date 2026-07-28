@@ -2179,6 +2179,19 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       ['Capacity','capacity_mw','installed, MW','mw'],
       ['Utilisation','plf_pct','plant load factor','pct0'],
       ['Revenue','revenue','for the period','cr'],
+      ['Profit','pat','profit after tax','cr']],
+    'lending':[
+      ['Loan book','aum','assets under management','cr'],
+      ['Margin','nim_pct','net interest margin','pct0'],
+      ['Bad loans','gnpa_pct','gross NPA','pct0'],
+      ['Profit','pat','profit after tax','cr']],
+    // Every business has these. Used when a company's MODEL-specific drivers have not been read
+    // yet — the financials are known, the driver is not, and four dashes would say "no data" when
+    // the truth is "not that deep yet".
+    'baseline':[
+      ['Revenue','revenue','for the period','cr'],
+      ['Growth','revenue_yoy','vs the prior year','pctd'],
+      ['Operating margin','opm_pct','operating profit / revenue','pct0'],
       ['Profit','pat','profit after tax','cr']]
   };
   function _bizFmt(v,kind){
@@ -2220,6 +2233,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var why=(m.reasons&&m.reasons.length)?('<div class="biz-why">'+esc(m.reasons[0])+'</div>'):'';
 
     var spec=_BIZMETRICS[c.model||'backlog']||_BIZMETRICS['backlog'];
+    var haveModel=spec.some(function(s){ return L[s[1]]!=null; });
+    var usedBaseline=false;
+    if(!haveModel && (c.model||'backlog')!=='baseline'){ spec=_BIZMETRICS['baseline']; usedBaseline=true; }
     var grid='<div class="biz-grid">'+spec.map(function(s){
       var v=L[s[1]];
       var sub=s[2];
@@ -2278,7 +2294,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var asof='<div class="biz-asof">'+esc(per||'period unknown')+
       (q.latest_period?(' · quarters to '+esc(q.latest_period)):'')+
       (pend?(' · year ended '+fmtD(pend,true)):'')+
-      ' · '+esc(L.verification||'unverified')+'</div>';
+      ' · '+esc(L.verification||'unverified')+
+      ' · '+((c.depth==='full'&&!usedBaseline)?'full read':'baseline read — '+esc(c.model||'backlog')+' drivers not yet sourced')+
+      '</div>';
 
     return '<div class="bizc"'+(isHeld?' data-held="1"':'')+'>'+head+why+grid+spark+gl+fal+asof+'</div>';
   }
