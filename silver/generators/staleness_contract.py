@@ -470,6 +470,17 @@ EQUITY_BLOCKS = {
                                   public_as="family_account_b", allow_empty=True),
     "performance":           _blk("parse_capital_gains.py", "laptop", 10, severity="warn",
                                   public_as="perf_private", allow_empty=True),
+    "real_scorecard":        _blk("real_scorecard.py", "operator", 10,
+                                  _key_date("as_of"), severity="warn",
+                                  public_as="scorecard_private", allow_empty=True,
+                                  note="F260728-SCORECARD: the operator's REAL-money record, "
+                                       "built from the capital-gains reports + the broker book. "
+                                       "Substrate is OPERATOR because it advances only when a "
+                                       "cap-gains report is dropped - so staleness here is a nag "
+                                       "to drop one, not a system fault. It must still be DATED: "
+                                       "an undated scorecard cannot be told apart from a current "
+                                       "one, and the whole point of the block is that the number "
+                                       "on it is TRUE TODAY."),
     "trade_lab":             _blk("trade_tracker_emit.py", "laptop", 2, severity="warn",
                                   public_as="trade_lab_private", allow_empty=True),
     "conviction":            _blk("conviction_book", "laptop", 10, severity="warn",
