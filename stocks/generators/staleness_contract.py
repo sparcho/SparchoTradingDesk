@@ -470,6 +470,10 @@ EQUITY_BLOCKS = {
                                   public_as="family_account_b", allow_empty=True),
     "performance":           _blk("parse_capital_gains.py", "laptop", 10, severity="warn",
                                   public_as="perf_private", allow_empty=True),
+    # F260728-ORDERLOG: the order-log behaviour half rides INSIDE real_scorecard.behaviour rather
+    # than as its own block — it is optional by design (the Scorecard was complete before it and
+    # stays complete if the export goes missing), and an optional block with its own contract
+    # entry would nag for a file the operator has no obligation to re-drop.
     "real_scorecard":        _blk("real_scorecard.py", "operator", 10,
                                   _key_date("as_of"), severity="warn",
                                   public_as="scorecard_private", allow_empty=True,
