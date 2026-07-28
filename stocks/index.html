@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785251502">
-<meta name="x-built-at" content="2026-07-28T15:11:16+00:00">
+<meta name="x-build-id" content="1785253083">
+<meta name="x-built-at" content="2026-07-28T15:37:36+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785251502",BUILT_AT="2026-07-28T15:11:16+00:00";
+  var BID="1785253083",BUILT_AT="2026-07-28T15:37:36+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2204,33 +2204,38 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         +'<span class="uchip">your order log</span>'
         +'<span class="pf-sx">'+(bh.n_orders||0)+' orders placed \u00b7 '+(bh.n_fills||0)+' filled \u00b7 '
         +fmtD(bh.window_start)+' to '+fmtD(bh.as_of)+'</span></div>';
-      // The finding that changes what to fix: a stop never PLACED is a different failure
-      // from a stop placed and jumped.
-      if(bs.n_orders){
-        html+='<div class="pf-take '+(bs.ever_protected?'unclear':'bad')+'">'+
-          (bs.ever_protected
-            ? ('A stop has taken you out of a trade '+bs.n_trigger_filled+' time'+(bs.n_trigger_filled===1?'':'s')+'.')
-            : ('<b>No stop-loss order has ever executed.</b> Across '+bs.n_orders+' orders you placed '+
-               'a protective order <b>'+bs.n_with_trigger+' time'+(bs.n_with_trigger===1?'':'s')+'</b>'+
-               (bs.last_attempt?(' \u2014 the last on '+fmtD(bs.last_attempt)):'')+', and not one of them filled. '+
-               'Every exit you have taken was a manual decision. That is not a stop being jumped; '+
-               'it is a stop that was never there.'))+'</div>';
+      // Resting stops are deliberately not used - a stop sitting on the exchange broadcasts the
+      // level. The stop is mental, so the log cannot see it directly. What it CAN see is the
+      // moment the operator described: price runs past the mental stop and, rather than exiting,
+      // they add. Depth-when-you-added against how the whole position ended is that, measured.
+      var po=bh.positions||{}, byd=po.by_depth||{}, na=po.no_add_while_under||{};
+      html+='<div class="pf-take unclear">You do not leave stop orders resting on the exchange \u2014 that is deliberate, and the log agrees: <b>'+(bs.n_with_trigger||0)+'</b> of <b>'+(bs.n_orders||0)+'</b> orders carried a trigger, none filled. So the stop is mental, and the only honest question is whether it gets honoured.</div>';
+      if(po.deepest_add_that_recovered){
+        html+='<div class="pf-take bad">Across <b>'+(po.n_closed||0)+'</b> closed positions, the line sits at about <b>5%</b>. Adds made up to <b>'+esc(String(po.deepest_add_that_recovered))+'</b> your average recovered more often than not. Past that they did not \u2014 and past 5% the recovery rate falls to <b class="neg">'+((byd['5-10% under']||{}).hit_rate_pct!=null?byd['5-10% under'].hit_rate_pct+'%':'\u2014')+'</b>. Your instinct that a 1\u20132% overshoot is opportunity is <b>supported</b>; the damage starts where the overshoot stops being small.</div>';
       }
+      html+='<div class="card pf-card full" style="height:auto"><div class="c-lbl"><span class="d"></span>'+
+        'When you added, how deep were you'+HT('Every position you took, flat to flat, grouped by how far below your own average price you were at the moment you added to it \u2014 against how the whole position finally ended. This is scored per POSITION, not per lot: FIFO would split one decision into a loser and a winner and tell you nothing. A drawdown you did NOT act on is invisible here, because an order log only records what you did.')+'<span class="age">'+(po.n_closed||0)+' closed positions</span></div>'+
+        '<div class="sc-tbl"><div class="sc-row uwh"><span class="sc-nm">when you added</span><span class="sc-v">positions</span><span class="sc-v">recovered</span><span class="sc-v">median</span><span class="sc-p">worst</span></div>'+
+        [['no add while under',na]].concat(Object.keys(byd).map(function(k){ return ['added '+k, byd[k]]; }))
+          .map(function(p){ var lbl=p[0], v=p[1]||{}; if(!v.n) return '';
+            var hr=v.hit_rate_pct, hc=(hr==null?'':(hr>=50?'pos':'neg'));
+            return '<div class="sc-row"><span class="sc-nm">'+esc(lbl)+'</span>'+
+              '<span class="sc-v">'+v.n+'</span>'+
+              '<span class="sc-v '+hc+'">'+(hr==null?'\u2014':(hr+'%'))+'</span>'+
+              '<span class="sc-v '+scSign(v.median_ret_pct)+'">'+(v.median_ret_pct==null?'\u2014':((v.median_ret_pct>0?'+':'')+v.median_ret_pct+'%'))+'</span>'+
+              '<span class="sc-p neg">'+(v.worst_ret_pct==null?'\u2014':(v.worst_ret_pct+'%'))+'</span></div>'; }).join('')+
+        '</div>'+
+        '<div class="fc-note" style="margin-top:7px">'+esc(String(po.measures||''))+' The deep bands hold few positions \u2014 read them as a direction, not a rule.</div></div>';
       html+='<div class="card pf-card full" style="height:auto"><div class="sc-stats">'+
-        '<div><span class="sck">Protective orders</span><span class="scv '+(bs.n_trigger_filled?'':'neg')+'">'+(bs.n_with_trigger||0)+' / '+(bs.n_orders||0)+'</span><span class="scs">'+(bs.n_trigger_filled||0)+' ever filled</span></div>'+
-        '<div><span class="sck">Round trips</span><span class="scv">'+(bt.n||0)+'</span><span class="scs">closed lots, FIFO \u00b7 '+(bt.hit_rate_pct!=null?(bt.hit_rate_pct+'% won'):'')+'</span></div>'+
+        '<div><span class="sck">Closed positions</span><span class="scv">'+(po.n_closed||0)+'</span><span class="scs">flat to flat \u00b7 '+(po.n_open||0)+' still open</span></div>'+
+        '<div><span class="sck">Round trips</span><span class="scv">'+(bt.n||0)+'</span><span class="scs">FIFO lots \u00b7 '+(bt.hit_rate_pct!=null?(bt.hit_rate_pct+'% won'):'')+'</span></div>'+
         '<div><span class="sck">Winners held</span><span class="scv pos">'+(bt.median_hold_days_win!=null?(bt.median_hold_days_win+'d'):'\u2014')+'</span><span class="scs">median</span></div>'+
         '<div><span class="sck">Losers held</span><span class="scv neg">'+(bt.median_hold_days_loss!=null?(bt.median_hold_days_loss+'d'):'\u2014')+'</span><span class="scs">median</span></div>'+
-        '<div><span class="sck">Averaged down</span><span class="scv '+((ba.averaging_down||0)>(ba.pyramiding||0)?'neg':'')+'">'+(ba.averaging_down||0)+'</span><span class="scs">adds below your average</span></div>'+
-        '<div><span class="sck">Added on strength</span><span class="scv pos">'+(ba.pyramiding||0)+'</span><span class="scs">adds above your average</span></div>'+
+        '<div><span class="sck">Added under water</span><span class="scv">'+(ba.averaging_down||0)+'</span><span class="scs">adds below your average</span></div>'+
+        '<div><span class="sck">Added on strength</span><span class="scv">'+(ba.pyramiding||0)+'</span><span class="scs">adds above your average</span></div>'+
         '<div><span class="sck">Held past 30d</span><span class="scv">'+(bt.n_held_over_30d||0)+'</span><span class="scs">'+(bt.n_held_over_30d_win||0)+' of them won</span></div>'+
         '<div><span class="sck">Same-day</span><span class="scv">'+(bt.n_same_day||0)+'</span><span class="scs">in and out the same day</span></div>'+
         '</div></div>';
-      if((ba.averaging_down||0)>(ba.pyramiding||0)){
-        html+='<div class="pf-take bad">You added to a position <b>'+ba.averaging_down+'</b> times below your '+
-          'own average and <b>'+ba.pyramiding+'</b> times above it. Adding while under water is what turns '+
-          'a small loss into the one that dominates the year.</div>';
-      }
       var busy=(bh.busiest||[]).slice(0,6);
       if(busy.length){
         html+='<div class="card pf-card full" style="height:auto"><div class="c-lbl"><span class="d"></span>'+
@@ -4305,6 +4310,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .sc-bar.n i{background:linear-gradient(90deg,var(--neg),color-mix(in srgb,var(--neg) 55%,transparent))}
 .sc-v,.sc-p{text-align:right}
 .sc-v.pos,.sc-p.pos{color:var(--pos)}.sc-v.neg,.sc-p.neg{color:var(--neg)}
+.sc-row.uwh{color:var(--mut);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;border-bottom-color:rgba(255,255,255,.1)}
+.sc-row.uwh .sc-nm{letter-spacing:.08em}
+#sc-sec-behaviour .sc-row{grid-template-columns:150px 1fr 1fr 1fr 1fr}
+#sc-sec-behaviour .sc-row .sc-v,#sc-sec-behaviour .sc-row .sc-p{text-align:right}
 .sc-list{margin:4px 0 0;padding-left:17px;font-size:11px;line-height:1.65;color:var(--mut)}
 .sc-list li{margin-bottom:4px}
 .sc-list.want li{color:var(--ink)}
