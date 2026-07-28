@@ -48,7 +48,7 @@ from datetime import datetime
 from pathlib import Path
 from collections import defaultdict
 sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from nse_calendar import latest_session as _latest_nse_session, prev_session as _prev_nse_session  # F131 260616 — NSE-session date gate; F138: holiday-aware staleness
+from nse_calendar import latest_session as _latest_nse_session, is_session as _is_nse_session, prev_session as _prev_nse_session  # F131 260616 / F260622 — NSE-session date gate; F138: prev_session for holiday-aware staleness
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 TRADER_ROOT = SCRIPT_DIR.parent.parent
@@ -66,7 +66,7 @@ SECTOR_MAP = {
     # Fundamental 10G #1 needs: Power, IT, NBFC
     'POWER': {
         'NTPC', 'POWERGRID', 'ADANIGREEN', 'TATAPOWER',
-        'IREDA', 'WAAREEENER', 'MGL',  # MGL = gas utility, treating as power-adjacent
+        'IREDA', 'WAAREEENER', 'MGL', 'VEDPOWER',  # +VEDPOWER 260630 (Vedanta Power thermal demerger, held); MGL = gas utility, power-adjacent
     },
     'IT': {
         'TCS', 'INFY', 'HCLTECH', 'PERSISTENT', 'TATAELXSI',
@@ -78,14 +78,19 @@ SECTOR_MAP = {
     'MINERALS': {'GMDCLTD', 'MOIL', 'HINDZINC', 'GRAPHITE', 'VEDL', 'DECNGOLD', 'HINDCOPPER'},   # +DECNGOLD 260619 (gold explorer); +HINDCOPPER 260630 (copper PSU onboard)
     'TELECOM': {'HFCL', 'STLTECH', 'TEJASNET', 'BHARTIARTL', 'POLYCAB', 'KEI', 'PACEDIGITK'},   # +PACEDIGITK 260619 (held; telecom-digital infra)
     'DEFENCE': {'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO'},   # +APOLLO +ASTRAMICRO 260620 (full screener-verse onboard)
-    'SEMI_EMS': {'KAYNES', 'DIXON', 'SYRMA', 'AMBER'},
-    'DC': {'ANANTRAJ', 'BLUESTAR'},
-    'L5_APPS': {'KPIT', 'NAUKRI', 'TANLA', 'MAPMYINDIA', 'NEWGEN'},
-    'DPI': {'PAYTM', 'PBFINTECH', 'CDSL', 'ANGELONE'},
+    'SEMI_EMS': {
+        'EXIDEIND',
+        'OLAELEC','KAYNES', 'DIXON', 'SYRMA', 'AMBER'},
+    'DC': {
+        'DENTA','ANANTRAJ', 'BLUESTARCO'},
+    'L5_APPS': {
+        'CEINSYS','KPIT', 'NAUKRI', 'TANLA', 'MAPMYINDIA', 'NEWGEN'},
+    'DPI': {'PAYTM', 'PBFINTECH', 'CDSL', 'ANGELONE', 'NSDL'},   # +NSDL 260715 (depository, CDSL peer; held)
     'PHARMA': {'DRREDDY', 'SUNPHARMA', 'BIOCON'},
     'AGRI': {'AVANTIFEED', 'PARADEEP'},
     'FERT': {'PARADEEP'},
     'ETF': {'HDFCSML250'},   # Broad Smallcap index ETF (260620); tracked + level-ID'd, NOT value-screened (see G1_NON_SCREENED)
+    'CHEMICALS': {'HSCL', 'PCBL', 'AETHER'},   # +260630 specialty-chem / carbon & battery materials (HSCL held; PCBL+AETHER already in ALL_TICKERS)
 }
 
 # Indian-market cap thresholds (₹ Cr)
@@ -146,6 +151,8 @@ def load_historical_closes():
             close = float(r['close'])
         except (TypeError, ValueError):
             continue
+        if not _is_nse_session(r['date']):   # F260622: never score a non-NSE-session (weekend/holiday) bar
+            continue
         by_t[r['ticker']].append((r['date'], close))
     return {t: sorted(rows) for t, rows in by_t.items()}
 
@@ -165,6 +172,8 @@ def load_historical_with_volume():
             v = int(float(r.get('volume') or 0))
         except (TypeError, ValueError):
             v = 0
+        if not _is_nse_session(r['date']):   # F260622: skip non-session (weekend/holiday) bars
+            continue
         by_t[r['ticker']].append((r['date'], float(r['close']), v))
     return {t: sorted(rows) for t, rows in by_t.items()}
 
@@ -175,6 +184,8 @@ def load_daily_ohlc():
         return {}
     by_t = defaultdict(list)
     for r in csv.DictReader(DAILY_CSV.open()):
+        if not _is_nse_session(r.get('date')):   # F260622: skip non-session (weekend/holiday) bars
+            continue
         try:
             by_t[r['ticker']].append({
                 'date':   r['date'],
@@ -239,8 +250,9 @@ G1_NON_SCREENED = {'NIFTY', 'NIFTYBEES', 'BANKBEES', 'ITBEES', 'PHARMABEES', 'PS
 def historical_staleness(historical, run_date, threshold_frac=0.05):
     """G-1: flag if > threshold of SCREENED tickers are stale (last_date < run_date - 1 bday).
     Benchmark/ETF context series are excluded — the gate protects screened output, not display."""
-    # F138: holiday-aware cutoff = last real NSE session before run_date (was _prev_business_day,
-    # weekday-only -> false-aborted on NSE holidays like 2026-06-26 Muharram).
+    # F138: holiday-aware cutoff = last real NSE session strictly before run_date.
+    # Was _prev_business_day (weekday-only, no holiday cal) -> on 2026-06-29 it demanded
+    # 26-Jun data that can never exist (26-Jun = Muharram NSE holiday) and false-aborted.
     cutoff = (_prev_nse_session(run_date) or _prev_business_day(run_date)).isoformat()
     last = {t: d for t, d in historical_last_dates(historical).items() if t not in G1_NON_SCREENED}
     stale = {t: d for t, d in last.items() if (d is None or d < cutoff)}
@@ -264,7 +276,7 @@ def write_stale_flag(info, today):
         "# FLAG: STALE-HIST-CACHE (F110 G-1)",
         "",
         f"**Run date:** {info['run_date']}  ",
-        f"**Freshness cutoff (run_date - 1 bday):** {info['cutoff']}  ",
+        f"**Freshness cutoff (last completed NSE session):** {info['cutoff']}  ",
         f"**Stale tickers:** {info['stale_count']} / {info['total']} "
         f"({info['stale_frac']*100:.0f}% > {info['threshold_frac']*100:.0f}% threshold) — RUN ABORTED  ",
         "",
@@ -879,6 +891,13 @@ def main():
     today = _latest_nse_session(_cal) or _cal
     if today != _cal:
         print(f"  [session-gate] {_cal} is a non-NSE session -> stamping as latest session {today}")
+    # F260622 weekend invariant: on a non-NSE-session day, do NOT re-score or re-emit. The latest
+    # session's scored artifacts (Friday's lens CSVs/MD) stay UNTOUCHED until the next real session,
+    # so a Sat/Sun (re)run can never advance the latest session or mutate Friday's scores.
+    if not _is_nse_session(_cal):
+        print(f"  [session-gate] {_cal} is not an NSE session — leaving the latest session "
+              f"({today}) scored output UNTOUCHED (no re-score, F260622).")
+        return 0
     # F110 G-1: pre-run staleness assertion on historical_closes.csv
     _stale = historical_staleness(historical, today)
     print(f"  hist freshness:      {_stale['total']-_stale['stale_count']}/{_stale['total']} fresh "
@@ -1338,4 +1357,3 @@ SCREENER_REGISTRY['DayTrade-Confluence'] = {
 
 if __name__ == '__main__':
     sys.exit(main())
-# nomenclature v2 wired 2026-05-05

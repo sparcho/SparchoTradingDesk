@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "NSDL",
-  "emitted_at_utc": "2026-07-28T03:24:54+00:00",
+  "emitted_at_utc": "2026-07-28T08:14:29+00:00",
   "public": {
     "ticker": "NSDL",
     "name": "National Securities Depository",
@@ -14,12 +14,12 @@
     "cap_size": "large",
     "tier": "T2",
     "conviction": null,
-    "position_status": "active",
-    "display_status": "held",
+    "position_status": "closed",
+    "display_status": "exited",
     "exchange": "NSE / BSE",
     "tv_symbol": "NSDL",
     "tv_exchange": "NSE",
-    "exit_date": null,
+    "exit_date": "2026-07-28",
     "exit_reason": null,
     "regime_global": {
       "zone": "YELLOW",
@@ -43,9 +43,9 @@
     "level_id_date": null,
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 810.05,
-      "day_chg_pct": -0.948,
-      "week_chg_pct": -1.4957135039824976,
+      "price": 822.15,
+      "day_chg_pct": 0.532,
+      "week_chg_pct": -0.024320544780208606,
       "date": "2026-07-28"
     },
     "chart_kind": "candles",
@@ -1725,10 +1725,10 @@
       ],
       [
         "2026-07-28",
-        810.6,
-        813.05,
-        809.0,
-        810.05
+        820.0,
+        825.0,
+        818.6,
+        822.15
       ]
     ],
     "sr_levels": [
@@ -1823,18 +1823,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 808.35,
+        "price": 810.7,
         "dir": "below",
         "kind": "watch",
-        "why": "pivot S1",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 810.7,
+        "price": 841.05,
         "dir": "above",
         "kind": "trim",
-        "why": "classical pivot",
+        "why": "50-day SMA",
         "auto": true
       },
       {
@@ -1849,32 +1849,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "RESISTANCE",
-        "price": 810.7,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 0.08024196037282773
-      },
-      {
         "label": "SUPPORT",
-        "price": 808.35,
+        "price": 810.7,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -0.2098635886673578
+        "dist_pct": -1.3926898984370166
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 841.05,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 2.298850574712641
       },
       {
         "label": "INVALIDATION",
         "price": 791.15,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -2.333189309301892
+        "dist_pct": -3.770601471750897
       },
       {
         "label": "UPSIDE",
         "price": 1342.2,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 65.69347571137585
+        "dist_pct": 63.254880496259815
       }
     ],
     "scenario_ladder": [
@@ -1887,7 +1887,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 810.05,
+        "level": 822.15,
         "note": "holds current band; reclaim Rs962 (200-SMA) to flip constructive"
       },
       {
@@ -1947,17 +1947,106 @@
         "ticker_specific": false
       }
     ],
-    "order_book": null,
+    "order_book": {
+      "momentum": {
+        "company": "NSDL",
+        "label": "NEUTRAL/WATCH",
+        "book_to_bill": null,
+        "ob_cover": null,
+        "execution_rate": null,
+        "flags": []
+      },
+      "company": {
+        "company": "NSDL",
+        "full_name": "National Securities Depository Ltd",
+        "segment": "Depository / capital-market infrastructure — flow business",
+        "role": "held",
+        "model": "flow",
+        "held": true,
+        "guidance": null,
+        "series": [
+          {
+            "period": "FY26",
+            "period_end": "2026-03-31",
+            "order_book_closing": null,
+            "revenue": 1660.2,
+            "book_to_bill": null,
+            "ob_cover": null,
+            "execution_rate": null,
+            "verification": "web-verified",
+            "derived": false
+          }
+        ],
+        "latest": {
+          "period": "FY26",
+          "order_book_closing": null,
+          "order_inflow": null,
+          "revenue": 1660.2,
+          "book_to_bill": null,
+          "ob_cover": null,
+          "execution_rate": null,
+          "enquiry_pipeline": null,
+          "revenue_yoy": null,
+          "opm_pct": null,
+          "pat": 380.0,
+          "market_share_pct": 86,
+          "accounts_added": 4940000,
+          "capacity_mw": null,
+          "plf_pct": null,
+          "realisation": null,
+          "verification": "web-verified"
+        },
+        "momentum": {
+          "label": "NEUTRAL/WATCH",
+          "reasons": [
+            "profit Rs 380 cr"
+          ],
+          "flags": [],
+          "ob_trend": null,
+          "rev_growth": null,
+          "book_to_bill": null,
+          "ob_cover": null,
+          "execution_rate": null,
+          "basis": "fundamentals"
+        },
+        "quarterly": {
+          "series": [],
+          "ob_qoq": null,
+          "ob_trend": null,
+          "inflow_last": null,
+          "inflow_prior": null,
+          "intake_slowing": null,
+          "latest_period": null
+        },
+        "falsification": [
+          {
+            "trigger": "custody-value market share < 80%",
+            "status": "monitor",
+            "detail": "no auto-evaluable metric — manual watch",
+            "timeframe": "any FY",
+            "action": "review"
+          }
+        ],
+        "falsification_lines": [],
+        "events": [],
+        "template": null,
+        "book_composition": null,
+        "watch": null
+      },
+      "sector_context": {
+        "cycle_read": "Year 4 of a 7-year capex cycle — now in the execution-and-payment phase (execution rate matters most here; the orders are largely already won).",
+        "psu_defence_order_book_cr": 1500000,
+        "psu_defence_cover_x": "8-10",
+        "defence_exports_fy26_cr": 38424,
+        "defence_exports_target_2029_cr": 50000,
+        "source": "PIB / Union Budget / MoD; DR corpus (defence-railways brief)",
+        "verification": "vetted-DR-corpus"
+      },
+      "emitted_at": "2026-07-28 13:44 IST"
+    },
     "order_events": []
   },
   "privacy": {
-    "locked": true
-  },
-  "sensitive_enc": {
-    "v": 1,
-    "iter": 200000,
-    "salt": "NdjBfVPhUzwzbmdL2UGxYQ==",
-    "iv": "ZhK2dydSCz4sNhaf",
-    "ct": "wA8JNnt/N/DJ8NMGLrBRLP9se7p8ygpeoC8vLwRGS0XQvz+9WIe1nIIdUtHz0/pQipJBmip1dNCA9Zp5AbAP2mixJFdZrzrDt4NL2RYw4hW6Pu5jfrlx25Ek+RI21worP3JpMhwPNOZECEgDqVqd7WQcD75w24mJFAzYtqTnBsoXIe8ktBXr9gP/dFxw8POd5AS0yfe0ABgSs5R9NgjEy8wcyVqCxCkcCdPHyd2gzuIgFeh3ruIJonlOCjR/LHZi6v5gZsTKL/CqgMwwZiHtplxCuGHdFkZBPCJd7JiCjv4xyGlJ+ycwMwN/331UbYqlpL+qwcF016U5E7INfo78E2qIqeZQrZVBsJTZq9GC8DuDcliWEaAzp+AKg5PSu9K/kykYsb5q73g/oRNXNdJkeC3+JgivOtbnePR4S+Qe5/XGGCpdlEirxmN2j9i36wBGd6udnnUhPabKCAQpCD2XUF287reCgMurpCDw0QwH/aiNzr3ub/xTgGINgIELCWYDZJ2LV3ZiCK7qexTitedHF8cse8ZL/qj4rfVsCye5QqCCa8TjJkMdC5eeT9L0Dg++QxpUOVzZCKeD401UdsMHPvktM8COrgkgfSCaZiPnmQ3uWvC4kSLj6GddfS9JWT+01rHdPNxYJDI9RcTqMpk8h/zBrX4C+SIUl4hsKXBnJmsxS2Pc2zLOeslkXGPZyoEZg2voVZvDf25s2EgUlslojt4pVS7sfCDY4yU41ebCz2mufEjvdTr1EH8zbEopB/diABe9fleWKBVA6MaR0LcM7E8L6uXEl3OyacIjUtRThHRMbXt8XIOANqzgNyEfvnJPAfRaz5DH7r0+NmCuCklfhkw3VTD68ibQv4b9d6Sk8/+zzS1/Y6fHUbpuwVqu+XHPz6shYDP/vjrrqfCH3nPXp5/Y+3a7iECwkhmJVRgVZDLyMe13vSQ2OObJokUIG3IKRNN4vD32314IUPqgS6Nc0N4NHl/v/XIvsMM8e+AC55dEdEu/Uo8M0Ek1IZtf15OxJKfJSNR0Kf6pOHtLNgTpjZ7/4MsFYxT7nAYosALUSgg0ADlPnW4cr5h7KT7LC008W0nuCmexkGJP2M/A9HICnHn/JijOGKjqZBhzE1tPQ+CsE3puUa2FdbVAhi0f/BBsKMTm1w5bISfWX/2sa3XJahQV9MgncrcfAq+liN3JTPZ+dmH0KHVBv+oMYZ2KolZPGQ7iQzJ+HmnL3/TPNqyjXo6encDleNZn1aDqQ4JS7MCS9ZIFjHdATfTft271/i4v7e26KHW0kJUSQndclYsgUk1eCL9qWpGN/4Ps7t1a+RgmYuC0xZ2tMZ6evPxqFnVHY094CIbNwaaRLT0UCkoLrXIzvydV5ZjvT3Uir5Ofsig8slusHGLIPQbJtlVgUEjBM6teD86cXGU8EKc2gX9XrG4wamTKNgc0BWAAgmLeXhjX2+5DllOxy0w9QF3qhyCEys6OucynnnAOTvphvQBV9RNH7gyaZpRnko5wDKfsPP2J"
+    "locked": false
   }
 }
