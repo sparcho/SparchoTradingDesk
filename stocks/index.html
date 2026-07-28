@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785209051">
-<meta name="x-built-at" content="2026-07-28T03:23:41+00:00">
+<meta name="x-build-id" content="1782241583">
+<meta name="x-built-at" content="2026-06-23T19:06:21+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785209051",BUILT_AT="2026-07-28T03:23:41+00:00";
+  var BID="1782241583",BUILT_AT="2026-06-23T19:06:21+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1120,7 +1120,7 @@
 .bll{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);flex:0 0 78px;padding-top:2px}
 .biz-line b.pos{color:var(--pos)} .biz-line b.neg{color:var(--neg)}
 .biz-fal{display:inline-block;font-family:var(--font-mono);font-size:9.5px;margin-right:8px}
-.biz-fal.pos{color:var(--pos)} .biz-fal.neg{color:var(--neg)}
+.biz-fal.pos{color:var(--pos)} .biz-fal.neg{color:var(--neg)} .biz-fal.mon{color:var(--mut)}
 .biz-asof{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.05em;color:var(--faint);margin-top:10px;padding-top:8px;border-top:1px solid var(--hair)}
 /* compact form that rides with a fire */
 .biz-take{border:0;padding:0}
@@ -2154,6 +2154,55 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   function _bizPct(v,dp){ return (v==null||isNaN(v))?'—':((v>=0?'+':'')+(+v*100).toFixed(dp==null?0:dp)+'%'); }
   function _bizCr(v){ return (v==null||isNaN(v))?'—':('₹'+(+v).toLocaleString('en-IN',{maximumFractionDigits:0})+'cr'); }
 
+  // F260728 — the four headline metrics DEPEND ON THE BUSINESS MODEL. A miner has no book-to-bill
+  // and a depository has no order-book cover; showing them the backlog four yields four dashes,
+  // which reads as "no data" when the truth is "wrong question". Each entry is
+  // [label, field, subtitle, tone(v)] and reads from `latest`. Anything the company has not
+  // disclosed stays null and renders "—", never a derived stand-in.
+  var _BIZMETRICS={
+    'backlog':[
+      ['Order book','order_book_closing','closing backlog','cr'],
+      ['Book-to-bill','book_to_bill','>1 = winning work faster than billing','x'],
+      ['Cover','ob_cover','years of revenue already booked','x'],
+      ['Execution','execution_rate','of the book actually billed','pct']],
+    'volume-realisation':[
+      ['Revenue','revenue','for the period','cr'],
+      ['Revenue YoY','revenue_yoy','vs the prior year','pctd'],
+      ['Operating margin','opm_pct','operating profit / revenue','pct0'],
+      ['Realisation','realisation','price per unit sold','raw']],
+    'flow':[
+      ['Income','revenue','total income for the period','cr'],
+      ['Profit','pat','profit after tax','cr'],
+      ['Market share','market_share_pct','of custody value','pct0'],
+      ['Accounts added','accounts_added','net new accounts in the period','raw']],
+    'capacity':[
+      ['Capacity','capacity_mw','installed, MW','mw'],
+      ['Utilisation','plf_pct','plant load factor','pct0'],
+      ['Revenue','revenue','for the period','cr'],
+      ['Profit','pat','profit after tax','cr']]
+  };
+  function _bizFmt(v,kind){
+    if(v==null||v==='') return '—';
+    if(kind==='cr')   return _bizCr(v);
+    if(kind==='x')    return (+v).toFixed(2)+'×';
+    if(kind==='pct')  return _bizPct(v);
+    if(kind==='pct0') return (+v).toFixed(0)+'%';
+    if(kind==='pctd') return ((v>=0?'+':'')+(+v*100).toFixed(1)+'%');
+    if(kind==='mw')   return (+v).toLocaleString('en-IN')+' MW';
+    if(kind==='raw'&&typeof v==='number'&&Math.abs(v)>=100000)
+      return (v/100000).toFixed(1).replace(/\.0$/,'')+' lakh';   // 4940000 -> "49.4 lakh"
+    return esc(String(v));
+  }
+  function _bizTone(field,v){
+    if(v==null) return 'mut';
+    if(field==='book_to_bill')   return v>=1.2?'pos':(v>=1?'watch':'neg');
+    if(field==='ob_cover')       return v>=2?'pos':'watch';
+    if(field==='execution_rate') return v>=0.5?'pos':'watch';
+    if(field==='revenue_yoy')    return v>0?'pos':'neg';
+    if(field==='pat')            return v>0?'pos':'neg';
+    return '';
+  }
+
   function bizCardHTML(tk){
     var c=_bizBy()[String(tk||'').toUpperCase()];
     if(!c) return '';
@@ -2170,20 +2219,15 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // the single most important sentence the engine produced about this company
     var why=(m.reasons&&m.reasons.length)?('<div class="biz-why">'+esc(m.reasons[0])+'</div>'):'';
 
-    function kv(k,v,sub,cls){ return '<div><span class="bk">'+k+'</span><span class="bv '+(cls||'')+'">'+v+
-      '</span><span class="bs">'+esc(sub)+'</span></div>'; }
-    var b2b=(L.book_to_bill!=null)?+L.book_to_bill:null;
-    var grid='<div class="biz-grid">'+
-      kv('Order book',_bizCr(L.order_book_closing),(m.ob_trend?('vs prior year: '+m.ob_trend):'closing backlog'),
-         (m.ob_trend==='declining'?'neg':(m.ob_trend==='growing'?'pos':'watch')))+
-      kv('Book-to-bill',(b2b!=null?(b2b.toFixed(2)+'×'):'—'),
-         (b2b==null?'not disclosed':(b2b>=1?'winning work faster than billing':'billing faster than it wins')),
-         (b2b==null?'mut':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg'))))+
-      kv('Cover',(L.ob_cover!=null?(+L.ob_cover).toFixed(2)+'×':'—'),'years of revenue already booked',
-         (L.ob_cover==null?'mut':(L.ob_cover>=2?'pos':'watch')))+
-      kv('Execution',(L.execution_rate!=null?_bizPct(L.execution_rate):'—'),'of the book actually billed',
-         (L.execution_rate==null?'mut':(L.execution_rate>=0.5?'pos':'watch')))+
-    '</div>';
+    var spec=_BIZMETRICS[c.model||'backlog']||_BIZMETRICS['backlog'];
+    var grid='<div class="biz-grid">'+spec.map(function(s){
+      var v=L[s[1]];
+      var sub=s[2];
+      // the backlog headline carries the book's own direction when the engine classified one
+      if(s[1]==='order_book_closing'&&m.ob_trend) sub='vs prior year: '+m.ob_trend;
+      return '<div><span class="bk">'+s[0]+'</span><span class="bv '+_bizTone(s[1],v)+'">'+
+        _bizFmt(v,s[3])+'</span><span class="bs">'+esc(v==null?'not disclosed':sub)+'</span></div>';
+    }).join('')+'</div>';
 
     // quarterly order-book shape — magnitude, so a plain bar row; intake is the leading half
     var qs=(q.series||[]).filter(function(x){ return x.order_book_closing!=null; });
@@ -2214,11 +2258,19 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     }
 
     // the pre-committed sell lines. A written invalidation nobody can see is no invalidation.
+    // THREE states, not two. The evaluator also returns `monitor` — "no auto-evaluable metric,
+    // manual watch" — and treating everything non-intact as BREACHED reported a held name's thesis
+    // as broken (custody share < 80% flagged while the share was 86%) purely because the engine
+    // could not check that metric. Saying a position has failed when it has not is the worst error
+    // this card can make; "not checked" is not a finding.
     var fl=(c.falsification||[]);
     var fal=fl.length?('<div class="biz-line"><span class="bll">Sell triggers</span><span>'+fl.map(function(f){
-        var br=String(f.status||'')!=='intact';
-        return '<span class="biz-fal '+(br?'neg':'pos')+'" title="'+esc(f.detail||'')+'">'+
-          (br?'✗ BREACHED':'✓ intact')+' · '+esc(f.trigger||'')+'</span>'; }).join(' ')+'</span></div>'):'';
+        var st=String(f.status||'').toLowerCase(), cls, txt;
+        if(st==='intact'){ cls='pos'; txt='✓ intact'; }
+        else if(st==='triggered'){ cls='neg'; txt='✗ BREACHED'; }
+        else { cls='mon'; txt='◦ not auto-checked'; }
+        return '<span class="biz-fal '+cls+'" title="'+esc(f.detail||'')+'">'+
+          txt+' · '+esc(f.trigger||'')+'</span>'; }).join(' ')+'</span></div>'):'';
 
     // PROVENANCE — the period the numbers describe, not when the file was written.
     var per=L.period||(c.series&&c.series.length?c.series[c.series.length-1].period:null);
