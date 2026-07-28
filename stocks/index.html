@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785246153">
-<meta name="x-built-at" content="2026-07-28T13:42:06+00:00">
+<meta name="x-build-id" content="1785251502">
+<meta name="x-built-at" content="2026-07-28T15:11:16+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785246153",BUILT_AT="2026-07-28T13:42:06+00:00";
+  var BID="1785251502",BUILT_AT="2026-07-28T15:11:16+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2191,8 +2191,70 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '</div></div>';
     html+='</div>';
 
-    // ---- 03 where the money went ------------------------------------------------------
-    html+='<div class="pf-sec" id="sc-sec-3"><div class="pf-sh"><span class="pf-n">03</span><h3>Where the money went</h3><span class="pop real">REAL</span><span class="uchip">\u20b9 booked per name</span><span class="pf-sx">every name you closed this year, best to worst</span></div>';
+
+    // ---- 03 how the trading was actually done (order log) -----------------------------
+    // Separate section on purpose. These come from the per-ORDER log, which answers what a
+    // capital-gains report structurally cannot - but whose window opens mid-position, so it
+    // may never state a rupee total. Money above, behaviour here, no mixing.
+    var bh=sc.behaviour||null;
+    if(bh){
+      var bt=bh.trades||{}, bs=bh.stops||{}, ba=bh.adds||{}, bc=bh.coverage||{};
+      html+='<div class="pf-sec" id="sc-sec-behaviour"><div class="pf-sh"><span class="pf-n">03</span>'
+        +'<h3>How you actually traded</h3><span class="pop real">REAL</span>'
+        +'<span class="uchip">your order log</span>'
+        +'<span class="pf-sx">'+(bh.n_orders||0)+' orders placed \u00b7 '+(bh.n_fills||0)+' filled \u00b7 '
+        +fmtD(bh.window_start)+' to '+fmtD(bh.as_of)+'</span></div>';
+      // The finding that changes what to fix: a stop never PLACED is a different failure
+      // from a stop placed and jumped.
+      if(bs.n_orders){
+        html+='<div class="pf-take '+(bs.ever_protected?'unclear':'bad')+'">'+
+          (bs.ever_protected
+            ? ('A stop has taken you out of a trade '+bs.n_trigger_filled+' time'+(bs.n_trigger_filled===1?'':'s')+'.')
+            : ('<b>No stop-loss order has ever executed.</b> Across '+bs.n_orders+' orders you placed '+
+               'a protective order <b>'+bs.n_with_trigger+' time'+(bs.n_with_trigger===1?'':'s')+'</b>'+
+               (bs.last_attempt?(' \u2014 the last on '+fmtD(bs.last_attempt)):'')+', and not one of them filled. '+
+               'Every exit you have taken was a manual decision. That is not a stop being jumped; '+
+               'it is a stop that was never there.'))+'</div>';
+      }
+      html+='<div class="card pf-card full" style="height:auto"><div class="sc-stats">'+
+        '<div><span class="sck">Protective orders</span><span class="scv '+(bs.n_trigger_filled?'':'neg')+'">'+(bs.n_with_trigger||0)+' / '+(bs.n_orders||0)+'</span><span class="scs">'+(bs.n_trigger_filled||0)+' ever filled</span></div>'+
+        '<div><span class="sck">Round trips</span><span class="scv">'+(bt.n||0)+'</span><span class="scs">closed lots, FIFO \u00b7 '+(bt.hit_rate_pct!=null?(bt.hit_rate_pct+'% won'):'')+'</span></div>'+
+        '<div><span class="sck">Winners held</span><span class="scv pos">'+(bt.median_hold_days_win!=null?(bt.median_hold_days_win+'d'):'\u2014')+'</span><span class="scs">median</span></div>'+
+        '<div><span class="sck">Losers held</span><span class="scv neg">'+(bt.median_hold_days_loss!=null?(bt.median_hold_days_loss+'d'):'\u2014')+'</span><span class="scs">median</span></div>'+
+        '<div><span class="sck">Averaged down</span><span class="scv '+((ba.averaging_down||0)>(ba.pyramiding||0)?'neg':'')+'">'+(ba.averaging_down||0)+'</span><span class="scs">adds below your average</span></div>'+
+        '<div><span class="sck">Added on strength</span><span class="scv pos">'+(ba.pyramiding||0)+'</span><span class="scs">adds above your average</span></div>'+
+        '<div><span class="sck">Held past 30d</span><span class="scv">'+(bt.n_held_over_30d||0)+'</span><span class="scs">'+(bt.n_held_over_30d_win||0)+' of them won</span></div>'+
+        '<div><span class="sck">Same-day</span><span class="scv">'+(bt.n_same_day||0)+'</span><span class="scs">in and out the same day</span></div>'+
+        '</div></div>';
+      if((ba.averaging_down||0)>(ba.pyramiding||0)){
+        html+='<div class="pf-take bad">You added to a position <b>'+ba.averaging_down+'</b> times below your '+
+          'own average and <b>'+ba.pyramiding+'</b> times above it. Adding while under water is what turns '+
+          'a small loss into the one that dominates the year.</div>';
+      }
+      var busy=(bh.busiest||[]).slice(0,6);
+      if(busy.length){
+        html+='<div class="card pf-card full" style="height:auto"><div class="c-lbl"><span class="d"></span>'+
+          'Where the orders went'+HT('Number of FILLED orders per name over the log window. A name with dozens of fills was not one decision held \u2014 it was traded repeatedly, and each round of adding is a fresh risk decision.')+
+          '<span class="age">filled orders per name</span></div><div class="sc-tbl">'+''+
+          busy.map(function(x){ var w=Math.max(4,Math.round(x.n_fills/busy[0].n_fills*100));
+            return '<div class="sc-row"><span class="sc-nm">'+esc(String(x.sym||''))+'</span>'+
+              '<span class="sc-bar p"><i style="width:'+w+'%"></i></span>'+
+              '<span class="sc-v">'+x.n_fills+'</span><span class="sc-p">fills</span></div>'; }).join('')+
+          '</div></div>';
+      }
+      if(bc.pnl_is_incomplete){
+        html+='<div class="fc-note" style="margin-top:8px">This section counts behaviour only. '+
+          'It cannot show P&amp;L, because '+((bc.names_missing_cost_basis||[]).length)+' name'+
+          (((bc.names_missing_cost_basis||[]).length===1)?'':'s')+' were sold out of stock bought before the '+
+          'log window opened ('+esc((bc.names_missing_cost_basis||[]).join(', '))+'), so their purchase price '+
+          'is not in the file. Every rupee above comes from the capital-gains report instead. '+
+          esc(String(bc.fix||''))+'</div>';
+      }
+      html+='</div>';
+    }
+
+    // ---- 04 where the money went ------------------------------------------------------
+    html+='<div class="pf-sec" id="sc-sec-3"><div class="pf-sh"><span class="pf-n">04</span><h3>Where the money went</h3><span class="pop real">REAL</span><span class="uchip">\u20b9 booked per name</span><span class="pf-sx">every name you closed this year, best to worst</span></div>';
     if(k.worst_name&&k.worst_share_of_losses_pct!=null){
       html+='<div class="pf-take '+(k.worst_share_of_losses_pct>=25?'bad':'unclear')+'"><b>'+esc(String(k.worst_name))+'</b> alone is <b class="neg">'+k.worst_share_of_losses_pct+'%</b> of every rupee you lost this year'+(k.top3_share_of_losses_pct!=null?(', and your three worst names are <b class="neg">'+k.top3_share_of_losses_pct+'%</b>'):'')+'. The losses are concentrated, not spread \u2014 that is a position-size question, not a stock-picking one.</div>';
     }
@@ -2206,8 +2268,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<span class="sc-p '+scSign(n.return_pct)+'">'+(n.return_pct==null?'\u2014':((n.return_pct>0?'+':'')+n.return_pct+'%'))+'</span></div>';
     }).join('')+'</div></div></div>';
 
-    // ---- 04 what is still open --------------------------------------------------------
-    html+='<div class="pf-sec" id="sc-sec-4"><div class="pf-sh"><span class="pf-n">04</span><h3>Still open</h3><span class="pop real">REAL</span><span class="uchip">\u20b9 unbooked</span><span class="pf-sx">'+(ob?('from your broker book \u00b7 as of '+fmtD(ob.as_of)):'no broker drop loaded')+'</span></div>';
+    // ---- 05 what is still open --------------------------------------------------------
+    html+='<div class="pf-sec" id="sc-sec-4"><div class="pf-sh"><span class="pf-n">05</span><h3>Still open</h3><span class="pop real">REAL</span><span class="uchip">\u20b9 unbooked</span><span class="pf-sx">'+(ob?('from your broker book \u00b7 as of '+fmtD(ob.as_of)):'no broker drop loaded')+'</span></div>';
     if(ob&&(ob.held||[]).length){
       html+='<div class="pf-take '+(ob.unrealized>0?'good':'bad')+'">Your open book is <b class="'+scSign(ob.unrealized)+' sens">'+scMoney(ob.unrealized)+'</b> ('+(ob.unrealized_pct!=null?((ob.unrealized_pct>0?'+':'')+ob.unrealized_pct+'%'):'\u2014')+') on <b class="sens">'+scMoney(ob.invested,true)+'</b> invested. None of this is booked yet \u2014 it moves with the price.</div>';
       var omx=1; ob.held.forEach(function(h){ var v=Math.abs(h.unreal||0); if(v>omx) omx=v; });
@@ -2221,8 +2283,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     } else { html+='<div class="pf-grid"><div class="card pf-card full">'+window.pfState('pending','Open book','No broker drop is loaded, so the open side is blank rather than guessed.')+'</div></div>'; }
     html+='</div>';
 
-    // ---- 05 the honest edges of the source --------------------------------------------
-    html+='<div class="pf-sec" id="sc-sec-5"><div class="pf-sh"><span class="pf-n">05</span><h3>What this record cannot tell you</h3><span class="uchip">source limits</span><span class="pf-sx">stated, not approximated</span></div>';
+    // ---- 06 the honest edges of the source --------------------------------------------
+    html+='<div class="pf-sec" id="sc-sec-5"><div class="pf-sh"><span class="pf-n">06</span><h3>What this record cannot tell you</h3><span class="uchip">source limits</span><span class="pf-sx">stated, not approximated</span></div>';
     html+='<div class="card pf-card full" style="height:auto"><div class="c-lbl"><span class="d"></span>Limits of the capital-gains report<span class="age">'+esc(String(sc.source_file||''))+'</span></div>'+
       '<ul class="sc-list">'+(sc.cannot_answer||[]).map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul>'+
       '<div class="c-lbl sub" style="margin-top:10px"><span class="d"></span>What you could give me that would sharpen it</div>'+
