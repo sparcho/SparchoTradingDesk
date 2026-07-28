@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "DENTA",
-  "emitted_at_utc": "2026-07-28T09:32:36+00:00",
+  "emitted_at_utc": "2026-07-28T11:00:14+00:00",
   "public": {
     "ticker": "DENTA",
     "name": "Denta Water & Infra Solutions Ltd",
@@ -43,8 +43,8 @@
     "level_id_date": null,
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 331.0,
-      "day_chg_pct": -1.678,
+      "price": 335.2,
+      "day_chg_pct": 0.404,
       "week_chg_pct": null,
       "date": "2026-07-28"
     },
@@ -2643,22 +2643,175 @@
       [
         "2026-07-28",
         334.0,
-        334.25,
+        340.0,
         324.0,
-        331.0
+        335.2
       ]
     ],
-    "sr_levels": [],
+    "sr_levels": [
+      {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 333.07,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 342.13,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 349.07,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 358.13,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 326.13,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 317.07,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 310.13,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "swing_high",
+        "kind": "SH1",
+        "price": 353.05,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "swing_low",
+        "kind": "SL1",
+        "price": 240.65,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "sma",
+        "kind": "SMA50",
+        "price": 299.3,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "sma",
+        "kind": "SMA200",
+        "price": 309.32,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "annual_hilo",
+        "kind": "52W_HIGH",
+        "price": 467.65,
+        "as_of": "2026-07-28"
+      },
+      {
+        "method": "annual_hilo",
+        "kind": "52W_LOW",
+        "price": 224.45,
+        "as_of": "2026-07-28"
+      }
+    ],
     "operator_levels": [],
-    "gate_levels": [],
-    "gate_levels_auto": false,
-    "gate_check": [],
+    "gate_levels": [
+      {
+        "label": "INVALIDATION",
+        "price": 224.45,
+        "dir": "below",
+        "kind": "inv",
+        "why": "52-week low",
+        "auto": true
+      },
+      {
+        "label": "SUPPORT",
+        "price": 333.07,
+        "dir": "below",
+        "kind": "watch",
+        "why": "classical pivot",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 342.13,
+        "dir": "above",
+        "kind": "trim",
+        "why": "pivot R1",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
+        "price": 467.65,
+        "dir": "above",
+        "kind": "trim",
+        "why": "52-week high",
+        "auto": true
+      }
+    ],
+    "gate_levels_auto": true,
+    "gate_check": [
+      {
+        "label": "SUPPORT",
+        "price": 333.07,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.6354415274462993
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 342.13,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 2.0674224343675442
+      },
+      {
+        "label": "INVALIDATION",
+        "price": 224.45,
+        "dir": "below",
+        "kind": "inv",
+        "dist_pct": -33.03997613365156
+      },
+      {
+        "label": "UPSIDE",
+        "price": 467.65,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 39.51372315035799
+      }
+    ],
     "scenario_ladder": [
+      {
+        "case": "bear",
+        "label": "Bear: Thesis-break",
+        "level": 224.45,
+        "note": "daily close below Rs224 invalidates the structure"
+      },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 331.0,
+        "level": 335.2,
         "note": "holds current band"
+      },
+      {
+        "case": "bull",
+        "label": "Bull: Trend resumption",
+        "level": 467.65,
+        "note": "sustained move toward Rs468"
       }
     ],
     "catalysts": [
@@ -2840,8 +2993,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "x4NIuLQ+wxdS8u7l9BdWZw==",
-    "iv": "8BvL/wCPjFMtrOil",
-    "ct": "aNfm2QGXZxOXtNuIsB84UxuycdUcWWo+pmQtXLxuOS5puQRimWIItDPdzLut40oPFzVhGnODB9ERCRPxR/MxC2sQBlRyCekJAk2u0lQH3VLdQQ5mEEb2WbBakXNmv/IjkKsnt88dGWOwpicLN+Us4Fyzy6S8508pb55h0ChXsdlfDuf6I529kMMQYEO9E0BFEB4kSHPf387XQhhRFU4M+fYxnmfmVXAFQ8ErcbsGU0qSjagc4d3B4KPJYM18fbZYftNlKPnoLvdDOL5q6pEM1jusLwb5yLQ9/g4220dZkbV5d3rwNsazehl8whqMF4qGwQkNKWfIeQbnVeRsgiz1gQO1shhbBm6iKld0To6aM1tAz05Nix2ZWejLEQBVGBv5jyShlYxHKZ6g0vwbWfSHSps3Tw5vokKXfoEA9chj4VWDXiKu1/LZU1PP4qY134+Im6GH/UZFLMbzUx8jwADMvv8EM9TOONkSNbDBklk04acql5bwBl1obvjkmXUcv3fvGZgPndg/TPx167iv+vnVG2BaI2OccyLvgIrFJp6QjprTiPSptX+gvfNTIqAuHBOqGm2EhxqMV1FMf4IuqtiMJ3uWmLWexXWgcu36e5aEZpt1tWNhF27TaXDMADurnjQRfpYd0kjvacn9qZJedtPx2s4YIhKXQ6dd9cQ6otYcr9JYhz2S6FDe29MTGCs6u4Hvdd5/ZWpwtChhOMk1YdW3+FcRIg=="
+    "salt": "J7SK15GW0dScPTQeg0WmZA==",
+    "iv": "XpSgqRdiYHPcDz6X",
+    "ct": "2Wr+4kYVjZcdlD07Lf/ljZk/+8JZdygsBW4truCpuTDVlA6bTz7m81D19AFJkp5iTMpeb6e9/+i5mkTG+moSRUrdyopJ7naO6eNRNx0Ai2uJu3m4mzurt2rT1Bk7/6YrufzrzVCStOqIu/u9ZuDD+atrIFQCmgJSYbqD4j1jvsoLC3vYzdeGrvp5tQx/oif8ir2mmVZg/nicEs8M9tHUZstdlVpQNaJe5Pm7H1ejZVU6wZNicW4kYzfEg64W9O22FMQo6FZhBgpjfdXOH3agMsYyvaj6KGuHyGwQqY0PqXJdmEi859q0Q4ACj6wjk5IVrOp0Uanm0g/Z+dLsj2roGkxBXNHb+sQdqI3rW5lumFfJCn7tH7btDY+lkA+blj6eNIX2C2T6koOCR7qXKOHGzpj2cC68/TjBnzxJAN3lxKDVg6N4YbkupUJJ94++BfbcYY/2IEQDW0CP0EWhR/1s+S9UFUGHmHOQ4BLToZWSlk/7ixIzzdCNZaqLEqSr568jd7r0kFbjUfCVW+wRQy8UqNj7Lgzj7Nnw8ETnwIPxzudVo7Ddr5d1x3d+txMuq1A6AHifYEKSJsaCL0XPO2RehFQ8JXuuyXMzaoq7T803PCNhW91ndH6IdrGxZC0jIzQJLzYituum3AKiJPHKrVWNfMR4lPyAkdOK1D6dd3+nsFlCr9vQz3ug0G2/zTC/xgLnZpO2RnCmccnb+LMrTo9ZEbCYch86wRpkfRDJmMXJXDSHrEjuLXP2bcT1q+rNEmbQm5SQIEM1kVy8FalqU8O6gNZRgWXaCZTNx+q6uZ8CyUbAHenalie8eWAqqGBHJIgntgesEZ+lPQn+zCDHqUw+417SWrXAzfWNIOBVqdTccOJSE6a9S/86H6MBvl6wq+FqxhU1qhM8y9zV2amSF/bY7cRNcKLQb4J6VgOYrGn2dx8r1Qer8Gx4k3NwOf85yXTt6am3zWGEvHjzU3o/zj7ZHwFxFI1v88Ts04pi5LdI0LQY/FPh9JW/pAZNNOZo2CssyLt2CtyD2PaGUE6WwmvMKYFN02vjfodYUA0H2KNNu2j6fv07EKP1ZI7dO1+C94cgRoxUhG5YdGadvTG8igC8EObkNwwYP6oCuB7AVbZXaalv75iPku49DYFdFqcATGG4plN10uOt8vQy/uuwEGp/+j2pXMKLQgod9wWh+GKVWwrBjaTo7s8oCGEzvQEpyurI8IgFzbmQ7xY4rDX9ri+1MEovBllzpYIyFn8yVlRGYISCdm0tFX7OmPtwv+a8FRcQbH0nVXTH5+bBDeI="
   }
 }
