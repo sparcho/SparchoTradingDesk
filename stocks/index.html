@@ -1089,6 +1089,49 @@
 @media(max-width:760px){.tlperf{grid-template-columns:1fr}}
 .tlperf-l,.tlperf-r{min-width:0}
 .c-lbl.sub{font-size:11px;font-weight:600;color:var(--ink2);opacity:1;margin-bottom:7px}
+/* F260728 THE BUSINESS CARD — what the company is doing, as the second take on a fire.
+   Desk tokens only; no new palette. The verdict is a WORD, never a colour alone. */
+.bizwrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:12px}
+.bizc{background:var(--glass2);border:1px solid var(--hair);border-radius:13px;padding:14px 15px;min-width:0}
+.bizc[data-held="1"]{border-color:rgba(66,219,230,0.34)}
+.biz-h{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.biz-tk{font-size:14.5px;font-weight:700;letter-spacing:-.2px}
+.biz-held{color:var(--cyan)}
+.biz-verdict{margin-left:auto;font-family:var(--font-mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;padding:3px 8px;border-radius:6px;border:1px solid currentColor}
+.biz-verdict.pos{color:var(--pos);background:var(--pos-soft)}
+.biz-verdict.watch{color:var(--watch);background:var(--watch-soft)}
+.biz-verdict.neg{color:var(--neg);background:var(--neg-soft)}
+.biz-verdict.mut{color:var(--mut)}
+.biz-seg{font-size:11px;color:var(--mut);line-height:1.4;margin-bottom:9px}
+.biz-why{font-size:12px;color:var(--ink2);line-height:1.5;padding:8px 10px;border-radius:8px;background:var(--glass);margin-bottom:11px}
+.biz-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;margin-bottom:11px}
+.biz-grid .bk{display:block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.biz-grid .bv{display:block;font-family:var(--font-mono);font-size:15px;margin-top:2px}
+.biz-grid .bv.pos{color:var(--pos)} .biz-grid .bv.neg{color:var(--neg)} .biz-grid .bv.watch{color:var(--watch)} .biz-grid .bv.mut{color:var(--mut)}
+.biz-grid .bs{display:block;font-size:10px;color:var(--faint);margin-top:2px;line-height:1.35}
+.biz-q{display:flex;align-items:flex-end;gap:9px;margin-bottom:5px}
+.bql{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+.bqbars{display:flex;align-items:flex-end;gap:3px;height:20px}
+.bqb{width:9px;background:var(--cyan);opacity:.72;border-radius:2px 2px 0 0}
+.bqm{font-family:var(--font-mono);font-size:9px;color:var(--faint);margin-left:auto;white-space:nowrap}
+.biz-intake{font-size:11px;color:var(--mut);margin-bottom:9px}
+.biz-intake.warn{color:var(--watch)}
+.biz-line{display:flex;gap:9px;font-size:11px;color:var(--ink2);line-height:1.5;padding-top:8px;border-top:1px solid var(--hair);margin-top:2px}
+.bll{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);flex:0 0 78px;padding-top:2px}
+.biz-line b.pos{color:var(--pos)} .biz-line b.neg{color:var(--neg)}
+.biz-fal{display:inline-block;font-family:var(--font-mono);font-size:9.5px;margin-right:8px}
+.biz-fal.pos{color:var(--pos)} .biz-fal.neg{color:var(--neg)}
+.biz-asof{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.05em;color:var(--faint);margin-top:10px;padding-top:8px;border-top:1px solid var(--hair)}
+/* compact form that rides with a fire */
+.biz-take{border:0;padding:0}
+.biz-mini{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:8px;background:var(--glass);border-left:2px solid var(--mut)}
+.biz-mini.pos{border-left-color:var(--pos)} .biz-mini.watch{border-left-color:var(--watch)} .biz-mini.neg{border-left-color:var(--neg)}
+.biz-mini.none{color:var(--faint);font-style:italic}
+.bmv{font-family:var(--font-mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink)}
+.bmw{color:var(--ink2);flex:1 1 auto;min-width:0}
+.bmn{font-family:var(--font-mono);font-size:9.5px;color:var(--faint);white-space:nowrap}
+@media(max-width:520px){ .biz-grid{grid-template-columns:1fr} .biz-line{flex-direction:column;gap:3px} .bll{flex:none} }
+
 /* F260727 THE BOARD — grid (what is everything doing) + tracks (how far). Uses only existing
    :root tokens; no new palette. Identity never rests on hue: the trend is the COLUMN and a glyph. */
 .bd-grid{margin-top:4px;overflow-x:auto}
@@ -2079,16 +2122,149 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   }
   function _dtMon(d){ var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; var m=String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})/); return m?(parseInt(m[3],10)+' '+M[parseInt(m[2],10)-1]):String(d||''); }
   window.__dtIdx=(typeof window.__dtIdx==='number')?window.__dtIdx:null;
+  // -- THE BUSINESS CARD (F260728) ---------------------------------------------------------------
+  // What the COMPANY is doing, as the co-equal second take on a fire. The fib bank says WHERE price
+  // is standing; this says WHETHER the business behind it deserves the buy.
+  //
+  // Why it exists: the desk already held a good business record per name — annual order book and
+  // revenue, book-to-bill, coverage, execution rate, stated guidance with an implied CAGR, a
+  // quarterly order-book series, pre-committed sell triggers, and per-order events carrying a source
+  // URL and a verification status. It rendered TWO NUMBERS in a tile, three of eight of them blank.
+  // One name sat at momentum WARNING — "book drawn down while intake slows, the revenue-cliff
+  // precursor", with quarterly intake more than halving — and it is HELD, and none of that reached
+  // the screen. (Named only in the vault write-up: this shell is PUBLIC, and the publish gate aborts
+  // if a held ticker appears in it as plaintext. It caught this very comment.)
+  //
+  // PROVENANCE RULE: company data is QUARTERLY, the fib bank is DAILY. Every figure here is dated to
+  // the period it describes (FY26 / Q4FY26 / period_end), never to the emit — a Q4 order book shown
+  // beside today's close is exactly the quiet staleness this desk keeps getting bitten by.
+  var _BIZV={BULLISH:['pos','Bullish'],'NEUTRAL/WATCH':['watch','Neutral'],NEUTRAL:['watch','Neutral'],
+             WARNING:['neg','Warning'],WEAK:['neg','Weak'],
+             // an unmapped enum reached the screen as a shouted token on 5 of 8 cards. A verdict a
+             // person cannot read is not a verdict.
+             'INSUFFICIENT-HISTORY':['mut','Too early to say']};
+  // Held comes from the BOOK, never from the block's own flag: order_book stamps `held` when that
+  // block is built, and on 28-Jul it still marked a name that had been exited, so the card starred
+  // a position the operator no longer owned. One source of truth for membership (the rule the Radar
+  // already follows for fires) — DATA.held, which the emit rebuilds from the broker drop.
+  function _bizHeld(){ var s={}; ((DATA&&DATA.held)||[]).forEach(function(h){
+      if(h&&h.ticker) s[String(h.ticker).toUpperCase()]=1; }); return s; }
+  function _bizBy(){ var m={}; (((DATA&&DATA.order_book)||{}).companies||[]).forEach(function(c){
+      if(c && c.company) m[String(c.company).toUpperCase()]=c; }); return m; }
+  function _bizPct(v,dp){ return (v==null||isNaN(v))?'—':((v>=0?'+':'')+(+v*100).toFixed(dp==null?0:dp)+'%'); }
+  function _bizCr(v){ return (v==null||isNaN(v))?'—':('₹'+(+v).toLocaleString('en-IN',{maximumFractionDigits:0})+'cr'); }
+
+  function bizCardHTML(tk){
+    var c=_bizBy()[String(tk||'').toUpperCase()];
+    if(!c) return '';
+    var m=c.momentum||{}, L=c.latest||{}, q=c.quarterly||{};
+    var isHeld=!!_bizHeld()[String(c.company||'').toUpperCase()];
+    var vv=_BIZV[String(m.label||'').toUpperCase()]||['mut',(m.label||'—')];
+    // the verdict, spelled out — never colour alone (the desk's pos/watch/neg sit ~4 ΔE apart
+    // under red-green colourblindness, so hue can never be the carrier).
+    var head='<div class="biz-h"><span class="biz-tk">'+(isHeld?'<span class="biz-held" title="held in the book">★</span>':'')+
+      tkA(c.company,esc(c.company))+'</span>'+
+      '<span class="biz-verdict '+vv[0]+'">'+esc(vv[1])+'</span></div>'+
+      '<div class="biz-seg">'+esc(c.full_name||'')+(c.segment?(' · '+esc(c.segment)):'')+'</div>';
+
+    // the single most important sentence the engine produced about this company
+    var why=(m.reasons&&m.reasons.length)?('<div class="biz-why">'+esc(m.reasons[0])+'</div>'):'';
+
+    function kv(k,v,sub,cls){ return '<div><span class="bk">'+k+'</span><span class="bv '+(cls||'')+'">'+v+
+      '</span><span class="bs">'+esc(sub)+'</span></div>'; }
+    var b2b=(L.book_to_bill!=null)?+L.book_to_bill:null;
+    var grid='<div class="biz-grid">'+
+      kv('Order book',_bizCr(L.order_book_closing),(m.ob_trend?('vs prior year: '+m.ob_trend):'closing backlog'),
+         (m.ob_trend==='declining'?'neg':(m.ob_trend==='growing'?'pos':'watch')))+
+      kv('Book-to-bill',(b2b!=null?(b2b.toFixed(2)+'×'):'—'),
+         (b2b==null?'not disclosed':(b2b>=1?'winning work faster than billing':'billing faster than it wins')),
+         (b2b==null?'mut':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg'))))+
+      kv('Cover',(L.ob_cover!=null?(+L.ob_cover).toFixed(2)+'×':'—'),'years of revenue already booked',
+         (L.ob_cover==null?'mut':(L.ob_cover>=2?'pos':'watch')))+
+      kv('Execution',(L.execution_rate!=null?_bizPct(L.execution_rate):'—'),'of the book actually billed',
+         (L.execution_rate==null?'mut':(L.execution_rate>=0.5?'pos':'watch')))+
+    '</div>';
+
+    // quarterly order-book shape — magnitude, so a plain bar row; intake is the leading half
+    var qs=(q.series||[]).filter(function(x){ return x.order_book_closing!=null; });
+    var spark='';
+    if(qs.length>1){
+      var vals=qs.map(function(x){ return +x.order_book_closing; });
+      var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals), rng=(hi-lo)||1;
+      spark='<div class="biz-q"><span class="bql">Order book by quarter</span>'+
+        '<span class="bqbars">'+qs.map(function(x){
+          var h=18*(0.25+0.75*((+x.order_book_closing-lo)/rng));
+          return '<span class="bqb" style="height:'+h.toFixed(1)+'px" title="'+esc(x.period)+' · '+_bizCr(x.order_book_closing)+'"></span>'; }).join('')+'</span>'+
+        '<span class="bqm">'+esc(qs[0].period)+' → '+esc(qs[qs.length-1].period)+
+        (q.ob_qoq!=null?(' · '+_bizPct(q.ob_qoq,1)+' QoQ'):'')+'</span></div>'+
+        ((q.inflow_last!=null&&q.inflow_prior!=null)?
+          ('<div class="biz-intake'+(q.intake_slowing?' warn':'')+'">New orders '+_bizCr(q.inflow_prior)+' → '+_bizCr(q.inflow_last)+
+           (q.intake_slowing?' — slowing':' — holding up')+'</div>'):'');
+    }
+
+    // guidance: what they promised vs what they are delivering
+    var g=c.guidance||{}, gl='';
+    if(g.target){
+      var need=(g.implied_cagr!=null)?(+g.implied_cagr):null, doing=(m.rev_growth!=null)?+m.rev_growth:null;
+      var ok=(need!=null&&doing!=null)?(doing>=need):null;
+      gl='<div class="biz-line"><span class="bll">Guidance</span><span>'+esc(g.target)+(g.timeframe?(' '+esc(g.timeframe)):'')+
+        (need!=null?(' · needs '+_bizPct(need)+'/yr'):'')+
+        (doing!=null?(' · growing <b class="'+(ok===true?'pos':(ok===false?'neg':''))+'">'+_bizPct(doing)+'</b>'):'')+
+        '</span></div>';
+    }
+
+    // the pre-committed sell lines. A written invalidation nobody can see is no invalidation.
+    var fl=(c.falsification||[]);
+    var fal=fl.length?('<div class="biz-line"><span class="bll">Sell triggers</span><span>'+fl.map(function(f){
+        var br=String(f.status||'')!=='intact';
+        return '<span class="biz-fal '+(br?'neg':'pos')+'" title="'+esc(f.detail||'')+'">'+
+          (br?'✗ BREACHED':'✓ intact')+' · '+esc(f.trigger||'')+'</span>'; }).join(' ')+'</span></div>'):'';
+
+    // PROVENANCE — the period the numbers describe, not when the file was written.
+    var per=L.period||(c.series&&c.series.length?c.series[c.series.length-1].period:null);
+    var pend=(c.series||[]).reduce(function(a,x){ return x.period_end||a; },null);
+    var asof='<div class="biz-asof">'+esc(per||'period unknown')+
+      (q.latest_period?(' · quarters to '+esc(q.latest_period)):'')+
+      (pend?(' · year ended '+fmtD(pend,true)):'')+
+      ' · '+esc(L.verification||'unverified')+'</div>';
+
+    return '<div class="bizc"'+(isHeld?' data-held="1"':'')+'>'+head+why+grid+spark+gl+fal+asof+'</div>';
+  }
+
+  // The compact form that rides along with a fire. An ABSENT business read must say so — 8 of 75
+  // names have one, so silence here would read as "nothing wrong with the business".
+  function bizSecondTakeHTML(tk){
+    var c=_bizBy()[String(tk||'').toUpperCase()];
+    if(!c) return '<div class="biz-mini none">no business read on file — this name has no company record yet</div>';
+    var m=c.momentum||{}, L=c.latest||{}, vv=_BIZV[String(m.label||'').toUpperCase()]||['mut',(m.label||'—')];
+    return '<div class="biz-mini '+vv[0]+'"><span class="bmv">'+esc(vv[1])+'</span>'+
+      '<span class="bmw">'+esc((m.reasons&&m.reasons[0])||'')+'</span>'+
+      '<span class="bmn">'+(L.book_to_bill!=null?((+L.book_to_bill).toFixed(2)+'× b2b'):'')+
+      (L.ob_cover!=null?(' · '+(+L.ob_cover).toFixed(2)+'× cover'):'')+
+      (L.period?(' · '+esc(L.period)):'')+'</span></div>';
+  }
+
   function renderCompanyPerf(){
     var el=$('f1-companyperf'); if(!el) return;
     var ob=(DATA&&DATA.order_book)||{}, comps=ob.companies||[], mom=ob.momentum_summary||[];
     var head='<div class="c-lbl"><span class="d"></span>Company performance'+HT('Company-level operating signal — starting with corporate order-book / backlog momentum (book-to-bill, order-book coverage, execution). Expands with more company fundamentals later; for now it tracks the order-book book we have.')+'<span class="age">'+comps.length+' companies · order-book phase</span></div>';
     if(!comps.length && !mom.length){ el.innerHTML=head+pending('Company performance','no company order-book data in this emit.'); return; }
-    var byTk={}; mom.forEach(function(m){ byTk[m.company]=m; });
-    var src=comps.length?comps:mom;
-    var cards=src.map(function(c){ var tk=c.company||c.ticker||'—'; var m=byTk[tk]||c; var b2b=parseFloat(m.book_to_bill); var bc=isNaN(b2b)?'watch':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg')); var seg=c.segment||c.full_name||''; var held=c.held?'★ ':'';
-      return '<div class="cpc"><div class="cph"><span class="cpn">'+held+tkA(tk,esc(tk))+'</span>'+(m.book_to_bill!=null?('<span class="b2b '+bc+'">B2B '+esc(m.book_to_bill)+'</span>'):'')+'</div>'+(seg?('<div class="cpseg">'+esc(seg)+'</div>'):'')+'<div class="cpm"><span><b>'+esc(m.ob_cover!=null?m.ob_cover:'—')+'</b> OB cover</span><span><b>'+esc(m.execution_rate!=null?m.execution_rate:'—')+'</b> exec</span></div>'+(m.note?('<div class="cpseg" style="margin-top:6px">'+esc(m.note)+'</div>'):'')+'</div>'; }).join('');
-    el.innerHTML=head+'<div class="cperf">'+cards+'</div>';
+    // F260728 — full business cards replace the two-number tile. Held names lead: a WARNING on
+    // something you own outranks a BULLISH on something you don't.
+    var RANK={WARNING:0,WEAK:0,'NEUTRAL/WATCH':1,NEUTRAL:1,BULLISH:2};
+    var HS=_bizHeld();
+    var ordered=comps.slice().sort(function(a,b){
+      var ha=!!HS[String(a.company||'').toUpperCase()], hb=!!HS[String(b.company||'').toUpperCase()];
+      if(ha!==hb) return hb?1:-1;
+      var ra=RANK[String((a.momentum||{}).label||'').toUpperCase()], rb=RANK[String((b.momentum||{}).label||'').toUpperCase()];
+      return (ra==null?3:ra)-(rb==null?3:rb);
+    });
+    var cards=ordered.map(function(c){ return bizCardHTML(c.company); }).filter(Boolean).join('');
+    // the coverage gap, stated — 8 of 75 is the constraint, and a strip of 8 cards hides that
+    var uni=((DATA&&DATA.fib_coverage)||{}).universe;
+    var gap=uni?('<div class="fc-note">business record on <b>'+comps.length+' of '+uni+'</b> traded names'+
+      ' &mdash; the other '+(uni-comps.length)+' have no company read, so their fires carry a fib take only.</div>'):'';
+    el.innerHTML=head+gap+'<div class="bizwrap">'+cards+'</div>';
   }
   window.wlFilter=function(btn){ try{ var val=(btn&&btn.getAttribute('data-wl'))||'*'; var wrap=btn.closest('.card'); if(!wrap) return; Array.prototype.forEach.call(wrap.querySelectorAll('.wlfilters button'),function(b){ b.classList.remove('on'); }); btn.classList.add('on'); Array.prototype.forEach.call(wrap.querySelectorAll('.rundown .rdrow'),function(row){ if(row.classList.contains('h')) return; var cl=row.getAttribute('data-cl')||''; row.style.display=(val==='*'||cl===val)?'':'none'; }); }catch(e){} };
   // ===== F260709-v2 screener trade-pairs (rich cards · clickable → Trade Lab · day/week nav) =====
@@ -2659,7 +2835,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
           '<span class="tkv '+acol+'">'+(comp!=null?('composite '+comp+' &middot; '+lens+' lens'):'not in the screen universe')+'</span></div>'+
         '<div class="rdr-take"><span class="tkl">two-take</span><span class="tkv '+acol+'">'+
           (agree==='agrees'?'both takes agree':(agree==='disagrees'?'DISAGREE &mdash; the screen does not like it, the bank does':'screen silent &mdash; the bank read stands alone'))+
-        '</span></div></div>';
+        '</span></div></div>'+
+        // F260728 — the BUSINESS read rides with every fire. The fib bank says where price is; this
+        // says whether the company behind it deserves the buy. Absent reads say so out loud (8 of 75
+        // names have a record), because a blank here would read as "nothing wrong with the business".
+        '<div class="rdr-take biz-take"><span class="tkl">business read <i>is the company earning it?</i></span></div>'+
+        bizSecondTakeHTML(f.ticker);
     };
 
     var lvl=function(f){
