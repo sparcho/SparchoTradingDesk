@@ -436,6 +436,14 @@ EQUITY_BLOCKS = {
                                        "correct - zero open decisions is a real and good state. "
                                        "It has no freshness SLA because it moves only when a flag "
                                        "does; what matters is that OVERDUE items reach the desk."),
+    "live_daytrade":         _blk("cloud refresh_prices.py (5-min, market hours)", "cloud",
+                                  lambda b: (b or {}).get("as_of"),
+                                  count=lambda b: len((b or {}).get("panel") or []),
+                                  note="F260729-VAULT: the day-trade panel kept PUBLIC on purpose. "
+                                       "The rest of the screener layer moved inside sensitive_enc; this "
+                                       "one block stays out so the cloud can keep refreshing it every "
+                                       "5 minutes with the laptop asleep - operator 260729, explicitly "
+                                       "NOT laptop-only. Held flags are stripped from the public copy."),
     "fib_coverage":          _blk("emit (EDGE/LEVELS x lens universe)", "operator", None,
                                   severity="info",
                                   count=lambda b: (b or {}).get("verified"),

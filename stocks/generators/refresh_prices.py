@@ -278,7 +278,12 @@ def main():
                 print("  NO-REGRESS: live pull " + str(price_as_of) + " older than published "
                       + str(_prior_paf) + " — kept fresher panel (F138)", file=sys.stderr)
             else:
-                data.setdefault("screeners", {})["daytrade_panel"] = rows
+                # F260729-VAULT: the screener layer is sealed; the cloud's panel goes into its
+                # own PUBLIC block so it keeps refreshing with the laptop asleep. The PUBLIC copy
+                # must not carry the held flag - this job decrypts the held list to mark rows, and
+                # publishing that marking would re-open F260729-HELDLEAK from the other side.
+                data.setdefault("live_daytrade", {})["panel"] = [
+                    {k: (False if k == "held" else v) for k, v in row.items()} for row in rows]
                 data["daytrade_freshness"] = daytrade_core.daytrade_freshness(price_as_of, refreshed_at_utc=now_iso)
                 print("  fires re-scored: " + str(len(rows)) + " | price_as_of " + str(price_as_of)
                       + " | " + data["daytrade_freshness"]["status"])
