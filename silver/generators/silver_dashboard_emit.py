@@ -138,6 +138,35 @@ def _seal_verified(payload: bytes, pw: str, expect_keys=None) -> dict:
         f"({type(last).__name__}: {last}) — refusing to ship an unopenable book")
 
 
+def verify_written_aggregate(path, pw: str) -> None:
+    """Open the sealed block in the file that was ACTUALLY WRITTEN.
+
+    F260729-SILVERSEAL-2. Verifying the blob in memory is not enough: on 260729 the emit printed
+    "seal round-trip VERIFIED", wrote the aggregate, and the file that reached the repo and
+    GitHub Pages opened with no key at all — the family book was live and unopenable. Whatever
+    damages it happens at or after serialisation, so the check has to read the bytes that
+    landed. Same principle as safe_write (CLAUDE §0.2d): verify what is on disk, never what you
+    intended to put there.
+    """
+    import base64 as _b64, hashlib as _hl
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    try:
+        enc = (json.loads(Path(path).read_text(encoding="utf-8")) or {}).get("sensitive_enc")
+    except Exception as exc:
+        raise SealVerifyError(f"written aggregate {path} is unreadable ({exc})") from exc
+    if not enc:
+        raise SealVerifyError(f"written aggregate {path} carries no sensitive_enc")
+    try:
+        key = _hl.pbkdf2_hmac("sha256", pw.encode("utf-8"),
+                              _b64.b64decode(enc["salt"]), int(enc["iter"]), 32)
+        AESGCM(key).decrypt(_b64.b64decode(enc["iv"]), _b64.b64decode(enc["ct"]), None)
+    except SealVerifyError:
+        raise
+    except Exception as exc:
+        raise SealVerifyError(
+            f"the aggregate written to {path} does NOT open with the sealing password "
+            f"({type(exc).__name__}) — refusing to publish a book nobody can unlock") from exc
+
 def _apply_privacy(out: dict) -> None:
     """F260607-F122 — same lock as the equity dashboard (PBKDF2-SHA256 200k -> AES-256-GCM,
     matching the page's WebCrypto unlock). Three modes:
@@ -1517,6 +1546,10 @@ def emit() -> Path:
     _blob = json.dumps(out, indent=2, default=str)
     from atomic_io import atomic_write_text  # F139: crash-safe data write
     atomic_write_text(OUTPUT_JSON, _blob)
+    # F260729-SILVERSEAL-2: prove the file that LANDED opens, not the one we meant to write.
+    _pw_now = PW_FILE.read_text(encoding="utf-8").strip() if PW_FILE.exists() else None
+    if _pw_now and out.get("sensitive_enc"):
+        verify_written_aggregate(OUTPUT_JSON, _pw_now)
     # PRIVACY GUARD (F260614): always overwrite the local DASHBOARDS web/data copy with the
     # ENCRYPTED aggregate (out is post-_apply_privacy here) so the local/preview copy can never
     # re-drift to plaintext family data — closes the flagged 260614 fragility.
@@ -1525,7 +1558,9 @@ def emit() -> Path:
         if _webdata.resolve() != OUTPUT_JSON.resolve() and _webdata.parent.parent.exists():
             _webdata.parent.mkdir(parents=True, exist_ok=True)
             atomic_write_text(_webdata, _blob)
-            print(f"[privacy] mirrored ENCRYPTED aggregate -> web/data (no plaintext re-drift)")
+            if _pw_now and out.get("sensitive_enc"):
+                verify_written_aggregate(_webdata, _pw_now)
+            print(f"[privacy] mirrored ENCRYPTED aggregate -> web/data (verified openable)")
     except Exception as _e:  # noqa: BLE001
         print(f"[privacy] web/data mirror skipped: {_e}", file=sys.stderr)
     return OUTPUT_JSON
