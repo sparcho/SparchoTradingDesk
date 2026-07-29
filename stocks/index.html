@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785253083">
-<meta name="x-built-at" content="2026-07-28T15:37:36+00:00">
+<meta name="x-build-id" content="1785344498">
+<meta name="x-built-at" content="2026-07-29T17:01:10+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785253083",BUILT_AT="2026-07-28T15:37:36+00:00";
+  var BID="1785344498",BUILT_AT="2026-07-29T17:01:10+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -439,6 +439,19 @@
   .tl-attn{ margin-bottom:13px; border-color:var(--watch); }
   .tl-attn-row{ display:flex; align-items:center; gap:8px; padding:6px 2px; border-top:1px solid var(--hair); font-size:11px; }
   .tl-attn-row:first-of-type{ border-top:none; }
+  .rdr-taken{ margin-left:6px; padding:1px 5px; border-radius:4px; font-size:8.5px; letter-spacing:.09em;
+             font-family:'Space Mono',ui-monospace,monospace; color:var(--faint);
+             border:1px solid var(--hair); }
+  .rdr-taken.live{ color:var(--pos); border-color:var(--pos); }
+  .tl-attn-row{ cursor:pointer; }
+  .tl-attn-row:hover{ background:rgba(255,255,255,.03); }
+  .tl-attn-caret{ margin-left:auto; color:var(--faint); transition:transform .18s ease; }
+  .tl-attn-row.open .tl-attn-caret{ transform:rotate(90deg); }
+  .tl-attn-det{ padding:6px 2px 9px 18px; font-size:10.5px; border-top:1px dashed var(--hair); }
+  .tl-attn-dl{ display:flex; gap:10px; padding:2px 0; }
+  .tl-attn-dk{ color:var(--faint); min-width:132px; flex:none; }
+  .tl-attn-dv{ color:var(--ink); }
+
   .tl-attn-why{ margin-left:auto; color:var(--watch); font-family:var(--font-mono); font-size:10px; white-space:nowrap; }
   .tl-attn-empty{ padding:8px 2px; color:var(--mut); font-size:11px; }
   .tl-attn-today{ padding:7px 2px 1px; border-top:1px solid var(--hair); font-size:11px; color:var(--ink2); }
@@ -3163,10 +3176,32 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '</div>';
     };
 
+    // F260729-FIRETAKEN - operator, 260729: "i see it is a bit outdated now, why is it still
+    // showing? i see the paper trade was already anyway made". The block is NOT stale - it is
+    // recomputed each morning on the last close. What was missing is any notion of a fire you
+    // have ALREADY ACTED ON: the Radar re-presented the same set-up as a fresh call whether or
+    // not a trade existed against it.
+    //
+    // It BADGES, it never hides. Matching on ticker alone would suppress a genuine re-entry at a
+    // different level, and a missed re-entry costs more than a badge you can ignore. The card
+    // still shows its levels; it just stops pretending you have not seen it.
+    var _takenBy=(function(){ var m={};
+      var all=(window.__tlOpen||[]).concat(window.__tlClosed||[]);
+      all.forEach(function(t){
+        if(!t||!t.ticker) return;
+        if(typeof window.tlViewOf==='function' && window.tlViewOf(t)!=='fib') return;
+        var st=String(t.status||'').toUpperCase();
+        var live=(st==='OPEN'||st==='FILLED'||st==='ACTIVE');
+        var prev=m[t.ticker];
+        if(!prev||live) m[t.ticker]={live:live,status:st.toLowerCase()||'logged'};
+      });
+      return m; })();
     var hero=function(f,i){
+      var _tk=_takenBy[f.ticker]||null;
+      var _takenBadge=_tk?('<span class="rdr-taken'+(_tk.live?' live':'')+'" title="you already logged a fib trade on this name - the set-up is still shown because a re-entry at a different level is a real trade">'+(_tk.live?'TAKEN · LIVE':'TAKEN')+'</span>'):'';
       return '<div class="rdr-card'+(i===0?' lead':'')+'">'+
         '<div class="rdr-h"><span class="rdr-rk">&#127919;</span>'+
-          '<span class="rdr-tk">'+tkA(f.ticker,esc(f.ticker))+'</span>'+
+          '<span class="rdr-tk">'+tkA(f.ticker,esc(f.ticker))+'</span>'+_takenBadge+
           '<span class="rdr-vd">FIRE</span>'+
           '<span class="rdr-px">'+(f.current_px!=null?('spot '+esc(String(f.current_px))):'')+'</span></div>'+
         lvl(f)+twoTake(f)+
@@ -3397,6 +3432,30 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       window.tlLadder=function(t){ var st=String((t&&t.status)||'').toUpperCase(), fills=(t&&t.fills)||[]; var booked=0; fills.forEach(function(f){ booked+=(f.frac||0); }); var rungs=((t&&t.targets)||[]).map(function(x){ var bk=fills.some(function(f){ return f.kind==='target' && Math.abs((f.px||0)-(x.px||0))<0.01; }); return {px:x.px, booked:!!bk}; }); var live=(st==='OPEN'||st==='FILLED'||st==='ACTIVE'); return {entry:(t&&(t.entry_filled!=null?t.entry_filled:t.entry_trigger)), stop:(t&&t.invalidation), rungs:rungs, runner:(live && fills.length>0 && (1-booked)>0.001)}; }; //@pure
       window.tlKpiDelta=function(dailyR,today){ var a=(dailyR||[]); if(!a.length) return null; var last=a[a.length-1]; if(String(last.date).slice(0,10)!==String(today).slice(0,10)) return null; return {net_r:last.net_r, n:last.n, w:last.w, l:last.l}; }; //@pure
       window.tlPop=function(t,opSet){ var tt=String((t&&t.trade_type)||'').toLowerCase(); if(tt==='operator') return 'real'; if(opSet&&t&&opSet[t.methodology]) return 'real'; return 'paper'; }; //@pure
+      // F260729-ATTNDETAIL - operator, 260729: "ideally i can click them to see what the issue is".
+      // The rail named the trade and gave a four-word reason and then dead-ended. This expands the
+      // row in place: the numbers that decide what to DO about it - where you got in, where the
+      // stop is, what is already booked, and how many sessions are left before the cap closes it.
+      // Kept inline rather than jumping to the ledger row, which would couple this to the ledger's
+      // paging and sort order for no gain.
+      window.tlAttnDetail=window.tlAttnDetail||function(id){ var e=document.getElementById(id); if(!e) return;
+        var open=(e.style.display==='none'||!e.style.display); e.style.display=open?'block':'none';
+        var r=document.getElementById(id+'-row'); if(r) r.classList.toggle('open',open); };
+      window.tlAttnRows=window.tlAttnRows||function(t,a){
+        var f=function(v){ return (v==null||v==='')?null:v; };
+        var rows=[];
+        rows.push(['What needs you', a&&a.reason?a.reason:'—']);
+        var se=t.sessions_elapsed, mh=t.max_hold_sessions;
+        if(se!=null&&mh) rows.push(['Sessions held', se+' of '+mh+' · '+Math.max(0,mh-se)+' left before the time-cap closes it']);
+        var ent=f(t.entry_filled)||f(t.entry_trigger);
+        if(ent!=null) rows.push(['Entry', String(ent)+(t.entry_filled!=null?' (filled)':' (trigger)')]);
+        if(f(t.invalidation)!=null) rows.push(['Stop / invalidation', String(t.invalidation)+' · mental, by policy']);
+        if(t.targets&&t.targets.length) rows.push(['Targets', t.targets.map(function(x){return String(x.px);}).join('  ·  ')]);
+        if(f(t.last_close)!=null) rows.push(['Last close', String(t.last_close)]);
+        var fl=t.fills||[]; if(fl.length){ var bk=0; fl.forEach(function(x){ bk+=(x.frac||0); });
+          rows.push(['Booked so far', Math.round(bk*100)+'% booked · '+Math.round((1-bk)*100)+'% still running']); }
+        if(f(t.thesis)!=null) rows.push(['Thesis', String(t.thesis)]);
+        return rows; };
       window.tlNeedsAttn=function(t){ var st=String((t&&t.status)||'').toUpperCase(); if(st!=='OPEN'&&st!=='FILLED'&&st!=='ACTIVE') return {need:false}; var se=(t&&t.sessions_elapsed), mh=(t&&t.max_hold_sessions); var fills=(t&&t.fills)||[]; if(se!=null&&mh&&se>=mh-1) return {need:true,kind:'cap',reason:(mh-se<=0?'at time-cap · auto-closes next session':'1 session to time-cap')}; if(fills.length) return {need:true,kind:'runner',reason:'partial booked · runner live'}; return {need:false}; }; //@pure
       window.tlSignalLine=function(t,fmt){ fmt=fmt||function(x){return x;}; var st=String((t&&t.status)||'').toUpperCase(); var lg=String((t&&t.logged_at)||'').split(' ')[0].slice(0,10); var efd=String((t&&t.entry_filled_at)||'').slice(0,10); var act=(typeof window!=='undefined'&&window.tlActDate)?window.tlActDate(t):''; if(efd) return (efd!==lg?('signal '+fmt(lg)+' · '):'')+'entry '+fmt(efd); if(st==='PLANNED') return (act&&act!==lg)?('signal '+fmt(lg)+' · for '+fmt(act)):('logged '+fmt(lg)); if((st==='CLOSED'||st==='REVIEWED')&&t&&t.exit_at) return 'signal '+fmt(lg)+' · exited '+fmt(String(t.exit_at).slice(0,10)); return 'logged '+fmt(lg); }; //@pure
         window.tlStatusMeta=function(t){ var st=String((t&&t.status)||'').toUpperCase(), staged=(st==='PLANNED'&&t&&t.stage==='staged'), nf=(t&&(t.exit_kind==='no-fill'||t.exit_kind==='expired')); if(st==='PLANNED') return {word:staged?'watch · staged':'watch'}; if((st==='CLOSED'||st==='REVIEWED')&&nf) return {word:'missed'}; return {}; }; //@pure
@@ -3831,7 +3890,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         dtPerfKpis+'</div>'):'';
             window.tlLadGlyph=function(t){ var L=window.tlLadder(t); if(!L||!L.rungs) return ''; var g='<span class="lad-e" title="entry">E</span>'; L.rungs.forEach(function(r,i){ g+='<span class="lad-sep">▸</span><span class="lad-t'+(r.booked?' bk':'')+'" title="T'+(i+1)+' '+fmtNum(r.px,1)+(r.booked?' · booked':'')+'">'+(r.booked?'✓':('T'+(i+1)))+'</span>'; }); g+='<span class="lad-sep">·</span><span class="lad-s" title="stop">S</span>'+(L.runner?'<span class="lad-run" title="runner live">◤</span>':''); return '<span class="tllad">'+g+'</span>'; };
             var _attn=(open||[]).map(function(t){ var a=window.tlNeedsAttn(t); return a.need?{t:t,a:a}:null; }).filter(Boolean);
-            var _railBody=_attn.length?_attn.map(function(x){ var t=x.t, pop=window.tlPop(t,opMeth); return '<div class="tl-attn-row"><span class="dot live"></span>'+tkA(t.ticker,esc(t.ticker))+'<span class="pop '+pop+' popmini">'+pop.toUpperCase()+'</span>'+window.tlLadGlyph(t)+'<span class="tl-attn-why">'+esc(x.a.reason)+'</span></div>'; }).join(''):'<div class="tl-attn-empty">✓ Nothing needs you today — no live trade near its time-cap or mid-runner.</div>';
+            var _railBody=_attn.length?_attn.map(function(x,_i){ var t=x.t, pop=window.tlPop(t,opMeth); var aid='attn'+String(t.trade_id||('x'+_i)).replace(/[^A-Za-z0-9]/g,''); var det=window.tlAttnRows(t,x.a).map(function(kv){ return '<div class="tl-attn-dl"><span class="tl-attn-dk">'+esc(kv[0])+'</span><span class="tl-attn-dv">'+esc(String(kv[1]))+'</span></div>'; }).join(''); return '<div class="tl-attn-row" id="'+aid+'-row" onclick="tlAttnDetail(&#39;'+aid+'&#39;)" title="click for what exactly needs you"><span class="dot live"></span>'+tkA(t.ticker,esc(t.ticker))+'<span class="pop '+pop+' popmini">'+pop.toUpperCase()+'</span>'+window.tlLadGlyph(t)+'<span class="tl-attn-why">'+esc(x.a.reason)+'</span><span class="tl-attn-caret">›</span></div><div class="tl-attn-det" id="'+aid+'" style="display:none">'+det+'</div>'; }).join(''):'<div class="tl-attn-empty">✓ Nothing needs you today — no live trade near its time-cap or mid-runner.</div>';
             var _kd=window.tlKpiDelta(dailyR, window.tlTodayStr()); var _tR=_kd?(+(_kd.net_r||0)):0;
             var _todayLine=_kd?('<div class="tl-attn-today">Today: <b class="'+(_tR>0?'pos':(_tR<0?'neg':''))+'">'+(_tR>0?'+':'')+_tR.toFixed(2)+'R</b> · '+(_kd.n||0)+' close'+((_kd.n===1)?'':'s')+'</div>'):'';
             var _rail='<div class="card tl-attn"><div class="c-lbl"><span class="d"></span>Needs attention'+HT('Live trades that want your eye: within one session of the time-cap, or a booked partial with a runner still live. Empty = nothing needs you.')+'<span class="age">'+_attn.length+' now</span></div>'+_railBody+_todayLine+'</div>';
