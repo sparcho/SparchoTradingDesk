@@ -186,6 +186,37 @@ def write_profit_lock_status(universe_n, now_iso, out_path):
     print("OK wrote " + out_path.name + " (profit-lock heartbeat)")
 
 
+def _held_from_ciphertext(data: dict) -> list:
+    """Read the held tickers out of the sealed block, using the desk password.
+
+    F260729-HELDLEAK. The held list used to ride in the PUBLIC aggregate, which meant anyone
+    could fetch the operator's positions by URL. It now lives inside sensitive_enc. This job
+    still needs the names to mark rows and score the day-trade panel, so it DECRYPTS to read
+    them — and never re-seals, so it cannot corrupt the blob or change what the page opens with.
+
+    Returns [] when the secret is absent (a fork, or a run without it). The panel then simply
+    marks nothing as held, which is visibly wrong rather than quietly wrong.
+    """
+    import base64
+    import hashlib
+    import os
+    enc = data.get("sensitive_enc") or {}
+    pw = os.environ.get("DESK_UNLOCK_PW") or ""
+    if not enc or not pw:
+        return []
+    try:
+        from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+        key = hashlib.pbkdf2_hmac("sha256", pw.encode("utf-8"),
+                                  base64.b64decode(enc["salt"]), int(enc.get("iter", 600000)), 32)
+        opened = json.loads(AESGCM(key).decrypt(base64.b64decode(enc["iv"]),
+                                                base64.b64decode(enc["ct"]), None))
+    except Exception as exc:
+        print(f"WARN: could not read held from the sealed block ({type(exc).__name__}) — "
+              "day-trade rows will not be marked held", file=sys.stderr)
+        return []
+    return list(opened.get("daytrade_held")
+                or [h.get("ticker") for h in (opened.get("held") or [])])
+
 def main():
     # F260622 addendum — NSE-session gate: silent on weekends/holidays. The 5-min market-hours cron
     # would otherwise re-stamp identical closed-market data on an NSE holiday. US-macro readings
@@ -207,7 +238,10 @@ def main():
 
     dt_inputs = data.get("daytrade_inputs") or {}
     candidates = dt_inputs.get("candidates") or {}
-    held_tickers = dt_inputs.get("held") or [h.get("ticker") for h in data.get("held", [])]
+    # held identities live inside the ciphertext now (F260729-HELDLEAK); decrypt to read them.
+    held_tickers = (dt_inputs.get("held")
+                    or [h.get("ticker") for h in data.get("held", [])]
+                    or _held_from_ciphertext(data))
     held_set = set(held_tickers)
 
     if not candidates:

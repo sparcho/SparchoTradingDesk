@@ -48,6 +48,11 @@ jobs:
         run: pip install --quiet yfinance numpy pyyaml
 
       - name: Overlay held last-price + universe moves
+        # F260729-HELDLEAK: the held tickers moved inside sensitive_enc, so this step needs the
+        # desk password to READ them. It only decrypts — it never re-seals the block, so it
+        # cannot corrupt the ciphertext or change what the page unlocks with.
+        env:
+          DESK_UNLOCK_PW: ${{ secrets.DESK_UNLOCK_PW }}
         run: python stocks/generators/refresh_prices.py
 
       # Regime live readings (TNX/DXY/USDINR/Brent/CCC). Reading-numbers only — never
