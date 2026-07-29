@@ -73,6 +73,71 @@ SENSITIVE_TOP = ("accounts", "family_totals", "strategy", "deployment_plan", "si
 _FAMILY_TOKENS = ("Sparsh", "Rajiv", "Shalini", "Shalu", "Yash", "HUF", "2P2", "Kite", "SPARCHO")
 
 
+class SealVerifyError(RuntimeError):
+    """The freshly-sealed book does not re-open with the password that sealed it.
+
+    F260729-SILVERSEAL. Shipping such a blob locks the family out of their own book with no
+    error anywhere — the card renders "locked" and every correct password is rejected. The
+    cloud path has gated on this since 260723 (ci_silver_refresh.verify_seal_roundtrip); this
+    is the same gate on the laptop path, where every observed bad seal actually came from.
+    """
+
+
+# PBKDF2 iterations for the operator-facing desk lock. 600k = OWASP 2026 floor, matches the
+# equity emit (raised there 260722; silver was left at 200k until 260729). Both the Python
+# sealer and the page's WebCrypto unlock read `iter` off the blob, so older blobs still open.
+SEAL_ITERATIONS = 600000
+
+
+def _seal_book(payload: bytes, pw: str, iterations: int = SEAL_ITERATIONS) -> dict:
+    """PBKDF2-SHA256 -> AES-256-GCM, the shape the page's WebCrypto unlock expects."""
+    import os as _os, base64 as _b64, hashlib as _hl
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    salt = _os.urandom(16)
+    iv = _os.urandom(12)
+    key = _hl.pbkdf2_hmac("sha256", pw.encode("utf-8"), salt, iterations, 32)
+    ct = AESGCM(key).encrypt(iv, payload, None)
+    return {"v": 1, "iter": iterations,
+            "salt": _b64.b64encode(salt).decode(),
+            "iv": _b64.b64encode(iv).decode(),
+            "ct": _b64.b64encode(ct).decode()}
+
+
+def _verify_seal_roundtrip(enc: dict, pw: str, expect_keys=None) -> None:
+    """Open the blob we are about to ship, with the password that sealed it. Raises on failure."""
+    import base64 as _b64, hashlib as _hl
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    key = _hl.pbkdf2_hmac("sha256", pw.encode("utf-8"),
+                          _b64.b64decode(enc["salt"]), int(enc["iter"]), 32)
+    opened = json.loads(AESGCM(key).decrypt(_b64.b64decode(enc["iv"]),
+                                            _b64.b64decode(enc["ct"]), None).decode("utf-8"))
+    if expect_keys and set(opened) != set(expect_keys):
+        raise SealVerifyError(
+            "seal opened but the payload changed shape (missing %s) — degenerate book"
+            % sorted(set(expect_keys) - set(opened)))
+
+
+def _seal_verified(payload: bytes, pw: str, expect_keys=None) -> dict:
+    """Seal, then PROVE it opens. One retry rides over an intermittent bad seal (the class of
+    failure seen on both substrates); a systematic one still aborts the emit loudly rather than
+    publishing a book nobody can unlock."""
+    last = None
+    for attempt in (1, 2):
+        enc = _seal_book(payload, pw)
+        try:
+            _verify_seal_roundtrip(enc, pw, expect_keys)
+            return enc
+        except SealVerifyError:
+            raise
+        except Exception as exc:  # InvalidTag and friends
+            last = exc
+            print(f"[privacy] seal round-trip FAILED on attempt {attempt} "
+                  f"({type(exc).__name__}) -> re-sealing", file=sys.stderr)
+    raise SealVerifyError(
+        "silver book seal did not re-open with the sealing password after 2 attempts "
+        f"({type(last).__name__}: {last}) — refusing to ship an unopenable book")
+
+
 def _apply_privacy(out: dict) -> None:
     """F260607-F122 — same lock as the equity dashboard (PBKDF2-SHA256 200k -> AES-256-GCM,
     matching the page's WebCrypto unlock). Three modes:
@@ -93,17 +158,13 @@ def _apply_privacy(out: dict) -> None:
     enc = None
     if pw:
         try:
-            import os as _os, base64 as _b64, hashlib as _hl
-            from cryptography.hazmat.primitives.ciphers.aead import AESGCM
             payload = json.dumps(sensitive, ensure_ascii=False, default=str).encode("utf-8")
-            salt = _os.urandom(16); iv = _os.urandom(12)
-            key = _hl.pbkdf2_hmac("sha256", pw.encode("utf-8"), salt, 200000, 32)
-            ct = AESGCM(key).encrypt(iv, payload, None)
-            enc = {"v": 1, "iter": 200000,
-                   "salt": _b64.b64encode(salt).decode(),
-                   "iv": _b64.b64encode(iv).decode(),
-                   "ct": _b64.b64encode(ct).decode()}
-            print(f"[privacy] silver LOCKED fresh ({len(ct)}b ct); plaintext stripped")
+            # F260729-SILVERSEAL: seal AND prove it opens before it can be written/published.
+            enc = _seal_verified(payload, pw, expect_keys=set(sensitive))
+            print(f"[privacy] silver LOCKED fresh + seal round-trip VERIFIED "
+                  f"(iter={enc['iter']}, {len(enc['ct'])}b ct); plaintext stripped")
+        except SealVerifyError:
+            raise                 # never fall back to a stale/unopenable ciphertext
         except Exception as e:  # pragma: no cover
             print(f"[privacy] encrypt failed ({e}) -> trying carry-forward", file=sys.stderr)
     if enc is None:
@@ -199,18 +260,14 @@ def _apply_privacy(out):
     enc = None
     if pw:
         try:
-            import os as _os, base64 as _b64, hashlib as _hl
-            from cryptography.hazmat.primitives.ciphers.aead import AESGCM
             payload = json.dumps(sensitive, ensure_ascii=False, default=str).encode("utf-8")
-            salt = _os.urandom(16); iv = _os.urandom(12)
-            key = _hl.pbkdf2_hmac("sha256", pw.encode("utf-8"), salt, 200000, 32)
-            ct = AESGCM(key).encrypt(iv, payload, None)
-            enc = {"v": 1, "iter": 200000,
-                   "salt": _b64.b64encode(salt).decode(),
-                   "iv": _b64.b64encode(iv).decode(),
-                   "ct": _b64.b64encode(ct).decode()}
+            # F260729-SILVERSEAL: seal AND prove it opens before it can be written/published.
+            enc = _seal_verified(payload, pw, expect_keys=set(sensitive))
             out.setdefault("meta", {})["book_local_emit_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-            print(f"[privacy] silver LOCKED fresh ({len(ct)}b ct); plaintext stripped")
+            print(f"[privacy] silver LOCKED fresh + seal round-trip VERIFIED "
+                  f"(iter={enc['iter']}, {len(enc['ct'])}b ct); plaintext stripped")
+        except SealVerifyError:
+            raise                 # never fall back to a stale/unopenable ciphertext
         except Exception as e:
             print(f"[privacy] encrypt failed ({e}) -> trying carry-forward", file=sys.stderr)
     if enc is None:
