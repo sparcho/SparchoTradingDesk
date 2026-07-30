@@ -264,44 +264,49 @@ def main():
     write_prices_json(ohlc, now_iso, DATA_JSON.parent / "prices.json")  # F131 single-source store
     write_profit_lock_status(len(universe), now_iso, DATA_JSON.parent / "profit_lock_status.json")
 
+    # F260730-DTREADERS: this job used to RE-SCORE the day-trade panel here and publish it as
+    # `live_daytrade`. The day-trade class was retired 25-Jul (measured negative expectancy) and
+    # the block is gone, so the scoring is gone with it — re-scoring a signal nothing may act on
+    # is decay surface that still has to be kept green. `daytrade_inputs.candidates` is still read
+    # ABOVE, for the one thing it is still good for: defining the price universe to pull.
+    #
+    # What survives is the price-freshness stamp, now derived from the pull itself (the newest bar
+    # in this batch) instead of from the retired scorer's return value. Same number, no dependency:
+    # build_panel's price_as_of was always just max(bar_date) over the same OHLC.
     if candidates:
         covered = sum(1 for t in candidates if len(ohlc.get(t, [])) >= 2)
         coverage = covered / max(1, len(candidates))
-        print("fire-candidate coverage: " + str(covered) + "/" + str(len(candidates)))
+        print("price coverage: " + str(covered) + "/" + str(len(candidates)))
+        price_as_of = max((b[-1][0] for b in ohlc.values() if b), default=None)
         if coverage >= MIN_COVERAGE:
-            rows, price_as_of = daytrade_core.build_panel(candidates, ohlc, held_set)
-            # Freshness-regression guard (F138 / 260701 grayed-fires incident): a live
-            # yfinance pull off-hours sometimes LAGS a session — its newest bar is the
-            # prior day's, not the latest close. Re-scoring on that laggier pull would
-            # regress price_as_of and stamp the panel STALE, clobbering a fresher panel
-            # already published and graying the dashboard's day-trade card. Never regress:
-            # only overwrite when the live pull is at least as fresh as what's published.
+            # Freshness-regression guard (F138 / 260701 grayed-fires incident): a live yfinance
+            # pull off-hours sometimes LAGS a session — its newest bar is the prior day's, not the
+            # latest close. Stamping that would regress price_as_of, mark the desk STALE and gray
+            # cards that are in fact current. Never regress: only overwrite when the live pull is
+            # at least as fresh as what is already published.
             _prior_paf = (data.get("daytrade_freshness") or {}).get("price_as_of")
             if _prior_paf and price_as_of and str(price_as_of) < str(_prior_paf):
                 fr = dict(data.get("daytrade_freshness") or {})
                 fr["refreshed_at_utc"] = now_iso
                 fr["error"] = ("live pull lagged (price_as_of " + str(price_as_of)
-                               + " < published " + str(_prior_paf) + "); kept fresher panel — no regression")
+                               + " < published " + str(_prior_paf) + "); kept the fresher stamp — no regression")
                 data["daytrade_freshness"] = fr
                 print("  NO-REGRESS: live pull " + str(price_as_of) + " older than published "
-                      + str(_prior_paf) + " — kept fresher panel (F138)", file=sys.stderr)
+                      + str(_prior_paf) + " — kept the fresher stamp (F138)", file=sys.stderr)
             else:
-                # F260729-VAULT: the screener layer is sealed; the cloud's panel goes into its
-                # own PUBLIC block so it keeps refreshing with the laptop asleep. The PUBLIC copy
-                # must not carry the held flag - this job decrypts the held list to mark rows, and
-                # publishing that marking would re-open F260729-HELDLEAK from the other side.
-                data.setdefault("live_daytrade", {})["panel"] = [
-                    {k: (False if k == "held" else v) for k, v in row.items()} for row in rows]
-                data["daytrade_freshness"] = daytrade_core.daytrade_freshness(price_as_of, refreshed_at_utc=now_iso)
-                print("  fires re-scored: " + str(len(rows)) + " | price_as_of " + str(price_as_of)
-                      + " | " + data["daytrade_freshness"]["status"])
+                data["daytrade_freshness"] = daytrade_core.daytrade_freshness(
+                    price_as_of, refreshed_at_utc=now_iso)
+                print("  price_as_of " + str(price_as_of) + " | "
+                      + data["daytrade_freshness"]["status"])
         else:
             fr = dict(data.get("daytrade_freshness") or {})
             fr["status"] = "STALE"
             fr["refreshed_at_utc"] = now_iso
-            fr["error"] = "live price pull failed (coverage below threshold); showing last good panel"
+            fr["error"] = "live price pull failed (coverage below threshold); kept the prior stamp"
             data["daytrade_freshness"] = fr
-            print("  FAIL-CLOSED: coverage too low — kept prior panel, stamped STALE", file=sys.stderr)
+            print("  FAIL-CLOSED: coverage too low — kept the prior stamp, marked STALE", file=sys.stderr)
+    # A block cannot outlive its producer: drop any `live_daytrade` carried in an older aggregate.
+    data.pop("live_daytrade", None)
 
     data["emitted_at_utc"] = now_iso
     data.setdefault("meta", {})["last_price_refresh"] = now_iso
