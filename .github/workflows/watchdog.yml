@@ -4,6 +4,20 @@ name: Dashboard freshness watchdog
 # data is actually current (NSE-session-aware via daytrade_freshness). On any breach
 # the job FAILS -> GitHub emails the operator -> no need to open anything to discover
 # staleness. Writes stocks/data/health.json either way. No host in the loop.
+#
+# TWO ARMS, and they answer DIFFERENT questions (F260730-WDORPHAN):
+#   watchdog_check.py — is the published PAYLOAD current? (emit age, session-aware)
+#   watchdog_ci.py    — did the PRODUCER actually succeed? (workflow conclusions) + writes the
+#                       notifications feed and its daily heartbeat.
+# The second arm existed on disk but was invoked by NOTHING, and the gap is not academic: on
+# 28-29 Jul 2026 ci_fib_refresh aborted on 4 consecutive runs (InvalidTag — it built a correct
+# radar each time and could not re-seal it). refresh-stocks-dashboard.yml is in its
+# CRITICAL_WORKFLOWS and CONSEC_FAIL_ALERT is 3, so it would have alerted on the third. Instead
+# the payload stayed fresh (prices kept flowing), this arm's age checks all passed, health.json
+# read overall:OK for two days, and the operator found the resulting stale radar price by eye.
+# An age check CANNOT see a dead producer whose siblings keep the file's timestamp moving —
+# that is exactly V-37's freshness-layer-vs-substance-layer split. Guarded by the vault's
+# TESTS/test_cloud_watchdog_is_wired.py so an arm can never be orphaned again.
 
 on:
   schedule:
@@ -17,6 +31,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write               # watchdog_ci re-triggers a dead producer's workflow
 
 jobs:
   watchdog:
@@ -45,8 +60,30 @@ jobs:
             git push
           fi
 
+      # ARM 2 (F260730-WDORPHAN) — did the PRODUCERS succeed? Reads workflow conclusions, alerts on
+      # a CONSEC_FAIL_ALERT streak, re-triggers best-effort, and appends the spotted->action->outcome
+      # event + daily heartbeat to status/notifications.json (the landing page's System status panel).
+      #
+      # continue-on-error: this arm must never cost the run its health.json commit or mask a real
+      # freshness breach below. It exits 0 by design anyway ("a watchdog must never fail the
+      # workflow"), so a non-zero here means the arm itself broke — surfaced by the gate at the end
+      # rather than swallowed, because a silently-broken watchdog is the defect this arm exists for.
+      - name: Cloud watchdog — producer health + notifications feed
+        id: wdci
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python status/watchdog_ci.py
+
       - name: Fail the run on breach (triggers GitHub failure email)
         if: env.BREACH == '1'
         run: |
           echo "::error::Dashboard freshness breach — published data is stale. See stocks/data/health.json"
+          exit 1
+
+      - name: Fail the run if the cloud watchdog arm itself broke
+        if: steps.wdci.outcome == 'failure'
+        run: |
+          echo "::error::status/watchdog_ci.py exited non-zero — it is designed to always exit 0,"
+          echo "::error::so the producer-health arm is BROKEN and is no longer watching. See the step log."
           exit 1

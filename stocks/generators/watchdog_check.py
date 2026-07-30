@@ -155,6 +155,53 @@ def check_daily_roll():
 PROFIT_LOCK_STATUS = STOCKS_AGG.parent / "profit_lock_status.json"
 PL_STALE_MIN = 45   # price feed older than this during a session -> WARN (the advisory rides a quiet feed)
 
+PRICES_JSON = STOCKS_AGG.parent / "prices.json"
+
+
+def check_price_bar_lag():
+    """How many tickers carry a bar OLDER than the newest bar in their own pull (F260730-STALEFLAG).
+
+    WHY THIS EXISTS. Yahoo intermittently omits the most recent session for a subset of `.NS`
+    symbols. On 2026-07-30 that put 29 of 74 names a full session behind -- and it reached the fib
+    radar's spot price, the confluence cards and the watchlist 1d moves as a FABRICATED day change
+    (an older close measured against a newer prev_close inverts the real move). Every existing check
+    passed throughout, because they all measure the AGE OF THE FILE and the file was being rewritten
+    on time by the names that did update.
+
+    `prices.json` already recorded `bar_date` per ticker and, from 260730, an honest `stale` flag --
+    but nothing read either. This is the reader. An unread description is not a safeguard.
+
+    WARN, never FAIL, on purpose: a few omissions per pull are routine, and a check that pages every
+    day gets filtered out and stops being a signal at all. The job here is to make the NUMBER visible
+    rather than let 37 names be quietly wrong. It escalates only when the lag is broad enough to mean
+    the pull itself (not Yahoo's coverage of a few symbols) is the problem.
+    """
+    if not PRICES_JSON.exists():
+        return [{"check": "price_bar_lag", "status": "SKIP", "detail": "prices.json not present"}], False
+    try:
+        tickers = (json.loads(PRICES_JSON.read_text(encoding="utf-8")) or {}).get("tickers") or {}
+    except Exception as e:
+        return [{"check": "price_bar_lag", "status": "WARN",
+                 "detail": "prices.json unreadable: " + str(e)}], False
+    dated = {t: v for t, v in tickers.items() if (v or {}).get("bar_date")}
+    if not dated:
+        return [{"check": "price_bar_lag", "status": "WARN",
+                 "detail": "no ticker carries a bar_date — staleness is unfalsifiable"}], False
+    newest = max(v["bar_date"] for v in dated.values())
+    lagging = sorted(t for t, v in dated.items() if v["bar_date"] < newest)
+    n, tot = len(lagging), len(dated)
+    if not lagging:
+        return [{"check": "price_bar_lag", "status": "OK",
+                 "detail": "all %d ticker(s) on the %s bar" % (tot, newest)}], False
+    shown = ", ".join(lagging[:8]) + (" +%d more" % (n - 8) if n > 8 else "")
+    frac = n / tot
+    status = "WARN" if frac < 0.60 else "FAIL"
+    detail = ("%d/%d ticker(s) behind the newest bar (%s): %s"
+              % (n, tot, newest, shown))
+    if status == "FAIL":
+        detail += " — majority of the batch lagging, so the PULL is suspect, not Yahoo coverage"
+    return [{"check": "price_bar_lag", "status": status, "detail": detail}], status == "FAIL"
+
 
 def _in_market_hours(now=None):
     """Rough NSE market window in UTC (~09:15-15:30 IST = 03:45-10:00 UTC), weekdays."""
@@ -214,6 +261,7 @@ def main():
 
     checks, breach = [], False
     c, b = check_stocks(); checks += c; breach = breach or b
+    c, b = check_price_bar_lag(); checks += c; breach = breach or b
     c, b = check_profit_lock(); checks += c; breach = breach or b
     c, b = check_daily_roll(); checks += c; breach = breach or b
     c, b = check_silver(); checks += c; breach = breach or b

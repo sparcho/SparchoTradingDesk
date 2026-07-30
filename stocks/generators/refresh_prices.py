@@ -143,19 +143,27 @@ def write_prices_json(ohlc, now_iso, out_path):
     asof}, built from the SAME batched pull that feeds the held book + fires. Consumers (shell
     overlay, _index cards) resolve prices from HERE rather than embedding their own snapshot — one
     price per ticker, one asof, one place to see staleness. Per the Price-Printer SSOT contract."""
+    # F260730-STALEFLAG. `stale` was hardcoded False while `bar_date` was recorded faithfully right
+    # beside it, so a name a full session behind still declared itself fresh -- 29 of 74 names on
+    # 2026-07-30, and nothing read either field. The reference session is the NEWEST bar_date IN THIS
+    # SAME PULL: the batch is its own control, which needs no calendar and cannot be fooled by a
+    # holiday, a weekend or a pre-open run. A name lagging the rest of its own batch is exactly the
+    # Yahoo-omission anomaly that staled the fib radar's spot price.
+    batch_bar_date = max((b[-1][0] for b in ohlc.values() if b), default=None)
     tickers = {}
     for t, bars in ohlc.items():
         if not bars:
             continue
         last = bars[-1][4]
         prev = bars[-2][4] if len(bars) >= 2 else last
+        bar_date = bars[-1][0]
         tickers[t] = {
             "last": round(last, 2),
             "prev_close": round(prev, 2),
             "day_chg_pct": round(((last - prev) / prev * 100) if prev else 0, 2),
-            "bar_date": bars[-1][0],
+            "bar_date": bar_date,
             "asof_utc": now_iso,
-            "stale": False,
+            "stale": bool(batch_bar_date and bar_date < batch_bar_date),
         }
     store = {"schema": "price-printer/v1", "asof_utc": now_iso, "session": "intraday",
              "source": "yfinance", "tickers": tickers}
