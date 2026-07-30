@@ -2,6 +2,12 @@ stocks/generators/staleness_contract.py -text
 silver/generators/staleness_contract.py -text
 # F260721-LEVELSCLOUD — byte-identical ports of the vault fib engines (test_copy_parity.py).
 # -text keeps Windows checkouts from rewriting LF->CRLF, which would break parity as EOL drift.
+# F260730 — the fourth staleness_contract copy was declared in test_copy_parity's MANIFEST
+# on 260727 but never listed here, so a Windows checkout rewrote it to CRLF and broke
+# byte-parity with no edit. test_copy_parity now derives this list from the manifest.
+stocks/engine/staleness_contract.py -text
+stocks/engine/screener_runner.py -text
+stocks/generators/daytrade_core.py -text
 stocks/engine/box_engine.py -text
 stocks/engine/fib_confluence_feed.py -text
 stocks/engine/levels_bank_publish.py -text
