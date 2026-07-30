@@ -23,6 +23,7 @@ Deterministic, unit-tested (TESTS/test_box_engine.py).
 from __future__ import annotations
 import csv
 import json
+from datetime import datetime
 from pathlib import Path
 
 VAULT = Path(__file__).resolve().parents[2]
@@ -40,6 +41,8 @@ CONFLUENCE_TOL = 0.015     # two ladders' box edges within ~1.5% = a confluence
 BOUNDARY_TOL = 0.02        # price within ~2% of a box edge = "at a boundary"
 CONSOLIDATION_N = 15       # >= this many bars in one box = notable consolidation
 LEAP_LOOKBACK = 45
+# F260730-GHOSTPRICE: a price basis older than this is reported as a P0, never used silently.
+STALE_PRICE_DAYS = 5
 
 
 def boxes_from_anchor(low, high):
@@ -146,7 +149,12 @@ def observe(read, closes, current_px):
             # both present but low>=high = a genuine INVERSION -> P0 (a real data discrepancy)
             p0.append("inverted fib anchor %s (low %s >= high %s) — impossible, needs fixing" % (a.get("timeframe"), lo, hi))
     if not ladders:
-        return {"ticker": read.get("ticker"), "states": [], "confluence": [], "notes": [],
+        # F260730-VERIFIEDPASSENGER: carry current_px on this early return too. Traced 2026-07-30:
+        # SHRIRAMFIN has 3 banked zones and a live price of 1027.2, but this path omitted the price,
+        # so fib_confluence_feed's `if not cur` dropped it before its zones were ever read. A name
+        # whose ladders cannot build boxes may still have perfectly good operator zones.
+        return {"ticker": read.get("ticker"), "current_px": round(current_px, 2),
+                "states": [], "confluence": [], "notes": [],
                 "incomplete": incomplete, "p0": p0 or ["no usable fib ladder to build boxes"]}
 
     states, notes = [], []
@@ -194,6 +202,12 @@ def observe(read, closes, current_px):
 
 # ── I/O ──────────────────────────────────────────────────────────────────────
 def _recent_closes(tkr, n=LEAP_LOOKBACK):
+    """(series, price, asof) -- `asof` is the SESSION the price came from.
+
+    F260730-GHOSTPRICE: this used to return the price alone, so a fall-back to the last row of
+    historical_ohlc.csv was indistinguishable from a live close. Nine tickers were being priced off
+    a 2026-06-05 row with no date attached. The basis date now travels with the number.
+    """
     closes = []
     if HIST_CSV.exists():
         with open(HIST_CSV, newline="", encoding="utf-8", errors="ignore") as fh:
@@ -205,18 +219,46 @@ def _recent_closes(tkr, n=LEAP_LOOKBACK):
                         pass
     closes.sort(key=lambda r: r[0])
     series = [c for _, c in closes]
-    live = None
+    live, live_date = None, None
     if DAILY_CSV.exists():
         with open(DAILY_CSV, newline="", encoding="utf-8", errors="ignore") as fh:
             rows = [r for r in csv.DictReader(fh) if r.get("ticker") == tkr and r.get("close")]
         if rows:
             try:
                 live = float(rows[-1]["close"])
+                live_date = rows[-1].get("date")
             except (TypeError, ValueError):
-                live = None
+                live, live_date = None, None
     if live is not None:
         series = series + [live]
-    return series[-n:], (live if live is not None else (series[-1] if series else None))
+        return series[-n:], live, live_date
+    if series:
+        return series[-n:], series[-1], (closes[-1][0] if closes else None)
+    return [], None, None
+
+
+def _newest_price_date():
+    """The newest date present in the live daily cache -- the yardstick a basis date is aged against."""
+    newest = None
+    if DAILY_CSV.exists():
+        with open(DAILY_CSV, newline="", encoding="utf-8", errors="ignore") as fh:
+            for r in csv.DictReader(fh):
+                d = r.get("date")
+                if r.get("close") and d and (newest is None or d > newest):
+                    newest = d
+    return newest
+
+
+def _sessions_stale(asof, newest):
+    """Calendar days between a basis date and the newest available session. None if unknowable."""
+    if not asof or not newest:
+        return None
+    try:
+        a = datetime.strptime(asof[:10], "%Y-%m-%d").date()
+        b = datetime.strptime(newest[:10], "%Y-%m-%d").date()
+    except ValueError:
+        return None
+    return (b - a).days
 
 
 def _load_verified(tkr):
@@ -232,19 +274,35 @@ def _load_verified(tkr):
 
 def build_all(write=True):
     obs, p0_items = [], []
+    newest_date = _newest_price_date()
     for fp in sorted(BANK_DIR.glob("*.json")):
         read = _load_verified(fp.stem)
         if not read:
             continue
-        closes, cur = _recent_closes(fp.stem)
+        closes, cur, asof = _recent_closes(fp.stem)
         if cur is None:
             p0_items.append({"ticker": fp.stem, "p0": ["no live price to place against boxes"]})
             continue
         o = observe(read, closes, cur)
         if o:
+            # F260730-GHOSTPRICE: the basis session travels with the price, and a price older than
+            # STALE_PRICE_DAYS is a P0 rather than a silent substitution.
+            o["current_px_asof"] = asof
+            stale = _sessions_stale(asof, newest_date)
+            o["current_px_stale_days"] = stale
+            if stale is not None and stale > STALE_PRICE_DAYS:
+                o["p0"] = list(o.get("p0") or []) + [
+                    "price basis is %s (%d days old) -- placed against boxes anyway; "
+                    "support/resistance labels may be inverted" % (asof, stale)]
             if o.get("p0"):
                 p0_items.append({"ticker": fp.stem, "p0": o["p0"]})
-            if o.get("notes") or o.get("confluence"):
+            # F260730-VERIFIEDPASSENGER: a VERIFIED bank carrying zones is emitted even when the
+            # ALGORITHMIC pass found nothing notable. Operator levels are authoritative over the
+            # derived baseline (SKILL.md LEVELS BANK, V-38) -- they must be able to surface a name
+            # on their own, not only enrich one the algorithm already found. Gating on notes/
+            # confluence also inverted the quality gradient: a clean single-ladder chart scores zero
+            # auto points, so the BETTER read was the likelier to be dropped.
+            if o.get("notes") or o.get("confluence") or (read.get("zones") or []):
                 obs.append(o)
     # rank: names with a ★ confluence note first, then by number of notes
     obs.sort(key=lambda o: (not any(n.startswith("**") for n in o["notes"]), -len(o["notes"])))
