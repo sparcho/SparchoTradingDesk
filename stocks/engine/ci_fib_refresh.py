@@ -13,6 +13,15 @@ result back inside the operator's encrypted block.
     box_engine.build_all() --------------------------> box_observations.json
     fib_confluence_feed.build() ---------------------> the radar payload
     inject_fib(aggregate, payload, DESK_UNLOCK_PW) --> sensitive_enc + a public provenance stub
+    fib_confluence_source.build_radar(payload) ------> agg["fib_radar"]  (fires / watch / board)
+
+F260727-RADARSUBSTRATE. Until 2026-07-30 this job stopped at the sealed payload, so `fib_radar` --
+the fires, the watch list and the 41-name board the desk actually reads -- had exactly ONE producer:
+equity_dashboard_emit, on the laptop. EQUITY_BLOCKS declared the block `cloud`, reasoning that it
+inherits the substrate of the data it derives from; substrate is not inherited, it is who runs the
+writer (V-37). The cost was concrete: on 30-Jul a bad laptop morning pull replaced a good post-close
+build, 37 of 92 names carrying the 28-Jul close under a declared 30-Jul, and the board read 0 fires
+where the true prices gave 2. Had the cloud owned it, the 29-Jul build would have stood.
 
 PORTING CONVENTION (ci_screener_emit.py's). box_engine.py, fib_confluence_feed.py and
 levels_bank_publish.py are BYTE-IDENTICAL copies of the vault modules — guarded by the vault's
@@ -255,6 +264,37 @@ def _sanity(payload: dict) -> None:
         raise FibRefreshAbort("rebuilt radar has no price_as_of — an undateable block is a broken one")
 
 
+def build_radar_block(payload: dict) -> dict:
+    """The public Radar block (fires / watch / board), via the ONE shared projection.
+
+    `fib_confluence_source` is a byte-identical copy of the vault module (test_copy_parity), so the
+    gate — at-confluence + STRONG + >=3 verified sources + setup/trend + R:R >= 1.5 — is not
+    re-implemented here. Its VAULT-rooted `BANK` constant is never reached: we pass the in-memory
+    payload we just built, which is the same object the laptop reads from EDGE/fib_confluences.json.
+    """
+    import fib_confluence_source as FCS
+    return FCS.build_radar(payload)
+
+
+def _sanity_radar(radar: dict, payload: dict) -> None:
+    """Refuse to publish a radar that cannot be judged, on the same principle as _sanity.
+
+    A board with rows but no `price_as_of` is the F260721-FIBPROV bug (an undatable block cannot be
+    proven stale). A basis that disagrees with the payload we just sealed would mean the two halves
+    of this job scored different closes — publishing that pair would put a fresh-looking board next
+    to a differently-dated analysis, which is the 30-Jul defect in miniature.
+    """
+    if not radar.get("board"):
+        raise FibRefreshAbort("rebuilt radar has an EMPTY board — refusing to publish over the "
+                              "prior block (a dated, empty board reads as a healthy quiet day)")
+    if not radar.get("price_as_of"):
+        raise FibRefreshAbort("rebuilt radar has no price_as_of — an undateable block is broken")
+    if radar["price_as_of"] != payload.get("price_as_of"):
+        raise FibRefreshAbort(
+            "radar price_as_of %s != sealed payload %s — the two halves of this job scored "
+            "different closes" % (radar["price_as_of"], payload.get("price_as_of")))
+
+
 def fetch_closes(tickers, range_="1y", now_ist=None, sleep_s=0.6) -> dict:
     """Daily close series per ticker from Yahoo — SETTLED bars only.
 
@@ -343,10 +383,21 @@ def main(argv=None) -> int:
         except FibRefreshAbort as e:
             print(f"[fib-cloud] ABORT: {e}", file=sys.stderr)
             return 4
+        # F260727-RADARSUBSTRATE — the public Radar block, from the SAME projection the laptop emit
+        # calls. Built from the payload we just sealed, so the two can never disagree about which
+        # bank or which close they scored. inject_fib comes first on purpose: if the book cannot be
+        # opened this job aborts before touching anything, and a radar written next to a book we
+        # failed to re-seal would be a half-applied update.
+        radar = build_radar_block(payload)
+        _sanity_radar(radar, payload)
+        agg["fib_radar"] = radar
         from atomic_io import atomic_write_json
         atomic_write_json(agg_path, agg, indent=1)
+        c = radar["counts"]
         print("[fib-cloud] aggregate updated — fib analysis LOCKED into sensitive_enc; public stub "
               "(price_as_of=%s) left for provenance" % payload["price_as_of"])
+        print("[fib-cloud] fib_radar rebuilt on the CLOUD substrate: %d fire · %d watch · %d "
+              "exclude · board %d" % (c["fire"], c["watch"], c["exclude"], len(radar["board"])))
     return 0
 
 
