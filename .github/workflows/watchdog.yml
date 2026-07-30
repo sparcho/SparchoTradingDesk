@@ -95,7 +95,55 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python status/watchdog_ci.py
+        run: |
+          python status/watchdog_ci.py
+          # watchdog_ci.main() ends at nf.append_events() — it writes the feed into the RUNNER's
+          # working tree and returns. There is NO git commit anywhere in the script, despite its
+          # docstring claiming it appends an event "then commit". Verified on run 30519285527: the
+          # arm ran, caught a real live-parity problem, and the published feed stayed frozen at
+          # 2026-07-28 because the file died with the runner. A finding computed and thrown away is
+          # the same nothing as a finding never computed. The commit belongs here.
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add status/notifications.json || true
+          if git diff --cached --quiet; then
+            echo "no new watchdog events"; exit 0
+          fi
+          git commit -m "watchdog notifications $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if git push; then echo "pushed (fast path)"; exit 0; fi
+          echo "push rejected — remote moved; replaying the append onto latest"
+          for i in 1 2 3 4 5; do
+            git fetch origin main || { sleep 4; continue; }
+            # keep OUR feed file across the reset: the events were computed from state this run
+            # observed, and the remote's copy may carry OTHER producers' events we must not drop.
+            cp status/notifications.json /tmp/notif_ours.json
+            git reset --hard origin/main
+            python - <<'PY'
+          import json, pathlib
+          # merge: remote feed + our new events, deduped on (ts_utc, subsystem), newest first
+          ours = json.loads(pathlib.Path('/tmp/notif_ours.json').read_text(encoding='utf-8'))
+          p = pathlib.Path('status/notifications.json')
+          base = json.loads(p.read_text(encoding='utf-8')) if p.exists() else {'events': []}
+          seen, merged = set(), []
+          for e in (ours.get('events') or []) + (base.get('events') or []):
+              k = (e.get('ts_utc'), e.get('subsystem'), e.get('spotted'))
+              if k in seen:
+                  continue
+              seen.add(k); merged.append(e)
+          merged.sort(key=lambda e: str(e.get('ts_utc') or ''), reverse=True)
+          base['events'] = merged[:200]
+          base['updated_at_utc'] = max((str(e.get('ts_utc') or '') for e in merged), default='')
+          p.write_text(json.dumps(base, indent=1, ensure_ascii=False), encoding='utf-8')
+          print('merged feed: %d event(s)' % len(merged))
+          PY
+            git add status/notifications.json || true
+            if git diff --cached --quiet; then echo "no net change after merge — done"; exit 0; fi
+            git commit -m "watchdog notifications (merged on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push; then echo "pushed (attempt $i)"; exit 0; fi
+            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+          done
+          echo "::error::could not push notifications.json after merge retries"
+          exit 1
 
       - name: Fail the run on breach (triggers GitHub failure email)
         if: env.BREACH == '1'
