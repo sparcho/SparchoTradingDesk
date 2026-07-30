@@ -436,14 +436,17 @@ EQUITY_BLOCKS = {
                                        "correct - zero open decisions is a real and good state. "
                                        "It has no freshness SLA because it moves only when a flag "
                                        "does; what matters is that OVERDUE items reach the desk."),
-    "live_daytrade":         _blk("cloud refresh_prices.py (5-min, market hours)", "cloud",
-                                  lambda b: (b or {}).get("as_of"),
-                                  count=lambda b: len((b or {}).get("panel") or []),
-                                  note="F260729-VAULT: the day-trade panel kept PUBLIC on purpose. "
-                                       "The rest of the screener layer moved inside sensitive_enc; this "
-                                       "one block stays out so the cloud can keep refreshing it every "
-                                       "5 minutes with the laptop asleep - operator 260729, explicitly "
-                                       "NOT laptop-only. Held flags are stripped from the public copy."),
+    # RETIRED 2026-07-30 (F260730-DTREADERS, operator decision) - `live_daytrade`.
+    #    The day-trade CLASS was retired 25-Jul on measured evidence (negative expectancy; its
+    #    highest-scored tier performed WORST), and horizon buckets were rejected outright 30-Jul
+    #    ("holding period is an outcome of a setup's structure, not a category"). This block was
+    #    the public 5-minute panel feeding a card that already showed a tombstone - while three
+    #    surfaces still READ it, including the Radar's own hero ranking. Producers removed from
+    #    the emit and from cloud refresh_prices; the price-freshness stamp it shared
+    #    (`daytrade_freshness`) survives on its own and is now derived from the price pull
+    #    directly. It was also mis-declared - the as-of lambda sat in the max_sessions slot, so
+    #    the detector raised TypeError for eight days; test_block_contract now checks the
+    #    registry's shape so that specific slip cannot recur.
     "fib_coverage":          _blk("emit (EDGE/LEVELS x lens universe)", "operator", None,
                                   severity="info",
                                   count=lambda b: (b or {}).get("verified"),
