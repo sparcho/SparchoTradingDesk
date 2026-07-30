@@ -54,11 +54,28 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add stocks/data/health.json || true
           if git diff --cached --quiet; then
-            echo "no health change"
-          else
-            git commit -m "watchdog health $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push
+            echo "no health change"; exit 0
           fi
+          git commit -m "watchdog health $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if git push; then echo "pushed (fast path)"; exit 0; fi
+          # F260730-WDORPHAN: this was the ONLY pusher in the repo without a rebase-retry, so any
+          # concurrent push (there are five other cron pushers on the shared queue, plus the host's
+          # publish) failed the whole watchdog run — taking the producer-health arm down with it.
+          # health.json is fully recomputed from the checkout, so rebasing and re-running is always
+          # safe: there is no local state to lose.
+          echo "push rejected — remote moved; rebasing onto latest and retrying"
+          for i in 1 2 3 4 5; do
+            git fetch origin main || { sleep 4; continue; }
+            git reset --hard origin/main
+            python stocks/generators/watchdog_check.py > /tmp/wd.txt 2>&1 || echo "BREACH=1" >> "$GITHUB_ENV"
+            git add stocks/data/health.json || true
+            if git diff --cached --quiet; then echo "no net change after rebuild — done"; exit 0; fi
+            git commit -m "watchdog health (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push; then echo "pushed (attempt $i)"; exit 0; fi
+            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+          done
+          echo "::error::could not push health.json after rebase retries"
+          exit 1
 
       # ARM 2 (F260730-WDORPHAN) — did the PRODUCERS succeed? Reads workflow conclusions, alerts on
       # a CONSEC_FAIL_ALERT streak, re-triggers best-effort, and appends the spotted->action->outcome
@@ -70,6 +87,11 @@ jobs:
       # rather than swallowed, because a silently-broken watchdog is the defect this arm exists for.
       - name: Cloud watchdog — producer health + notifications feed
         id: wdci
+        # if: always() — a watchdog gated behind another step's success is OFF exactly when things
+        # are going wrong. Learned on the first live run after wiring (30519101562): the health-commit
+        # step above lost a routine push race, exited 1, and GitHub skipped this arm on the very run
+        # meant to prove it works.
+        if: always()
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
