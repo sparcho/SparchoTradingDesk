@@ -449,7 +449,11 @@ def build(obs=None, ohlc=None, write=True):
     for o in obs.get("observations", []):
         cur = o.get("current_px")
         confl = o.get("confluence") or []
-        if not cur or not confl:
+        # F260730-VERIFIEDPASSENGER: the banked-zone ingestion below used to sit BENEATH this skip,
+        # so a name with a verified bank but zero AUTO confluence points was dropped before its
+        # operator levels were ever read. Doctrine puts operator levels above the derived baseline
+        # (SKILL.md LEVELS BANK, V-38) -- a verified bank must be able to surface a name alone.
+        if not cur or (not confl and not _bank_zones(o.get("ticker"))):
             continue
         ma = ma_stack(ohlc.get(o.get("ticker"), []))
         trend = _trend_of(cur, ma)
