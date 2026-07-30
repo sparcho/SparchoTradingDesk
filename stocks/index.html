@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785405201">
-<meta name="x-built-at" content="2026-07-30T09:53:16+00:00">
+<meta name="x-build-id" content="1785408300">
+<meta name="x-built-at" content="2026-07-30T10:44:55+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785405201",BUILT_AT="2026-07-30T09:53:16+00:00";
+  var BID="1785408300",BUILT_AT="2026-07-30T10:44:55+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2838,12 +2838,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       const min=DATA.emitted_at_utc?Math.floor((Date.now()-new Date(DATA.emitted_at_utc).getTime())/60000):null;
       $('op-age').innerHTML='<span class="dot"></span>data <b>'+(min==null?'—':(min<90?min+'m':Math.floor(min/60)+'h'))+'</b> old';
       const bg=reg.binding_gate||{};
-      (function(){ var _ch=function(c,h){return '<span class="ch"><span class="dt2" style="background:'+c+'"></span><span>'+h+'</span></span>';}; var _rc=zone==='RED'?'var(--neg)':(zone==='GREEN'?'var(--pos)':'var(--watch)'); var _fc=radFires, _fn=_fc.slice(0,4).map(function(f){return esc(f.ticker);}).join(', '); var _tb=bubble.slice().filter(function(b){return +b.lean>0;}).sort(function(a,b){return b.composite-a.composite;})[0]; var _pd=(DATA.daytrade_freshness||{}).price_as_of||''; var H='<div class="wcaph">Today\u2019s action'+(_pd?(' \u00b7 as of '+fmtD(_pd)):'')+'</div>'; H+=_ch(_rc,'Regime <b>'+esc(zone)+(reg.score!=null?(' \u00b7 '+esc(String(reg.score))):'')+'</b>'+(reg.attack_mode?(' \u00b7 '+esc(reg.attack_mode)):'')); if(bg.id) H+=_ch('var(--watch)','Gate <b>'+esc(bg.id)+'</b> '+esc(bg.status||'')+' '+esc(bg.reading||'')+(bg.threshold?(' ('+esc(bg.threshold)+')'):'')); H+=_ch(_fc.length?'var(--pos)':'var(--mut)',_fc.length?('<b>'+_fc.length+'</b> Radar fire'+(_fc.length>1?'s':'')+' \u00b7 '+_fn+(_fc.length>4?(' +'+(_fc.length-4)):'')):'No Radar fires today'); if(_tb) H+=_ch('var(--cyan)','Top conviction <b>'+esc(_tb.ticker)+'</b> \u00b7 composite '+Math.round(_tb.composite)); if(cat&&cat.event) H+=_ch('var(--violet)','Next \u00b7 '+esc((cat.event||'').trim())); $('op-changed').innerHTML=H; })(); }catch(e){__reportErr('opbar',e);}
+      (function(){ var _ch=function(c,h){return '<span class="ch"><span class="dt2" style="background:'+c+'"></span><span>'+h+'</span></span>';}; var _rc=zone==='RED'?'var(--neg)':(zone==='GREEN'?'var(--pos)':'var(--watch)'); var _fc=radFires, _fn=_fc.slice(0,4).map(function(f){return esc(f.ticker);}).join(', '); var _nBull=bubble.filter(function(b){return +b.lean>0;}).length; var _pd=(DATA.daytrade_freshness||{}).price_as_of||''; var H='<div class="wcaph">Today\u2019s action'+(_pd?(' \u00b7 as of '+fmtD(_pd)):'')+'</div>'; H+=_ch(_rc,'Regime <b>'+esc(zone)+(reg.score!=null?(' \u00b7 '+esc(String(reg.score))):'')+'</b>'+(reg.attack_mode?(' \u00b7 '+esc(reg.attack_mode)):'')); if(bg.id) H+=_ch('var(--watch)','Gate <b>'+esc(bg.id)+'</b> '+esc(bg.status||'')+' '+esc(bg.reading||'')+(bg.threshold?(' ('+esc(bg.threshold)+')'):'')); H+=_ch(_fc.length?'var(--pos)':'var(--mut)',_fc.length?('<b>'+_fc.length+'</b> Radar fire'+(_fc.length>1?'s':'')+' \u00b7 '+_fn+(_fc.length>4?(' +'+(_fc.length-4)):'')):'No Radar fires today'); /* F260730-SWEEP: this chip named ONE ticker as the top *conviction* pick, scored by composite.
+         Composite has no forward-return record, and "conviction" is the thesis-anchored book's word,
+         not the screen's — so the chip read as the operator's highest-conviction position. The screen
+         is landscape: report HOW MANY names lean long, and let the Radar, which has a verified level
+         behind every fire, be the surface that names names. */
+      if(_nBull) H+=_ch('var(--cyan)','<b>'+_nBull+'</b> screened name'+(_nBull>1?'s':'')+' lean long \u00b7 context, not a pick'); if(cat&&cat.event) H+=_ch('var(--violet)','Next \u00b7 '+esc((cat.event||'').trim())); $('op-changed').innerHTML=H; })(); }catch(e){__reportErr('opbar',e);}
 
     try{ buildReadHeroes((reg.headline||'').trim());
       const topBull=bubble.slice().filter(b=>+b.lean>0).sort((a,b)=>b.composite-a.composite)[0];
       $('f1-next').innerHTML = zone==='RED' ? 'Risk-off — no new initiations; manage held to gates.'
-        : ('Lean '+esc(String(zone).toLowerCase())+'. '+(topBull?('Top conviction <b>'+esc(topBull.ticker)+'</b> · composite '+Math.round(topBull.composite)+'.'):'No clean long lean.')); }catch(e){__reportErr('f1-today',e);}
+        : ('Lean '+esc(String(zone).toLowerCase())+'. '+(topBull?('Screen leader <b>'+esc(topBull.ticker)+'</b> · composite '+Math.round(topBull.composite)+' — context only; this score has never been measured forward, so it is a landscape reading, not a pick.'):'No clean long lean.')); }catch(e){__reportErr('f1-today',e);}
 
     try{ const regC=zone==='RED'?'neg':(zone==='GREEN'?'pos':'watch');
       var _tkl=function(a,mx){ mx=mx||22; if(!a||!a.length) return '<i style="color:var(--faint);font-style:normal">none this run</i>'; var s2=a.slice(0,mx).map(function(t){return esc(t);}).join(', '); if(a.length>mx) s2+=' <i style="color:var(--faint);font-style:normal">+'+(a.length-mx)+' more</i>'; return s2; };
