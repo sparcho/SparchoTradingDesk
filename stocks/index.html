@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785350009">
-<meta name="x-built-at" content="2026-07-29T18:32:54+00:00">
+<meta name="x-build-id" content="1785386931">
+<meta name="x-built-at" content="2026-07-30T04:48:22+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785350009",BUILT_AT="2026-07-29T18:32:54+00:00";
+  var BID="1785386931",BUILT_AT="2026-07-30T04:48:22+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2704,8 +2704,47 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   }
   window.dtStep=function(){};   // F260725: the retired firehose has no sessions to page
 
-  // ---------- SWING / POSITIONAL pair (public bubble_set now; unlocked ledger history) ----------
-  function _liveFires(view){ var bubble=((DATA.screeners||{}).bubble_set)||[]; var ranked=bubble.filter(function(b){return !b.held;}).slice().sort(function(a,b){return (+b.composite||-1)-(+a.composite||-1);}); return view==='swing'?ranked.slice(0,2):ranked.slice(2,4); }
+  // ---------- SWING / POSITIONAL pair (logged ledger history; live fires RETIRED) ----------
+  // F260730-SCRNFIRES — the live swing + positional fires are RETIRED, for the same three reasons
+  // that retired the day-trade firehose (25-Jul) and the pre-open session preview (26-Jul). All
+  // three applied here verbatim and were simply left standing:
+  // (the preview's own block name is deliberately not spelled out — test_desk_radar_shell asserts
+  //  that token is absent from the shell, and that guard should stay strict.)
+  //   1. THE HORIZON WAS NEVER MODELLED. The selector was, in full:
+  //        ranked = bubble_set.filter(not held).sort(by composite)
+  //        swing = ranked.slice(0,2)   ·   positional = ranked.slice(2,4)
+  //      "Positional" was composite ranks 3-4 of the SAME list. Rank #3 is not a longer horizon
+  //      than rank #1; it is a lower score. Two cards presented one ranking as two strategies.
+  //   2. THE RANKING SCORE HAS NEVER BEEN MEASURED. composite = the v2 role-aware consensus, whose
+  //      weights_version is still `phase1-placeholder-v0` — placeholders, never fitted to outcomes.
+  //      signal_perf covers only DayTrade-Confluence and TA; there is no forward-return record for
+  //      composite anywhere on the desk. Its predecessor (gate-count) measured NEGATIVE excess
+  //      (-0.02% at 1d, -0.33% at 5d, -0.44% at 10d over 2,900 signals) and non-monotonic by tier.
+  //   3. IT CONTRADICTED THE RADAR ON THE SAME PAGE, and fired without a verified read. On
+  //      2026-07-30 the Radar held 0 fires / 6 watch / 35 excluded, while these cards showed four:
+  //      PACEDIGITK and DECNGOLD (both `approaching` on the Radar board — explicitly NOT at a
+  //      level), BHARTIARTL (not on the board), CHOLAFIN (not on the board AND no verified fib bank
+  //      at all, which A2 / V-38 forbids outright). None passed a single one of the four screens;
+  //      composite is a mean of FAILING pass-ratios, so the "top fire" is the least-failing name in
+  //      the universe rather than a qualifying one. Every `lean` was 0 — no directional read either.
+  // They also carried no entry, stop, target, R:R or invalidation, so nothing could be ordered from
+  // them and no R:R could be stated. The LOGGED history below is retained and still pages: those
+  // are real ledger trades and they are the evidence, not a signal.
+  function _retiredFiresHTML(cfg){
+    var rad=(DATA&&DATA.fib_radar)||{}, rc=rad.counts||{};
+    return '<div class="fc-note">Removed on the same measured evidence that retired the day-trade '+
+      'firehose: <b>'+cfg.label.replace(' fires','')+'</b> was never a horizon — it was composite '+
+      'rank '+(cfg.view==='swing'?'1-2':'3-4')+' of one list, ranked on a score that has never been '+
+      'measured forward, with no entry, stop, target or R:R attached. Kept as the record, not as a '+
+      'signal.</div>'+
+      '<div class="fire fclick" onclick="firePan(\'fib\')" style="cursor:pointer"><div class="top">'+
+        '<span class="rk">🎯</span><span class="tk">The Radar<span class="sec">verified fib banks</span></span>'+
+        '<span class="sc">'+(rc.fire||0)+'</span></div>'+
+        '<div class="note">'+cfg.view+' setups now come from hand-verified fib structure only — price '+
+        'ON a multi-source support with 1.5+ R:R to the next banked level → open the Radar</div></div>'+
+      '<div class="fc-note" style="margin-top:8px">Page back with ◀ for the <b>logged</b> '+
+        esc(cfg.view)+' trades — those are real ledger entries and still count.</div>';
+  }
   function _horizonPair(cfg){
     var view=cfg.view;
     var grain=window[cfg.grainKey]||cfg.grains[0];
@@ -2722,12 +2761,11 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var nav=perNav({stepFn:cfg.stepFn,idx:idx,n:views.length,curLabel:cur.label,curTag:(cur.kind==='current'?'current':'history'),grain:grain,grains:cfg.grains,grainFn:cfg.grainFn});
     var sigHTML='', cards=[], sub='';
     if(cur.kind==='current'){
-      var lf=_liveFires(view);
-      if(!lf.length) sigHTML=pending(cfg.label,'no composite-ranked candidates (held-excluded) in this emit.');
-      lf.forEach(function(b,i){ var nl=(+b.multi_hit_count||0); var comp=Math.round(+b.composite||0);
-        sigHTML+='<div class="fire fclick" onclick="tlOpenTrade(\''+esc(b.ticker)+'\',\''+view+'\')" style="cursor:pointer"><div class="top"><span class="rk">'+cfg.icon+'</span><span class="tk">'+tkA(b.ticker,esc(b.ticker))+'<span class="sec">'+esc(b.sector||b.cluster||'')+'</span></span><span class="sc">'+comp+'</span><span class="mv '+(nl>=3?'pos':(nl>=1?'watch':'mut'))+'">'+nl+' lens</span></div><div class="note">'+(i===0?'top fire':'fire #'+(i+1))+' · '+(b.lean>0.15?'bull lean':(b.lean<-0.15?'bear lean':'neutral'))+' → Trade Lab '+view+'</div></div>';
-        cards.push(tradeCard({tk:b.ticker,sector:b.sector||b.cluster,status:'active',score:b.composite,scoreLbl:'comp',lensObj:b.lens,lensN:nl,ret:null,view:view})); });
-      sub='live fires · resolving';
+      // F260730-SCRNFIRES: no live fires here any more. The panel STATES the retirement rather
+      // than blanking — a blank card would read "no candidates today", a different and false claim
+      // from "this desk no longer fires this way". See _retiredFiresHTML for the three reasons.
+      sigHTML=_retiredFiresHTML(cfg);
+      sub='retired 30-Jul-2026';
     } else {
       var ts=cur.bucket.trades.slice().sort(function(a,b){ var ra=_tlRet(a),rb=_tlRet(b); return ((rb?rb.v:-999)-(ra?ra.v:-999)); });
       ts.forEach(function(t){ var ret=_tlRet(t); var e=(t.entry_filled!=null?t.entry_filled:t.entry_trigger);
@@ -2735,8 +2773,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         cards.push(tradeCard({tk:t.ticker,sector:t.sector||t.cluster,status:t.status,score:t.signal_score,scoreLbl:'score',entry:e,stop:t.invalidation,lensObj:(window.__lensByTk||{})[t.ticker],ret:ret,view:view})); });
       sub=cur.bucket.trades.length+' trades';
     }
-    var el=$(cfg.firesEl); if(el) el.innerHTML='<div class="c-lbl"><span class="d"></span>'+cfg.icon+' '+cfg.label+HT('System fires for this horizon (composite leaders, held-excluded). Current = live bubble_set picks; page back for logged history (unlock required). Click a fire → the trade in Trade Lab.')+'<span class="age">'+view+' · '+esc(String(cur.label))+'</span></div>'+nav+(sigHTML||pending(cfg.label,'no fires in this bucket.'));
-    var pe=$(cfg.perfEl); if(pe){ var ph='<div class="c-lbl"><span class="d"></span>📊 '+cfg.label.replace('fires','performance')+HT('How this horizon’s fires performed. Current picks show active; historical buckets show realized return / R from the trade ledger. Click a card → the trade in Trade Lab.')+'<span class="age">'+esc(String(cur.label))+' · '+esc(sub)+'</span></div>';
+    var _isCur=(cur.kind==='current');
+    var el=$(cfg.firesEl); if(el) el.innerHTML='<div class="c-lbl"><span class="d"></span>'+cfg.icon+' '+cfg.label+(_isCur?' · RETIRED':'')+HT('Live '+view+' fires were retired on 30-Jul-2026: the selector was composite rank '+(cfg.view==='swing'?'1-2':'3-4')+' of one list — not a horizon — ranked on a score with no forward-return record, and it carried no entry, stop, target or R:R. Verified fib structure now decides setups; see the Radar. Page back for the LOGGED trades, which are real ledger entries (unlock required).')+'<span class="age">'+view+' · '+esc(String(cur.label))+'</span></div>'+nav+(sigHTML||pending(cfg.label,'no fires in this bucket.'));
+    var pe=$(cfg.perfEl); if(pe){ var ph='<div class="c-lbl"><span class="d"></span>📊 '+cfg.label.replace('fires','performance')+HT('How this horizon’s LOGGED trades performed — realized return / R from the trade ledger. There are no live picks to score any more (fires retired 30-Jul-2026). Click a card → the trade in Trade Lab.')+'<span class="age">'+esc(String(cur.label))+' · '+esc(sub)+'</span></div>';
       ph+=(cards.length?('<div class="tcgrid">'+cards.join('')+'</div>'):pending('Performance','no trades in this bucket.'));
       if(cur.kind==='current' && !(DATA&&DATA._unlocked)){ ph+='<div class="tc-lockmsg">🔒 Unlock to page through logged '+view+' history &amp; performance by '+cfg.grains.join(' / ')+'.</div>'; }
       pe.innerHTML=ph; }
