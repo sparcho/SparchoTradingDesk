@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1785386931">
-<meta name="x-built-at" content="2026-07-30T04:48:22+00:00">
+<meta name="x-build-id" content="1785394206">
+<meta name="x-built-at" content="2026-07-30T06:50:01+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1785386931",BUILT_AT="2026-07-30T04:48:22+00:00";
+  var BID="1785394206",BUILT_AT="2026-07-30T06:50:01+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2659,12 +2659,26 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var D=DATA; if(!D) return;
     var rd=((D.trade_lab||{}).retired_daytrade)||null;
     var rad=D.fib_radar||{}, rc=rad.counts||{};
-    var ev=rd&&rd.n?('<div class="scgrid">'+
-        '<div><span class="sck">Closed</span><span class="scv">'+rd.n+'</span></div>'+
-        '<div><span class="sck">Avg R</span><span class="scv '+(rd.avg_r<0?'neg':'pos')+'">'+(rd.avg_r!=null?((rd.avg_r>0?'+':'')+rd.avg_r+'R'):'—')+'</span></div>'+
-        '<div><span class="sck">Cum R</span><span class="scv '+(rd.cum_r<0?'neg':'pos')+'">'+(rd.cum_r!=null?((rd.cum_r>0?'+':'')+(+rd.cum_r).toFixed(1)+'R'):'—')+'</span></div>'+
-        '<div><span class="sck">Hit rate</span><span class="scv '+(rd.hit!=null&&rd.hit>=0.5?'pos':'neg')+'">'+(rd.hit!=null?Math.round(rd.hit*100)+'%':'—')+'</span></div>'+
-      '</div>'):'<div class="mut" style="font-size:10.5px;padding:6px 0">no resolved day-trade closes in this emit.</div>';
+    // F260730-OLDBANK — these figures are FROZEN, and hardcoded on purpose.
+    //
+    // The 285 trades from the three retired producers were moved to
+    // EDGE/_ARCHIVE/OLD_SYSTEM_DATA_BANK/ on 30-Jul-2026 (operator: "I dont want any biases from that
+    // trading style to affect the assessment of the current one"). trade_tracker_emit globs
+    // EDGE/TRADES/ only, so `trade_lab.retired_daytrade` is now legitimately EMPTY -- which would have
+    // left this tombstone claiming a retirement with no evidence behind it.
+    //
+    // The evidence is sealed in that archive's _MANIFEST.json under `sealed_verdict`, computed while
+    // the trades were still live (source aggregate commit 553f3d3c, 2026-07-30T03:23 UTC). It is
+    // inlined here rather than read from the archive for two reasons: a frozen number belongs beside
+    // the claim it supports and can never drift; and NO producer is allowed to read that directory --
+    // that structural exclusion is the whole quarantine (TESTS/test_old_system_bank_is_quarantined.py).
+    var SEALED_DT={n:121,hit:0.372,avg_r:-0.29,cum_r:-35.133};
+    var _sv=function(k,v,neg){return '<div><span class="sck">'+k+'</span><span class="scv '+(neg?'neg':'')+'">'+v+'</span></div>';};
+    var ev='<div class="scgrid">'+_sv('Closed',SEALED_DT.n)+_sv('Avg R',SEALED_DT.avg_r+'R',true)+
+      _sv('Cum R',SEALED_DT.cum_r.toFixed(1)+'R',true)+_sv('Hit rate',Math.round(SEALED_DT.hit*100)+'%',true)+'</div>'+
+      '<div class="fc-note" style="margin-top:6px">Sealed 30-Jul-2026 — measured while these trades were '+
+      'live, then archived out of every current metric. <b>Paper, retired producers.</b> Not the desk’s '+
+      'record and never to be blended with one.</div>';
     var fh='<div class="c-lbl"><span class="d"></span>⚡ Day-trade fires · RETIRED'+
       ((typeof HT!=="undefined")?HT('The day-trade firehose was removed from the actionable path on 25-Jul-2026. It was measured, not guessed: negative expectancy across its resolved closes, and the highest-scored tier performed WORST. The desk now fires from the verified fib banks instead — see the Radar.'):'')+
       '<span class="age">retired 25-Jul-2026</span></div>'+
@@ -2730,13 +2744,27 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   // They also carried no entry, stop, target, R:R or invalidation, so nothing could be ordered from
   // them and no R:R could be stated. The LOGGED history below is retained and still pages: those
   // are real ledger trades and they are the evidence, not a signal.
+  // Per-class measured alpha, FROZEN at the 30-Jul-2026 seal (see SEALED_DT above for the mechanic and
+  // why these are inlined). Source: EDGE/_ARCHIVE/OLD_SYSTEM_DATA_BANK/_MANIFEST.json sealed_verdict.
+  // Before today these two cards carried NO numbers at all — they fired on a score whose forward
+  // return had never been measured. Now the card states the measurement that condemned it.
+  var SEALED_CLASS={swing:{cls:'bubble-swing',n:48,excess:-0.205,exp:-0.287},
+                    positional:{cls:'composite-positional',n:50,excess:-0.504,exp:-0.374}};
   function _retiredFiresHTML(cfg){
     var rad=(DATA&&DATA.fib_radar)||{}, rc=rad.counts||{};
+    var s=SEALED_CLASS[cfg.view]||null;
+    var ev=s?('<div class="scgrid">'+
+        '<div><span class="sck">Settled</span><span class="scv">'+s.n+'</span></div>'+
+        '<div><span class="sck">Excess vs universe</span><span class="scv neg">'+s.excess+'</span></div>'+
+        '<div><span class="sck">Expectancy</span><span class="scv neg">'+s.exp+'R</span></div>'+
+        '<div><span class="sck">Verdict</span><span class="scv neg">paper</span></div>'+
+      '</div><div class="fc-note" style="margin-top:6px"><code>'+s.cls+'</code> · sealed 30-Jul-2026 · '+
+      '<b>paper, retired producer</b> — archived out of every current metric.</div>'):'';
     return '<div class="fc-note">Removed on the same measured evidence that retired the day-trade '+
       'firehose: <b>'+cfg.label.replace(' fires','')+'</b> was never a horizon — it was composite '+
       'rank '+(cfg.view==='swing'?'1-2':'3-4')+' of one list, ranked on a score that has never been '+
-      'measured forward, with no entry, stop, target or R:R attached. Kept as the record, not as a '+
-      'signal.</div>'+
+      'measured forward, with no entry, stop, target or R:R attached. Holding period is an outcome of '+
+      'a setup’s structure, not a category to sort setups into.</div>'+ev+
       '<div class="fire fclick" onclick="firePan(\'fib\')" style="cursor:pointer"><div class="top">'+
         '<span class="rk">🎯</span><span class="tk">The Radar<span class="sec">verified fib banks</span></span>'+
         '<span class="sc">'+(rc.fire||0)+'</span></div>'+
