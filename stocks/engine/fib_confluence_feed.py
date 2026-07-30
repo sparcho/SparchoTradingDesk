@@ -161,12 +161,19 @@ def _price_as_of(daily_csv=None):
 
     Macro rows are excluded: on a Saturday they legitimately carry a later date than any equity
     close, and inheriting it makes the declared basis a session that never happened — which both
-    misleads the card and makes a stale radar measure as fresh."""
+    misleads the card and makes a stale radar measure as fresh.
+
+    F260730-STALEBAR: a row must also carry a CLOSE to set the basis. A failed or stale-barred pull
+    still writes a row (date + status, no price), and counting it declared a basis for a session we
+    had no price for — the card read "engine-scored on the <date> close" while every current_px came
+    from the session before. The block was dated, so the contract passed; the date simply did not
+    describe the number underneath it."""
     try:
         import csv as _csv
         with (daily_csv or DAILY_CSV).open(encoding="utf-8") as fh:
             ds = sorted({r["date"] for r in _csv.DictReader(fh)
-                         if r.get("date") and r.get("ticker") not in MACRO_SERIES})
+                         if r.get("date") and r.get("ticker") not in MACRO_SERIES
+                         and r.get("close") not in (None, "")})
         return ds[-1] if ds else None
     except Exception:
         return None
