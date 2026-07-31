@@ -189,8 +189,13 @@ def select_fib_confluence(payload) -> dict:
 # (stocks/engine/ci_fib_refresh.py) build the block from the same code — the ci_screener_emit
 # convention: port byte-identically, repoint paths, never fork the scoring.
 
+# F260731-RADARRESTAMP — px_asof/px_stale_days travel WITH current_px. The block's
+# price_as_of is a max across the whole universe, so on a partially-rolled pull it describes
+# only the freshest ticker; a row quoting a price with no basis of its own inherits that lie.
+# POLYCAB shipped as a FIRE at the 30-Jul close under a 31-Jul stamp while spot was 1.4%
+# higher. A price and the session it came from are one fact and must not be separated.
 RADAR_KEYS = ("ticker", "verdict", "entry", "stop", "target", "rr", "setup", "trend",
-              "grade", "score", "current_px")
+              "grade", "score", "current_px", "px_asof", "px_stale_days")
 
 
 def radar_row(r: dict) -> dict:
