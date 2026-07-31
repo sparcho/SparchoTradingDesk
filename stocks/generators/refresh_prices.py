@@ -52,6 +52,23 @@ def _nse(ticker):
     return ticker + ".NS"
 
 
+def tickers_behind_batch(out, batch_bar_date=None):
+    """Tickers whose newest bar is MISSING or BEHIND the batch's newest bar -- i.e. the ones a
+    per-ticker re-fetch should be spent on.
+
+    F260731-CLOUDPRICESTALE: `if out[t]: continue` could only see an EMPTY series, so a symbol that
+    returned bars but was one session short was treated as a success and never retried.
+
+    The reference session is the newest bar_date present in THIS batch, which is the same reference
+    write_prices_json() uses to set `stale` -- so what gets re-fetched and what gets flagged stale
+    can never disagree.
+    """
+    if batch_bar_date is None:
+        batch_bar_date = max((b[-1][0] for b in out.values() if b), default=None)
+    if batch_bar_date is None:
+        return sorted(out)          # the whole batch came back empty -- everything is a straggler
+    return sorted(t for t, b in out.items() if not b or b[-1][0] < batch_bar_date)
+
 def batch_ohlc(tickers):
     """Return {ticker: sorted [(date_iso, o, h, l, c), ...]} via one batched pull,
     per-ticker fallback for stragglers. Missing names stay empty (fail-closed)."""
@@ -79,19 +96,33 @@ def batch_ohlc(tickers):
                 if c > 0:
                     out[t].append((d, o, h, l, c))
             out[t].sort()
-    for t in tickers:
-        if out[t]:
-            continue
+    # F260731-CLOUDPRICESTALE. The straggler guard used to be `if out[t]: continue`, i.e. only a
+    # ticker that came back COMPLETELY EMPTY was retried. A batched multi-symbol pull routinely
+    # returns a SHORT series for a subset of symbols -- bars present, latest session missing -- and
+    # those sailed through as success. On 2026-07-30 that pinned 25 of 74 tickers to the 29-Jul bar,
+    # MTARTECH among them at 5,194.0 against a real close of 5,453.50, omitting a whole +5% limit-up
+    # session. The `stale` flag was made honest that same day (F260730-STALEFLAG) but the FETCH was
+    # not, so the feed announced bad data instead of going back for good data. Now a ticker BEHIND
+    # the batch's newest bar is a straggler too.
+    for t in tickers_behind_batch(out):
         try:
             h = yf.Ticker(_nse(t)).history(period="20d", interval="1d")
+        except Exception:
+            continue
+        retry = []
+        try:
             for idx, row in h.iterrows():
                 d = idx.date().isoformat()
                 o, hi, lo, c = float(row["Open"]), float(row["High"]), float(row["Low"]), float(row["Close"])
                 if c > 0:
-                    out[t].append((d, o, hi, lo, c))
-            out[t].sort()
+                    retry.append((d, o, hi, lo, c))
         except Exception:
-            pass
+            continue
+        retry.sort()
+        # Keep the retry only if it is genuinely newer. A retry that comes back shorter or equally
+        # stale must never overwrite what the batch already gave us (fail-closed, never fail-worse).
+        if retry and (not out[t] or retry[-1][0] > out[t][-1][0]):
+            out[t] = retry
     return out
 
 
