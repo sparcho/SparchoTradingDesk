@@ -492,6 +492,14 @@ def build(obs=None, ohlc=None, write=True):
         names.append({
             "ticker": o.get("ticker"),
             "current_px": round(cur, 2),
+            # F260731-RADARRESTAMP — PER-ROW PROVENANCE. The block's price_as_of is a MAX
+            # across the whole universe, so on a partially-rolled pull it declares the
+            # freshest ticker's session while lagging rows silently carry an older bar. On
+            # 2026-07-31 that shipped POLYCAB FIRED at the 30-Jul close (8,896.0) under a
+            # 31-Jul stamp while spot was 9,017.5. One date cannot describe heterogeneous
+            # rows, so every row now declares the session ITS OWN price came from.
+            "px_asof": o.get("current_px_asof"),
+            "px_stale_days": o.get("current_px_stale_days"),
             "n_points": len(pts),
             "at_confluence": any(p["at"] for p in pts),
             "nearest_dist_pct": min(p["dist_pct"] for p in pts if p["dist_pct"] is not None),
@@ -517,9 +525,18 @@ def build(obs=None, ohlc=None, write=True):
     # the feed rebuilds ~2x/day and a pre-open build scores against the PRIOR close.
     # Declare the basis so the UI can render it and the block contract can judge it.
     _px_asof = _price_as_of()
+    # F260731-RADARRESTAMP — the block summary may no longer hide heterogeneity. price_as_of
+    # remains the session that was SCORED (the newest bar available), but the oldest row and
+    # the count of rows behind it travel with it, so a reader can tell in one glance whether
+    # this one date actually describes every row underneath.
+    _row_asofs = [n["px_asof"] for n in names if n.get("px_asof")]
+    _px_asof_min = min(_row_asofs) if _row_asofs else None
+    _n_behind = sum(1 for a in _row_asofs if _px_asof and a < _px_asof)
     payload = {"n_names": len(names), "n_points": total_points,
                "n_at": sum(1 for n in names if n["at_confluence"]),
                "price_as_of": _px_asof,
+               "price_as_of_min": _px_asof_min,
+               "n_rows_behind_price_as_of": _n_behind,
                "generated_at_utc": _dt.datetime.now(_dt.timezone.utc)
                                       .isoformat(timespec="seconds"),
                "basis": "last close (%s) - NOT intraday live" % (_px_asof or "unknown"),
