@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "KAYNES",
-  "emitted_at_utc": "2026-08-04T03:23:44+00:00",
+  "emitted_at_utc": "2026-08-04T10:59:11+00:00",
   "public": {
     "ticker": "KAYNES",
     "name": "KAYNES",
@@ -43,10 +43,10 @@
     "level_id_date": null,
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 3805.0,
-      "day_chg_pct": 0.011,
-      "week_chg_pct": 19.605192845692006,
-      "date": "2026-08-03"
+      "price": 3875.0,
+      "day_chg_pct": 1.84,
+      "week_chg_pct": 20.054527992068664,
+      "date": "2026-08-04"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5481,50 +5481,99 @@
         3866.8,
         3760.0,
         3805.0
+      ],
+      [
+        "2026-08-04",
+        3805.0,
+        3880.0,
+        3795.0,
+        3875.0
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 3850.0,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 3905.0,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 3935.0,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 3990.0,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 3820.0,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 3765.0,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 3735.0,
+        "as_of": "2026-08-04"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 3385.5,
-        "as_of": "2026-08-03"
+        "as_of": "2026-08-04"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 3026.9,
-        "as_of": "2026-08-03"
+        "as_of": "2026-08-04"
       },
       {
         "method": "swing_low",
         "kind": "SL2",
         "price": 3121.9,
-        "as_of": "2026-08-03"
+        "as_of": "2026-08-04"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 3264.54,
-        "as_of": "2026-08-03"
+        "price": 3276.06,
+        "as_of": "2026-08-04"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 4119.46,
-        "as_of": "2026-08-03"
+        "price": 4104.05,
+        "as_of": "2026-08-04"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 7593.0,
-        "as_of": "2026-08-03"
+        "as_of": "2026-08-04"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 3001.0,
-        "as_of": "2026-08-03"
+        "as_of": "2026-08-04"
       }
     ],
     "operator_levels": [],
@@ -5539,18 +5588,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 3264.54,
+        "price": 3850.0,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 4119.46,
+        "price": 3905.0,
         "dir": "above",
         "kind": "trim",
-        "why": "200-day SMA",
+        "why": "pivot R1",
         "auto": true
       },
       {
@@ -5565,32 +5614,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "RESISTANCE",
-        "price": 4119.46,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 8.264388961892248
-      },
-      {
         "label": "SUPPORT",
-        "price": 3264.54,
+        "price": 3850.0,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -14.203942181340343
+        "dist_pct": -0.6451612903225806
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 3905.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.7741935483870968
       },
       {
         "label": "INVALIDATION",
         "price": 3001.0,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -21.130091984231274
+        "dist_pct": -22.55483870967742
       },
       {
         "label": "UPSIDE",
         "price": 7593.0,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 99.55321944809461
+        "dist_pct": 95.94838709677418
       }
     ],
     "scenario_ladder": [
@@ -5603,8 +5652,8 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 3805.0,
-        "note": "holds current band; reclaim Rs4119 (200-SMA) to flip constructive"
+        "level": 3875.0,
+        "note": "holds current band; reclaim Rs4104 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
@@ -5776,8 +5825,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "SB+FFsp1x1LHzzjusHfxbg==",
-    "iv": "n1zG+bp5S1BPxtsP",
-    "ct": "wV3IvoTDuaZptTokRRJt/3LFU1aRneZQcACIFiLYcD8prtnSGwiOnDTWCkh/uTfbl2ERF9auCE0gYwyMpjb/e/T+ABOq+f3PKoeH/nJ0rleHl6mHv7Ufu3XRxDMMQco7hgAmIyRRvk1ERKBXieg7by6vw2OmVtj6SPD5EzdrpnX4n4s+SE9Z8O6vrP1V+CkQwwtJmYghFa9CFjrvUhjMIlI1xdEJZxuCGti/6kpPf180F4zkBIrBczPoHad57E1zuFN/YVwt5o0lp2naNGE4yc6oKgfJ73bnRfYSsyNQyP6nDX4DkwhfMEdQlDlMrH1J2idSUDEf2DVrYrNNR8zRCesyobsyiEUn9FP9gF1FnXqIvA804Qb8BMDB00xbv+n1gCC0usS480mmLzZtGnphh3+C+RqJc0XEDXAv1q/DIPnsJw6LLiqMOKkXTAO/dl8CmkI0vYpy6Q7sNlJOEyFnyGB51128cfLFdgi2zqt91GLnR2lP7I4ZyJyXAPEwUJO9tDzbJqQxEQvIHbHGaw/Y4HhtK9u8M0i36Dqqu38NOU2YLSTSj4XpOU7Oc3olsQ5HfTZgzAq9LZZ8bp8ZuqbvgyghwVBFwR3tXwh3KFFi4Av52Q1bD3SL9180XDirId//VO5N35WMs9/iGG7n"
+    "salt": "eUv0t/Doe0bNVt6Au1rh7w==",
+    "iv": "eqcrLJn+Mm9+uSmU",
+    "ct": "vwv2UTrEyUMVZvdmIfhPh75yAaJabvjYILb5SW7ES6TUSq9fd/mi7/CRobQ9lrcUbwD4WqF3GRJ/1NRgpu42Eb+rm6yQHVOPb1pn1ZCNyHE8BmZqNPlM1S/YNWGBlzKkQZ0qPh8qEtXMy9f746/bbXvZ3E9VKTRCqKKQlDdl50Kq/rGc3J+c1YqXYLG/mk2hP4ubOWc5SNAIlyCVbGHqDcy3zjPGf0znTq5rAyhLtQWAPfMhsE/mjzNM/7bDzQEUySozMLdYfv4xHw6ST+iNYhjYGHtl6TOSma57ymiBXHopEBV/0rMKq7CXIq0qsw+uI2j1RMzuskP4FK6VDa5QNCdAywwISqT+3tNgGauoGD/uYMQPJvQfhNL1oz5R9MnIuBLMVqa25d8PwFBTWv4zFKQgybeKTHUarm9R7T5tywk3KAbNcIW2nHbjKxxOljofzP8tep86Fg3r+Ns8eh5y1ZJE1DPaA0pYhCWgWMN5rzCcyyzbJZBVVfpUABYarZtfm0Mrxvubb/WdWy0CPLOS6rniG3KR3Kk7bUGlKe53neiWrSJLMT2bB6zpU6d9yl3RBiLh8+pkf1WTAsDWZEwAK/01bCL44sSO+J61ScXhfzKBvp4Iiktb14FbYw3F+eG9PY0ld1BO7LTpbYWp"
   }
 }

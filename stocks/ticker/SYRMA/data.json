@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "SYRMA",
-  "emitted_at_utc": "2026-08-04T03:23:48+00:00",
+  "emitted_at_utc": "2026-08-04T10:59:14+00:00",
   "public": {
     "ticker": "SYRMA",
     "name": "SYRMA",
@@ -43,10 +43,10 @@
     "level_id_date": "2026-07-01",
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 1360.6,
-      "day_chg_pct": -0.454,
-      "week_chg_pct": 3.37334751557513,
-      "date": "2026-08-03"
+      "price": 1421.6,
+      "day_chg_pct": 4.483,
+      "week_chg_pct": 8.851454823889734,
+      "date": "2026-08-04"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5481,38 +5481,87 @@
         1397.5,
         1351.6,
         1360.6
+      ],
+      [
+        "2026-08-04",
+        1360.6,
+        1428.0,
+        1354.5,
+        1421.6
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 1401.37,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 1448.23,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 1474.87,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 1521.73,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 1374.73,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 1327.87,
+        "as_of": "2026-08-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 1301.23,
+        "as_of": "2026-08-04"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 1451.9,
-        "as_of": "2026-08-03"
+        "as_of": "2026-08-04"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 1315.55,
-        "as_of": "2026-08-03"
+        "price": 1322.83,
+        "as_of": "2026-08-04"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 949.53,
-        "as_of": "2026-08-03"
+        "price": 952.66,
+        "as_of": "2026-08-04"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 1451.9,
-        "as_of": "2026-08-03"
+        "as_of": "2026-08-04"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 640.15,
-        "as_of": "2026-08-03"
+        "as_of": "2026-08-04"
       }
     ],
     "operator_levels": [],
@@ -5527,18 +5576,26 @@
       },
       {
         "label": "SUPPORT",
-        "price": 1315.55,
+        "price": 1401.37,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
+        "price": 1448.23,
+        "dir": "above",
+        "kind": "trim",
+        "why": "pivot R1",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
         "price": 1451.9,
         "dir": "above",
         "kind": "trim",
-        "why": "60-day swing high",
+        "why": "52-week high",
         "auto": true
       }
     ],
@@ -5546,24 +5603,31 @@
     "gate_check": [
       {
         "label": "SUPPORT",
-        "price": 1315.55,
+        "price": 1401.37,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -3.311039247390854
+        "dist_pct": -1.423044456949917
       },
       {
         "label": "RESISTANCE",
+        "price": 1448.23,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 1.8732414181204355
+      },
+      {
+        "label": "UPSIDE",
         "price": 1451.9,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 6.710274878729986
+        "dist_pct": 2.1314012380416565
       },
       {
         "label": "INVALIDATION",
         "price": 640.15,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -52.950904012935474
+        "dist_pct": -54.969752391671356
       }
     ],
     "scenario_ladder": [
@@ -5576,7 +5640,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 1360.6,
+        "level": 1421.6,
         "note": "holds current band"
       },
       {
