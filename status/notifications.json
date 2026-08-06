@@ -1,8 +1,41 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-08-06T13:54:56+00:00",
+  "updated_at_utc": "2026-08-06T23:54:04+00:00",
   "events": [
+    {
+      "ts": "2026-08-07T05:24:01+05:30",
+      "ts_utc": "2026-08-06T23:54:01+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "equity-dashboard",
+      "spotted": "equity aggregate 442m stale (tol 90m, off-hours) + last live-refresh Action FAILED",
+      "action_taken": "re-triggered live-refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-08-07T05:24:02+05:30",
+      "ts_utc": "2026-08-06T23:54:02+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver-dashboard",
+      "spotted": "silver aggregate 503m stale + last silver-refresh Action FAILED",
+      "action_taken": "re-triggered silver 20-min refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-08-07T05:24:04+05:30",
+      "ts_utc": "2026-08-06T23:54:04+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver:silver_book",
+      "spotted": "(event redacted — would have exposed sensitive data)",
+      "action_taken": "(redacted)",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-08-06T19:24:54+05:30",
       "ts_utc": "2026-08-06T13:54:54+00:00",
@@ -517,39 +550,6 @@
       "subsystem": "silver:silver_book",
       "spotted": "(event redacted — would have exposed sensitive data)",
       "action_taken": "(redacted)",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-07-30T15:36:02+05:30",
-      "ts_utc": "2026-07-30T10:06:02+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "notifications-feed",
-      "spotted": "47 of 50 events in this feed were written by a unit test, not by the desk",
-      "action_taken": "test_publish_gates forces a structural breach and calls publish_dashboards.main(), whose loud channel appended a real 'publish BLOCKED - regime NULL' alert on every suite run. The channel now refuses to write under pytest (F260730-NOTIFSPAM).",
-      "outcome": "Those 47 events are removed. The feed caps at 50, so genuine findings older than 2026-07-26 were EVICTED by the spam and cannot be recovered. If a real regime-NULL block happened in that window it is indistinguishable from the test's - treat pre-260730 structural-gate rows as unreliable rather than as history.",
-      "source": "claude-session"
-    },
-    {
-      "ts": "2026-07-30T13:47:02+05:30",
-      "ts_utc": "2026-07-30T08:17:02+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 127m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-07-30T13:47:03+05:30",
-      "ts_utc": "2026-07-30T08:17:03+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "equity:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:live_daytrade",
-      "action_taken": "logged - auto-probe re-triggered the desk refresh; persists => GH-Pages build/CDN stuck",
       "outcome": "pending",
       "source": "cloud-watchdog"
     }
