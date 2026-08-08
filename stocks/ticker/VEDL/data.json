@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "VEDL",
-  "emitted_at_utc": "2026-08-08T10:58:58+00:00",
+  "emitted_at_utc": "2026-08-08T15:29:52+00:00",
   "public": {
     "ticker": "VEDL",
     "name": "Vedanta Ltd",
@@ -43,10 +43,10 @@
     "level_id_date": null,
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 275.0,
-      "day_chg_pct": -0.722,
-      "week_chg_pct": 2.803738317757009,
-      "date": "2026-08-06"
+      "price": 278.85,
+      "day_chg_pct": 1.4,
+      "week_chg_pct": 5.525070955534541,
+      "date": "2026-08-07"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5502,9 +5502,58 @@
         282.35,
         273.6,
         275.0
+      ],
+      [
+        "2026-08-07",
+        273.95,
+        278.85,
+        271.85,
+        278.85
       ]
     ],
     "sr_levels": [
+      {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 276.52,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 281.18,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 283.52,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 288.18,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 274.18,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 269.52,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 267.18,
+        "as_of": "2026-08-07"
+      },
       {
         "method": "swing_low",
         "kind": "SL1",
@@ -5547,11 +5596,19 @@
         "auto": true
       },
       {
+        "label": "SUPPORT",
+        "price": 276.52,
+        "dir": "below",
+        "kind": "watch",
+        "why": "classical pivot",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 283.68,
+        "price": 281.18,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "pivot R1",
         "auto": true
       },
       {
@@ -5567,24 +5624,31 @@
     "gate_check": [
       {
         "label": "RESISTANCE",
-        "price": 283.68,
+        "price": 281.18,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 3.156363636363639
+        "dist_pct": 0.8355746817285221
+      },
+      {
+        "label": "SUPPORT",
+        "price": 276.52,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.8355746817285424
       },
       {
         "label": "INVALIDATION",
         "price": 253.05,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -7.981818181818177
+        "dist_pct": -9.252286175363102
       },
       {
         "label": "UPSIDE",
         "price": 787.5,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 186.36363636363635
+        "dist_pct": 182.40989779451314
       }
     ],
     "scenario_ladder": [
@@ -5597,7 +5661,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 275.0,
+        "level": 278.85,
         "note": "holds current band; reclaim Rs510 (200-SMA) to flip constructive"
       },
       {
@@ -5754,8 +5818,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "dxfGCLGpNUvDME7DEaJS7A==",
-    "iv": "5iYGARwRWbi7LyA2",
-    "ct": "bervqFjcDIpa3S+nnKI/a+Wn84XvuESEaDBi54bgbYWeqfVz+ErPgyTsjmFjhnKEgX0q2yo5QRxVEYeFFHrlFmBobxbYdgSsPtfF3Brq1cpSFAOafg7HNx1s9uhgNbYjlqjWEnXQT9JCZmSoDVoSSZWCvMoQnJbjoJ/bYTzhOdaD++H++GRb8R9s9k7AqfAisoIwIriEm4k0mdTqXpQQRxGBLUi5Dj63rpWH0txVHq8SkmtZlbyXkeZ6dHG0Zjqe/fzBVMseyZxI6hPmmqd1rwnaupq3Od/RoMz/G57NJv8hnO4h9GCigWCu49O7m6jUxwcKF8g1Kgx7aU3cp9uYt8dVuUtncHaDwxK4EVPMfJ18f6EqHyLxJ+ESyYtje29BWvL59rqNYuPZ8MzH+9Nn1LRf1j2f5unN7LKlKEzi+eXrwlnCrDbZZcu7+5O/vBQ6yM31RVIYRK0mAW8ta182WM/AO5W9yUljV0Z4SPbHA/0cgWGbp2mux48ZvR1m1PLttMma0+IE39WaV8TDyY/i4wyCXDeFjDKfGNgSgUW3lVk6e1tSREtM66FxS5wtFqG4K61zYq/nvkN6DuuRJ9wq5fJzeKdWGy1ak4j739cqZ1qOZyvq8lC6i5v3j98il3jcGSxPb4Rq4aKF1Nn1NKAyaJN2WCt8WYS+z7fs5Js+Qy686OFWiUvkG6Ta4CBw8eQctEfU+8PMFQ301qo="
+    "salt": "EqkhvywPPji0AcgYECoBXA==",
+    "iv": "LX7OJNnZ23cH5dsk",
+    "ct": "cwBNsRteGbid7g3Yb4xIjQJASmVU0cN0BCRubSXdnzly6B8OgBCKJ4NW/ug5oT7VDpg0HpT5Nfg6FaJevHwP5lTccNBPD3fR2liihDRv6dQpxhHWyZC3MAngV2IYp95L6WKxWd5eB/M6Cprxo5I1BgjA24sgO384S1Feqo2nc9DZT6UQnmWveNyin4vOFbC/ZnCTE/0ai+y4X8SbWKIu8aaG6i8MxhfSgNFk4zQ6UXU0lJ57dXRgvAjFVA+FnYRWoO2G/lArQGhpsadKsw/wRideGrj9aTIc96YzpbDAFT/jqMFIYjrIxyzEnVafJNR2m6Zjbzaz5jS0gs7ozC63DHqg+x2zAOYP2HkvOxKK1zFQBth5vgZBeao2TNI74l6uwvoscujru3bJ0+qzZ3IcpiqUvVGliB3qDYL+keRkae0TI7QXsFYUg7hsYppFc8vWXIzojwSb5lHfnQCd/rvDDSPbE8kkBgwGzvF1ujiTd2NunrNrfmfolbgKSy8vDaZTZFHEIsoFtU549tPOrY30O/fBe0joQ6UpNp4oRzhBm9GB+JHxlxEFuL6HNARTqBnd8MKsNWIVVf/2ktnDa7Am/JFDDujQA6oZIcqL1vBHFvQFOom8CNABk0KfAN7sXqji8BDsLKPs153qe4b4cllIEjsw33sQaCOAgR8WLOJxEy2WpFTqW9rpaW1/EhwPGws3haSuscwXchv9BAk="
   }
 }

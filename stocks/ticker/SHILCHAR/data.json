@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "SHILCHAR",
-  "emitted_at_utc": "2026-08-08T10:58:56+00:00",
+  "emitted_at_utc": "2026-08-08T15:29:49+00:00",
   "public": {
     "ticker": "SHILCHAR",
     "name": "Shilchar Technologies",
@@ -43,10 +43,10 @@
     "level_id_date": "2026-07-03",
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 4620.1001,
-      "date": "2026-08-07",
-      "day_chg_pct": 1.9394531600788385,
-      "week_chg_pct": 0.8645366226394424
+      "price": 4623.0,
+      "day_chg_pct": 2.185,
+      "week_chg_pct": null,
+      "date": "2026-08-07"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -1291,23 +1291,182 @@
       ],
       [
         "2026-08-07",
-        4560.0,
-        4659.0,
-        4505.2002,
-        4620.1001
+        4598.9502,
+        4665.6001,
+        4506.4502,
+        4623.0
       ]
     ],
-    "sr_levels": [],
+    "sr_levels": [
+      {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 4598.35,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 4690.25,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 4757.5,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 4849.4,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 4531.1,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 4439.2,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 4371.95,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "swing_high",
+        "kind": "SH1",
+        "price": 4720.7,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "swing_low",
+        "kind": "SL1",
+        "price": 3818.5,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "swing_low",
+        "kind": "SL2",
+        "price": 4126.8,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "sma",
+        "kind": "SMA50",
+        "price": 4359.78,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "sma",
+        "kind": "SMA200",
+        "price": 4130.08,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "annual_hilo",
+        "kind": "52W_HIGH",
+        "price": 5390.0,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "annual_hilo",
+        "kind": "52W_LOW",
+        "price": 2921.95,
+        "as_of": "2026-08-07"
+      }
+    ],
     "operator_levels": [],
-    "gate_levels": [],
-    "gate_levels_auto": false,
-    "gate_check": [],
+    "gate_levels": [
+      {
+        "label": "INVALIDATION",
+        "price": 2921.95,
+        "dir": "below",
+        "kind": "inv",
+        "why": "52-week low",
+        "auto": true
+      },
+      {
+        "label": "SUPPORT",
+        "price": 4598.35,
+        "dir": "below",
+        "kind": "watch",
+        "why": "classical pivot",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 4690.25,
+        "dir": "above",
+        "kind": "trim",
+        "why": "pivot R1",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
+        "price": 5390.0,
+        "dir": "above",
+        "kind": "trim",
+        "why": "52-week high",
+        "auto": true
+      }
+    ],
+    "gate_levels_auto": true,
+    "gate_check": [
+      {
+        "label": "SUPPORT",
+        "price": 4598.35,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.5332035474799834
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 4690.25,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 1.4546831062080898
+      },
+      {
+        "label": "UPSIDE",
+        "price": 5390.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 16.590958252217174
+      },
+      {
+        "label": "INVALIDATION",
+        "price": 2921.95,
+        "dir": "below",
+        "kind": "inv",
+        "dist_pct": -36.79537097123081
+      }
+    ],
     "scenario_ladder": [
+      {
+        "case": "bear",
+        "label": "Bear: Thesis-break",
+        "level": 2921.95,
+        "note": "daily close below Rs2922 invalidates the structure"
+      },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 4620.1001,
+        "level": 4623.0,
         "note": "holds current band"
+      },
+      {
+        "case": "bull",
+        "label": "Bull: Trend resumption",
+        "level": 5390.0,
+        "note": "sustained move toward Rs5390"
       }
     ],
     "catalysts": [

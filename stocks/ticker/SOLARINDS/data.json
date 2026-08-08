@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "SOLARINDS",
-  "emitted_at_utc": "2026-08-08T10:58:56+00:00",
+  "emitted_at_utc": "2026-08-08T15:29:50+00:00",
   "public": {
     "ticker": "SOLARINDS",
     "name": "SOLARINDS",
@@ -43,10 +43,10 @@
     "level_id_date": null,
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 18496.0,
-      "day_chg_pct": 0.522,
-      "week_chg_pct": 2.4538857807566608,
-      "date": "2026-08-06"
+      "price": 18650.0,
+      "day_chg_pct": 0.833,
+      "week_chg_pct": 1.4082975368386712,
+      "date": "2026-08-07"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5502,9 +5502,58 @@
         18830.0,
         18353.0,
         18496.0
+      ],
+      [
+        "2026-08-07",
+        18509.0,
+        18669.0,
+        18391.0,
+        18650.0
       ]
     ],
     "sr_levels": [
+      {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 18570.0,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 18749.0,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 18848.0,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 19027.0,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 18471.0,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 18292.0,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 18193.0,
+        "as_of": "2026-08-07"
+      },
       {
         "method": "swing_high",
         "kind": "SH1",
@@ -5566,18 +5615,26 @@
       },
       {
         "label": "SUPPORT",
-        "price": 18194.2,
+        "price": 18570.0,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
+        "price": 18749.0,
+        "dir": "above",
+        "kind": "trim",
+        "why": "pivot R1",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
         "price": 19045.0,
         "dir": "above",
         "kind": "trim",
-        "why": "60-day swing high",
+        "why": "52-week high",
         "auto": true
       }
     ],
@@ -5585,24 +5642,31 @@
     "gate_check": [
       {
         "label": "SUPPORT",
-        "price": 18194.2,
+        "price": 18570.0,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -1.6317041522491311
+        "dist_pct": -0.42895442359249336
       },
       {
         "label": "RESISTANCE",
+        "price": 18749.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.5308310991957105
+      },
+      {
+        "label": "UPSIDE",
         "price": 19045.0,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 2.9682093425605536
+        "dist_pct": 2.1179624664879357
       },
       {
         "label": "INVALIDATION",
         "price": 11772.0,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -36.353806228373706
+        "dist_pct": -36.879356568364614
       }
     ],
     "scenario_ladder": [
@@ -5615,7 +5679,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 18496.0,
+        "level": 18650.0,
         "note": "holds current band"
       },
       {
