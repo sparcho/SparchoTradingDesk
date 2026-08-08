@@ -67,6 +67,8 @@ SECTOR_MAP = {
     'POWER': {
         'NTPC', 'POWERGRID', 'ADANIGREEN', 'TATAPOWER',
         'IREDA', 'WAAREEENER', 'MGL', 'VEDPOWER',  # +VEDPOWER 260630 (Vedanta Power thermal demerger, held); MGL = gas utility, power-adjacent
+        # +260808 power equipment / T&D (F260727-BANKED-OUTSIDE onboarding)
+        'BHEL', 'KEC', 'SIEMENS', 'SKIPPER', 'VOLTAMP', 'SHILCHAR',
     },
     'IT': {
         'TCS', 'INFY', 'HCLTECH', 'PERSISTENT', 'TATAELXSI',
@@ -78,7 +80,7 @@ SECTOR_MAP = {
     # Other clusters (kept for context; not used by Rajiv #1 but useful for future screeners)
     'MINERALS': {'GMDCLTD', 'MOIL', 'HINDZINC', 'GRAPHITE', 'VEDL', 'DECNGOLD', 'HINDCOPPER'},   # +DECNGOLD 260619 (gold explorer); +HINDCOPPER 260630 (copper PSU onboard)
     'TELECOM': {'HFCL', 'STLTECH', 'TEJASNET', 'BHARTIARTL', 'POLYCAB', 'KEI', 'PACEDIGITK'},   # +PACEDIGITK 260619 (held; telecom-digital infra)
-    'DEFENCE': {'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO', 'BHARATFORG'},   # +BHARATFORG 260730 (defence/auto-anc precision forging; onboarded with its banked 260729 level read)   # +APOLLO +ASTRAMICRO 260620 (full screener-verse onboard)
+    'DEFENCE': {'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO', 'BHARATFORG', 'BDL', 'DATAPATTNS'},   # +BDL +DATAPATTNS 260808   # +BHARATFORG 260730 (defence/auto-anc precision forging; onboarded with its banked 260729 level read)   # +APOLLO +ASTRAMICRO 260620 (full screener-verse onboard)
     'SEMI_EMS': {
         'EXIDEIND',
         'OLAELEC','KAYNES', 'DIXON', 'SYRMA', 'AMBER'},
@@ -91,6 +93,10 @@ SECTOR_MAP = {
     # +260808 infrastructure EPC. No existing coarse tag fitted a diversified engineering
     # contractor; without ANY entry the name renders under UNCATEGORIZED (F260619 item 3).
     'INFRA': {'LT', 'WABAG'},
+    # +260808 F260727-BANKED-OUTSIDE onboarding. Power equipment / T&D joins POWER; defence
+    # electronics joins DEFENCE; railways gets its own tag -- 8 names is a real sector, and
+    # folding them into DEFENCE would have muddied a screen the operator reads by sector.
+    'RAIL': {'IRCON', 'IRFC', 'JWL', 'KERNEX', 'RAILTEL', 'RVNL', 'TEXRAIL', 'TITAGARH'},
     'AGRI': {'AVANTIFEED', 'PARADEEP'},
     'FERT': {'PARADEEP'},
     'ETF': {'HDFCSML250'},   # Broad Smallcap index ETF (260620); tracked + level-ID'd, NOT value-screened (see G1_NON_SCREENED)
