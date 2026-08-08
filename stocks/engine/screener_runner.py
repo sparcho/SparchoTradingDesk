@@ -70,6 +70,7 @@ SECTOR_MAP = {
     },
     'IT': {
         'TCS', 'INFY', 'HCLTECH', 'PERSISTENT', 'TATAELXSI',
+        'LTTS',   # +260808 L&T Technology Services (ER&D / digital engineering)
     },
     'NBFC': {
         'BAJFINANCE', 'CHOLAFIN', 'SHRIRAMFIN', 'MCX', 'BSE',
@@ -86,7 +87,10 @@ SECTOR_MAP = {
     'L5_APPS': {
         'CEINSYS','KPIT', 'NAUKRI', 'TANLA', 'MAPMYINDIA', 'NEWGEN'},
     'DPI': {'PAYTM', 'PBFINTECH', 'CDSL', 'ANGELONE', 'NSDL'},   # +NSDL 260715 (depository, CDSL peer; held)
-    'PHARMA': {'DRREDDY', 'SUNPHARMA', 'BIOCON'},
+    'PHARMA': {'DRREDDY', 'SUNPHARMA', 'BIOCON', 'AARTIDRUGS'},   # +AARTIDRUGS 260808 (API / formulations)
+    # +260808 infrastructure EPC. No existing coarse tag fitted a diversified engineering
+    # contractor; without ANY entry the name renders under UNCATEGORIZED (F260619 item 3).
+    'INFRA': {'LT', 'WABAG'},
     'AGRI': {'AVANTIFEED', 'PARADEEP'},
     'FERT': {'PARADEEP'},
     'ETF': {'HDFCSML250'},   # Broad Smallcap index ETF (260620); tracked + level-ID'd, NOT value-screened (see G1_NON_SCREENED)
