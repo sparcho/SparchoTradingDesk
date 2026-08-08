@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "ANANTRAJ",
-  "emitted_at_utc": "2026-08-08T10:58:47+00:00",
+  "emitted_at_utc": "2026-08-08T15:29:39+00:00",
   "public": {
     "ticker": "ANANTRAJ",
     "name": "ANANTRAJ",
@@ -43,10 +43,10 @@
     "level_id_date": null,
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 617.4,
-      "day_chg_pct": -1.719,
-      "week_chg_pct": 1.2795275590551107,
-      "date": "2026-08-06"
+      "price": 615.9,
+      "day_chg_pct": -0.243,
+      "week_chg_pct": -1.3771016813450796,
+      "date": "2026-08-07"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5502,9 +5502,58 @@
         632.2,
         615.3,
         617.4
+      ],
+      [
+        "2026-08-07",
+        616.95,
+        627.3,
+        613.5,
+        615.9
       ]
     ],
     "sr_levels": [
+      {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 618.9,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 624.3,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 632.7,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 638.1,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 610.5,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 605.1,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 596.7,
+        "as_of": "2026-08-07"
+      },
       {
         "method": "swing_high",
         "kind": "SH1",
@@ -5554,10 +5603,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 565.15,
+        "price": 610.5,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 618.9,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5572,25 +5629,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 618.9,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.4870920603994155
+      },
+      {
         "label": "SUPPORT",
-        "price": 565.15,
+        "price": 610.5,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -8.462908973113056
+        "dist_pct": -0.8767657087189443
       },
       {
         "label": "UPSIDE",
         "price": 735.6,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 19.144800777453845
+        "dist_pct": 19.434973209936686
       },
       {
         "label": "INVALIDATION",
         "price": 405.7,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -34.28895367670878
+        "dist_pct": -34.128917031985715
       }
     ],
     "scenario_ladder": [
@@ -5603,7 +5667,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 617.4,
+        "level": 615.9,
         "note": "holds current band"
       },
       {

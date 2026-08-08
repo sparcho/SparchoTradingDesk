@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "KEI",
-  "emitted_at_utc": "2026-08-08T10:58:53+00:00",
+  "emitted_at_utc": "2026-08-08T15:29:46+00:00",
   "public": {
     "ticker": "KEI",
     "name": "KEI",
@@ -43,10 +43,10 @@
     "level_id_date": null,
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 5595.0,
-      "day_chg_pct": 0.323,
-      "week_chg_pct": 16.574643191999165,
-      "date": "2026-08-06"
+      "price": 5600.0,
+      "day_chg_pct": 0.089,
+      "week_chg_pct": 12.02240448089618,
+      "date": "2026-08-07"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5502,9 +5502,58 @@
         5595.0,
         5485.5,
         5595.0
+      ],
+      [
+        "2026-08-07",
+        5569.0,
+        5629.0,
+        5542.2998,
+        5600.0
       ]
     ],
     "sr_levels": [
+      {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 5590.43,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 5638.57,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 5677.13,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 5725.27,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 5551.87,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 5503.73,
+        "as_of": "2026-08-07"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 5465.17,
+        "as_of": "2026-08-07"
+      },
       {
         "method": "swing_high",
         "kind": "SH1",
@@ -5554,43 +5603,58 @@
       },
       {
         "label": "SUPPORT",
-        "price": 5224.15,
+        "price": 5590.43,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
+        "price": 5638.57,
+        "dir": "above",
+        "kind": "trim",
+        "why": "pivot R1",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
         "price": 5660.5,
         "dir": "above",
         "kind": "trim",
-        "why": "60-day swing high",
+        "why": "52-week high",
         "auto": true
       }
     ],
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "SUPPORT",
+        "price": 5590.43,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.17089285714285196
+      },
+      {
         "label": "RESISTANCE",
+        "price": 5638.57,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.6887499999999949
+      },
+      {
+        "label": "UPSIDE",
         "price": 5660.5,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 1.1706881143878463
-      },
-      {
-        "label": "SUPPORT",
-        "price": 5224.15,
-        "dir": "below",
-        "kind": "watch",
-        "dist_pct": -6.628239499553179
+        "dist_pct": 1.0803571428571428
       },
       {
         "label": "INVALIDATION",
         "price": 3764.7,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -32.713136729222526
+        "dist_pct": -32.77321428571429
       }
     ],
     "scenario_ladder": [
@@ -5603,7 +5667,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 5595.0,
+        "level": 5600.0,
         "note": "holds current band"
       },
       {
