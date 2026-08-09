@@ -261,7 +261,9 @@ function renderAll(){
   // ── scenario ladder + S/R ──
   h+='<div class="grid g2 section">'+scenarioCard(p)+srCard(p)+'</div>';
   // ── thesis lenses ──
+  h+=levelIdBankCard(p);
   h+=lensCard(p);
+  h+=drCard(p);
   // ── order book ──
   if(p.order_book) h+=orderBookCard(p);
   // ── catalysts ──
@@ -365,6 +367,55 @@ function srCard(p){
   h+='</div>';
   return h;
 }
+// The level-ID half of the two-take, rendered from the level-ID-fib bank. Before this the
+// row came from _index.md `level_id:` alone, which 48 of 97 banked names lack — so their
+// "two-take" card silently rendered as a ONE-take. The read existed; it never arrived.
+function levelIdBankCard(p){
+  const b=p.level_id_bank; if(!b) return '';
+  const ltp=(p.live||{}).price;
+  const fresh = b.depth_pass_date ? ('depth-passed '+esc(b.depth_pass_date))
+              : (b.first_pass ? 'FIRST PASS — read from a subset of the drop' : 'read '+esc(b.studied_date||''));
+  const badge = b.first_pass ? 'yellow' : 'green';
+  let h='<div class="card section"><h2>📐 Level-ID read <span class="sub">level-ID-fib bank · operator-verified — the manual half of the two-take</span></h2>';
+  h+='<div class="ob-chips"><span class="badge '+badge+'">'+(b.first_pass?'FIRST PASS':'VERIFIED')+'</span>'
+    +'<span class="ob-chip">studied <b>'+esc(b.studied_date||'—')+'</b></span>'
+    +'<span class="ob-chip">'+b.n_levels+' levels · '+(b.zones||[]).length+' zones</span>'
+    +(b.basis_price!=null?'<span class="ob-chip">basis <b class="num">'+inr(b.basis_price)+'</b></span>':'')
+    +'</div>';
+  h+='<div class="muted-note" style="margin-top:6px">'+fresh+'</div>';
+  if(b.verdict) h+='<div class="lensrow"><div class="lbl">Verdict</div><div class="lens">'+esc(b.verdict)+'</div></div>';
+  else if(b.verdict_withheld) h+='<div class="muted-note" style="margin-top:8px">🔒 '+esc(b.verdict_withheld)+'</div>';
+  const zs=(b.zones||[]).slice().sort((x,y)=>y.lo-x.lo);
+  if(zs.length){
+    h+='<div style="margin-top:12px"><div class="lbl" style="font-family:var(--font-mono);font-size:10.5px;color:var(--accent-2);font-weight:700;margin-bottom:6px">RANKED ZONES</div>';
+    for(const z of zs){
+      const above = ltp!=null && z.lo>ltp, inside = ltp!=null && z.lo<=ltp && ltp<=z.hi;
+      const col = inside?'var(--accent)':(above?'var(--neg)':'var(--pos)');
+      const d = ltp? ((((z.lo+z.hi)/2)-ltp)/ltp*100) : null;
+      h+='<div class="lvl-row"><span class="pill" style="color:'+col+';border:1px solid '+col+'">'
+        +(inside?'AT':(above?'R':'S'))+'</span>'
+        +'<span class="num"><b>'+inr(z.lo)+'–'+inr(z.hi)+'</b> <span class="lvl-why">'
+        +esc(z.strength||'')+' · '+z.n_sources+' source'+(z.n_sources===1?'':'s')+'</span></span>'
+        +'<span class="lvl-dist num" style="color:'+col+'">'+(d==null?'':(d>=0?'+':'')+d.toFixed(1)+'%')+'</span></div>';
+    }
+    h+='</div>';
+  }
+  h+='</div>';
+  return h;
+}
+
+// The 'business read': 82 deep-research briefs existed on disk and NOTHING referenced them.
+function drCard(p){
+  const d=p.dr_briefs||[]; if(!d.length) return '';
+  let h='<div class="card section"><h2>📄 Deep research <span class="sub">business read · 09_DEEP_RESEARCH/COMPANY</span></h2>';
+  for(const b of d){
+    h+='<div class="cat"><span class="dt">'+esc(b.date||'')+'</span><span class="ev">'+esc(b.title||'')
+      +' <span class="lvl-why">'+esc(b.path)+'</span></span></div>';
+  }
+  h+='<div class="muted-note" style="margin-top:6px">Titles and paths only — open the brief in the vault to read it.</div></div>';
+  return h;
+}
+
 function lensCard(p){
   const rows=[
     ['levelid','📐 Level-ID take', p.level_id, p.level_id_date],   // F260619 — the manual/technical side of the two-take
