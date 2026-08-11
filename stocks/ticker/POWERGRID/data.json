@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "POWERGRID",
-  "emitted_at_utc": "2026-08-11T03:25:14+00:00",
+  "emitted_at_utc": "2026-08-11T11:00:29+00:00",
   "public": {
     "ticker": "POWERGRID",
     "name": "Power Grid Corporation",
@@ -135,10 +135,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 270.1,
-      "day_chg_pct": -0.552,
-      "week_chg_pct": -5.888501742160271,
-      "date": "2026-08-10"
+      "price": 267.95,
+      "day_chg_pct": -0.796,
+      "week_chg_pct": -5.451658433309806,
+      "date": "2026-08-11"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5608,56 +5608,99 @@
         271.6,
         268.8,
         270.1
+      ],
+      [
+        "2026-08-11",
+        270.0,
+        270.8,
+        266.65,
+        267.95
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 268.47,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 270.28,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 272.62,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 274.43,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 266.13,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 264.32,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 261.98,
+        "as_of": "2026-08-11"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 292.25,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "swing_high",
         "kind": "SH2",
         "price": 289.8,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 279.7,
-        "as_of": "2026-08-10"
-      },
-      {
-        "method": "swing_low",
-        "kind": "SL2",
-        "price": 282.15,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 285.04,
-        "as_of": "2026-08-10"
+        "price": 284.76,
+        "as_of": "2026-08-11"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 285.98,
-        "as_of": "2026-08-10"
+        "price": 285.87,
+        "as_of": "2026-08-11"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 320.9,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 254.05,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       }
     ],
     "operator_levels": [],
@@ -5671,11 +5714,19 @@
         "auto": true
       },
       {
+        "label": "SUPPORT",
+        "price": 266.13,
+        "dir": "below",
+        "kind": "watch",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 285.04,
+        "price": 268.47,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5691,24 +5742,31 @@
     "gate_check": [
       {
         "label": "RESISTANCE",
-        "price": 285.04,
+        "price": 268.47,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 5.5312847093669
+        "dist_pct": 0.1940660571002197
+      },
+      {
+        "label": "SUPPORT",
+        "price": 266.13,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.6792311998507159
       },
       {
         "label": "INVALIDATION",
         "price": 254.05,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -5.942243613476494
+        "dist_pct": -5.187534987870864
       },
       {
         "label": "UPSIDE",
         "price": 320.9,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 18.80784894483523
+        "dist_pct": 19.761149468184357
       }
     ],
     "scenario_ladder": [
@@ -5721,7 +5779,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 270.1,
+        "level": 267.95,
         "note": "holds current band; reclaim Rs286 (200-SMA) to flip constructive"
       },
       {
@@ -5878,8 +5936,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "M4mmDDs5xtHEM09Bfv74qA==",
-    "iv": "LdupXTzvRGoCanAt",
-    "ct": "QWA+hxRp1h/mQ3GWPS+4xeRFBADhQGykgiR1PiUAq0n/R1ipdde+DoShvRjRrlbJ/3qo4wBrrBaudWNoV+Ge1cxZHCPY4B9UUJtc8wkDfnUei0A8DAtB3hEDycQaV/y8pUVX3zHhLwKsP7V9qRzjchJodufa6wCNnbL184/p8sJjjAbPRh5QG104dHtkmr0KrjL8kZsEbMfGtlqvBjdTYhopQe0/pFwxUzkHsAARmtgqx+z4LRUcqGB/bJDmTLXVMT40BEYo3CigpUO3ccJvEOStQy/Mi6aUUSUvYaRvdayiMmsT0QanH3KN3/dlrdL+DomUQoYU+Zpy5OSl7fjaXu/uRbGgXgdqljPs08Z+UW/yuFcaxllOQemlY9E/xd0luanJDBhUDsEySoLHTjrj5h6JZe09in4rRITxWkLcsZqg3/ZhsDLTugCyTV52XT6V+hD39DQDKcsKXwQKH0+Y6GvQwnvjp+TBNrO0ORCzmyvJbq3SjYTtpAxhetEv/Omd6bcKWdpsuZpMAueFD61pykoajrIu0UL0nGyvc3im/bEU67xfwFZpryjGIxUnd2UFxAnPFuzUs4OJgc/TJruK2PeV6WXjJeYETizIVl+JvBSc130VRVeJLzCdV899fV7m2TxhW3aRY2JffJPTnNGtuS9uq8MTVswTH/nABdq4q05GaNv8S8Xeu9Wv/zmmdKwInk9tQ8vCpjChGUY="
+    "salt": "JYQyhbFNm/JKZ2VtoCwBOg==",
+    "iv": "V8qo/GifUJJ0fSYk",
+    "ct": "gl+lguW/tlVOQqFssTKI4s/UtzYtN4QPxPmHFfcxzUCGMN7kPepJIvUOTxC13/MOGVNRMGF/w9K+SgdVji/NBoALAN+iD51VoC1/Po9ewl6vFh6XnnN48JBjDP9C9pLrM8XJtjLmH6VtpEP9HKO5VFzmn20Eq+wXhhOk8lsPyw84WDg7iNMcbQG0wf5jzdAMDUwPsKRIpP/q1sWER1KETlTaGZR17lrg+y3vN91+isU7OfXr/CdTZ2iZYi2byRvC/JzKHzjp8Wlu7g/aWw2Rv2C3NcKw67przjNlurvMOFbju4bq/bL/GSXl90zwFb/98+JycpR6g0eu8+qq0YSDXXH8Z9Epzob38K23wJnVtE3IaoyK6mwbYpf8ezX1s08WDXzY+W/Esug3/WJnCTqfKAO/Fj+9wKrZaXtfejlHiBH+lszeaUyfPgrXrrU2E5J+i/dJ3v4E8LBPk1UxbKFfuHBhrqTSR8uNXpho4MYJXfXW/7IFH9dd1I6J+QXntn0iqoO80+ECD6hWCf3D2+sX6JAfnykECknnCH3llEaFAv5aAPcI16FjySv9yEbFyycluwHjACyPlfgz5d4J6cnBK3hceVZNxRX4NRWzBuL45k9uSlgdkU1o1nMsTjERrqwVkXXFk9UCbuLX2+59c9qp6WlRHYBgr1SrbNVbNPYEwno/iolikDY7ieuFwAhu5EgM4eK5RCqqpUF2BVM="
   }
 }
