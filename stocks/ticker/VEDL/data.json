@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "VEDL",
-  "emitted_at_utc": "2026-08-11T03:25:17+00:00",
+  "emitted_at_utc": "2026-08-11T11:00:33+00:00",
   "public": {
     "ticker": "VEDL",
     "name": "Vedanta Ltd",
@@ -128,10 +128,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 283.65,
-      "day_chg_pct": 1.721,
-      "week_chg_pct": 6.136576239476137,
-      "date": "2026-08-10"
+      "price": 275.0,
+      "day_chg_pct": -3.05,
+      "week_chg_pct": 2.2304832713754648,
+      "date": "2026-08-11"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5601,38 +5601,87 @@
         285.8,
         277.2,
         283.65
+      ],
+      [
+        "2026-08-11",
+        284.9,
+        286.4,
+        275.0,
+        275.0
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 278.8,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 282.6,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 290.2,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 294.0,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 271.2,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 267.4,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 259.8,
+        "as_of": "2026-08-11"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 253.05,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 282.61,
-        "as_of": "2026-08-10"
+        "price": 281.44,
+        "as_of": "2026-08-11"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 509.36,
-        "as_of": "2026-08-10"
+        "price": 508.32,
+        "as_of": "2026-08-11"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 787.5,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 253.05,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       }
     ],
     "operator_levels": [],
@@ -5647,18 +5696,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 282.61,
+        "price": 271.2,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "pivot S1",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 509.36,
+        "price": 278.8,
         "dir": "above",
         "kind": "trim",
-        "why": "200-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5674,31 +5723,31 @@
     "gate_check": [
       {
         "label": "SUPPORT",
-        "price": 282.61,
+        "price": 271.2,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -0.3666490393089948
+        "dist_pct": -1.381818181818186
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 278.8,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 1.381818181818186
       },
       {
         "label": "INVALIDATION",
         "price": 253.05,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -10.787942887361174
-      },
-      {
-        "label": "RESISTANCE",
-        "price": 509.36,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 79.57341794465012
+        "dist_pct": -7.981818181818177
       },
       {
         "label": "UPSIDE",
         "price": 787.5,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 177.63088313061874
+        "dist_pct": 186.36363636363635
       }
     ],
     "scenario_ladder": [
@@ -5711,8 +5760,8 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 283.65,
-        "note": "holds current band; reclaim Rs509 (200-SMA) to flip constructive"
+        "level": 275.0,
+        "note": "holds current band; reclaim Rs508 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
@@ -5868,8 +5917,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "SGJthja7N3EAlKxoOu6Ugw==",
-    "iv": "b0xRyL++64DX4DwO",
-    "ct": "pIUbxncN4mUhrYruz/7To8t0ShiTVDYVpp7vxWVF5n2S0ZGvzVk8oYooJ5RCjvLPJAF//HpDsjEkA855gApjABFQjtdj4+C/8Ynj06KMqvJOaeAESlfGnrFSzr/ihjYx6qEYuGbBB8AllCx85nw2yMz3A9OrBpsk/58ofT/Vp12Wd6ybSEyE8o8PlZtbvpRneXjUr51Ufu0BbS3I7SznNEFsn4tSW7JbAFO2JVDbpzpKcyZkAnPMWyep/O5x01RI2t0dNb3lJWmGCEMFrUVHL153rpc3drRk6oS4E547iyeAO16YmDMZh6l2N9oReX6O0mBLiaq5i8b9pCqYRLyhh0/tIu3l3qQ3Kked4MqclALEftbp72V02ewyZ8IIdq0YSOt7Pw9BxU7VyNYYG3sw3qBOPgs1rjtTzOcvJ8EH7yEFVOWU5vlb5kcNEfW6x6dDJtfF3D0ZrS1bUt93aob1cQWZRGclcoBPkF9KKByef3Q4B3T0IYoQnR5F2nP37Sn4IedR7Jotq6iikoGJS6WHUkm9PJ9kMCao0ncwOtoL4lydoBhLsmowQpK3jKH8PSNloV9iLT2wrEHC4o0siuyYwV3g+36RWYaswVuvZC5F/TbHhnrtTUpdSxBaaqqV45lTGJWOHHMokpH31w=="
+    "salt": "mPom1eQuPPZs41hAl1nelQ==",
+    "iv": "9JsL6cG/ysdMSsUc",
+    "ct": "Lgamj0dA8bW/Q8jpb4LPYEV2xJGfF8unZAijeXZIzdg6FytgF7/WEuoE2FWZRnOqf/2RLF+tC7DpflJuTd5KwVjYmqqkCqbhm51YY7fQJCdzb+jZAv3RyxW57TWaeP4+abMxAyWxymptoOlTQKJfrWdDNA6fC2BdquBoNi75m3zanwgCKXhRJjeUeS14ul8VzdG9cTjrR1wOez2z7luhXTT3YgeSRnBqWL4ZeTfsJi3ivQkoG4fus9Xy+Ykg1VtgBiw31faN/TO49Nap7pt5DlsBqx9Q4l7Na0AfnGS7xd/JA23HxY2eky/iZ43MuiSvxy9OpHnM7ML/gNIyB5Ba9HxYLCAsv/dNy5VRzGl7jnMXZa6qEMueEBwxTQWxsglAgiZHNWS5ve7wn+pojoczrj+FZqTN37mCf7qEdcbWXYg39h7vgND+Yhs2g3gW3W9bk2p/2Ci6X22zQhzkIZVef/i/VuNWwjloX6ayV+YDYQ0KWGZW8QmGjxWCSwq9Ftzqh49Fd8MGigQ4CbMbH9pI0139eHIu82sY+Arw2wotp7YNVhaZHBObcSnSBAMAxG9Bq0uwDrys7lFBex8SwkU0Fzph11x9GKOSihGK1I4cEAzyhHJ81FuRlRNPryEXxWGbaUCtFM4CqdlBGg=="
   }
 }

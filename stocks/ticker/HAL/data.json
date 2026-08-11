@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "HAL",
-  "emitted_at_utc": "2026-08-11T03:25:08+00:00",
+  "emitted_at_utc": "2026-08-11T11:00:22+00:00",
   "public": {
     "ticker": "HAL",
     "name": "Hindustan Aeronautics",
@@ -93,10 +93,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 4928.0,
-      "day_chg_pct": 0.367,
-      "week_chg_pct": 5.074626865671641,
-      "date": "2026-08-10"
+      "price": 4909.0,
+      "day_chg_pct": -0.386,
+      "week_chg_pct": 5.911542610571737,
+      "date": "2026-08-11"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5566,44 +5566,93 @@
         4960.0,
         4895.3999,
         4928.0
+      ],
+      [
+        "2026-08-11",
+        4930.1001,
+        4963.7998,
+        4855.6001,
+        4909.0
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 4909.47,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 4963.33,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 5017.67,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 5071.53,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 4855.13,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 4801.27,
+        "as_of": "2026-08-11"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 4746.93,
+        "as_of": "2026-08-11"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 4515.2,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 4172.3,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 4459.6,
-        "as_of": "2026-08-10"
+        "price": 4472.21,
+        "as_of": "2026-08-11"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 4360.22,
-        "as_of": "2026-08-10"
+        "price": 4360.71,
+        "as_of": "2026-08-11"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 4928.0,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 3487.2,
-        "as_of": "2026-08-10"
+        "as_of": "2026-08-11"
       }
     ],
     "operator_levels": [],
@@ -5618,28 +5667,58 @@
       },
       {
         "label": "SUPPORT",
-        "price": 4459.6,
+        "price": 4855.13,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 4909.47,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
+        "price": 4928.0,
+        "dir": "above",
+        "kind": "trim",
+        "why": "52-week high",
         "auto": true
       }
     ],
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 4909.47,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.00957425137503065
+      },
+      {
+        "label": "UPSIDE",
+        "price": 4928.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.387044204522306
+      },
+      {
         "label": "SUPPORT",
-        "price": 4459.6,
+        "price": 4855.13,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -9.504870129870122
+        "dist_pct": -1.0973721735587674
       },
       {
         "label": "INVALIDATION",
         "price": 3487.2,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -29.23701298701299
+        "dist_pct": -28.96312894683235
       }
     ],
     "scenario_ladder": [
@@ -5652,7 +5731,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 4928.0,
+        "level": 4909.0,
         "note": "holds current band"
       },
       {
