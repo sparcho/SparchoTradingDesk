@@ -1,7 +1,7 @@
 {
   "schema_version": "v1.1",
   "doc_type": "equity_dashboard_aggregate",
-  "emitted_at_utc": "2026-08-13T13:30:12+00:00",
+  "emitted_at_utc": "2026-08-13T14:38:52+00:00",
   "meta": {
     "account": "SPARCHO-HDFC",
     "doctrine_refs": [
@@ -11,7 +11,8 @@
     ],
     "held_count": 5,
     "held_locked": true,
-    "lens_run_date": "2026-08-13"
+    "lens_run_date": "2026-08-13",
+    "last_price_refresh": "2026-08-13T14:38:52+00:00"
   },
   "book": {
     "as_of": "2026-08-13",
@@ -21,7 +22,15 @@
     "fetched_at": "2026-08-13T18:44:41+05:30",
     "staleness": "FRESH -- drop taken 2026-08-13 (same day). Ends a 5-drop / 9-run staleness run on the 2026-08-06 book. The holdings page is the T+1-SETTLED view and LAGS same-day fills: it still lists DENTA 900 after 900 were sold today, and omits the SILVERBEES bought today. `positions` mirrors the page byte-for-byte; `positions_trade_adjusted` is the operative book.",
     "ledger_available": true,
-    "basis": "broker holdings + all 13-Aug EXECUTED fills applied (DENTA exit); SILVERBEES excluded as a SILVER-book position"
+    "basis": "broker holdings + all 13-Aug EXECUTED fills applied (DENTA exit); SILVERBEES excluded as a SILVER-book position",
+    "totals": {
+      "current_value": 0.0,
+      "invested": 0.0,
+      "unrealized_pnl_abs": 0.0,
+      "unrealized_pnl_pct": 0,
+      "change_today_abs": 0.0,
+      "change_today_pct": 0
+    }
   },
   "daytrade_inputs": {
     "candidates": {
@@ -1103,7 +1112,7 @@
     "sessions_stale": 0,
     "status": "OK",
     "score_version": "F128",
-    "refreshed_at_utc": "2026-08-13T13:30:12+00:00"
+    "refreshed_at_utc": "2026-08-13T14:38:52+00:00"
   },
   "flags": {
     "P0": [
@@ -1401,28 +1410,28 @@
       {
         "id": "TNX",
         "status": "FAIL",
-        "reading": "4.682",
+        "reading": "4.62%",
         "threshold": "<4.45%",
         "note": "4.682 vs <4.45% -> FAIL (auto-refreshed 2026-08-13 16:29 IST) -- binding deploy gate (S5.2 new-tranche block)"
       },
       {
         "id": "DXY",
         "status": "OK",
-        "reading": "99.895",
+        "reading": "99.83",
         "threshold": "<102",
         "note": "99.895 vs <102 -> OK (auto-refreshed 2026-08-13 16:29 IST) -- >102 weekly close = reduce-50 (V-06)"
       },
       {
         "id": "USDINR",
         "status": "PAUSE",
-        "reading": "95.43",
+        "reading": "95.430",
         "threshold": "<94 / <96 wkly",
         "note": "95.43 vs <94 / <96 wkly -> PAUSE (auto-refreshed 2026-08-13 16:29 IST) -- pause new tranches >94; reduce-25 >96 weekly close"
       },
       {
         "id": "HORMUZ",
         "status": "OK",
-        "reading": "87.2",
+        "reading": "oil $86.44",
         "threshold": "oil <$105",
         "note": "87.2 vs oil <$105 -> OK (auto-refreshed 2026-08-13 16:29 IST) -- war-premium / S10.1 correlated-cascade gate (Brent proxy)"
       },
@@ -1443,25 +1452,25 @@
     ],
     "macro": {
       "TNX": {
-        "value": 4.682,
+        "value": 4.616999626159668,
         "as_of": "2026-08-13T08:57:05+0530",
         "gate_status": "FAIL",
         "gate_threshold": "<4.45%"
       },
       "USDINR": {
-        "value": 95.43,
+        "value": 95.43000030517578,
         "as_of": "2026-08-13T16:27:55+0530",
         "gate_status": "PAUSE",
         "gate_threshold": "<94 / <96 wkly"
       },
       "DXY": {
-        "value": 99.895,
+        "value": 99.83300018310547,
         "as_of": "2026-08-13T16:27:55+0530",
         "gate_status": "OK",
         "gate_threshold": "<102"
       },
       "BRENT": {
-        "value": 87.2,
+        "value": 86.44000244140625,
         "as_of": "2026-08-13T16:27:55+0530",
         "gate_status": "OK",
         "gate_threshold": "oil <$105"
@@ -4325,7 +4334,7 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-08-13T13:30:15+00:00",
+    "computed_at_utc": "2026-08-13T14:38:52+00:00",
     "desk": "equity",
     "any_stale": true,
     "any_dim": false,
@@ -4356,7 +4365,7 @@
         "dim": false,
         "reason": "refreshed 0m ago",
         "since": null,
-        "age_min": 0.06544871666666667,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_equity",
         "ui_targets": []
@@ -4462,20 +4471,6 @@
         "ui_targets": []
       },
       {
-        "id": "block:dr",
-        "subsystem": "equity",
-        "label": "Block dr",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-08-01 (9 session(s) behind)",
-        "since": "2026-08-01",
-        "age_min": null,
-        "sessions_stale": 9,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
         "id": "block:fib_confluences",
         "subsystem": "equity",
         "label": "Block fib_confluences",
@@ -4518,20 +4513,6 @@
         "ui_targets": []
       },
       {
-        "id": "block:held",
-        "subsystem": "equity",
-        "label": "Block held",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-08-13 (0 session(s) behind)",
-        "since": "2026-08-13",
-        "age_min": null,
-        "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
         "id": "block:news",
         "subsystem": "equity",
         "label": "Block news",
@@ -4542,104 +4523,6 @@
         "since": "2026-08-13",
         "age_min": null,
         "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:order_book",
-        "subsystem": "equity",
-        "label": "Block order_book",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-07-28 (12 session(s) behind)",
-        "since": "2026-07-28",
-        "age_min": null,
-        "sessions_stale": 12,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:perf_private",
-        "subsystem": "equity",
-        "label": "Block perf_private",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-08-12 (1 session(s) behind)",
-        "since": "2026-08-12",
-        "age_min": null,
-        "sessions_stale": 1,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:positional_assessment",
-        "subsystem": "equity",
-        "label": "Block positional_assessment",
-        "is_stale": true,
-        "severity": "alert",
-        "dim": false,
-        "reason": "STALE — as-of 2026-08-08 is 4 session(s) behind today (tolerance 2); produced by signal_ledger.py on the laptop substrate.",
-        "since": "2026-08-08",
-        "age_min": null,
-        "sessions_stale": 4,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:family_account_b",
-        "subsystem": "equity",
-        "label": "Block family_account_b",
-        "is_stale": true,
-        "severity": "warn",
-        "dim": false,
-        "reason": "STALE — as-of 2026-06-06 is 49 session(s) behind today (tolerance 10); produced by propagate/account pull on the operator substrate.",
-        "since": "2026-06-06",
-        "age_min": null,
-        "sessions_stale": 49,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:scorecard_private",
-        "subsystem": "equity",
-        "label": "Block scorecard_private",
-        "is_stale": true,
-        "severity": "warn",
-        "dim": false,
-        "reason": "STALE — as-of 2026-07-28 is 12 session(s) behind today (tolerance 10); produced by real_scorecard.py on the operator substrate.",
-        "since": "2026-07-28",
-        "age_min": null,
-        "sessions_stale": 12,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:recent_closed",
-        "subsystem": "equity",
-        "label": "Block recent_closed",
-        "is_stale": true,
-        "severity": "warn",
-        "dim": false,
-        "reason": "STALE — as-of 2026-05-05 is 72 session(s) behind today (tolerance 3); produced by trade_tracker_emit.py on the laptop substrate.",
-        "since": "2026-05-05",
-        "age_min": null,
-        "sessions_stale": 72,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:recent_trades",
-        "subsystem": "equity",
-        "label": "Block recent_trades",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "empty by declaration (allow_empty) — nothing to date; producer trade_tracker_emit.py liveness is judged by its dated sibling blocks",
-        "since": null,
-        "age_min": null,
-        "sessions_stale": null,
         "heal": null,
         "ui_targets": []
       },
@@ -4672,34 +4555,6 @@
         "ui_targets": []
       },
       {
-        "id": "block:risk_gates",
-        "subsystem": "equity",
-        "label": "Block risk_gates",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-08-13 (0 session(s) behind)",
-        "since": "2026-08-13",
-        "age_min": null,
-        "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:screeners",
-        "subsystem": "equity",
-        "label": "Block screeners",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-08-13 (0 session(s) behind)",
-        "since": "2026-08-13",
-        "age_min": null,
-        "sessions_stale": 0,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
         "id": "block:signal_perf",
         "subsystem": "equity",
         "label": "Block signal_perf",
@@ -4710,20 +4565,6 @@
         "since": "2026-08-07",
         "age_min": null,
         "sessions_stale": 4,
-        "heal": null,
-        "ui_targets": []
-      },
-      {
-        "id": "block:trade_lab_private",
-        "subsystem": "equity",
-        "label": "Block trade_lab_private",
-        "is_stale": false,
-        "severity": "info",
-        "dim": false,
-        "reason": "fresh — as-of 2026-08-13 (0 session(s) behind)",
-        "since": "2026-08-13",
-        "age_min": null,
-        "sessions_stale": 0,
         "heal": null,
         "ui_targets": []
       }
