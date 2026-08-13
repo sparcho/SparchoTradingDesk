@@ -98,7 +98,10 @@ SECTOR_MAP = {
     # folding them into DEFENCE would have muddied a screen the operator reads by sector.
     'RAIL': {'IRCON', 'IRFC', 'JWL', 'KERNEX', 'RAILTEL', 'RVNL', 'TEXRAIL', 'TITAGARH'},
     'AGRI': {'AVANTIFEED', 'PARADEEP'},
-    'FERT': {'PARADEEP'},
+    # +CHAMBLFERT 260813 (Chambal Fertilisers -- HELD from the 13-Aug drop). Without an
+    # entry a held name renders under UNCATEGORIZED on the desk (F260619 item 3), which
+    # is the second of the two hidden onboarding gates.
+    'FERT': {'PARADEEP', 'CHAMBLFERT'},
     'ETF': {'HDFCSML250'},   # Broad Smallcap index ETF (260620); tracked + level-ID'd, NOT value-screened (see G1_NON_SCREENED)
     'CHEMICALS': {'HSCL', 'PCBL', 'AETHER'},   # +260630 specialty-chem / carbon & battery materials (HSCL held; PCBL+AETHER already in ALL_TICKERS)
 }
