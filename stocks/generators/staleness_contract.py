@@ -469,6 +469,19 @@ EQUITY_BLOCKS = {
                                   note="quarterly-cadence backlog data — refresh on results, "
                                        "never daily-restamp without new data (260723 triage)"),
     "dr":                    _blk("DR pipeline", "laptop", 20, severity="warn"),
+    "fundamentals":          _blk("fundamental_autopilot.py", "laptop", 100,
+                                  _key_date("newest_period_end"), severity="warn",
+                                  note="REBUILD-PLAN phase 6: the business read behind each fire "
+                                       "and on every ticker page. Dated by its SUBSTANCE (the "
+                                       "newest reporting period across the bank), never by the "
+                                       "build - the autopilot rebuilds it daily while the numbers "
+                                       "move once a quarter, so a build stamp would let a "
+                                       "two-quarter-old read pass forever (a-date-is-not-an-age). "
+                                       "max_sessions is a QUARTER-scale 100: a name being one "
+                                       "period behind inside its filing window is normal, and a "
+                                       "check that cries wolf every quarter stops being read. "
+                                       "Substrate LAPTOP - the screener fetch runs on the "
+                                       "operator's machine and stops when he is away."),
     # "analysis" RETIRED 2026-07-27 (F260723-ANALYSIS-RETIRE, operator decision) — orphaned (no
     # renderer), 66d stale, and tracking two permanently-retired PDF cycles. Producer removed from
     # equity_dashboard_emit and the equity_analysis_freshness detector removed with it, so no half
