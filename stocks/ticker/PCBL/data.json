@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "PCBL",
-  "emitted_at_utc": "2026-08-16T11:01:01+00:00",
+  "emitted_at_utc": "2026-08-16T17:58:40+00:00",
   "public": {
     "ticker": "PCBL",
     "name": "PCBL",
@@ -5913,7 +5913,159 @@
       },
       "emitted_at": "2026-07-28 13:44 IST"
     },
-    "order_events": []
+    "order_events": [],
+    "fundamentals": {
+      "ticker": "PCBL",
+      "headline": "UNCLEAR — priced away from its own history, but the business readings disagree about which way it is going · the business readings do not agree on a direction, so no cell is claimed — but the market has marked it up by 364.72% over 3 years",
+      "reservations": [
+        {
+          "name": "working-capital-stress",
+          "detail": "working capital is building while growth slows — the one configuration R7 does flag",
+          "source": "earnings_quality.working_capital"
+        },
+        {
+          "name": "own-history-shorter-than-ten-years",
+          "detail": "the median it is judged cheap or dear against rests on 5 priced year ends, not ten",
+          "source": "valuation.pe_vs_own_history.years_used"
+        }
+      ],
+      "as_of": {
+        "period_end": "2026-06-30",
+        "fetched_at": "2026-08-16T17:01:19+0530",
+        "basis": "consolidated",
+        "source_url": "https://www.screener.in/company/PCBL/consolidated/",
+        "record_publishable": true,
+        "failed_record_gates": []
+      },
+      "basis": "consolidated",
+      "record_warning": null,
+      "readings": [
+        {
+          "label": "Where the cheap-or-dear vs improving-or-deteriorating table puts it",
+          "lens": "verdict_cell",
+          "reading": "UNCLEAR",
+          "figure": "priced away from its own history, but the business readings disagree about which way it is going",
+          "source": "verdict.verdict",
+          "not_measurable": null,
+          "measured": "NOT MEASURED",
+          "measured_note": "only one bucket with usable size (['NO VERDICT']): a signal that gives every name the same label has no discriminating power, whatever its returns look like",
+          "may_be_wired": false
+        },
+        {
+          "label": "How the market prices it, against its own history",
+          "lens": "valuation_position",
+          "reading": "expensive vs its own history",
+          "figure": "PE 46.1 against its own median of 20.6 (+124%), and that median rests on 5 priced year ends",
+          "source": "valuation.pe_vs_own_history",
+          "not_measurable": null,
+          "measured": "MEASURED INVERTED",
+          "measured_note": "measured INVERTED: 'cheap' beat 'expensive' by -40.05pp, and a signal is not wired into ranking unless it points the way it claims to ([[rules-rebuild-two-books]])",
+          "may_be_wired": false
+        },
+        {
+          "label": "The business direction overall",
+          "lens": "business_direction",
+          "reading": "mixed",
+          "figure": "on 4 of 4 readings: returns improving; margin improving; revenue rolling over; profit rolling over",
+          "source": "verdict.business.direction",
+          "not_measurable": null,
+          "measured": "NOT MEASURED",
+          "measured_note": "no forward window has elapsed for this signal: its components need six quarterly year-on-year readings, and screener publishes thirteen quarters, so the sixth does not exist until Sep-2025 — a full forward year has not passed since",
+          "may_be_wired": false
+        },
+        {
+          "label": "Return on capital — the DIRECTION",
+          "lens": "roce_trend",
+          "reading": "improving",
+          "figure": "latest 8.0% against a 12-year median of 15.0%",
+          "source": "quality.roce.trend",
+          "not_measurable": null,
+          "measured": "DEPENDS ON HOLDING PERIOD",
+          "measured_note": "its sign depends on the holding period — 182d: FLAT; 365d: AS EXPECTED. Holding period is an outcome of a setup here, never an input, so a signal that needs one chosen in advance cannot rank ([[horizon-is-an-outcome-not-a-category]])",
+          "may_be_wired": false
+        },
+        {
+          "label": "Return on capital — the LEVEL",
+          "lens": "roce_consistently_good",
+          "reading": "not consistently above 15%",
+          "figure": "6 of 12 years at or above 15%",
+          "source": "quality.roce.consistently_above_15",
+          "not_measurable": null,
+          "measured": "MEASURED INVERTED",
+          "measured_note": "measured INVERTED: 'consistently-above-15' beat 'not-consistent' by -14.77pp, and a signal is not wired into ranking unless it points the way it claims to ([[rules-rebuild-two-books]])",
+          "may_be_wired": false
+        },
+        {
+          "label": "Operating margin — the direction",
+          "lens": "opm_trend",
+          "reading": "improving",
+          "figure": "latest 13.0% against a 12-year median of 14.5%",
+          "source": "quality.opm.trend",
+          "not_measurable": null,
+          "measured": "MEASURED INVERTED",
+          "measured_note": "measured INVERTED: 'improving' beat 'deteriorating' by -11.35pp, and a signal is not wired into ranking unless it points the way it claims to ([[rules-rebuild-two-books]])",
+          "may_be_wired": false
+        },
+        {
+          "label": "Revenue and profit, quarter by quarter",
+          "lens": "revenue_trajectory",
+          "reading": "revenue rolling over, profit rolling over",
+          "figure": "latest quarter (2026-06-30): revenue +17.0% year on year, profit +64.9%",
+          "source": "trajectory.sales_yoy.reads",
+          "not_measurable": null,
+          "measured": "NOT MEASURED",
+          "measured_note": "no forward window has elapsed for this signal: its components need six quarterly year-on-year readings, and screener publishes thirteen quarters, so the sixth does not exist until Sep-2025 — a full forward year has not passed since",
+          "may_be_wired": false
+        },
+        {
+          "label": "Do the profits turn into cash?",
+          "lens": "cash_conversion",
+          "reading": "profits are turning into cash",
+          "figure": "over 5 years, cash from operations came to 213% of reported profit",
+          "source": "earnings_quality.cash_conversion",
+          "not_measurable": null,
+          "measured": "MEASURED FLAT",
+          "measured_note": "measured FLAT: 'converting' beat 'profits-not-converting' by -2.18pp, and a signal is not wired into ranking unless it points the way it claims to ([[rules-rebuild-two-books]])",
+          "may_be_wired": false
+        },
+        {
+          "label": "Working capital, read the operator's way (R7)",
+          "lens": "working_capital",
+          "reading": "working capital is building while growth SLOWS - the one configuration R7 does flag",
+          "figure": "working-capital days -46 -> -18, with three-year growth +12.3%",
+          "source": "earnings_quality.working_capital.verdict",
+          "not_measurable": null,
+          "measured": "MEASURED INVERTED",
+          "measured_note": "measured INVERTED: 'no-build' beat 'working-capital-stress' by -18.88pp, and a signal is not wired into ranking unless it points the way it claims to ([[rules-rebuild-two-books]])",
+          "may_be_wired": false
+        },
+        {
+          "label": "Has the market changed its mind? (the MULTIPLE, not the price)",
+          "lens": "rerating",
+          "reading": "re-rated up",
+          "figure": "PE 9.9 at 2023-03-31 -> 46.1 now, +365% over 3 fiscal year ends. The price moved +167% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
+          "source": "tracking.rerating.verdict",
+          "not_measurable": null,
+          "measured": "MEASURED INVERTED",
+          "measured_note": "measured INVERTED: 'de-rated' beat 're-rated up' by -23.65pp, and a signal is not wired into ranking unless it points the way it claims to ([[rules-rebuild-two-books]])",
+          "may_be_wired": false
+        },
+        {
+          "label": "Business direction vs what the market did with the multiple",
+          "lens": "tracking_cell",
+          "reading": "NO READ",
+          "figure": "the business readings do not agree on a direction, so no cell is claimed — but the market has marked it up by 364.72% over 3 years",
+          "source": "tracking.comparison",
+          "not_measurable": null,
+          "measured": "NOT MEASURED AT EVERY HORIZON",
+          "measured_note": "its sign depends on the holding period — 182d: INVERTED; 365d: NOT MEASURED. Holding period is an outcome of a setup here, never an input, so a signal that needs one chosen in advance cannot rank ([[horizon-is-an-outcome-not-a-category]])",
+          "may_be_wired": false
+        }
+      ],
+      "scored": false,
+      "information_only": "Information only. Every lens below was measured before it was shown, and not one of them separated winners from losers in the direction it claims to — on this universe, this tape and this window. Nothing here ranks a name, filters a list or fires a trade; the allow-list that would permit any of that is empty.",
+      "wired": []
+    }
   },
   "privacy": {
     "locked": true
@@ -5921,8 +6073,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "/0oFyee4lXQ/6CPcs5qF1A==",
-    "iv": "66N3xqR31SEh+m+X",
-    "ct": "7WbUshN5kGiYXMbidH7H+oJlm2j8ObHQ6b5hKMUfPfJTKIRtfsCHZyvLFv5Am+IKcaVAsG1R47ORdAlDr9rL5AOTScNstiaulxGMSYgX5vmTXxM48c9QD87GRH6ktwDdyY6HoI1HQd3kSr1W1zIDRjY8y26Ly1vCJ6XWzhDdqz9jx4EeqQ/kyS/hguPEVRGMfmCS6d9YJEyKjIQH7XWjGgoIBF7TZEswl04m71RMdfaKVnu9Qm8BMlxOJpA3aUjhp9JgTkTKLMwJ38OxLiMbEoKo2vGoToePgKh7XVsrLx480id8A1jNPg5Mz9Jb9FIQA7Zl5TzT51yxRchHvujexDabOaMPnXqOdNYFY2J999cuEtWq86E8NXEgqVAw8qBGXDPwI4yx6F0S9Xu8BPM+1UbThEoL2yjdHYzRzztaSSy+7ss+nxv9zK9TIUHSxEQZJFIwAInStibRBKiCX11TBqJxX0Gyzit7R1pOPvaf1wIatbQPdCUC4JxOLep8aUlGZeSjecIgMxx4fJNBweN3uNC1zUHAl/6kAHl+Bm3SF+aCMh4h+N2/XfIv5+Kf4hN5COvCTtVOg9K1ry50hLWGiUX6Rk02cFmXuYVPe1tCy+Y2SyifitqHweU2dyKsgY0bkOZiCnha+DhlTla2MqQt//sIVszXEIsJHAhqM97UcArpqw5qSD6J/igxJa2dHWTkKN5EOkFBrtCRh3km/xjeaj9RUrbSdyepTi4Fm930eOeMZDSBzT75nmZYYkv55+r75w842+dcXfzGedfslf3YO17jMUoaCMUhZiyeNJUbyNjHQ1ovVdr7MX3QlQitHbQMiUBwIHuLhI0s1SSjqrebp3iF0AjEHx3jYDR78sAXJIxkQXzXfimof0YQYtgbpAxT2YFccB8UKCdDLCC96062eQQx7We7aavPaxDAN4wBVBgpBSarePBYi2Ldz8AiLB0yqWnTjrW2fYWETR7ETcQGP7kZyt+y4XavlEAsF1SfDW62ViHX15pXCxvJ4T1vUGztZpEGmdbBX5kY8nKogUQ6q9JkXepaiarNaqPL9CQBQ0NUsG9kK1zDI5gh1D8aZBnnbHufhHWmf3ebKuNpXBbUIDy7Vs/IlZs9njzdtI2p3ocZcWCquvfZb8GA5eL/VJFgUuav62D4RaqPXj+xjtz2yrezHI4nUVZNgzDqPLJaAqRGNml13owcp0QuERiyHjg4SgTuKXcy/gyUvRKJEEsDydQutBRWNpN0cc8ZL7A4uajSQajZZ/ISKj/GPNn38vq3UwirQ68="
+    "salt": "nCE3bhRrqBGYXvzr0vubvw==",
+    "iv": "nGX5CoNgo+4I+BOj",
+    "ct": "G9Z9SMYqUSqlr41y2/wIx5UpNOOLjfn9VLtt3TR5iWBVxumDW03qzHEBCtwgQqy4rHtASt4SyvnsOCiPgqfER5dwrLtgPXwfn8NZPBK8Op1eDMgge7G+oGY25SJSViRMWjbaBO2vpnpcRglBvaahKJXn22T+Syd3lvB6Q4Bh6rhtttOCKMlJm/wCXvcTGgzdJftBbQezPN8mio1/DhdpwjoTQA+oB3FS1kPeNAmeDbchgLIAU3dPSmDq+dDCRp2Z4P1gT50baH5vKL3ZKez9koYEMsbl499dIyMo8UCUrpyISqKRGL0Zr4ufn5rZgwAsoax2UGp7euBo0ygOoqkCJG70swk+Ei/gvcoP5HBSaZuRXWPJIlDTK6tWcEztgxYIhvDpkKh7PRo8LCPYiSmWlukq+pV0atdImiiYDKnqjnLmsQOcmqL+oFT1pPMqJhOXUsrvTZRF3eKCDZT+HxsPGf9N+I8bNiiESPx7h3oOuyjB3mI8mC0XqWpVSgWPUMWV3pqc7iBWhsCw7IZh+cnEVyLTzZaicUFduhPig7B8s8OI42z5uKSNmQePx/euR3naGjMfIA0rP+k3NzDeSA2RACt9H+IkyM/Mt7hwbNu2tWWNiKf61Qazpq+kyigmn6snAP4ixKjK4XZYw5pDNnjQRA7YrxGEJhD3kK0CDUEgMQHNBlQDc82SpDj1cWDNDqrEKL6ZgeFuFyBKe3d1Q5PrOnImPVoWPzTJL+owPpiuL3n/FimRS4ptX9XtwYbsX/P7DOtofUKeT9ChGJSHyTC9JsdKb9aeGBakoi260bGBdB8+6yF2JuJhGeXNS38ijVipmb+w/j7+Jxk2UmQtGbXqcvnYZOg0L2gjrzoCv1oxZGvLzYzcX1Ljg+gVEHu0bjoVRp0gKHNBly3AgbacgtE+uDyNdUsy4C2WIPaVEM9RYTzywowxiH4sdbYKsH4sXR5icEy0P8asgBDSWd8iQnoiNc6lDe7KSakU33/od/oNxC3P7p7nGKlofCvwNjMXY5+wNK3KR2t9K+m2+vAsYF1Vmlu+nbGtKQ9LfwDhKFn2qEFIbAiR5OHPP4py5tiGDaPpN0MtfEyp0KFFof2j0s7IqXNQVBvGewRATO+GWtkZOS/nAoJ40EUvMgRCbgHCZmBh8rK7RGovXgc5tSl6YLNIiJwCQrWEpXsVyNxb33GVmkkCY0/6SnnV4YYYfn0kUzVnrVMYZrBDmuy8WzPpotZTalZ7WdN6tbtovdrW/X5292peZq7Tlt+IPyKopcTR7s3283GZsPk="
   }
 }

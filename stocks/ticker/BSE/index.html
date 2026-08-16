@@ -103,6 +103,31 @@ a{color:inherit;text-decoration:none}
 .foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:10px;color:var(--ink-faint);line-height:1.7}
 .section{margin-bottom:16px}
 .exited{background:var(--neg-soft);border:1px solid var(--neg);border-radius:var(--radius-sm);padding:10px 14px;font-size:12.5px;color:var(--ink-soft);margin-bottom:18px}
+/* ── fundamentals card (REBUILD-PLAN phase 6) — the chip colour IS the measurement ── */
+  .fund-head{ font-size:14px; color:var(--ink); margin-bottom:6px; }
+  .fund-prov{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-mute); }
+  .fund-prov a{ color:var(--accent); }
+  .fund-warn{ margin-top:9px; padding:7px 9px; border-radius:var(--radius-md);
+    border:1px solid var(--warn,var(--accent-2)); color:var(--warn,var(--accent-2));
+    font-size:12px; }
+  .fund-note{ margin-top:9px; font-size:11.5px; color:var(--ink-mute); font-style:italic; }
+  .fund-row{ padding:9px 0; border-top:1px solid var(--border); }
+  .fund-lbl{ font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase;
+    letter-spacing:.4px; color:var(--ink-faint); }
+  .fund-read{ font-size:13.5px; color:var(--ink); margin-top:2px; }
+  .fund-fig{ font-size:11.5px; color:var(--ink-soft); margin-top:2px; }
+  .fund-why{ font-size:11.5px; color:var(--ink-mute); margin-top:2px; font-style:italic; }
+  .fund-measured{ display:inline-block; margin-top:5px; padding:1px 7px; border-radius:999px;
+    font-family:var(--font-mono); font-size:9px; letter-spacing:.4px;
+    border:1px solid currentColor; color:var(--ink-mute); }
+  .fund-measured.bad{ color:var(--neg); }
+  .fund-measured.warn{ color:var(--accent-2); }
+  .fund-measured.ok{ color:var(--pos); }
+  .fund-measured.flat,.fund-measured.none{ color:var(--ink-faint); }
+  .fund-resv{ margin-top:11px; border-top:1px solid var(--border); padding-top:9px; }
+  .fund-resvh{ font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase;
+    letter-spacing:.4px; color:var(--ink-faint); }
+  .fund-resv ul{ margin:5px 0 0; padding-left:17px; color:var(--ink-soft); font-size:11.5px; }
 .pending{color:var(--ink-faint);font-style:italic;font-size:12px}
 /* num helper — Space Mono tabular on any numeric node */
 .num,.is-numeric{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
@@ -262,6 +287,8 @@ function renderAll(){
   h+='<div class="grid g2 section">'+scenarioCard(p)+srCard(p)+'</div>';
   // ── thesis lenses ──
   h+=levelIdBankCard(p);
+  // the business read sits directly under the level read: the two takes, together
+  h+=fundamentalsCard(p);
   h+=lensCard(p);
   h+=drCard(p);
   // ── order book ──
@@ -429,6 +456,41 @@ function lensCard(p){
   if(!rows.length){ h+='<div class="pending">No agent-lens analysis captured for this name yet — analysis pending.</div></div>'; return h; }
   for(const [k,lbl,txt,ref] of rows){
     h+='<div class="lensrow"><div class="lbl">'+esc(lbl)+'</div><div class="lens">'+esc(txt)+(ref?'<span class="ref">refreshed '+esc(ref)+'</span>':'')+'</div></div>';
+  }
+  h+='</div>';
+  return h;
+}
+function fundamentalsCard(p){
+  // What the NUMBERS say about the business — the counterpart to the fib read above.
+  // Every line carries what its lens was measured to do, because not one of them
+  // separated winners from losers in the direction it claims to on this universe.
+  // Drop that chip and the reader meets a confident verdict with nothing arguing back.
+  const f=p.fundamentals; if(!f) return '';
+  const a=f.as_of||{};
+  let h='<div class="card section"><h2>What the numbers say <span class="sub">screener financials · every reading carries what it was MEASURED to do</span></h2>';
+  h+='<div class="fund-head">'+esc(f.headline||'')+'</div>';
+  h+='<div class="fund-prov">figures to '+esc(a.period_end||'?')+' · '+esc(a.basis||'basis unstated')+' basis · page fetched '+esc((a.fetched_at||'').slice(0,10));
+  if(a.source_url) h+=' · <a href="'+esc(a.source_url)+'" target="_blank" rel="noopener">source</a>';
+  h+='</div>';
+  if(f.record_warning) h+='<div class="fund-warn">'+esc(f.record_warning)+'</div>';
+  h+='<div class="fund-note">'+esc(f.information_only||'')+'</div>';
+  const cls=(m)=>({'MEASURED INVERTED':'bad','MEASURED FLAT':'flat','MEASURED AS EXPECTED':'ok',
+                   'DEPENDS ON HOLDING PERIOD':'warn','NOT MEASURED AT EVERY HORIZON':'warn',
+                   'NOT MEASURED':'none'}[m]||'none');
+  for(const r of (f.readings||[])){
+    h+='<div class="fund-row">';
+    h+='<div class="fund-lbl">'+esc(r.label)+'</div>';
+    h+='<div class="fund-read">'+esc(r.reading)+'</div>';
+    if(r.figure) h+='<div class="fund-fig">'+esc(r.figure)+'</div>';
+    if(r.not_measurable) h+='<div class="fund-why">why not: '+esc(r.not_measurable)+'</div>';
+    h+='<div class="fund-measured '+cls(r.measured)+'" title="'+esc(r.measured_note||'')+'">'+esc(r.measured)+'</div>';
+    h+='</div>';
+  }
+  const rv=f.reservations||[];
+  if(rv.length){
+    h+='<div class="fund-resv"><div class="fund-resvh">Reservations — they travel with the read and never move it</div><ul>';
+    for(const r of rv) h+='<li><b>'+esc(r.name)+'</b> — '+esc(r.detail)+'</li>';
+    h+='</ul></div>';
   }
   h+='</div>';
   return h;
