@@ -136,6 +136,35 @@ def _read_ohlc():
     return ohlc_from_csv(HIST_CSV, DAILY_CSV)
 
 
+def atr_pct_from_csv(hist_csv=None):
+    """Median daily high-low range as a fraction of close, per ticker (last 60 sessions).
+
+    This is what "one normal day" means for a name, and it is the unit the stop's
+    noise floor is measured in. Median rather than mean so a single gap day does not
+    quietly widen every stop on the book.
+    """
+    import csv
+    rows = {}
+    path = Path(hist_csv or HIST_CSV)
+    if not path.exists():
+        return {}
+    with open(path, newline="", encoding="utf-8", errors="ignore") as fh:
+        for r in csv.DictReader(fh):
+            try:
+                c = float(r["close"]); hi = float(r["high"]); lo = float(r["low"])
+            except (TypeError, ValueError, KeyError):
+                continue
+            if c > 0 and hi >= lo:
+                rows.setdefault(r.get("ticker"), []).append((r.get("date"), (hi - lo) / c))
+    out = {}
+    for t, rr in rows.items():
+        rr.sort(key=lambda x: x[0])
+        tail = sorted(v for _, v in rr[-60:])
+        if tail:
+            out[t] = round(tail[len(tail) // 2], 5)
+    return out
+
+
 def _trend_of(cur, ma):
     """Price vs the daily MA stack (chart-free): above all -> up, below all -> down, else mixed."""
     vals = [v for v in (ma or {}).values() if v]
@@ -444,6 +473,7 @@ def build(obs=None, ohlc=None, write=True):
         obs = _read_obs()
     if ohlc is None:
         ohlc = _read_ohlc()
+    atr = atr_pct_from_csv()
     names = []
     total_points = 0
     for o in obs.get("observations", []):
@@ -510,6 +540,10 @@ def build(obs=None, ohlc=None, write=True):
             "setup": _setup_of(top, trend),
             "flags": list(top.get("flags") or []),
             "ext": ext,
+            # One normal day's range for this name. The stop's noise floor is measured
+            # in these units (fib_confluence_source.ATR_FLOOR); without it the floor is
+            # inert and a third of stops sit inside a single day's weather.
+            "atr_pct": atr.get(o.get("ticker")),
             "why": _why_of(cur, top, trend, ext, base_score, score),
             "ma": {k: (round(v, 2) if v else None) for k, v in ma.items()},
             "points": pts,
