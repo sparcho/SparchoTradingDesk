@@ -43,6 +43,15 @@ STOP_BUFFER = 0.005    # invalidation sits 0.5% UNDER the banked support zone's 
 RR_MIN = 1.5           # reward:risk floor to the next banked level — below this it is a WATCH
 MIN_SOURCES = 3        # a "confluence" needs 3+ independent sources; 2 is a coincidence
 
+# NOISE FLOOR on the stop (measured 2026-08-18, [[WHAT-WE-LEARNED_plain-english]]).
+# On 22,947 real pullback entries a tighter stop returned less at EVERY step:
+# ~1.5% kept +0.37%, 3% kept +0.60%, 2x ATR kept +0.86%, 3x ATR +1.05%, no stop +1.75%.
+# The structural stop is still right in principle -- but on the live bank 34% of stops
+# sat closer than ONE average day's range, so they were being hit by ordinary weather
+# rather than by the thesis breaking. Keep the structural level; refuse to place it
+# nearer than this many average daily ranges from entry.
+ATR_FLOOR = 2.0
+
 FIRE_SETUPS = ("buy-support", "at-support")     # price is AT a support confluence
 WATCH_SETUPS = ("approaching", "in-zone")       # structurally sound, not actionable yet
 OK_TRENDS = ("up", "mixed")                     # never buy support into a downtrend
@@ -72,6 +81,14 @@ def classify(name: dict) -> dict:
     entry = _num(ks.get("px"))
     zone_lo = _num(zone.get("lo"))
     stop = round(zone_lo * (1 - STOP_BUFFER), 2) if zone_lo is not None else None
+    # Push the stop out if the structural level lands inside the name's own daily
+    # noise. Only ever widens -- a structural stop already outside the floor is left
+    # exactly where the bank put it.
+    atr_pct = _num(name.get("atr_pct"))
+    if stop is not None and entry is not None and atr_pct and atr_pct > 0:
+        floor_px = entry * (1 - ATR_FLOOR * atr_pct)
+        if floor_px < stop:
+            stop = round(floor_px, 2)
     target = _num(kr.get("px"))
     rr = None
     if entry is not None and stop is not None and target is not None and entry > stop:
