@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1787109929">
-<meta name="x-built-at" content="2026-08-19T03:24:59+00:00">
+<meta name="x-build-id" content="1787126764">
+<meta name="x-built-at" content="2026-08-19T08:05:30+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1787109929",BUILT_AT="2026-08-19T03:24:59+00:00";
+  var BID="1787126764",BUILT_AT="2026-08-19T08:05:30+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -904,10 +904,6 @@
 
   /* ── fundamental read on a fire card (260817) — chip says what the lens MEASURED ── */
   .fund-mini{ display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
-  .fund-badge{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:.3px;
-    padding:2px 7px; border-radius:999px; border:1px solid currentColor; color:var(--ink-mute); }
-  .fund-badge.pos{ color:var(--pos); } .fund-badge.neg{ color:var(--neg); }
-  .fund-badge.watch{ color:var(--watch,var(--acc)); } .fund-badge.mut{ color:var(--ink-mute); }
   .fund-mini.none{ font-size:10.5px; color:var(--ink-faint); font-style:italic; }
   .fund-rows{ margin-top:5px; }
   .fund-r{ display:grid; grid-template-columns:88px 1fr; gap:6px; padding:3px 0;
@@ -915,7 +911,6 @@
   .fund-r .fk{ font-family:var(--font-mono); font-size:9px; text-transform:uppercase;
     letter-spacing:.3px; color:var(--ink-faint); }
   .fund-r .fv{ color:var(--ink-soft); }
-  .fund-r .ff{ grid-column:2; color:var(--ink-faint); font-size:9.5px; }
   .fund-chip{ display:inline-block; margin-left:6px; padding:0 5px; border-radius:999px;
     font-family:var(--font-mono); font-size:8.5px; letter-spacing:.3px;
     border:1px solid currentColor; color:var(--ink-faint); }
@@ -1163,7 +1158,6 @@
 .biz-fal.pos{color:var(--pos)} .biz-fal.neg{color:var(--neg)} .biz-fal.mon{color:var(--mut)}
 .biz-asof{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.05em;color:var(--faint);margin-top:10px;padding-top:8px;border-top:1px solid var(--hair)}
 /* compact form that rides with a fire */
-.biz-take{border:0;padding:0}
 .biz-mini{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:8px;background:var(--glass);border-left:2px solid var(--mut)}
 .biz-mini.pos{border-left-color:var(--pos)} .biz-mini.watch{border-left-color:var(--watch)} .biz-mini.neg{border-left-color:var(--neg)}
 .biz-mini.none{color:var(--faint);font-style:italic}
@@ -2638,36 +2632,28 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var F=(DATA&&DATA.fundamentals)||null;
     if(!F) return '';
     var n=(F.names||{})[String(tk||'').toUpperCase()];
-    if(!n) return '<div class="fund-mini none">no banked fundamentals for this name &mdash; the fib take stands alone</div>';
+    if(!n) return '<div class="fund-mini none">no company record for this name &mdash; the level stands alone</div>';
     var biz=n.business||{}, val=n.valuation||{}, csh=n.cash||{};
-    // The badge is the scannable half: what the business is doing, and how it is
-    // priced against its OWN history. Two named readings, never blended.
-    var h='<div class="fund-mini '+_fundTone(biz.reading)+'">'+
-      '<span class="fund-badge '+_fundTone(biz.reading)+'">business '+esc(String(biz.reading||'no read'))+'</span>'+
-      '<span class="fund-badge '+_fundTone(val.reading)+'">'+esc(String(val.reading||'no valuation read'))+'</span>'+
-      (String(csh.reading||'').indexOf('NOT')>=0?'<span class="fund-badge neg">profits not converting to cash</span>':'')+
-      '</div>';
-    // and the checkable half: the figure behind each, with what its lens measured.
-    h+='<div class="fund-rows">';
-    [['business',biz],['vs own history',val],['cash',csh]].forEach(function(p){
+    // v2.0: the scannable half moved up into the card face as three plain-word
+    // rows (rdr-co). This is the checkable half only, so nothing is said twice.
+    var h='<div class="fund-rows">';
+    [['the business',biz],['the price tag',val],['turning profit into cash',csh]].forEach(function(p){
       var r=p[1]||{};
       if(!r.reading) return;
       h+='<div class="fund-r"><span class="fk">'+esc(p[0])+'</span>'+
-         '<span class="fv">'+esc(String(r.reading))+_fundChip(r)+'</span>'+
-         '<span class="ff">'+esc(String(r.figure||r.why||''))+'</span></div>';
+         '<span class="fv">'+esc(String(r.figure||r.why||r.reading))+_fundChip(r)+'</span></div>';
     });
     h+='</div>';
     if(n.record_warning) h+='<div class="fund-warnline">'+esc(n.record_warning)+'</div>';
-    h+='<div class="fund-foot">figures to '+esc(String(n.period_end||'?'))+' &middot; '+
-       esc(String(n.basis||'basis unstated'))+' basis &middot; '+
-       '<a href="ticker/'+esc(String(tk))+'/">full read</a> &middot; '+
-       'information only &mdash; measured, and not one of these lenses pointed the way it claims to</div>';
+    h+='<div class="fund-foot">figures to '+esc(fmtD(String(n.period_end||'?')))+', '+
+       esc(String(n.basis||'basis unstated'))+' accounts &middot; '+
+       '<a href="ticker/'+esc(String(tk))+'/">full read</a><br>'+
+       'These describe the company. None of them has been shown to predict the next move.</div>';
     return h;
   }
-
   function bizSecondTakeHTML(tk){
     var c=_bizBy()[String(tk||'').toUpperCase()];
-    if(!c) return '<div class="biz-mini none">no order-book record for this name — backlog/book-to-bill is the hand-typed layer and covers few names; the financial read is below</div>';
+    if(!c) return '<div class="biz-mini none">no order-book record for this name</div>';
     var m=c.momentum||{}, L=c.latest||{}, vv=_BIZV[String(m.label||'').toUpperCase()]||['mut',(m.label||'—')];
     return '<div class="biz-mini '+vv[0]+'"><span class="bmv">'+esc(vv[1])+'</span>'+
       '<span class="bmw">'+esc((m.reasons&&m.reasons[0])||'')+'</span>'+
@@ -3323,43 +3309,115 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var planned={}; try{ ((DATA.trade_lab||{}).open||[]).forEach(function(t){ if(t.signal_class==='fib-confluence') planned[t.ticker]=t; }); }catch(e){}
     var rc=rad.counts||{}, G=rad.gate||{};
 
-    var twoTake=function(f){
-      var b=byTk[f.ticker]||null;
-      var comp=b?Math.round(+b.composite||0):null, lens=b?(+b.multi_hit_count||0):null;
-      // The automatic screen CONFIRMS when it also likes the name (a lens hit, or a mid+ composite).
-      // Silence from the screen is not disagreement -- it is silence, and it is labelled as such.
-      var agree=(comp==null)?'unseen':((lens>=1||comp>=50)?'agrees':'disagrees');
-      var acol=agree==='agrees'?'pos':(agree==='disagrees'?'watch':'mut');
-      return '<div class="rdr-takes">'+
-        '<div class="rdr-take"><span class="tkl">level-ID read <i>gates the fire</i></span>'+
-          '<span class="tkv">'+esc(String(f.setup||'-'))+' &middot; '+esc(String(f.grade||''))+' &middot; score '+Math.round(f.score||0)+'</span></div>'+
-        '<div class="rdr-take"><span class="tkl">automatic read <i>co-equal 2nd take</i></span>'+
-          '<span class="tkv '+acol+'">'+(comp!=null?('composite '+comp+' &middot; '+lens+' lens'):'not in the screen universe')+'</span></div>'+
-        '<div class="rdr-take"><span class="tkl">two-take</span><span class="tkv '+acol+'">'+
-          (agree==='agrees'?'both takes agree':(agree==='disagrees'?'DISAGREE &mdash; the screen does not like it, the bank does':'screen silent &mdash; the bank read stands alone'))+
-        '</span></div></div>'+
-        // F260728 — the BUSINESS read rides with every fire. The fib bank says where price is; this
-        // says whether the company behind it deserves the buy. Absent reads say so out loud (8 of 75
-        // names have a record), because a blank here would read as "nothing wrong with the business".
-        '<div class="rdr-take biz-take"><span class="tkl">business read <i>is the company earning it?</i></span></div>'+
-        bizSecondTakeHTML(f.ticker)+
-        // the fundamental engine's read — the order-book layer covers 8 names, this covers 95
-        fundReadHTML(f.ticker);
+    // -- v2.0 (2026-08-19) -----------------------------------------------------------------
+    // The card answers ONE question per band: what it costs, why it fired, who is behind it,
+    // and what the catch is. It used to ask two different questions across five overlapping
+    // blocks and then re-narrate the trade a third time at the bottom.
+    //
+    // Invariant #1 (two-take co-equality) is NOT dropped -- it is told the truth about. On the
+    // fires this desk actually produces, the automatic screen and the order-book layer carry no
+    // row at all, so three of the four old "takes" rendered absence as three separate sentences
+    // ([[radar-angles-are-mostly-empty]]). Absence now costs one dim line inside the fold, and
+    // where the screen DOES have a view it is shown. Disagreement is still never hidden.
+    var BIZW={'deteriorating':['getting worse','neg'],'mixed':['mixed','watch'],
+              'improving':['getting better','pos']};
+    var VALW={'in line with its own history':['normal for this stock','mut'],
+              'expensive vs its own history':['dear vs its own past','neg'],
+              'cheap vs its own history':['cheap vs its own past','pos']};
+    var CASHW={'profits are turning into cash':['profits do become cash','pos'],
+               'profits are NOT turning into cash':['profits do NOT become cash','neg']};
+    // Absence says so out loud; a blank would read as "nothing wrong here".
+    var _pw=function(map,r){ if(!r) return ['not measured','none']; return map[String(r)]||[String(r),'mut']; };
+
+    // The sentence the v1 card never said. It showed a STRONG level and "business
+    // deteriorating" side by side and left them unreconciled, so a reader who is not the
+    // operator could not tell whether that was a warning or the whole point.
+    var _bottomLine=function(grade,tones){
+      var bad=0,good=0;
+      tones.forEach(function(t){ if(t==='neg') bad++; else if(t==='pos') good++; });
+      var strong=String(grade||'').toUpperCase()==='STRONG';
+      if(bad>=2&&strong) return ['You are buying the chart, not the company.',
+        'The level is as good as they get; the business behind it is not. Treat it as a level trade and respect the stop.','neg'];
+      if(bad>=2) return ['Chart and company disagree.',
+        'The level has held before, but the numbers behind it are weak.','neg'];
+      if(bad===1) return ['Mostly lines up, with one blemish.',
+        'Nothing here contradicts the level outright.','watch'];
+      if(good>=2) return ['Chart and company agree.',
+        'The level has held before, and the business behind it is holding up.','pos'];
+      return ['Nothing to flag either way.','The company reads middling in both directions.','mut'];
     };
 
+    // BAND 3 -- who is behind it. One word per lens; the colour IS the reading. The figures
+    // live in the fold. This is an INDICATOR beside a fire, never a reason one fire outranks
+    // another: every lens under it was measured and not one pointed the way it claims to.
+    var company=function(tk){
+      var F=(DATA&&DATA.fundamentals)||null;
+      var n=F?((F.names||{})[String(tk||'').toUpperCase()]):null;
+      var row=function(lbl,w){ return '<div class="crow"><span>'+lbl+'</span>'+
+        '<i class="'+w[1]+'"></i><b class="'+w[1]+'">'+esc(w[0])+'</b></div>'; };
+      if(!n) return {html:'<div class="rdr-co"><span class="rdr-ck">the company behind it</span>'+
+        row('the business',['no record','none'])+row('the price tag',['no record','none'])+
+        row('turning profit into cash',['no record','none'])+'</div>', tones:['none','none','none']};
+      var b=_pw(BIZW,(n.business||{}).reading), v=_pw(VALW,(n.valuation||{}).reading),
+          c=_pw(CASHW,(n.cash||{}).reading);
+      return {html:'<div class="rdr-co"><span class="rdr-ck">the company behind it</span>'+
+        row('the business',b)+row('the price tag',v)+row('turning profit into cash',c)+'</div>',
+        tones:[b[1],v[1],c[1]]};
+    };
+
+    // BAND 1 -- what it costs. Three numbers and a picture: the rail puts the entry mark and
+    // today's price between the stop and the target, so the asymmetry is SEEN rather than
+    // read off a ratio. This is what let the closing summary go -- it only restated these.
     var lvl=function(f){
-      var risk=(f.entry!=null&&f.stop!=null)?(f.entry-f.stop):null;
-      var riskPct=(risk!=null&&f.entry)?(risk/f.entry*100):null;
+      var entry=f.entry, stop=f.stop, tgt=f.target, spot=f.current_px;
+      var riskp=(entry!=null&&stop!=null&&entry)?((entry-stop)/entry*100):null;
+      var rewp=(entry!=null&&tgt!=null&&entry)?((tgt-entry)/entry*100):null;
+      var pos=null, epos=null;
+      if(stop!=null&&tgt!=null&&tgt>stop){
+        if(spot!=null) pos=Math.max(0,Math.min(1,(spot-stop)/(tgt-stop)));
+        if(entry!=null) epos=Math.max(0,Math.min(1,(entry-stop)/(tgt-stop)));
+      }
+      var rail=(pos!=null&&epos!=null)?('<div class="rdr-rail">'+
+        '<div class="rr-t"><i style="left:'+(epos*100).toFixed(1)+'%" title="where you would buy"></i></div>'+
+        '<div class="rr-d" style="left:'+(pos*100).toFixed(1)+'%" title="trading here right now"></div>'+
+        '</div>'):'';
       var pl=planned[f.ticker];
-      return '<div class="scgrid rdr-lvls">'+
-        '<div><span class="sck">Entry</span><span class="scv">'+esc(String(f.entry!=null?f.entry:'-'))+'</span><span class="scs">banked support</span></div>'+
-        '<div><span class="sck">Stop</span><span class="scv neg">'+esc(String(f.stop!=null?f.stop:'-'))+'</span><span class="scs">'+(riskPct!=null?('-'+riskPct.toFixed(1)+'% &middot; zone floor'):'invalidation')+'</span></div>'+
-        '<div><span class="sck">Target</span><span class="scv pos">'+esc(String(f.target!=null?f.target:'-'))+'</span><span class="scs">next banked level</span></div>'+
-        '<div><span class="sck">R:R</span><span class="scv '+((f.rr!=null&&f.rr>=2)?'pos':'watch')+'">'+(f.rr!=null?((+f.rr).toFixed(2)+' : 1'):'-')+'</span><span class="scs">floor '+(G.rr_min||1.5)+'</span></div>'+
-        (pl?('<div><span class="sck">Logged</span><span class="scv">'+esc(String(pl.trade_id||pl.status||'open'))+'</span><span class="scs">fib-auto PLANNED</span></div>'):'')+
-      '</div>';
+      return '<div class="rdr-lvls">'+
+        '<div><span class="sck">buy at</span><span class="scv">'+esc(String(entry!=null?entry:'-'))+'</span></div>'+
+        '<div><span class="sck">get out at</span><span class="scv neg">'+esc(String(stop!=null?stop:'-'))+'</span></div>'+
+        '<div><span class="sck">aiming for</span><span class="scv pos">'+esc(String(tgt!=null?tgt:'-'))+'</span></div>'+
+        '</div>'+rail+
+        '<div class="rdr-leg"><span class="neg">risk '+(riskp!=null?(riskp.toFixed(1)+'%'):'-')+'</span>'+
+        '<span class="rdr-rr">'+(f.rr!=null?((+f.rr).toFixed(1)+'&times;'):'-')+' reward for the risk</span>'+
+        '<span class="pos">reward '+(rewp!=null?(rewp.toFixed(1)+'%'):'-')+'</span></div>'+
+        (pl?('<div class="rdr-logged">already logged as '+esc(String(pl.trade_id||pl.status||'open'))+'</div>'):'');
     };
 
+    // BAND 2 -- why it fired, in one sentence. setup/grade/score become a "verified" chip with
+    // the full string on hover: they are the operator's vocabulary, kept one hover away.
+    var whyBand=function(f){
+      var w=(f.why||[])[0]||'', m=/(\d+)-source/.exec(w), src=m?m[1]:'';
+      return '<div class="rdr-why2"><span class="rdr-wk">why it fired</span>'+
+        'Price has come back to <b>'+esc(String(f.entry!=null?f.entry:'this level'))+'</b> &mdash; '+
+        'a support line you drew and checked yourself. '+
+        (src?('<b>'+esc(src)+' separate measurements</b> land on it. '):'')+
+        'The trend is '+esc(String(f.trend||'unstated'))+'.'+
+        '<span class="rdr-vchip" title="'+esc(String(f.setup||''))+' &middot; '+esc(String(f.grade||''))+
+        ' &middot; score '+Math.round(f.score||0)+'">verified</span></div>';
+    };
+
+    // The fold: every supporting figure, plus an honest note on which feeds had nothing to say
+    // about this name. Kept out of the resting card, never deleted.
+    var fold=function(f){
+      var b=byTk[f.ticker]||null;
+      var screen=b?('the automatic screen scores it '+Math.round(+b.composite||0)+
+                    ' on '+(+b.multi_hit_count||0)+' lens'):'the automatic screen has no view on this name';
+      return '<details class="rdr-more"><summary>show the numbers</summary>'+
+        fundReadHTML(f.ticker)+
+        bizSecondTakeHTML(f.ticker)+
+        '<div class="rdr-miss">'+screen+'</div>'+
+        '</details>';
+    };
     // F260729-FIRETAKEN - operator, 260729: "i see it is a bit outdated now, why is it still
     // showing? i see the paper trade was already anyway made". The block is NOT stale - it is
     // recomputed each morning on the last close. What was missing is any notion of a fire you
@@ -3383,13 +3441,15 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var hero=function(f,i){
       var _tk=_takenBy[f.ticker]||null;
       var _takenBadge=_tk?('<span class="rdr-taken'+(_tk.live?' live':'')+'" title="you already logged a fib trade on this name - the set-up is still shown because a re-entry at a different level is a real trade">'+(_tk.live?'TAKEN · LIVE':'TAKEN')+'</span>'):'';
+      var co=company(f.ticker), bl=_bottomLine(f.grade,co.tones);
       return '<div class="rdr-card'+(i===0?' lead':'')+'">'+
         '<div class="rdr-h"><span class="rdr-rk">&#127919;</span>'+
           '<span class="rdr-tk">'+tkA(f.ticker,esc(f.ticker))+'</span>'+_takenBadge+
           '<span class="rdr-vd">FIRE</span>'+
-          '<span class="rdr-px">'+(f.current_px!=null?('spot '+esc(String(f.current_px))):'')+'</span></div>'+
-        lvl(f)+twoTake(f)+
-        '<div class="rdr-why">'+(f.why||[]).map(function(w){return esc(w);}).join(' &middot; ')+'</div></div>';
+          '<span class="rdr-px">'+(f.current_px!=null?('now '+esc(String(f.current_px))):'')+'</span></div>'+
+        lvl(f)+whyBand(f)+co.html+
+        '<div class="rdr-bl '+bl[2]+'"><b>'+esc(bl[0])+'</b>'+esc(bl[1])+'</div>'+
+        fold(f)+'</div>';
     };
     var watchRow=function(w){
       return '<div class="fire"><div class="top"><span class="rk">&#128065;</span>'+
@@ -4488,20 +4548,6 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .rdr-tk{font-family:var(--font-mono);font-size:13.5px;font-weight:600;letter-spacing:.02em}
 .rdr-vd{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;padding:2px 6px;border-radius:5px;color:var(--acc);background:color-mix(in srgb,var(--acc) 13%,transparent);border:1px solid color-mix(in srgb,var(--acc) 30%,transparent)}
 .rdr-px{margin-left:auto;font-family:var(--font-mono);font-size:10px;color:var(--mut)}
-.rdr-lvls{display:grid !important;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:9px}
-.rdr-lvls>div{display:flex;flex-direction:column;gap:1px;min-width:0}
-.rdr-lvls .sck{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
-.rdr-lvls .scv{font-family:var(--font-mono);font-size:14px;font-weight:600;line-height:1.15}
-.rdr-lvls .scs{font-family:var(--font-mono);font-size:8.5px;line-height:1.3;color:var(--mut)}
-.rdr-lvls>div:nth-child(n+5){grid-column:span 2}
-.rdr-takes{display:grid;gap:4px;padding:8px 0 2px;border-top:1px solid rgba(255,255,255,.06)}
-.rdr-take{display:flex;align-items:baseline;gap:8px;font-family:var(--font-mono);font-size:10px}
-.rdr-take .tkl{color:var(--mut);flex:0 0 auto;letter-spacing:.02em}
-.rdr-take .tkv{flex:1 1 auto;min-width:0}
-.rdr-take .tkl i{opacity:.65;font-style:normal}
-.rdr-take .tkv.pos{color:var(--pos)}.rdr-take .tkv.neg{color:var(--neg)}
-.rdr-take .tkv.watch{color:var(--watch)}.rdr-take .tkv.mut{color:var(--mut)}
-.rdr-why{margin-top:8px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06);font-size:10.5px;line-height:1.5;color:var(--mut)}
 .rdr-nofire{line-height:1.55}
 .hv-claims{display:grid;gap:6px;margin:4px 0 2px}
 .hv-claim{display:flex;gap:10px;align-items:baseline;padding:7px 9px;border-radius:9px;background:var(--glass);border-left:2px solid var(--mut)}
@@ -4531,8 +4577,67 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .cvb-f{display:block;height:100%}
 .cvb-sc,.cvb-pnl{text-align:right}
 .cvb-pnl.pos{color:var(--pos)}.cvb-pnl.neg{color:var(--neg)}.cvb-pnl.mut{color:var(--mut)}
-@media(max-width:760px){.rdr-grid{grid-template-columns:1fr}.rdr-take{flex-direction:column;gap:1px}
-  .rdr-take .tkl{min-width:0}.hv-claim{flex-direction:column;gap:3px}.hvc-k{min-width:0}}
+@media(max-width:760px){.rdr-grid{grid-template-columns:1fr}
+  .hv-claim{flex-direction:column;gap:3px}.hvc-k{min-width:0}}
+/* -- F260819 Radar card v2.0: one question per band. Appended override layer, existing
+   tokens only - no new palette, no :root touched (the vault's reskin discipline). --------- */
+.rdr-lvls{display:grid !important;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0}
+.rdr-lvls>div{display:flex;flex-direction:column;gap:1px;min-width:0}
+.rdr-lvls .sck{font-family:inherit;font-size:10.5px;letter-spacing:0;text-transform:none;color:var(--mut)}
+.rdr-lvls .scv{font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1.2}
+.rdr-lvls .scv.neg{color:var(--neg)}.rdr-lvls .scv.pos{color:var(--pos)}
+.rdr-rail{position:relative;height:15px;margin-top:11px}
+.rdr-rail .rr-t{position:absolute;left:0;right:0;top:6px;height:4px;border-radius:3px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--neg) 60%,transparent) 0%,
+  color-mix(in srgb,var(--neg) 16%,transparent) 40%,color-mix(in srgb,var(--pos) 18%,transparent) 56%,
+  color-mix(in srgb,var(--pos) 62%,transparent) 100%)}
+.rdr-rail .rr-t i{position:absolute;top:-4px;width:2px;height:12px;background:var(--ink);border-radius:1px;transform:translateX(-1px)}
+.rdr-rail .rr-d{position:absolute;top:2px;width:11px;height:11px;border-radius:50%;background:var(--acc);
+  box-shadow:0 0 10px color-mix(in srgb,var(--acc) 70%,transparent);transform:translateX(-5.5px);
+  border:2px solid rgba(0,0,0,.75)}
+.rdr-leg{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:5px;
+  font-family:var(--font-mono);font-size:9.5px}
+.rdr-leg .neg{color:var(--neg)}.rdr-leg .pos{color:var(--pos)}
+.rdr-rr{color:var(--ink);font-weight:700;font-size:10.5px;text-align:center}
+.rdr-logged{margin-top:6px;font-family:var(--font-mono);font-size:9px;color:var(--mut)}
+.rdr-why2{position:relative;margin-top:12px;padding:9px 11px 9px;border-radius:9px;font-size:12px;
+  line-height:1.55;color:var(--mut);background:color-mix(in srgb,var(--acc) 6%,transparent);
+  border:1px solid color-mix(in srgb,var(--acc) 15%,transparent)}
+.rdr-why2 b{color:var(--ink);font-family:var(--font-mono);font-size:11.5px}
+.rdr-wk{display:block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--acc);margin-bottom:4px}
+.rdr-vchip{position:absolute;top:8px;right:10px;font-family:var(--font-mono);font-size:8px;
+  letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:4px;cursor:help;
+  background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--acc)}
+.rdr-co{margin-top:11px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)}
+.rdr-ck{display:block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mut);margin-bottom:7px}
+.rdr-co .crow{display:flex;align-items:center;gap:8px;font-size:11.8px;color:var(--mut);padding:3px 0}
+.rdr-co .crow>span{flex:1 1 auto;min-width:0}
+.rdr-co .crow i{flex:0 0 auto;width:6px;height:6px;border-radius:50%;background:currentColor;
+  box-shadow:0 0 7px currentColor}
+.rdr-co .crow b{flex:0 0 auto;font-weight:600;text-align:right}
+.rdr-co .pos{color:var(--pos)}.rdr-co .neg{color:var(--neg)}.rdr-co .watch{color:var(--watch)}
+.rdr-co .mut{color:var(--ink)}.rdr-co .none{color:var(--ink-faint)}
+.rdr-bl{margin-top:11px;padding:8px 11px;border-radius:9px;font-size:11.8px;line-height:1.55;
+  color:var(--mut);background:rgba(255,255,255,.035);border-left:2px solid var(--mut)}
+.rdr-bl b{display:block;color:var(--ink);font-size:12.4px;margin-bottom:2px}
+.rdr-bl.neg{border-left-color:var(--neg);background:color-mix(in srgb,var(--neg) 7%,transparent)}
+.rdr-bl.neg b{color:var(--neg)}
+.rdr-bl.watch{border-left-color:var(--watch);background:color-mix(in srgb,var(--watch) 6%,transparent)}
+.rdr-bl.watch b{color:var(--watch)}
+.rdr-bl.pos{border-left-color:var(--pos);background:color-mix(in srgb,var(--pos) 7%,transparent)}
+.rdr-bl.pos b{color:var(--pos)}
+.rdr-more{margin-top:10px}
+.rdr-more summary{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mut);cursor:pointer;padding:4px 0;list-style:none}
+.rdr-more summary::-webkit-details-marker{display:none}
+.rdr-more summary:before{content:"+ ";color:var(--acc)}
+.rdr-more[open] summary:before{content:"\2212\0020";color:var(--acc)}
+.rdr-more summary:hover{color:var(--ink)}
+.rdr-more .fund-rows{margin-top:4px}
+.rdr-miss{font-family:var(--font-mono);font-size:9px;color:var(--ink-faint);margin-top:6px;letter-spacing:.03em}
+@media(max-width:760px){.rdr-lvls{grid-template-columns:1fr}}
 /* -- F260728-SCORECARD: the real-money tab. Existing tokens only, no new palette. ------- */
 .sc-src{font-size:11px;line-height:1.6;color:var(--mut);background:var(--glass);border:1px solid rgba(255,255,255,.07);border-left:2px solid var(--acc);border-radius:9px;padding:9px 11px;margin-bottom:12px}
 /* A stat cell is label ABOVE value ABOVE sub-label. The bare .scgrid is only styled under
