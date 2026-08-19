@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1787126764">
-<meta name="x-built-at" content="2026-08-19T08:05:30+00:00">
+<meta name="x-build-id" content="1787162776">
+<meta name="x-built-at" content="2026-08-19T18:05:47+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1787126764",BUILT_AT="2026-08-19T08:05:30+00:00";
+  var BID="1787162776",BUILT_AT="2026-08-19T18:05:47+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -3368,6 +3368,31 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // BAND 1 -- what it costs. Three numbers and a picture: the rail puts the entry mark and
     // today's price between the stop and the target, so the asymmetry is SEEN rather than
     // read off a ratio. This is what let the closing summary go -- it only restated these.
+    // The co-equality rule (0.1 #10) exists to MANUFACTURE an argument between two
+    // independent methods and then make sure it cannot be missed: "where they disagree,
+    // show the disagreement (it is itself signal)". v2.0 first shipped the screener's
+    // score into the fold and named the clash nowhere -- a number the reader must
+    // interpret is not a surfaced disagreement.
+    //
+    // The locked case is stated honestly. The screener layer is encrypted, so on a locked
+    // desk its view is HIDDEN, not missing, and saying "no view" would be a false
+    // statement about the evidence ([[absence-of-evidence-is-not-health]]).
+    function agreeLineHTML(f){
+      var b=byTk[f.ticker]||null;
+      if(!b){
+        var locked=!(DATA&&DATA._unlocked);
+        return '<div class="rdr-agree mut">'+(locked
+          ? 'The automatic screener&rsquo;s view is hidden until you unlock.'
+          : 'The automatic screener doesn&rsquo;t cover this name, so the chart stands alone.')+'</div>';
+      }
+      var comp=Math.round(+b.composite||0), lens=(+b.multi_hit_count||0);
+      var agrees=(lens>=1||comp>=50);
+      return '<div class="rdr-agree '+(agrees?'pos':'watch')+'" title="composite '+comp+
+        ' &middot; '+lens+' lens">'+(agrees
+          ? 'The automatic screener likes it too.'
+          : 'The automatic screener doesn&rsquo;t rate this one. Your chart and the machine disagree &mdash; worth a second look.')+'</div>';
+    }
+
     var lvl=function(f){
       var entry=f.entry, stop=f.stop, tgt=f.target, spot=f.current_px;
       var riskp=(entry!=null&&stop!=null&&entry)?((entry-stop)/entry*100):null;
@@ -3410,12 +3435,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // about this name. Kept out of the resting card, never deleted.
     var fold=function(f){
       var b=byTk[f.ticker]||null;
-      var screen=b?('the automatic screen scores it '+Math.round(+b.composite||0)+
-                    ' on '+(+b.multi_hit_count||0)+' lens'):'the automatic screen has no view on this name';
+      var screen=b?('the automatic screener scores it '+Math.round(+b.composite||0)+
+                    ' on '+(+b.multi_hit_count||0)+' lens'):'';
       return '<details class="rdr-more"><summary>show the numbers</summary>'+
         fundReadHTML(f.ticker)+
         bizSecondTakeHTML(f.ticker)+
-        '<div class="rdr-miss">'+screen+'</div>'+
+        (screen?('<div class="rdr-miss">'+screen+'</div>'):'')+
         '</details>';
     };
     // F260729-FIRETAKEN - operator, 260729: "i see it is a bit outdated now, why is it still
@@ -3447,7 +3472,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
           '<span class="rdr-tk">'+tkA(f.ticker,esc(f.ticker))+'</span>'+_takenBadge+
           '<span class="rdr-vd">FIRE</span>'+
           '<span class="rdr-px">'+(f.current_px!=null?('now '+esc(String(f.current_px))):'')+'</span></div>'+
-        lvl(f)+whyBand(f)+co.html+
+        lvl(f)+whyBand(f)+agreeLineHTML(f)+co.html+
         '<div class="rdr-bl '+bl[2]+'"><b>'+esc(bl[0])+'</b>'+esc(bl[1])+'</div>'+
         fold(f)+'</div>';
     };
@@ -4628,6 +4653,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .rdr-bl.watch b{color:var(--watch)}
 .rdr-bl.pos{border-left-color:var(--pos);background:color-mix(in srgb,var(--pos) 7%,transparent)}
 .rdr-bl.pos b{color:var(--pos)}
+.rdr-agree{margin-top:9px;font-size:11.6px;line-height:1.5;padding-left:9px;
+  border-left:2px solid var(--mut);color:var(--mut)}
+.rdr-agree.pos{border-left-color:var(--pos)}
+.rdr-agree.watch{border-left-color:var(--watch);color:var(--ink)}
 .rdr-more{margin-top:10px}
 .rdr-more summary{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;
   text-transform:uppercase;color:var(--mut);cursor:pointer;padding:4px 0;list-style:none}
