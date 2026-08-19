@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "VEDL",
-  "emitted_at_utc": "2026-08-19T03:26:23+00:00",
+  "emitted_at_utc": "2026-08-19T11:02:09+00:00",
   "public": {
     "ticker": "VEDL",
     "name": "Vedanta Ltd",
@@ -128,10 +128,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 264.0,
-      "day_chg_pct": -2.113,
-      "week_chg_pct": -4.0,
-      "date": "2026-08-18"
+      "price": 262.6,
+      "day_chg_pct": -0.53,
+      "week_chg_pct": -4.7860768672951375,
+      "date": "2026-08-19"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5643,38 +5643,87 @@
         270.5,
         264.0,
         264.0
+      ],
+      [
+        "2026-08-19",
+        264.0,
+        264.7,
+        261.35,
+        262.6
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 262.88,
+        "as_of": "2026-08-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 264.42,
+        "as_of": "2026-08-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 266.23,
+        "as_of": "2026-08-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 267.77,
+        "as_of": "2026-08-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 261.07,
+        "as_of": "2026-08-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 259.53,
+        "as_of": "2026-08-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 257.72,
+        "as_of": "2026-08-19"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 253.05,
-        "as_of": "2026-08-18"
+        "as_of": "2026-08-19"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 277.42,
-        "as_of": "2026-08-18"
+        "price": 276.55,
+        "as_of": "2026-08-19"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 249.34,
-        "as_of": "2026-08-18"
+        "price": 249.77,
+        "as_of": "2026-08-19"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 354.7,
-        "as_of": "2026-08-18"
+        "as_of": "2026-08-19"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 147.66,
-        "as_of": "2026-08-18"
+        "as_of": "2026-08-19"
       }
     ],
     "operator_levels": [],
@@ -5689,18 +5738,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 253.05,
+        "price": 261.07,
         "dir": "below",
         "kind": "watch",
-        "why": "60-day swing low",
+        "why": "pivot S1",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 277.42,
+        "price": 262.88,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5715,32 +5764,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "SUPPORT",
-        "price": 253.05,
-        "dir": "below",
-        "kind": "watch",
-        "dist_pct": -4.147727272727268
-      },
-      {
         "label": "RESISTANCE",
-        "price": 277.42,
+        "price": 262.88,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 5.083333333333339
+        "dist_pct": 0.10662604722009622
+      },
+      {
+        "label": "SUPPORT",
+        "price": 261.07,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.5826351865955939
       },
       {
         "label": "UPSIDE",
         "price": 354.7,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 34.3560606060606
+        "dist_pct": 35.072353389185054
       },
       {
         "label": "INVALIDATION",
         "price": 147.66,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -44.06818181818182
+        "dist_pct": -43.769992383853776
       }
     ],
     "scenario_ladder": [
@@ -5753,7 +5802,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 264.0,
+        "level": 262.6,
         "note": "holds current band"
       },
       {
@@ -6024,7 +6073,7 @@
           "label": "Has the market changed its mind? (the MULTIPLE, not the price)",
           "lens": "rerating",
           "reading": "re-rated up",
-          "figure": "PE 3.4 at 2023-03-31 -> 9.5 now, +181% over 3 fiscal year ends. The price moved +174% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
+          "figure": "PE 3.4 at 2023-03-31 -> 9.5 now, +181% over 3 fiscal year ends. The price moved +173% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
           "source": "tracking.rerating.verdict",
           "not_measurable": null,
           "measured": "MEASURED INVERTED",
@@ -6054,8 +6103,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "+hPM6tStWVi5l3Lxuqu3Jg==",
-    "iv": "LbmBaUmqh8tXq7MB",
-    "ct": "9tmJm2fiB3YEPh4MmfuD3GL7K0oaLZotlBHstCjNMvQ2OALs6cA5PY2ySoKGfBbsq6FjAcUu8cxgfU6JS68hTMEwjKxgK2KJRLLvRTUXwcN0QTSECEyK404aDOo7cyv52q1klFesPJgyjfA71HpoBEFKNgGO8NpYHq2Tc3jZpVxbTvsuguwVy2c0FAu2jh6iCoIYk1uYxoyMMb56/mxSK8eGGzR5LFK1Fz96/NmhDL1bQUT5BWRMvNIaP6fBbB1cvS+Z3umZF20zm/hLxWaRn8Sx3o2/jEqowE15yOygp9MGuoDJCo/fd2MRUV7lTab8fmAA0AjzYNVzDHZRHhLIbqbN7QsCkPEHrnqG9sNeKoSssxwRT5sBn23bmbC9V1xistOxekG73fb5ukUIh5tSo4cLiKsD+rWhUq5Q7rbh1R0iLCkXh148G3QniZ9TuqMyKak1chIvB1aVsVE+CVNjl8jkPRv0ReOfGNHzcmv7a9wp+Mt6uRhL0+ETzDtx4SvdhlxQI8eRrRL4NqHyf6xaTXrkODVhSiGkVt8bXpZgPwvaHuDcEH2sSJwP5kd0zaI/ohy/V3nISv9Q1ZO8L4KJxLWLvVAqX8Jr+i8W7AWy11AlIvGDFvRSp8c5qjCS5y0ukExYiI+MBlCMog=="
+    "salt": "HTxx+ktOHihf/pBwIl/Szg==",
+    "iv": "3k+z0UsoZffoKHIB",
+    "ct": "ENRgJ5fgHHKRKb92XqoQ67Exwk7zexWqkBzudUtBZ92Xtkfg3jmMzfpwkjW2bpxE9BrRCSHVaDUcRe4sfY6EUAVr5rffVNtAoNBHOokAUgzAcMKM1h4a86Gq5Y84c1mivp4jbUnkenqGNiqs9p2+kdcL3jVLgq9zJvKLnni8dpSp4vP5EqL44IJ5+rRGuQd7Q71v6ZeB8dQXBys5nZVAybzXQYlYFxDsRmJsDUldrNO+Yaq7Cltgdiw7Twr3dgUiMl2IuAcTmYf2uC+bWuy5tC8wgmTMS5Fee14c2hiKcK1M9UhTAjflz0GMa/inSWbIQTf5yX8STSIe9b/DvtbTZMvWIryonkau9VnToa+W2dScuPNU8F2AJzDPZFwHldfOLsm1Uw4xxdcK4eII+AWlvLWZx0sN10uTQRP9Mp9XvXhqnDUY6MBQoP+0jUc21vMGtUBFxopEe1QtXgLex//2i4sKNpD1kT+eCCoQ4+I0vYVqQKe3HD7PJGlshZ4AwgotsiPjJGSJgx4/fmoRXvp1aaww12v6oJvxx8NaXmtZfoiYqz8w/6WcGofJ036biDRSPB4okUPA5oxU7ty+329jJaUJtOXuSyOYJGaMF5V+dDLikj3LPN62tfFaBGlkXiXEVXwShxV+qZrR7g=="
   }
 }
