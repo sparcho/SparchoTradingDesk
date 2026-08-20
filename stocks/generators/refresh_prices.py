@@ -169,6 +169,77 @@ def refresh_held(data, ohlc):
         h["concentration_pct"] = round((cv / new_mv * 100) if new_mv else 0, 2)
 
 
+# --- F260811-STALEREF: the ABSOLUTE reference -------------------------------------------------
+# `stale` compares each ticker against the newest bar IN THE SAME PULL. That control group lives
+# inside the thing being measured, so a hole every ticker shares is invisible to it: on 2026-08-11
+# Yahoo had dropped the real 2026-08-10 session for every .NS symbol, all 94 names agreed with each
+# other, and all 94 declared `stale: false` while `day_chg_pct` was measured across two sessions.
+# The NSE session calendar is outside the batch and cannot agree with it by accident.
+
+def _calendar():
+    """The NSE session calendar module, or None. Tried across both deployments (cloud
+    `stocks/engine`, vault `00_SYSTEM/GENERATORS`) because this file is byte-identical in both."""
+    for cand in (HERE.parent / "engine", HERE.parents[3] / "GENERATORS",
+                 HERE.parents[4] / "GENERATORS"):
+        try:
+            if not (cand / "nse_calendar.py").exists():
+                continue
+            sys.path.insert(0, str(cand))
+            import nse_calendar
+            return nse_calendar
+        except Exception:
+            continue
+    return None
+
+
+def sessions_between(prev_iso, cur_iso, cal=None, cap=40):
+    """How many NSE sessions the step prev_iso -> cur_iso covers. 1 == consecutive sessions,
+    which is the only span for which a "day change" is a day change.
+
+    Returns None rather than a guess when the calendar is unavailable, when the span exceeds
+    `cap`, or when cur_iso is not itself a session — an unknowable answer is reported as unknown,
+    never as a passing one ([[absence-of-evidence-is-not-health]]).
+    """
+    cal = _calendar() if cal is None else cal
+    if cal is None or not prev_iso or not cur_iso or prev_iso >= cur_iso:
+        return None
+    d, n = prev_iso, 0
+    for _ in range(cap):
+        nxt = cal.next_session(d)
+        if nxt is None:
+            return None
+        d, n = nxt.isoformat(), n + 1
+        if d == cur_iso:
+            return n
+        if d > cur_iso:
+            return None
+    return None
+
+
+def expected_session(now_iso, cal=None):
+    """The most recent NSE session that can already HAVE a close, as of `now_iso` (UTC).
+
+    Before 09:15 IST the newest closeable session is the previous one — expecting today's bar
+    pre-open would cry wolf every single morning, and a check that cries wolf stops being read
+    ([[absence-of-evidence-is-not-health]]). Returns None when the calendar is unavailable.
+    """
+    cal = _calendar() if cal is None else cal
+    if cal is None or not now_iso:
+        return None
+    try:
+        utc = datetime.fromisoformat(str(now_iso).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    ist = utc.astimezone(timezone(timedelta(hours=5, minutes=30)))
+    ref = cal.latest_session(ist.date())
+    if ref is None:
+        return None
+    pre_open = (ist.hour, ist.minute) < (9, 15)
+    if pre_open and ref == ist.date():
+        ref = cal.prev_session(ist.date())
+    return ref.isoformat() if ref else None
+
+
 def write_prices_json(ohlc, now_iso, out_path):
     """F131 Phase-0 seed of the single-source price store: ticker -> {last, prev_close, day_chg,
     asof}, built from the SAME batched pull that feeds the held book + fires. Consumers (shell
@@ -181,6 +252,7 @@ def write_prices_json(ohlc, now_iso, out_path):
     # holiday, a weekend or a pre-open run. A name lagging the rest of its own batch is exactly the
     # Yahoo-omission anomaly that staled the fib radar's spot price.
     batch_bar_date = max((b[-1][0] for b in ohlc.values() if b), default=None)
+    cal = _calendar()
     tickers = {}
     for t, bars in ohlc.items():
         if not bars:
@@ -188,16 +260,38 @@ def write_prices_json(ohlc, now_iso, out_path):
         last = bars[-1][4]
         prev = bars[-2][4] if len(bars) >= 2 else last
         bar_date = bars[-1][0]
+        prev_bar_date = bars[-2][0] if len(bars) >= 2 else None
+        span = sessions_between(prev_bar_date, bar_date, cal)
         tickers[t] = {
             "last": round(last, 2),
             "prev_close": round(prev, 2),
             "day_chg_pct": round(((last - prev) / prev * 100) if prev else 0, 2),
             "bar_date": bar_date,
+            # F260811-STALEREF. `prev_close` is half of `day_chg_pct` and nothing declared WHICH
+            # session it came from, so a pull that skipped a session was indistinguishable from one
+            # that did not ([[a-date-is-not-an-age]]).
+            "prev_bar_date": prev_bar_date,
+            # 1 == a real one-session move. Anything else means `day_chg_pct` is measured across a
+            # hole, which is how RAILTEL published +0.99% against a true +0.19% on 2026-08-11.
+            "sessions_spanned": span,
+            "day_chg_basis": ("prev_session" if span == 1
+                              else "multi_session_gap" if isinstance(span, int) and span > 1
+                              else "unknown"),
             "asof_utc": now_iso,
             "stale": bool(batch_bar_date and bar_date < batch_bar_date),
         }
+    # F260811-STALEREF: the batch measured against a reference OUTSIDE itself. A hole shared by
+    # every ticker leaves the relative `stale` flag entirely silent — this is the only field that
+    # can say the whole pull is a session behind.
+    exp = expected_session(now_iso, cal)
     store = {"schema": "price-printer/v1", "asof_utc": now_iso, "session": "intraday",
-             "source": "yfinance", "tickers": tickers}
+             "source": "yfinance",
+             "batch_bar_date": batch_bar_date,
+             "expected_session": exp,
+             "batch_behind_calendar": bool(exp and batch_bar_date and batch_bar_date < exp),
+             "n_gapped": sum(1 for v in tickers.values()
+                             if v.get("day_chg_basis") == "multi_session_gap"),
+             "tickers": tickers}
     out_path.write_text(json.dumps(store, indent=2, ensure_ascii=False), encoding="utf-8")
     print("OK wrote " + out_path.name + " (" + str(len(tickers)) + " tickers)")
 
