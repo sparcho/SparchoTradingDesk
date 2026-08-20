@@ -69,6 +69,7 @@ SECTOR_MAP = {
         'IREDA', 'WAAREEENER', 'MGL', 'VEDPOWER',  # +VEDPOWER 260630 (Vedanta Power thermal demerger, held); MGL = gas utility, power-adjacent
         # +260808 power equipment / T&D (F260727-BANKED-OUTSIDE onboarding)
         'BHEL', 'KEC', 'SIEMENS', 'SKIPPER', 'VOLTAMP', 'SHILCHAR',
+        'POWERINDIA',   # +260820 Hitachi Energy India -- HVDC / grid automation
     },
     'IT': {
         'TCS', 'INFY', 'HCLTECH', 'PERSISTENT', 'TATAELXSI',
@@ -78,9 +79,11 @@ SECTOR_MAP = {
         'BAJFINANCE', 'CHOLAFIN', 'SHRIRAMFIN', 'MCX', 'BSE',
     },
     # Other clusters (kept for context; not used by Rajiv #1 but useful for future screeners)
-    'MINERALS': {'GMDCLTD', 'MOIL', 'HINDZINC', 'GRAPHITE', 'VEDL', 'DECNGOLD', 'HINDCOPPER'},   # +DECNGOLD 260619 (gold explorer); +HINDCOPPER 260630 (copper PSU onboard)
+    'MINERALS': {'GMDCLTD', 'MOIL', 'HINDZINC', 'GRAPHITE', 'VEDL', 'DECNGOLD', 'HINDCOPPER',
+                 'HINDALCO'},   # +HINDALCO 260820 (aluminium + copper integrated producer)   # +DECNGOLD 260619 (gold explorer); +HINDCOPPER 260630 (copper PSU onboard)
     'TELECOM': {'HFCL', 'STLTECH', 'TEJASNET', 'BHARTIARTL', 'POLYCAB', 'KEI', 'PACEDIGITK'},   # +PACEDIGITK 260619 (held; telecom-digital infra)
-    'DEFENCE': {'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO', 'BHARATFORG', 'BDL', 'DATAPATTNS'},   # +BDL +DATAPATTNS 260808   # +BHARATFORG 260730 (defence/auto-anc precision forging; onboarded with its banked 260729 level read)   # +APOLLO +ASTRAMICRO 260620 (full screener-verse onboard)
+    'DEFENCE': {'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO', 'BHARATFORG', 'BDL', 'DATAPATTNS',
+                 'PARAS', 'SOLARINDS'},   # +PARAS 260820 (Paras Defence & Space, optics/EW)   # +BDL +DATAPATTNS 260808   # +BHARATFORG 260730 (defence/auto-anc precision forging; onboarded with its banked 260729 level read)   # +APOLLO +ASTRAMICRO 260620 (full screener-verse onboard)
     'SEMI_EMS': {
         'EXIDEIND',
         'OLAELEC','KAYNES', 'DIXON', 'SYRMA', 'AMBER'},
@@ -102,6 +105,11 @@ SECTOR_MAP = {
     # entry a held name renders under UNCATEGORIZED on the desk (F260619 item 3), which
     # is the second of the two hidden onboarding gates.
     'FERT': {'PARADEEP', 'CHAMBLFERT'},
+    # +260820. Voltas is HVAC/cooling: no existing coarse tag fitted, and without ANY entry
+    # a tracked name renders UNCATEGORIZED on the desk (F260619 item 3). BLUESTARCO sits in
+    # 'DC' because the desk tracks it for data-centre cooling; Voltas is consumer/commercial
+    # AC, so folding it in there would misdescribe it.
+    'CAPGOODS': {'VOLTAS'},
     'ETF': {'HDFCSML250'},   # Broad Smallcap index ETF (260620); tracked + level-ID'd, NOT value-screened (see G1_NON_SCREENED)
     'CHEMICALS': {'HSCL', 'PCBL', 'AETHER'},   # +260630 specialty-chem / carbon & battery materials (HSCL held; PCBL+AETHER already in ALL_TICKERS)
 }
