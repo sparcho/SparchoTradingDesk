@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "BAJFINANCE",
-  "emitted_at_utc": "2026-08-20T05:20:55+00:00",
+  "emitted_at_utc": "2026-08-20T11:01:55+00:00",
   "public": {
     "ticker": "BAJFINANCE",
     "name": "Bajaj Finance Ltd",
@@ -114,10 +114,10 @@
     ],
     "last_stock_ta": "2026-06-30",
     "live": {
-      "price": 1080.2,
-      "day_chg_pct": -1.288,
-      "week_chg_pct": -1.2794735880095045,
-      "date": "2026-08-19"
+      "price": 1095.0,
+      "day_chg_pct": 1.37,
+      "week_chg_pct": 0.38503850385038924,
+      "date": "2026-08-20"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5678,44 +5678,93 @@
         1093.9,
         1076.4,
         1080.2
+      ],
+      [
+        "2026-08-20",
+        1089.7,
+        1102.3,
+        1086.3,
+        1095.0
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 1094.53,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 1102.77,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 1110.53,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 1118.77,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 1086.77,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 1078.53,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 1070.77,
+        "as_of": "2026-08-20"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 1158.8,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 870.55,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 1033.3,
-        "as_of": "2026-08-19"
+        "price": 1037.52,
+        "as_of": "2026-08-20"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 976.4,
-        "as_of": "2026-08-19"
+        "price": 976.51,
+        "as_of": "2026-08-20"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 1158.8,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 801.55,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       }
     ],
     "operator_levels": [],
@@ -5732,14 +5781,14 @@
         "price": 1050.0,
         "dir": "above",
         "kind": "trim",
-        "why": "near 50-day SMA Rs1033.30"
+        "why": "near 50-day SMA Rs1037.52"
       },
       {
         "label": "TRIM-add",
         "price": 1116.0,
         "dir": "above",
         "kind": "trim",
-        "why": "near 60-day swing high Rs1158.80"
+        "why": "near pivot R3 Rs1118.77"
       },
       {
         "label": "TRIM-60",
@@ -5752,32 +5801,32 @@
     "gate_levels_auto": false,
     "gate_check": [
       {
-        "label": "TRIM-30",
-        "price": 1050.0,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": -2.795778559526018
-      },
-      {
         "label": "TRIM-add",
         "price": 1116.0,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 3.314201073875204
+        "dist_pct": 1.9178082191780823
+      },
+      {
+        "label": "TRIM-30",
+        "price": 1050.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": -4.10958904109589
       },
       {
         "label": "TRIM-60",
         "price": 1184.0,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 9.609331605258282
+        "dist_pct": 8.12785388127854
       },
       {
         "label": "INVALIDATION",
         "price": 905.0,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -16.21921866321052
+        "dist_pct": -17.35159817351598
       }
     ],
     "scenario_ladder": [
@@ -5790,7 +5839,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 1080.2,
+        "level": 1095.0,
         "note": "holds current band"
       },
       {
@@ -6070,7 +6119,7 @@
           "label": "Has the market changed its mind? (the MULTIPLE, not the price)",
           "lens": "rerating",
           "reading": "unchanged",
-          "figure": "PE 29.6 at 2023-03-31 -> 33.0 now, +12% over 3 fiscal year ends. The price moved +92% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
+          "figure": "PE 29.6 at 2023-03-31 -> 33.0 now, +12% over 3 fiscal year ends. The price moved +95% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
           "source": "tracking.rerating.verdict",
           "not_measurable": null,
           "measured": "MEASURED INVERTED",

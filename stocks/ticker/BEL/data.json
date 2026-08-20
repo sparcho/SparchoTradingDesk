@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "BEL",
-  "emitted_at_utc": "2026-08-20T05:20:55+00:00",
+  "emitted_at_utc": "2026-08-20T11:01:55+00:00",
   "public": {
     "ticker": "BEL",
     "name": "Bharat Electronics",
@@ -114,10 +114,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 409.2,
-      "day_chg_pct": -0.68,
-      "week_chg_pct": 0.8627064333251172,
-      "date": "2026-08-19"
+      "price": 409.4,
+      "day_chg_pct": 0.049,
+      "week_chg_pct": -0.26796589524970105,
+      "date": "2026-08-20"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5636,50 +5636,99 @@
         412.75,
         406.4,
         409.2
+      ],
+      [
+        "2026-08-20",
+        411.8,
+        412.2,
+        406.3,
+        409.4
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 409.3,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 412.3,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 415.2,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 418.2,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 406.4,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 403.4,
+        "as_of": "2026-08-20"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 400.5,
+        "as_of": "2026-08-20"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 431.5,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 384.9,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       },
       {
         "method": "swing_low",
         "kind": "SL2",
         "price": 402.3,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 408.26,
-        "as_of": "2026-08-19"
+        "price": 408.28,
+        "as_of": "2026-08-20"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 419.62,
-        "as_of": "2026-08-19"
+        "price": 419.6,
+        "as_of": "2026-08-20"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 468.45,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 363.85,
-        "as_of": "2026-08-19"
+        "as_of": "2026-08-20"
       }
     ],
     "operator_levels": [],
@@ -5694,18 +5743,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 408.26,
+        "price": 409.3,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 419.62,
+        "price": 412.3,
         "dir": "above",
         "kind": "trim",
-        "why": "200-day SMA",
+        "why": "pivot R1",
         "auto": true
       },
       {
@@ -5721,31 +5770,31 @@
     "gate_check": [
       {
         "label": "SUPPORT",
-        "price": 408.26,
+        "price": 409.3,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -0.22971652003910015
+        "dist_pct": -0.0244259892525564
       },
       {
         "label": "RESISTANCE",
-        "price": 419.62,
+        "price": 412.3,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 2.5464320625610988
+        "dist_pct": 0.7083536883243855
       },
       {
         "label": "INVALIDATION",
         "price": 363.85,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -11.082600195503414
+        "dist_pct": -11.126038104543223
       },
       {
         "label": "UPSIDE",
         "price": 468.45,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 14.479472140762464
+        "dist_pct": 14.423546653639477
       }
     ],
     "scenario_ladder": [
@@ -5758,7 +5807,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 409.2,
+        "level": 409.4,
         "note": "holds current band; reclaim Rs420 (200-SMA) to flip constructive"
       },
       {
@@ -6012,7 +6061,7 @@
           "label": "Has the market changed its mind? (the MULTIPLE, not the price)",
           "lens": "rerating",
           "reading": "re-rated up",
-          "figure": "PE 23.9 at 2023-03-31 -> 48.9 now, +105% over 3 fiscal year ends. The price moved +319% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
+          "figure": "PE 23.9 at 2023-03-31 -> 48.9 now, +105% over 3 fiscal year ends. The price moved +320% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
           "source": "tracking.rerating.verdict",
           "not_measurable": null,
           "measured": "MEASURED INVERTED",
@@ -6042,8 +6091,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "XOIyiarFOzXv4RxxT0CTkw==",
-    "iv": "l4nrVB/pLzmbs2gU",
-    "ct": "IOu53bDlgB+s/PTYwhU9qp7zYQIJQkMMyMELtYDJmhM1tca1nqxVtlbr1ggvLIZYhqte4OlPu6LElXEG1ZwbynXFYqFBqjYDurPMJoDUMSuJcomByOzFVqSo45spyORlva0mZWvWayr+q3YoM3WFvh6aS7nBFy4t38I2L9lf2eKsi3qSHJuK2dCxOEGDl9OJf7xgqCO4mnRS4HUukXMoY9YDtIxjOSdap+kdxM15ENyRC2FJd/QCh84jaFCQB5oV6+5eK+LKkgruZO1rRBbop9vCvNsmcIyYe64dpnAkwQKi+PC+CAKJ/Zw8K7yABaO5HVzpxcvHA+JYqNcj0FV13YiN+UXJuDtX9QqVKF9er9Mvh8M6v4KsG4vlPqLtMHhhd9IbRozRZ1h5pIDCrElizn/Mj5l+OtodAIHkpa0Oj2GZwCQ6SUKh+01p+O/LANC8tSEFXUd355Nj1VzG/KHF5KkmCKz0o09NxXNKH6YaMHgp3llNakGCmKhzghtQufBI+E6XFo46PHl6lIZxldXm4SsO5yzZ9AxNTpDRJ+WbK+ustGlO7i4gfC7vlDH1HoMGDWb/4KrOjMTg2mjFl8TYT88i9zr8661Wcrq4E5WTKHhjzew7J2FBu5kTU4mN8LbKpwMaOIWaqFc/"
+    "salt": "eII1595Y0otQjgjrQyM2Wg==",
+    "iv": "YYJelZf9lJSRZZwB",
+    "ct": "9FE+u8401rgOIvp5cywey0xHg0IbFPjGQNWD1fWvSGxbESkn87IXQbhYUqc+K9GbP9P50uH0Ab/iVMhPnbOorba5XCcWMrnQV1AIRR2eDGnIIvIDydVEnloXlfV+CfEdDpzWYjPMJm2S0yMBQhZLe9oFCjaDNZ+GcdZe3447hwnN4QIPCZ+8+qelz7uWFRXJAFpUiMNvWc2z61EumbgwTP1Xov+0FgjCcn42CRAhu22dOEqD+LOotzgdRbFD1r53hRQt6Zqi/PBer/LzEWD3mkVioWpA4OZKz9Sk6pqBdYbMgDLsB5x8TRWKlpg6uSaXzHRIPj/cuWa8U3FvPJGby0lEgjM2oT1qya4w6gwLUUzSorLG9nZu0iAHkvdwafglV3uo/tnxaE0eJ8Un5fRU8h/HO58g3y5+KijZR5tPVO3/z/wotxzcfDSm4G95ET3tjYjNB02NV1qMbqeHsOcViy12rHfBPkehLCcudelFcq0LNF8OlcX/JoAHZ0QXvLXCJ7HPDZeejSdHqxNY4NyTpfWl7upN5eWwzGkdQXBPMnNWNEu5lU9Q+m3ZE7RVO+cOKmjYr6JHpICrC9zHNWB2PgfeLLJSFKNWLqwXY+G5PJRs1fPXVBYDh5To+08+Ag36MaIxnDbSw1MN"
   }
 }
