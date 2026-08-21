@@ -4518,15 +4518,43 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   function tkPubCards(){
     var rows=tkPubRows();
     if(!rows.length) return '<div class="tk-covfoot">Nothing matches that.</div>';
-    return '<div class="tgrid">'+rows.map(function(r){
+    /* F260821b: GROUP BY SECTOR, exactly as the unlocked view does. The first public build
+       rendered one flat A-Z grid with a sector line per card, so the sector SECTIONS only
+       appeared once you unlocked - which the operator read, correctly, as content that changes
+       on unlock. Unlocking may ADD (screen scores, level reads); it must never be what turns a
+       structure on. Same .tsec / .tsec-h / .tgrid markup and the same stable per-sector colour,
+       so locked and unlocked are the same page with more in it, not two pages. */
+    var groups={}, order=[];
+    rows.forEach(function(r){ if(!groups[r.sec]){ groups[r.sec]=[]; order.push(r.sec); } groups[r.sec].push(r); });
+    var colOf={};
+    order.slice().sort().forEach(function(s,i){
+      colOf[s]=(s==='\u2014')?'var(--mut)':((typeof SECTOR_PAL!=='undefined')?SECTOR_PAL[i%SECTOR_PAL.length]:'var(--acc)'); });
+    // held-bearing sectors first, then by size, then alpha - the unlocked ordering rule
+    order.sort(function(a,b){
+      var ha=groups[a].some(function(x){return x.st==='held';}), hb=groups[b].some(function(x){return x.st==='held';});
+      if(ha!==hb) return ha?-1:1;
+      if(groups[a].length!==groups[b].length) return groups[b].length-groups[a].length;
+      return a.localeCompare(b); });
+    var card=function(r,sx){
       var dir=(r.dc==null)?'flat':(r.dc>0.02?'up':(r.dc<-0.02?'dn':'flat'));
       var arrow=(dir==='up')?'\u25B2':(dir==='dn'?'\u25BC':'\u00B7');
-      return '<a class="tcard tkpub'+(r.st==='held'?' held':'')+'" href="'+tkHref(r.t)+'"'+tkExt(r.t)+'>'+
+      return '<a class="tcard tkpub'+(r.st==='held'?' held':'')+'" style="--sx:'+sx+'" href="'+tkHref(r.t)+'"'+tkExt(r.t)+'>'+
         '<div class="th"><span class="sym">'+esc(r.t)+'</span>'+
         '<span class="dm '+dir+'">'+arrow+' '+(r.dc==null?'\u2014':(r.dc>=0?'+':'')+(+r.dc).toFixed(2)+'%')+'</span></div>'+
         '<div class="tpx">'+(r.px==null?'\u2014':'\u20B9'+(+r.px).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}))+'</div>'+
-        '<div class="tk-secline">'+esc(r.sec)+'</div>'+
-        '</a>'; }).join('')+'</div>';
+        '<div class="tk-secline">'+esc(r.nm||r.t)+'</div></a>'; };
+    if(__TKPUBSORT!=='name'){
+      /* an explicit sort is a request to see ONE ranked list - grouping would defeat it */
+      return '<div class="tgrid">'+rows.map(function(r){ return card(r,colOf[r.sec]||'var(--acc)'); }).join('')+'</div>';
+    }
+    return order.map(function(s){
+      var items=groups[s].slice().sort(function(a,b){
+        if((a.st==='held')!==(b.st==='held')) return a.st==='held'?-1:1;
+        return a.t<b.t?-1:(a.t>b.t?1:0); });
+      return '<div class="tsec"><div class="tsec-h" style="--sx:'+colOf[s]+'">'+
+        '<span class="nm">'+esc(s)+'</span><span class="ct">'+items.length+' name'+(items.length===1?'':'s')+'</span></div>'+
+        '<div class="tgrid">'+items.map(function(r){ return card(r,colOf[s]); }).join('')+'</div></div>';
+    }).join('');
   }
 
   function tkPubRepaint(){
