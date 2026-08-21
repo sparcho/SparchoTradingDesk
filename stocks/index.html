@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1787203197">
-<meta name="x-built-at" content="2026-08-20T05:19:28+00:00">
+<meta name="x-build-id" content="1787284737">
+<meta name="x-built-at" content="2026-08-21T03:58:24+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1787203197",BUILT_AT="2026-08-20T05:19:28+00:00";
+  var BID="1787284737",BUILT_AT="2026-08-21T03:58:24+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1131,6 +1131,18 @@
   .pending .pm{ font-size:10px; color:var(--mut); line-height:1.5; max-width:360px; }
   #unlock-input{ display:none; font-family:var(--font-mono); font-size:10px; color:var(--ink); background:var(--glass); border:1px solid var(--border); border-radius:999px; padding:6px 11px; width:118px; }
   #unlock-msg{ font-family:var(--font-mono); font-size:9px; color:var(--neg); }
+  .tk-secline{ font-family:var(--font-mono); font-size:9px; letter-spacing:.06em; color:var(--ink-mute);
+    text-transform:uppercase; margin-top:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tkpub-ctl{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 8px; }
+  #tkpub-q{ flex:1; min-width:180px; background:var(--glass); border:1px solid var(--border);
+    border-radius:999px; padding:7px 13px; color:var(--ink); font-size:12px; outline:none; }
+  .tkpub-seg button,.tkpub-cats button{ background:var(--glass); border:1px solid var(--border);
+    border-radius:999px; padding:5px 11px; color:var(--ink-mute); font-family:var(--font-mono);
+    font-size:9.5px; letter-spacing:.06em; cursor:pointer; margin:0 5px 5px 0;
+    text-transform:uppercase; }
+  .tkpub-seg button.on,.tkpub-cats button.on{ color:var(--ink); border-color:var(--accent); }
+  .tkpub-cats{ margin:0 0 12px; }
+  .tcard.tkpub.held{ border-color:rgba(63,207,122,.42); }
   #render-errors{ display:none; position:fixed; bottom:0; left:0; right:0; z-index:50; background:var(--neg-soft); color:var(--neg); border-top:1px solid var(--neg); font-family:var(--font-mono); font-size:11px; padding:8px 14px; }
   .stale-banner{ display:none; align-items:center; gap:8px; background:var(--watch-soft); border:1px solid var(--watch); border-radius:10px; padding:9px 13px; font-size:11px; color:var(--ink2); margin-bottom:13px; }
   .stale-banner b{ color:var(--ink); }
@@ -1655,10 +1667,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 
   <script>
   /* ═══ EQUITY DESK · data layer — bind-or-PENDING, additive (no emit/aggregate changes) ═══ */
-  const LENS_ORDER = ['10-Gate','DIV','8-Gate','TA'];
+  const LENS_ORDER = ['Fundamental 10G','DIV','Fundamental 8G','TA'];
   // F260709: lens keys in the live aggregate are 'Fundamental 10G'/'DIV'/'Fundamental 8G'/'TA';
   // resolve display abbreviations to whatever alias the emit produced (fixes blank hit-matrix + leaderboard cells).
-  const LENS_ALIAS={'10-Gate':['10-Gate','Fundamental 10G','10G'],'DIV':['DIV','DIV'],'8-Gate':['8-Gate','Fundamental 8G','8G'],'TA':['TA','TA']};
+  const LENS_ALIAS={'Fundamental 10G':['Fundamental 10G','10-Gate','Fundamental 10G','10G'],'DIV':['DIV','DIV'],'Fundamental 8G':['Fundamental 8G','8-Gate','Fundamental 8G','8G'],'TA':['TA','TA']};
   function lensStat(lensObj,k){ if(!lensObj) return null; var al=LENS_ALIAS[k]||[k]; for(var i=0;i<al.length;i++){ var c=lensObj[al[i]]; if(c&&c.status!=null) return c.status; } return null; }
   const TV_SPECIAL = { BLUESTAR:'BLUESTARCO', KPIT:'KPITTECH', PBFINTECH:'POLICYBZR' };
   const tvSymbol = (t)=> 'NSE:' + (TV_SPECIAL[t]||t);
@@ -3098,7 +3110,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     else if(tl){ box2='<div class="dt-nodata">no realized signal-trade closes yet.</div>'; }
     else { box2='<div class="dt-nodata">🔒 unlock to view the realized signal-trade equity curve.</div>'; }
     el.innerHTML='<div class="c-lbl"><span class="d"></span>Screener signal quality · positional'+HT('How good the positional screens are at flagging multi-week winners — NOT your executed trades. Alpha = a signal’s return minus the Nifty over the same window (so a “win” means it beat just buying the index). Measured on episodes (one name’s continuous run = one episode) at 1-week / 1-month / 3-month checkpoints.')+'<span class="age">alpha vs Nifty · 1w/1m/3m · episodes · NOT executed trades</span></div>'+
-      '<div class="sigbanner">⚠ <b>Screener SIGNAL quality, not your trades.</b> How well the positional screens (10-Gate · DIV · 8-Gate · TA) flag multi-week winners — measured as alpha (excess over Nifty) on deduplicated episodes. 1m/3m fill in as signals age.</div>'+
+      '<div class="sigbanner">⚠ <b>Screener SIGNAL quality, not your trades.</b> How well the positional screens (Fundamental 10G · DIV · Fundamental 8G · TA) flag multi-week winners — measured as alpha (excess over Nifty) on deduplicated episodes. 1m/3m fill in as signals age.</div>'+
       kpis+
       '<div class="sq5">'+
         '<div class="sq5-l">'+
@@ -4445,26 +4457,97 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   }
   try{ bindHeroTilt(); }catch(e){}
 
-  function tkPublicFallback(){
-    var cov=((DATA&&DATA.fib_coverage)||{}).by_ticker||{};
-    var names=Object.keys(cov).sort();
-    if(!names.length) return '<div class="tk-covfoot">The tracked-name list is not in this build. '+
-      'Open the full <a href="ticker/index.html">Tickers page</a>.</div>';
-    var cards=names.map(function(t){
-      var lp=(typeof priceFor==='function')?priceFor(t):null;
-      var px=(lp&&lp.last!=null)?lp.last:null, dc=(lp&&lp.day_chg_pct!=null)?lp.day_chg_pct:null;
-      var dir=(dc==null)?'flat':(dc>0.02?'up':(dc<-0.02?'dn':'flat'));
+  /* PUBLIC TICKERS (F260821). The tab used to be a degraded twin of a page that needs no
+     password: symbol + price, with "sector unlocks with the password" printed on it, while
+     /stocks/ticker/ has been publishing sector, name, price, move and status for every name
+     all along. It renders from THAT payload now, which is public by construction: if a
+     stranger can open the page, the tab may show what the page shows. The encrypted
+     bubble_set is still PREFERRED when present (it adds the screen scores) - this is the
+     floor, not a replacement. */
+  var __TKPUB=null, __TKPUBQ='', __TKPUBSORT='name', __TKPUBCAT='ALL';
+
+  function tkPubRows(){
+    var rows=[];
+    (((__TKPUB||{}).groups)||[]).forEach(function(g){
+      (g.names||[]).forEach(function(n){ rows.push({t:n.ticker, nm:n.name||n.ticker,
+        sec:g.name||'\u2014', px:n.price, dc:n.day_chg_pct, st:n.status||'watch'}); });
+    });
+    var q=(__TKPUBQ||'').toLowerCase();
+    if(q) rows=rows.filter(function(r){ return (r.t+' '+r.nm+' '+r.sec).toLowerCase().indexOf(q)>=0; });
+    if(__TKPUBCAT!=='ALL') rows=rows.filter(function(r){ return r.sec===__TKPUBCAT; });
+    rows.sort(function(a,b){
+      if(__TKPUBSORT==='gainers') return (b.dc==null?-1e9:b.dc)-(a.dc==null?-1e9:a.dc);
+      if(__TKPUBSORT==='losers')  return (a.dc==null?1e9:a.dc)-(b.dc==null?1e9:b.dc);
+      if(__TKPUBSORT==='price')   return (b.px==null?-1e9:b.px)-(a.px==null?-1e9:a.px);
+      return a.t<b.t?-1:(a.t>b.t?1:0);
+    });
+    return rows;
+  }
+
+  function tkPubCards(){
+    var rows=tkPubRows();
+    if(!rows.length) return '<div class="tk-covfoot">Nothing matches that.</div>';
+    return '<div class="tgrid">'+rows.map(function(r){
+      var dir=(r.dc==null)?'flat':(r.dc>0.02?'up':(r.dc<-0.02?'dn':'flat'));
       var arrow=(dir==='up')?'\u25B2':(dir==='dn'?'\u25BC':'\u00B7');
-      return '<a class="tcard tkpub" href="'+tkHref(t)+'"'+tkExt(t)+'>'+
-        '<div class="th"><span class="sym">'+esc(t)+'</span>'+
-        '<span class="dm '+dir+'">'+arrow+' '+(dc==null?'\u2014':(dc>=0?'+':'')+(+dc).toFixed(2)+'%')+'</span></div>'+
-        '<div class="tpx">'+(px==null?'\u2014':'\u20B9'+(+px).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}))+'</div>'+
-        '</a>'; }).join('');
-    return '<div class="tk-covfoot" style="margin:0 0 12px">Showing the '+names.length+
-      ' names this desk tracks, with today\'s price and move. Sector, screen scores and the level '+
-      'reads unlock with the password \u2014 or open the full '+
-      '<a href="ticker/index.html">Tickers page</a>, which needs none.</div>'+
-      '<div class="tgrid">'+cards+'</div>';
+      return '<a class="tcard tkpub'+(r.st==='held'?' held':'')+'" href="'+tkHref(r.t)+'"'+tkExt(r.t)+'>'+
+        '<div class="th"><span class="sym">'+esc(r.t)+'</span>'+
+        '<span class="dm '+dir+'">'+arrow+' '+(r.dc==null?'\u2014':(r.dc>=0?'+':'')+(+r.dc).toFixed(2)+'%')+'</span></div>'+
+        '<div class="tpx">'+(r.px==null?'\u2014':'\u20B9'+(+r.px).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}))+'</div>'+
+        '<div class="tk-secline">'+esc(r.sec)+'</div>'+
+        '</a>'; }).join('')+'</div>';
+  }
+
+  function tkPubRepaint(){
+    var m=document.getElementById('tkpub-body'); if(m) m.innerHTML=tkPubCards();
+  }
+
+  function tkPubShell(){
+    var cats={}; (((__TKPUB||{}).groups)||[]).forEach(function(g){ cats[g.name]=(g.names||[]).length; });
+    var btns=['<button data-c="ALL" class="on">All '+(((__TKPUB||{}).count)||0)+'</button>'].concat(
+      Object.keys(cats).map(function(c){ return '<button data-c="'+esc(c)+'">'+esc(c)+' '+cats[c]+'</button>'; })).join('');
+    return '<div class="tk-covfoot" style="margin:0 0 10px">Every name this desk tracks, with its sector, '+
+      'today\'s price and today\'s move \u2014 no password needed. The screen scores and the level reads are '+
+      'the part that unlocks. Full page: <a href="ticker/index.html">Tickers</a>.</div>'+
+      '<div class="tkpub-ctl"><input id="tkpub-q" placeholder="search name or sector\u2026" autocomplete="off">'+
+      '<span class="tkpub-seg" id="tkpub-sort"><button data-s="name" class="on">A\u2013Z</button>'+
+      '<button data-s="gainers">Gainers</button><button data-s="losers">Losers</button>'+
+      '<button data-s="price">Price</button></span></div>'+
+      '<div class="tkpub-cats" id="tkpub-cats">'+btns+'</div>'+
+      '<div id="tkpub-body">'+tkPubCards()+'</div>';
+  }
+
+  function tkPubBind(){
+    var q=document.getElementById('tkpub-q');
+    if(q) q.oninput=function(){ __TKPUBQ=q.value||''; tkPubRepaint(); };
+    var s=document.getElementById('tkpub-sort');
+    if(s) s.onclick=function(e){ var b=e.target&&e.target.closest?e.target.closest('button'):null; if(!b) return;
+      __TKPUBSORT=b.getAttribute('data-s');
+      [].forEach.call(s.querySelectorAll('button'),function(x){x.classList.toggle('on',x===b);});
+      tkPubRepaint(); };
+    var c=document.getElementById('tkpub-cats');
+    if(c) c.onclick=function(e){ var b=e.target&&e.target.closest?e.target.closest('button'):null; if(!b) return;
+      __TKPUBCAT=b.getAttribute('data-c');
+      [].forEach.call(c.querySelectorAll('button'),function(x){x.classList.toggle('on',x===b);});
+      tkPubRepaint(); };
+  }
+
+  function tkPublicFallback(){
+    if(__TKPUB) return tkPubShell();
+    /* Fetch, then repaint. NO silent catch: a failed read says so and NAMES the file, because
+       "this desk has no sectors" and "I could not open that file" look identical on a card and
+       only one of them is a bug worth chasing ([[absence-of-evidence-is-not-health]]). */
+    fetch('ticker/pages.json',{cache:'no-store'}).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status); return r.json();
+    }).then(function(j){
+      __TKPUB=j; setFace('z-tickers', tkPubShell()); tkPubBind();
+    }).catch(function(e){
+      var msg='<div class="tk-covfoot">Could not read <code>ticker/pages.json</code> ('+
+        esc(String((e&&e.message)||e))+'). Open the full <a href="ticker/index.html">Tickers page</a>.</div>';
+      var m=document.getElementById('tkpub-body');
+      if(m) m.innerHTML=msg; else setFace('z-tickers', msg);
+    });
+    return '<div id="tkpub-body"><div class="tk-covfoot">Loading the tracked-name list\u2026</div></div>';
   }
 
   function renderTickers(bubble){ try{
