@@ -3689,7 +3689,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // confluence fires section, I actually want you to place the fib confluence radar - engine
     // scored". Fires answer "is this a trade", the map answers "where does structure agree", the
     // board answers "what is everything doing" — decision, map, sweep.
-    let html=decisionsHTML()+fibRadarHTML()+fibConflHTML()+fibBoardHTML();
+    /* F260821: order by LOCK STATE, not by which payload branch we happen to be in.
+       The first attempt reordered the `!tl && !sp` branch and did nothing, because
+       `signal_perf` is PUBLIC - so a locked visitor never took that branch and still met
+       `Decisions pending` first. Found by loading the live desk in a fresh session rather
+       than by reading the code. Operator reads a pending decision first; a visitor should
+       meet the fires first, and one order cannot be both. */
+    var _lk=!!(DATA.privacy&&DATA.privacy.locked&&DATA.sensitive_enc&&!DATA._unlocked);
+    let html=(_lk?(fibRadarHTML()+decisionsHTML()):(decisionsHTML()+fibRadarHTML()))+fibConflHTML()+fibBoardHTML();
     // F260617: confluence day-trade backtest (signal quality) relocated to the Screener panel (renderDTConf -> #f1-dtconf).
     if(tl){
       const open=tl.open||[], closed=tl.closed||[], dailyR=tl.daily_r||[], sc=tl.scorecard||{}, byO=tl.scorecard_by_origin||{};
