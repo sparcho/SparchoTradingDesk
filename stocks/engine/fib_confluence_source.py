@@ -52,6 +52,20 @@ MIN_SOURCES = 3        # a "confluence" needs 3+ independent sources; 2 is a coi
 # nearer than this many average daily ranges from entry.
 ATR_FLOOR = 2.0
 
+# How far price may sit from the level a FIRE names before the fire stops being true.
+# Matches the bank's own AT tolerance (fib_confluence_feed.AT_TOL = 0.02, itself
+# box_engine's BOUNDARY_TOL), so "AT the level" means the same thing on both sides.
+#
+# F260823-FIREGAP. The gate asked `at_confluence` -- is price at SOME confluence -- and then
+# took `entry` from `key_support`, the STRONGEST support zone anywhere below. Nothing tied
+# the two together, so a name could be at a minor confluence while its published entry sat
+# far under spot: on the 21-Aug bank STLTECH fired at 627.15 telling you to buy at 315.07,
+# and ASTRAMICRO at 1,662.20 telling you to buy at 1,145.75, both under "price has come back
+# to this level". The ratio inherits the error too -- R:R off an unreachable entry read
+# 9.76x on STLTECH. Such a name is structurally sound and simply not there yet, which is
+# the definition of WATCH, so it is demoted rather than dropped.
+AT_TOL_PCT = 2.0
+
 FIRE_SETUPS = ("buy-support", "at-support")     # price is AT a support confluence
 WATCH_SETUPS = ("approaching", "in-zone")       # structurally sound, not actionable yet
 OK_TRENDS = ("up", "mixed")                     # never buy support into a downtrend
@@ -130,6 +144,19 @@ def classify(name: dict) -> dict:
         why.append("price is not at the level yet (setup=%s) — watch for the tag" % setup
                    if setup == "approaching" else
                    "price is INSIDE the band (setup=in-zone) — neither support nor resistance yet")
+    # F260823-FIREGAP — is price AT the level this row actually tells you to buy?
+    # `at_confluence` above only says price is at SOME confluence on the chart. The entry
+    # comes from key_support, which may be a different, much lower zone; nothing tied them
+    # together, so a fire could publish an entry 99% below spot under "price has come back
+    # to this level". Sound structure, price simply not there -> WATCH, which is what WATCH
+    # is for. Never a silent exclusion: the level set is still shown, correctly labelled.
+    cur = _num(name.get("current_px"))
+    if cur is not None and entry:
+        gap = abs(cur - entry) / entry * 100
+        if gap > AT_TOL_PCT:
+            why.append("price %.2f is %.1f%% from the %s it would buy — the confluence price "
+                       "is AT is not this level, so it is not a fire yet"
+                       % (cur, gap, entry))
     if target is None:
         why.append("no banked level overhead to target — nothing to size a reward against")
     elif rr is not None and rr < RR_MIN:
@@ -148,6 +175,44 @@ def classify(name: dict) -> dict:
 
     return {"ticker": name.get("ticker"), "verdict": verdict, "entry": entry, "stop": stop,
             "target": target, "rr": rr, "why_verdict": why}
+
+
+def stop_atr_days(entry, stop, atr_pct):
+    """How many of this name's own normal days sit between entry and the stop.
+
+    The UNIT matters more than the number. A stop quoted as "3.4% away" says nothing about
+    whether that is room or noise -- 3.4% is a fortnight on one name and half a session on
+    another, which is exactly how a fixed-% barrier ends up measuring volatility instead of
+    skill ([[fixed-percent-barriers-measure-volatility]]). In the name's own daily range it
+    is comparable across the book, and it is the form the evidence is stated in: on 22,947
+    entries a tighter stop returned LESS at every step (~1.5% kept +0.37%, 2xATR +0.86%,
+    3xATR +1.05%, none +1.75%), and 34% of live bank stops sat inside a single average day.
+
+    None when any input is missing or the levels are incoherent -- an unmeasurable stop must
+    read as unmeasured, never as zero room.
+    """
+    e, s, a = _num(entry), _num(stop), _num(atr_pct)
+    if e is None or s is None or not a or a <= 0 or e <= 0 or s >= e:
+        return None
+    return round((e - s) / (e * a), 2)
+
+
+def order_key(row):
+    """The order the desk shows gate-qualified names in -- and it is NOT a ranking.
+
+    It used to be `score` descending. That composite is built from ladder count, MA hits
+    and timeframe stacking, and all three measured NO_EDGE against a displaced-ladder
+    control on 2026-08-18. Ordering fires by it meant the desk led with a number it had
+    already proven carries nothing (21-Aug: LT at R:R 2.27 top, STLTECH at 9.76 last).
+
+    Nothing replaces it as a CONVICTION ranking, because nothing has earned that: 13
+    separate ways of choosing WHICH name were tested and all 13 failed. So the order is
+    deterministic and makes no forecast -- R:R, which is arithmetic off the banked entry,
+    stop and target rather than a prediction, then ticker so it never wobbles run to run.
+    Whoever renders this must say so rather than let position imply conviction.
+    """
+    rr = _num((row or {}).get("rr"))
+    return (-(rr if rr is not None else -1), str((row or {}).get("ticker") or ""))
 
 
 def select_fib_confluence(payload) -> dict:
@@ -175,10 +240,22 @@ def select_fib_confluence(payload) -> dict:
         r["why"] = list(name.get("why") or [])          # the bank's own reasoning, carried through
         r["key_support"] = name.get("key_support")
         r["key_resistance"] = name.get("key_resistance")
+        # ── the evidence-backed fields the card is allowed to LEAD with ──────────────
+        # Everything else on a fib card (ladder count, MA hits, timeframe stacking, the
+        # grade, the score) was measured against a displaced-ladder control and carries
+        # nothing. These two were measured and do:
+        #   stop_atr_days  -- the stop expressed in this name's own normal days. The one
+        #                     quantity here measured against MONEY (n=22,947).
+        #   entry_timing   -- the only two entry conditions that beat a fair control.
+        # None is permitted; a MISSING KEY is not, because a renderer cannot then tell
+        # "not measured" from "not there" ([[absence-of-evidence-is-not-health]]).
+        r["atr_pct"] = _num(name.get("atr_pct"))
+        r["entry_timing"] = name.get("entry_timing") or {}
+        r["stop_atr_days"] = stop_atr_days(r.get("entry"), r.get("stop"), r["atr_pct"])
         buckets[r["verdict"]].append(r)
 
     for b in buckets.values():
-        b.sort(key=lambda r: -(_num(r.get("score")) or 0))
+        b.sort(key=order_key)
 
     return {
         "fires": buckets["FIRE"],
@@ -212,7 +289,14 @@ def select_fib_confluence(payload) -> dict:
 # POLYCAB shipped as a FIRE at the 30-Jul close under a 31-Jul stamp while spot was 1.4%
 # higher. A price and the session it came from are one fact and must not be separated.
 RADAR_KEYS = ("ticker", "verdict", "entry", "stop", "target", "rr", "setup", "trend",
-              "grade", "score", "current_px", "px_asof", "px_stale_days")
+              "grade", "score", "current_px", "px_asof", "px_stale_days",
+              # The two evidence-backed fields the card leads with (roadmap step 4). Public
+              # by construction: arithmetic on public price history, carrying none of the
+              # banked ladder prose this allowlist exists to withhold. They are listed HERE
+              # rather than computed in the shell so the cloud Action and this emit ship the
+              # same block -- an allowlist that silently drops a new field renders the card
+              # as though it was never computed ([[moving-a-field-breaks-its-readers]]).
+              "stop_atr_days", "entry_timing")
 
 
 def radar_row(r: dict) -> dict:

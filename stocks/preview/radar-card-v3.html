@@ -1,0 +1,85 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Radar card v3 - evidence-weighted (PREVIEW)</title><style>
+:root{--bg:#08090b;--pan:rgba(255,255,255,.038);--hair:rgba(255,255,255,.09);
+--ink:#f2f5f8;--ink2:#aab4c0;--mut:#6b7683;--faint:#3d4650;
+--cyan:#42dbe6;--pos:#38c98f;--neg:#ef5f6b;--warn:#e6b34a;--violet:#9d7cf5;
+--mono:"Space Mono","SF Mono",ui-monospace,monospace;--sans:"Inter",system-ui,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding:26px 20px 80px;
+background-image:radial-gradient(900px 500px at 12% -8%,rgba(66,219,230,.07),transparent 60%),
+radial-gradient(760px 460px at 92% 4%,rgba(157,124,245,.06),transparent 62%);}
+.wrap{max-width:1180px;margin:0 auto}
+.tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;
+text-transform:uppercase;color:#08090b;background:var(--warn);padding:4px 9px;border-radius:4px;font-weight:700}
+h1{font-size:31px;font-weight:600;letter-spacing:-.035em;margin:13px 0 7px}
+h1 .g{background:linear-gradient(105deg,var(--cyan),var(--violet) 60%,var(--pos));
+-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{color:var(--ink2);font-size:14px;line-height:1.62;max-width:820px}
+.lede b{color:var(--ink)}
+.principle{margin:22px 0 20px;padding:15px 17px;border-left:2px solid var(--cyan);
+background:linear-gradient(97deg,rgba(66,219,230,.09),transparent 72%);border-radius:0 9px 9px 0}
+.principle .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+.principle .v{font-size:15.5px;font-weight:600;letter-spacing:-.01em}
+.principle .s{color:var(--ink2);font-size:12.8px;margin-top:6px;line-height:1.55}
+.meta{font-family:var(--mono);font-size:10.5px;color:var(--mut);margin:0 0 8px;letter-spacing:.04em}
+.ordnote{color:var(--mut);font-size:12px;line-height:1.55;margin:0 0 18px;max-width:820px;font-style:italic}
+.find{margin:20px 0 6px;padding:15px 17px;border-left:2px solid var(--neg);
+background:linear-gradient(97deg,rgba(239,95,107,.10),transparent 72%);border-radius:0 9px 9px 0}
+.find .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--neg);margin-bottom:6px}
+.find .v{font-size:15.5px;font-weight:600;letter-spacing:-.01em;line-height:1.45}
+.find .s{color:var(--ink2);font-size:12.8px;margin-top:7px;line-height:1.62}
+.find .s b{color:var(--ink)}
+h2{font-size:17px;font-weight:600;margin:32px 0 4px;letter-spacing:-.015em}
+h2 .c{font-family:var(--mono);font-size:11px;color:var(--cyan);margin-left:9px;letter-spacing:.06em}
+.h2s{color:var(--ink2);font-size:12.8px;line-height:1.58;margin-bottom:14px;max-width:820px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:13px}
+.card{background:var(--pan);border:1px solid var(--hair);border-radius:13px;overflow:hidden;
+border-left:2px solid var(--pos);backdrop-filter:blur(9px)}
+.hd{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid var(--hair);background:rgba(255,255,255,.02)}
+.tk{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.02em}
+.vd{font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.11em;padding:3px 7px;border-radius:3px}
+.vd.fire{background:rgba(56,201,143,.16);color:var(--pos)}
+.vd.trust{background:rgba(66,219,230,.15);color:var(--cyan)}
+.px{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink2)}
+.lv{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:12px 14px}
+.lv div{display:flex;flex-direction:column;gap:2px}
+.lv .k{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.lv .v{font-family:var(--mono);font-size:12.5px;font-weight:700}
+.lv .v.s{color:var(--neg)} .lv .v.t{color:var(--pos)}
+.sect{padding:11px 14px}
+.sect .lbl{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;
+display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.sect.ev{border-top:1px solid var(--hair)}
+.sect.ev .lbl{color:var(--pos)}
+.sect.desc{border-top:1px solid var(--hair);background:rgba(0,0,0,.22)}
+.sect.desc .lbl{color:var(--mut)}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor;box-shadow:0 0 7px currentColor}
+.erow{display:grid;grid-template-columns:auto 1fr;gap:3px 9px;margin-bottom:11px;font-size:12.8px}
+.erow .n{font-family:var(--mono);font-weight:700;color:var(--ink);white-space:nowrap}
+.erow .t{color:var(--ink2);line-height:1.45}
+.erow .ev{grid-column:1/-1;font-family:var(--mono);font-size:9.5px;color:var(--pos);opacity:.85}
+.desc .d{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.6}
+.desc .why{font-size:10.5px;color:var(--mut);margin-top:7px;line-height:1.5;font-style:italic}
+.mini{background:var(--pan);border:1px solid var(--hair);border-radius:10px;margin-bottom:7px;
+border-left:2px solid var(--faint)}
+.mini summary{cursor:pointer;padding:10px 13px;display:flex;align-items:center;gap:11px;list-style:none;font-size:12.5px}
+.mini summary::-webkit-details-marker{display:none}
+.mtk{font-family:var(--mono);font-weight:700;font-size:13px;min-width:114px}
+.mrr{font-family:var(--mono);color:var(--ink2);min-width:60px}
+.mroom{font-family:var(--mono);color:var(--mut);font-size:11px;min-width:124px}
+.mno{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+text-transform:uppercase;color:var(--faint)}
+.mbody{border-top:1px solid var(--hair)}
+.mbody .d{padding:0 14px 12px;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+.reg{margin-top:36px;background:var(--pan);border:1px solid var(--hair);border-radius:13px;padding:17px 18px}
+.reg h3{font-size:15.5px;font-weight:600;margin-bottom:5px}
+.reg .sub{color:var(--ink2);font-size:12.6px;margin-bottom:14px;line-height:1.55}
+table{width:100%;border-collapse:collapse;font-size:12.2px}
+th{text-align:left;font-family:var(--mono);font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;
+color:var(--mut);padding:6px 9px;border-bottom:1px solid var(--hair)}
+td{padding:8px 9px;border-bottom:1px solid rgba(255,255,255,.045);vertical-align:top;color:var(--ink2);line-height:1.45}
+td.s{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.07em;white-space:nowrap}
+.WORKS{color:var(--pos)} .NO_EDGE{color:var(--mut)} .UNTESTED{color:var(--warn)} .HARMFUL{color:var(--neg)}
+td .id{font-family:var(--mono);font-size:11px;color:var(--ink)}
+td .num{font-family:var(--mono);font-size:10.5px;color:var(--ink2)}
+.scroll{overflow-x:auto}
+</style></head><body><div class="wrap"><span class="tag">Preview - not the live desk</span><h1>Fewer cards, <span class="g">each one able to say why</span></h1><p class="lede">You said the Radar showed a lot of hero cards and felt structureless &mdash; that it was not refining the fires using signals we are confident about. Both halves were true. Every fire drew a full card, and the ORDER came from the confluence score, which is ladder count plus moving-average hits plus timeframe stacking. All three were measured on 18-Aug against a fair control and <b>not one of them predicts anything</b>. The desk was shouting loudest about the part it had already disproved.</p><div class="find"><div class="k">And re-ordering it turned up something worse</div><div class="v">Two of the seven fires were telling you to buy at a price the stock is nowhere near.</div><div class="s">A FIRE is supposed to mean price is sitting ON a support you verified. The gate checked that price was at <i>some</i> confluence, then took the buy level from the strongest support zone <i>anywhere below</i> &mdash; and nothing tied those two together. So STLTECH fired at Rs 627.15 saying <b>buy at Rs 315.07</b>, 99% below, and ASTRAMICRO at Rs 1,662.20 saying buy at Rs 1,145.75, 45% below &mdash; both under the sentence &ldquo;price has come back to this level&rdquo;. The reward-for-risk inherits the error, which is why STLTECH read 9.76&times; and sorted to the top the moment I ordered by it. Fourteen names carried an unreachable level in total. They are now demoted to Watch with the distance stated, not deleted &mdash; sound structure, price simply not there yet. Fires today: <b>5, not 7</b>.</div></div><div class="principle"><div class="k">The rule</div><div class="v">A card gets hero weight only when something measured backs it.</div><div class="s">Two entry conditions have ever beaten a fair control, out of twenty-five tested. A fire that currently matches one of them leads. Every other fire is still here, complete and tradeable &mdash; it just stops presenting itself as a headline.</div></div><p class="meta">live fib bank &middot; 2026-08-21 close &middot; 5 fire / 16 watch &middot; stop floor 2.0&times; each stock&rsquo;s own daily range</p><p class="ordnote">Order is reward-for-risk, then name. It is deliberately not a conviction ranking: thirteen separate ways of choosing WHICH name to buy were tested and all thirteen failed, so nothing has earned the right to be called strongest.</p><h2>Backed by something measured<span class="c">0 of 5 fires</span></h2><p class="h2s">One of the two surviving entry conditions applies to these right now. They are shown, not enforced &mdash; the study that found them says two survivors out of twenty-five deserve a live forward-tracking period before they gate a real decision.</p><p class="h2s">No fire today has one of the two tested entry conditions behind it. That is a real answer and not a gap &mdash; promoting one anyway would be filling a slot rather than reporting a finding.</p><h2>Gate-qualified, nothing tested behind it<span class="c">5 fires</span></h2><p class="h2s">These cleared every structural gate: a hand-verified support you drew yourself, three or more independent sources landing on it, a strong cluster, an up or mixed trend, and enough room to the next banked level. What they do not have is one of the two entry conditions that beat a control. Open any of them for the full level set.</p><details class="mini"><summary><span class="mtk">HINDALCO</span><span class="mrr">4.36&times;</span><span class="mroom">2.0 days of room</span><span class="mno">no tested entry condition</span></summary><div class="mbody"><div class="lv"><div><span class="k">buy at</span><span class="v">Rs 1,028.40</span></div><div><span class="k">get out at</span><span class="v s">Rs 976.01</span></div><div><span class="k">aiming for</span><span class="v t">Rs 1,256.70</span></div></div><div class="d">strong cluster &middot; buy-support &middot; engine score 85 &middot; up trend</div></div></details><details class="mini"><summary><span class="mtk">TATAELXSI</span><span class="mrr">3.18&times;</span><span class="mroom">2.3 days of room</span><span class="mno">no tested entry condition</span></summary><div class="mbody"><div class="lv"><div><span class="k">buy at</span><span class="v">Rs 3,693.00</span></div><div><span class="k">get out at</span><span class="v s">Rs 3,477.53</span></div><div><span class="k">aiming for</span><span class="v t">Rs 4,378.60</span></div></div><div class="d">strong cluster &middot; at-support &middot; engine score 86 &middot; mixed trend</div></div></details><details class="mini"><summary><span class="mtk">LT</span><span class="mrr">2.27&times;</span><span class="mroom">2.4 days of room</span><span class="mno">no tested entry condition</span></summary><div class="mbody"><div class="lv"><div><span class="k">buy at</span><span class="v">Rs 4,021.40</span></div><div><span class="k">get out at</span><span class="v s">Rs 3,883.29</span></div><div><span class="k">aiming for</span><span class="v t">Rs 4,334.90</span></div></div><div class="d">strong cluster &middot; buy-support &middot; engine score 100 &middot; up trend</div></div></details><details class="mini"><summary><span class="mtk">BHARATFORG</span><span class="mrr">1.86&times;</span><span class="mroom">2.0 days of room</span><span class="mno">no tested entry condition</span></summary><div class="mbody"><div class="lv"><div><span class="k">buy at</span><span class="v">Rs 2,057.95</span></div><div><span class="k">get out at</span><span class="v s">Rs 1,933.86</span></div><div><span class="k">aiming for</span><span class="v t">Rs 2,288.70</span></div></div><div class="d">strong cluster &middot; at-support &middot; engine score 86 &middot; mixed trend</div></div></details><details class="mini"><summary><span class="mtk">HCLTECH</span><span class="mrr">1.56&times;</span><span class="mroom">2.0 days of room</span><span class="mno">no tested entry condition</span></summary><div class="mbody"><div class="lv"><div><span class="k">buy at</span><span class="v">Rs 1,286.40</span></div><div><span class="k">get out at</span><span class="v s">Rs 1,226.79</span></div><div><span class="k">aiming for</span><span class="v t">Rs 1,379.40</span></div></div><div class="d">strong cluster &middot; at-support &middot; engine score 95 &middot; mixed trend</div></div></details><div class="reg"><h3>Every signal, and what it was actually measured at</h3><p class="sub">One row per signal the desk shows anywhere, from <span class="num">00_SYSTEM/EDGE/evidence_register.json</span>. The cards take their weight from this file, so when we learn something new we change one row and every surface follows. A test refuses any signal that reaches a card without a row here.</p><div class="scroll"><table><thead><tr><th>signal</th><th>verdict</th><th>what we measured</th><th>shown as</th></tr></thead><tbody><tr><td><span class="id">pullback_in_uptrend</span></td><td class="s WORKS">WORKS</td><td><span class="num">+7.0pp vs entering without waiting; held-out +5.2pp</span></td><td>setup: pullback while above the 200d</td></tr><tr><td><span class="id">oversold_bounce</span></td><td class="s WORKS">WORKS</td><td><span class="num">+7.5pp; held-out +5.0pp</span></td><td>setup: oversold</td></tr><tr><td><span class="id">stop_noise_floor</span></td><td class="s WORKS">WORKS</td><td><span class="num">tightening cost money at every step: ~1.5% kept +0.37%, 2xATR +0.86%, 3xATR +1.05%, no stop +1.75% (n=22,947)</span></td><td>stop distance, in the stock&#x27;s own daily ranges</td></tr><tr><td><span class="id">anchor_reach</span></td><td class="s WORKS">WORKS</td><td><span class="num">-6.7pp vs 0.0 for in-history ladders; gap +7.30pp, p=0.0004</span></td><td>ladder anchored before the visible price history</td></tr><tr><td><span class="id">fib_confluence_marks_turns</span></td><td class="s WORKS">WORKS</td><td><span class="num">1 ladder 17.1% / 2 21.9% / 3+ 28.6%; +11.4pp vs a shifted null, p=0.013</span></td><td>n_ladders / source count, as a claim about TURNS</td></tr><tr><td><span class="id">fib_confluence_predicts_return</span></td><td class="s NO_EDGE">NO EDGE</td><td><span class="num">+0.15pp at 2 ladders, -0.03pp at 3+, vs a displaced ladder (n=136,139)</span></td><td>n_ladders / source count, as a claim about MONEY</td></tr><tr><td><span class="id">fib_ratio_precision</span></td><td class="s NO_EDGE">NO EDGE</td><td><span class="num">below a phase-shifted null at all five pivot scales</span></td><td>the specific rung (1.618, 1.414 ...) and how exactly price tagged it</td></tr><tr><td><span class="id">ma_at_zone</span></td><td class="s NO_EDGE">NO EDGE</td><td><span class="num">-0.04pp (0 MA) / -0.48pp (1 MA) / +0.42pp (2 MA) vs displaced, non-monotone</span></td><td>ma_hits - EMA21 / SMA50 / EMA200 sitting in the zone</td></tr><tr><td><span class="id">timeframe_stacking</span></td><td class="s NO_EDGE">NO EDGE</td><td><span class="num">no bucket beat its displaced control at any horizon</span></td><td>tf_max - &#x27;up to 3M&#x27;, solid/dashed/dotted degree stacking</td></tr><tr><td><span class="id">ladder_quality</span></td><td class="s NO_EDGE">NO EDGE</td><td><span class="num">0 of 10 pre-registered tests survived</span></td><td>tight / recent / clean-pivot anchoring</td></tr><tr><td><span class="id">operator_colour_rank</span></td><td class="s UNTESTED">UNTESTED</td><td><span class="num">green looked good (+3.3pp, n=19) but source-count is non-monotone (4 good, 5 bad) - too thin either way</span></td><td>purple / green / yellow / red / teal / maroon zone colour</td></tr><tr><td><span class="id">operator_drawn_zone</span></td><td class="s UNTESTED">UNTESTED</td><td><span class="num">+0.08 / -0.73 / +0.24 pp vs the name&#x27;s own normal move (only 157 reached, 86 with a full 20 days)</span></td><td>the operator&#x27;s own hand-drawn zone, forward of the date it was drawn</td></tr><tr><td><span class="id">per_ticker_personality</span></td><td class="s HARMFUL">HARMFUL</td><td><span class="num">best-fit rule per name held out-of-sample for 40 of 79 names (51%); in-sample vs out-of-sample correlation +0.13</span></td><td>&#x27;this stock responds to X&#x27; - a per-name custom rule</td></tr></tbody></table></div></div></div></body></html>

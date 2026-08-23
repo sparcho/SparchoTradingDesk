@@ -42,6 +42,87 @@ def ma_stack(closes):
     return {"ema21": ema(closes, 21), "sma50": sma(closes, 50), "ema200": ema(closes, 200)}
 
 
+def rsi14(closes, n=14):
+    """Wilder's RSI over the last n periods. None when there is not enough history.
+
+    None is load-bearing: with fewer than n+1 closes the smoothing has not warmed up, and
+    a warm-up artefact rendered as a reading is a fabricated signal. The two ends are what
+    the entry rule leans on -- an all-down window reads 0, an all-up window reads 100.
+    """
+    if not closes or len(closes) < n + 1:
+        return None
+    gains, losses = [], []
+    for prev, cur in zip(closes[-(n + 1):-1], closes[-n:]):
+        d = cur - prev
+        gains.append(max(d, 0.0))
+        losses.append(max(-d, 0.0))
+    avg_gain = sum(gains) / n
+    avg_loss = sum(losses) / n
+    if avg_loss == 0:
+        return 100.0 if avg_gain > 0 else None
+    rs = avg_gain / avg_loss
+    return round(100.0 - (100.0 / (1.0 + rs)), 2)
+
+
+# ── the two entry conditions that survived (PHASE-6, sealed pre-registration) ────────────
+# Twenty-five hypotheses were tested across the whole evidence programme. Two survived, and
+# both are about WHEN to enter a name already chosen -- never about WHICH name. Quoted from
+# PHASE-6_TIMING-PRE-REGISTRATION lines 129/134 so the shipped arithmetic cannot drift from
+# the sealed text:
+#
+#   B-2 pullback into strength -- first close within 2% of the 20-session low, provided
+#                                 close > 200-session mean.        +7.0pp (held-out +5.2pp)
+#   B-4 oversold bounce        -- first close after a 14-session RSI below 30.
+#                                                                  +7.5pp (held-out +5.0pp)
+#
+# NOT A GATE. The study's own instruction is "do not wire anything yet -- two survivors out
+# of twenty-five, on one regime, deserve a live forward-tracking period before they gate a
+# real decision". These fields therefore INFORM the card and never filter a fire.
+#
+# The 200-day filter ALONE measured exactly +0.0pp -- it is a component of B-2 and never a
+# reason by itself, which is why `above_200d` ships with its own NO_EDGE verdict attached.
+PULLBACK_TOL = 0.02       # "within 2% of the 20-session low"
+PULLBACK_WINDOW = 20      # sessions
+TREND_WINDOW = 200        # "200-session MEAN" -- an SMA, not the EMA200 of the MA stack
+OVERSOLD_RSI = 30.0
+
+
+def entry_timing(closes):
+    """Which of the two surviving entry families currently applies to this close series.
+
+    Every flag is True / False / **None**, and None is not a decoration: with too little
+    history the honest answer is "not measured", which is a different claim from "the
+    condition is absent" ([[absence-of-evidence-is-not-health]]).
+    """
+    closes = [c for c in (closes or []) if c]
+    unknown = {"pullback_in_uptrend": None, "oversold_bounce": None, "above_200d": None,
+               "pct_above_20d_low": None, "rsi14": None,
+               "evidence": {"pullback_in_uptrend": "WORKS", "oversold_bounce": "WORKS",
+                            "above_200d": "NO_EDGE"}}
+    if len(closes) < TREND_WINDOW + 1:
+        return unknown
+    cur = closes[-1]
+    sma200 = sma(closes, TREND_WINDOW)
+    above_200d = bool(sma200 and cur > sma200)
+    low20 = min(closes[-PULLBACK_WINDOW:])
+    pct_above = round((cur - low20) / low20 * 100.0, 2) if low20 else None
+    dip = pct_above is not None and pct_above <= PULLBACK_TOL * 100.0
+
+    r_now = rsi14(closes)
+    # "the first close AFTER a 14-session RSI below 30" -- the entry bar the study measured
+    # is the bounce bar, so a reading that has just lifted off the floor still qualifies.
+    r_prev = rsi14(closes[:-1])
+    washed = [r for r in (r_now, r_prev) if r is not None]
+    oversold = bool(washed) and min(washed) < OVERSOLD_RSI
+
+    return {"pullback_in_uptrend": bool(dip and above_200d),
+            "oversold_bounce": oversold,
+            "above_200d": above_200d,
+            "pct_above_20d_low": pct_above,
+            "rsi14": r_now,
+            "evidence": unknown["evidence"]}
+
+
 MA_TOL = 0.012   # an EMA/SMA within ~1.2% of the confluence px = it reinforces that level
 _MA_LABEL = {"ema21": "EMA21", "sma50": "SMA50", "ema200": "EMA200"}
 # a confluence anchored on a longer timeframe measures a bigger move -> structurally weightier
@@ -544,6 +625,11 @@ def build(obs=None, ohlc=None, write=True):
             # in these units (fib_confluence_source.ATR_FLOOR); without it the floor is
             # inert and a third of stops sit inside a single day's weather.
             "atr_pct": atr.get(o.get("ticker")),
+            # The two entry conditions that beat a fair control (PHASE-6). Carried so the
+            # Radar can say WHY a fire is trusted using something that was measured, rather
+            # than the confluence score -- which WAS measured and carries nothing. Informs
+            # the card; never gates a fire (the study's own "do not wire anything yet").
+            "entry_timing": entry_timing(closes),
             "why": _why_of(cur, top, trend, ext, base_score, score),
             "ma": {k: (round(v, 2) if v else None) for k, v in ma.items()},
             "points": pts,
