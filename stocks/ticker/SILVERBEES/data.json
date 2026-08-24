@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "SILVERBEES",
-  "emitted_at_utc": "2026-08-24T03:25:50+00:00",
+  "emitted_at_utc": "2026-08-24T11:01:09+00:00",
   "public": {
     "ticker": "SILVERBEES",
     "name": "Nippon India Silver ETF",
@@ -45,10 +45,10 @@
     "dr_briefs": [],
     "last_stock_ta": "N/A",
     "live": {
-      "price": 232.92,
-      "day_chg_pct": 3.323,
-      "week_chg_pct": 5.288852725793323,
-      "date": "2026-08-21"
+      "price": 231.8,
+      "day_chg_pct": -0.481,
+      "week_chg_pct": 3.662626895040471,
+      "date": "2026-08-24"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -534,44 +534,93 @@
         234.28,
         229.65,
         232.92
+      ],
+      [
+        "2026-08-24",
+        232.55,
+        233.5,
+        231.26,
+        231.8
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 232.19,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 233.11,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 234.43,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 235.35,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 230.87,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 229.95,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 228.63,
+        "as_of": "2026-08-24"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 204.92,
-        "as_of": "2026-08-21"
+        "as_of": "2026-08-24"
       },
       {
         "method": "swing_low",
         "kind": "SL2",
         "price": 206.57,
-        "as_of": "2026-08-21"
+        "as_of": "2026-08-24"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 216.24,
-        "as_of": "2026-08-21"
+        "price": 216.28,
+        "as_of": "2026-08-24"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 220.73,
-        "as_of": "2026-08-21"
+        "price": 221.19,
+        "as_of": "2026-08-24"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 351.91,
-        "as_of": "2026-08-21"
+        "as_of": "2026-08-24"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 106.99,
-        "as_of": "2026-08-21"
+        "as_of": "2026-08-24"
       }
     ],
     "operator_levels": [],
@@ -586,10 +635,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 220.73,
+        "price": 230.87,
         "dir": "below",
         "kind": "watch",
-        "why": "200-day SMA",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 232.19,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -604,25 +661,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 232.19,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.16824849007764728
+      },
+      {
         "label": "SUPPORT",
-        "price": 220.73,
+        "price": 230.87,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -5.2335565859522575
+        "dist_pct": -0.40120793787748354
       },
       {
         "label": "UPSIDE",
         "price": 351.91,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 51.0862098574618
+        "dist_pct": 51.81622088006903
       },
       {
         "label": "INVALIDATION",
         "price": 106.99,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -54.06577365619096
+        "dist_pct": -53.843830888697156
       }
     ],
     "scenario_ladder": [
@@ -635,7 +699,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 232.92,
+        "level": 231.8,
         "note": "holds current band"
       },
       {
@@ -680,8 +744,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "3l0CCU9HD6SbboSJkJ62tQ==",
-    "iv": "f04iBW1kcQ+RmiBa",
-    "ct": "auqyQU0ZAx85Vn6Jcnf6hUXCbjuYd4VEJJ69aIUOFULTG/EG5cD+eTLJGrHtkHzSk0nQbkT1VORJczd2VsemCAQyKwWqssn4ECCMw9W8gjLRJ7U9VVBjqDNVDFNo9dfJ3XLt7vRIn5VWb0OMw73cH7G3a+QoWsWU0G4q+5PCkpbzz9KmDte3K8HvGforcuK/PlwZNPYDL4Wpb4g+siog2cs7t7GEXU4nc1jvAIhMo8MOpnHbfpixB3c3WjsITqwn2L++vwbeZFK17VCiAGE0q1M29Su3Ke/owboh5KW/5YhAmypMR3Ta0UMz3elwrCdWpdr7Off8mX+MWwdzRO7jrfklSq1PzYiSVJs6C97l85a5e4kU0Ck7rgItyRNLbDpiBjBnRSFThFb0jyr7uhWKCY3TRExIZoZ1nObWvlNrCAjQbF4y8j1HRkQthgktgF3FV15fGKSW5jYIgCnDMSR+potS6JJMB5LWU9Oy7G4TIIsjxtRhypr3bp2N/QAQZhy2BMoNgOkyaCV1TfTc8vgtW1wLJ9Hln6zYfvWDXbYJbnK98cpgBUNN1SuyJ86be4wBKOA+4/XkS44VVAj9A9/lXp9aYnUxoXB2uY9MqVoRkl2ag7KXCU8PiEMs3cKync7rr3albzxtwDcCxjBQhR3WPTW6FVPpRCuQUM3Yu2skg2pKsxSgRzTNrR+HSRqEfva0TlyjwMCmEk4LWcQSZLmrGN8q8Nm9A0aCTAjnZL+JET1BeEAe34WhaihzUeur32me47ORgdgBBHXIKoass1eYmWrTP8b0JCExwlQpBA3JQU7qvQvozJ8GqDTeEKvAvYFyohdiPwo9EE8Ska+YF/HBAEPepMd6T7tuiu/FMJKerEWcPobf/dvAZ62hZd1IR+o13JZvVLxgGgoUgqbQBwo6GElLfRxRTfHCyY9Pe8wi4eFK5mze3AWAKwUV4pkgTOATBQqiKD7OBjqljqF698pyKE4+aoRpaq84w/zvuFtPhOTVc1JVQgOOUkHNgWa41oKAC3k4B+ZmUx6pULl67H55CfkPtnL7m3SQjcEtLtioN7+dQ9k6aihrKh1Wu7NuNxEbA6A90NMamI3jvq6LM+2nT9LWTmYQ6LPAv8ns/CV1U+A5i3K07ObW8mlQrXD0UMu6a6ai5BbuXg8JoZOJdyRcidquXcR1ZJrbLTDqu81o8RMJ4gPN+FBdI69QMWM4avsezVsWlUJh1k+MDahpVSmKR7xF/ywyu55wyNm2wT3OCLVUR7IwUrWoHPjRV28ogB/bu/hbxQ=="
+    "salt": "Wx4EzCi3EvwzVlL8E0HcGg==",
+    "iv": "S4X38mhdMNU85h6o",
+    "ct": "05WjyT2FAyCuz0pYklEHHN8WBLhYi8EZZZDicyXvgie0wp6UmSeXBhMkYT86i7ZkmolO+Ck0VegpedZngJJdoyHvvFqZoiCLbLpwPCug4pbB4GLoYnceLShRpESOZoWiDqDUShHWUJFGOz8L3KnIoTvngRJU4k6qlFXgapIlecMvNu+4dYEUslrGyvQ1sfS9c6jrkmV1Ksty4ra1J0Gb6n4iyyPw+2+dkBvw9Deo4w7k9ZKaGNtCCG7roptAVxzg9WNXCjCqkmbws/isyGEPu/HxZHrdVFX4B5+wQjkxBhEcJffuHl8X+zQlCOYbxnWmx0Xo6qQTYicrnKZ1/4nXL9NBoqtxPAgCCuIQ0uOF5eBA9dAwVxtd47J9/E0fYy01SeHZ1O8SqcHsyI/CubOuvqDqU9ko4JcLPJIEWT76jDLc/Ri3j9jv5OHWYF5h2kZpLMobreY+ogGTtciITY0P/0K+F4ogJWllScplR4lNSVJJkQQLnLDRgPFsla8pLHn+4l9HLH2R/6GS+MaArZMJx7no0iAuWQckCFmhKeJE/nT2uW9sDZNYqzi1TVuReLSyDMaQ2wsz7v4rxPLxDzK/0P5f3ABUwcRIqn9XPzJSLNvbodqRuQy6jru2lCam+vqlP/0og247oEadDi8q48TshLh9TRkU788WUMFjHqxM032nb0HusJzX5/bOHKJLDoW5H4svOfyw/tI9YAQfaoC8IDQwjWQfFeMYwZIkLDysWcjJdGLvF2FCBcI/rbrct8cyzj5VHHP82VkUIRJGNpuu8gY2I4QlJW4jtuMWEWtVLm9pbxGMotratqqGlumUZhRSbsrkI2qgLBiq7AJpCNDn0XTZ+SKC+IyNGgmBurtiWwoAQTcv+7LvEKYzpkKzkPWGitHc9URc+HM5pZ/kIKkKI9+5mh4boJfFRu79IpeeLjfmtpOderM65kzKxwP4qf6vLe7hJ4LZx7K9B8zYTp3muBPfZ5zbXW9U5Cy0/GtkxWvnGVAJzZMJUHdNkDT3SS9m36n50GHF4of32Y7kJVBMA05wJXcwL/42YpyxT9cEDbxGLWpG9G5tIN3sMQ1oETxfr9WYkNfkbDOQgvPHDJYel/1Fe6uT+gYgef2VfQpjUWQeWbYoxRYSQ4rdqzBijfwIcNhlJj6QQo/1nY6X8Qg3b3c3aHf2xw7AasoWudLX/erfQ4AKSeykLHvQNYh7Y2tz3tTL+dp3OhQ4u2/V1zSmFd/OcX7RmacNUuTOd9PgEUEmguGizwzUKJNrP/PwjQobOs2sM3+6AQkE/je/UR3+RadsYCnuzkIFY+ISUa1ktYBhaS0ge7kgll1mHVixsTENGvmFAhSHmRy/bZ+G3Cu/VhxK9zaiUszwtODlyTttusNiFQ=="
   }
 }

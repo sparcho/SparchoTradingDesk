@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "VEDL",
-  "emitted_at_utc": "2026-08-24T03:25:52+00:00",
+  "emitted_at_utc": "2026-08-24T11:01:12+00:00",
   "public": {
     "ticker": "VEDL",
     "name": "Vedanta Ltd",
@@ -128,10 +128,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 279.0,
-      "day_chg_pct": 4.104,
-      "week_chg_pct": 4.299065420560748,
-      "date": "2026-08-21"
+      "price": 277.0,
+      "day_chg_pct": -0.717,
+      "week_chg_pct": 2.706711160548762,
+      "date": "2026-08-24"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5664,38 +5664,93 @@
         279.7,
         269.0,
         279.0
+      ],
+      [
+        "2026-08-24",
+        280.05,
+        281.45,
+        272.4,
+        277.0
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 276.95,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 281.5,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 286.0,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 290.55,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 272.45,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 267.9,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 263.4,
+        "as_of": "2026-08-24"
+      },
+      {
+        "method": "swing_high",
+        "kind": "SH1",
+        "price": 283.65,
+        "as_of": "2026-08-24"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 253.05,
-        "as_of": "2026-08-21"
+        "as_of": "2026-08-24"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 275.41,
-        "as_of": "2026-08-21"
+        "price": 274.75,
+        "as_of": "2026-08-24"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 250.72,
-        "as_of": "2026-08-21"
+        "price": 251.21,
+        "as_of": "2026-08-24"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 354.7,
-        "as_of": "2026-08-21"
+        "as_of": "2026-08-24"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 147.66,
-        "as_of": "2026-08-21"
+        "as_of": "2026-08-24"
       }
     ],
     "operator_levels": [],
@@ -5710,10 +5765,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 275.41,
+        "price": 276.95,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "classical pivot",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 281.5,
+        "dir": "above",
+        "kind": "trim",
+        "why": "pivot R1",
         "auto": true
       },
       {
@@ -5729,24 +5792,31 @@
     "gate_check": [
       {
         "label": "SUPPORT",
-        "price": 275.41,
+        "price": 276.95,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -1.2867383512544712
+        "dist_pct": -0.01805054151624959
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 281.5,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 1.6245487364620936
       },
       {
         "label": "UPSIDE",
         "price": 354.7,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 27.13261648745519
+        "dist_pct": 28.05054151624548
       },
       {
         "label": "INVALIDATION",
         "price": 147.66,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -47.075268817204304
+        "dist_pct": -46.69314079422382
       }
     ],
     "scenario_ladder": [
@@ -5759,7 +5829,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 279.0,
+        "level": 277.0,
         "note": "holds current band"
       },
       {
@@ -6060,8 +6130,8 @@
   "sensitive_enc": {
     "v": 1,
     "iter": 200000,
-    "salt": "Y1lNpykn8cGyQ5SuMOYg3A==",
-    "iv": "Fj6g+6D+Zahh05Ka",
-    "ct": "A54mFxEAnNGNwu3lygXA/3hCiMEli87Ni7F6mVK4iLTRysPfDrzNG+rBUjtN7gYoHKZsEXedJRNt56vCwVICBImzJ9e/T8cb0bU32ZScyNqEi9/t99E6Bkp02KN7mFrW1Db4QIymVBmaeinVLaUrgwRM5rqXt7LCUV5QKd0+uXfv1IqmUp964i29Vi+nCC5avTHIpZ0xdHQGGKDmUxOKJGRn3D88/zc/HV2igH3yYb9ckwcZg3dAJ59G/TqUAqDnOAVGud07Vu0zT6EorbEh93iol916KchP/uRtNA6hGfToOLdXVfGsxpA9XozN/AU3ZJQ82ajyGn5Sy7RqaFwLh1mgfuURDD8qAHKBE2bjudtonv7mD/jXbO/Iyt99CDRmQtSEmS0MMO7l1zdCIH3ZfEZN4I/pEomCux2PVEbwqJGBAffwRuVMrec/W+bP9Ns2wl6vrOCXVjw7/MEx8Smi2lbmemCnGhZNpNKvbRVPue4FlyHS4d4jPTsCe54gY6qt5XbeKFRBrQTIe9206RPZkGiOGaIeDMSpIqbly3/+7jX4FHmiZubygdLikLaqCYvvQSIvNsEMHxU+TtTmSora16QhClseLRu4XEOOq80w0Dj1zIFaWVTrVtULWyzkRfEOSuOLaUMqJUlolQ=="
+    "salt": "AK/XAJZVqfOKowmVoAoFWg==",
+    "iv": "fWOlca5YhaT+e/B4",
+    "ct": "Y3wcK8OT3vAFtbKth0uazFPJD1+1c8DkjcQj2rF8MofgatvwT0uHjRdyn55iNq+/WsHkbZeJhQW15VmNNAZII8gOCQY34m9+3zoMRWZfOIJ7jhHp5iXaWSzKGZNmDQ+F6rYVfk9jSPtXjv7JCYjwBOxsuMnVzAqmdK1JNNBBzzDnh3Z35kPaJmBZkYPTKc4WNUzthnwmm2o0jsueV6XZePM1rWJUQzYMZXnqmXg3GR0cPHyRZ05YoTIjUE5zoBoNVRjndvZi1kUFf5bwQZ5olfQiyNt8uZ5PeQQGpl8F6SIxd27bqlQiiYR+YKdMx2a4GDZjSw8OhrbKumiZAXDKEUEMIScq8HqjUa+pazysowxjZ3yhxD7y2G/YwDcOiKFjEiBZy3TC1u08hVyms4yLK1dKZ7+HJnswFjTHzkDbCzMDQYDm2MR/XN9kWYcRkJAavwepAaSYwd+b8vgRj2ddwO0xy+J24XM95HpBc03gIqkqMFsFW7KLVYzvIWKj84fFOdJwOt7X3mXTHEV+bDv4B3q1BXBb1YOcsZnMrPWNgZX75iIpy2mm+GKMDTJ0kfewBg/BxWQ0vXTdIwqDqMzlxCydwPoLRR/OjAYJKdgCXWEEX9ClEqcGNehHCmCaJRAusbEEPh35Jg+nDg=="
   }
 }

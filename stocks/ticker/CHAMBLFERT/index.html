@@ -394,7 +394,7 @@ function srCard(p){
   h+='</div>';
   return h;
 }
-// The level-ID half of the two-take, rendered from the level-ID-fib bank. Before this the
+// The level-ID half of the two-take, rendered from the kaarin-fib bank. Before this the
 // row came from _index.md `level_id:` alone, which 48 of 97 banked names lack — so their
 // "two-take" card silently rendered as a ONE-take. The read existed; it never arrived.
 function levelIdBankCard(p){
@@ -403,7 +403,7 @@ function levelIdBankCard(p){
   const fresh = b.depth_pass_date ? ('depth-passed '+esc(b.depth_pass_date))
               : (b.first_pass ? 'FIRST PASS — read from a subset of the drop' : 'read '+esc(b.studied_date||''));
   const badge = b.first_pass ? 'yellow' : 'green';
-  let h='<div class="card section"><h2>📐 Level-ID read <span class="sub">level-ID-fib bank · operator-verified — the manual half of the two-take</span></h2>';
+  let h='<div class="card section"><h2>📐 Level-ID read <span class="sub">kaarin-fib bank · operator-verified — the manual half of the two-take</span></h2>';
   h+='<div class="ob-chips"><span class="badge '+badge+'">'+(b.first_pass?'FIRST PASS':'VERIFIED')+'</span>'
     +'<span class="ob-chip">studied <b>'+esc(b.studied_date||'—')+'</b></span>'
     +'<span class="ob-chip">'+b.n_levels+' levels · '+(b.zones||[]).length+' zones</span>'
@@ -587,8 +587,8 @@ function renderOperator(){
     h+='</div>';
   }
   if(s.account_avg){ const aa=s.account_avg; const arow=(o,who,col)=>{ if(!o||o.avg==null) return ''; const f=o.on_level; return '<div class="lvl-row"><span class="pill" style="color:'+col+';border:1px solid '+col+'">'+who+'</span><span class="num"><b>'+inr(o.avg)+'</b>'+(o.qty?' · '+o.qty+'sh':'')+'</span><span class="lvl-dist num">'+(f?'⚑ on '+esc(f.label)+' ('+f.dist_pct+'%)':'')+'</span></div>'; };
-    h+='<div class="lbl" style="font-family:var(--font-mono);font-size:10.5px;color:var(--accent-2);font-weight:700;margin:12px 0 4px">ACCOUNT AVG-COST OVERLAY <span style="color:var(--ink-faint);font-weight:400">(purple=HDFC · orange=Fundamental 10G · chart lines)</span></div>'+arow(aa.sparcho,'HDFC','#a855f7')+arow(aa.Fundamental 10G,'Fundamental 10G','#f59e0b'); }
-  if(s.Fundamental 10G){ h+='<div class="lensrow" style="margin-top:10px"><div class="lbl">Fundamental 10G '+esc(s.Fundamental 10G.date||'')+'</div><div class="lens">'+esc(s.Fundamental 10G.verdict||'')+(s.Fundamental 10G.observation?'<div style="margin-top:5px;color:var(--ink-soft)">'+esc(s.Fundamental 10G.observation)+'</div>':'')+'</div></div>'; }
+    h+='<div class="lbl" style="font-family:var(--font-mono);font-size:10.5px;color:var(--accent-2);font-weight:700;margin:12px 0 4px">ACCOUNT AVG-COST OVERLAY <span style="color:var(--ink-faint);font-weight:400">(purple=HDFC · orange=Rajiv · chart lines)</span></div>'+arow(aa.sparcho,'HDFC','#a855f7')+arow(aa.rajiv,'Rajiv','#f59e0b'); }
+  if(s.rajiv){ h+='<div class="lensrow" style="margin-top:10px"><div class="lbl">Rajiv '+esc(s.rajiv.date||'')+'</div><div class="lens">'+esc(s.rajiv.verdict||'')+(s.rajiv.observation?'<div style="margin-top:5px;color:var(--ink-soft)">'+esc(s.rajiv.observation)+'</div>':'')+'</div></div>'; }
   if(s.operator_observation){ h+='<div class="lensrow"><div class="lbl">Operator observation</div><div class="lens">'+esc(s.operator_observation)+'</div></div>'; }
   host.innerHTML=h;
 }
@@ -652,14 +652,14 @@ function drawChart(p){
   for(const o of (p.operator_levels||[])){ if(o.price==null) continue; const c=cssv('--accent-2')||'#8b7cf6';
     _series.createPriceLine({price:+o.price,color:c,lineWidth:2,lineStyle:2,axisLabelVisible:true,title:'op '+(o.label||'')});
     legend.push('<span><b style="color:'+c+'">&#8228;</b> op '+esc(o.label||'operator')+' Rs'+(+o.price).toFixed(0)+'</span>'); }
-  // account average-cost overlay (OPERATOR STANDARD 260620): PURPLE=HDFC, ORANGE=Fundamental 10G. Private -> drawn only when unlocked.
+  // account average-cost overlay (OPERATOR STANDARD 260620): PURPLE=HDFC, ORANGE=Rajiv. Private -> drawn only when unlocked.
   if(DATA._unlocked && DATA._sensitive && DATA._sensitive.account_avg){
     const aa=DATA._sensitive.account_avg;
     const drawAvg=(o,color,who)=>{ if(!o||o.avg==null) return; const f=o.on_level;
       _series.createPriceLine({price:+o.avg,color:color,lineWidth:2,lineStyle:0,axisLabelVisible:true,title:who+' avg'+(f?' ⚑':'')});
       legend.push('<span><b style="color:'+color+'">━</b> '+who+' avg Rs'+(+o.avg).toFixed(0)+(o.qty?' ('+o.qty+'sh)':'')+(f?' <b style="color:'+color+'">⚑ on '+esc(f.label)+' '+(f.dist_pct)+'%</b>':'')+'</span>'); };
-    drawAvg(aa.sparcho,'#a855f7','HDFC');   // operator-mandated semantic colours (purple=HDFC / orange=Fundamental 10G)
-    drawAvg(aa.Fundamental 10G,'#f59e0b','Fundamental 10G');
+    drawAvg(aa.sparcho,'#a855f7','HDFC');   // operator-mandated semantic colours (purple=HDFC / orange=Rajiv)
+    drawAvg(aa.rajiv,'#f59e0b','Rajiv');
   }
   _setRange(365);
   document.getElementById('legend').innerHTML=legend.join('');
