@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-screener_runner.py  --  apply Fundamental 10G #1, Fundamental 8G 8-gate fundamental, etc. to the universe
+screener_runner.py  --  apply Rajiv #1, Sanjeev 8-gate fundamental, etc. to the universe
 
 WHY THIS EXISTS
 ===============
-Fundamental 10G (Dad) + Tauji each have a defined screener spec. This script applies
+Rajiv (Dad) + Tauji each have a defined screener spec. This script applies
 each spec to the cached fundamentals + price data and outputs:
   * a markdown report per screener with the candidate list + per-ticker
     pass/fail breakdown across each gate (so we can see WHY a name made or
@@ -27,7 +27,7 @@ USAGE
    python3 screener_runner.py
        Run all screeners; output to /03_SCREENERS/screeners/<screener_name>/<YYMMDD>_<screener>.{md,csv}
 
-   python3 screener_runner.py --screener Fundamental 10G
+   python3 screener_runner.py --screener Rajiv-10G
        Run one specific screener.
 
    python3 screener_runner.py --list
@@ -35,8 +35,8 @@ USAGE
 
 OUTPUT LOCATIONS
 ================
-  /03_SCREENERS/LAYERS/Fundamental 10G/YYMMDD_Fundamental 10G.md   + .csv
-  /03_SCREENERS/LAYERS/Fundamental 8G/YYMMDD_Fundamental 8G.md + .csv
+  /03_SCREENERS/LAYERS/Rajiv-10G/YYMMDD_Rajiv-10G.md   + .csv
+  /03_SCREENERS/LAYERS/Sanjeev-8G/YYMMDD_Sanjeev-8G.md + .csv
 """
 from __future__ import annotations
 
@@ -63,7 +63,7 @@ HIST_CSV = CACHE_DIR / "historical_closes.csv"
 # Sector mapping (matches CLAUDE.md §16 clusters)
 # =============================================================================
 SECTOR_MAP = {
-    # Fundamental 10G #1 needs: Power, IT, NBFC
+    # Rajiv #1 needs: Power, IT, NBFC
     'POWER': {
         'NTPC', 'POWERGRID', 'ADANIGREEN', 'TATAPOWER',
         'IREDA', 'WAAREEENER', 'MGL', 'VEDPOWER',  # +VEDPOWER 260630 (Vedanta Power thermal demerger, held); MGL = gas utility, power-adjacent
@@ -78,7 +78,7 @@ SECTOR_MAP = {
     'NBFC': {
         'BAJFINANCE', 'CHOLAFIN', 'SHRIRAMFIN', 'MCX', 'BSE',
     },
-    # Other clusters (kept for context; not used by Fundamental 10G #1 but useful for future screeners)
+    # Other clusters (kept for context; not used by Rajiv #1 but useful for future screeners)
     'MINERALS': {'GMDCLTD', 'MOIL', 'HINDZINC', 'GRAPHITE', 'VEDL', 'DECNGOLD', 'HINDCOPPER',
                  'HINDALCO'},   # +HINDALCO 260820 (aluminium + copper integrated producer)   # +DECNGOLD 260619 (gold explorer); +HINDCOPPER 260630 (copper PSU onboard)
     'TELECOM': {'HFCL', 'STLTECH', 'TEJASNET', 'BHARTIARTL', 'POLYCAB', 'KEI', 'PACEDIGITK'},   # +PACEDIGITK 260619 (held; telecom-digital infra)
@@ -223,7 +223,7 @@ def load_daily_ohlc():
 
 # =============================================================================
 # F110 — stale-historical-cache guard (G-1 pre-run assertion, G-2 per-row age)
-# Audit: 00_SYSTEM/AUDITS/260518_DIV_BULL_drift_audit.md
+# Audit: 00_SYSTEM/AUDITS/260518_Rajiv-DIV_BULL_drift_audit.md
 # =============================================================================
 from datetime import timedelta as _timedelta
 
@@ -508,8 +508,8 @@ def rsi_divergence_either(historical_rows, lookback=10):
 # =============================================================================
 # Screener specs
 # =============================================================================
-def screener_fund10g(ticker, fund, hist_rows, daily_rows):
-    """Fundamental 10G's screener #1. Returns dict[gate_name] -> bool/None + meta.
+def screener_rajiv_10g(ticker, fund, hist_rows, daily_rows):
+    """Rajiv's screener #1. Returns dict[gate_name] -> bool/None + meta.
 
     Gates:
       G1 sector       : ticker in Power/IT/NBFC
@@ -576,7 +576,7 @@ def screener_fund10g(ticker, fund, hist_rows, daily_rows):
     return gates, meta
 
 
-def screener_fund8g(ticker, fund, hist_rows, daily_rows):
+def screener_sanjeev_8g(ticker, fund, hist_rows, daily_rows):
     """Tauji's standard 8-gate fundamental screener. ROIC deferred (not on screener.in)."""
     prom = f(fund.get('promoter_pct'))
     pe = f(fund.get('pe'))
@@ -608,10 +608,10 @@ def screener_fund8g(ticker, fund, hist_rows, daily_rows):
     return gates, meta
 
 
-def screener_div(ticker, fund, hist_rows, daily_rows, hist_vol_rows=None):
-    """Fundamental 10G's screener #2 -- pure technical "squeeze + volume + RSI div".
+def screener_rajiv_div(ticker, fund, hist_rows, daily_rows, hist_vol_rows=None):
+    """Rajiv's screener #2 -- pure technical "squeeze + volume + RSI div".
 
-    Operator-relayed spec (2026-04-28, from Fundamental 10G's WhatsApp):
+    Operator-relayed spec (2026-04-28, from Rajiv's WhatsApp):
         "Finding a squeeze in the last 10 days defined as the standard
          deviation during those 10 days is about 3 % with a few days of
          volume higher than 30 day average volume and with rsi divergence."
@@ -669,21 +669,21 @@ def screener_div(ticker, fund, hist_rows, daily_rows, hist_vol_rows=None):
 
 
 SCREENER_REGISTRY = {
-    'Fundamental 10G': {
-        'fn': screener_fund10g,
-        'name': 'Fundamental 10G -- Power/IT/NBFC sector + PEG/ROCE/ROE quality + technical setup',
+    'Rajiv-10G': {
+        'fn': screener_rajiv_10g,
+        'name': 'Rajiv-10G -- Power/IT/NBFC sector + PEG/ROCE/ROE quality + technical setup',
         'all_gates_required': True,  # candidate = passes ALL gates
         'needs_volume': False,
     },
-    'DIV': {
-        'fn': screener_div,
-        'name': 'DIV -- pure technical: 10d squeeze + volume spikes + RSI divergence',
+    'Rajiv-DIV': {
+        'fn': screener_rajiv_div,
+        'name': 'Rajiv-DIV -- pure technical: 10d squeeze + volume spikes + RSI divergence',
         'all_gates_required': True,
         'needs_volume': True,
     },
-    'Fundamental 8G': {
-        'fn': screener_fund8g,
-        'name': 'Fundamental 8G 8-gate fundamental -- 8 quantitative fundamental gates',
+    'Sanjeev-8G': {
+        'fn': screener_sanjeev_8g,
+        'name': 'Sanjeev 8-gate fundamental -- 8 quantitative fundamental gates',
         'all_gates_required': True,
         'needs_volume': False,
     },
@@ -728,9 +728,9 @@ def run_screener(name, fundamentals, historical, daily, historical_with_vol=None
 
 
 # Set True by the main() talib preflight when a FULL-lens run finds talib missing:
-# de-cascade proceeds but TA's G5 gate is inert. Read in write_outputs() to
+# de-cascade proceeds but Kaarin-TA's G5 gate is inert. Read in write_outputs() to
 # stamp last_run.json (F138 / 260701).
-_LEVELID_G5_DEGRADED = False
+_KAARIN_G5_DEGRADED = False
 
 
 def write_outputs(name, rows, today):
@@ -744,7 +744,7 @@ def write_outputs(name, rows, today):
     yymmdd = today.strftime('%y%m%d')
 
     # CSV: ticker,pass_count,total_gates,passes_all,<each gate>,<each meta key>
-    # Filename uses screener key as-is (mixed case e.g. Fundamental 10G) per nomenclature v2 (2026-05-05).
+    # Filename uses screener key as-is (mixed case e.g. Rajiv-10G) per nomenclature v2 (2026-05-05).
     csv_path = outdir / f"{yymmdd}_{name}.csv"
     if not rows:
         return None, None
@@ -826,9 +826,9 @@ def write_outputs(name, rows, today):
         "status": "ok",
     }
     # Tell-on-itself: if the talib preflight de-cascaded (full-lens run, talib absent),
-    # TA's G5 gate was inert this run. Record it so system_doctor flags YELLOW
+    # Kaarin-TA's G5 gate was inert this run. Record it so system_doctor flags YELLOW
     # rather than the gate silently returning no fires (F138 / 260701).
-    if name == 'TA' and globals().get('_LEVELID_G5_DEGRADED', False):
+    if name == 'Kaarin-TA' and globals().get('_KAARIN_G5_DEGRADED', False):
         last_run["degraded"] = "G5/CDLENGULFING inert (talib not importable) -- fail-soft de-cascade per F138"
     # Atomic write — prevents truncated last_run.json on mid-write interruption
     # (260603 broken-lens incident; see atomic_io.py).
@@ -848,44 +848,44 @@ def main():
     args = ap.parse_args()
 
     # TA-Lib preflight — added 2026-05-15 per audit Tier 1.3.
-    # TA's engulfing pattern silently returned 'TALIB-NOT-INSTALLED' before this;
+    # Kaarin-TA's engulfing pattern silently returned 'TALIB-NOT-INSTALLED' before this;
     # one of five mechanical gates was dead and the screener didn't tell on itself.
-    # Now: if TA is in the run list, talib MUST import or we halt loudly.
-    _levelid_in_run = (
-        args.screener == 'TA'
-        or (not args.screener and 'TA' in SCREENER_REGISTRY)
+    # Now: if Kaarin-TA is in the run list, talib MUST import or we halt loudly.
+    _kaarin_in_run = (
+        args.screener == 'Kaarin-TA'
+        or (not args.screener and 'Kaarin-TA' in SCREENER_REGISTRY)
     )
-    if _levelid_in_run:
+    if _kaarin_in_run:
         try:
             import talib  # noqa: F401
             import numpy as _np  # noqa: F401
         except ImportError as _ie:
             import sys as _sys
-            _levelid_only = (args.screener == 'TA')
+            _kaarin_only = (args.screener == 'Kaarin-TA')
             print("=" * 72, file=_sys.stderr)
-            if _levelid_only:
-                # Single-lens intent (`--screener TA`): G5 IS the point of this
+            if _kaarin_only:
+                # Single-lens intent (`--screener Kaarin-TA`): G5 IS the point of this
                 # run, so a missing talib is genuinely fatal -> hard-halt (unchanged).
-                print("PRE-FLIGHT FAIL: screener_runner.py / TA", file=_sys.stderr)
+                print("PRE-FLIGHT FAIL: screener_runner.py / Kaarin-TA", file=_sys.stderr)
                 print("=" * 72, file=_sys.stderr)
                 print(f"  TA-Lib not importable: {_ie}", file=_sys.stderr)
-                print("  TA's CDLENGULFING gate (G5) requires the talib library.", file=_sys.stderr)
+                print("  Kaarin-TA's CDLENGULFING gate (G5) requires the talib library.", file=_sys.stderr)
                 print("  Fix: pip install TA-Lib --break-system-packages", file=_sys.stderr)
                 print("  Then re-run. Halting (single-lens run needs G5).", file=_sys.stderr)
                 print("=" * 72, file=_sys.stderr)
                 return 2
             # Full-lens run: fail-SOFT + DE-CASCADE (F138). A flaky C-extension import
             # in an ephemeral cloud container must NOT nuke the other 4 lenses +
-            # watchlists + report -- none of which use talib. TA still runs; its
+            # watchlists + report -- none of which use talib. Kaarin-TA still runs; its
             # G5/CDLENGULFING gate self-reports 'TALIB-NOT-INSTALLED' and simply does not
             # fire. Marked DEGRADED in last_run.json (NOT silent) so system_doctor
             # surfaces a YELLOW -- honouring the 2026-05-15 "no silent dead gate" intent
             # without the collateral cascade the fail-closed halt caused (260701 incident).
-            global _LEVELID_G5_DEGRADED
-            _LEVELID_G5_DEGRADED = True
-            print("DEGRADED (non-fatal): screener_runner.py / TA G5", file=_sys.stderr)
+            global _KAARIN_G5_DEGRADED
+            _KAARIN_G5_DEGRADED = True
+            print("DEGRADED (non-fatal): screener_runner.py / Kaarin-TA G5", file=_sys.stderr)
             print(f"  TA-Lib not importable: {_ie}", file=_sys.stderr)
-            print("  TA's CDLENGULFING gate (G5) will NOT fire this run; the other", file=_sys.stderr)
+            print("  Kaarin-TA's CDLENGULFING gate (G5) will NOT fire this run; the other", file=_sys.stderr)
             print("  4 lenses + watchlists + report proceed (de-cascade per F138).", file=_sys.stderr)
             print("  Restore G5 with: pip install TA-Lib --break-system-packages", file=_sys.stderr)
             print("=" * 72, file=_sys.stderr)
@@ -954,10 +954,10 @@ def main():
 
 
 # =============================================================================
-# TA chart confluence screener (added 2026-05-02)
+# Kaarin-TA chart confluence screener (added 2026-05-02)
 # =============================================================================
-# Mechanical TA proxy for level-ID's lens. v0 ships 4 gates; >=3 = HIGH-CONF.
-# Per /00_SYSTEM/REFERENCES/CONVERSATIONS/level-ID/LENS_ANALYSIS_v1.md sec 2.1 + 3.1.
+# Mechanical TA proxy for Kaarin's lens. v0 ships 4 gates; >=3 = HIGH-CONF.
+# Per /00_SYSTEM/REFERENCES/CONVERSATIONS/KAARIN/LENS_ANALYSIS_v1.md sec 2.1 + 3.1.
 # Bullish-bias only in v0; bear-fire detection deferred to v0.5/v1.
 # Universe: same 65 names as the other screeners (operator-decided 2026-05-02).
 # Calibration: placeholder weights for SCREENER-REPORT composite; first cycle
@@ -1009,7 +1009,7 @@ def _monthly_close_series(historical_rows):
     return list(by_month.values())
 
 
-def _levelid_ma_stack_w(weekly_closes):
+def _kaarin_ma_stack_w(weekly_closes):
     """Pillar 1: weekly close > 21EMA AND > 50SMA AND > 200EMA (bullish stack reclaimed)."""
     if len(weekly_closes) < 50:
         return None, {'ema21_w': None, 'sma50_w': None, 'ema200_w': None}
@@ -1025,7 +1025,7 @@ def _levelid_ma_stack_w(weekly_closes):
     return bullish, {'ema21_w': ema21, 'sma50_w': sma50, 'ema200_w_proxy': ema_long}
 
 
-def _levelid_rsi_momentum_w(weekly_closes):
+def _kaarin_rsi_momentum_w(weekly_closes):
     """Pillar 2: weekly RSI(14) > 50 AND rising over last 4 weeks."""
     if len(weekly_closes) < 18:  # 14 RSI + 4 lookback
         return None, {'rsi_w': None, 'rsi_w_4w_ago': None}
@@ -1037,7 +1037,7 @@ def _levelid_rsi_momentum_w(weekly_closes):
     return bullish, {'rsi_w': rsi_now, 'rsi_w_4w_ago': rsi_past}
 
 
-def _levelid_multi_tf_align(historical_rows):
+def _kaarin_multi_tf_align(historical_rows):
     """Pillar 3: daily > daily 200EMA AND weekly > weekly 30EMA-proxy AND monthly > monthly 6EMA-proxy.
     1Y data => no true 200EMA-weekly or 200EMA-monthly; proxies stand in until 3Y backfill."""
     if not historical_rows:
@@ -1067,7 +1067,7 @@ def _levelid_multi_tf_align(historical_rows):
     return bullish, {'ema200_d': daily_ema200, 'ema_long_w': weekly_ema_long, 'ema_long_m': monthly_ema_long}
 
 
-def _levelid_aoi_proximity(historical_rows, threshold_pct=3.0):
+def _kaarin_aoi_proximity(historical_rows, threshold_pct=3.0):
     """Pillar 4: current price within +-threshold% of any of: 60D high, 60D low, 52W high, 52W low.
     'Area of Interest' proxy. Both highs (resistance test) and lows (bounce zone) qualify in v0."""
     if not historical_rows or len(historical_rows) < 60:
@@ -1101,7 +1101,7 @@ def _levelid_aoi_proximity(historical_rows, threshold_pct=3.0):
 
 
 
-def _levelid_engulfing_pattern(daily_rows):
+def _kaarin_engulfing_pattern(daily_rows):
     """Pillar 1 extension (G5 v0.5): TA-Lib CDLENGULFING on recent OHLC bars.
     Returns (fired, meta_dict). Fires TRUE if recent CDLENGULFING bullish (+>0),
     FALSE if bearish (<0), None if no fire OR insufficient OHLC bars.
@@ -1130,14 +1130,14 @@ def _levelid_engulfing_pattern(daily_rows):
         if vals[i] != 0:
             kind = 'BULL' if vals[i] > 0 else 'BEAR'
             d = daily_rows[i].get('date') if i < len(daily_rows) else None
-            fired = vals[i] > 0  # gate fires TRUE on bullish only (matches TA bullish-bias convention)
+            fired = vals[i] > 0  # gate fires TRUE on bullish only (matches Kaarin-TA bullish-bias convention)
             return fired, {'engulfing_kind': kind, 'engulfing_value': int(vals[i]), 'engulfing_date': d}
     return None, {'engulfing_kind': None, 'engulfing_value': None, 'engulfing_date': None}
 
 
 
-def screener_ta(ticker, fund, hist_rows, daily_rows):
-    """level-ID chart-confluence screener. v0. Bullish-only.
+def screener_kaarin_ta(ticker, fund, hist_rows, daily_rows):
+    """Kaarin chart-confluence screener. v0. Bullish-only.
 
     Gates (fire TRUE if bullish):
       G1 ma_stack_w     : weekly close > 21EMA AND > 50SMA AND > 40EMA-proxy (200EMA when 3Y data lands)
@@ -1151,15 +1151,15 @@ def screener_ta(ticker, fund, hist_rows, daily_rows):
       2/4 = LOW-CONF (also near-miss)
       <=1 = no setup
 
-    Source: /00_SYSTEM/REFERENCES/CONVERSATIONS/level-ID/LENS_ANALYSIS_v1.md
+    Source: /00_SYSTEM/REFERENCES/CONVERSATIONS/KAARIN/LENS_ANALYSIS_v1.md
     """
     weekly = _weekly_close_series(hist_rows or [])
-    g1_fired, g1_meta = _levelid_ma_stack_w(weekly)
-    g2_fired, g2_meta = _levelid_rsi_momentum_w(weekly)
-    g3_fired, g3_meta = _levelid_multi_tf_align(hist_rows or [])
-    g4_fired, g4_meta = _levelid_aoi_proximity(hist_rows or [])
+    g1_fired, g1_meta = _kaarin_ma_stack_w(weekly)
+    g2_fired, g2_meta = _kaarin_rsi_momentum_w(weekly)
+    g3_fired, g3_meta = _kaarin_multi_tf_align(hist_rows or [])
+    g4_fired, g4_meta = _kaarin_aoi_proximity(hist_rows or [])
 
-    g5_fired, g5_meta = _levelid_engulfing_pattern(daily_rows or [])
+    g5_fired, g5_meta = _kaarin_engulfing_pattern(daily_rows or [])
     # v0.6 deepening (260602): HTF Supertrend (weekly) + HTF Fib proximity
     g6_fired, g6_st = _supertrend_bullish(_weekly_ohlc_from_closes(hist_rows or []))
     g7_fired, g7_meta = _fib_proximity([c for _, c in (hist_rows or [])])
@@ -1184,9 +1184,9 @@ def screener_ta(ticker, fund, hist_rows, daily_rows):
 
 
 # Register the screener (additive: keeps existing 3 entries untouched).
-SCREENER_REGISTRY['TA'] = {
-    'fn': screener_ta,
-    'name': 'TA chart confluence -- v0.6: MA stack + RSI momentum + multi-TF align + AOI proximity + CDLENGULFING + HTF Supertrend(W) + HTF Fib proximity (7/7 = HIGHEST-CONF)',
+SCREENER_REGISTRY['Kaarin-TA'] = {
+    'fn': screener_kaarin_ta,
+    'name': 'Kaarin-TA chart confluence -- v0.6: MA stack + RSI momentum + multi-TF align + AOI proximity + CDLENGULFING + HTF Supertrend(W) + HTF Fib proximity (7/7 = HIGHEST-CONF)',
     'all_gates_required': True,  # 4/4 = HIGH-CONF candidate per LENS_ANALYSIS framework
     'needs_volume': False,
 }
@@ -1194,7 +1194,7 @@ SCREENER_REGISTRY['TA'] = {
 
 
 # =============================================================================
-# Shared TA helpers (260602) — DayTrade lens + level-ID deepening
+# Shared TA helpers (260602) — DayTrade lens + Kaarin deepening
 # =============================================================================
 _SR_CACHE = None
 
@@ -1322,7 +1322,7 @@ def _cvd_proxy(daily_rows, lookback=5):
 # =============================================================================
 # DayTrade-Confluence lens (260602) — EOD-DERIVED next-session setup.
 # NOT live intraday: we have no L2/orderbook or tick data, so this is a daily-bar
-# proxy for level-ID's confluence method. CVD is a signed-volume PROXY; Orderbook
+# proxy for Kaarin's confluence method. CVD is a signed-volume PROXY; Orderbook
 # is OUT OF SCOPE (documented). Feeds the WS-C day-trade trade-plan scaffold.
 # =============================================================================
 def screener_daytrade_confluence(ticker, fund, hist_rows, daily_rows, hist_vol_rows=None):

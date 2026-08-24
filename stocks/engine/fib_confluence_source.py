@@ -127,7 +127,7 @@ def classify(name: dict) -> dict:
     if "supply-unconfirmed" in flags:
         why.append("cluster carries SUPPLY semantics price has NOT accepted above — not a floor")
     if not ks.get("verified"):
-        why.append("key support is not a hand-verified Fib read (A2: verified banks only)")
+        why.append("key support is not a hand-verified Kaarin-Fib read (A2: verified banks only)")
     if (ks.get("sources") or 0) < MIN_SOURCES:
         why.append("key support has %s source(s), under the %d-source confluence floor"
                    % (ks.get("sources") or 0, MIN_SOURCES))

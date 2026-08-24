@@ -3,7 +3,7 @@
 
 WHY THIS EXISTS (F129, 2026-06-09): the fires were computed inside
 equity_dashboard_emit.py only, in THREE divergent copies (GENERATORS had the
-Fundamental 10G-approved F128 falling-knife logic; web/ + stocks/ were still pre-F128), and
+Rajiv-approved F128 falling-knife logic; web/ + stocks/ were still pre-F128), and
 the cloud refresh (refresh_prices.py) never recomputed them at all — so the live
 dashboard could sit on multi-session-stale prices with nothing surfacing it.
 
@@ -11,7 +11,7 @@ This module factors the scoring into ONE pure, I/O-free function that BOTH the
 vault full-emit AND the CI price-refresh import, so the logic can never drift
 across copies again and the CI job can re-score the fires on the latest prices.
 The scoring is a verbatim port of the GENERATORS F128 _build_daytrade_panel
-(encodes Fundamental 10G's doji->HHHL discipline) — verified byte-identical by
+(encodes Rajiv's doji->HHHL discipline) — verified byte-identical by
 daytrade_parity_test.py.
 
 CONTRACT — build_panel(candidates, ohlc, held_tickers):
@@ -61,7 +61,7 @@ def build_panel(candidates: dict, ohlc: dict, held_tickers=None, top_n: int = 12
             last_doji = body0 <= 0.18
         if len(closes) >= 4:
             recent_down = closes[-1] < closes[-3] and closes[-1] < closes[-4]
-        # FALLING-KNIFE EXCLUSION (F128, encodes Fundamental 10G 260608) -- fail CLOSED, never no-ops on missing d1:
+        # FALLING-KNIFE EXCLUSION (F128, encodes Rajiv 260608) -- fail CLOSED, never no-ops on missing d1:
         knife = False
         if d1 is not None and d1 <= -3:
             knife = True
@@ -97,7 +97,7 @@ def build_panel(candidates: dict, ohlc: dict, held_tickers=None, top_n: int = 12
         if d1 is not None and d1 < -0.5 and not confirmed:
             continue   # down on the day with no reversal candle -> not an upward opportunity
         if recent_down and not confirmed and not last_doji:
-            continue   # Fundamental 10G doji->HHHL gate: downtrending names wait for rest(doji)+turn(green)
+            continue   # Rajiv doji->HHHL gate: downtrending names wait for rest(doji)+turn(green)
         d5 = round((closes[-1] - closes[-6]) / closes[-6] * 100, 2) if len(closes) >= 6 and closes[-6] else None
         rsi = m.get("rsi_today")
         mh = m.get("multi_hit_count", 0)

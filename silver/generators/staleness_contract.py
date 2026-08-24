@@ -490,7 +490,7 @@ EQUITY_BLOCKS = {
 
     # --- operator-private: encrypted into sensitive_enc and stripped from the public
     # aggregate. They MUST still report freshness, but under a codename (see the detector).
-    "family_account_b":         _blk("propagate/account pull", "operator", 10, severity="warn",
+    "rajiv_account":         _blk("propagate/account pull", "operator", 10, severity="warn",
                                   public_as="family_account_b", allow_empty=True),
     "performance":           _blk("parse_capital_gains.py", "laptop", 10, severity="warn",
                                   public_as="perf_private", allow_empty=True),
@@ -534,7 +534,7 @@ def _block_items(data, now, registry, desk):
     for name in sorted((data or {}).keys()):
         spec = registry.get(name)
         # F260721-CONTRACTLEAK: this runs BEFORE _apply_privacy strips the operator-private
-        # blocks, so a raw key name here lands on a PUBLIC surface. `family_account_b` did exactly
+        # blocks, so a raw key name here lands on a PUBLIC surface. `rajiv_account` did exactly
         # that - the DATA was stripped, and the health metadata describing it put the family
         # name back. It also evaded privacy_scrub, whose halt-on-survivor check is word-boundary
         # based and cannot see a name embedded in an identifier. Private blocks must still be
