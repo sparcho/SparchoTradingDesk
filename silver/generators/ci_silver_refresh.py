@@ -88,7 +88,7 @@ def assert_public_clean(agg: dict) -> None:
     """
     public = {k: v for k, v in (agg or {}).items() if k != "sensitive_enc"}
     blob = json.dumps(public, ensure_ascii=False, default=str)
-    # Split on RUNS OF LETTERS, so `rajiv_account` and `family-member-c` both yield their parts
+    # Split on RUNS OF LETTERS, so `family_account_b` and `family-member-c` both yield their parts
     # (`_` and `-` are not letters). That also makes base64 safe without special-casing it: a
     # chance run like `DYashfNXs` tokenises whole and hashes to nothing, while `Yashish Dahiya`
     # — a real listed-company founder named in a brief — is likewise its own token and is NOT a

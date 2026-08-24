@@ -28,6 +28,8 @@ Item schema:
 """
 from __future__ import annotations
 
+import hashlib
+import re
 from datetime import datetime, timezone, timedelta
 
 SCHEMA = "v1"
@@ -490,8 +492,8 @@ EQUITY_BLOCKS = {
 
     # --- operator-private: encrypted into sensitive_enc and stripped from the public
     # aggregate. They MUST still report freshness, but under a codename (see the detector).
-    "rajiv_account":         _blk("propagate/account pull", "operator", 10, severity="warn",
-                                  public_as="family_account_b", allow_empty=True),
+    # "family_account_b" RETIRED 2026-08-24 - the desk tracks one account, the operator's. A
+    # contract entry for a block nobody produces is a nag for a file that will never arrive.
     "performance":           _blk("parse_capital_gains.py", "laptop", 10, severity="warn",
                                   public_as="perf_private", allow_empty=True),
     # F260728-ORDERLOG: the order-log behaviour half rides INSIDE real_scorecard.behaviour rather
@@ -521,6 +523,32 @@ EQUITY_BLOCKS = {
 }
 
 
+# SHA-256 prefixes of the private first names. HASHED, never spelled out: this file has three
+# copies in the PUBLIC repo, so a plaintext list here would be the leak it exists to prevent -- and
+# a plaintext list is also silently rewritable, which is how the 2026-08-24 history scrub disarmed
+# the silver leak gate. It cannot import the vault's privacy_scrub for the same reason: this file
+# also runs in the cloud, where that module does not exist.
+_PRIVATE_NAME_HASHES = frozenset({
+    "af7a74864494b189", "8394e6f426a8d1cc", "eec47d9891bc884a",
+    "fb3193a85f57ec2d", "262cc47030b18030",
+})
+
+
+def _safe_public_name(name):
+    """A public label for an UNREGISTERED block key.
+
+    Registered private blocks declare `public_as`. An unregistered one declares nothing, and the
+    fallback used to be the RAW KEY -- so RETIRING a private block turned its freshness row back
+    into a leak, which is the exact opposite of what retiring it was for. Split on runs of letters
+    so `family_account_b` yields its parts; if any part is a private name, report the block under a
+    neutral label. It is still REPORTED -- silence is the other failure mode.
+    """
+    for word in re.findall(r"[A-Za-z]+", str(name or "")):
+        if hashlib.sha256(word.lower().encode()).hexdigest()[:16] in _PRIVATE_NAME_HASHES:
+            return "private-block"
+    return name
+
+
 def _block_items(data, now, registry, desk):
     """Generic per-block freshness, judged against TODAY — the D1 detector.
 
@@ -534,12 +562,12 @@ def _block_items(data, now, registry, desk):
     for name in sorted((data or {}).keys()):
         spec = registry.get(name)
         # F260721-CONTRACTLEAK: this runs BEFORE _apply_privacy strips the operator-private
-        # blocks, so a raw key name here lands on a PUBLIC surface. `rajiv_account` did exactly
+        # blocks, so a raw key name here lands on a PUBLIC surface. `family_account_b` did exactly
         # that - the DATA was stripped, and the health metadata describing it put the family
         # name back. It also evaded privacy_scrub, whose halt-on-survivor check is word-boundary
         # based and cannot see a name embedded in an identifier. Private blocks must still be
         # REPORTED (silence is the other failure mode) - just never by their own key.
-        pub = (spec or {}).get("public_as") or name
+        pub = (spec or {}).get("public_as") or _safe_public_name(name)
         if spec is None:
             items.append(_item(
                 id="block:" + pub, subsystem=desk, label="Block %s" % pub,

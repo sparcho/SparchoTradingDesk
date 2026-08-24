@@ -1668,9 +1668,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   <script>
   /* ═══ EQUITY DESK · data layer — bind-or-PENDING, additive (no emit/aggregate changes) ═══ */
   const LENS_ORDER = ['Fundamental 10G','DIV','Fundamental 8G','TA'];
-  // F260709: lens keys in the live aggregate are 'Fundamental 10G'/'DIV'/'Fundamental 8G'/'TA';
+  // F260709: lens keys in the live aggregate are the codenamed set;
   // resolve display abbreviations to whatever alias the emit produced (fixes blank hit-matrix + leaderboard cells).
-  const LENS_ALIAS={'Fundamental 10G':['Fundamental 10G','10-Gate','Fundamental 10G','10G'],'DIV':['DIV','DIV'],'Fundamental 8G':['Fundamental 8G','8-Gate','Fundamental 8G','8G'],'TA':['TA','TA']};
+  /* Aliases cover the CURRENT internal keys and every codenamed display spelling. The raw
+     pre-rename tokens are deliberately NOT listed: keeping them for backward compatibility
+     would put the names straight back into a public file, which is what the rename removed. */
+  const LENS_ALIAS={'Fundamental 10G':['Fundamental 10G','Fundamental-10G','10-Gate','10G'],'DIV':['DIV','Technical-DIV'],'Fundamental 8G':['Fundamental 8G','Fundamental-8G','8-Gate','8G'],'TA':['TA','LevelID-TA']};
   function lensStat(lensObj,k){ if(!lensObj) return null; var al=LENS_ALIAS[k]||[k]; for(var i=0;i<al.length;i++){ var c=lensObj[al[i]]; if(c&&c.status!=null) return c.status; } return null; }
   const TV_SPECIAL = { BLUESTAR:'BLUESTARCO', KPIT:'KPITTECH', PBFINTECH:'POLICYBZR' };
   const tvSymbol = (t)=> 'NSE:' + (TV_SPECIAL[t]||t);
@@ -1742,7 +1745,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       const hp={}; (u.held_private||[]).forEach(x=>hp[x.ticker]=x);
       DATA.held=(DATA.held||[]).map(h=>Object.assign({},h,hp[h.ticker]||{}));
     }
-    DATA.risk_gates=u.risk_gates||DATA.risk_gates||[]; DATA.recent_closed=u.recent_closed||[]; DATA.family_account_b=u.family_account_b||DATA.family_account_b||null;
+    DATA.risk_gates=u.risk_gates||DATA.risk_gates||[]; DATA.recent_closed=u.recent_closed||[];
     if(u.trade_lab!=null) DATA.trade_lab=u.trade_lab;
     // F260728-SCORECARD - the operator's REAL-money record and the capital-gains series it
     // is built from. Both ride inside the ciphertext (real rupees, public repo), so without
@@ -4288,7 +4291,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     }
     window.__cardFor=cardFor;
     var acctMap={'SPARCHO-HDFC (you)':held};
-    (function(){ var ra=(DATA.family_account_b&&DATA.family_account_b.holdings)||{}; (ra.per_stock||[]).forEach(function(st){ var accs=st.accounts||{}; Object.keys(accs).forEach(function(an){ var a=accs[an]||{}; (acctMap[an]=acctMap[an]||[]).push({ticker:st.ticker,sector:'',current_price:st.price,day_chg_pct:st.day_change_pct,qty:a.qty,current_value:a.value,invested:a.cost,avg_cost:(a.qty?a.cost/a.qty:null),unreal_pct:(a.cost?((a.value-a.cost)/a.cost*100):null)}); }); }); Object.keys(acctMap).forEach(function(k){ if(k!=='SPARCHO-HDFC (you)') acctMap[k].sort(function(x,y){return (y.current_value||0)-(x.current_value||0);}); }); })();
+    /* F260824: the family multi-account holdings no longer populate acctMap - one book. */
     window.__acctMap=acctMap;
     if(!window.__selAcct||!acctMap[window.__selAcct]) window.__selAcct='SPARCHO-HDFC (you)';
     window.__renderHeld=function(){ var m=window.__acctMap||{}; var sel=window.__selAcct||'SPARCHO-HDFC (you)'; if(!m[sel]) sel='SPARCHO-HDFC (you)'; var r=document.getElementById('hc-row'); if(r&&window.__cardFor) r.innerHTML=(m[sel]||[]).map(window.__cardFor).join(''); var hh=document.getElementById('hc-acct'); if(hh) hh.textContent=sel; document.querySelectorAll('.acctrow').forEach(function(tr){ tr.classList.toggle('on', tr.getAttribute('data-acct')===sel); }); };
@@ -4303,11 +4306,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     setFace('z-port',
       kpis+
       hero+
-      '<div class="grid2b"><div class="card"><div class="c-lbl"><span class="d"></span>Accounts · multi-account book<span class="age">click a row → load its holdings above</span></div>'+(function(){ var ra=(DATA.family_account_b&&DATA.family_account_b.holdings)||{}; var ats=(ra.account_totals||[]); var gt=ra.grand_totals||{}; var rows=[];
-      if(_mv!=null) rows.push({a:'SPARCHO-HDFC (you)',v:_mv,c:tot.invested,p:_ur,n:held.length,you:true});
-      ats.forEach(function(x){ rows.push({a:x.account,v:x.value,c:x.cost,p:(x.cost?((x.value-x.cost)/x.cost*100):null),n:x.n_stocks}); });
-      if(!rows.length) return pending('Multi-account book','unlock to load the family account book. '+PEND_EMIT);
-      return '<table class="tbl"><thead><tr><th style="text-align:left">Account</th><th>Value</th><th>Cost</th><th>P&amp;L %</th><th>Names</th></tr></thead><tbody>'+rows.map(function(r){ return '<tr class="acctrow'+(r.a===window.__selAcct?' on':'')+'" data-acct="'+esc(r.a)+'" onclick="selAccount(this.dataset.acct)"><td style="text-align:left">'+(r.you?'<span class="star" style="color:var(--watch)">★</span> ':'')+esc(r.a)+'</td><td class="sens">'+(r.v!=null?fmtINR(r.v,{compact:true}):'—')+'</td><td class="sens">'+(r.c!=null?fmtINR(r.c,{compact:true}):'—')+'</td><td class="sens '+cls(r.p)+'">'+(r.p!=null?fmtPct(r.p):'—')+'</td><td>'+(r.n!=null?r.n:'—')+'</td></tr>'; }).join('')+(gt.current_value!=null?('<tr style="border-top:1px solid var(--border)"><td style="text-align:left;color:var(--cyan)">Family grand total</td><td class="sens">'+fmtINR(gt.current_value,{compact:true})+'</td><td class="sens">'+(gt.total_cost!=null?fmtINR(gt.total_cost,{compact:true}):'—')+'</td><td class="sens '+cls(gt.roi_pct)+'">'+(gt.roi_pct!=null?fmtPct(gt.roi_pct):'—')+'</td><td>'+(gt.n_stocks!=null?gt.n_stocks:'—')+'</td></tr>'):'')+'</tbody></table>'; })()+'</div>'+
+      /* F260824 - the multi-account book is RETIRED. Operator: the desk tracks ONE account,
+         his own; the family accounts he does not manage are tabled. The producer stopped
+         emitting the block, the contract entry is gone, and this was the third leg - a
+         renderer left behind would have gone on drawing a panel whose data never arrives,
+         which is the half-retirement this vault keeps paying for. */
+      '<div class="grid2b">'+
       '<div class="card"><div class="c-lbl"><span class="d"></span>Closed trades · realized P&amp;L</div>'+(function(){ var cl=(DATA.recent_closed||[]); if(!cl.length) return pending('Closed trades','no positions closed in this window.'); return '<table class="tbl"><thead><tr><th>Ticker</th><th>Cluster</th><th>Exit</th><th>Realized</th><th>Reason</th></tr></thead><tbody>'+cl.map(function(c){ return '<tr><td>'+esc(c.ticker)+'</td><td style="text-align:left;color:var(--mut)">'+esc(c.cluster||'')+'</td><td>'+fmtD(c.exit_date)+'</td><td class="sens '+cls(c.realised_pnl)+'">'+(c.realised_pnl!=null?fmtINR(c.realised_pnl,{compact:true}):'—')+'</td><td style="text-align:left;color:var(--faint)">'+esc(c.exit_reason||'')+'</td></tr>'; }).join('')+'</tbody></table>'; })()+'</div></div>');
     const row=$('hc-row'); if(row){ const scc=function(d){ row.scrollBy({left:d*250,behavior:'smooth'}); }; const p=$('hc-prev'),nn=$('hc-next'); if(p)p.onclick=function(){scc(-1);}; if(nn)nn.onclick=function(){scc(1);}; }
   }catch(e){__reportErr('port',e);} }
