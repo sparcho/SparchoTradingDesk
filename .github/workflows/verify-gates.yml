@@ -60,8 +60,9 @@ jobs:
         run: |
           set -uo pipefail
           # The denylist lives in a repo SECRET so the sensitive tokens never live in the repo itself.
-          # Put FULL names / specific sensitive strings (one per line) — NOT bare first names like
-          # "Fundamental 10G", which collide with the public screener-lens names (Fundamental 10G / DIV).
+          # Put FULL names / specific sensitive strings (one per line) — NOT bare first names,
+          # which collide with the internal screener-lens tokens that legitimately contain them
+          # and would fail the build on every run.
           if [ -z "${LEAK_DENYLIST:-}" ]; then
             echo "::warning::LEAK_DENYLIST secret not set — family-token scan SKIPPED."
             echo "Set it: Settings → Secrets and variables → Actions → New repository secret → LEAK_DENYLIST"

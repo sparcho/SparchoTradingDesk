@@ -38,7 +38,9 @@ The 20-min price overlay then keeps the live tickers moving on top, exactly as b
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
+import re
 import os
 import sys
 from datetime import datetime, timedelta, timezone
@@ -53,12 +55,21 @@ sys.path.insert(0, str(HERE))
 IST = timezone(timedelta(hours=5, minutes=30))
 SETTLED_AFTER_IST = (15, 45)
 
-# Personal/account tokens that must NEVER appear in the PUBLIC portion of the aggregate.
-# Mirrors silver_dashboard_emit's family-token set minus the intended-public 'Sparcho' brand
-# and the generic 'HUF' (which can never leak alone once the name beside it is gone).
-# Scanned case-insensitively as SUBSTRINGS (privacy_scrub lesson: `_` is a \w char, so a
-# word-boundary regex misses `family_account_b`).
-LEAK_TOKENS = ("the operator", "Fundamental 10G", "family-member-c", "family-member-c", "family-member-d")
+# Personal tokens that must NEVER appear in the PUBLIC portion of the aggregate — held as
+# SHA-256 prefixes, never as text.
+#
+# F260824. This list used to spell the names out, and that was the leak it existed to prevent:
+# the deny-list is published with the file, so the gate advertised exactly who it was protecting
+# ([[health-metadata-can-leak-private-names]] — describing the data IS publishing it). The
+# 2026-08-24 history scrub then made the point twice over, by rewriting the plaintext list into
+# codenames and DISARMING the gate — it went on passing while watching for names nobody would
+# ever type. A guard whose subject can be rewritten by a text substitution was never a guard.
+#
+# Hashes cannot be rewritten into something harmless by accident, and they cannot be read.
+_LEAK_HASHES = frozenset({
+    "8394e6f426a8d1cc", "af7a74864494b189", "eec47d9891bc884a",
+    "fb3193a85f57ec2d", "262cc47030b18030",
+})
 
 # Local fallbacks are a LAPTOP-dry-run convenience only; in Actions the env always wins.
 VAULT_INPUTS = Path(r"C:/Users/user/Desktop/CLAUDE PLAY/TRADER/00_SYSTEM/GENERATORS/_inputs")
@@ -76,12 +87,19 @@ def assert_public_clean(agg: dict) -> None:
     warnings — is scanned lowercased as substrings.
     """
     public = {k: v for k, v in (agg or {}).items() if k != "sensitive_enc"}
-    blob = json.dumps(public, ensure_ascii=False, default=str).lower()
-    hits = sorted({t for t in LEAK_TOKENS if t.lower() in blob})
+    blob = json.dumps(public, ensure_ascii=False, default=str)
+    # Split on RUNS OF LETTERS, so `rajiv_account` and `family-member-c` both yield their parts
+    # (`_` and `-` are not letters). That also makes base64 safe without special-casing it: a
+    # chance run like `DYashfNXs` tokenises whole and hashes to nothing, while `Yashish Dahiya`
+    # — a real listed-company founder named in a brief — is likewise its own token and is NOT a
+    # family name. Substring matching could not tell any of those three apart.
+    words = {w.lower() for w in re.findall(r"[A-Za-z]+", blob)}
+    hits = sorted(w for w in words
+                  if hashlib.sha256(w.encode()).hexdigest()[:16] in _LEAK_HASHES)
     if hits:
         raise SilverRefreshAbort(
-            "PRIVACY LEAK: family token(s) %s present in the PUBLIC aggregate — refusing to "
-            "write. The emit's privacy lock did not strip everything." % ", ".join(hits))
+            "PRIVACY LEAK: %d family token(s) present in the PUBLIC aggregate — refusing to "
+            "write. The emit's privacy lock did not strip everything." % len(hits))
 
 
 def _secret(env_name: str, *files) -> str:
