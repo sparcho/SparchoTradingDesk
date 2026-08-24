@@ -113,6 +113,26 @@ def classify(name: dict) -> dict:
     flags = [str(f) for f in (name.get("flags") or [])]
     why: list = []
 
+    # Is the entry a price you could actually transact at today? Computed HERE, above the first
+    # return, because all three exits publish `rr` and all three were publishing it off an
+    # unreachable level. The first version of this fix guarded only the WATCH exit and looked
+    # correct locally -- the live desk then moved STLTECH to EXCLUDE and it published rr 8.02
+    # again from the exit nobody had patched ([[retire-a-signal-sweep-every-surface]]: one exit
+    # is not the surface, the function is).
+    _cur = _num(name.get("current_px"))
+    _gap_raw = (abs(_cur - entry) / entry * 100) if (_cur is not None and entry) else None
+    # Decide on the RAW gap and round only for DISPLAY. Rounding first put TEJASNET at exactly
+    # 2.0 against a 2.0 tolerance, so a 2.004% gap compared as not-greater-than and the row kept
+    # its ratio -- a boundary the rounding invented rather than one the data has.
+    entry_gap_pct = None if _gap_raw is None else round(_gap_raw, 1)
+    unreachable = _gap_raw is not None and _gap_raw > AT_TOL_PCT
+
+    def _rr_fields():
+        """R:R is a property of a trade you can take. Withheld -- not deleted -- when you cannot."""
+        return {"rr": None if unreachable else rr,
+                "rr_if_reached": rr if unreachable else None,
+                "entry_gap_pct": entry_gap_pct if unreachable else None}
+
     # ── STRUCTURAL gates. Failing ANY of these is an EXCLUDE, not a WATCH: the name is not a
     #    candidate at all. (Reading these as demotions gives 23 WATCH / 16 EXCLUDE against the
     #    operator's live-verified 5 / 34.)
@@ -136,7 +156,7 @@ def classify(name: dict) -> dict:
 
     if why:
         return {"ticker": name.get("ticker"), "verdict": "EXCLUDE", "entry": entry, "stop": stop,
-                "target": target, "rr": rr, "why_verdict": why}
+                "target": target, "why_verdict": why, **_rr_fields()}
 
     # ── ACTIONABILITY. Everything below reaches here already structurally sound, so a failure is
     #    a DEMOTION to WATCH — the name stays on the radar, it just is not a fire today.
@@ -150,12 +170,9 @@ def classify(name: dict) -> dict:
     # together, so a fire could publish an entry 99% below spot under "price has come back
     # to this level". Sound structure, price simply not there -> WATCH, which is what WATCH
     # is for. Never a silent exclusion: the level set is still shown, correctly labelled.
-    cur = _num(name.get("current_px"))
-    unreachable = False
-    if cur is not None and entry:
-        gap = abs(cur - entry) / entry * 100
-        if gap > AT_TOL_PCT:
-            unreachable = True
+    cur, gap = _cur, entry_gap_pct
+    if unreachable:
+        if True:
             why.append("price %.2f is %.1f%% from the %s it would buy — the confluence price "
                        "is AT is not this level, so it is not a fire yet"
                        % (cur, gap, entry))
@@ -180,14 +197,7 @@ def classify(name: dict) -> dict:
 
     if why:
         return {"ticker": name.get("ticker"), "verdict": "WATCH", "entry": entry, "stop": stop,
-                "target": target,
-                # withheld, not deleted: `rr_if_reached` keeps the arithmetic and names its own
-                # precondition, so nothing is lost and nothing can be printed as if it were live.
-                "rr": None if unreachable else rr,
-                "rr_if_reached": rr if unreachable else None,
-                "entry_gap_pct": (round(abs(cur - entry) / entry * 100, 1)
-                                  if (unreachable and cur is not None and entry) else None),
-                "why_verdict": why}
+                "target": target, "why_verdict": why, **_rr_fields()}
 
     # V-03 — a FIRE states its WHY too. This is the line the desk renders under the level set.
     why.append("AT a %d-source hand-verified support at %s in a %s trend; %.2f R:R to the next "
