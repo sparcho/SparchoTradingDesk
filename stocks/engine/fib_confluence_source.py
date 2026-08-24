@@ -151,12 +151,27 @@ def classify(name: dict) -> dict:
     # to this level". Sound structure, price simply not there -> WATCH, which is what WATCH
     # is for. Never a silent exclusion: the level set is still shown, correctly labelled.
     cur = _num(name.get("current_px"))
+    unreachable = False
     if cur is not None and entry:
         gap = abs(cur - entry) / entry * 100
         if gap > AT_TOL_PCT:
+            unreachable = True
             why.append("price %.2f is %.1f%% from the %s it would buy — the confluence price "
                        "is AT is not this level, so it is not a fire yet"
                        % (cur, gap, entry))
+            # F260824 — the 23-Aug repair fixed the VERDICT and left the NUMBERS. The row stayed
+            # on the desk still publishing an R:R computed off a price you cannot transact at,
+            # and the card rendered it ("9.8x reward" on STLTECH at a 99.1% gap). Worse, the
+            # buckets ORDER by R:R, and across the live bank the ratio is very nearly rank-
+            # ordered by the gap itself (99.1%->9.76, 45.1%->6.94, 32.5%->5.40, 16.4%->5.07) —
+            # so it was measuring distance-from-price and floating the LEAST actionable rows to
+            # the top. The levels stay (real banked structure, the reason to watch the name);
+            # the RATIO is withheld and its value preserved under a name that states the
+            # condition ([[jointly-incoherent-fields]]).
+            why.append("reward:risk withheld — %.2f only applies IF price returns to %s, and it "
+                       "is %.1f%% away; a ratio off an unreachable price is not a trade that exists"
+                       % (rr, entry, gap) if rr is not None else
+                       "reward:risk withheld — the entry is %.1f%% away" % gap)
     if target is None:
         why.append("no banked level overhead to target — nothing to size a reward against")
     elif rr is not None and rr < RR_MIN:
@@ -165,7 +180,14 @@ def classify(name: dict) -> dict:
 
     if why:
         return {"ticker": name.get("ticker"), "verdict": "WATCH", "entry": entry, "stop": stop,
-                "target": target, "rr": rr, "why_verdict": why}
+                "target": target,
+                # withheld, not deleted: `rr_if_reached` keeps the arithmetic and names its own
+                # precondition, so nothing is lost and nothing can be printed as if it were live.
+                "rr": None if unreachable else rr,
+                "rr_if_reached": rr if unreachable else None,
+                "entry_gap_pct": (round(abs(cur - entry) / entry * 100, 1)
+                                  if (unreachable and cur is not None and entry) else None),
+                "why_verdict": why}
 
     # V-03 — a FIRE states its WHY too. This is the line the desk renders under the level set.
     why.append("AT a %d-source hand-verified support at %s in a %s trend; %.2f R:R to the next "
@@ -212,6 +234,9 @@ def order_key(row):
     Whoever renders this must say so rather than let position imply conviction.
     """
     rr = _num((row or {}).get("rr"))
+    # A WITHHELD ratio sorts LAST, not first. `rr` is None both for "no ratio computable" and
+    # for "computed off a price you cannot reach", and in either case the row has not earned a
+    # position above one that states a real number.
     return (-(rr if rr is not None else -1), str((row or {}).get("ticker") or ""))
 
 
