@@ -1,29 +1,15 @@
 #!/usr/bin/env python3
-"""
-atomic_io.py — crash-safe file writers for TRADER generators.
+"""silver_atomic_io.py -- the SILVER desk's crash-safe writers.
 
-WHY (codified 2026-06-03 per P1.2 broken-lens incident):
-  Several sentinel writers (`last_run.json` in screener_runner.py /
-  watchlist_runner.py) and the `positions_unified.json` cache were written
-  with a plain `path.write_text(...)`. If the process is interrupted mid-write
-  (signal, kill, crash, disk full), the file is left TRUNCATED — e.g. a
-  `last_run.json` cut off at `"status": "` — and any reader (system_doctor.py,
-  the dashboard emit) crashes on `json.JSONDecodeError`. The 260603 health run
-  reported four lenses RED ("Unterminated string ... char 440") from exactly
-  this failure mode; positions_unified.json corrupted the same way on 260525
-  (see `_cache/positions_unified.json.corrupt-260525T2105`).
+A deliberate copy of the shared writer, taken 2026-08-26 when the desks were
+separated. The operator's directive covered even the basics: "besides absolutely
+basic rules but even then they should be separated between the desks."
 
-FIX: write to a temp file in the SAME directory, fsync, then `os.replace()`
-  onto the target. `os.replace` is atomic on POSIX and on Windows (same volume),
-  so a reader sees either the complete old file or the complete new file —
-  never a half-written one.
+Duplication is the point. If silver ever needs a different verification rule -- a
+different sentinel, a different shape check -- it can have one without touching a
+module the other desk writes through.
 
-USAGE:
-    from atomic_io import atomic_write_text, atomic_write_json
-    atomic_write_json(path, obj, indent=2)
-    atomic_write_text(path, "....")
-
-Keep this dependency-free (stdlib only) so every generator can import it.
+Original rationale kept below.
 """
 from __future__ import annotations
 

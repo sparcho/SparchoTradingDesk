@@ -1,99 +1,18 @@
 #!/usr/bin/env python3
-"""
-yahoo_common.py  --  shared Yahoo-Finance access layer
-=======================================================
-Single source of truth for:
-    * SCRN-MAP 71-ticker universe (ALL_TICKERS) — was 69 pre-2026-05-11; +2 AREM/CHAMBLFERT per F101 P3 wrap-up (closes held-position fundamentals gap)
-    * Special ticker -> Yahoo symbol mappings (SPECIAL)
-    * User-Agent string (UA)
-    * fetch_chart() 1d/5d/14d helper
-    * yahoo_symbols() fallback-list helper
+"""yahoo_common.py -- the SILVER desk's Yahoo access layer.
 
-Consumers:
-    * fetch_weekly_chg.py   (Sunday SCRN-MAP refresh)
-    * fetch_daily_ohlc.py   (Mon-Fri 9:25 AM + 3:40 PM IST daily price log)
-    * any future screener-universe fetcher
+A deliberate copy taken 2026-08-26 when the desks were separated. It carries the
+FETCH HELPERS only: silver's universe lives in `silver_rails.py`, so adding a rail
+here can never change what the other desk pulls.
 
-Reachability sanity (2026-04-23 verified post-domain-allowlist):
-    query1.finance.yahoo.com   -> 200 (with UA)
-    www.screener.in            -> 200
-    www.nseindia.com           -> reachable but TLS quirks; fallback only
-    in.investing.com           -> 403 UA-block (avoid)
-
-Stdlib-only on purpose -- yfinance's curl-cffi backend gets 403'd by the
-cowork egress proxy; plain urllib with a real User-Agent passes cleanly.
+The public repo has done it this way all along (silver/generators/yahoo_common.py);
+the vault was the odd one out, with one module serving both desks.
 """
 import json, time, urllib.request, urllib.error
 from pathlib import Path
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36")
-
-# ---------------------------------------------------------------------------
-# Universe  --  must stay in sync with LAYERS in generate_screener_map_bento.py
-# ---------------------------------------------------------------------------
-ALL_TICKERS = [
-    # 10 TA-analysed
-    'HFCL','GMDCLTD','HINDZINC','IREDA','MOIL','PARADEEP','EXIDEIND',
-    'HBLENGINE','GRAPHITE','STLTECH',
-    # 2 held-but-missing (added 2026-05-02 to close pack-coverage gap)
-    'GENESYS','TARIL',
-    # L1 Energy
-    'WAAREEENER','MGL','NTPC','POWERGRID','ADANIGREEN','TATAPOWER','VEDL',
-    'XAGUSD','SILVERBEES','SILVER1','AVANTIFEED',
-    # L2 Chips/Semi/EMS
-    'KAYNES','DIXON','SYRMA','TATAELXSI','AMBER',
-    # L3 Infra
-    'BEL','GRSE','MAZDOCK','SOLARINDS','MTARTECH','HAL','TEJASNET',
-    'BHARTIARTL','POLYCAB','KEI','ANANTRAJ','BLUESTAR',
-    # L4 IT
-    'TCS','INFY','HCLTECH','PERSISTENT',
-    # L5 Apps
-    'KPIT','NAUKRI','TANLA','MAPMYINDIA','NEWGEN',
-    # SUB
-    'PAYTM','PBFINTECH','CDSL','ANGELONE','DRREDDY','SUNPHARMA','BIOCON',
-    # ETF
-    'NIFTY','NIFTYBEES','BANKBEES','ITBEES','PHARMABEES','PSUBNKBEES',
-    # NBFC + Exchanges (added 2026-04-27 to enable Fundamental 10G screener #1)
-    'BAJFINANCE','CHOLAFIN','SHRIRAMFIN','MCX','BSE',
-    # PROMOTE-from-RESERVE (added 2026-05-03 per 260503_WATCHLIST-REVIEW F-WLR-04;
-    # IDEAFORGE = drone OEM defence sibling to held HBLENGINE; POWERINDIA = Hitachi Energy India HVDC/T&D pure-play)
-    'IDEAFORGE','POWERINDIA',
-    # Held positions missing from earlier universe (added 2026-05-11 per F101 P3 wrap-up;
-    # AREM = Amara Raja Energy & Mobility (held), CHAMBLFERT = Chambal Fertilizers (held))
-    'AREM','CHAMBLFERT',
-]
-
-# Special ticker -> Yahoo symbol mappings (default rule = ticker + '.NS')
-SPECIAL = {
-    'XAGUSD':    ['SI=F'],                    # silver futures proxy for spot
-    'NIFTY':     ['^NSEI'],
-    'BLUESTAR':  ['BLUESTARCO.NS'],
-    'KPIT':      ['KPITTECH.NS'],
-    'PBFINTECH': ['POLICYBZR.NS'],
-    'WAAREEENER':['WAAREEENER.NS','WAAREE.NS'],
-    'SILVER1':   ['SILVER1.NS','SILVERIETF.NS'],
-    'TRANSRAIL': ['TRANSRAILL.NS'],           # Reserve-pulse fix 2026-05-01 (extra-L spelling)
-    'AREM':      ['ARE%26M.NS','AMARAJABAT.NS'],  # ARE&M (Amara Raja Energy & Mobility); legacy 'AMARAJABAT' as fallback
-}
-
-# F33 fix (260427): intermarket scalars used in QT synthesis (USDINR, DXY, TNX).
-# These get the same daily-cache treatment as the equity universe so the SILV-TA
-# Saturday cycle has fresh values without manual chart-reads or one-shot pulls.
-# Kept SEPARATE from ALL_TICKERS to preserve the screener-universe semantics --
-# fetchers that want intermarket too should iterate ALL_TICKERS + INTERMARKET_TICKERS.
-INTERMARKET_TICKERS = [
-    'USDINR',  # USD/INR spot
-    'DXY',     # US Dollar Index
-    'TNX',     # US 10Y Treasury yield
-]
-
-# Yahoo symbols for the intermarket scalars (used by yahoo_symbols() + fetchers)
-SPECIAL.update({
-    'USDINR': ['INR=X'],
-    'DXY':    ['DX-Y.NYB'],
-    'TNX':    ['^TNX'],
-})
 
 # Paths
 MODULE_DIR = Path(__file__).parent
@@ -114,7 +33,7 @@ def ensure_cache_dir():
 
 def yahoo_symbols(ticker):
     """Return ordered list of Yahoo symbols to try for an internal ticker code."""
-    return SPECIAL.get(ticker, [f"{ticker}.NS"])
+    return YAHOO_SYMBOL.get(ticker, [f"{ticker}.NS"])
 
 
 def fetch_chart(sym, interval='1d', range_='14d', timeout=12):

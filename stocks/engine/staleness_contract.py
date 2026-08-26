@@ -33,6 +33,11 @@ import re
 from datetime import datetime, timezone, timedelta
 
 SCHEMA = "v1"
+
+# NOTE (2026-08-26): the SILVER desk was carved out of this module into
+# `silver_staleness.py`, which owns its detectors and its own block registry.
+# This file must stay single-desk. The two desks interface through published
+# data, never a shared import -- operator directive: they do not share engines.
 _IST = timezone(timedelta(hours=5, minutes=30))
 
 # Age tolerances (minutes) for the whole-aggregate emit-recency signal.
@@ -185,105 +190,6 @@ def _equity_items(data, now):
     #    Retired together with its producer in the emit and the `analysis` EQUITY_BLOCKS entry;
     #    "how fresh is the operator's analysis" is now carried by fib_coverage + the fib bank's
     #    studied dates. The silver detector below is UNAFFECTED — that surface is live.
-
-    return items
-
-
-# ---------------------------------------------------------------- silver detectors
-def _silver_items(data, now):
-    items = []
-
-    # 1. Live silver prices overlay recency.
-    try:
-        cm = data.get("current_market") or {}
-        src = cm.get("fetched_at_utc") or (data.get("meta") or {}).get("last_price_overlay_utc") \
-            or data.get("emitted_at_utc")
-        age = _age_min(src, now)
-        stale = age is not None and age > SILVER_PRICE_TOL_MIN
-        items.append(_item(
-            id="silver_prices", subsystem="silver", label="Silver live prices",
-            is_stale=stale, severity="warn" if stale else "info", dim=stale,
-            reason=(f"prices {int(age)}m old (tol {SILVER_PRICE_TOL_MIN}m)") if stale
-                   else f"fresh — {int(age)}m ago" if age is not None else "unknown",
-            age_min=age, heal="refresh_prices_silver", ui_targets=["silver-price-card"],
-        ))
-    except Exception:
-        pass
-
-    # 2. Silver book (holdings/deployment) local emit age — operator-driven nudge.
-    try:
-        m = data.get("meta") or {}
-        src = m.get("book_local_emit_utc") or m.get("last_synced")
-        age = _age_min(src, now)
-        days = (age / 1440.0) if age is not None else None
-        stale = days is not None and days > SILVER_BOOK_TOL_DAYS
-        items.append(_item(
-            id="silver_book", subsystem="silver", label="Silver book",
-            is_stale=stale, severity="warn" if stale else "info", dim=False,
-            reason=(f"book emit {days:.0f}d old (tol {SILVER_BOOK_TOL_DAYS}d)") if stale
-                   else (f"current — emitted {days:.1f}d ago" if days is not None else "unknown"),
-            since=src, age_min=age, heal="silver_book_reemit_nudge", ui_targets=[],
-        ))
-    except Exception:
-        pass
-
-    # 3. Whole-aggregate emit recency.
-    try:
-        age = _age_min(data.get("emitted_at_utc"), now)
-        tol = SILVER_PRICE_TOL_MIN if _is_market_hours(now) else EMIT_TOL_OFFHOURS_MIN
-        stale = age is not None and age > tol
-        items.append(_item(
-            id="silver_emit_recency", subsystem="silver", label="Silver data refresh",
-            is_stale=stale, severity="alert" if stale else "info", dim=False,
-            reason=(f"aggregate {int(age)}m old (tol {tol}m)") if stale
-                   else f"refreshed {int(age)}m ago" if age is not None else "unknown",
-            age_min=age, heal="refresh_prices_silver", ui_targets=[],
-        ))
-    except Exception:
-        pass
-
-    # 4. Analysis-input freshness (F145): stale operator SILV-TA chart read.
-    try:
-        an = data.get("analysis") or {}
-        last = an.get("last_silv_ta")
-        dd = _parse_iso(last)
-        days = None
-        if dd:
-            probe = dd.date() if hasattr(dd, "date") else dd
-            days = (now.astimezone(_IST).date() - probe).days
-        alert = days is not None and days > SILV_TA_ALERT_DAYS
-        warn = days is not None and days > SILV_TA_WARN_DAYS
-        stale = bool(warn or alert)
-        items.append(_item(
-            id="silver_analysis_freshness", subsystem="silver", label="Silver TA read",
-            is_stale=stale, severity=("alert" if alert else "warn") if stale else "info", dim=False,
-            reason=(f"latest SILV-TA {days}d old (warn >{SILV_TA_WARN_DAYS}d, alert >{SILV_TA_ALERT_DAYS}d)") if stale
-                   else (f"fresh - latest SILV-TA {days}d ago ({last})" if days is not None else "no SILV-TA date emitted"),
-            since=last, age_min=(days * 1440 if days is not None else None),
-            heal=None, ui_targets=["silver-ta-card"],
-        ))
-    except Exception:
-        pass
-
-    # 6. COT-fetch freshness (F145 addendum): distinguish a dead fetcher from a
-    #    holiday-delayed-but-fresh CFTC print. Reads booleans the emit already computed.
-    try:
-        fetch_stale = bool(data.get("cot_fetch_stale"))
-        delayed = bool(data.get("cot_delayed"))
-        fage = data.get("cot_fetch_age_days")
-        rage = data.get("cot_report_age_days")
-        if data.get("cot_fetched_at") is not None or fetch_stale or delayed:
-            items.append(_item(
-                id="cot_fetch_freshness", subsystem="silver", label="COT fetch",
-                is_stale=fetch_stale, severity="alert" if fetch_stale else "info", dim=False,
-                reason=(f"fetcher stale {fage}d (>8d = pipeline problem)") if fetch_stale
-                       else (f"latest CFTC print is holiday-delayed ({rage}d) but fetch is fresh" if delayed
-                             else f"fresh - fetched {fage}d ago" if fage is not None else "fetched"),
-                since=data.get("cot_fetched_at"), age_min=(fage * 1440 if isinstance(fage,(int,float)) else None),
-                heal=None, ui_targets=["cot-card"],
-            ))
-    except Exception:
-        pass
 
     return items
 
@@ -522,96 +428,6 @@ EQUITY_BLOCKS = {
                                   note="forward-dated by nature; not a freshness signal"),
 }
 
-# ---------------------------------------------------------------------------
-# SILVER_BLOCKS -- the silver desk's block provenance contract (added 2026-08-25)
-#
-# WHY IT EXISTS. Equity has had a block contract since July; silver had none, and
-# silver is the desk that rotted. `sr_levels` sat 65 days stale INSIDE a file
-# written the previous day, so every file-level freshness check passed it while
-# the card told the operator that a gate which had fired six times had not fired.
-# An unregistered block has no owner, no substrate and no tolerance, so nothing
-# can age it -- omission is never an exemption.
-#
-# Substrate matters more here than on equity: almost every silver block is
-# OPERATOR-authored YAML rather than a scheduled producer, which is precisely why
-# they rot silently. Declaring `operator` substrate makes "nobody has touched this"
-# a visible state instead of an invisible one.
-SILVER_BLOCKS = {
-    # --- structural: exempt BY DECLARATION, never by omission
-    "schema_version":   _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
-    "doc_type":         _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
-    "emitted_at_utc":   _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
-    "meta":             _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
-    "privacy":          _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
-    "sensitive_enc":    _blk("silver_dashboard_emit.py (AES-GCM)", "struct", None, severity="info"),
-    "staleness":        _blk("staleness_contract.py", "struct", None, severity="info"),
-    "warnings":         _blk("silver_dashboard_emit.py", "struct", None,
-                             allow_empty=True, severity="info"),
-    "snapshot_tickers": _blk("silver_holdings.yaml", "struct", None, severity="info"),
-    "tradingview_main_chart": _blk("silver_holdings.yaml", "struct", None, severity="info"),
-
-    # --- live market layer: fetched on every emit, and it never fails.
-    # That is the trap V-37 named: this layer proves freshness while the
-    # substance layer below is dead. Do not read a green here as a green desk.
-    "current_price":    _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1),
-    "current_market":   _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1,
-                             _key_date("fetched_at_utc")),
-    "live_xagusd_used_for_ladders": _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1,
-                                         severity="info"),
-
-    # --- computed from the price series on every emit (added 2026-08-25)
-    "thesis_gates":     _blk("silver_dashboard_emit.py::_thesis_gates", "cloud", 1,
-                             _key_date("computed_at"),
-                             note="the gate STATE, computed from completed weekly XAGUSD "
-                                  "closes. Replaces the typed sr_levels.thesis prose, which "
-                                  "went 65 days wrong on two of four gates."),
-
-    # --- OPERATOR-authored YAML. These are the blocks that rot, because nothing
-    #     schedules them. Tolerances are generous but finite: a level map is
-    #     structural and moves slowly, a thesis is not.
-    "sr_levels":        _blk("silver_holdings.yaml (operator)", "operator", 30,
-                             _key_date("last_updated"), severity="alert",
-                             note="THE 260825 FINDING. Read 2026-06-21 and still live on "
-                                  "2026-08-25. Its `thesis` string is prose and is NOT the "
-                                  "gate state -- thesis_gates is. The verified level bank is "
-                                  "EDGE/LEVELS/XAGUSD.json; this block should be derived "
-                                  "from it rather than typed."),
-    "forecast":         _blk("silver_holdings.yaml (operator)", "operator", 45,
-                             _key_date("last_chart_read_date"), severity="warn"),
-    "probability":      _blk("silver_dashboard_emit.py <- forecast", "operator", 45,
-                             _key_date("as_of"), severity="warn"),
-    "bull_bear":        _blk("silver_holdings.yaml (operator)", "operator", 60, severity="warn"),
-    "floor_framework":  _blk("silver_holdings.yaml (operator)", "operator", 90, severity="warn",
-                             note="V-13 tier structure -- structural, moves slowly"),
-    "silver_strategy":  _blk("silver_strategy.yaml (operator)", "operator", 45, severity="warn"),
-    "strategy_timeline_public": _blk("silver_holdings.yaml (operator)", "operator", 90,
-                                     severity="warn"),
-    "analysis":         _blk("SILV-TA pack", "operator", 45, _key_date("last_silv_ta"),
-                             severity="warn"),
-    "catalysts":        _blk("silver_holdings.yaml (operator)", "operator", 30,
-                             allow_empty=True, severity="warn"),
-    "news":             _blk("silver_holdings.yaml (operator)", "operator", 14,
-                             allow_empty=True, severity="warn"),
-
-    # --- externally-sourced data with real publication cadences
-    "cot":              _blk("COT fetch (CFTC, weekly Fri release)", "laptop", 8,
-                             _key_date("survey_date"), severity="warn",
-                             note="dated by the SURVEY date, never the fetch -- the fetch "
-                                  "succeeds every day while the survey moves weekly, so a "
-                                  "fetch stamp would let a month-old survey pass forever "
-                                  "(a-date-is-not-an-age)"),
-    "global_inventory": _blk("inventory fetch (LBMA/COMEX/SHFE)", "laptop", 20,
-                             _key_date("last_updated"), severity="warn"),
-    "paper_physical":   _blk("paper-physical composite", "laptop", 20, severity="warn"),
-}
-
-
-
-# SHA-256 prefixes of the private first names. HASHED, never spelled out: this file has three
-# copies in the PUBLIC repo, so a plaintext list here would be the leak it exists to prevent -- and
-# a plaintext list is also silently rewritable, which is how the 2026-08-24 history scrub disarmed
-# the silver leak gate. It cannot import the vault's privacy_scrub for the same reason: this file
-# also runs in the cloud, where that module does not exist.
 _PRIVATE_NAME_HASHES = frozenset({
     "af7a74864494b189", "8394e6f426a8d1cc", "eec47d9891bc884a",
     "fb3193a85f57ec2d", "262cc47030b18030",
@@ -744,16 +560,17 @@ def build_staleness(data, desk, now_utc_iso=None):
     Safe on partial/empty data — each detector self-guards.
     """
     now = _now_utc(now_utc_iso)
-    if desk == "equity":
-        # bespoke detectors (the scar-tissue layer, kept for their UI dim targets + heal keys)
-        items = _equity_items(data, now)
-        # + the generic per-block contract (D1 / F260721-BLOCKROT): judges EVERY block
-        # against TODAY so a frozen block can no longer hide under a fresh envelope.
-        items = items + _block_items(data, now, EQUITY_BLOCKS, "equity")
-    elif desk == "silver":
-        items = _silver_items(data, now)
-    else:
-        items = []
+    # Single-desk by directive (2026-08-26). The silver branch moved to
+    # `silver_staleness.build_staleness`; a function that dispatches on which desk
+    # you are IS the shared engine that split exists to remove.
+    if desk != "equity":
+        raise ValueError(
+            "staleness_contract is single-desk; %r has its own module" % (desk,))
+    # bespoke detectors (the scar-tissue layer, kept for their UI dim targets + heal keys)
+    items = _equity_items(data, now)
+    # + the generic per-block contract (D1 / F260721-BLOCKROT): judges EVERY block
+    # against TODAY so a frozen block can no longer hide under a fresh envelope.
+    items = items + _block_items(data, now, EQUITY_BLOCKS, "equity")
 
     stale_items = [i for i in items if i.get("is_stale")]
     worst = "ok"

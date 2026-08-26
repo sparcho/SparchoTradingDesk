@@ -35,17 +35,17 @@ from typing import Any
 
 import yaml  # PyYAML
 
-# staleness_contract: single source of truth for the staleness contract (F260702).
+# silver_staleness: the SILVER desk's OWN contract (separated 2026-08-26).
 try:
-    import staleness_contract
+    import silver_staleness
 except ImportError:
     import sys as _sys
     from pathlib import Path as _P
     _sys.path.insert(0, str(_P(__file__).resolve().parent))
     try:
-        import staleness_contract
+        import silver_staleness
     except ImportError:
-        staleness_contract = None
+        silver_staleness = None
 
 HERE = Path(__file__).resolve().parent
 # Layout-flexible (F260531-F116): ONE emit serves both the vault (00_SYSTEM/GENERATORS/)
@@ -1524,13 +1524,13 @@ def emit() -> Path:
     # Canonical staleness contract (F260702) -- built before the privacy transform;
     # freshness metadata only (no sensitive data).
     try:
-        if staleness_contract:
+        if silver_staleness:
             try:  # F145: stamp analysis-input freshness before the contract reads it
                 import analysis_freshness
                 out["analysis"] = analysis_freshness.compute("silver")
             except Exception as _af:
                 print(f"[analysis-freshness] silver skipped: {_af}", file=sys.stderr)
-            out["staleness"] = staleness_contract.build_staleness(out, "silver")
+            out["staleness"] = silver_staleness.build_staleness(out)
     except Exception as _e:
         print(f"[staleness] silver build skipped: {_e}", file=sys.stderr)
 
