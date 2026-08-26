@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "SILVERBEES",
-  "emitted_at_utc": "2026-08-26T03:26:18+00:00",
+  "emitted_at_utc": "2026-08-26T11:01:09+00:00",
   "public": {
     "ticker": "SILVERBEES",
     "name": "Nippon India Silver ETF",
@@ -45,10 +45,10 @@
     "dr_briefs": [],
     "last_stock_ta": "N/A",
     "live": {
-      "price": 229.0,
-      "day_chg_pct": -1.208,
-      "week_chg_pct": 3.3300243660319446,
-      "date": "2026-08-25"
+      "price": 230.13,
+      "day_chg_pct": 0.493,
+      "week_chg_pct": 6.329991221180052,
+      "date": "2026-08-26"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -548,51 +548,100 @@
         231.05,
         228.13,
         229.0
+      ],
+      [
+        "2026-08-26",
+        232.39,
+        232.45,
+        229.71,
+        230.13
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 230.76,
+        "as_of": "2026-08-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 231.82,
+        "as_of": "2026-08-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 233.5,
+        "as_of": "2026-08-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 234.56,
+        "as_of": "2026-08-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 229.08,
+        "as_of": "2026-08-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 228.02,
+        "as_of": "2026-08-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 226.34,
+        "as_of": "2026-08-26"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 204.92,
-        "as_of": "2026-08-25"
+        "as_of": "2026-08-26"
       },
       {
         "method": "swing_low",
         "kind": "SL2",
         "price": 206.57,
-        "as_of": "2026-08-25"
+        "as_of": "2026-08-26"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 216.09,
-        "as_of": "2026-08-25"
+        "price": 216.11,
+        "as_of": "2026-08-26"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 221.62,
-        "as_of": "2026-08-25"
+        "price": 221.63,
+        "as_of": "2026-08-26"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 351.91,
-        "as_of": "2026-08-25"
+        "as_of": "2026-08-26"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 106.99,
-        "as_of": "2026-08-25"
+        "price": 111.91,
+        "as_of": "2026-08-26"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
         "label": "INVALIDATION",
-        "price": 106.99,
+        "price": 111.91,
         "dir": "below",
         "kind": "inv",
         "why": "52-week low",
@@ -600,10 +649,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 221.62,
+        "price": 229.08,
         "dir": "below",
         "kind": "watch",
-        "why": "200-day SMA",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 230.76,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -618,38 +675,45 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 230.76,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.2737583105201388
+      },
+      {
         "label": "SUPPORT",
-        "price": 221.62,
+        "price": 229.08,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -3.222707423580784
+        "dist_pct": -0.4562638508668939
       },
       {
         "label": "INVALIDATION",
-        "price": 106.99,
+        "price": 111.91,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -53.27947598253275
+        "dist_pct": -51.37096423760483
       },
       {
         "label": "UPSIDE",
         "price": 351.91,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 53.67248908296944
+        "dist_pct": 52.91791596054406
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 106.99,
-        "note": "daily close below Rs107 invalidates the structure"
+        "level": 111.91,
+        "note": "daily close below Rs112 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 229.0,
+        "level": 230.13,
         "note": "holds current band"
       },
       {
