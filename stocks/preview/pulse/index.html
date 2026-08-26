@@ -54,7 +54,6 @@ h2.sec::after{content:"";flex:1;height:1px;background:var(--hair)}
 .row:hover{border-color:var(--border);transform:translateX(2px)}
 .row.at-level{border-color:rgba(66,219,230,.55);box-shadow:0 0 26px rgba(66,219,230,.14)}
 .tk{font-weight:700;font-size:15px;letter-spacing:-.01em;display:flex;align-items:center;gap:7px}
-.tk .held{font-size:9px;padding:2px 5px;border-radius:4px;background:var(--violet);color:#0b0f1c;font-weight:800}
 .rv{font-size:17px;font-weight:700;text-align:right}
 .barwrap{height:9px;border-radius:99px;background:rgba(255,255,255,.05);overflow:hidden}
 .bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
@@ -147,7 +146,7 @@ function render(d){
       if(!r.catalyst_tier) tags.push(`<span class="tag t2">no filing</span>`);
       const news = (r.news&&r.news[0]) ? `<div class="meta"><span style="opacity:.75">📰 ${esc(r.news[0].title)}</span></div>` : "";
       return `<div class="row ${r.level?"at-level":""}">
-        <div><div class="tk">${esc(r.ticker)}${r.held?'<span class="held">HELD</span>':""}</div>
+        <div><div class="tk">${esc(r.ticker)}</div>
              <div class="meta mono" style="font-size:11px">₹${F(r.price)}</div></div>
         <div class="rv mono">${r.rvol>=20?Math.round(r.rvol):r.rvol.toFixed(1)}×</div>
         <div><div class="barwrap"><div class="bar ${bc}" style="width:${pct}%"></div></div>
@@ -181,7 +180,9 @@ function render(d){
      a candidate call.<br><br>
      <b>Limits, stated:</b> the opening-volume filter is evidenced on US equities, not NSE. Nothing here
      has yet beaten the 0.777% round-trip toll. PULSE is a watchlist and vetting layer — it does not
-     authorise a trade and never overrides the mandatory fib gate.
+     authorise a trade and never overrides the mandatory fib gate.<br><br>
+     <b>Your book is not on this page.</b> It is a public URL, so position overlap is deliberately
+     not published — check own-book names against your own holdings.
      ${d.n_skipped_no_baseline?`<br><br><b>${d.n_skipped_no_baseline}</b> name(s) had too little history to measure and were excluded rather than guessed.`:""}`;
 }
 
