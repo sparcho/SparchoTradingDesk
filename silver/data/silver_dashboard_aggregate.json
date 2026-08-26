@@ -1,7 +1,7 @@
 {
   "schema_version": "v2",
   "doc_type": "silver_dashboard_aggregate",
-  "emitted_at_utc": "2026-08-26T11:24:12+00:00",
+  "emitted_at_utc": "2026-08-26T11:43:36+00:00",
   "meta": {
     "source_excel": "My Stocks (Google Sheets, father-maintained)",
     "source_excel_drive_id": "1L6QZtyhrCN198GuLWGmpBZTaCoEWMH54IrTT-ts630I",
@@ -16,7 +16,8 @@
     "related_flag": "F260518-F109_silver-re-entry-v2_lower-floor-thesis",
     "last_regraded": "2026-06-14",
     "obsidian_reference_dashboard": "00_SYSTEM/DASHBOARDS/SILVER_DASHBOARD.md (v1.6)",
-    "book_local_emit_utc": "2026-08-26T11:24:12+00:00"
+    "book_local_emit_utc": "2026-08-26T11:24:12+00:00",
+    "last_price_overlay_utc": "2026-08-26T11:43:36+00:00"
   },
   "current_price": {
     "primary_inr": 230.13,
@@ -34,77 +35,50 @@
   },
   "current_market": {
     "silverbees": {
-      "status": "ok",
-      "ticker": "SILVERBEES",
-      "yahoo_symbol": "SILVERBEES.NS",
-      "currency": "INR",
-      "market_state": null,
-      "price": 230.13,
-      "prev_close": 229.0,
-      "day_chg_pct": 0.4934497816593867,
-      "as_of_utc": "2026-08-26T10:00:00+00:00"
+      "status": "error: name 'YAHOO_SYMBOL' is not defined",
+      "ticker": "SILVERBEES"
     },
     "xagusd": {
-      "status": "ok",
-      "ticker": "XAGUSD",
-      "yahoo_symbol": "SI=F",
-      "currency": "USD",
-      "market_state": null,
-      "price": 68.455,
-      "prev_close": 68.682,
-      "day_chg_pct": -0.3305087213534898,
-      "as_of_utc": "2026-08-26T11:14:00+00:00"
+      "status": "error: name 'YAHOO_SYMBOL' is not defined",
+      "ticker": "XAGUSD"
     },
     "usdinr": {
-      "status": "ok",
-      "ticker": "USDINR",
-      "yahoo_symbol": "INR=X",
-      "currency": "INR",
-      "market_state": null,
-      "price": 95.402,
-      "prev_close": 95.402,
-      "day_chg_pct": 0.0,
-      "as_of_utc": "2026-08-26T03:14:09+00:00"
+      "status": "error: name 'YAHOO_SYMBOL' is not defined",
+      "ticker": "USDINR"
     },
     "dxy": {
-      "status": "ok",
-      "ticker": "DXY",
-      "yahoo_symbol": "DX-Y.NYB",
-      "currency": "USD",
-      "market_state": null,
-      "price": 99.009,
-      "prev_close": 98.915,
-      "day_chg_pct": 0.09503108729716836,
-      "as_of_utc": "2026-08-26T11:14:09+00:00"
+      "status": "error: name 'YAHOO_SYMBOL' is not defined",
+      "ticker": "DXY"
     },
     "gold": {
       "status": "ok",
       "ticker": "GOLD",
       "yahoo_symbol": "GC=F",
-      "price": 4674.1,
+      "currency": "USD",
+      "price": 4678.1,
       "prev_close": 4694.5,
-      "as_of_utc": "2026-08-26T11:13:43+00:00",
-      "currency": "USD"
+      "day_chg_pct": -0.34934497816593113,
+      "as_of_utc": "2026-08-26T11:33:25+00:00"
     },
     "wti": {
       "status": "ok",
       "ticker": "WTI",
       "yahoo_symbol": "CL=F",
-      "price": 80.22,
+      "currency": "USD",
+      "price": 80.21,
       "prev_close": 82.36,
-      "day_chg_pct": -2.5983487129674607,
-      "as_of_utc": "2026-08-26T11:14:08+00:00",
-      "currency": "USD"
+      "day_chg_pct": -2.6104905293832026,
+      "as_of_utc": "2026-08-26T11:33:35+00:00"
     },
     "tnx": {
       "status": "ok",
       "ticker": "TNX",
       "yahoo_symbol": "^TNX",
+      "currency": "USD",
       "price": 4.639,
       "prev_close": 4.704,
       "day_chg_pct": -1.381802721088425,
-      "as_of_utc": "2026-08-25T18:59:53+00:00",
-      "currency": "USD"
+      "as_of_utc": "2026-08-25T18:59:53+00:00"
     },
     "mcx_silver": {
       "status": "ok",
@@ -125,7 +99,7 @@
       "value": 68.27989189978818,
       "derivation": "GOLD / XAGUSD (spot/spot)"
     },
-    "fetched_at_utc": "2026-08-26T11:24:12+00:00"
+    "fetched_at_utc": "2026-08-26T11:43:36+00:00"
   },
   "live_xagusd_used_for_ladders": 68.455,
   "snapshot_tickers": [
@@ -871,11 +845,11 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-08-26T11:24:12+00:00",
+    "computed_at_utc": "2026-08-26T11:43:36+00:00",
     "desk": "silver",
     "any_stale": true,
     "any_dim": false,
-    "worst": "warn",
+    "worst": "alert",
     "items": [
       {
         "id": "silver_prices",
@@ -886,7 +860,7 @@
         "dim": false,
         "reason": "fresh — 0m ago",
         "since": null,
-        "age_min": 0.0035482,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_silver",
         "ui_targets": [
@@ -897,12 +871,12 @@
         "id": "silver_book",
         "subsystem": "silver",
         "label": "Silver book",
-        "is_stale": true,
-        "severity": "warn",
+        "is_stale": false,
+        "severity": "info",
         "dim": false,
-        "reason": "book emit 73d old (tol 10d)",
-        "since": "2026-06-14",
-        "age_min": 105804.20354819999,
+        "reason": "current — emitted 0.0d ago",
+        "since": "2026-08-26T11:24:12+00:00",
+        "age_min": 19.4,
         "sessions_stale": null,
         "heal": "silver_book_reemit_nudge",
         "ui_targets": []
@@ -916,7 +890,7 @@
         "dim": false,
         "reason": "refreshed 0m ago",
         "since": null,
-        "age_min": 0.0035482,
+        "age_min": 0.0,
         "sessions_stale": null,
         "heal": "refresh_prices_silver",
         "ui_targets": []
@@ -936,6 +910,230 @@
         "ui_targets": [
           "silver-ta-card"
         ]
+      },
+      {
+        "id": "block:analysis",
+        "subsystem": "silver",
+        "label": "Block analysis",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "NO PROVENANCE — no as-of date can be derived, so this block can never be proven fresh OR stale. Producer SILV-TA pack must stamp it.",
+        "since": null,
+        "age_min": null,
+        "sessions_stale": null,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:bull_bear",
+        "subsystem": "silver",
+        "label": "Block bull_bear",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "NO PROVENANCE — no as-of date can be derived, so this block can never be proven fresh OR stale. Producer silver_holdings.yaml (operator) must stamp it.",
+        "since": null,
+        "age_min": null,
+        "sessions_stale": null,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:catalysts",
+        "subsystem": "silver",
+        "label": "Block catalysts",
+        "is_stale": false,
+        "severity": "info",
+        "dim": false,
+        "reason": "fresh — as-of 2026-08-07 (13 session(s) behind)",
+        "since": "2026-08-07",
+        "age_min": null,
+        "sessions_stale": 13,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:cot",
+        "subsystem": "silver",
+        "label": "Block cot",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "STALE — as-of 2026-07-07 is 36 session(s) behind today (tolerance 8); produced by COT fetch (CFTC, weekly Fri release) on the laptop substrate.",
+        "since": "2026-07-07",
+        "age_min": null,
+        "sessions_stale": 36,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:current_market",
+        "subsystem": "silver",
+        "label": "Block current_market",
+        "is_stale": false,
+        "severity": "info",
+        "dim": false,
+        "reason": "fresh — as-of 2026-08-26 (0 session(s) behind)",
+        "since": "2026-08-26",
+        "age_min": null,
+        "sessions_stale": 0,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:current_price",
+        "subsystem": "silver",
+        "label": "Block current_price",
+        "is_stale": false,
+        "severity": "info",
+        "dim": false,
+        "reason": "fresh — as-of 2026-08-26 (0 session(s) behind)",
+        "since": "2026-08-26",
+        "age_min": null,
+        "sessions_stale": 0,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:floor_framework",
+        "subsystem": "silver",
+        "label": "Block floor_framework",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "NO PROVENANCE — no as-of date can be derived, so this block can never be proven fresh OR stale. Producer silver_holdings.yaml (operator) must stamp it. V-13 tier structure -- structural, moves slowly",
+        "since": null,
+        "age_min": null,
+        "sessions_stale": null,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:forecast",
+        "subsystem": "silver",
+        "label": "Block forecast",
+        "is_stale": false,
+        "severity": "info",
+        "dim": false,
+        "reason": "fresh — as-of 2026-06-25 (44 session(s) behind)",
+        "since": "2026-06-25",
+        "age_min": null,
+        "sessions_stale": 44,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:global_inventory",
+        "subsystem": "silver",
+        "label": "Block global_inventory",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "STALE — as-of 2026-07-16 is 29 session(s) behind today (tolerance 20); produced by inventory fetch (LBMA/COMEX/SHFE) on the laptop substrate.",
+        "since": "2026-07-16",
+        "age_min": null,
+        "sessions_stale": 29,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:live_xagusd_used_for_ladders",
+        "subsystem": "silver",
+        "label": "Block live_xagusd_used_for_ladders",
+        "is_stale": true,
+        "severity": "info",
+        "dim": false,
+        "reason": "NO PROVENANCE — no as-of date can be derived, so this block can never be proven fresh OR stale. Producer silver_dashboard_emit.py (live fetch) must stamp it.",
+        "since": null,
+        "age_min": null,
+        "sessions_stale": null,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:news",
+        "subsystem": "silver",
+        "label": "Block news",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "STALE — as-of 2026-07-16 is 29 session(s) behind today (tolerance 14); produced by silver_holdings.yaml (operator) on the operator substrate.",
+        "since": "2026-07-16",
+        "age_min": null,
+        "sessions_stale": 29,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:paper_physical",
+        "subsystem": "silver",
+        "label": "Block paper_physical",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "STALE — as-of 2026-06-21 is 48 session(s) behind today (tolerance 20); produced by paper-physical composite on the laptop substrate.",
+        "since": "2026-06-21",
+        "age_min": null,
+        "sessions_stale": 48,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:probability",
+        "subsystem": "silver",
+        "label": "Block probability",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "STALE — as-of 2026-06-21 is 48 session(s) behind today (tolerance 45); produced by silver_dashboard_emit.py <- forecast on the operator substrate.",
+        "since": "2026-06-21",
+        "age_min": null,
+        "sessions_stale": 48,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:silver_strategy",
+        "subsystem": "silver",
+        "label": "Block silver_strategy",
+        "is_stale": true,
+        "severity": "warn",
+        "dim": false,
+        "reason": "NO PROVENANCE — no as-of date can be derived, so this block can never be proven fresh OR stale. Producer silver_strategy.yaml (operator) must stamp it.",
+        "since": null,
+        "age_min": null,
+        "sessions_stale": null,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:sr_levels",
+        "subsystem": "silver",
+        "label": "Block sr_levels",
+        "is_stale": true,
+        "severity": "alert",
+        "dim": false,
+        "reason": "STALE — as-of 2026-06-21 is 48 session(s) behind today (tolerance 30); produced by silver_holdings.yaml (operator) on the operator substrate.",
+        "since": "2026-06-21",
+        "age_min": null,
+        "sessions_stale": 48,
+        "heal": null,
+        "ui_targets": []
+      },
+      {
+        "id": "block:strategy_timeline_public",
+        "subsystem": "silver",
+        "label": "Block strategy_timeline_public",
+        "is_stale": false,
+        "severity": "info",
+        "dim": false,
+        "reason": "fresh — as-of 2026-06-14 (53 session(s) behind)",
+        "since": "2026-06-14",
+        "age_min": null,
+        "sessions_stale": 53,
+        "heal": null,
+        "ui_targets": []
       }
     ]
   },
