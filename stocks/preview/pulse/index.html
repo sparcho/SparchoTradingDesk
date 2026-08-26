@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PULSE — who's alive today</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%AB%80%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pos:#3fcf7a; --neg:#ff6b6b; --watch:#ffb44d;
+  --pos-soft:rgba(63,207,122,.15); --neg-soft:rgba(255,107,107,.14); --watch-soft:rgba(255,180,77,.16);
+  --deep:#05070f; --ink:#eaf3ff; --mut:#6f86b0; --faint:#48587d;
+  --cyan:#42dbe6; --violet:#9a8cff; --acc:#42dbe6;
+  --glass:rgba(26,40,68,.42); --border:rgba(120,200,230,.30); --hair:rgba(130,190,230,.14);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--deep);color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
+  background-image:radial-gradient(1200px 600px at 15% -5%,rgba(66,219,230,.09),transparent 60%),
+                   radial-gradient(900px 500px at 90% 0%,rgba(154,140,255,.08),transparent 55%);
+  background-attachment:fixed;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:26px 18px 70px}
+.mono{font-family:"Space Mono",ui-monospace,monospace}
+.eyebrow{font-size:10.5px;letter-spacing:.20em;text-transform:uppercase;color:var(--faint)}
+
+header.hero{margin:8px 0 22px}
+h1{margin:6px 0 4px;font-size:clamp(30px,5.2vw,46px);font-weight:800;letter-spacing:-.025em;
+  background:linear-gradient(96deg,#fff 8%,var(--cyan) 48%,var(--violet) 92%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);font-size:13.5px;max-width:62ch;line-height:1.55}
+.stamp{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+  border:1px solid var(--hair);background:var(--glass);font-size:11px;color:var(--mut)}
+.chip b{color:var(--ink);font-weight:600}
+.chip.live{border-color:rgba(63,207,122,.4);color:var(--pos);box-shadow:0 0 16px rgba(63,207,122,.18)}
+.chip.stale{border-color:rgba(255,180,77,.45);color:var(--watch);box-shadow:0 0 16px rgba(255,180,77,.18)}
+.chip.dead{border-color:rgba(255,107,107,.5);color:var(--neg);box-shadow:0 0 18px rgba(255,107,107,.22)}
+
+.alarm{border:1px solid rgba(255,107,107,.5);background:rgba(255,107,107,.08);
+  border-radius:14px;padding:14px 16px;margin:16px 0}
+.alarm h3{margin:0 0 6px;font-size:13px;color:var(--neg);letter-spacing:.02em}
+.alarm.notice{border-color:rgba(255,180,77,.45);background:rgba(255,180,77,.07)}
+.alarm.notice h3{color:var(--watch)}
+.alarm li{font-size:12px;color:var(--ink);opacity:.9;margin:3px 0}
+
+h2.sec{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);
+  margin:30px 0 12px;display:flex;align-items:center;gap:10px}
+h2.sec::after{content:"";flex:1;height:1px;background:var(--hair)}
+
+.row{display:grid;grid-template-columns:132px 62px 1fr 108px;gap:12px;align-items:center;
+  padding:13px 14px;border:1px solid var(--hair);border-radius:13px;background:var(--glass);
+  margin-bottom:8px;transition:border-color .18s,transform .18s}
+.row:hover{border-color:var(--border);transform:translateX(2px)}
+.row.at-level{border-color:rgba(66,219,230,.55);box-shadow:0 0 26px rgba(66,219,230,.14)}
+.tk{font-weight:700;font-size:15px;letter-spacing:-.01em;display:flex;align-items:center;gap:7px}
+.tk .held{font-size:9px;padding:2px 5px;border-radius:4px;background:var(--violet);color:#0b0f1c;font-weight:800}
+.rv{font-size:17px;font-weight:700;text-align:right}
+.barwrap{height:9px;border-radius:99px;background:rgba(255,255,255,.05);overflow:hidden}
+.bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.bar.buying{background:linear-gradient(90deg,var(--pos),#7de9a8)}
+.bar.selling{background:linear-gradient(90deg,var(--neg),#ff9d9d)}
+.meta{margin-top:6px;font-size:11.5px;color:var(--mut);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tag{padding:2px 7px;border-radius:6px;border:1px solid var(--hair);font-size:10.5px}
+.tag.t1{border-color:rgba(255,180,77,.5);color:var(--watch);background:var(--watch-soft)}
+.tag.t2{border-color:var(--hair);color:var(--mut)}
+.tag.lvl{border-color:rgba(66,219,230,.45);color:var(--cyan);background:rgba(66,219,230,.10)}
+.stance{text-align:right;font-size:12px;font-weight:700;letter-spacing:.03em}
+.stance.BUYING{color:var(--pos)} .stance.SELLING{color:var(--neg)} .stance.flat{color:var(--faint);font-weight:400}
+.stance small{display:block;font-weight:400;color:var(--faint);font-size:10px;letter-spacing:0}
+
+.empty{border:1px dashed var(--hair);border-radius:14px;padding:26px;text-align:center;color:var(--mut);font-size:13px}
+.cat{padding:11px 14px;border:1px solid var(--hair);border-radius:12px;background:var(--glass);margin-bottom:7px}
+.cat .h{font-weight:600;font-size:13.5px;display:flex;gap:8px;align-items:center}
+.cat .d{font-size:11.5px;color:var(--mut);margin-top:3px;line-height:1.5}
+.cat a{color:var(--cyan);text-decoration:none}
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--hair);font-size:11px;color:var(--faint);line-height:1.7}
+@media(max-width:620px){.row{grid-template-columns:1fr 54px;gap:8px}.barwrap,.stance{grid-column:1/-1}.stance{text-align:left}}
+</style></head>
+<body><div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Sparcho Trading Desk · preview surface</div>
+  <h1>🫀 PULSE</h1>
+  <div class="sub">The fib bank tells you <b>where</b>. This tells you <b>whether today</b> — which names have
+  a reason to move, and which ones the market has actually noticed.</div>
+  <div class="stamp" id="stamp"></div>
+</header>
+
+<div id="alarms"></div>
+
+<h2 class="sec">Alive today</h2>
+<div id="alive"></div>
+
+<h2 class="sec">What changed — filings &amp; news</h2>
+<div id="cats"></div>
+
+<div class="foot" id="foot"></div>
+</div>
+
+<script>
+const F = n => n==null ? "—" : n.toLocaleString("en-IN");
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+function render(d){
+  // ---- stamp: a stale or blind run must LOOK stale, never healthy-and-empty ----
+  const st = document.getElementById("stamp");
+  const blind = (d.errors||[]).length>0;
+  const preopen = (d.notices||[]).length>0;
+  const cls = blind ? "dead" : preopen ? "stale" : "live";
+  st.innerHTML =
+    `<span class="chip ${cls}"><b>${blind?"DEGRADED":preopen?"LAST SESSION":"LIVE"}</b></span>`+
+    `<span class="chip">session <b>${esc(d.session_date)}</b></span>`+
+    `<span class="chip">bars through <b class="mono">${esc(d.bars_through||"—")}</b></span>`+
+    `<span class="chip">as of <b class="mono">${esc(d.as_of_ist)}</b></span>`+
+    `<span class="chip"><b>${d.n_alive}</b> alive of <b>${d.n_measured}</b> measured</span>`+
+    `<span class="chip">open range <b class="mono">${esc(d.opening_range)}</b></span>`;
+
+  let box = "";
+  if((d.errors||[]).length){
+    box += `<div class="alarm"><h3>⚠ This run could not see everything — do not read the list as complete</h3><ul>`+
+      d.errors.map(e=>`<li>${esc(e)}</li>`).join("")+`</ul></div>`;
+  }
+  if((d.notices||[]).length){
+    box += `<div class="alarm notice"><h3>Where this stands</h3><ul>`+
+      d.notices.map(e=>`<li>${esc(e)}</li>`).join("")+`</ul></div>`;
+  }
+  document.getElementById("alarms").innerHTML = box;
+
+  // ---- the strip ----
+  const host = document.getElementById("alive");
+  if(!d.rows || !d.rows.length){
+    host.innerHTML = `<div class="empty">No name cleared <b>${d.alive_threshold}×</b> its own normal open.<br>
+      <span style="opacity:.7">That is a real answer, not a broken feed — most days few names are genuinely in play.</span></div>`;
+  } else {
+    // Cap the bar scale: one genuine 96x outlier (GENESYS 26-Aug, post-allotment) would
+    // otherwise squash every other row to a 2px stub and make the strip unreadable.
+    const cap = Math.min(Math.max(...d.rows.map(r=>r.rvol)), 8);
+    host.innerHTML = d.rows.map(r=>{
+      const pct = Math.max(6, Math.min(100, Math.round(r.rvol/cap*100)));
+      const bc = r.stance==="BUYING"?"buying":r.stance==="SELLING"?"selling":"";
+      const sc = r.stance==="--"?"flat":r.stance;
+      const bf = r.buy_frac==null?"—":Math.round(r.buy_frac*100)+"% buy";
+      const tags = [];
+      if(r.level) tags.push(`<span class="tag lvl">@ verified ${esc(r.level.role||"zone")}${r.level.inside?" — inside":" — "+r.level.dist_pct+"% away"}</span>`);
+      if(r.catalyst_tier) tags.push(`<span class="tag ${r.catalyst_tier.toLowerCase()}">⚡ ${esc((r.catalysts[0]||{}).desc||r.catalyst_tier)}</span>`);
+      if(!r.catalyst_tier) tags.push(`<span class="tag t2">no filing</span>`);
+      const news = (r.news&&r.news[0]) ? `<div class="meta"><span style="opacity:.75">📰 ${esc(r.news[0].title)}</span></div>` : "";
+      return `<div class="row ${r.level?"at-level":""}">
+        <div><div class="tk">${esc(r.ticker)}${r.held?'<span class="held">HELD</span>':""}</div>
+             <div class="meta mono" style="font-size:11px">₹${F(r.price)}</div></div>
+        <div class="rv mono">${r.rvol>=20?Math.round(r.rvol):r.rvol.toFixed(1)}×</div>
+        <div><div class="barwrap"><div class="bar ${bc}" style="width:${pct}%"></div></div>
+             <div class="meta">${tags.join("")}</div>${news}</div>
+        <div class="stance ${sc}">${r.stance==="--"?"——":esc(r.stance)}<small>${bf}</small></div>
+      </div>`;
+    }).join("");
+  }
+
+  // ---- catalysts ----
+  const cw = document.getElementById("cats");
+  const rows = (d.rows||[]).filter(r=>r.catalysts && r.catalysts.length);
+  if(!rows.length){
+    cw.innerHTML = `<div class="empty">No material filing on an alive name in the window.</div>`;
+  } else {
+    cw.innerHTML = rows.map(r=>r.catalysts.map(c=>`
+      <div class="cat"><div class="h">${esc(r.ticker)}
+        <span class="tag ${String(c.tier).toLowerCase()}">${esc(c.tier)}</span>
+        <span style="color:var(--faint);font-weight:400;font-size:11px" class="mono">${esc(c.at)}</span></div>
+        <div class="d">${esc(c.desc)}${c.detail?" — "+esc(c.detail).slice(0,220):""}
+        ${c.url?` · <a href="${esc(c.url)}" target="_blank" rel="noopener">filing ↗</a>`:""}</div>
+      </div>`).join("")).join("");
+  }
+
+  document.getElementById("foot").innerHTML =
+    `<b>How to read this.</b> <b class="mono">3.1×</b> means the name traded 3.1 times its own normal
+     09:20–09:45 volume — unusual <i>for itself</i>, not just large. The buy/sell split is Bulk Volume
+     Classification (Easley, López de Prado &amp; O'Hara) computed from price bars alone; it is
+     <i>less</i> accurate per-trade than tick data and only the aggregate is relied on. A row glows cyan
+     when the name is BOTH alive and sitting at a hand-verified fib zone — that is the only row that is
+     a candidate call.<br><br>
+     <b>Limits, stated:</b> the opening-volume filter is evidenced on US equities, not NSE. Nothing here
+     has yet beaten the 0.777% round-trip toll. PULSE is a watchlist and vetting layer — it does not
+     authorise a trade and never overrides the mandatory fib gate.
+     ${d.n_skipped_no_baseline?`<br><br><b>${d.n_skipped_no_baseline}</b> name(s) had too little history to measure and were excluded rather than guessed.`:""}`;
+}
+
+fetch("data/pulse.json?t="+Date.now()).then(r=>r.json()).then(render).catch(e=>{
+  document.getElementById("alarms").innerHTML =
+    `<div class="alarm"><h3>⚠ Could not load pulse.json</h3><ul><li>${esc(e)}</li>
+     <li>The feed is blind. Do not trade off this page until it loads.</li></ul></div>`;
+});
+</script>
+</body></html>
