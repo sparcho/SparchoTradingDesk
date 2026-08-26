@@ -522,6 +522,90 @@ EQUITY_BLOCKS = {
                                   note="forward-dated by nature; not a freshness signal"),
 }
 
+# ---------------------------------------------------------------------------
+# SILVER_BLOCKS -- the silver desk's block provenance contract (added 2026-08-25)
+#
+# WHY IT EXISTS. Equity has had a block contract since July; silver had none, and
+# silver is the desk that rotted. `sr_levels` sat 65 days stale INSIDE a file
+# written the previous day, so every file-level freshness check passed it while
+# the card told the operator that a gate which had fired six times had not fired.
+# An unregistered block has no owner, no substrate and no tolerance, so nothing
+# can age it -- omission is never an exemption.
+#
+# Substrate matters more here than on equity: almost every silver block is
+# OPERATOR-authored YAML rather than a scheduled producer, which is precisely why
+# they rot silently. Declaring `operator` substrate makes "nobody has touched this"
+# a visible state instead of an invisible one.
+SILVER_BLOCKS = {
+    # --- structural: exempt BY DECLARATION, never by omission
+    "schema_version":   _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
+    "doc_type":         _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
+    "emitted_at_utc":   _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
+    "meta":             _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
+    "privacy":          _blk("silver_dashboard_emit.py", "struct", None, severity="info"),
+    "sensitive_enc":    _blk("silver_dashboard_emit.py (AES-GCM)", "struct", None, severity="info"),
+    "staleness":        _blk("staleness_contract.py", "struct", None, severity="info"),
+    "warnings":         _blk("silver_dashboard_emit.py", "struct", None,
+                             allow_empty=True, severity="info"),
+    "snapshot_tickers": _blk("silver_holdings.yaml", "struct", None, severity="info"),
+    "tradingview_main_chart": _blk("silver_holdings.yaml", "struct", None, severity="info"),
+
+    # --- live market layer: fetched on every emit, and it never fails.
+    # That is the trap V-37 named: this layer proves freshness while the
+    # substance layer below is dead. Do not read a green here as a green desk.
+    "current_price":    _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1),
+    "current_market":   _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1,
+                             _key_date("fetched_at_utc")),
+    "live_xagusd_used_for_ladders": _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1,
+                                         severity="info"),
+
+    # --- computed from the price series on every emit (added 2026-08-25)
+    "thesis_gates":     _blk("silver_dashboard_emit.py::_thesis_gates", "cloud", 1,
+                             _key_date("computed_at"),
+                             note="the gate STATE, computed from completed weekly XAGUSD "
+                                  "closes. Replaces the typed sr_levels.thesis prose, which "
+                                  "went 65 days wrong on two of four gates."),
+
+    # --- OPERATOR-authored YAML. These are the blocks that rot, because nothing
+    #     schedules them. Tolerances are generous but finite: a level map is
+    #     structural and moves slowly, a thesis is not.
+    "sr_levels":        _blk("silver_holdings.yaml (operator)", "operator", 30,
+                             _key_date("last_updated"), severity="alert",
+                             note="THE 260825 FINDING. Read 2026-06-21 and still live on "
+                                  "2026-08-25. Its `thesis` string is prose and is NOT the "
+                                  "gate state -- thesis_gates is. The verified level bank is "
+                                  "EDGE/LEVELS/XAGUSD.json; this block should be derived "
+                                  "from it rather than typed."),
+    "forecast":         _blk("silver_holdings.yaml (operator)", "operator", 45,
+                             _key_date("last_chart_read_date"), severity="warn"),
+    "probability":      _blk("silver_dashboard_emit.py <- forecast", "operator", 45,
+                             _key_date("as_of"), severity="warn"),
+    "bull_bear":        _blk("silver_holdings.yaml (operator)", "operator", 60, severity="warn"),
+    "floor_framework":  _blk("silver_holdings.yaml (operator)", "operator", 90, severity="warn",
+                             note="V-13 tier structure -- structural, moves slowly"),
+    "silver_strategy":  _blk("silver_strategy.yaml (operator)", "operator", 45, severity="warn"),
+    "strategy_timeline_public": _blk("silver_holdings.yaml (operator)", "operator", 90,
+                                     severity="warn"),
+    "analysis":         _blk("SILV-TA pack", "operator", 45, _key_date("last_silv_ta"),
+                             severity="warn"),
+    "catalysts":        _blk("silver_holdings.yaml (operator)", "operator", 30,
+                             allow_empty=True, severity="warn"),
+    "news":             _blk("silver_holdings.yaml (operator)", "operator", 14,
+                             allow_empty=True, severity="warn"),
+
+    # --- externally-sourced data with real publication cadences
+    "cot":              _blk("COT fetch (CFTC, weekly Fri release)", "laptop", 8,
+                             _key_date("survey_date"), severity="warn",
+                             note="dated by the SURVEY date, never the fetch -- the fetch "
+                                  "succeeds every day while the survey moves weekly, so a "
+                                  "fetch stamp would let a month-old survey pass forever "
+                                  "(a-date-is-not-an-age)"),
+    "global_inventory": _blk("inventory fetch (LBMA/COMEX/SHFE)", "laptop", 20,
+                             _key_date("last_updated"), severity="warn"),
+    "paper_physical":   _blk("paper-physical composite", "laptop", 20, severity="warn"),
+}
+
+
 
 # SHA-256 prefixes of the private first names. HASHED, never spelled out: this file has three
 # copies in the PUBLIC repo, so a plaintext list here would be the leak it exists to prevent -- and
