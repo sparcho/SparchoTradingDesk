@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Radar flow — proposed</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%AB%80%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pos:#3fcf7a; --neg:#ff6b6b; --watch:#e6b34a; --cyan:#42dbe6; --violet:#9a8cff;
+  --deep:#05070f; --ink:#eaf3ff; --mut:#6f86b0; --faint:#48587d;
+  --bg2:rgba(26,40,68,.42); --hair:rgba(130,190,230,.14); --font-mono:"Space Mono",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--deep);color:var(--ink);font-family:Inter,system-ui,sans-serif;
+  background-image:radial-gradient(1100px 520px at 12% -6%,rgba(66,219,230,.08),transparent 60%);
+  background-attachment:fixed;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 70px}
+.mono{font-family:var(--font-mono)}
+.banner{border:1px solid rgba(154,140,255,.45);background:rgba(154,140,255,.08);border-radius:12px;
+  padding:12px 15px;margin-bottom:18px}
+.banner h1{margin:0 0 5px;font-size:16px;letter-spacing:-.01em}
+.banner p{margin:0;font-size:12px;color:var(--mut);line-height:1.6}
+.ord{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;font-family:var(--font-mono);font-size:10px}
+.ord span{padding:3px 8px;border-radius:99px;border:1px solid var(--hair);background:var(--bg2);color:var(--mut)}
+.ord span.new{border-color:var(--cyan);color:var(--cyan)}
+.ord span.moved{border-color:var(--watch);color:var(--watch)}
+.ord span.gone{border-color:var(--neg);color:var(--neg);text-decoration:line-through;opacity:.75}
+
+.card{border:1px solid var(--hair);border-radius:13px;background:var(--bg2);padding:13px 15px;margin-bottom:13px}
+.c-lbl{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut);
+  display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.c-lbl .age{margin-left:auto;font-family:var(--font-mono);font-size:10px;color:var(--faint);letter-spacing:0}
+.fc-note{font-size:11px;color:var(--mut);margin-bottom:8px;line-height:1.5}
+.pos{color:var(--pos)} .neg{color:var(--neg)}
+
+/* step marker */
+.step{display:flex;align-items:center;gap:9px;margin:22px 0 8px}
+.step b{font-family:var(--font-mono);font-size:10px;color:var(--deep);background:var(--cyan);
+  padding:2px 7px;border-radius:5px}
+.step span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.step i{flex:1;height:1px;background:var(--hair)}
+
+/* volume strip */
+.pl-vol-hd{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:9px}
+.pl-vol-t{font-size:12px;letter-spacing:.10em;text-transform:uppercase;font-weight:600}
+.pl-vol-s{font-family:var(--font-mono);font-size:10px;color:var(--mut)}
+.pl-vol-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:5px}
+.pl-t{flex:0 0 auto;min-width:94px;border:1px solid var(--hair);border-top:2px solid var(--hair);
+  border-radius:9px;background:rgba(255,255,255,.02);padding:6px 8px 5px;line-height:1.35}
+.pl-t.buying{border-top-color:var(--pos)} .pl-t.selling{border-top-color:var(--neg)}
+.pl-t.mixed{border-top-color:var(--cyan)}
+.pl-t-tk{font-weight:700;font-size:11.5px}
+.pl-t-v{font-family:var(--font-mono);font-size:14px;font-weight:700;margin-top:1px}
+.pl-t.buying .pl-t-v{color:var(--pos)} .pl-t.selling .pl-t-v{color:var(--neg)} .pl-t.mixed .pl-t-v{color:var(--cyan)}
+.pl-t-f{font-family:var(--font-mono);font-size:9px;color:var(--mut)}
+.pl-t-m{font-size:8.5px;color:var(--faint);margin-top:2px}
+.pl-t-m .has{color:var(--cyan)}
+.pl-worth{margin-top:9px;font-size:10.5px;color:var(--mut);line-height:1.6}
+.pl-worth b{color:var(--ink)} .pl-worth .nm{font-family:var(--font-mono);color:var(--cyan)}
+.legend{margin-top:10px;padding-top:9px;border-top:1px dashed var(--hair);font-size:10.5px;color:var(--mut);line-height:1.7}
+.sw{display:inline-block;width:22px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+
+/* fire cards */
+.fc-heroes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+@media(max-width:1000px){.fc-heroes{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.fc-heroes{grid-template-columns:repeat(2,1fr)}}
+.fc2{border:1px solid var(--hair);border-left:3px solid var(--hair);border-radius:10px;
+  background:rgba(255,255,255,.02);padding:9px 10px;font-size:11.5px}
+.fc2.buy{border-left-color:var(--pos)} .fc2.watchbuy{border-left-color:var(--watch)}
+.fc2.resist{border-left-color:#e6873a} .fc2.avoid{border-left-color:var(--neg)}
+.fc2-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.fc2-tk{font-weight:700;font-size:13px}
+.fc2-sc{font-family:var(--font-mono);font-size:10px;color:var(--mut)}
+.fc2-situ{color:var(--mut);font-size:10.5px}
+.fc2-act{display:flex;justify-content:space-between;margin:4px 0;font-weight:600;font-size:11.5px}
+.fc2-px{font-family:var(--font-mono)}
+.fc2-live,.fc2-gate,.fc2-q{font-size:10px;color:var(--mut);margin-top:3px}
+.pl-today{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-family:var(--font-mono);
+  font-size:10px;margin:5px 0 0;padding:4px 6px;border-radius:6px;border:1px solid var(--hair);
+  background:rgba(255,255,255,.02);color:var(--mut)}
+.pl-today.buying{border-color:var(--pos);background:rgba(63,207,122,.09)}
+.pl-today.buying b{color:var(--pos)}
+.pl-today.quiet{opacity:.45;padding:2px 6px;border-style:dashed}
+.pl-read{display:block;margin-top:3px;font-size:10px;font-family:Inter,sans-serif;line-height:1.4}
+.pl-read.ok{color:var(--pos)} .pl-cat{padding:1px 5px;border-radius:4px;border:1px solid var(--watch);
+  color:var(--watch);background:rgba(230,179,74,.12);font-size:9px}
+
+/* decisions */
+.dec{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid var(--hair)}
+.dec:last-child{border-bottom:0}
+.dec-p{font-family:var(--font-mono);font-size:9px;padding:2px 6px;border-radius:5px;border:1px solid var(--hair);color:var(--mut);flex:0 0 auto}
+.dec-p.p1{border-color:var(--watch);color:var(--watch)} .dec-p.p0{border-color:var(--neg);color:var(--neg)}
+.dec-b{flex:1;min-width:0}
+.dec-t{font-size:12.5px;font-weight:600}
+.dec-d{font-size:11px;color:var(--mut);margin-top:2px;line-height:1.5}
+.fixbtn{flex:0 0 auto;cursor:pointer;font-family:var(--font-mono);font-size:10px;padding:5px 10px;
+  border-radius:7px;border:1px solid rgba(66,219,230,.5);color:var(--cyan);
+  background:rgba(66,219,230,.08);transition:.15s}
+.fixbtn:hover{background:rgba(66,219,230,.18);border-color:var(--cyan)}
+.fixbtn.done{border-color:var(--pos);color:var(--pos);background:rgba(63,207,122,.12)}
+.note{font-size:10.5px;color:var(--faint);margin-top:9px;line-height:1.6;padding-top:8px;border-top:1px dashed var(--hair)}
+.dim{opacity:.42}
+</style></head>
+<body><div class="wrap">
+
+<div class="banner">
+  <h1>Radar page — proposed flow (mock)</h1>
+  <p>Same components, reordered around what you actually do during the session: refresh, and look at
+  whether the fires moved. Nothing here is live — it is a layout proposal on real 26-Aug data.</p>
+  <div class="ord">
+    <span class="new">1 · unusual volume — MOVED UP</span>
+    <span class="new">2 · fib fires (heroes)</span>
+    <span class="gone">watch/minis list — REMOVED</span>
+    <span>3 · engine map + board</span>
+    <span class="moved">4 · decisions pending — MOVED DOWN, + fix button</span>
+    <span class="moved">5 · needs attention — MOVED DOWN, joined to the ledger</span>
+  </div>
+</div>
+
+<div class="step"><b>1</b><span>first thing in view</span><i></i></div>
+<div class="card">
+  <div class="pl-vol-hd">
+    <span class="pl-vol-t">🫀 Unusual volume today</span>
+    <span class="pl-vol-s" id="vsub">—</span>
+    <span class="pl-vol-s" style="margin-left:auto" id="vstamp">—</span>
+  </div>
+  <div class="pl-vol-row" id="vrow"></div>
+  <div class="pl-worth" id="vworth"></div>
+  <div class="legend">
+    <b style="color:var(--ink)">What the colour means</b> — it is the <b style="color:var(--ink)">side in
+    control of the flow</b>, not the size of the move and not whether the price is up.<br>
+    <span class="sw" style="background:var(--pos)"></span><b class="pos">Green</b> — buyers ≥60% of
+    estimated volume &nbsp;·&nbsp;
+    <span class="sw" style="background:var(--neg)"></span><b class="neg">Red</b> — sellers ≥60% &nbsp;·&nbsp;
+    <span class="sw" style="background:var(--cyan)"></span><b style="color:var(--cyan)">Cyan</b> — mixed,
+    neither side in control.<br>
+    The big number is always <b style="color:var(--ink)">how unusual the volume is versus that name's own
+    normal open</b> — colour and size are two separate facts.
+  </div>
+</div>
+
+<div class="step"><b>2</b><span>fib confluence fires · heroes only</span><i></i></div>
+<div class="card">
+  <div class="c-lbl"><span>Fib confluence radar · engine-scored</span><span class="age">10 names · at price</span></div>
+  <div class="fc-note">engine-scored on the <b>2026-08-26</b> close · validate over time · not calls</div>
+  <div class="fc-heroes" id="heroes"></div>
+  <div class="note">The <b>“watch — structurally sound, not actionable yet”</b> mini list that used to sit
+  here is <b style="color:var(--neg)">removed</b>. It was a long row of collapsed chips that had to be
+  clicked one by one to say anything, and none of it was a decision.</div>
+</div>
+
+<div class="step"><b>3</b><span>engine map + board · unchanged</span><i></i></div>
+<div class="card dim">
+  <div class="c-lbl"><span>Fib radar · engine map</span><span class="age">unchanged</span></div>
+  <div class="fc-note">Where structure agrees across ladders. Position in the flow is unchanged — it
+  answers “where does structure agree”, after the fires answer “is this a trade”.</div>
+</div>
+
+<div class="step"><b>4</b><span>decisions pending · moved down, now actionable</span><i></i></div>
+<div class="card">
+  <div class="c-lbl"><span>Decisions pending</span><span class="age">1 open · 1 overdue</span></div>
+  <div class="dec">
+    <span class="dec-p p1">P1</span>
+    <div class="dec-b">
+      <div class="dec-t">F260728-FHAUTOCLOSE — health flags never auto-close</div>
+      <div class="dec-d">Auto-spawned health flags stay open after the underlying issue clears, so the
+        P0 count is permanently wrong. Open 30 days.</div>
+    </div>
+    <span class="fixbtn" data-id="F260728-FHAUTOCLOSE"
+          data-cmd="Fix F260728-FHAUTOCLOSE: auto-spawned health flags never auto-close, so the open-flag count is permanently wrong. Read the flag file, find where system_doctor spawns FH-* flags, make them close themselves when the underlying check goes green, and add a test that a cleared check closes its flag.">⚡ Hand to Claude</span>
+  </div>
+  <div class="note" id="fixnote">
+    <b style="color:var(--ink)">The button</b> — you said seeing a pending decision has never once made you
+    troubleshoot, because acting on it means opening a terminal. Clicking copies a <b>complete, self-contained
+    instruction</b> for that specific decision to your clipboard, so the whole job is: open Claude, paste, done.
+    <br><br><b style="color:var(--watch)">Worth knowing:</b> a page on GitHub Pages cannot start a process on
+    your laptop, so <b>no button can be truly one-click</b> without something running locally to listen. Two
+    honest ways to get closer, if you want them: (a) the button opens a pre-filled GitHub issue and the
+    existing 45-minute PULSE job picks it up and acts on the classes it already knows how to fix; (b) the
+    watchdog gains a queue file and heals known classes with no session at all. Say which and I will build it.
+  </div>
+</div>
+
+<div class="step"><b>5</b><span>needs attention · moved down, read WITH the ledger</span><i></i></div>
+<div class="card">
+  <div class="c-lbl"><span>Needs attention</span><span class="age">joined to the ledger</span></div>
+  <div class="fc-note">Live trades within one session of the time-cap, or a booked partial with a runner
+  still live. <b>It used to be prepended to the whole zone</b> (<code class="mono">html = _rail + html</code>),
+  which is why it met you first on every unlock.</div>
+  <div class="note">It now sits directly above the trade ledger, because every one of its rows is a ledger
+  row — reading it 4 sections away from the position it describes was the actual problem, not the content.
+  <b style="color:var(--ink)">Its redesign is deliberately NOT attempted here</b> — you said it needs a
+  rethink alongside the ledger, and that is a separate piece of work.</div>
+</div>
+<div class="card dim">
+  <div class="c-lbl"><span>Trade ledger</span><span class="age">unchanged</span></div>
+  <div class="fc-note">Open positions, closed trades, R curve, scorecard.</div>
+</div>
+
+</div>
+<script>
+var FIRES=[
+ {tk:"GENESYS",k:"buy",sc:92,situ:"At support · holding",lbl:"Potential buy",px:"₹244.10",cl:"₹246.30",tr:"uptrend",gate:"↑ reclaim ₹252.00 to turn up",q:"Confluence: 3 fib ladders + EMA21 · up to 3M"},
+ {tk:"NTPC",k:"watchbuy",sc:71,situ:"Approaching support from above",lbl:"Watch to buy if it holds",px:"₹332.40",cl:"₹336.10",tr:"range",gate:"↑ reclaim ₹341.00 to turn up",q:"Confluence: 2 fib ladders · up to 6M"},
+ {tk:"MAPMYINDIA",k:"resist",sc:64,situ:"At resistance",lbl:"Not a buy · watch / trim",px:"₹1,041.00",cl:"₹1,038.50",tr:"downtrend",gate:"↓ support ₹988.00",q:"Confluence: single ladder · up to 3M"},
+ {tk:"PARADEEP",k:"buy",sc:80,situ:"At support · holding",lbl:"Potential buy",px:"₹161.20",cl:"₹163.84",tr:"uptrend",gate:"↑ reclaim ₹168.00 to turn up",q:"Confluence: 2 fib ladders"},
+ {tk:"TEJASNET",k:"avoid",sc:55,situ:"Falling into support · downtrend",lbl:"Avoid — don't catch",px:"₹520.00",cl:"₹517.40",tr:"downtrend",gate:"↑ reclaim ₹548.00 to turn up",q:"Confluence: single ladder"}
+];
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+fetch("../../data/pulse.json?t="+Date.now()).then(function(r){return r.json();}).then(function(P){
+  var rows=(P.rows||[]).slice().sort(function(a,b){return b.rvol-a.rvol;});
+  var onFire={}; FIRES.forEach(function(f){onFire[f.tk]=1;});
+  document.getElementById("vsub").textContent=(P.n_alive||0)+" of "+(P.n_measured||0)+" tracked names past "+(P.alive_threshold||1.5)+"× their OWN normal open · "+(P.opening_range||"");
+  document.getElementById("vstamp").textContent=(P.session_date||"")+" · bars to "+(P.bars_through||"—");
+  document.getElementById("vrow").innerHTML=rows.map(function(r){
+    var cls=r.stance==="BUYING"?"buying":r.stance==="SELLING"?"selling":"mixed";
+    var pct=r.buy_frac!=null?Math.round(r.buy_frac*100):null;
+    var flow=r.stance==="BUYING"?("▲ "+pct+"% buy"):r.stance==="SELLING"?("▼ "+(100-pct)+"% sell"):(pct!=null?("· "+pct+"% buy"):"· n/a");
+    var lvl=(r.level||onFire[r.ticker])?'<span class="has">● fire card</span>':'<span>○ no level</span>';
+    return '<div class="pl-t '+cls+'"><div class="pl-t-tk">'+esc(r.ticker)+(r.catalyst_tier?" ⚡":"")+'</div>'+
+      '<div class="pl-t-v">'+(r.rvol>=20?Math.round(r.rvol):r.rvol.toFixed(1))+'×</div>'+
+      '<div class="pl-t-f">'+flow+'</div><div class="pl-t-m">'+lvl+'</div></div>';}).join("");
+  var noL=rows.filter(function(r){return !r.level && !onFire[r.ticker];});
+  var q=noL.filter(function(r){return r.catalyst_tier||r.stance==="BUYING"||r.stance==="SELLING";});
+  var rank=function(r){var v=0;if(r.catalyst_tier==="T1")v+=400;else if(r.catalyst_tier==="T2")v+=180;
+    if(r.stance==="BUYING")v+=120;else if(r.stance==="SELLING")v+=60;return v+Math.min(r.rvol||0,12)*5;};
+  var best=q.sort(function(a,b){return rank(b)-rank(a);}).slice(0,5);
+  document.getElementById("vworth").innerHTML=best.length?('<b>Worth drawing a level on:</b> '+
+    best.map(function(r){return '<span class="nm">'+esc(r.ticker)+'</span> '+r.rvol.toFixed(1)+'×'+(r.catalyst_tier?" ⚡":"");}).join(" · ")+
+    (noL.length>best.length?' <span style="opacity:.55">· '+(noL.length-best.length)+' more alive but undefined</span>':'')):'';
+
+  var map={}; rows.forEach(function(r){map[r.ticker]=r;});
+  document.getElementById("heroes").innerHTML=FIRES.map(function(f){
+    var r=map[f.tk], today;
+    if(!r){ today='<div class="pl-today quiet">· quiet today</div>'; }
+    else{
+      var pct=Math.round((r.buy_frac||0)*100);
+      var cat=(r.catalyst_tier&&r.catalysts&&r.catalysts[0])?'<span class="pl-cat">⚡ '+esc(r.catalysts[0].desc).slice(0,20)+'</span>':'';
+      today='<div class="pl-today '+(r.stance==="BUYING"?"buying":"")+'">🫀 <b>'+r.rvol.toFixed(1)+'×</b> vol · <b>'+pct+'% buying</b>'+cat+
+        '<span class="pl-read ok">Alive and being bought — the level has interest behind it.</span></div>';
+    }
+    return '<div class="fc2 '+f.k+'"><div class="fc2-hd"><span class="fc2-tk">'+f.tk+'</span><span class="fc2-sc">'+f.sc+'</span></div>'+
+      '<div class="fc2-situ">'+f.situ+'</div><div class="fc2-act"><span>'+f.lbl+'</span><span class="fc2-px">'+f.px+'</span></div>'+
+      '<div class="fc2-live">Close <b>'+f.cl+'</b> · '+f.tr+'</div>'+today+
+      '<div class="fc2-gate">'+f.gate+'</div><div class="fc2-q">'+f.q+'</div></div>';}).join("");
+});
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest(".fixbtn"); if(!b) return;
+  var cmd=b.getAttribute("data-cmd");
+  (navigator.clipboard?navigator.clipboard.writeText(cmd):Promise.reject()).then(function(){
+    b.textContent="✓ copied — paste into Claude"; b.classList.add("done");
+  }).catch(function(){
+    b.textContent="✓ see below"; b.classList.add("done");
+    document.getElementById("fixnote").insertAdjacentHTML("afterbegin",
+      '<div style="margin-bottom:9px;padding:8px;border:1px solid var(--hair);border-radius:7px;color:var(--ink);font-family:var(--font-mono);font-size:10px">'+esc(cmd)+'</div>');
+  });
+});
+</script>
+</body></html>
