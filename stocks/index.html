@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1787714724">
-<meta name="x-built-at" content="2026-08-26T03:24:46+00:00">
+<meta name="x-build-id" content="1787801015">
+<meta name="x-built-at" content="2026-08-27T03:23:00+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1787714724",BUILT_AT="2026-08-26T03:24:46+00:00";
+  var BID="1787801015",BUILT_AT="2026-08-27T03:23:00+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -4932,4 +4932,292 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 @media(max-width:760px){.dec-row{grid-template-columns:30px 1fr;gap:2px}
   .dec-o,.dec-a{display:none}.dec-d{text-align:left}}
 </style>
+
+<!-- ============================================================================
+     PULSE INTEGRATION LAYER  ·  appended to a copy of stocks/index.html
+     ============================================================================
+     Constructive, not additive: PULSE does not get its own competing panel on the
+     desk. It goes INSIDE the existing fib-confluence fire cards, because the fire
+     card already answers WHERE (the level) and WHAT KIND (buy / watch / resist) —
+     and the one thing it has never answered is WHETHER TODAY.
+
+     The card grammar it slots into (unchanged):
+         .fc2-hd    ticker · book dot · score
+         .fc2-situ  the situation
+         .fc2-act   verdict + level price
+         .fc2-live  close + trend          <-- PULSE inserts directly after this,
+         .fc2-gate  what would flip it          because it is live state
+         .fc2-q     why (the structural evidence)
+
+     PULSE is the STATE counterpart to .fc2-q's STRUCTURE. Same card, same language.
+
+     Non-invasive by design: this is an appended layer that decorates rendered
+     cards. It touches none of the 503KB above it, so it reverts by deleting the
+     block and graduates by copying this file over index.html.
+     ============================================================================ -->
+<style>
+  .pl-today{ display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+             font-family:var(--font-mono); font-size:10px; letter-spacing:.02em;
+             margin:5px 0 0; padding:4px 6px; border-radius:6px;
+             border:1px solid var(--hair); background:rgba(255,255,255,.02); color:var(--mut); }
+  .pl-today b{ font-weight:700; }
+  .pl-today.alive{ border-color:rgba(66,219,230,.42); background:rgba(66,219,230,.07); color:var(--ink); }
+  .pl-today.buying{ border-color:var(--pos); background:rgba(63,207,122,.09); }
+  .pl-today.buying b{ color:var(--pos); }
+  .pl-today.selling{ border-color:var(--neg); background:rgba(255,107,107,.09); }
+  .pl-today.selling b{ color:var(--neg); }
+  .pl-today.quiet{ opacity:.45; padding:2px 6px; border-style:dashed; }
+  .pl-cat{ padding:1px 5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:170px; border-radius:4px; border:1px solid var(--watch,#e6b34a);
+           color:var(--watch,#e6b34a); background:rgba(230,179,74,.12); font-size:9px; }
+  /* The read — where PULSE and the card's own verdict agree or disagree. This is the
+     line that makes the two layers talk instead of sitting side by side. */
+  .pl-read{ display:block; margin-top:3px; font-size:10px; line-height:1.4;
+            font-family:var(--font-sans,inherit); letter-spacing:0; }
+  .pl-read.ok{ color:var(--pos); }
+  .pl-read.warn{ color:var(--neg); }
+  .pl-read.mute{ color:var(--mut); }
+
+  .pl-strip{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin:8px 0 2px;
+             font-family:var(--font-mono); font-size:10px; color:var(--mut); }
+  .pl-chip{ padding:2px 7px; border-radius:99px; border:1px solid var(--hair); background:var(--bg2); }
+  .pl-chip.on{ border-color:rgba(66,219,230,.5); color:var(--cyan); }
+  .pl-chip.warnc{ border-color:var(--neg); color:var(--neg); }
+  .pl-sort{ cursor:pointer; user-select:none; }
+  .pl-sort:hover{ border-color:var(--cyan); color:var(--cyan); }
+  .pl-sort.active{ border-color:var(--cyan); color:var(--cyan); background:rgba(66,219,230,.10); }
+  .pl-orphan{ margin-top:9px; }
+  .pl-orphan .pl-o-lbl{ font-family:var(--font-mono); font-size:9px; letter-spacing:.06em;
+                        text-transform:uppercase; color:var(--mut); margin:0 0 5px; }
+  .pl-o-wrap{ display:flex; flex-wrap:wrap; gap:5px; }
+  .pl-o{ border:1px solid var(--hair); border-left:2px solid var(--cyan); border-radius:7px;
+         background:var(--bg2); font-size:11px; padding:4px 8px; display:flex; align-items:center; gap:6px; }
+  .pl-o .t{ font-weight:700; }
+  .pl-o .v{ font-family:var(--font-mono); font-size:10px; color:var(--cyan); }
+  .pl-o.selling{ border-left-color:var(--neg); } .pl-o.selling .v{ color:var(--neg); }
+</style>
+<script>
+(function(){
+  "use strict";
+  var P = null, applied = 0;
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  function byTicker(d){
+    var m = {};
+    (d.rows||[]).forEach(function(r){ m[String(r.ticker).toUpperCase()] = r; });
+    return m;
+  }
+
+  // The read: what PULSE says about the card's OWN verdict. A level with no interest is
+  // not a trade, and a support level being sold into is the opposite of a buy.
+  function readFor(kind, r){
+    if(!r) return {cls:"mute", txt:"Quiet today — no unusual interest at this level."};
+    var buying = r.stance === "BUYING", selling = r.stance === "SELLING";
+    if(kind === "buy" || kind === "watchbuy"){
+      if(buying) return {cls:"ok",   txt:"Alive and being bought — the level has interest behind it."};
+      if(selling) return {cls:"warn", txt:"Alive but being SOLD into. Volume at support without buyers is distribution, not a floor."};
+      return {cls:"mute", txt:"Alive, but flow is mixed — no side has taken control."};
+    }
+    if(kind === "resist"){
+      if(buying) return {cls:"warn", txt:"Alive and being bought INTO resistance — either a break is coming or it is being fed."};
+      if(selling) return {cls:"ok",  txt:"Alive and being sold at resistance — the level is doing its job."};
+      return {cls:"mute", txt:"Alive at resistance, flow mixed."};
+    }
+    if(kind === "avoid"){
+      if(selling) return {cls:"warn", txt:"Alive and still being sold — the knife has not landed."};
+      if(buying)  return {cls:"mute", txt:"Alive with buyers stepping in — watch, do not anticipate."};
+    }
+    return {cls:"mute", txt:"Alive today."};
+  }
+
+  function todayHTML(tk, kind){
+    var r = P.map[String(tk||"").toUpperCase()];
+    var cat = "";
+    if(r && r.catalyst_tier && r.catalysts && r.catalysts[0]){
+      cat = '<span class="pl-cat">⚡ ' + esc(r.catalysts[0].desc).slice(0,22) + '</span>';
+    }
+    var read = readFor(kind, r);
+    if(!r){
+      // A null state must LOOK null. One muted line, no explanatory paragraph -- the absence
+      // of interest is not worth as much card real estate as its presence.
+      return '<div class="pl-today quiet" title="No unusual volume at this level today.">'
+           + '· quiet today</div>';
+    }
+    var cls = "pl-today alive" + (r.stance==="BUYING" ? " buying" : r.stance==="SELLING" ? " selling" : "");
+    var pct = (r.buy_frac!=null) ? Math.round(r.buy_frac*100) : null;
+    var flow = (r.stance==="BUYING") ? ("<b>"+pct+"% buying</b>")
+             : (r.stance==="SELLING") ? ("<b>"+(100-pct)+"% selling</b>")
+             : (pct!=null ? (pct+"% buy · mixed") : "flow n/a");
+    return '<div class="'+cls+'">🫀 <b>'+r.rvol.toFixed(1)+'×</b> vol · '+flow+cat
+         + '<span class="pl-read '+read.cls+'">'+esc(read.txt)+'</span></div>';
+  }
+
+  // Decorate one card. Idempotent -- the desk re-renders on every price refresh.
+  function decorate(el, tk, kind){
+    if(!tk || el.querySelector(":scope > .pl-today")) return;
+    var anchor = el.querySelector(".fc2-live") || el.querySelector(".fc2-act");
+    if(!anchor) return;
+    var div = document.createElement("div");
+    div.innerHTML = todayHTML(tk, kind);
+    var node = div.firstChild;
+    anchor.parentNode.insertBefore(node, anchor.nextSibling);
+  }
+
+  function kindOf(el){
+    var k = ["buy","watchbuy","resist","avoid","watch"];
+    for(var i=0;i<k.length;i++){ if(el.classList.contains(k[i])) return k[i]; }
+    return "watch";
+  }
+
+  function apply(){
+    if(!P) return;
+    // hero cards
+    document.querySelectorAll(".rhero.fc2").forEach(function(el){
+      var t = el.querySelector(".fc2-tk");
+      decorate(el, t && t.textContent, kindOf(el));
+    });
+    // mini cards (expandable) -- same treatment inside the body
+    document.querySelectorAll("details.fc-mini").forEach(function(el){
+      var t = el.querySelector(".fcm-tk");
+      var body = el.querySelector(".fcm-body");
+      if(!t || !body || body.querySelector(":scope > .pl-today")) return;
+      var div = document.createElement("div");
+      div.innerHTML = todayHTML(t.textContent, kindOf(el));
+      body.appendChild(div.firstChild);
+    });
+    header();
+    applied++;
+  }
+
+  // A summary strip on the radar card, plus the names that are alive but have NO level --
+  // they are tomorrow's watchlist, not today's trade, and they would otherwise be invisible.
+  function header(){
+    var wrap = document.querySelector(".card.fc-wrap");
+    if(!wrap || wrap.querySelector(".pl-strip")) return;
+    var note = wrap.querySelector(".fc-note");
+    if(!note) return;
+
+    var onCard = {};
+    wrap.querySelectorAll(".fc2-tk,.fcm-tk").forEach(function(n){
+      onCard[n.textContent.trim().toUpperCase()] = 1; });
+
+    // Operator directive 2026-08-27: cap this at the 3-5 BEST and show nothing that is not a
+    // DEFINED opportunity. A name that is merely busy, with no banked level, no filing and no
+    // decisive flow, is an undefined trade -- listing 22 of those buries the two that matter.
+    var all = (P.rows||[]).filter(function(r){ return !onCard[String(r.ticker).toUpperCase()]; });
+    var nOrphanTotal = all.length;
+    var qualified = all.filter(function(r){
+      return r.catalyst_tier === "T1" || r.catalyst_tier === "T2"   // a stated reason, or
+          || r.stance === "BUYING" || r.stance === "SELLING";        // one side clearly in control
+    });
+    var rank = function(r){
+      var s = 0;
+      if(r.catalyst_tier === "T1") s += 400;        // a hard filing outranks everything
+      else if(r.catalyst_tier === "T2") s += 180;
+      if(r.stance === "BUYING") s += 120;           // direction beats raw activity
+      else if(r.stance === "SELLING") s += 60;      // real information, but not a long idea
+      return s + Math.min(r.rvol || 0, 12) * 5;     // rvol capped so one 96x cannot dominate
+    };
+    var orphans = qualified.sort(function(a,b){ return rank(b) - rank(a); }).slice(0, 5);
+    var nSuppressed = nOrphanTotal - orphans.length;
+
+    var bad = (P.errors||[]).length;
+    var s = document.createElement("div");
+    s.className = "pl-strip";
+    s.innerHTML =
+      '<span class="pl-chip '+(bad?"warnc":"on")+'">🫀 PULSE '+(bad?"DEGRADED":"live")+'</span>'+
+      '<span class="pl-chip"><b>'+(P.n_alive||0)+'</b> alive of '+(P.n_measured||0)+'</span>'+
+      '<span class="pl-chip">session '+esc(P.session_date||"?")+' · bars to '+esc(P.bars_through||"?")+'</span>'+
+      '<span class="pl-chip">open range '+esc(P.opening_range||"")+'</span>'+
+      '<span class="pl-chip pl-sort" id="pl-sort">sort: nearest price</span>';
+    note.parentNode.insertBefore(s, note.nextSibling);
+
+    if(orphans.length){
+      var o = document.createElement("div");
+      o.className = "pl-orphan";
+      o.innerHTML = '<div class="pl-o-lbl">Worth a level — alive with a reason, no banked read yet'+
+        (nSuppressed>0 ? ' <span style="opacity:.6">· '+nSuppressed+' more alive but undefined, hidden</span>' : '')+
+        '</div>'+
+        '<div class="pl-o-wrap">'+orphans.map(function(r){
+          return '<span class="pl-o '+(r.stance==="SELLING"?"selling":"")+'"><span class="t">'+esc(r.ticker)+
+                 '</span><span class="v">'+r.rvol.toFixed(1)+'×</span>'+
+                 (r.catalyst_tier?'<span class="pl-cat">⚡</span>':'')+'</span>'; }).join('')+'</div>';
+      s.parentNode.insertBefore(o, s.nextSibling);
+    }
+
+    // Sort toggle. The desk's own ranking (held first, then nearest price) is NOT replaced
+    // silently -- the operator opts in, and can flip back. A ranking change that nobody
+    // asked for is how a card starts lying about what matters.
+    var btn = document.getElementById("pl-sort");
+    if(btn) btn.addEventListener("click", function(){
+      var grid = wrap.querySelector(".readheroes.fc-grid");
+      if(!grid) return;
+      var on = btn.classList.toggle("active");
+      btn.textContent = on ? "sort: alive today ↓" : "sort: nearest price";
+      var cards = Array.prototype.slice.call(grid.children);
+      if(on){
+        if(!grid.dataset.plOrig){
+          grid.dataset.plOrig = "1";
+          cards.forEach(function(c,i){ c.dataset.plIdx = i; });
+        }
+        cards.sort(function(a,b){
+          var ta=(a.querySelector(".fc2-tk")||{}).textContent, tb=(b.querySelector(".fc2-tk")||{}).textContent;
+          var ra=(P.map[String(ta||"").trim().toUpperCase()]||{}).rvol||0;
+          var rb=(P.map[String(tb||"").trim().toUpperCase()]||{}).rvol||0;
+          return rb-ra;
+        });
+      } else {
+        cards.sort(function(a,b){ return (+a.dataset.plIdx||0)-(+b.dataset.plIdx||0); });
+      }
+      cards.forEach(function(c){ grid.appendChild(c); });
+    });
+  }
+
+  fetch("data/pulse.json?v=1787801015&t="+Date.now())
+    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+    .then(function(d){
+      P = d; P.map = byTicker(d);
+      apply();
+      // The desk re-renders cards on every price refresh, so re-decorate on mutation.
+      // apply() INSERTS nodes, which the observer would see as a mutation, which would call
+      // apply() again. It is idempotent so it cannot loop infinitely, but on a 503KB desk it
+      // would re-scan the DOM continuously. Debounce, and ignore mutations we caused ourselves.
+      var busy = false, pending = null;
+      var run = function(){
+        if(busy) return;
+        busy = true;
+        try { apply(); } finally { busy = false; }
+      };
+      var mo = new MutationObserver(function(muts){
+        if(busy) return;
+        // ignore mutations that are only our own decorations
+        var ours = muts.every(function(m){
+          return Array.prototype.every.call(m.addedNodes, function(n){
+            return n.nodeType === 1 && (n.classList.contains("pl-today") ||
+                   n.classList.contains("pl-strip") || n.classList.contains("pl-orphan")); });
+        });
+        if(ours) return;
+        clearTimeout(pending);
+        pending = setTimeout(run, 250);
+      });
+      mo.observe(document.body, {childList:true, subtree:true});
+    })
+    .catch(function(e){
+      // Say so on the card rather than leaving the operator to assume every name is quiet.
+      var wrap = document.querySelector(".card.fc-wrap");
+      if(wrap && !wrap.querySelector(".pl-strip")){
+        var note = wrap.querySelector(".fc-note");
+        if(note){
+          var s = document.createElement("div");
+          s.className = "pl-strip";
+          s.innerHTML = '<span class="pl-chip warnc">🫀 PULSE unavailable — '+esc(e.message)+
+                        ' · absence of a today-line does NOT mean quiet</span>';
+          note.parentNode.insertBefore(s, note.nextSibling);
+        }
+      }
+    });
+})();
+</script>
+
 </body></html>
