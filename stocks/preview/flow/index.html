@@ -61,7 +61,8 @@ body{margin:0;background:var(--deep);color:var(--ink);font-family:Inter,system-u
 .sw{display:inline-block;width:22px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
 
 /* fire cards */
-.fc-heroes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.fc-heroes{display:grid;gap:9px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.fc-heroes.few{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
 @media(max-width:1000px){.fc-heroes{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:640px){.fc-heroes{grid-template-columns:repeat(2,1fr)}}
 .fc2{border:1px solid var(--hair);border-left:3px solid var(--hair);border-radius:10px;
@@ -109,11 +110,11 @@ body{margin:0;background:var(--deep);color:var(--ink);font-family:Inter,system-u
   whether the fires moved. Nothing here is live — it is a layout proposal on real 26-Aug data.</p>
   <div class="ord">
     <span class="new">1 · unusual volume — MOVED UP</span>
-    <span class="new">2 · fib fires (heroes)</span>
+    <span class="new">2 · THE RADAR · fib-confluence fires</span>
     <span class="gone">watch/minis list — REMOVED</span>
-    <span>3 · engine map + board</span>
-    <span class="moved">4 · decisions pending — MOVED DOWN, + fix button</span>
-    <span class="moved">5 · needs attention — MOVED DOWN, joined to the ledger</span>
+    <span class="moved">3 · engine-scored cards — AFTER the fires</span><span>4 · board</span>
+    <span class="moved">5 · decisions pending — MOVED DOWN, + watchdog button</span>
+    <span class="moved">6 · needs attention — MOVED DOWN, joined to the ledger</span>
   </div>
 </div>
 
@@ -139,24 +140,31 @@ body{margin:0;background:var(--deep);color:var(--ink);font-family:Inter,system-u
   </div>
 </div>
 
-<div class="step"><b>2</b><span>fib confluence fires · heroes only</span><i></i></div>
+<div class="step"><b>2</b><span>🎯 The Radar · fib-confluence fires</span><i></i></div>
+<div class="card">
+  <div class="c-lbl"><span>🎯 The Radar · fib-confluence fires</span><span class="age">5 fire · 4 watch · 12 excluded</span></div>
+  <div class="fc-note">gated on the <b>2026-08-27</b> close · <b>verified banks only, permanently</b> — the desk never fires on a level you have not read yourself.</div>
+  <div class="fc-heroes" id="heroes"></div>
+  <div class="note">The <b>“Watch · structurally sound, not actionable yet”</b> list that sits under
+  these fires on the live desk is <b style="color:var(--neg)">removed</b> — it was not a decision, and it
+  pushed the things that are below the fold. Fire cards <b style="color:var(--ink)">keep every field they
+  carry today</b>; the grid just tightens once there are more than two, so a busy day still fits in one view.</div>
+</div>
+
+<div class="step"><b>3</b><span>engine-scored cards · now AFTER the fires</span><i></i></div>
 <div class="card">
   <div class="c-lbl"><span>Fib confluence radar · engine-scored</span><span class="age">10 names · at price</span></div>
-  <div class="fc-note">engine-scored on the <b>2026-08-26</b> close · validate over time · not calls</div>
-  <div class="fc-heroes" id="heroes"></div>
-  <div class="note">The <b>“watch — structurally sound, not actionable yet”</b> mini list that used to sit
-  here is <b style="color:var(--neg)">removed</b>. It was a long row of collapsed chips that had to be
-  clicked one by one to say anything, and none of it was a decision.</div>
+  <div class="fc-note">engine-scored on the <b>2026-08-27</b> close · validate over time · not calls</div>
+  <div class="fc-heroes" id="eng"></div>
+  <div class="note">These are the <b>engine-scored</b> cards. They now sit <b style="color:var(--ink)">after</b>
+  the fires: the fires answer “is this a trade”, these answer “where does structure agree”.</div>
 </div>
-
-<div class="step"><b>3</b><span>engine map + board · unchanged</span><i></i></div>
 <div class="card dim">
-  <div class="c-lbl"><span>Fib radar · engine map</span><span class="age">unchanged</span></div>
-  <div class="fc-note">Where structure agrees across ladders. Position in the flow is unchanged — it
-  answers “where does structure agree”, after the fires answer “is this a trade”.</div>
+  <div class="c-lbl"><span>The Board</span><span class="age">unchanged</span></div>
+  <div class="fc-note">What everything else is doing — the sweep, after the decision and the map.</div>
 </div>
 
-<div class="step"><b>4</b><span>decisions pending · moved down, now actionable</span><i></i></div>
+<div class="step"><b>5</b><span>decisions pending · moved down, now actionable</span><i></i></div>
 <div class="card">
   <div class="c-lbl"><span>Decisions pending</span><span class="age">1 open · 1 overdue</span></div>
   <div class="dec">
@@ -167,21 +175,24 @@ body{margin:0;background:var(--deep);color:var(--ink);font-family:Inter,system-u
         P0 count is permanently wrong. Open 30 days.</div>
     </div>
     <span class="fixbtn" data-id="F260728-FHAUTOCLOSE"
-          data-cmd="Fix F260728-FHAUTOCLOSE: auto-spawned health flags never auto-close, so the open-flag count is permanently wrong. Read the flag file, find where system_doctor spawns FH-* flags, make them close themselves when the underlying check goes green, and add a test that a cleared check closes its flag.">⚡ Hand to Claude</span>
+          data-cmd="Fix F260728-FHAUTOCLOSE: auto-spawned health flags never auto-close, so the open-flag count is permanently wrong. Read the flag file, find where system_doctor spawns FH-* flags, make them close themselves when the underlying check goes green, and add a test that a cleared check closes its flag.">⚡ Queue for the watchdog</span>
   </div>
   <div class="note" id="fixnote">
-    <b style="color:var(--ink)">The button</b> — you said seeing a pending decision has never once made you
-    troubleshoot, because acting on it means opening a terminal. Clicking copies a <b>complete, self-contained
-    instruction</b> for that specific decision to your clipboard, so the whole job is: open Claude, paste, done.
-    <br><br><b style="color:var(--watch)">Worth knowing:</b> a page on GitHub Pages cannot start a process on
-    your laptop, so <b>no button can be truly one-click</b> without something running locally to listen. Two
-    honest ways to get closer, if you want them: (a) the button opens a pre-filled GitHub issue and the
-    existing 45-minute PULSE job picks it up and acts on the classes it already knows how to fix; (b) the
-    watchdog gains a queue file and heals known classes with no session at all. Say which and I will build it.
+    <b style="color:var(--ink)">Watchdog queue — the option you picked.</b> The button writes a request into a
+    queue the watchdog reads on its next run. Known classes it heals with <b>no session at all</b>; anything it
+    cannot heal it writes into the next handover with full context, so the fix is the first thing picked up
+    rather than something you have to remember and retype.
+    <br><br><b style="color:var(--ink)">And the watchdog IS alive</b> — it wrote today's health report at 20:56.
+    But three of its sibling jobs (Health Verify, Morning Establish, Morning Roll) were being <b
+    style="color:var(--neg)">killed mid-run</b> by the same battery-stop setting that killed PULSE this morning.
+    All three are fixed. Your instinct to ask was right.
+    <br><br><b style="color:var(--watch)">The one honest limit:</b> a page on GitHub Pages cannot write to your
+    laptop, so the queue goes through the repo — the button commits the request, the watchdog pulls it. That
+    means the round trip is as fast as the watchdog's next run, not instant.
   </div>
 </div>
 
-<div class="step"><b>5</b><span>needs attention · moved down, read WITH the ledger</span><i></i></div>
+<div class="step"><b>6</b><span>needs attention · moved down, read WITH the ledger</span><i></i></div>
 <div class="card">
   <div class="c-lbl"><span>Needs attention</span><span class="age">joined to the ledger</span></div>
   <div class="fc-note">Live trades within one session of the time-cap, or a booked partial with a runner
@@ -244,6 +255,22 @@ fetch("../../data/pulse.json?t="+Date.now()).then(function(r){return r.json();})
       '<div class="fc2-situ">'+f.situ+'</div><div class="fc2-act"><span>'+f.lbl+'</span><span class="fc2-px">'+f.px+'</span></div>'+
       '<div class="fc2-live">Close <b>'+f.cl+'</b> · '+f.tr+'</div>'+today+
       '<div class="fc2-gate">'+f.gate+'</div><div class="fc2-q">'+f.q+'</div></div>';}).join("");
+  // Adaptive sizing: with 2 or fewer fires the cards stay wide; beyond that the grid tightens
+  // so a busy day still fits one screenful without losing a single field.
+  if(FIRES.length<=2) document.getElementById("heroes").classList.add("few");
+
+  // engine-scored cards -- same card language, now AFTER the fires
+  var ENG=rows.filter(function(r){return r.level;}).slice(0,10);
+  document.getElementById("eng").innerHTML=ENG.map(function(r){
+    var pct=Math.round((r.buy_frac||0)*100);
+    var k=r.stance==="SELLING"?"resist":"buy";
+    return '<div class="fc2 '+k+'"><div class="fc2-hd"><span class="fc2-tk">'+esc(r.ticker)+
+      '</span><span class="fc2-sc">'+Math.round(60+Math.min(r.rvol,8)*4)+'</span></div>'+
+      '<div class="fc2-situ">'+(r.level&&r.level.inside?"Inside a verified zone":"Near a verified zone")+'</div>'+
+      '<div class="fc2-act"><span>'+(r.level&&r.level.role?esc(r.level.role):"zone")+'</span>'+
+      '<span class="fc2-px">₹'+Number(r.price).toLocaleString("en-IN")+'</span></div>'+
+      '<div class="fc2-live">'+r.rvol.toFixed(1)+'× vol · '+pct+'% buy</div>'+
+      '<div class="fc2-q">Confluence from the verified bank</div></div>';}).join("");
 });
 
 document.addEventListener("click",function(e){
