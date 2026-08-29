@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1787802460">
-<meta name="x-built-at" content="2026-08-27T03:47:06+00:00">
+<meta name="x-build-id" content="1787985759">
+<meta name="x-built-at" content="2026-08-29T06:42:00+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1787802460",BUILT_AT="2026-08-27T03:47:06+00:00";
+  var BID="1787985759",BUILT_AT="2026-08-29T06:42:00+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -5012,6 +5012,11 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   .pl-worth{ margin-top:9px; font-size:10.5px; color:var(--mut); line-height:1.6; }
   .pl-worth b{ color:var(--ink); }
   .pl-worth .nm{ font-family:var(--font-mono); color:var(--cyan); }
+  .pl-fix{ cursor:pointer; user-select:none; font-family:var(--font-mono); font-size:9.5px;
+           padding:3px 8px; border-radius:6px; border:1px solid rgba(66,219,230,.5);
+           color:var(--cyan); background:rgba(66,219,230,.08); margin-left:8px;
+           text-decoration:none; display:inline-block; }
+  .pl-fix:hover{ background:rgba(66,219,230,.18); border-color:var(--cyan); }
   .pl-orphan{ margin-top:9px; }
   .pl-orphan .pl-o-lbl{ font-family:var(--font-mono); font-size:9px; letter-spacing:.06em;
                         text-transform:uppercase; color:var(--mut); margin:0 0 5px; }
@@ -5115,6 +5120,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
     volumeStrip();
     header();
+    reflow();
+    fixButtons();
     applied++;
   }
 
@@ -5134,8 +5141,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 
     // Which names the fib layer already shows, so a tile can point at the card below.
     var onCard = {};
-    document.querySelectorAll(".fc2-tk,.fcm-tk").forEach(function(n){
-      onCard[n.textContent.trim().toUpperCase()] = 1; });
+    document.querySelectorAll(".fc2-tk,.fcm-tk,.card.rdr-wrap .fire .tk").forEach(function(n){
+      onCard[n.textContent.trim().split(/\s+/)[0].toUpperCase()] = 1; });
 
     var tiles = rows.map(function(r){
       var cls = r.stance === "BUYING" ? "buying" : r.stance === "SELLING" ? "selling" : "mixed";
@@ -5192,11 +5199,95 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       worth +
       '<div class="pl-worth" style="opacity:.6;margin-top:7px">State, not calls. ● = this name has a fib card on the radar below · ○ = no banked level yet.</div>';
 
-    // Anchor above the radar if it exists, else the first card, else the top of the page.
-    // It must NOT depend on the radar — that dependency is the bug this fixes.
-    var anchor = document.querySelector(".card.fc-wrap") || document.querySelector(".card");
+    // Anchor above THE FIRES (.rdr-wrap = "🎯 The Radar · fib-confluence fires"), not above the
+    // engine-scored card (.fc-wrap). Operator, 2026-08-29: during the session all they do is
+    // refresh and check whether the fires moved, so volume has to share that first screenful.
+    // Falls back to the engine card, then any card, then the page top — it must NEVER depend on
+    // one card existing, which was the original bug.
+    var anchor = document.querySelector(".card.rdr-wrap")
+              || document.querySelector(".card.fc-wrap") || document.querySelector(".card");
     if(anchor && anchor.parentNode) anchor.parentNode.insertBefore(el, anchor);
     else document.body.insertBefore(el, document.body.firstChild);
+  }
+
+  // ---- FIX BUTTON on each pending decision ------------------------------------------------
+  // Operator: seeing a pending decision has never once made them troubleshoot, because acting
+  // on it meant opening a terminal. A GitHub Pages page cannot start a process on the laptop,
+  // so the button opens a PRE-FILLED GitHub issue; pulse_fix_queue drains `fix-request` issues
+  // on the next scheduled PULSE run and routes them into the next-session block.
+  // Round trip is one PULSE cycle, not instant — said plainly rather than pretended away.
+  function fixButtons(){
+    var dec = document.querySelector(".card.dec-wrap");
+    if(!dec) return;
+    dec.querySelectorAll(".fpl, .dec-t, b, .fp-l, .decl").forEach(function(el){
+      if(el.dataset.plFix || el.querySelector(".pl-fix")) return;
+      var txt = (el.textContent || "").trim();
+      var m = txt.match(/\b([A-Z][A-Z0-9]*\d{4,}[A-Za-z0-9._-]*)\b/);
+      if(!m) return;
+      el.dataset.plFix = "1";
+      var id = m[1];
+      var a = document.createElement("a");
+      a.className = "pl-fix";
+      a.target = "_blank"; a.rel = "noopener";
+      a.href = "https://github.com/sparcho/SparchoTradingDesk/issues/new?labels=fix-request"
+             + "&title=" + encodeURIComponent("fix: " + id + " — " + txt.slice(0, 110))
+             + "&body=" + encodeURIComponent(
+                 "Queued from the equity desk.\n\nDecision: " + id + "\n\n" + txt +
+                 "\n\nDrained by pulse_fix_queue on the next PULSE run.");
+      a.textContent = "⚡ queue fix";
+      a.title = "Opens a pre-filled GitHub issue. The next PULSE run picks it up and routes it.";
+      el.appendChild(a);
+    });
+  }
+
+  // ---- RADAR PAGE REFLOW (operator-specified 2026-08-29) --------------------------------
+  // The zone was built as: needs-attention, decisions, fires, engine-scored, board, ledger --
+  // because `html = _rail + html` prepends the attention rail to the WHOLE zone. So on every
+  // unlock the operator met two admin cards before the thing they came to look at.
+  //
+  // New order: volume · FIRES · engine-scored · board · decisions · needs-attention · ledger.
+  // Nothing is deleted and nothing is re-rendered; nodes are moved. Reverting = delete this.
+  function reflow(){
+    var fires = document.querySelector(".card.rdr-wrap");
+    if(!fires || !fires.parentNode) return;
+    var zone = fires.parentNode;
+
+    // The board is a generic .card -- identify it by its own children, never by position.
+    var board = null;
+    Array.prototype.forEach.call(zone.children, function(c){
+      if(!board && c.classList && c.classList.contains("card") &&
+         (c.querySelector(".bd-t") || c.querySelector(".bd-nb"))) board = c; });
+
+    // Decisions, then needs-attention, both below the board. Needs-attention goes LAST so it
+    // sits against the trade ledger it describes -- every one of its rows IS a ledger row, and
+    // reading it four sections from the position was the actual complaint, not the content.
+    var after = board || document.querySelector(".card.fc-wrap") || fires;
+    ["dec-wrap", "tl-attn"].forEach(function(cls){
+      var el = zone.querySelector(".card." + cls);
+      if(el && el !== after && el.parentNode === zone){
+        after.parentNode.insertBefore(el, after.nextSibling); after = el; }
+    });
+
+    // The volume strip belongs immediately above the fires.
+    var vol = document.querySelector(".pl-vol");
+    if(vol && vol.nextElementSibling !== fires && vol.parentNode) zone.insertBefore(vol, fires);
+
+    // Drop the "Watch · structurally sound, not actionable yet" list. Operator: it was never a
+    // decision, and it pushed everything below it out of view. HIDDEN, not deleted, so the
+    // payload stays falsifiable and this is one line to undo.
+    var sub = fires.querySelector(".c-lbl.sub");
+    if(sub && !sub.dataset.plHidden){
+      var n = sub;
+      while(n){ n.dataset.plHidden = "1"; n.style.display = "none"; n = n.nextElementSibling; }
+    }
+
+    // Fire cards keep every field; the grid tightens past two so a busy day still fits one
+    // screenful instead of running off the bottom.
+    var grid = fires.querySelector(".rdr-grid");
+    if(grid && grid.children.length){
+      grid.style.gridTemplateColumns = "repeat(auto-fit,minmax(" +
+        (grid.children.length <= 2 ? "330px" : "252px") + ",1fr))";
+    }
   }
 
   // A summary strip on the radar card, plus the names that are alive but have NO level --
@@ -5273,7 +5364,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1787802460&t="+Date.now())
+  fetch("data/pulse.json?v=1787985759&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
@@ -5295,7 +5386,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
           return Array.prototype.every.call(m.addedNodes, function(n){
             return n.nodeType === 1 && (n.classList.contains("pl-today") ||
                    n.classList.contains("pl-strip") || n.classList.contains("pl-orphan") ||
-                   n.classList.contains("pl-vol")); });
+                   n.classList.contains("pl-vol") || n.classList.contains("pl-fix")); });
         });
         if(ours) return;
         clearTimeout(pending);
