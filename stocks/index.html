@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1788184326">
-<meta name="x-built-at" content="2026-08-31T13:51:30+00:00">
+<meta name="x-build-id" content="1788191110">
+<meta name="x-built-at" content="2026-08-31T15:44:29+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1788184326",BUILT_AT="2026-08-31T13:51:30+00:00";
+  var BID="1788191110",BUILT_AT="2026-08-31T15:44:29+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -4813,7 +4813,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
             //   size    position size · colour  state · centre  banked result + win-rate arc
             //   rim     recent closed trades, outward won / inward lost
             //   outside names in play with no banked level yet
-            var ORB={C:300, STOP:104, TGT:212, Q:244, SWEEP:210};
+            var ORB={C:350, STOP:120, TGT:250, PLAN:288, Q:318, SWEEP:250};
             window.tlOrbXY=function(r,a){ return [ORB.C+r*Math.cos(a), ORB.C+r*Math.sin(a)]; }; //@pure
             window.tlOrbRad=function(r){ return ORB.STOP+Math.max(0,Math.min(1,((+r||0)+1)/4.6))*(ORB.TGT-ORB.STOP); };
             // SMART LABEL PLACEMENT. Hand-nudging positions does not survive real data: the
@@ -4842,54 +4842,88 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               rows.forEach(function(x){ maxAge=Math.max(maxAge, x.t.sessions_elapsed||1); });
               var ang=function(age,i){ return (-90-((age||0)/maxAge)*ORB.SWEEP-(i%2?4:-4))*Math.PI/180; };
               // guide rings + the scale, parked on the 3-6 o'clock wedge the sweep never reaches
-              S.push('<circle cx="300" cy="300" r="122" fill="url(#orbDanger)"/>',
-                '<circle class="orb-gl stop" cx="300" cy="300" r="104"/>',
-                '<circle class="orb-gl" cx="300" cy="300" r="150"/>',
-                '<circle class="orb-gl tgt" cx="300" cy="300" r="212"/>',
-                '<circle class="orb-gl" cx="300" cy="300" r="244" stroke="rgba(255,180,77,.16)" stroke-dasharray="2 6"/>',
-                '<line x1="300" y1="300" x2="552" y2="300" stroke="rgba(130,190,230,.10)" stroke-dasharray="2 4"/>',
-                '<text class="orb-ax" x="384" y="294" fill="var(--neg)">STOP</text>',
-                '<text class="orb-ax" x="454" y="294">+1R</text>',
-                '<text class="orb-ax" x="512" y="294" fill="var(--pos)">TARGET</text>',
-                '<text class="orb-ax" x="512" y="276" fill="var(--watch)">NO LEVEL</text>',
-                '<text class="orb-ax" x="300" y="26" text-anchor="middle">NEWEST ENTRY ▲</text>',
-                '<text class="orb-ax" x="300" y="42" text-anchor="middle" fill="var(--mut)">older ↺ anticlockwise</text>');
+              // The sweep runs 250 degrees ANTICLOCKWISE from 12, ending near 2 o'clock, so the
+              // 4 o'clock arc is the one place no node can reach. The scale lives there on its own
+              // rotated spoke, instead of lying across the field as it did in v1.
+              S.push('<circle cx="350" cy="350" r="140" fill="url(#orbDanger)"/>',
+                '<circle class="orb-gl stop" cx="350" cy="350" r="120"/>',
+                '<circle class="orb-gl" cx="350" cy="350" r="185"/>',
+                '<circle class="orb-gl tgt" cx="350" cy="350" r="250"/>',
+                '<circle class="orb-gl" cx="350" cy="350" r="318" stroke="rgba(255,180,77,.14)" stroke-dasharray="2 6"/>',
+                '<g transform="translate(350,350) rotate(34)">',
+                '<line x1="0" y1="0" x2="336" y2="0" stroke="rgba(130,190,230,.10)" stroke-dasharray="2 4"/>',
+                '<text class="orb-ax" x="122" y="-7" fill="var(--neg)">STOP</text>',
+                '<text class="orb-ax" x="187" y="-7">+1R</text>',
+                '<text class="orb-ax" x="252" y="-7" fill="var(--pos)">TARGET</text>',
+                '<text class="orb-ax" x="290" y="-7" fill="var(--faint)">PLANS</text>',
+                '<text class="orb-ax" x="320" y="-7" fill="var(--watch)">NO LEVEL</text>',
+                '</g>',
+                '<text class="orb-ax" x="350" y="16" text-anchor="middle">NEWEST ENTRY ▲</text>',
+                '<text class="orb-ax" x="350" y="32" text-anchor="middle" fill="var(--mut)">older ↺ anticlockwise</text>');
               // rim: the closed record
               (closed||[]).slice(0,24).forEach(function(r,i,arr){
                 var a=(-90-(i/Math.max(1,arr.length))*ORB.SWEEP)*Math.PI/180;
-                var len=Math.min(16,Math.abs(r)*6)+2, r0=ORB.Q+16, r1=r0+(r>0?len:-len);
+                var len=Math.min(14,Math.abs(r)*5)+2, r0=ORB.Q+13, r1=r0+(r>0?len:-len);
                 var p0=window.tlOrbXY(r0,a), p1=window.tlOrbXY(r1,a);
                 S.push('<line x1="'+p0[0].toFixed(1)+'" y1="'+p0[1].toFixed(1)+'" x2="'+p1[0].toFixed(1)+
                   '" y2="'+p1[1].toFixed(1)+'" stroke="'+(r>0?'var(--pos)':'var(--neg)')+
                   '" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>');
               });
               // outer band: no banked level yet
-              var qlab=[];
-              (queue||[]).slice(0,8).forEach(function(q,i,arr){
+              // The raw queue is 40 long, repeats names, and contained a ticker that is ALSO an
+              // open position. Showing a name in the "no level yet" band while it sits in the
+              // field as a live trade is simply wrong.
+              var qlab=[], qseen={}, qopen={};
+              rows.forEach(function(x){ qopen[x.t.ticker]=1; });
+              var qc=(queue||[]).filter(function(q){ var tk=q&&q.ticker;
+                if(!tk||qseen[tk]||qopen[tk]) return false; qseen[tk]=1; return true; });
+              var qHidden=Math.max(0,qc.length-8);
+              qc.slice(0,8).forEach(function(q,i,arr){
                 var a=(-90-(i+0.5)*(ORB.SWEEP/Math.max(1,arr.length)))*Math.PI/180;
-                var p=window.tlOrbXY(ORB.Q,a), lp=window.tlOrbXY(ORB.Q+17,a);
+                var p=window.tlOrbXY(ORB.Q,a), lp=window.tlOrbXY(ORB.Q+15,a);
                 S.push('<circle class="orb-q" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="5" '+
                   'data-q="'+esc(q.ticker||'')+'"><title>'+esc(q.ticker||'')+' — in play, no banked level</title></circle>');
                 qlab.push('<text class="orb-lbl" x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+3).toFixed(1)+
                   '" text-anchor="'+(lp[0]<ORB.C?'end':'start')+'" fill="var(--watch)">'+esc(q.ticker||'')+'</text>');
               });
               S.push(qlab.join(''));
+              if(qHidden) S.push('<text class="orb-ax" x="350" y="700" text-anchor="middle" '+
+                'fill="var(--watch)">+'+qHidden+' MORE AWAITING A LEVEL</text>');
               // nodes + tails
               var lab=[];
+              // PLANNED rows carry no mark and no age. Placing them in a field whose axes are
+              // "room above the stop" and "how long you have held it" is meaningless -- and it
+              // stacked eight of them on one point. They get their own evenly-spaced arc.
+              var live=[], plan=[];
               rows.forEach(function(x,i){
-                var t=x.t, d=x.d;
-                var a=ang(t.sessions_elapsed,i);
+                (String(x.t.status||'').toUpperCase()==='PLANNED' || x.t.unrealized_r==null)
+                  ? plan.push({x:x,i:i}) : live.push({x:x,i:i}); });
+              // Real entry dates cluster, so equal angles are the norm rather than the exception.
+              // Nudge any node landing within MINSEP of one already placed.
+              var MINSEP=14*Math.PI/180, placedA=[];
+              var deconflict=function(a0){ var a=a0, g=0;
+                while(placedA.some(function(p){ return Math.abs(p-a)<MINSEP; }) && g++<40) a-=MINSEP;
+                placedA.push(a); return a; };
+              plan.forEach(function(o,k){
+                var a=(-90-(k+0.5)*(ORB.SWEEP/Math.max(1,plan.length)))*Math.PI/180;
+                var p=window.tlOrbXY(ORB.PLAN,a);
+                S.push('<circle class="orb-nd orb-plan" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+
+                  '" r="5.5" fill="none" stroke="var(--faint)" stroke-width="1.6" data-i="'+o.i+
+                  '"><title>'+esc(o.x.t.ticker)+' — resting plan, not entered</title></circle>');
+                lab.push({tk:o.x.t.ticker,x:p[0],y:p[1],r:5.5,fill:'var(--faint)'}); });
+              live.forEach(function(o,k){
+                var x=o.x, i=o.i, t=x.t, d=x.d;
+                var a=deconflict(ang(t.sessions_elapsed,k));
                 var rnow=(t.unrealized_r!=null?+t.unrealized_r:0);
                 var r1=window.tlOrbRad(rnow), p1=window.tlOrbXY(r1,a);
-                var col=d.act?'var(--watch)':(String(t.status||'').toUpperCase()==='PLANNED'?'var(--faint)'
-                        :(rnow>=0?'var(--pos)':'var(--neg)'));
+                var col=d.act?'var(--watch)':(rnow>=0?'var(--pos)':'var(--neg)');
                 if(t.r_prev!=null){
                   var r0=window.tlOrbRad(+t.r_prev), p0=window.tlOrbXY(r0,a);
                   if(Math.abs(r1-r0)>3)
                     S.push('<line class="orb-tail" x1="'+p0[0].toFixed(1)+'" y1="'+p0[1].toFixed(1)+
                       '" x2="'+p1[0].toFixed(1)+'" y2="'+p1[1].toFixed(1)+'" stroke="'+col+'" stroke-width="2.2"/>');
                 }
-                var rr=5+Math.min(4,(t.shares&&t.notional?2:2))*1.9;
+                var rr=8.5;
                 S.push('<circle class="orb-nd" cx="'+p1[0].toFixed(1)+'" cy="'+p1[1].toFixed(1)+'" r="'+rr.toFixed(1)+
                   '" fill="'+col+'" data-i="'+i+'"><title>'+esc(t.ticker)+'</title></circle>');
                 if(d.act) S.push('<circle cx="'+p1[0].toFixed(1)+'" cy="'+p1[1].toFixed(1)+'" r="'+(rr+6).toFixed(1)+
@@ -4903,17 +4937,21 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               // hub
               var wr=(stats&&stats.hit!=null)?Math.round(stats.hit*100):null;
               var cum=(stats&&stats.cum_r!=null)?(+stats.cum_r):null;
-              var dash=(wr!=null?(wr/100*440):0);
-              S.push('<circle cx="300" cy="300" r="78" fill="rgba(4,7,14,.95)" stroke="var(--hair)"/>',
-                '<circle cx="300" cy="300" r="70" fill="none" stroke="rgba(130,190,230,.10)" stroke-width="7"/>',
-                '<circle cx="300" cy="300" r="70" fill="none" stroke="var(--pos)" stroke-width="7" '+
-                  'stroke-linecap="round" stroke-dasharray="'+dash.toFixed(0)+' 440" transform="rotate(-90 300 300)"/>',
-                '<text class="orb-hub" x="300" y="296" text-anchor="middle">'+
+              var dash=(wr!=null?(wr/100*540):0);
+              // Colour BY SIGN. v1 drew -25.6x in the winning green, which is the one thing
+              // colour on this page is not allowed to do.
+              var hcol=(cum==null?'var(--mut)':(cum>=0?'var(--pos)':'var(--neg)'));
+              S.push('<circle cx="350" cy="350" r="94" fill="rgba(4,7,14,.96)" stroke="var(--hair)"/>',
+                '<circle cx="350" cy="350" r="86" fill="none" stroke="rgba(130,190,230,.10)" stroke-width="7"/>',
+                '<circle cx="350" cy="350" r="86" fill="none" stroke="'+hcol+'" stroke-width="7" '+
+                  'stroke-linecap="round" stroke-dasharray="'+dash.toFixed(0)+' 540" transform="rotate(-90 350 350)"/>',
+                '<text class="orb-hub" x="350" y="346" text-anchor="middle" fill="'+hcol+'">'+
                   (cum!=null?((cum>=0?'+':'')+cum.toFixed(1)):'—')+'</text>',
-                '<text class="orb-ax" x="300" y="316" text-anchor="middle">× RISK BANKED</text>',
-                '<text class="orb-ax" x="300" y="334" text-anchor="middle" fill="var(--mut)">'+
+                '<text class="orb-ax" x="350" y="367" text-anchor="middle">× RISK '+
+                  (cum!=null&&cum<0?'LOST':'BANKED')+'</text>',
+                '<text class="orb-ax" x="350" y="385" text-anchor="middle" fill="var(--mut)">'+
                   (wr!=null?(wr+'% OF '+(stats.n||0)+' WON'):'no closed trades yet')+'</text>');
-              return '<svg class="orbsvg" viewBox="0 0 600 600"><defs>'+
+              return '<svg class="orbsvg" viewBox="0 0 700 706"><defs>'+
                 '<radialGradient id="orbDanger"><stop offset="0%" stop-color="rgba(255,95,109,.18)"/>'+
                 '<stop offset="100%" stop-color="rgba(255,95,109,0)"/></radialGradient></defs>'+S.join('')+'</svg>';
             };
@@ -6111,7 +6149,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1788184326&t="+Date.now())
+  fetch("data/pulse.json?v=1788191110&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
