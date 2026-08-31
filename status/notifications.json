@@ -1,8 +1,41 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-08-31T02:41:36+00:00",
+  "updated_at_utc": "2026-08-31T09:08:49+00:00",
   "events": [
+    {
+      "ts": "2026-08-31T14:38:44+05:30",
+      "ts_utc": "2026-08-31T09:08:44+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "equity-dashboard",
+      "spotted": "equity aggregate 65m stale (tol 45m, intraday)",
+      "action_taken": "re-triggered live-refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-08-31T14:38:46+05:30",
+      "ts_utc": "2026-08-31T09:08:46+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver-dashboard",
+      "spotted": "silver aggregate 124m stale",
+      "action_taken": "re-triggered silver 20-min refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-08-31T14:38:46+05:30",
+      "ts_utc": "2026-08-31T09:08:46+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 2 grayed item(s): block:current_price, block:sr_levels",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-08-31T08:11:30+05:30",
       "ts_utc": "2026-08-31T02:41:30+00:00",
@@ -512,39 +545,6 @@
     {
       "ts": "2026-08-26T18:06:03+05:30",
       "ts_utc": "2026-08-26T12:36:03+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "equity:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:signal_perf",
-      "action_taken": "logged - auto-probe re-triggered the desk refresh; persists => GH-Pages build/CDN stuck",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-08-26T18:06:03+05:30",
-      "ts_utc": "2026-08-26T12:36:03+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "silver:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
-      "action_taken": "logged - auto-probe re-triggered the desk refresh; persists => GH-Pages build/CDN stuck",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-08-26T15:03:21+05:30",
-      "ts_utc": "2026-08-26T09:33:21+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "equity:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:signal_perf",
-      "action_taken": "logged - auto-probe re-triggered the desk refresh; persists => GH-Pages build/CDN stuck",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-08-26T12:04:24+05:30",
-      "ts_utc": "2026-08-26T06:34:24+00:00",
       "severity": "🔴",
       "level": "alert",
       "subsystem": "equity:live-parity",
