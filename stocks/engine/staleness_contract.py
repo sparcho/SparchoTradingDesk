@@ -323,6 +323,14 @@ EQUITY_BLOCKS = {
     # daily re-run would add ~1 session of new evidence to a ~32-session window and change
     # nothing -- a check that fires daily on a study nobody needs to re-run is a check that
     # teaches you to ignore the row it sits in.
+    # Recomputed whenever the bank or the price spine moves. Tolerated at 5 sessions:
+    # touch counts change slowly, and a daily alarm on a slow-moving block is noise.
+    "level_memory":          _blk("level_memory.py", "laptop", 5,
+                                  _key_date("generated_at"),
+                                  note="Touch memory per key level. The count WINDOW is "
+                                       "part of the threshold -- widening LOOKBACK "
+                                       "without re-deriving TESTED_AT breaks the link "
+                                       "to the evidence."),
     "fib_level_quality":     _blk("fib_level_quality.py", "laptop", 14,
                                   _key_date("generated_at"),
                                   note="Measures banked levels against price, real vs a "
