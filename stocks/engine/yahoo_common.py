@@ -45,7 +45,7 @@ ALL_TICKERS = [
     'KAYNES','DIXON','SYRMA','TATAELXSI','AMBER',
     # L3 Infra
     'BEL','GRSE','MAZDOCK','SOLARINDS','MTARTECH','HAL','TEJASNET',
-    'BHARTIARTL','POLYCAB','KEI','ANANTRAJ','BLUESTAR',
+    'BHARTIARTL','POLYCAB','KEI','ANANTRAJ',
     # L4 IT
     'TCS','INFY','HCLTECH','PERSISTENT',
     # L5 Apps
@@ -68,13 +68,47 @@ ALL_TICKERS = [
     'PCBL','HSCL','AETHER',                     # L1 carbon & battery materials / specialty chem
     'PARAS','ASTRAMICRO','APOLLO',              # L3 defence — electronics & systems
     'CEINSYS','PACEDIGITK',                     # L5 geospatial / L3 telecom-digital infra
+    # 260831 — CLOSING A SILENT HOLE. This copy had drifted 28 names behind the vault's
+    # GENERATORS/yahoo_common.py, so every cloud job (ci_pulse, fetch_daily_ohlc,
+    # fetch_fundamentals, fetch_historical, ci_regime_refresh) measured 100% of a list that
+    # was missing the whole defence/railways cluster and reported a clean run.
+    # Kept in sync by TESTS/test_cloud_engine_universe_matches_the_vault.py + the doctor's
+    # check_cloud_engine_universe; the vault list is the source of truth (F84).
+    'AARTIDRUGS',
+    'BDL',
+    'BHARATFORG',
+    'BHEL',
+    'BLUESTARCO',
+    'DATAPATTNS',
+    'DECNGOLD',
+    'DENTA',
+    'HDFCSML250',
+    'IRCON',
+    'IRFC',
+    'JWL',
+    'KEC',
+    'KERNEX',
+    'LT',
+    'LTTS',
+    'NSDL',
+    'OLAELEC',
+    'RAILTEL',
+    'RVNL',
+    'SHILCHAR',
+    'SIEMENS',
+    'SKIPPER',
+    'TEXRAIL',
+    'TITAGARH',
+    'VEDPOWER',
+    'VOLTAMP',
+    'WABAG',
 ]
 
 # Special ticker -> Yahoo symbol mappings (default rule = ticker + '.NS')
 SPECIAL = {
     'XAGUSD':    ['SI=F'],                    # silver futures proxy for spot
     'NIFTY':     ['^NSEI'],
-    'BLUESTAR':  ['BLUESTARCO.NS'],
+    'BLUESTARCO': ['BLUESTARCO.NS'],
     'KPIT':      ['KPITTECH.NS'],
     'PBFINTECH': ['POLICYBZR.NS'],
     'WAAREEENER':['WAAREEENER.NS','WAAREE.NS'],

@@ -252,6 +252,12 @@ def main():
         symbols[t] = s or (t + ".NS")
 
     cats, news, cat_err = fetch_catalysts(universe)
+    # Stamp the catalyst READ, not the run. PULSE's own rule is that a stale strip must
+    # look stale; an undated filing passes every freshness gate ever written because
+    # you cannot tell one read four minutes ago from one read four days ago
+    # (dated-is-not-the-same-as-correctly-dated). A fetch that FAILED is dated None
+    # rather than being stamped with the time we failed at.
+    catalysts_as_of = None if cat_err else datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
     errors.extend(cat_err)
 
     intr = fetch_intraday(symbols)
@@ -338,6 +344,7 @@ def main():
         "session_date": today,
         "bars_through": last_bar,
         "opening_range": "%s-%s" % (OPEN_FROM, OPEN_TO),
+        "catalysts_as_of": catalysts_as_of,
         "alive_threshold": ALIVE_RVOL,
         "n_universe": len(universe),
         "n_measured": measured,
