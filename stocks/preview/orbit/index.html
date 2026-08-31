@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Orbit — live trade instrument</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#04070e; --ink:#eaf3ff; --ink2:#a9c2e6; --mut:#6f86b0; --faint:#3d4d70;
+  --hair:rgba(130,190,230,.13); --hair2:rgba(130,190,230,.07);
+  --pos:#3fcf7a; --neg:#ff5f6d; --watch:#ffb44d; --cyan:#42dbe6; --acc:#9a8cff;
+  --mono:'Space Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;padding-bottom:70px;background:
+  radial-gradient(1300px 700px at 12% -12%,rgba(66,219,230,.06),transparent 60%),
+  radial-gradient(900px 500px at 96% 4%,rgba(154,140,255,.05),transparent 55%),var(--bg0);
+  color:var(--ink);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:0 22px}
+.hd{padding:34px 0 12px}
+.hd h1{margin:0;font-size:25px;font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(96deg,#eaf3ff,#8fd8e8 55%,#9a8cff);-webkit-background-clip:text;
+  background-clip:text;-webkit-text-fill-color:transparent}
+.hd p{color:var(--mut);font-size:13px;max-width:82ch;margin:8px 0 0}
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--watch);border:1px solid rgba(255,180,77,.35);
+  background:rgba(255,180,77,.08);padding:4px 9px;border-radius:6px;margin-bottom:13px}
+.note{border-left:2px solid var(--acc);background:rgba(154,140,255,.055);border-radius:0 9px 9px 0;
+  padding:11px 14px;margin:0 0 18px;font-size:12px;color:var(--ink2);line-height:1.62}
+.note > b:first-child{color:var(--acc);font-family:var(--mono);font-size:9px;letter-spacing:.09em;
+  text-transform:uppercase;display:block;margin-bottom:5px}
+.note b{color:var(--ink);font-weight:650}
+.card{background:linear-gradient(180deg,rgba(13,22,44,.82),rgba(6,11,23,.82));border:1px solid var(--hair);
+  border-radius:16px;padding:20px 22px;margin-bottom:20px;backdrop-filter:blur(9px)}
+.sh{display:flex;align-items:baseline;gap:11px;margin-bottom:2px}
+.sh h2{margin:0;font-size:16px;font-weight:700}
+.sx{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--faint);letter-spacing:.05em}
+
+.stage{display:grid;grid-template-columns:1fr 330px;gap:24px;align-items:center}
+@media(max-width:1020px){.stage{grid-template-columns:1fr}}
+.orbit{position:relative;display:flex;justify-content:center}
+.orbit svg{width:100%;max-width:600px;height:600px;overflow:visible}
+.gl{fill:none;stroke:rgba(130,190,230,.10)}
+.gl.stop{stroke:rgba(255,95,109,.42);stroke-dasharray:3 5}
+.gl.tgt{stroke:rgba(63,207,122,.24);stroke-dasharray:3 5}
+.ax{font-family:var(--mono);font-size:8px;fill:var(--faint);letter-spacing:.1em}
+.nlbl{font-family:var(--mono);font-size:9px;fill:var(--mut);pointer-events:none}
+.nd{cursor:pointer;transition:opacity .16s}
+.tail{fill:none;stroke-linecap:round;opacity:.5}
+.hub{font-family:var(--mono);font-size:34px;font-weight:700;fill:var(--pos);letter-spacing:-.03em;
+  filter:drop-shadow(0 0 14px rgba(63,207,122,.55))}
+.qn{fill:none;stroke:var(--watch);stroke-width:1.4;opacity:.75;cursor:pointer}
+
+/* side panel */
+.side{border-left:1px solid var(--hair);padding-left:22px;min-height:520px;display:flex;
+  flex-direction:column;justify-content:center}
+.idle .ih{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:14px}
+.kpi{border-left:2px solid var(--hair);padding:2px 0 2px 12px;margin-bottom:13px}
+.kpi b{display:block;font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.02em}
+.kpi b.pos{color:var(--pos)} .kpi b.watch{color:var(--watch)}
+.kpi span{display:block;color:var(--mut);font-size:11px;margin-top:3px;line-height:1.45}
+.dt-tk{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.dt-sub{color:var(--mut);font-size:11.5px;margin-top:2px}
+.dt-pl{font-family:var(--mono);font-size:30px;font-weight:700;letter-spacing:-.03em;margin:12px 0 2px}
+.dt-pl.pos{color:var(--pos)} .dt-pl.neg{color:var(--neg)} .dt-pl.none{color:var(--faint);font-size:17px}
+.dt-r{font-family:var(--mono);font-size:11px;color:var(--mut)}
+.pbar{position:relative;height:22px;margin:15px 0 0}
+.ptrack{position:absolute;left:0;right:0;top:9px;height:4px;border-radius:3px;
+  background:linear-gradient(90deg,rgba(255,95,109,.32),rgba(111,134,176,.18) 30%,rgba(63,207,122,.32))}
+.pfill{position:absolute;top:9px;height:4px;border-radius:3px;background:var(--pos);box-shadow:0 0 12px rgba(63,207,122,.5)}
+.pfill.neg{background:var(--neg);box-shadow:0 0 12px rgba(255,95,109,.45)}
+.pbar i{position:absolute;top:3px;width:2px;height:16px;background:var(--faint);border-radius:2px}
+.pbar i.e{background:var(--ink2);height:20px;top:1px}
+.pbar i.s{background:var(--neg)} .pbar i.t{background:rgba(63,207,122,.5)}
+.pnow{position:absolute;top:2px;width:11px;height:18px;margin-left:-5.5px;border-radius:4px;background:var(--ink);
+  box-shadow:0 0 0 3px rgba(4,7,14,.92),0 0 15px rgba(234,243,255,.45)}
+.plbl{display:flex;justify-content:space-between;margin-top:5px;font-family:var(--mono);font-size:8.5px;color:var(--faint)}
+.plbl span:nth-child(2){color:var(--ink2)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.chip{font-family:var(--mono);font-size:8.5px;color:var(--ink2);border:1px solid var(--hair);
+  border-radius:5px;padding:3px 7px;background:rgba(255,255,255,.02)}
+.chip.book{color:var(--cyan);border-color:rgba(66,219,230,.28);background:rgba(66,219,230,.07)}
+.chip.tested{color:var(--pos);border-color:rgba(63,207,122,.3);background:rgba(63,207,122,.08)}
+.dt-say{margin-top:13px;padding-top:11px;border-top:1px solid var(--hair2);font-size:12px;color:var(--ink2);line-height:1.6}
+.dt-say b{color:var(--ink)}
+.dt-act{display:flex;gap:7px;margin-top:12px}
+.dt-act a{flex:1;text-align:center;font-size:11px;padding:7px;border-radius:7px;border:1px solid var(--hair);
+  color:var(--ink2);text-decoration:none}
+.dt-act a:hover{border-color:var(--watch);color:var(--watch)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px 20px;margin-top:18px;
+  padding-top:16px;border-top:1px solid var(--hair);font-size:11px;color:var(--mut);line-height:1.5}
+.legend div{display:flex;gap:9px}
+.legend k{font-family:var(--mono);font-size:9px;color:var(--faint);letter-spacing:.06em;
+  flex:0 0 74px;text-transform:uppercase;padding-top:1px}
+</style></head>
+<body><div class="wrap">
+
+<div class="hd">
+  <div class="tag">● mockup v2 · every ticker and number invented</div>
+  <h1>The Orbit</h1>
+  <p>The ring, developed. Every dimension now carries meaning — including the angle, which in v1
+  carried none. It shows the active book at a glance, the closed record on the rim, the names still
+  waiting on a fib read outside it, and the headline numbers at the centre. Hover anything.</p>
+</div>
+
+<div class="note"><b>Read it in one sentence</b>
+<b>How far out</b> a node sits is how much room it has above your stop. <b>Where it sits around the
+ring</b> is when you entered it — newest at 12 o'clock, going back in time anticlockwise. <b>The tail</b>
+is where it was five sessions ago, so you can see which way it is travelling. Everything else is
+supporting detail.
+</div>
+
+<div class="card">
+  <div class="sh"><h2>Live book</h2><span class="sx">hover a node, the rim, or the outer band</span></div>
+  <div class="stage">
+    <div class="orbit">
+      <svg viewBox="0 0 600 600" id="svg" aria-label="orbit of open trades">
+        <defs>
+          <radialGradient id="danger"><stop offset="0%" stop-color="rgba(255,95,109,.20)"/>
+            <stop offset="100%" stop-color="rgba(255,95,109,0)"/></radialGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <!-- danger well around the stop -->
+        <circle cx="300" cy="300" r="122" fill="url(#danger)"/>
+        <!-- guide rings -->
+        <circle class="gl stop" cx="300" cy="300" r="104"/>
+        <circle class="gl"      cx="300" cy="300" r="150"/>
+        <circle class="gl tgt"  cx="300" cy="300" r="212"/>
+        <circle class="gl"      cx="300" cy="300" r="240" stroke="rgba(255,180,77,.16)" stroke-dasharray="2 6"/>
+        <!-- Radial scale on the 1-3 o'clock arc. Angle sweeps 250 degrees ANTICLOCKWISE from 12,
+             so this wedge is empty by construction and a label here can never sit on a node. -->
+        <line x1="300" y1="300" x2="552" y2="300" stroke="rgba(130,190,230,.10)" stroke-dasharray="2 4"/>
+        <text class="ax" x="384" y="294" fill="#ff5f6d">STOP</text>
+        <text class="ax" x="454" y="294">+1R</text>
+        <text class="ax" x="512" y="294" fill="#3fcf7a">TARGET</text>
+        <text class="ax" x="512" y="276" fill="#ffb44d">NO LEVEL</text>
+        <!-- time axis, kept clear of the node field -->
+        <text class="ax" x="300" y="26" text-anchor="middle">NEWEST ENTRY ▲</text>
+        <text class="ax" x="300" y="42" text-anchor="middle" fill="#6f86b0">older ↺ anticlockwise</text>
+        <g id="rim"></g><g id="queue"></g><g id="tails"></g><g id="nodes"></g>
+        <!-- hub -->
+        <circle cx="300" cy="300" r="78" fill="rgba(4,7,14,.95)" stroke="rgba(130,190,230,.14)"/>
+        <circle cx="300" cy="300" r="70" fill="none" stroke="rgba(130,190,230,.10)" stroke-width="7"/>
+        <circle cx="300" cy="300" r="70" fill="none" stroke="var(--pos)" stroke-width="7" stroke-linecap="round"
+                stroke-dasharray="255 440" transform="rotate(-90 300 300)" filter="url(#glow)"/>
+        <text class="hub" x="300" y="296" text-anchor="middle"><tspan>+8.9</tspan></text>
+        <text class="ax" x="300" y="316" text-anchor="middle">× RISK BANKED</text>
+        <text class="ax" x="300" y="334" text-anchor="middle" fill="#6f86b0">58% OF 37 WON</text>
+      </svg>
+    </div>
+
+    <div class="side" id="side"></div>
+  </div>
+
+  <div class="legend">
+    <div><k>Distance out</k><span>room above your stop. The centre disc <b>is</b> the stop — a node touching it is done.</span></div>
+    <div><k>Around</k><span>when you entered. Newest at 12, older anticlockwise.</span></div>
+    <div><k>Tail</k><span>where it was 5 sessions ago. Outward = improving, inward = drifting to the stop.</span></div>
+    <div><k>Size</k><span>how big the position is.</span></div>
+    <div><k>Colour</k><span><b style="color:var(--pos)">winning</b> · <b style="color:var(--neg)">at the stop</b> · <b style="color:var(--watch)">needs a decision</b> · <b style="color:var(--faint)">not entered</b></span></div>
+    <div><k>Outer band</k><span>names in play with <b>no banked level</b> — they enter the ring once you draw one.</span></div>
+    <div><k>Rim ticks</k><span>the last 24 closed trades, newest at 12. Outward = won, inward = lost.</span></div>
+    <div><k>Centre</k><span>banked result and win rate. The green arc is the win rate.</span></div>
+  </div>
+</div>
+
+<div class="note"><b>What the shape tells you before you read anything</b>
+A <b>tight cluster near the middle</b> means the book is stretched — several positions with little room
+above their stops. A <b>wide scatter</b> means it is comfortable. <b>Tails pointing inward</b> across
+several nodes is the early warning that matters: the book is deteriorating together, which is what a
+correlated drawdown looks like before it shows up in the P&amp;L. None of that requires reading a number.
+</div>
+
+<div class="note"><b>Two things I would still watch</b>
+First, with more than about a dozen open positions the ring will crowd near 12 o'clock if several were
+entered the same week — I have spread same-day entries slightly so they do not overlap, but past ~15 live
+names this needs a second band rather than more squeezing. Second, radius is measured in <b>R</b>, not in
+percent, so a node's distance is comparable across names of any price — that is deliberate, and it is
+also the thing most likely to confuse at first glance, which is why the legend leads with it.
+</div>
+
+</div>
+
+<script>
+const TRADES=[
+ {tk:'ACMEIND',  age:11, r:-0.98, prev:-0.20, size:3, state:'decide',
+  lbl:'DECIDE', pl:'−2.4%', rr:'−0.98× risk', sub:'bought the 240.00 floor · 11 sessions',
+  stop:233.5, ent:240, tgt:286, now:233.1, chips:['nothing booked','full size','level tested 4×'],
+  say:'<b>Trailing stop breached.</b> Last close 233.10 is below the 233.50 stop. The system closes this next session unless you say otherwise.', act:true},
+ {tk:'NORTHWIND',age:19, r:2.61, prev:1.90, size:4, state:'win',
+  lbl:'HOLDING', pl:'+14.4%', rr:'+2.61× risk', sub:'bought the 12,450 floor · 19 sessions',
+  stop:12455, ent:12450, tgt:15200, now:14245, chips:['40% booked','runner live','stop at breakeven','level tested 3×'],
+  say:'<b>Nothing to do.</b> The stop sits at your entry, so the runner is free — the worst case from here is a scratch.'},
+ {tk:'VERTEXCO', age:21, r:3.51, prev:3.70, size:3, state:'win',
+  lbl:'HOLDING', pl:'+23.7%', rr:'+3.51× risk', sub:'bought the 702.50 floor · 21 sessions',
+  stop:668, ent:702.5, tgt:881, now:869, chips:['40% booked','runner live','level tested 2×'],
+  say:'<b>Nothing to do.</b> Trailing stop 668.00 is 24.7% below price — hold, by the system.'},
+ {tk:'MERIDIAN', age:6,  r:1.20, prev:0.40, size:2, state:'win',
+  lbl:'HOLDING', pl:'+6.1%', rr:'+1.20× risk', sub:'bought the 515.60 floor · 6 sessions',
+  stop:497.2, ent:515.6, tgt:581.3, now:547, chips:['nothing booked','level tested 5×'],
+  say:'<b>Nothing to do.</b> Trailing stop 497.20 is intact. Waiting costs nothing here.'},
+ {tk:'ORCHIDCO', age:3,  r:-0.40, prev:0.25, size:2, state:'lose',
+  lbl:'HOLDING', pl:'−1.9%', rr:'−0.40× risk', sub:'bought the 96.80 floor · 3 sessions',
+  stop:93.7, ent:96.8, tgt:118, now:95, chips:['nothing booked','level UNTESTED'],
+  say:'<b>Nothing to do.</b> Trailing stop 93.70 not hit (1.4% clear) — hold, by the system. This level has never been retested, which is the weaker half of the measurement.'},
+ {tk:'HALCYON',  age:28, r:0.55, prev:0.95, size:2, state:'win',
+  lbl:'HOLDING', pl:'+2.8%', rr:'+0.55× risk', sub:'bought the 1,204.00 floor · 28 sessions',
+  stop:1180, ent:1204, tgt:1395, now:1238, chips:['nothing booked','level tested 2×'],
+  say:'<b>Nothing to do.</b> Drifting back toward the stop but still 4.9% clear of it.'},
+ {tk:'KESTREL',  age:2,  r:0,     prev:0,    size:2, state:'wait',
+  lbl:'WAITING', pl:'not entered', rr:'12.7% above the level', sub:'resting buy at the 2,905.40 floor',
+  stop:2880, ent:2905, tgt:3600, now:3272, chips:['no money at risk'],
+  say:'<b>Nothing at risk.</b> Price is well above the level and has not come back. The plan only becomes a trade if it does.'}
+];
+const QUEUE=[{tk:'LANTERNCO',why:'in play, no banked level'},{tk:'SABLE',why:'in play, no banked level'},
+             {tk:'CINDERCO',why:'in play, no banked level'},{tk:'PIQUET',why:'read is stale — re-draw'}];
+const CLOSED=[2.4,-1,1.8,0.6,-1,3.1,-0.4,2.0,-1,1.2,0.9,-1,2.8,0.3,-0.7,1.5,-1,2.2,0.8,-1,1.1,4.0,-0.5,1.7];
+
+const NS='http://www.w3.org/2000/svg', C=300, R_STOP=104, R_TGT=212, R_Q=244;
+const SWEEP=210;
+const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const COL={win:'#3fcf7a',lose:'#ff5f6d',decide:'#ffb44d',wait:'#22304d'};
+// radius: R-multiple above the stop, clamped. 0R sits ON the stop line, 3.6R at target.
+const rad=r=>R_STOP+Math.max(0,Math.min(1,(r+1)/4.6))*(R_TGT-R_STOP);
+// angle: newest entry at 12 o'clock, older anticlockwise (operator's choice).
+const maxAge=Math.max(...TRADES.map(t=>t.age))||1;
+const ang=(age,i)=>(-90-(age/maxAge)*SWEEP-(i%2?4:-4))*Math.PI/180;
+const XY=(rr,aa)=>[C+rr*Math.cos(aa),C+rr*Math.sin(aa)];
+
+function bar(t){
+  const hi=Math.max(t.tgt,t.now,t.ent),lo=Math.min(t.stop,t.ent,t.now);
+  const P=v=>Math.max(0,Math.min(100,(v-lo)/(hi-lo)*100));
+  const pe=P(t.ent),pn=P(t.now),win=t.now>=t.ent;
+  const fl=pn>=pe?`left:${pe}%;width:${pn-pe}%`:`left:${pn}%;width:${pe-pn}%`;
+  return `<div class="pbar"><div class="ptrack"></div><div class="pfill${win?'':' neg'}" style="${fl}"></div>
+   <i class="s" style="left:${P(t.stop)}%"></i><i class="e" style="left:${pe}%"></i><i class="t" style="left:${P(t.tgt)}%"></i>
+   <span class="pnow" style="left:${pn}%"></span></div>
+   <div class="plbl"><span>stop ${t.stop.toLocaleString()}</span><span>entry ${t.ent.toLocaleString()}</span><span>target ${t.tgt.toLocaleString()}</span></div>`;
+}
+const STATS=`<div class="idle">
+  <div class="ih">the book, right now</div>
+  <div class="kpi"><b class="pos">+8.9×</b><span>banked in risk units — about nine trades' worth of what you put at risk</span></div>
+  <div class="kpi"><b>58%</b><span>of 37 closed trades made money</span></div>
+  <div class="kpi"><b class="watch">1</b><span>needs a decision · 5 holding · 1 waiting to enter</span></div>
+  <div class="kpi"><b>4</b><span>in play with no banked level — the outer band</span></div>
+  <div class="kpi"><b>+2.1×</b><span>unrealised across the live book</span></div>
+  <div style="color:var(--faint);font-size:10.5px;font-family:var(--mono);margin-top:4px">▸ hover a node for the trade</div></div>`;
+const side=document.getElementById('side');
+side.innerHTML=STATS;
+function show(t){
+  side.innerHTML=`<div><div style="display:flex;align-items:baseline;gap:11px;flex-wrap:wrap">
+     <span class="dt-tk">${t.tk}</span><span class="dt-sub">${t.sub}</span></div>
+   <div class="dt-pl ${t.state==='win'?'pos':(t.state==='wait'?'none':'neg')}">${t.pl}
+     <span class="dt-r">${t.rr}</span></div>${bar(t)}
+   <div class="chips">${t.chips.map(c=>`<span class="chip${/booked/.test(c)?' book':''}${/tested \d/.test(c)?' tested':''}">${c}</span>`).join('')}</div>
+   <div class="dt-say">${t.say}</div>
+   ${t.act?`<div class="dt-act"><a href="#">✕ Close it</a><a href="#">⏸ Hold anyway</a></div>`:''}</div>`;
+}
+const gN=document.getElementById('nodes'),gT=document.getElementById('tails'),
+      gQ=document.getElementById('queue'),gR=document.getElementById('rim');
+
+// rim: the closed record. newest at 12, outward = won, inward = lost.
+CLOSED.forEach((r,i)=>{
+  const a=(-90-(i/CLOSED.length)*SWEEP)*Math.PI/180, len=Math.min(16,Math.abs(r)*6)+2;
+  const r0=R_Q+16, r1=r0+(r>0?len:-len);
+  const [x0,y0]=XY(r0,a),[x1,y1]=XY(r1,a);
+  gR.appendChild(el('line',{x1:x0,y1:y0,x2:x1,y2:y1,stroke:r>0?'#3fcf7a':'#ff5f6d',
+    'stroke-opacity':.55,'stroke-width':2.4,'stroke-linecap':'round'}));
+});
+
+// outer band: names with no banked level yet
+QUEUE.forEach((q,i)=>{
+  const a=(-90-(i+0.5)*(SWEEP/QUEUE.length))*Math.PI/180, [x,y]=XY(R_Q,a);
+  const c=el('circle',{cx:x,cy:y,r:5,class:'qn'});
+  c.addEventListener('mouseenter',()=>{ side.innerHTML=
+    `<div><div class="dt-tk">${q.tk}</div><div class="dt-sub">${q.why}</div>
+     <div class="dt-say" style="margin-top:16px"><b>Not a trade yet.</b> It is in play, but the desk will
+     not fire without a hand-verified level. Draw one and it enters the ring.</div>
+     <div class="dt-act"><a href="#">▸ open the chart</a></div></div>`; });
+  gQ.appendChild(c);
+  var [lx,ly]=XY(R_Q+17,a);
+  gQ.appendChild(el('text',{x:lx,y:ly+3,'text-anchor':(lx<C?'end':'start'),class:'nlbl',fill:'#ffb44d'})).textContent=q.tk;
+});
+
+// tails + nodes
+TRADES.forEach((t,i)=>{
+  const a=ang(t.age,i), r1=rad(t.r), r0=rad(t.prev);
+  const [x1,y1]=XY(r1,a),[x0,y0]=XY(r0,a);
+  const col=COL[t.state];
+  if(Math.abs(r1-r0)>3)
+    gT.appendChild(el('line',{x1:x0,y1:y0,x2:x1,y2:y1,stroke:col,'stroke-width':2.2,class:'tail'}));
+  const rr=5+t.size*1.9;
+  const c=el('circle',{cx:x1,cy:y1,r:rr,fill:col,class:'nd',
+    style:'filter:drop-shadow(0 0 9px '+col+'88)'});
+  c.addEventListener('mouseenter',()=>show(t));
+  gN.appendChild(c);
+  if(t.state==='decide') gN.appendChild(el('circle',{cx:x1,cy:y1,r:rr+6,fill:'none',
+    stroke:col,'stroke-opacity':.5,'stroke-dasharray':'2 3'}));
+  gN.appendChild(el('text',{x:x1,y:y1-(rr+7),'text-anchor':'middle',class:'nlbl'})).textContent=t.tk;
+});
+document.getElementById('svg').addEventListener('mouseleave',()=>{side.innerHTML=STATS;});
+</script>
+</body></html>
