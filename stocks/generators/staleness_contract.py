@@ -318,6 +318,17 @@ EQUITY_BLOCKS = {
     "daytrade_inputs":       _blk("screener_runner.py", "laptop", 1,
                                   note="carries no as-of field — needs a producer stamp"),
     "signal_perf":           _blk("signal_ledger.py", "laptop", 1),
+    # A STUDY, not a feed: it does not go stale a session at a time, it sharpens as the
+    # out-of-sample window grows. Tolerance is deliberately loose (14 sessions) because a
+    # daily re-run would add ~1 session of new evidence to a ~32-session window and change
+    # nothing -- a check that fires daily on a study nobody needs to re-run is a check that
+    # teaches you to ignore the row it sits in.
+    "fib_level_quality":     _blk("fib_level_quality.py", "laptop", 14,
+                                  _key_date("generated_at"),
+                                  note="Measures banked levels against price, real vs a "
+                                       "displaced AND a scrambled ladder. Replaced the "
+                                       "trade-outcome scorecard, which was structurally "
+                                       "n=0 and rendered dashes for months."),
     "fib_confluences":       _blk("ci_fib_refresh.py (cloud) / fib_confluence_feed.py", "cloud", 1,
                                   _key_date("price_as_of"),
                                   note="F260721-FIBPROV: stamps price_as_of/basis. Scored on the "
