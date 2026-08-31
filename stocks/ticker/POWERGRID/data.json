@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "POWERGRID",
-  "emitted_at_utc": "2026-08-31T03:26:57+00:00",
+  "emitted_at_utc": "2026-08-31T11:01:24+00:00",
   "public": {
     "ticker": "POWERGRID",
     "name": "Power Grid Corporation",
@@ -135,10 +135,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 266.05,
-      "day_chg_pct": 0.434,
-      "week_chg_pct": -2.3311306901615145,
-      "date": "2026-08-28"
+      "price": 263.55,
+      "day_chg_pct": -0.94,
+      "week_chg_pct": -2.8924097273397074,
+      "date": "2026-08-31"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5706,50 +5706,93 @@
         267.35,
         265.05,
         266.05
+      ],
+      [
+        "2026-08-31",
+        266.05,
+        266.05,
+        263.15,
+        263.55
       ]
     ],
     "sr_levels": [
       {
-        "method": "swing_high",
-        "kind": "SH1",
-        "price": 292.25,
-        "as_of": "2026-08-28"
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 264.25,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 265.35,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 267.15,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 268.25,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 262.45,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 261.35,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 259.55,
+        "as_of": "2026-08-31"
       },
       {
         "method": "swing_high",
-        "kind": "SH2",
+        "kind": "SH1",
         "price": 289.8,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 279.7,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 279.87,
-        "as_of": "2026-08-28"
+        "price": 279.3,
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 284.54,
-        "as_of": "2026-08-28"
+        "price": 284.5,
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 320.9,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 254.05,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       }
     ],
     "operator_levels": [],
@@ -5763,11 +5806,19 @@
         "auto": true
       },
       {
+        "label": "SUPPORT",
+        "price": 262.45,
+        "dir": "below",
+        "kind": "watch",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 279.87,
+        "price": 264.25,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5782,25 +5833,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 264.25,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.2656042496679904
+      },
+      {
+        "label": "SUPPORT",
+        "price": 262.45,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.4173781066211431
+      },
+      {
         "label": "INVALIDATION",
         "price": 254.05,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -4.51043037023116
-      },
-      {
-        "label": "RESISTANCE",
-        "price": 279.87,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 5.194512309716217
+        "dist_pct": -3.6046291026370705
       },
       {
         "label": "UPSIDE",
         "price": 320.9,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 20.61642548393158
+        "dist_pct": 21.760576740656408
       }
     ],
     "scenario_ladder": [
@@ -5813,8 +5871,8 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 266.05,
-        "note": "holds current band; reclaim Rs285 (200-SMA) to flip constructive"
+        "level": 263.55,
+        "note": "holds current band; reclaim Rs284 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",

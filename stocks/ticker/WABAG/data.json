@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "WABAG",
-  "emitted_at_utc": "2026-08-31T03:27:02+00:00",
+  "emitted_at_utc": "2026-08-31T11:01:30+00:00",
   "public": {
     "ticker": "WABAG",
     "name": "VA Tech Wabag Limited",
@@ -108,10 +108,10 @@
     "dr_briefs": [],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 2086.1001,
-      "day_chg_pct": -2.24,
-      "week_chg_pct": 4.133185244346835,
-      "date": "2026-08-28"
+      "price": 1979.2,
+      "day_chg_pct": -5.124,
+      "week_chg_pct": -1.0943980810554128,
+      "date": "2026-08-31"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8892,50 +8892,99 @@
         2139.0,
         2063.0,
         2086.1001
+      ],
+      [
+        "2026-08-31",
+        2085.0,
+        2085.0,
+        1965.0,
+        1979.2
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 2009.73,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 2054.47,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 2129.73,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 2174.47,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 1934.47,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 1889.73,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 1814.47,
+        "as_of": "2026-08-31"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 2221.2,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 1876.7,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "swing_low",
         "kind": "SL2",
         "price": 1885.6,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 2034.09,
-        "as_of": "2026-08-28"
+        "price": 2034.0,
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 1511.86,
-        "as_of": "2026-08-28"
+        "price": 1514.83,
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 2221.2,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 1049.1,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       }
     ],
     "operator_levels": [],
@@ -8950,43 +8999,58 @@
       },
       {
         "label": "SUPPORT",
-        "price": 2034.09,
+        "price": 1934.47,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "pivot S1",
         "auto": true
       },
       {
         "label": "RESISTANCE",
+        "price": 2009.73,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
         "price": 2221.2,
         "dir": "above",
         "kind": "trim",
-        "why": "60-day swing high",
+        "why": "52-week high",
         "auto": true
       }
     ],
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "SUPPORT",
-        "price": 2034.09,
-        "dir": "below",
-        "kind": "watch",
-        "dist_pct": -2.4931737455935212
+        "label": "RESISTANCE",
+        "price": 2009.73,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 1.5425424413904594
       },
       {
-        "label": "RESISTANCE",
+        "label": "SUPPORT",
+        "price": 1934.47,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -2.2600040420371874
+      },
+      {
+        "label": "UPSIDE",
         "price": 2221.2,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 6.4761945028428745
+        "dist_pct": 12.227162489894896
       },
       {
         "label": "INVALIDATION",
         "price": 1049.1,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -49.709987550453604
+        "dist_pct": -46.99373484236056
       }
     ],
     "scenario_ladder": [
@@ -8999,7 +9063,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 2086.1001,
+        "level": 1979.2,
         "note": "holds current band"
       },
       {

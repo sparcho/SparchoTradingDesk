@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "IRCON",
-  "emitted_at_utc": "2026-08-31T03:26:51+00:00",
+  "emitted_at_utc": "2026-08-31T11:01:17+00:00",
   "public": {
     "ticker": "IRCON",
     "name": "Ircon International",
@@ -115,10 +115,10 @@
     "dr_briefs": [],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 122.4,
-      "day_chg_pct": -0.52,
-      "week_chg_pct": -1.8601667735727978,
-      "date": "2026-08-28"
+      "price": 119.37,
+      "day_chg_pct": -2.475,
+      "week_chg_pct": -3.0300568643379284,
+      "date": "2026-08-31"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8899,44 +8899,93 @@
         123.89,
         122.2,
         122.4
+      ],
+      [
+        "2026-08-31",
+        122.21,
+        122.35,
+        118.9,
+        119.37
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 120.21,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 121.51,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 123.66,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 124.96,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 118.06,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 116.76,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 114.61,
+        "as_of": "2026-08-31"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 132.11,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 124.52,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 129.12,
-        "as_of": "2026-08-28"
+        "price": 128.76,
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 144.62,
-        "as_of": "2026-08-28"
+        "price": 144.4,
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 187.02,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 115.24,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       }
     ],
     "operator_levels": [],
@@ -8950,11 +8999,19 @@
         "auto": true
       },
       {
+        "label": "SUPPORT",
+        "price": 118.06,
+        "dir": "below",
+        "kind": "watch",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 129.12,
+        "price": 120.21,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -8970,24 +9027,31 @@
     "gate_check": [
       {
         "label": "RESISTANCE",
-        "price": 129.12,
+        "price": 120.21,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 5.490196078431371
+        "dist_pct": 0.703694395576769
+      },
+      {
+        "label": "SUPPORT",
+        "price": 118.06,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -1.0974281645304536
       },
       {
         "label": "INVALIDATION",
         "price": 115.24,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -5.849673202614388
+        "dist_pct": -3.4598307782525004
       },
       {
         "label": "UPSIDE",
         "price": 187.02,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 52.794117647058826
+        "dist_pct": 56.67253078662981
       }
     ],
     "scenario_ladder": [
@@ -9000,8 +9064,8 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 122.4,
-        "note": "holds current band; reclaim Rs145 (200-SMA) to flip constructive"
+        "level": 119.37,
+        "note": "holds current band; reclaim Rs144 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",

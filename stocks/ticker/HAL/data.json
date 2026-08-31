@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "HAL",
-  "emitted_at_utc": "2026-08-31T03:26:49+00:00",
+  "emitted_at_utc": "2026-08-31T11:01:14+00:00",
   "public": {
     "ticker": "HAL",
     "name": "Hindustan Aeronautics",
@@ -121,10 +121,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 4861.1001,
-      "day_chg_pct": -0.774,
-      "week_chg_pct": -2.777998000000007,
-      "date": "2026-08-28"
+      "price": 4801.6001,
+      "day_chg_pct": -1.224,
+      "week_chg_pct": -2.12800448430494,
+      "date": "2026-08-31"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5692,38 +5692,87 @@
         4890.0,
         4816.0,
         4861.1001
+      ],
+      [
+        "2026-08-31",
+        4836.8999,
+        4844.0,
+        4777.0,
+        4801.6001
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 4807.53,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 4838.07,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 4874.53,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 4905.07,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 4771.07,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 4740.53,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 4704.07,
+        "as_of": "2026-08-31"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 4515.2,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 4652.93,
-        "as_of": "2026-08-28"
+        "price": 4660.8,
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 4384.2,
-        "as_of": "2026-08-28"
+        "price": 4385.07,
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 5099.0,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 3487.2,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       }
     ],
     "operator_levels": [],
@@ -5738,10 +5787,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 4652.93,
+        "price": 4771.07,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 4807.53,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5756,25 +5813,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 4807.53,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.12349841462224415
+      },
+      {
         "label": "SUPPORT",
-        "price": 4652.93,
+        "price": 4771.07,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -4.2823660430279835
+        "dist_pct": -0.6358317928225624
       },
       {
         "label": "UPSIDE",
         "price": 5099.0,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 4.893951885500164
+        "dist_pct": 6.193766532119165
       },
       {
         "label": "INVALIDATION",
         "price": 3487.2,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -28.26315179150497
+        "dist_pct": -27.374210109667395
       }
     ],
     "scenario_ladder": [
@@ -5787,7 +5851,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 4861.1001,
+        "level": 4801.6001,
         "note": "holds current band"
       },
       {

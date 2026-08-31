@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "PERSISTENT",
-  "emitted_at_utc": "2026-08-31T03:26:57+00:00",
+  "emitted_at_utc": "2026-08-31T11:01:23+00:00",
   "public": {
     "ticker": "PERSISTENT",
     "name": "PERSISTENT",
@@ -114,10 +114,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 5875.0,
-      "day_chg_pct": 3.909,
-      "week_chg_pct": 3.661226290251433,
-      "date": "2026-08-28"
+      "price": 5594.5,
+      "day_chg_pct": -4.774,
+      "week_chg_pct": -1.747453459782227,
+      "date": "2026-08-31"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5685,38 +5685,87 @@
         5910.0,
         5677.0,
         5875.0
+      ],
+      [
+        "2026-08-31",
+        5855.5,
+        5855.5,
+        5593.0,
+        5594.5
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 5681.0,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 5769.0,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 5943.5,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 6031.5,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 5506.5,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 5418.5,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 5244.0,
+        "as_of": "2026-08-31"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 4298.5,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 5216.19,
-        "as_of": "2026-08-28"
+        "price": 5231.5,
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 5467.6,
-        "as_of": "2026-08-28"
+        "price": 5466.67,
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 6563.5,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 4298.5,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       }
     ],
     "operator_levels": [],
@@ -5731,10 +5780,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 5467.6,
+        "price": 5506.5,
         "dir": "below",
         "kind": "watch",
-        "why": "200-day SMA",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 5681.0,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5749,25 +5806,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 5681.0,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 1.5461614085262312
+      },
+      {
         "label": "SUPPORT",
-        "price": 5467.6,
+        "price": 5506.5,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -6.934468085106377
+        "dist_pct": -1.5729734560729287
       },
       {
         "label": "UPSIDE",
         "price": 6563.5,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 11.719148936170212
+        "dist_pct": 17.320582715166683
       },
       {
         "label": "INVALIDATION",
         "price": 4298.5,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -26.83404255319149
+        "dist_pct": -23.16560908034677
       }
     ],
     "scenario_ladder": [
@@ -5780,7 +5844,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 5875.0,
+        "level": 5594.5,
         "note": "holds current band"
       },
       {

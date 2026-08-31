@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "CHAMBLFERT",
-  "emitted_at_utc": "2026-08-31T03:26:46+00:00",
+  "emitted_at_utc": "2026-08-31T11:01:11+00:00",
   "public": {
     "ticker": "CHAMBLFERT",
     "name": "Chambal Fertilisers and Chemicals",
@@ -121,10 +121,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 421.55,
-      "day_chg_pct": -0.753,
-      "week_chg_pct": -2.226603270323545,
-      "date": "2026-08-28"
+      "price": 409.55,
+      "day_chg_pct": -2.847,
+      "week_chg_pct": -4.965773291565142,
+      "date": "2026-08-31"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5685,62 +5685,111 @@
         426.95,
         421.1,
         421.55
+      ],
+      [
+        "2026-08-31",
+        421.0,
+        421.0,
+        406.9,
+        409.55
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 412.48,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 418.07,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 426.58,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 432.17,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 403.97,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 398.38,
+        "as_of": "2026-08-31"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 389.87,
+        "as_of": "2026-08-31"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 459.75,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 431.0,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 450.99,
-        "as_of": "2026-08-28"
+        "price": 449.5,
+        "as_of": "2026-08-31"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 449.81,
-        "as_of": "2026-08-28"
+        "price": 449.46,
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 569.75,
-        "as_of": "2026-08-28"
+        "as_of": "2026-08-31"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 412.25,
-        "as_of": "2026-08-28"
+        "price": 409.55,
+        "as_of": "2026-08-31"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
-        "label": "INVALIDATION",
-        "price": 412.25,
+        "label": "SUPPORT",
+        "price": 403.97,
         "dir": "below",
-        "kind": "inv",
-        "why": "52-week low",
+        "kind": "watch",
+        "why": "pivot S1",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 449.81,
+        "price": 412.48,
         "dir": "above",
         "kind": "trim",
-        "why": "200-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5755,39 +5804,39 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "INVALIDATION",
-        "price": 412.25,
-        "dir": "below",
-        "kind": "inv",
-        "dist_pct": -2.2061439924089696
-      },
-      {
         "label": "RESISTANCE",
-        "price": 449.81,
+        "price": 412.48,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 6.703831099513698
+        "dist_pct": 0.7154193627151768
+      },
+      {
+        "label": "SUPPORT",
+        "price": 403.97,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -1.3624710047613195
       },
       {
         "label": "UPSIDE",
         "price": 569.75,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 35.15597200806547
+        "dist_pct": 39.11610303992186
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 412.25,
-        "note": "daily close below Rs412 invalidates the structure"
+        "level": 409.55,
+        "note": "daily close below Rs410 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 421.55,
-        "note": "holds current band; reclaim Rs450 (200-SMA) to flip constructive"
+        "level": 409.55,
+        "note": "holds current band; reclaim Rs449 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
