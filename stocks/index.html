@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1788173101">
-<meta name="x-built-at" content="2026-08-31T10:44:24+00:00">
+<meta name="x-build-id" content="1788183885">
+<meta name="x-built-at" content="2026-08-31T13:44:12+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1788173101",BUILT_AT="2026-08-31T10:44:24+00:00";
+  var BID="1788183885",BUILT_AT="2026-08-31T13:44:12+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1382,6 +1382,46 @@
 }
 .dtseg-note{font-family:'Space Mono',ui-monospace,monospace;font-size:9px;letter-spacing:.05em;
   color:var(--faint);margin-left:auto}
+/* F260831 — The Orbit. Colour carries state and nothing else. */
+.orbwrap{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:center;margin-top:6px}
+.orbstage{display:flex;justify-content:center}
+.orbsvg{width:100%;max-width:580px;height:auto;overflow:visible}
+.orb-gl{fill:none;stroke:rgba(130,190,230,.10)}
+.orb-gl.stop{stroke:rgba(255,107,107,.42);stroke-dasharray:3 5}
+.orb-gl.tgt{stroke:rgba(63,207,122,.24);stroke-dasharray:3 5}
+.orb-ax{font-family:'Space Mono',ui-monospace,monospace;font-size:8px;fill:var(--faint);letter-spacing:.1em}
+.orb-lbl{font-family:'Space Mono',ui-monospace,monospace;font-size:9px;pointer-events:none}
+.orb-nd{cursor:pointer}
+.orb-nd:hover{stroke:var(--ink);stroke-width:1.5}
+.orb-q{fill:none;stroke:var(--watch);stroke-width:1.4;opacity:.75;cursor:pointer}
+.orb-tail{fill:none;stroke-linecap:round;opacity:.5}
+.orb-hub{font-family:'Space Mono',ui-monospace,monospace;font-size:32px;font-weight:700;
+  fill:var(--pos);letter-spacing:-.03em}
+.orbside{border-left:1px solid var(--hair);padding-left:19px;min-height:430px;display:flex;
+  flex-direction:column;justify-content:center}
+.orbside .op{background:none;border:0;padding:0}
+.orbside .op:hover{transform:none;border-color:transparent}
+.orbih{font-family:'Space Mono',ui-monospace,monospace;font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--faint);margin-bottom:13px}
+.orbk{border-left:2px solid var(--hair);padding:2px 0 2px 12px;margin-bottom:12px}
+.orbk b{display:block;font-family:'Space Mono',ui-monospace,monospace;font-size:21px;font-weight:700;
+  letter-spacing:-.02em;color:var(--ink)}
+.orbk b.pos{color:var(--pos)} .orbk b.watch{color:var(--watch)}
+.orbk span{display:block;color:var(--mut);font-size:11px;margin-top:3px;line-height:1.45}
+.orbhint{color:var(--faint);font-size:10px;font-family:'Space Mono',ui-monospace,monospace;margin-top:2px}
+.orblegend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px 20px;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--hair);font-size:10.5px;
+  color:var(--mut);line-height:1.5}
+.orblegend div{display:flex;gap:9px}
+.orblegend k{font-family:'Space Mono',ui-monospace,monospace;font-size:8.5px;color:var(--faint);
+  letter-spacing:.06em;flex:0 0 72px;text-transform:uppercase;padding-top:1px}
+.orbfallback{display:none}
+/* Below ~900px a 600px ring cannot be read. Fall back to the cards — same information, laid
+   out flat — rather than shipping a chart nobody can use on a narrow screen. */
+@media(max-width:900px){
+  .orbwrap{display:none}
+  .orbfallback{display:grid}
+}
 .bd-trk-h{cursor:pointer;user-select:none}
 .bd-trk-h:hover{color:var(--ink)}
 .bd-trk-caret{margin-left:auto;padding-left:8px;color:var(--faint);transition:transform .16s ease;display:inline-block}
@@ -3491,6 +3531,46 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     return fibCard;
   }
 
+  // F260831 — the Orbit's hover behaviour, mounted after each Radar render.
+  // Idle shows the book's overall numbers; hovering a node opens that trade; hovering an outer
+  // marker explains why that name is not in the ring yet. Bound with a delegated listener on the
+  // SVG rather than one per node, so a re-render cannot leave orphaned handlers behind.
+  window.orbMount=function(){
+    var svg=document.querySelector('.orbsvg'), side=document.getElementById('orbside');
+    if(!svg||!side) return;
+    var rows=window.__orbRows||[];
+    var idle=function(){
+      var tl=(DATA&&DATA.trade_lab)||{}, v=(tl.trade_lab_views&&tl.trade_lab_views.fib)||{};
+      var dec=rows.filter(function(x){ return x.d.act; }).length;
+      var q=((tl.level_study_queue)||[]).length;
+      var unre=rows.reduce(function(a,x){ return a+((x.t.unrealized_r!=null)?+x.t.unrealized_r:0); },0);
+      var k=function(b,c,t){ return '<div class="orbk"><b class="'+(c||'')+'">'+b+'</b><span>'+t+'</span></div>'; };
+      side.innerHTML='<div class="orbidle"><div class="orbih">the book, right now</div>'+
+        k((v.cum_r!=null?((v.cum_r>=0?'+':'')+(+v.cum_r).toFixed(1)+'×'):'—'),'pos',
+          'banked in risk units — what the system has made, counted against what it risked')+
+        k((v.hit!=null?(Math.round(v.hit*100)+'%'):'—'),'',
+          'of '+(v.n||0)+' closed trades made money')+
+        k(dec,(dec?'watch':''),(dec?'need a decision':'need a decision')+' · '+
+          rows.filter(function(x){return !x.d.act;}).length+' holding or waiting')+
+        k(q,'', 'in play with no banked level — the outer band')+
+        k(((unre>=0?'+':'')+unre.toFixed(1)+'×'),'', 'unrealised across the live book')+
+        '<div class="orbhint">▸ hover a node for the trade</div></div>';
+    };
+    var show=function(i){
+      var x=rows[i]; if(!x) return;
+      side.innerHTML=window.tlOpenCard(x.t,{},i);
+    };
+    svg.addEventListener('mouseover',function(e){
+      var n=e.target.closest('.orb-nd'); if(n){ show(+n.dataset.i); return; }
+      var q=e.target.closest('.orb-q');
+      if(q) side.innerHTML='<div class="orbidle"><div class="orbih">'+esc(q.dataset.q)+'</div>'+
+        '<div class="fc-note">In play, but the desk will not fire without a hand-verified level. '+
+        'Draw one and it enters the ring.</div></div>';
+    });
+    svg.addEventListener('mouseleave',idle);
+    idle();
+  };
+
   function fibConflHTML(){
     var fc=(typeof DATA!=="undefined"&&DATA)?DATA.fib_confluences:null;
     if(!fc) return '';
@@ -4720,12 +4800,144 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                 '&title='+encodeURIComponent('trade: '+what+' '+t.ticker+' ('+(t.trade_id||'')+')')+
                 '&body='+encodeURIComponent(body)+'" onclick="event.stopPropagation()">'+esc(label)+'</a>';
             };
+            // ── F260831 — THE ORBIT (operator-chosen, from stocks/preview/orbit/) ────────────
+            // Replaces the open-position card grid. Every dimension carries meaning:
+            //   radius  room above the stop, in R -- comparable across names of any price
+            //   angle   when you entered. Newest at 12, older anticlockwise (operator's choice)
+            //   tail    where it sat 5 sessions back (r_prev). NO tail when that is unknown --
+            //           a fabricated one would point somewhere specific and mean nothing.
+            //   size    position size · colour  state · centre  banked result + win-rate arc
+            //   rim     recent closed trades, outward won / inward lost
+            //   outside names in play with no banked level yet
+            var ORB={C:300, STOP:104, TGT:212, Q:244, SWEEP:210};
+            window.tlOrbXY=function(r,a){ return [ORB.C+r*Math.cos(a), ORB.C+r*Math.sin(a)]; }; //@pure
+            window.tlOrbRad=function(r){ return ORB.STOP+Math.max(0,Math.min(1,((+r||0)+1)/4.6))*(ORB.TGT-ORB.STOP); };
+            // SMART LABEL PLACEMENT. Hand-nudging positions does not survive real data: the
+            // operator's book changes every session, so a layout tuned to today's nodes collides
+            // tomorrow. Each label is offered candidate slots around its node and takes the first
+            // that hits nothing already placed; a label with no free slot is DROPPED rather than
+            // overlapped -- the node is still hoverable, and an unreadable label is worse than none.
+            window.tlPlaceLabels=function(items){
+              var placed=[], out=[];
+              var W=function(t){ return t.length*5.4+4; }, H=11;
+              items.forEach(function(it){
+                var cands=[[0,-(it.r+9)],[0,it.r+15],[it.r+W(it.tk)/2+7,4],[-(it.r+W(it.tk)/2+7),4],
+                           [0,-(it.r+20)],[0,it.r+26]];
+                for(var i=0;i<cands.length;i++){
+                  var x=it.x+cands[i][0], y=it.y+cands[i][1];
+                  var box={l:x-W(it.tk)/2,r:x+W(it.tk)/2,t:y-H,b:y+2};
+                  var clash=placed.some(function(p){
+                    return box.l<p.r&&p.l<box.r&&box.t<p.b&&p.t<box.b; });
+                  if(!clash){ placed.push(box); out.push({tk:it.tk,x:x,y:y,fill:it.fill}); return; }
+                }
+              });
+              return out;
+            };
+            window.tlOrbitHTML=function(rows, closed, queue, stats){
+              var S=[], NSs='', maxAge=1;
+              rows.forEach(function(x){ maxAge=Math.max(maxAge, x.t.sessions_elapsed||1); });
+              var ang=function(age,i){ return (-90-((age||0)/maxAge)*ORB.SWEEP-(i%2?4:-4))*Math.PI/180; };
+              // guide rings + the scale, parked on the 3-6 o'clock wedge the sweep never reaches
+              S.push('<circle cx="300" cy="300" r="122" fill="url(#orbDanger)"/>',
+                '<circle class="orb-gl stop" cx="300" cy="300" r="104"/>',
+                '<circle class="orb-gl" cx="300" cy="300" r="150"/>',
+                '<circle class="orb-gl tgt" cx="300" cy="300" r="212"/>',
+                '<circle class="orb-gl" cx="300" cy="300" r="244" stroke="rgba(255,180,77,.16)" stroke-dasharray="2 6"/>',
+                '<line x1="300" y1="300" x2="552" y2="300" stroke="rgba(130,190,230,.10)" stroke-dasharray="2 4"/>',
+                '<text class="orb-ax" x="384" y="294" fill="var(--neg)">STOP</text>',
+                '<text class="orb-ax" x="454" y="294">+1R</text>',
+                '<text class="orb-ax" x="512" y="294" fill="var(--pos)">TARGET</text>',
+                '<text class="orb-ax" x="512" y="276" fill="var(--watch)">NO LEVEL</text>',
+                '<text class="orb-ax" x="300" y="26" text-anchor="middle">NEWEST ENTRY ▲</text>',
+                '<text class="orb-ax" x="300" y="42" text-anchor="middle" fill="var(--mut)">older ↺ anticlockwise</text>');
+              // rim: the closed record
+              (closed||[]).slice(0,24).forEach(function(r,i,arr){
+                var a=(-90-(i/Math.max(1,arr.length))*ORB.SWEEP)*Math.PI/180;
+                var len=Math.min(16,Math.abs(r)*6)+2, r0=ORB.Q+16, r1=r0+(r>0?len:-len);
+                var p0=window.tlOrbXY(r0,a), p1=window.tlOrbXY(r1,a);
+                S.push('<line x1="'+p0[0].toFixed(1)+'" y1="'+p0[1].toFixed(1)+'" x2="'+p1[0].toFixed(1)+
+                  '" y2="'+p1[1].toFixed(1)+'" stroke="'+(r>0?'var(--pos)':'var(--neg)')+
+                  '" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>');
+              });
+              // outer band: no banked level yet
+              var qlab=[];
+              (queue||[]).slice(0,8).forEach(function(q,i,arr){
+                var a=(-90-(i+0.5)*(ORB.SWEEP/Math.max(1,arr.length)))*Math.PI/180;
+                var p=window.tlOrbXY(ORB.Q,a), lp=window.tlOrbXY(ORB.Q+17,a);
+                S.push('<circle class="orb-q" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="5" '+
+                  'data-q="'+esc(q.ticker||'')+'"><title>'+esc(q.ticker||'')+' — in play, no banked level</title></circle>');
+                qlab.push('<text class="orb-lbl" x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+3).toFixed(1)+
+                  '" text-anchor="'+(lp[0]<ORB.C?'end':'start')+'" fill="var(--watch)">'+esc(q.ticker||'')+'</text>');
+              });
+              S.push(qlab.join(''));
+              // nodes + tails
+              var lab=[];
+              rows.forEach(function(x,i){
+                var t=x.t, d=x.d;
+                var a=ang(t.sessions_elapsed,i);
+                var rnow=(t.unrealized_r!=null?+t.unrealized_r:0);
+                var r1=window.tlOrbRad(rnow), p1=window.tlOrbXY(r1,a);
+                var col=d.act?'var(--watch)':(String(t.status||'').toUpperCase()==='PLANNED'?'var(--faint)'
+                        :(rnow>=0?'var(--pos)':'var(--neg)'));
+                if(t.r_prev!=null){
+                  var r0=window.tlOrbRad(+t.r_prev), p0=window.tlOrbXY(r0,a);
+                  if(Math.abs(r1-r0)>3)
+                    S.push('<line class="orb-tail" x1="'+p0[0].toFixed(1)+'" y1="'+p0[1].toFixed(1)+
+                      '" x2="'+p1[0].toFixed(1)+'" y2="'+p1[1].toFixed(1)+'" stroke="'+col+'" stroke-width="2.2"/>');
+                }
+                var rr=5+Math.min(4,(t.shares&&t.notional?2:2))*1.9;
+                S.push('<circle class="orb-nd" cx="'+p1[0].toFixed(1)+'" cy="'+p1[1].toFixed(1)+'" r="'+rr.toFixed(1)+
+                  '" fill="'+col+'" data-i="'+i+'"><title>'+esc(t.ticker)+'</title></circle>');
+                if(d.act) S.push('<circle cx="'+p1[0].toFixed(1)+'" cy="'+p1[1].toFixed(1)+'" r="'+(rr+6).toFixed(1)+
+                  '" fill="none" stroke="var(--watch)" stroke-opacity=".5" stroke-dasharray="2 3"/>');
+                lab.push({tk:t.ticker, x:p1[0], y:p1[1], r:rr, fill:'var(--mut)'});
+              });
+              window.tlPlaceLabels(lab).forEach(function(L){
+                S.push('<text class="orb-lbl" x="'+L.x.toFixed(1)+'" y="'+L.y.toFixed(1)+
+                  '" text-anchor="middle" fill="'+L.fill+'">'+esc(L.tk)+'</text>');
+              });
+              // hub
+              var wr=(stats&&stats.hit!=null)?Math.round(stats.hit*100):null;
+              var cum=(stats&&stats.cum_r!=null)?(+stats.cum_r):null;
+              var dash=(wr!=null?(wr/100*440):0);
+              S.push('<circle cx="300" cy="300" r="78" fill="rgba(4,7,14,.95)" stroke="var(--hair)"/>',
+                '<circle cx="300" cy="300" r="70" fill="none" stroke="rgba(130,190,230,.10)" stroke-width="7"/>',
+                '<circle cx="300" cy="300" r="70" fill="none" stroke="var(--pos)" stroke-width="7" '+
+                  'stroke-linecap="round" stroke-dasharray="'+dash.toFixed(0)+' 440" transform="rotate(-90 300 300)"/>',
+                '<text class="orb-hub" x="300" y="296" text-anchor="middle">'+
+                  (cum!=null?((cum>=0?'+':'')+cum.toFixed(1)):'—')+'</text>',
+                '<text class="orb-ax" x="300" y="316" text-anchor="middle">× RISK BANKED</text>',
+                '<text class="orb-ax" x="300" y="334" text-anchor="middle" fill="var(--mut)">'+
+                  (wr!=null?(wr+'% OF '+(stats.n||0)+' WON'):'no closed trades yet')+'</text>');
+              return '<svg class="orbsvg" viewBox="0 0 600 600"><defs>'+
+                '<radialGradient id="orbDanger"><stop offset="0%" stop-color="rgba(255,95,109,.18)"/>'+
+                '<stop offset="100%" stop-color="rgba(255,95,109,0)"/></radialGradient></defs>'+S.join('')+'</svg>';
+            };
             var _rows=(open||[]).filter(window.tlIsSystem).map(function(t){ return {t:t,d:window.tlVerdict(t)}; });
             var _dec=_rows.filter(function(x){ return x.d.v==='DECIDE'; });
             var _ord={DECIDE:0,HOLD:1,WAIT:2};
             _rows.sort(function(a,b){ return (_ord[a.d.v]-_ord[b.d.v]) || String(a.t.ticker).localeCompare(String(b.t.ticker)); });
+            // The orbit replaces the card grid. The cards are kept as the FALLBACK for a narrow
+            // viewport, where a 600px ring cannot be read -- the same information, laid out flat.
+            var _stats=(tl&&tl.trade_lab_views&&tl.trade_lab_views.fib)||{};
+            var _queue=((tl&&tl.level_study_queue)||[]).slice(0,8);
+            var _closedR=(closed||[]).filter(window.tlIsSystem)
+              .map(function(t){ return t.realized_r; })
+              .filter(function(v){ return v!=null && isFinite(+v); }).slice(0,24);
+            window.__orbRows=_rows;
             var _railBody=_rows.length
-              ? ('<div class="opgrid">'+_rows.map(function(x,_i){ return window.tlOpenCard(x.t,opMeth,_i); }).join('')+'</div>')
+              ? ('<div class="orbwrap"><div class="orbstage">'+
+                   window.tlOrbitHTML(_rows,_closedR,_queue,_stats)+
+                 '</div><div class="orbside" id="orbside"></div></div>'+
+                 '<div class="opgrid orbfallback">'+_rows.map(function(x,_i){ return window.tlOpenCard(x.t,opMeth,_i); }).join('')+'</div>'+
+                 '<div class="orblegend">'+
+                   '<div><k>Distance out</k><span>room above your stop, in R. The centre disc <b>is</b> the stop.</span></div>'+
+                   '<div><k>Around</k><span>when you entered. Newest at 12, older anticlockwise.</span></div>'+
+                   '<div><k>Tail</k><span>where it sat 5 sessions ago. Outward = improving, inward = drifting to the stop. No tail = not open long enough to know.</span></div>'+
+                   '<div><k>Outer band</k><span>in play with <b>no banked level</b> — they enter the ring once you draw one.</span></div>'+
+                   '<div><k>Rim ticks</k><span>recent closed trades. Outward = won, inward = lost.</span></div>'+
+                   '<div><k>Centre</k><span>banked result; the green arc is the win rate.</span></div>'+
+                 '</div>')
               : '<div class="tl-attn-empty">✓ No open positions logged.</div>';
             var _kd=window.tlKpiDelta(dailyR, window.tlTodayStr()); var _tR=_kd?(+(_kd.net_r||0)):0;
             var _todayLine=_kd?('<div class="tl-attn-today">Today: <b class="'+(_tR>0?'pos':(_tR<0?'neg':''))+'">'+(_tR>0?'+':'')+_tR.toFixed(2)+'R</b> · '+(_kd.n||0)+' close'+((_kd.n===1)?'':'s')+'</div>'):'';
@@ -4765,6 +4977,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     html = html + fibQualityHTML() + signalsBlockHTML();
     setFace('z-lab', html);
     try{ window.bdRestoreTracks(); }catch(e4){}
+    try{ window.orbMount(); }catch(e5){}
     try{ window.__signalsMount(); }catch(e2){}
     if(tl){ try{ window.tlRenderHist(); window.tlRenderLedger(); }catch(e3){__reportErr('lab-tl',e3);} }
   }catch(e){__reportErr('lab',e);} }
@@ -5894,7 +6107,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1788173101&t="+Date.now())
+  fetch("data/pulse.json?v=1788183885&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
