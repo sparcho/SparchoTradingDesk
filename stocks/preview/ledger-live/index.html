@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live ledger — two node views</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#04070e; --ink:#eaf3ff; --ink2:#a9c2e6; --mut:#6f86b0; --faint:#3d4d70;
+  --hair:rgba(130,190,230,.13); --hair2:rgba(130,190,230,.07);
+  --pos:#3fcf7a; --neg:#ff5f6d; --watch:#ffb44d; --cyan:#42dbe6; --acc:#9a8cff;
+  --mono:'Space Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:
+  radial-gradient(1300px 700px at 12% -12%,rgba(66,219,230,.06),transparent 60%),
+  radial-gradient(900px 500px at 96% 4%,rgba(154,140,255,.05),transparent 55%),var(--bg0);
+  color:var(--ink);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased;padding-bottom:70px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px}
+.hd{padding:34px 0 10px}
+.hd h1{margin:0;font-size:25px;font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(96deg,#eaf3ff,#8fd8e8 55%,#9a8cff);-webkit-background-clip:text;
+  background-clip:text;-webkit-text-fill-color:transparent}
+.hd p{color:var(--mut);font-size:13px;max-width:80ch;margin:8px 0 0}
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--watch);border:1px solid rgba(255,180,77,.35);
+  background:rgba(255,180,77,.08);padding:4px 9px;border-radius:6px;margin-bottom:13px}
+.note{border-left:2px solid var(--acc);background:rgba(154,140,255,.055);border-radius:0 9px 9px 0;
+  padding:11px 14px;margin:0 0 18px;font-size:12px;color:var(--ink2);line-height:1.62}
+.note > b:first-child{color:var(--acc);font-family:var(--mono);font-size:9px;letter-spacing:.09em;
+  text-transform:uppercase;display:block;margin-bottom:5px}
+/* mid-sentence emphasis must stay inline — a blanket rule on `b` broke every sentence that
+   used one into three stacked fragments in mono caps. */
+.note b{color:var(--ink);font-weight:650}
+.card{background:linear-gradient(180deg,rgba(13,22,44,.82),rgba(6,11,23,.82));border:1px solid var(--hair);
+  border-radius:16px;padding:20px 22px;margin-bottom:20px;backdrop-filter:blur(9px)}
+.sh{display:flex;align-items:baseline;gap:11px;margin-bottom:2px}
+.sh h2{margin:0;font-size:16px;font-weight:700}
+.sn{font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.1em}
+.sx{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--faint);letter-spacing:.05em}
+.ss{color:var(--mut);font-size:12px;margin:0 0 16px}
+
+/* ══ VIEW A — THE SPINE ══════════════════════════════════════════════════ */
+.spine{display:grid;grid-template-columns:236px 1fr 300px;gap:0;align-items:center;min-height:430px}
+.dial{position:relative;display:flex;align-items:center;justify-content:center}
+.dial svg{width:216px;height:216px;overflow:visible}
+.dial .mid{position:absolute;text-align:center;pointer-events:none}
+.dial .mid b{display:block;font-family:var(--mono);font-size:38px;font-weight:700;letter-spacing:-.03em;
+  color:var(--pos);text-shadow:0 0 26px rgba(63,207,122,.5);line-height:1}
+.dial .mid span{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--faint);margin-top:7px}
+.dial .cap{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);text-align:center;width:230px}
+.dial .cap i{font-style:normal;display:block;font-size:10.5px;color:var(--mut);line-height:1.5}
+.links{position:relative}
+.links svg{width:100%;height:430px;display:block;overflow:visible}
+.lk{fill:none;stroke-width:1.6;opacity:.62;transition:opacity .18s,stroke-width .18s}
+.lk.on{opacity:1;stroke-width:2.6}
+.nodes{display:flex;flex-direction:column;justify-content:center;gap:4px;height:430px}
+.nd{display:flex;align-items:center;gap:10px;padding:5px 8px;border-radius:9px;cursor:pointer;
+  transition:background .16s}
+.nd:hover,.nd.on{background:rgba(255,255,255,.045)}
+.pill{width:46px;height:26px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:700;flex:0 0 auto;color:#04070e}
+.pill.pos{background:var(--pos)} .pill.neg{background:var(--neg)}
+.pill.wait{background:#22304d;color:var(--faint)}
+.pill.watch{background:var(--watch)}
+.nd-tk{font-size:13px;font-weight:600}
+.nd-st{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;color:var(--faint)}
+.nd.decide .nd-tk{color:var(--watch)}
+/* the hover panel — the whole point of the view */
+.det{position:relative;min-height:430px}
+.det-in{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  border-left:1px solid var(--hair);padding-left:20px}
+.det-idle{color:var(--faint);font-size:12px;line-height:1.6;font-family:var(--mono)}
+.det-live{display:none}
+.det-live.on{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.dt-tk{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.dt-sub{color:var(--mut);font-size:11.5px;margin-top:2px}
+.dt-pl{font-family:var(--mono);font-size:31px;font-weight:700;letter-spacing:-.03em;margin:13px 0 2px}
+.dt-pl.pos{color:var(--pos)} .dt-pl.neg{color:var(--neg)}
+.dt-r{font-family:var(--mono);font-size:11px;color:var(--mut)}
+.pbar{position:relative;height:22px;margin:16px 0 0}
+.ptrack{position:absolute;left:0;right:0;top:9px;height:4px;border-radius:3px;
+  background:linear-gradient(90deg,rgba(255,95,109,.32),rgba(111,134,176,.18) 30%,rgba(63,207,122,.32))}
+.pfill{position:absolute;top:9px;height:4px;border-radius:3px;background:var(--pos);box-shadow:0 0 12px rgba(63,207,122,.5)}
+.pfill.neg{background:var(--neg);box-shadow:0 0 12px rgba(255,95,109,.45)}
+.pbar i{position:absolute;top:3px;width:2px;height:16px;background:var(--faint);border-radius:2px}
+.pbar i.e{background:var(--ink2);height:20px;top:1px}
+.pbar i.s{background:var(--neg)} .pbar i.t{background:rgba(63,207,122,.5)}
+.pnow{position:absolute;top:2px;width:11px;height:18px;margin-left:-5.5px;border-radius:4px;background:var(--ink);
+  box-shadow:0 0 0 3px rgba(4,7,14,.92),0 0 15px rgba(234,243,255,.45)}
+.plbl{display:flex;justify-content:space-between;margin-top:5px;font-family:var(--mono);font-size:8.5px;color:var(--faint)}
+.plbl span:nth-child(2){color:var(--ink2)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:13px}
+.chip{font-family:var(--mono);font-size:8.5px;color:var(--ink2);border:1px solid var(--hair);
+  border-radius:5px;padding:3px 7px;background:rgba(255,255,255,.02)}
+.chip.book{color:var(--cyan);border-color:rgba(66,219,230,.28);background:rgba(66,219,230,.07)}
+.chip.tested{color:var(--pos);border-color:rgba(63,207,122,.3);background:rgba(63,207,122,.08)}
+.dt-say{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair2);font-size:12px;
+  color:var(--ink2);line-height:1.6}
+.dt-say b{color:var(--ink)}
+.dt-act{display:flex;gap:7px;margin-top:13px}
+.dt-act a{flex:1;text-align:center;font-size:11px;padding:7px;border-radius:7px;border:1px solid var(--hair);
+  color:var(--ink2);text-decoration:none;transition:.15s}
+.dt-act a:hover{border-color:var(--watch);color:var(--watch)}
+
+/* ══ VIEW B — THE RING ═══════════════════════════════════════════════════ */
+.ringwrap{display:grid;grid-template-columns:1fr 310px;gap:26px;align-items:center}
+@media(max-width:960px){.ringwrap,.spine{grid-template-columns:1fr}}
+.ring{position:relative;display:flex;justify-content:center}
+.ring svg{width:100%;max-width:520px;height:460px;overflow:visible}
+.rn{cursor:pointer;transition:r .18s,opacity .18s}
+.rn:hover{opacity:1}
+.rlbl{font-family:var(--mono);font-size:9px;fill:var(--mut);pointer-events:none}
+.rax{font-family:var(--mono);font-size:8px;fill:var(--faint);letter-spacing:.09em}
+.legend{display:flex;flex-wrap:wrap;gap:13px;margin-top:12px;font-family:var(--mono);font-size:9px;color:var(--faint)}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* shared lower strip */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:20px;
+  padding-top:17px;border-top:1px solid var(--hair)}
+.st{border-left:2px solid var(--hair);padding-left:12px}
+.st b{display:block;font-family:var(--mono);font-size:19px;font-weight:700;letter-spacing:-.02em}
+.st b.pos{color:var(--pos)} .st b.watch{color:var(--watch)}
+.st span{display:block;color:var(--mut);font-size:11px;margin-top:3px;line-height:1.45}
+.blocked{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.bk{font-family:var(--mono);font-size:9.5px;color:var(--watch);border:1px solid rgba(255,180,77,.3);
+  background:rgba(255,180,77,.07);border-radius:6px;padding:4px 9px}
+</style></head>
+<body><div class="wrap">
+
+<div class="hd">
+  <div class="tag">● two mockups · every ticker and number invented</div>
+  <h1>The live ledger — hover a node, the trade opens</h1>
+  <p>Both views answer the same brief: the trade list becomes a <b>live graph</b>, and detail appears on
+  <b>hover</b> rather than as a wall of rows. Both carry the performance figure, the open trades, the closed
+  record and the names still blocked on a fib read. Pick one — or tell me which half of each to keep.</p>
+</div>
+
+<div class="note"><b>What the references were saying</b>
+All three share one grammar: a <b>centre that holds the single most important number</b>, and
+<b>curved connectors carrying state outward to labelled nodes</b>. The cyber-defence board is the closest
+to our problem — one score, lines fanning to entities, colour telling you which need you. That is exactly
+a book of open trades. So neither mockup invents a new language; they apply that one to the ledger.
+</div>
+
+<!-- ══════════════════ A ══════════════════ -->
+<div class="card">
+  <div class="sh"><span class="sn">A</span><h2>The Spine</h2>
+    <span class="sx">hover any node →</span></div>
+  <p class="ss">Cumulative result at the centre. One line per open trade, curving out. Line colour is the
+    trade’s state, line thickness is the size of the position. Hover to open it on the right.</p>
+
+  <div class="spine">
+    <div class="dial">
+      <svg viewBox="0 0 216 216">
+        <circle cx="108" cy="108" r="86" fill="none" stroke="rgba(130,190,230,.10)" stroke-width="12"/>
+        <circle cx="108" cy="108" r="86" fill="none" stroke="var(--pos)" stroke-width="12"
+                stroke-linecap="round" stroke-dasharray="392 540" transform="rotate(-90 108 108)"
+                style="filter:drop-shadow(0 0 12px rgba(63,207,122,.55))"/>
+        <circle cx="108" cy="108" r="66" fill="none" stroke="rgba(130,190,230,.07)" stroke-width="1"/>
+      </svg>
+      <div class="mid"><b>+8.9</b><span>× risk banked</span></div>
+      <div class="cap"><i>58% of 37 closed trades made money</i></div>
+    </div>
+
+    <div class="links">
+      <svg viewBox="0 0 300 430" preserveAspectRatio="none">
+        <path class="lk" id="lk0" d="M0,215 C120,215 150,64 300,64"   stroke="var(--watch)"/>
+        <path class="lk" id="lk1" d="M0,215 C120,215 150,138 300,138" stroke="var(--pos)"/>
+        <path class="lk" id="lk2" d="M0,215 C120,215 150,196 300,196" stroke="var(--pos)"/>
+        <path class="lk" id="lk3" d="M0,215 C120,215 150,254 300,254" stroke="var(--pos)"/>
+        <path class="lk" id="lk4" d="M0,215 C120,215 150,312 300,312" stroke="var(--neg)"/>
+        <path class="lk" id="lk5" d="M0,215 C120,215 150,370 300,370" stroke="rgba(111,134,176,.5)"/>
+      </svg>
+    </div>
+
+    <div class="nodes" id="nodes"></div>
+  </div>
+
+  <div class="det" style="grid-column:1/-1;min-height:0;margin-top:6px">
+    <div id="panel" style="border-top:1px solid var(--hair);padding-top:16px"></div>
+  </div>
+
+  <div class="strip">
+    <div class="st"><b class="pos">+8.9×</b><span>banked in risk units — about nine trades’ worth of what you put at risk</span></div>
+    <div class="st"><b>58%</b><span>of 37 closed trades made money</span></div>
+    <div class="st"><b>6</b><span>live right now · 82 logged by the system</span></div>
+    <div class="st"><b class="watch">4</b><span>blocked — waiting on your fib read</span></div>
+  </div>
+  <div class="blocked">
+    <span class="bk">NORTHWIND · needs a level</span><span class="bk">ORCHIDCO · needs a level</span>
+    <span class="bk">LANTERNCO · needs a level</span><span class="bk">KESTREL · re-read stale</span>
+  </div>
+</div>
+
+<div class="note"><b>Why the spine reads fastest</b>
+The eye gets a <b>single ordered column</b> — one scan, top to bottom, no grid to parse. The pill carries the
+number, the line carries the state, and position in the column is the ranking. The amber line is visible from
+the centre outward, so “something needs me” is answered before you read a single word. Detail only appears
+when you ask for it, which is what stops the page being a wall.
+</div>
+
+<!-- ══════════════════ B ══════════════════ -->
+<div class="card">
+  <div class="sh"><span class="sn">B</span><h2>The Ring</h2>
+    <span class="sx">distance from centre = distance from your stop</span></div>
+  <p class="ss">The centre <b>is your stop</b>. A node’s distance from it is how much room the trade has —
+    so anything near the middle is in trouble, and the outer band is winning. Angle just spaces them out.
+    This encodes risk <i>spatially</i>: you read the book’s exposure without reading any number.</p>
+
+  <div class="ringwrap">
+    <div class="ring">
+      <svg viewBox="0 0 460 460" id="ringsvg">
+        <defs><radialGradient id="rg"><stop offset="0%" stop-color="rgba(255,95,109,.22)"/>
+          <stop offset="100%" stop-color="rgba(255,95,109,0)"/></radialGradient></defs>
+        <circle cx="230" cy="230" r="70" fill="url(#rg)"/>
+        <circle cx="230" cy="230" r="70"  fill="none" stroke="rgba(255,95,109,.4)" stroke-dasharray="3 5"/>
+        <circle cx="230" cy="230" r="128" fill="none" stroke="rgba(130,190,230,.12)"/>
+        <circle cx="230" cy="230" r="186" fill="none" stroke="rgba(63,207,122,.22)" stroke-dasharray="3 5"/>
+        <text class="rax" x="230" y="234" text-anchor="middle" fill="#ff5f6d">STOP</text>
+        <text class="rax" x="230" y="98"  text-anchor="middle">+1R</text>
+        <text class="rax" x="230" y="40"  text-anchor="middle">TARGET</text>
+        <g id="ringnodes"></g>
+      </svg>
+    </div>
+    <div class="det" style="min-height:auto">
+      <div class="det-in" style="position:relative;min-height:340px">
+        <div id="rpanel"></div>
+      </div>
+    </div>
+  </div>
+  <div class="legend">
+    <span><i style="background:var(--pos)"></i> winning</span>
+    <span><i style="background:var(--neg)"></i> at or through the stop</span>
+    <span><i style="background:var(--watch)"></i> needs a decision</span>
+    <span><i style="background:#22304d"></i> waiting — not entered</span>
+    <span>node size = position size</span>
+  </div>
+</div>
+
+<div class="note"><b>What the ring buys, and what it costs</b>
+It is the only layout here where <b>the shape of the picture is itself the risk report</b>: a cluster hugging
+the middle means the book is stretched, a wide scatter means it is comfortable, and you see that before
+reading. The cost is that angle carries no meaning, which is a real weakness — a viewer will look for one.
+The spine has no such dead dimension. <b>My recommendation is A for daily use</b>, with the ring as a
+once-a-day “how exposed am I” glance if you want it.
+</div>
+
+<div class="note"><b>Both views drop what you asked to drop</b>
+The three hand-logged swing trades are gone and the class toggle with them — the ledger is
+<b>system trades only</b>, ready for the TradingView-chart pickup to feed the same channel. The blocked
+fib-read names sit in the lower strip on A, where they read as a queue rather than a nag.
+</div>
+
+</div>
+
+<script>
+const TRADES=[
+ {tk:'ACMEIND',  st:'decide', lbl:'DECIDE', pill:'watch', v:'−0.9', pl:'−2.4%', r:'−0.98× risk',
+  sub:'bought the 240.00 floor · 11 sessions', stop:233.5, ent:240, tgt:286, now:233.1, size:3,
+  chips:['nothing booked','full size','level tested 4×'],
+  say:'<b>Trailing stop breached.</b> Last close 233.10 is below the 233.50 stop. The system closes this next session unless you say otherwise.', act:true},
+ {tk:'NORTHWIND',st:'hold', lbl:'HOLDING', pill:'pos', v:'+2.6', pl:'+14.4%', r:'+2.61× risk',
+  sub:'bought the 12,450 floor · 19 sessions', stop:12455, ent:12450, tgt:15200, now:14245, size:4,
+  chips:['40% booked','runner live','stop at breakeven','level tested 3×'],
+  say:'<b>Nothing to do.</b> The stop sits at your entry, so the runner is free — the worst case from here is a scratch.'},
+ {tk:'VERTEXCO', st:'hold', lbl:'HOLDING', pill:'pos', v:'+3.5', pl:'+23.7%', r:'+3.51× risk',
+  sub:'bought the 702.50 floor · 21 sessions', stop:668, ent:702.5, tgt:881, now:869,  size:3,
+  chips:['40% booked','runner live','level tested 2×'],
+  say:'<b>Nothing to do.</b> Trailing stop 668.00 is 24.7% below price — hold, by the system.'},
+ {tk:'MERIDIAN', st:'hold', lbl:'HOLDING', pill:'pos', v:'+1.2', pl:'+6.1%',  r:'+1.20× risk',
+  sub:'bought the 515.60 floor · 6 sessions', stop:497.2, ent:515.6, tgt:581.3, now:547, size:2,
+  chips:['nothing booked','level tested 5×'],
+  say:'<b>Nothing to do.</b> Trailing stop 497.20 is intact. Waiting costs nothing here.'},
+ {tk:'ORCHIDCO', st:'hold', lbl:'HOLDING', pill:'neg', v:'−0.4', pl:'−1.9%',  r:'−0.40× risk',
+  sub:'bought the 96.80 floor · 3 sessions', stop:93.7, ent:96.8, tgt:118, now:95, size:2,
+  chips:['nothing booked','level UNTESTED'],
+  say:'<b>Nothing to do.</b> Trailing stop 93.70 not hit (1.4% clear) — hold, by the system. This level has never been retested, which is the weaker half of the measurement.'},
+ {tk:'KESTREL',  st:'wait', lbl:'WAITING', pill:'wait', v:'—', pl:'not entered', r:'12.7% above the level',
+  sub:'resting buy at the 2,905.40 floor', stop:2880, ent:2905, tgt:3600, now:3272, size:2,
+  chips:['no money at risk'],
+  say:'<b>Nothing at risk.</b> Price is well above the level and has not come back. The plan only becomes a trade if it does.'}
+];
+function bar(t){
+  const hi=Math.max(t.tgt,t.now,t.ent), lo=Math.min(t.stop,t.ent,t.now);
+  const P=v=>Math.max(0,Math.min(100,(v-lo)/(hi-lo)*100));
+  const pe=P(t.ent), pn=P(t.now), win=t.now>=t.ent;
+  const fl=pn>=pe?`left:${pe}%;width:${pn-pe}%`:`left:${pn}%;width:${pe-pn}%`;
+  return `<div class="pbar"><div class="ptrack"></div><div class="pfill${win?'':' neg'}" style="${fl}"></div>
+    <i class="s" style="left:${P(t.stop)}%"></i><i class="e" style="left:${pe}%"></i><i class="t" style="left:${P(t.tgt)}%"></i>
+    <span class="pnow" style="left:${pn}%"></span></div>
+    <div class="plbl"><span>stop ${t.stop.toLocaleString()}</span><span>entry ${t.ent.toLocaleString()}</span><span>target ${t.tgt.toLocaleString()}</span></div>`;
+}
+function panel(t){
+  if(!t) return `<div class="det-idle">▸ hover a node to open the trade</div>`;
+  return `<div class="det-live on">
+    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+      <span class="dt-tk">${t.tk}</span><span class="dt-sub">${t.sub}</span>
+      <span class="nd-st" style="margin-left:auto">${t.lbl}</span></div>
+    <div class="dt-pl ${t.pill==='neg'?'neg':(t.pill==='pos'?'pos':'')}">${t.pl}
+      <span class="dt-r">${t.r}</span></div>
+    ${bar(t)}
+    <div class="chips">${t.chips.map(c=>`<span class="chip${/booked/.test(c)?' book':''}${/tested \d/.test(c)?' tested':''}">${c}</span>`).join('')}</div>
+    <div class="dt-say">${t.say}</div>
+    ${t.act?`<div class="dt-act"><a href="#">✕ Close it</a><a href="#">⏸ Hold anyway</a></div>`:''}
+  </div>`;
+}
+const nodes=document.getElementById('nodes'), pan=document.getElementById('panel');
+nodes.innerHTML=TRADES.map((t,i)=>`<div class="nd ${t.st==='decide'?'decide':''}" data-i="${i}">
+  <span class="pill ${t.pill}">${t.v}</span><span class="nd-tk">${t.tk}</span>
+  <span class="nd-st">${t.lbl}</span></div>`).join('');
+pan.innerHTML=panel(null);
+function hl(i){
+  document.querySelectorAll('.nd').forEach((n,k)=>n.classList.toggle('on',k===i));
+  document.querySelectorAll('.lk').forEach((l,k)=>l.classList.toggle('on',k===i));
+  pan.innerHTML=panel(i==null?null:TRADES[i]);
+}
+nodes.querySelectorAll('.nd').forEach(n=>{
+  n.addEventListener('mouseenter',()=>hl(+n.dataset.i));
+});
+nodes.addEventListener('mouseleave',()=>hl(null));
+
+/* ── ring ── */
+const R={stop:70,max:190}, rs=document.getElementById('ringnodes'), rp=document.getElementById('rpanel');
+const NS='http://www.w3.org/2000/svg';
+TRADES.forEach((t,i)=>{
+  const rr=Math.abs(parseFloat(t.v))||0.15;
+  const rad=R.stop+Math.min(1,rr/3.6)*(R.max-R.stop);
+  const ang=(-90+i*(360/TRADES.length))*Math.PI/180;
+  const x=230+rad*Math.cos(ang), y=230+rad*Math.sin(ang);
+  const col=t.pill==='pos'?'#3fcf7a':(t.pill==='neg'?'#ff5f6d':(t.pill==='watch'?'#ffb44d':'#22304d'));
+  const spoke=document.createElementNS(NS,'line');
+  spoke.setAttribute('x1',230);spoke.setAttribute('y1',230);spoke.setAttribute('x2',x);spoke.setAttribute('y2',y);
+  spoke.setAttribute('stroke',col);spoke.setAttribute('stroke-opacity','.28');rs.appendChild(spoke);
+  const c=document.createElementNS(NS,'circle');
+  c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',5+t.size*1.9);
+  c.setAttribute('fill',col);c.setAttribute('class','rn');
+  c.setAttribute('style','filter:drop-shadow(0 0 9px '+col+'66)');
+  c.addEventListener('mouseenter',()=>{rp.innerHTML=panel(t);});
+  rs.appendChild(c);
+  const lb=document.createElementNS(NS,'text');
+  lb.setAttribute('x',x);lb.setAttribute('y',y-(11+t.size*1.9));
+  lb.setAttribute('text-anchor','middle');lb.setAttribute('class','rlbl');
+  lb.textContent=t.tk;rs.appendChild(lb);
+});
+rp.innerHTML=panel(null);
+document.getElementById('ringsvg').addEventListener('mouseleave',()=>{rp.innerHTML=panel(null);});
+</script>
+</body></html>
