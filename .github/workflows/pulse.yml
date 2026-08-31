@@ -1,0 +1,97 @@
+name: PULSE (unusual volume · who is alive today)
+
+# PULSE moved off the laptop 2026-08-31, on the operator's standing rule: "we should structure
+# our processes in a way that they can run without my specific system being on at any time."
+#
+# It was originally built on the laptop, which was the wrong call — and the desk already carried
+# a red caused by exactly that pattern (signal_perf stale, "produced on the laptop substrate").
+#
+# Nothing PULSE needs is private:
+#   intraday bars    -> yfinance
+#   catalysts        -> NSE corporate-announcements API + Google News RSS
+#   level marker     -> fib_radar.fires/.watch, already PUBLIC in the equity aggregate
+# So this job reads no operator data and writes no position information.
+#
+# It writes ONLY stocks/data/pulse.json. It never touches the equity aggregate, which is
+# owned by the dashboard jobs — hand-editing a cron-owned artifact is how a partially stale
+# cache once got published under one fresh stamp.
+
+on:
+  schedule:
+    # NSE session 09:15–15:30 IST = 03:45–10:00 UTC. The opening range closes 09:45 IST
+    # (04:15 UTC), so the first useful run is just after that. Twice an hour through the
+    # session is plenty — the numbers are an opening-range measure, not a tick feed.
+    - cron: '20,50 4-10 * * 1-5'
+    # Pre-open catalyst sweep — filings that landed overnight, before the session opens.
+    - cron: '15 3 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sparcho-pulse
+  cancel-in-progress: false
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install --quiet yfinance numpy pyyaml
+
+      - name: Build PULSE
+        run: python stocks/engine/ci_pulse.py
+
+      # A run that produced an unusable payload must FAIL here rather than push a
+      # healthy-looking empty file. Absence of names is a real answer; absence of
+      # measurement is not, and the two must not look the same on the desk.
+      - name: Gate — the payload has to be measurable
+        run: |
+          python - <<'PY'
+          import json, sys
+          d = json.load(open('stocks/data/pulse.json', encoding='utf-8'))
+          if d.get('n_measured', 0) < 20:
+              print('::error::PULSE measured only %s names — refusing to publish a blind run'
+                    % d.get('n_measured'))
+              sys.exit(1)
+          banned = {'held','qty','avg_cost','invested','pnl','shares'}
+          leak = sorted({k for r in d.get('rows', []) for k in r if k in banned})
+          if leak:
+              print('::error::PULSE payload carries position fields %s — refusing to publish' % leak)
+              sys.exit(1)
+          print('gate ok: measured %s · alive %s · errors %s'
+                % (d.get('n_measured'), d.get('n_alive'), len(d.get('errors') or [])))
+          PY
+
+      - name: Commit + push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stocks/data/pulse.json
+          if git diff --cached --quiet; then
+            echo "No change — skipping commit"; exit 0
+          fi
+          git commit -m "auto: pulse $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if git push; then echo "pushed (fast path)"; exit 0; fi
+          # PULSE owns exactly one file, so a moved remote is safe to rebuild onto —
+          # unlike the aggregate, there is no encrypted block to preserve.
+          for i in 1 2 3 4 5; do
+            git fetch origin main || { sleep 4; continue; }
+            git reset --hard origin/main
+            python stocks/engine/ci_pulse.py || echo "WARN: rebuild failed (continuing)"
+            git add stocks/data/pulse.json
+            if git diff --cached --quiet; then echo "no net change after rebuild — done"; exit 0; fi
+            git commit -m "auto: pulse (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
+            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+          done
+          echo "::error::could not push after rebuild retries"; exit 1
