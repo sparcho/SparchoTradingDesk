@@ -308,11 +308,33 @@ def check_live_parity(events):
         if dim:
             names = ", ".join(str(i.get("id")) for i in dim)
             sev = "🔴" if any(i.get("severity") == "alert" for i in dim) else "🟡"
+            # NAME THE PRODUCER, do not blame the CDN.
+            #
+            # This used to assert "persists => GH-Pages build/CDN stuck" on every run. It fired
+            # 38 times in 3 days and the diagnosis was wrong: block:signal_perf was grayed
+            # because signal_return_ledger.py had been ABORTING on its first line for 16 sessions
+            # ("NIFTYBEES missing from historical_closes.csv"). Re-triggering a page refresh can
+            # never fix a producer that is crashing, so the heal re-fired forever while pointing
+            # the reader at the wrong subsystem.
+            #
+            # The payload already records who owns each block. Say that instead — a heal that
+            # names the wrong cause is worse than one that says nothing.
+            who = []
+            for i in dim:
+                p = i.get("producer") or i.get("produced_by")
+                sub = i.get("substrate")
+                if p:
+                    who.append("%s <- %s%s" % (i.get("id"), p,
+                                               (" on the %s substrate" % sub) if sub else ""))
+            action = ("logged - refresh re-triggered. Owners: " + "; ".join(who)) if who else (
+                "logged - refresh re-triggered. No producer is recorded on these blocks, so "
+                "ownership cannot be attributed - that is itself the finding.")
+            action += (". If a block stays grayed across runs, check whether its PRODUCER is "
+                       "failing before suspecting the build or CDN.")
             events.append(nf.make_event(
                 sev, desk + ":live-parity",
                 "LIVE site shows " + str(len(dim)) + " grayed item(s): " + names,
-                "logged - auto-probe re-triggered the desk refresh; persists => GH-Pages build/CDN stuck",
-                "pending", SOURCE))
+                action, "pending", SOURCE))
 
 
 def main() -> int:
