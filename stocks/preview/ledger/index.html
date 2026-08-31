@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Master ledger — revamp mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#060a14; --bg1:#0a1020; --bg2:#101a33;
+  --ink:#eaf3ff; --ink2:#a9c2e6; --mut:#6f86b0; --faint:#48587d;
+  --hair:rgba(130,190,230,0.14); --hair2:rgba(130,190,230,0.08);
+  --pos:#3fcf7a; --neg:#ff6b6b; --watch:#ffb44d; --cyan:#42dbe6; --acc2:#9a8cff;
+  --mono:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:
+   radial-gradient(1200px 600px at 15% -10%, rgba(66,219,230,.07), transparent 60%),
+   radial-gradient(900px 500px at 95% 0%, rgba(154,140,255,.06), transparent 55%),
+   var(--bg0);
+  color:var(--ink); font-family:var(--sans); font-size:14px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; padding:0 0 80px;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+/* ── page head ─────────────────────────────────────────────────────────── */
+.hd{padding:38px 0 14px}
+.hd h1{margin:0;font-size:27px;font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(96deg,#eaf3ff 10%,#8fd8e8 55%,#9a8cff 95%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hd .sub{color:var(--mut);font-size:13px;margin-top:7px;max-width:74ch}
+.tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--watch);
+  border:1px solid rgba(255,180,77,.35);background:rgba(255,180,77,.09);
+  padding:4px 9px;border-radius:6px;margin-bottom:14px}
+
+/* ── generic card ──────────────────────────────────────────────────────── */
+.card{background:linear-gradient(180deg,rgba(16,26,51,.86),rgba(10,16,32,.86));
+  border:1px solid var(--hair);border-radius:15px;padding:18px 19px;margin-bottom:16px;
+  backdrop-filter:blur(9px);box-shadow:0 1px 0 rgba(255,255,255,.03) inset,0 18px 40px -28px rgba(0,0,0,.9)}
+.sec-h{display:flex;align-items:baseline;gap:11px;margin-bottom:3px}
+.sec-h h2{margin:0;font-size:16.5px;font-weight:700;letter-spacing:-.01em}
+.sec-n{font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.1em}
+.sec-x{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--faint);letter-spacing:.05em}
+.sec-sub{color:var(--mut);font-size:12px;margin:0 0 15px}
+
+/* ── 1. performance ────────────────────────────────────────────────────── */
+.perf{display:grid;grid-template-columns:1.25fr .95fr;gap:22px;align-items:center}
+@media(max-width:880px){.perf{grid-template-columns:1fr}}
+.curve{position:relative}
+.curve svg{width:100%;height:172px;display:block;overflow:visible}
+.pfline{display:grid;grid-template-columns:1fr;gap:11px}
+.pf{border-left:2px solid var(--hair);padding:2px 0 2px 13px}
+.pf b{display:block;font-family:var(--mono);font-size:23px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.pf b.pos{color:var(--pos)} .pf b.neg{color:var(--neg)}
+.pf span{display:block;color:var(--mut);font-size:11.5px;margin-top:3px;line-height:1.45}
+.seg{display:inline-flex;background:rgba(255,255,255,.035);border:1px solid var(--hair);
+  border-radius:9px;padding:3px;gap:2px;margin-left:auto}
+.seg button{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--mut);
+  background:none;border:0;padding:6px 12px;border-radius:6px;cursor:pointer;transition:.15s}
+.seg button.on{background:rgba(66,219,230,.13);color:var(--cyan);box-shadow:0 0 0 1px rgba(66,219,230,.25) inset}
+.seg button:hover:not(.on){color:var(--ink2)}
+
+/* ── the position bar — the core new visual ────────────────────────────── */
+.pbar{position:relative;height:34px;margin:13px 0 7px}
+.pbar .track{position:absolute;left:0;right:0;top:9px;height:4px;border-radius:3px;
+  background:linear-gradient(90deg,rgba(255,107,107,.30),rgba(111,134,176,.22) 30%,rgba(63,207,122,.30))}
+.pbar .fill{position:absolute;top:9px;height:4px;border-radius:3px;background:var(--pos);
+  box-shadow:0 0 12px rgba(63,207,122,.55)}
+.pbar .fill.neg{background:var(--neg);box-shadow:0 0 12px rgba(255,107,107,.5)}
+.pbar i{position:absolute;top:3px;width:2px;height:16px;background:var(--faint);border-radius:2px}
+.pbar i.entry{background:var(--ink2);height:20px;top:1px}
+.pbar i.stop{background:var(--neg)}
+.pbar i.tgt{background:rgba(63,207,122,.55)}
+.pbar .now{position:absolute;top:2px;width:11px;height:18px;margin-left:-5.5px;border-radius:4px;
+  background:var(--ink);box-shadow:0 0 0 3px rgba(10,16,32,.9),0 0 16px rgba(234,243,255,.5)}
+.pbar{height:22px;margin:14px 0 0}
+.plbl{display:flex;justify-content:space-between;gap:8px;margin:5px 0 2px;
+  font-family:var(--mono);font-size:8.5px;color:var(--faint);white-space:nowrap}
+.plbl b{color:var(--ink2);font-weight:400}
+.plbl span:nth-child(2){color:var(--ink2)}
+
+/* ── 2. open positions — mini hero cards ───────────────────────────────── */
+.opgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(298px,1fr));gap:13px}
+.op{background:linear-gradient(180deg,rgba(20,32,60,.7),rgba(11,18,36,.7));
+  border:1px solid var(--hair);border-radius:13px;padding:15px 16px 13px;position:relative;
+  transition:border-color .18s,transform .18s}
+.op:hover{border-color:rgba(130,190,230,.30);transform:translateY(-1px)}
+.op.decide{border-color:rgba(255,180,77,.42);box-shadow:0 0 0 1px rgba(255,180,77,.13),0 0 34px -14px rgba(255,180,77,.5)}
+.op-h{display:flex;align-items:center;gap:9px;margin-bottom:2px}
+.op-tk{font-size:15.5px;font-weight:700;letter-spacing:-.01em}
+.op-st{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+  padding:3px 8px;border-radius:5px;border:1px solid}
+.op-st.hold{color:var(--mut);border-color:var(--hair);background:rgba(255,255,255,.02)}
+.op-st.decide{color:var(--watch);border-color:rgba(255,180,77,.45);background:rgba(255,180,77,.12)}
+.op-st.wait{color:var(--faint);border-color:var(--hair2)}
+.op-sub{font-size:11.5px;color:var(--mut);margin-bottom:2px}
+.op-num{display:flex;align-items:baseline;gap:8px;margin-top:9px}
+.op-pl{font-family:var(--mono);font-size:20px;font-weight:700;letter-spacing:-.02em}
+.op-pl.pos{color:var(--pos)} .op-pl.neg{color:var(--neg)}
+.op-r{font-family:var(--mono);font-size:10.5px;color:var(--mut)}
+.op-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px}
+.chip{font-family:var(--mono);font-size:9px;letter-spacing:.04em;color:var(--ink2);
+  border:1px solid var(--hair);border-radius:5px;padding:3px 7px;background:rgba(255,255,255,.02)}
+.chip.book{color:var(--cyan);border-color:rgba(66,219,230,.28);background:rgba(66,219,230,.08)}
+.op-say{margin-top:11px;padding-top:10px;border-top:1px solid var(--hair2);
+  font-size:11.5px;color:var(--ink2);line-height:1.5}
+.op-say b{color:var(--ink)}
+.op-act{display:flex;gap:7px;margin-top:11px}
+.op-act a{flex:1;text-align:center;font-size:11px;padding:7px 8px;border-radius:7px;
+  border:1px solid var(--hair);color:var(--ink2);text-decoration:none;transition:.15s}
+.op-act a:hover{border-color:var(--watch);color:var(--watch)}
+
+/* ── 3. the ledger ─────────────────────────────────────────────────────── */
+.lg{display:flex;flex-direction:column}
+.lg-day{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--faint);padding:16px 2px 7px;border-bottom:1px solid var(--hair2);margin-bottom:2px}
+.lg-r{display:grid;grid-template-columns:11px 104px 82px 150px 78px 1fr 15px;gap:12px;
+  align-items:center;padding:11px 9px;border-radius:9px;cursor:pointer;transition:background .14s;
+  border-bottom:1px solid var(--hair2)}
+.lg-r:hover{background:rgba(255,255,255,.028)}
+.dot{width:7px;height:7px;border-radius:50%;justify-self:center}
+.dot.live{background:var(--cyan);box-shadow:0 0 9px var(--cyan)}
+.dot.won{background:var(--pos)} .dot.lost{background:var(--neg)}
+.dot.flat{background:var(--faint)} .dot.wait{background:transparent;border:1.5px solid var(--faint)}
+.lg-tk{font-weight:650;font-size:13.5px}
+.lg-st{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:var(--mut)}
+.lg-st.live{color:var(--cyan)}
+/* outcome as a BAR, so the eye ranks without reading digits */
+.rbar{position:relative;height:16px;overflow:visible}
+.rbar .mid{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--hair)}
+.rbar .b{position:absolute;top:4px;height:8px;border-radius:2px}
+.rbar .b.pos{background:var(--pos);left:50%;max-width:44%} .rbar .b.neg{background:var(--neg);right:50%;max-width:44%}
+.rbar em{position:absolute;top:0;font-family:var(--mono);font-size:10.5px;font-style:normal;line-height:16px}
+.rbar em.pos{color:var(--pos);right:0} .rbar em.neg{color:var(--neg);left:0}
+.rbar em.mut{color:var(--faint);right:0}
+.lg-hold{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:right;white-space:nowrap}
+.lg-say{font-size:12px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lg-c{color:var(--faint);transition:transform .16s}
+.lg-r.open .lg-c{transform:rotate(90deg)}
+
+/* expanded — a sentence first, evidence second */
+.lg-d{display:none;padding:4px 9px 22px 127px;border-bottom:1px solid var(--hair2)}
+.lg-r.open + .lg-d{display:block}
+.story{font-size:13px;line-height:1.62;color:var(--ink);max-width:70ch;margin-bottom:15px}
+.story b{color:#fff}
+.story .hl{color:var(--cyan)}
+.evid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px;margin-bottom:14px}
+.ev{background:rgba(255,255,255,.026);border:1px solid var(--hair2);border-radius:9px;padding:9px 11px}
+.ev span{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+.ev b{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:-.01em}
+.ev b.pos{color:var(--pos)} .ev b.neg{color:var(--neg)}
+.more{font-size:11.5px;color:var(--mut)}
+.more summary{cursor:pointer;color:var(--faint);font-family:var(--mono);font-size:10px;
+  letter-spacing:.06em;padding:7px 0;list-style:none}
+.more summary::-webkit-details-marker{display:none}
+.more summary:hover{color:var(--cyan)}
+.more[open] summary{color:var(--ink2)}
+.more p{margin:7px 0 0;line-height:1.6;max-width:72ch}
+
+/* ── annotation callouts for the mockup itself ─────────────────────────── */
+.note{border-left:2px solid var(--acc2);background:rgba(154,140,255,.06);
+  border-radius:0 9px 9px 0;padding:11px 14px;margin:0 0 17px;font-size:12px;color:var(--ink2);line-height:1.6}
+.note b{color:var(--acc2);font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;
+  text-transform:uppercase;display:block;margin-bottom:5px}
+.note s{color:var(--faint);text-decoration-color:var(--neg)}
+.note code{font-family:var(--mono);font-size:11px;color:var(--ink);background:rgba(255,255,255,.05);
+  padding:1px 5px;border-radius:4px}
+table.vocab{width:100%;border-collapse:collapse;margin-top:9px;font-size:11.5px}
+table.vocab td{padding:5px 9px;border-bottom:1px solid var(--hair2);vertical-align:top}
+table.vocab td:first-child{font-family:var(--mono);color:var(--faint);white-space:nowrap;width:1%}
+table.vocab td:nth-child(2){width:1%;color:var(--faint);padding:5px 3px}
+table.vocab td:last-child{color:var(--ink)}
+@media(max-width:820px){
+  .lg-r{grid-template-columns:11px 1fr 70px 15px;gap:9px}
+  .lg-st,.lg-hold,.lg-say{display:none}
+  .lg-d{padding-left:20px}
+}
+</style></head>
+<body><div class="wrap">
+
+<div class="hd">
+  <div class="tag">● mockup · every ticker and price invented · not your book</div>
+  <h1>Master ledger — the revamp</h1>
+  <p class="sub">Every number on this page is invented. It exists to show the <i>shape</i>, not your positions —
+  a public preview URL must never carry the book. Section order is the one you asked for:
+  performance → open positions → ledger. “Needs attention” is gone as a section; it lives on the cards now.</p>
+</div>
+
+<div class="note"><b>The problem being fixed</b>
+The ledger is a 13-column table. A table is the right shape for data you <i>look up</i> and the wrong shape for
+data you <i>read</i> — and you never look up a trade by ID, you scan for what happened. Three specific things
+made it unreadable: cryptic glyphs (<code>E ▸ T1 ▸ T2 · S</code>), six machine status words for four human
+states, and colour used decoratively so it carried no information.
+</div>
+
+<div class="note"><b>Decision 1 — the words</b>
+The desk emitted <code>OPEN</code>, <code>FILLED</code>, <code>ACTIVE</code>, <code>PLANNED</code>,
+<code>CLOSED</code>, <code>REVIEWED</code>, plus <code>watch</code> and <code>missed</code>. That is eight
+tokens for four real situations, and the difference between <s>ACTIVE</s> and <s>REVIEWED</s> is an internal
+bookkeeping detail you should never have to hold in your head.
+<table class="vocab">
+<tr><td>OPEN · FILLED · ACTIVE</td><td>→</td><td><b>Live</b> — money is in it right now</td></tr>
+<tr><td>PLANNED</td><td>→</td><td><b>Waiting</b> — a level is set, price hasn’t come</td></tr>
+<tr><td>CLOSED · REVIEWED</td><td>→</td><td><b>Closed</b> — it finished, and the result is the point</td></tr>
+<tr><td>no-fill · expired</td><td>→</td><td><b>Never filled</b> — the plan expired untouched, which is not a loss</td></tr>
+</table>
+</div>
+
+<div class="note"><b>Decision 2 — kill the glyph, draw the trade</b>
+<code>E ▸ T1 ▸ T2 · S ◤</code> asks you to decode five symbols to learn one thing: where price is between the
+stop and the target. That is a <i>picture</i>, so it should be drawn. The bar below is the single most
+repeated element in the design — stop on the left, target on the right, your entry marked, and the bright
+handle is where price is now. One glance answers “am I winning, and how much room is left”.
+</div>
+
+<div class="note"><b>Decision 3 — colour carries state, nothing else</b>
+Green means it made money. Red means it lost. Amber means <i>a decision is waiting on you</i> and appears
+nowhere else on the page, which is what lets “Needs attention” stop being a section — an amber card in the
+open-positions grid <i>is</i> the attention, in the place you were already looking. Cyan means live. Grey
+means nothing is happening. No other colour appears.
+</div>
+
+<!-- ═══ 1. PERFORMANCE ═══════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="sec-h"><span class="sec-n">01</span><h2>Fib fires performance</h2>
+    <div class="seg"><button class="on">Fib fires 53</button><button>Swing 3</button><button>Positional 0</button></div></div>
+  <p class="sec-sub">What the system’s own fib-fire signals have actually done. Paper unless marked otherwise —
+    this measures the screener, never you.</p>
+  <div class="perf">
+    <div class="curve">
+      <svg viewBox="0 0 420 172" preserveAspectRatio="none" aria-label="cumulative R curve">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3fcf7a" stop-opacity=".34"/>
+            <stop offset="100%" stop-color="#3fcf7a" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <line x1="0" y1="132" x2="420" y2="132" stroke="rgba(130,190,230,.18)" stroke-dasharray="3 4"/>
+        <text x="2" y="128" font-family="Space Mono" font-size="8" fill="#48587d">break even</text>
+        <path d="M0,132 L38,126 L76,134 L114,112 L152,118 L190,92 L228,97 L266,70 L304,78 L342,48 L380,40 L420,26
+                 L420,172 L0,172 Z" fill="url(#g)"/>
+        <path d="M0,132 L38,126 L76,134 L114,112 L152,118 L190,92 L228,97 L266,70 L304,78 L342,48 L380,40 L420,26"
+              fill="none" stroke="#3fcf7a" stroke-width="1.8" stroke-linejoin="round"/>
+        <circle cx="420" cy="26" r="3.4" fill="#3fcf7a"/>
+      </svg>
+    </div>
+    <div class="pfline">
+      <div class="pf"><b class="pos">+8.9×</b><span>banked, counted in risk units — about nine trades’ worth of what you put at risk</span></div>
+      <div class="pf"><b>58%</b><span>of 37 finished trades made money</span></div>
+      <div class="pf"><b class="pos">+0.24×</b><span>the average trade returned about a quarter of its own risk</span></div>
+      <div class="pf"><b>16</b><span>still live · 53 logged in this class</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="note"><b>Why the numbers read as sentences</b>
+<code>Avg R +0.24</code> is a term of art. “The average trade returned about a quarter of its own risk” is the
+same fact, and you never have to remember what R meant. The big figure stays scannable; the sentence under it
+does the teaching, once, permanently.
+</div>
+
+<!-- ═══ 2. OPEN POSITIONS ════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="sec-h"><span class="sec-n">02</span><h2>Open positions</h2>
+    <span class="sec-x">1 needs a decision · 4 holding</span></div>
+  <p class="sec-sub">One card per live position. The bar shows where price sits between your stop and your
+    target. Only the amber card is asking for anything.</p>
+
+  <div class="opgrid">
+
+    <!-- DECIDE -->
+    <div class="op decide">
+      <div class="op-h"><span class="op-tk">ACMEIND</span><span class="op-st decide">DECIDE</span></div>
+      <div class="op-sub">bought the 240.00 floor · 11 sessions</div>
+      <div class="pbar">
+        <div class="track"></div>
+        <div class="fill neg" style="left:18%;width:14%"></div>
+        <i class="stop" style="left:18%"></i><i class="entry" style="left:32%"></i><i class="tgt" style="left:88%"></i>
+        <div class="now" style="left:18%"></div>
+      </div>
+      <div class="plbl"><span>stop 233.50</span><span>entry 240.00</span><span>target 286.00</span></div>
+      <div class="op-num"><span class="op-pl neg">−2.4%</span><span class="op-r">−0.98× risk</span></div>
+      <div class="op-meta"><span class="chip">nothing booked</span><span class="chip">full size</span></div>
+      <div class="op-say"><b>Trailing stop breached.</b> Last close 233.10 is below the 233.50 stop.
+        The system closes this next session unless you say otherwise.</div>
+      <div class="op-act"><a href="#">✕ Close it</a><a href="#">⏸ Hold anyway</a></div>
+    </div>
+
+    <!-- HOLD, winning, runner live -->
+    <div class="op">
+      <div class="op-h"><span class="op-tk">NORTHWIND</span><span class="op-st hold">HOLDING</span></div>
+      <div class="op-sub">bought the 12,450 floor · 19 sessions</div>
+      <div class="pbar">
+        <div class="track"></div>
+        <div class="fill" style="left:30%;width:47%"></div>
+        <i class="stop" style="left:8%"></i><i class="entry" style="left:30%"></i><i class="tgt" style="left:92%"></i>
+        <div class="now" style="left:77%"></div>
+      </div>
+      <div class="plbl"><span>stop 12,455</span><span>entry 12,450</span><span>target 15,200</span></div>
+      <div class="op-num"><span class="op-pl pos">+14.4%</span><span class="op-r">+2.61× risk</span></div>
+      <div class="op-meta"><span class="chip book">40% booked</span><span class="chip">runner live</span><span class="chip">stop at breakeven</span></div>
+      <div class="op-say"><b>Nothing to do.</b> Stop sits at your entry, so the runner is free —
+        the worst case from here is a scratch.</div>
+    </div>
+
+    <!-- HOLD, winning -->
+    <div class="op">
+      <div class="op-h"><span class="op-tk">VERTEXCO</span><span class="op-st hold">HOLDING</span></div>
+      <div class="op-sub">bought the 702.50 floor · 21 sessions</div>
+      <div class="pbar">
+        <div class="track"></div>
+        <div class="fill" style="left:26%;width:52%"></div>
+        <i class="stop" style="left:6%"></i><i class="entry" style="left:26%"></i><i class="tgt" style="left:94%"></i>
+        <div class="now" style="left:78%"></div>
+      </div>
+      <div class="plbl"><span>stop 668.00</span><span>entry 702.50</span><span>target 881.00</span></div>
+      <div class="op-num"><span class="op-pl pos">+23.7%</span><span class="op-r">+3.51× risk</span></div>
+      <div class="op-meta"><span class="chip book">40% booked</span><span class="chip">runner live</span></div>
+      <div class="op-say"><b>Nothing to do.</b> Trailing stop 668.00 is 24.7% below price — hold, by the system.
+        Waiting costs nothing here.</div>
+    </div>
+
+    <!-- WAITING -->
+    <div class="op">
+      <div class="op-h"><span class="op-tk">KESTREL</span><span class="op-st wait">WAITING</span></div>
+      <div class="op-sub">resting buy at the 2,905.40 floor</div>
+      <div class="pbar">
+        <div class="track"></div>
+        <i class="stop" style="left:10%"></i><i class="entry" style="left:24%"></i><i class="tgt" style="left:90%"></i>
+        <div class="now" style="left:96%"></div>
+      </div>
+      <div class="plbl"><span>stop 2,880</span><span>buy 2,905</span><span>now 3,272</span></div>
+      <div class="op-num"><span class="op-pl" style="color:var(--faint)">not entered</span><span class="op-r">12.7% above the level</span></div>
+      <div class="op-meta"><span class="chip">no money at risk</span></div>
+      <div class="op-say"><b>Nothing at risk.</b> Price is well above the level and has not come back.
+        The plan only becomes a trade if it does.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note"><b>Decision 4 — “Needs attention” is not a section any more</b>
+It was a list that duplicated the ledger and demanded a look even when the honest answer was “hold”. A
+position either needs a decision or it doesn’t, and that belongs <i>on the position</i>. So the state moved
+onto the card: amber border, amber badge, and the two buttons that resolve it. Four calm cards and one amber
+one is a faster read than a rail that says “5 now” and makes you open each to find out none of them mattered.
+The header count still tells you at a glance: <span class="sec-x" style="margin:0">1 needs a decision · 4 holding</span>.
+</div>
+
+<!-- ═══ 3. THE LEDGER ════════════════════════════════════════════════════ -->
+<div class="card">
+  <div class="sec-h"><span class="sec-n">03</span><h2>Fib fires trade ledger</h2>
+    <span class="sec-x">53 trades · newest first</span></div>
+  <p class="sec-sub">One line per trade, ordered by when it mattered. Click any row for the story.</p>
+
+  <div class="lg">
+    <div class="lg-day">Friday 28 August</div>
+
+    <div class="lg-r" onclick="this.classList.toggle('open')">
+      <span class="dot won"></span>
+      <span class="lg-tk">MERIDIAN</span>
+      <span class="lg-st">Closed</span>
+      <span class="rbar"><span class="mid"></span><span class="b pos" style="width:31%"></span><em class="pos">+2.4×</em></span>
+      <span class="lg-hold">9 sessions</span>
+      <span class="lg-say">bought the 515.60 floor, ran to the first target and trailed out</span>
+      <span class="lg-c">›</span>
+    </div>
+    <div class="lg-d">
+      <p class="story">Bought <b>MERIDIAN</b> at <b>515.60</b>, the floor of a zone you’d marked
+        <span class="hl">high conviction</span> on the weekly. Risked 3.4% to the 497.20 stop. Price took
+        <b>9 sessions</b> to reach the first target at 556.00, where 40% came off; the rest trailed out at
+        <b>581.30</b> when the stop stepped up behind it. <b>Made 2.4× what you risked.</b></p>
+      <div class="evid">
+        <div class="ev"><span>Result</span><b class="pos">+2.4×</b></div>
+        <div class="ev"><span>Entry</span><b>515.60</b></div>
+        <div class="ev"><span>Exit</span><b>581.30</b></div>
+        <div class="ev"><span>Worst point</span><b class="neg">−0.4×</b></div>
+        <div class="ev"><span>Best point</span><b class="pos">+2.9×</b></div>
+        <div class="ev"><span>Held</span><b>9d</b></div>
+      </div>
+      <details class="more"><summary>▸ what the level looked like, and what other stop rules would have done</summary>
+        <p>The zone was drawn on the 1W ladder, floor at 515.60 where two rungs met a prior rejection.
+        Against the four stop disciplines the desk tracks, the live rule finished best here: a fixed 1R stop
+        would have exited at +1.8×, and a pure trailing stop at +2.1×.</p>
+      </details>
+    </div>
+
+    <div class="lg-r" onclick="this.classList.toggle('open')">
+      <span class="dot lost"></span>
+      <span class="lg-tk">ORCHIDCO</span>
+      <span class="lg-st">Closed</span>
+      <span class="rbar"><span class="mid"></span><span class="b neg" style="width:13%"></span><em class="neg">−1.0×</em></span>
+      <span class="lg-hold">4 sessions</span>
+      <span class="lg-say">level broke on the second session and never reclaimed</span>
+      <span class="lg-c">›</span>
+    </div>
+    <div class="lg-d">
+      <p class="story">Bought <b>ORCHIDCO</b> at <b>96.80</b> on a zone floor. It broke through on the second
+        session and never came back. Stopped out at <b>93.70</b> for <b>a full loss of what you risked</b> —
+        which is the stop doing exactly its job, not a mistake.</p>
+      <div class="evid">
+        <div class="ev"><span>Result</span><b class="neg">−1.0×</b></div>
+        <div class="ev"><span>Entry</span><b>96.80</b></div>
+        <div class="ev"><span>Exit</span><b>93.70</b></div>
+        <div class="ev"><span>Best point</span><b>+0.2×</b></div>
+        <div class="ev"><span>Held</span><b>4d</b></div>
+      </div>
+    </div>
+
+    <div class="lg-day">Wednesday 26 August</div>
+
+    <div class="lg-r" onclick="this.classList.toggle('open')">
+      <span class="dot live"></span>
+      <span class="lg-tk">NORTHWIND</span>
+      <span class="lg-st live">Live</span>
+      <span class="rbar"><span class="mid"></span><span class="b pos" style="width:33%"></span><em class="pos">+2.6×</em></span>
+      <span class="lg-hold">19 sessions</span>
+      <span class="lg-say">40% booked at the first target, runner riding a breakeven stop</span>
+      <span class="lg-c">›</span>
+    </div>
+    <div class="lg-d">
+      <p class="story">Still live. Bought at <b>12,450</b>, booked 40% at 13,010, and the stop has stepped up
+        to your entry — so the remaining 60% <b>cannot lose money any more</b>. Currently <b>+2.6× risk</b>
+        on paper with the target at 15,200.</p>
+      <div class="evid">
+        <div class="ev"><span>Unrealised</span><b class="pos">+2.6×</b></div>
+        <div class="ev"><span>Booked</span><b>40%</b></div>
+        <div class="ev"><span>Stop now</span><b>12,455</b></div>
+        <div class="ev"><span>Held</span><b>19d</b></div>
+      </div>
+    </div>
+
+    <div class="lg-r" onclick="this.classList.toggle('open')">
+      <span class="dot wait"></span>
+      <span class="lg-tk">LANTERNCO</span>
+      <span class="lg-st">Never filled</span>
+      <span class="rbar"><span class="mid"></span><em class="mut">—</em></span>
+      <span class="lg-hold">expired</span>
+      <span class="lg-say">price never came back to the level — no money was ever at risk</span>
+      <span class="lg-c">›</span>
+    </div>
+    <div class="lg-d">
+      <p class="story">The plan rested at <b>1,844</b> for five sessions and price never returned. It expired
+        untouched. <b>This is not a loss</b> — it is the anti-chase rule working, and it is counted separately
+        from trades that actually happened so it can’t drag the win rate around.</p>
+    </div>
+  </div>
+</div>
+
+<div class="note"><b>Decision 5 — the expanded view is a paragraph, then the evidence</b>
+You said the detail is “too complicated to look at and understand even for me”, and the reason is that it
+opens with five numbered bands of instrumentation. Nobody reads instrumentation first — they want to know
+<i>what happened</i>. So the story goes first, in one paragraph, in the same words you’d use out loud. The
+six numbers you actually reach for sit under it. Everything else — the ladder drawing, the stop-policy
+counterfactuals, the level provenance — is real and worth keeping, so it moves behind one line you can open.
+Nothing was deleted; it was <i>ordered</i>.
+</div>
+
+<div class="note"><b>Decision 6 — “never filled” stops polluting the record</b>
+A plan that expired untouched used to sit in the same visual channel as a loss. It isn’t one: no money was
+ever at risk. It now has its own hollow marker and an em-dash instead of a result, so scanning the dot column
+gives you an honest read of the class — <span style="color:var(--pos)">won</span>,
+<span style="color:var(--neg)">lost</span>, <span style="color:var(--cyan)">live</span>, or never happened.
+</div>
+
+<div class="note"><b>What I did NOT change, and why</b>
+The content is right — you said so, and the study agrees. Entry, stop, targets, R, MAE/MFE, hold time,
+stop-policy counterfactuals and level provenance all stay in the payload and all stay reachable. This is a
+presentation change only: <b>nothing is removed from the data, and no number here is computed differently.</b>
+The one behavioural change is the section order and the disappearance of the attention rail, both of which
+you asked for.
+</div>
+
+</div></body></html>
