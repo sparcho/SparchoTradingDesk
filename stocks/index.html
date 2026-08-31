@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1788191110">
-<meta name="x-built-at" content="2026-08-31T15:44:29+00:00">
+<meta name="x-build-id" content="1788196325">
+<meta name="x-built-at" content="2026-08-31T17:11:32+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1788191110",BUILT_AT="2026-08-31T15:44:29+00:00";
+  var BID="1788196325",BUILT_AT="2026-08-31T17:11:32+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1312,6 +1312,14 @@
 .op-st.hold{color:var(--mut);border-color:var(--hair);background:rgba(255,255,255,.02)}
 .op-st.decide{color:var(--watch);border-color:rgba(255,180,77,.45);background:rgba(255,180,77,.12)}
 .op-st.wait{color:var(--faint);border-color:var(--hair)}
+.op-lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(66px,1fr));gap:6px;margin-top:10px}
+.op-lv span{display:flex;flex-direction:column;gap:2px;font-family:'Space Mono',ui-monospace,monospace;
+  font-size:11px;color:var(--ink2)}
+.op-lv i{font-style:normal;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.op-lv b{color:var(--ink);font-weight:700}
+.op-why{margin-top:9px;font-size:11px;line-height:1.5;color:var(--mut);
+  border-left:2px solid var(--hair);padding-left:9px}
+.op-why b{color:var(--ink2)}
 .op-sub{font-size:11px;color:var(--mut)}
 .op-num{display:flex;align-items:baseline;gap:8px;margin-top:8px}
 .op-pl{font-family:'Space Mono',ui-monospace,monospace;font-size:19px;font-weight:700;letter-spacing:-.02em}
@@ -1391,7 +1399,10 @@
 .orb-gl.tgt{stroke:rgba(63,207,122,.24);stroke-dasharray:3 5}
 .orb-ax{font-family:'Space Mono',ui-monospace,monospace;font-size:8px;fill:var(--faint);letter-spacing:.1em}
 .orb-lbl{font-family:'Space Mono',ui-monospace,monospace;font-size:9px;pointer-events:none}
-.orb-nd{cursor:pointer}
+.orb-plan{pointer-events:none}
+.orb-hit{fill:transparent;stroke:none;cursor:pointer}
+.orb-hit-lbl{cursor:pointer;pointer-events:auto}
+.orb-nd{cursor:pointer;pointer-events:none}
 .orb-nd:hover{stroke:var(--ink);stroke-width:1.5}
 .orb-q{fill:none;stroke:var(--watch);stroke-width:1.4;opacity:.75;cursor:pointer}
 .orb-tail{fill:none;stroke-linecap:round;opacity:.5}
@@ -3561,7 +3572,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       side.innerHTML=window.tlOpenCard(x.t,{},i);
     };
     svg.addEventListener('mouseover',function(e){
-      var n=e.target.closest('.orb-nd'); if(n){ show(+n.dataset.i); return; }
+      var n=e.target.closest('.orb-nd,.orb-hit,.orb-hit-lbl');
+      if(n&&n.dataset.i!=null){ show(+n.dataset.i); return; }
       var q=e.target.closest('.orb-q');
       if(q) side.innerHTML='<div class="orbidle"><div class="orbih">'+esc(q.dataset.q)+'</div>'+
         '<div class="fc-note">In play, but the desk will not fire without a hand-verified level. '+
@@ -4759,6 +4771,23 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                     (d.act?'DECIDE':(live?'HOLDING':'WAITING'))+'</span></div>'+
                 '<div class="op-sub">'+(live?'bought the ':'resting buy at the ')+
                   esc(fmtNum(ent,1))+' floor</div>'+
+                // F260831 — the levels, always, and the SPOT. Operator: "for some of the trades,
+                // like the ones that haven't filled, i cant see what levels it was supposed to go
+                // and hence why it didnt. like even the spot price should show up."
+                // A resting plan drew a bar with no fill and no numbers, so it said nothing about
+                // WHY it had not triggered. This states the buy level, the spot, and the gap
+                // between them — which IS the reason.
+                '<div class="op-lv">'+
+                  '<span><i>buy at</i>'+esc(fmtNum(ent,1))+'</span>'+
+                  '<span><i>spot</i><b>'+esc(fmtNum(now,1))+'</b></span>'+
+                  (t.invalidation!=null?('<span><i>stop</i>'+esc(fmtNum(t.invalidation,1))+'</span>'):'')+
+                  ((t.targets&&t.targets.length)?('<span><i>target</i>'+esc(fmtNum(t.targets[t.targets.length-1].px,1))+'</span>'):'')+
+                '</div>'+
+                (!live&&ent!=null&&now!=null
+                  ? ('<div class="op-why">'+(now>ent
+                      ? ('Spot is <b>'+((now-ent)/ent*100).toFixed(1)+'% above</b> the buy level — price has not come back, so nothing triggered.')
+                      : ('Spot is <b>'+((ent-now)/ent*100).toFixed(1)+'% below</b> the buy level — it traded through without filling; the plan is still resting.'))+'</div>')
+                  : '')+
                 window.tlPosBar(t)+
                 '<div class="op-num">'+
                   (live?('<span class="op-pl '+(pl>=0?'pos':'neg')+'">'+(pl>=0?'+':'')+
@@ -4832,7 +4861,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                   var box={l:x-W(it.tk)/2,r:x+W(it.tk)/2,t:y-H,b:y+2};
                   var clash=placed.some(function(p){
                     return box.l<p.r&&p.l<box.r&&box.t<p.b&&p.t<box.b; });
-                  if(!clash){ placed.push(box); out.push({tk:it.tk,x:x,y:y,fill:it.fill}); return; }
+                  if(!clash){ placed.push(box); out.push({tk:it.tk,x:x,y:y,fill:it.fill,i:it.i}); return; }
                 }
               });
               return out;
@@ -4907,10 +4936,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               plan.forEach(function(o,k){
                 var a=(-90-(k+0.5)*(ORB.SWEEP/Math.max(1,plan.length)))*Math.PI/180;
                 var p=window.tlOrbXY(ORB.PLAN,a);
+                S.push('<circle class="orb-hit" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+
+                  '" r="24" data-i="'+o.i+'"/>');
                 S.push('<circle class="orb-nd orb-plan" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+
                   '" r="5.5" fill="none" stroke="var(--faint)" stroke-width="1.6" data-i="'+o.i+
                   '"><title>'+esc(o.x.t.ticker)+' — resting plan, not entered</title></circle>');
-                lab.push({tk:o.x.t.ticker,x:p[0],y:p[1],r:5.5,fill:'var(--faint)'}); });
+                lab.push({tk:o.x.t.ticker,x:p[0],y:p[1],r:5.5,fill:'var(--faint)',i:o.i}); });
               live.forEach(function(o,k){
                 var x=o.x, i=o.i, t=x.t, d=x.d;
                 var a=deconflict(ang(t.sessions_elapsed,k));
@@ -4924,15 +4955,19 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                       '" x2="'+p1[0].toFixed(1)+'" y2="'+p1[1].toFixed(1)+'" stroke="'+col+'" stroke-width="2.2"/>');
                 }
                 var rr=8.5;
+                // Generous invisible hit target behind the visible dot -- the pointer catches the
+                // trade well before it reaches an 8.5px circle.
+                S.push('<circle class="orb-hit" cx="'+p1[0].toFixed(1)+'" cy="'+p1[1].toFixed(1)+
+                  '" r="24" data-i="'+i+'"/>');
                 S.push('<circle class="orb-nd" cx="'+p1[0].toFixed(1)+'" cy="'+p1[1].toFixed(1)+'" r="'+rr.toFixed(1)+
                   '" fill="'+col+'" data-i="'+i+'"><title>'+esc(t.ticker)+'</title></circle>');
                 if(d.act) S.push('<circle cx="'+p1[0].toFixed(1)+'" cy="'+p1[1].toFixed(1)+'" r="'+(rr+6).toFixed(1)+
                   '" fill="none" stroke="var(--watch)" stroke-opacity=".5" stroke-dasharray="2 3"/>');
-                lab.push({tk:t.ticker, x:p1[0], y:p1[1], r:rr, fill:'var(--mut)'});
+                lab.push({tk:t.ticker, x:p1[0], y:p1[1], r:rr, fill:'var(--mut)', i:i});
               });
               window.tlPlaceLabels(lab).forEach(function(L){
-                S.push('<text class="orb-lbl" x="'+L.x.toFixed(1)+'" y="'+L.y.toFixed(1)+
-                  '" text-anchor="middle" fill="'+L.fill+'">'+esc(L.tk)+'</text>');
+                S.push('<text class="orb-lbl'+(L.i!=null?' orb-hit-lbl':'')+'" x="'+L.x.toFixed(1)+'" y="'+L.y.toFixed(1)+
+                  '" text-anchor="middle" fill="'+L.fill+'"'+(L.i!=null?(' data-i="'+L.i+'"'):'')+'>'+esc(L.tk)+'</text>');
               });
               // hub
               var wr=(stats&&stats.hit!=null)?Math.round(stats.hit*100):null;
@@ -6149,7 +6184,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1788191110&t="+Date.now())
+  fetch("data/pulse.json?v=1788196325&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
