@@ -45,6 +45,7 @@ SESSION_CLOSE = "15:30"
 OPEN_FROM, OPEN_TO = "09:20", "09:45"
 
 NOW_WINDOW_MIN = 30             # the "is it still going" window
+PROFILE_MIN = 30                # width of one published bucket of the day-shape
 MIN_PRIOR = 3                   # below this many comparable sessions we say "cannot measure"
 BASELINE_SESSIONS = 20
 COVER_TOLERANCE_MIN = 5         # a prior session may end one bar short and still be comparable
@@ -199,6 +200,22 @@ def compute(today_bars, prior_bar_lists, t_now=None, want_peak=True):
             best = (rv, lo, hi)
         lo += GRID_MIN
 
+    # THE DAY'S SHAPE, not just its three loudest moments. The scan above already visits every
+    # window to find the peak, so publishing only the winner throws away information the engine
+    # has already paid for. Operator, 2026-09-01: "i hope we are not dismissing any of the
+    # information that we gather in between." Non-overlapping buckets, so a busy half hour
+    # stands alone instead of smearing across neighbours.
+    profile = []
+    if want_peak:
+        b = to_min(SESSION_OPEN)
+        while b <= t:
+            b_hi = min(b + PROFILE_MIN - GRID_MIN, t)
+            el_b = [p for p in priors if covers(p, b_hi)]
+            profile.append({"t": to_hhmm(b),
+                            "rv": _ratio(window_vol(tp, b, b_hi),
+                                         [window_vol(p, b, b_hi) for p in el_b])})
+            b += PROFILE_MIN
+
     # How far did it TRAVEL, against how far it normally travels by this time of day?
     # 3x volume that goes nowhere and 3x with the range expanding are opposite trades; the old
     # strip printed an identical tile for both.
@@ -255,6 +272,7 @@ def compute(today_bars, prior_bar_lists, t_now=None, want_peak=True):
         "range_mult": range_mult,
         "travel": travel,
         "char": char,
+        "profile": profile,
         "rvol_peak": best[0] if best else None,
         "peak_at": ("%s-%s" % (to_hhmm(best[1]), to_hhmm(best[2] + GRID_MIN))) if best else None,
         "rvol_now": _ratio(window_vol(tp, now_lo, t), [window_vol(p, now_lo, t) for p in el_t]),
@@ -307,6 +325,7 @@ MEASURES = {
     "rvol_now": "the last 30 minutes vs the same 30 minutes on its own normal days -- is it STILL going",
     "rvol_open": "the old 09:20-09:45 opening-range measure, kept for comparison only",
     "rvol_peak": "the busiest half hour of the day so far, and peak_at says when",
+    "profile": "the whole session in half-hour buckets, each vs its own norm -- the day's shape",
     "range_mult": "how far it has travelled vs how far it normally travels by now",
     "char": "ABSORBING = it traded a lot and went nowhere · DISPLACING = the volume is genuinely moving price",
     "travel": "how far it moved vs how far this much volume normally moves it (1.0 = normal)",

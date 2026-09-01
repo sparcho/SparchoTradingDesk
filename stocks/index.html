@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1788266321">
-<meta name="x-built-at" content="2026-09-01T12:38:07+00:00">
+<meta name="x-build-id" content="1785344498">
+<meta name="x-built-at" content="2026-07-29T17:01:10+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1788266321",BUILT_AT="2026-09-01T12:38:07+00:00";
+  var BID="1785344498",BUILT_AT="2026-07-29T17:01:10+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2739,32 +2739,6 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '<div class="fc-note">'+esc(String(sc.excluded_by_design||''))+'</div></div>';
     html+='</div>';
 
-    /* SCORECARD:PAPER-FENCE ---------------------------------------------------------------
-       F260901. Operator: "lets move the fib fires performance ot the scorecard tab where it
-       should be." Everything ABOVE this line is real money and stays fenced against every
-       screener source (test_scorecard_wiring). This one section below it is the exception, and
-       it is allowed only on three conditions, each held by a test: it carries the PAPER chip, it
-       says in words that it is not his money, and it renders LAST so nothing above can be read
-       through it. Splitting the fence is safer than removing it — the 260728 error was a paper
-       ledger quoted as the operator's record, and that remains impossible here.
-
-       Months, not lifetime: of the fib book's -25.6x, -26.5 was booked by trades ENTERED in a
-       single month under mechanics since changed. */
-    (function(){
-      var _tl=DATA.trade_lab||null; if(!_tl) return;
-      var _v=(_tl.trade_lab_views&&_tl.trade_lab_views.fib)||null;
-      if(!_v||!_v.n) return;
-      html+='<div class="pf-sec" id="sc-sec-6"><div class="pf-sh"><span class="pf-n">07</span>'+
-        '<h3>Fib fires — the system’s own trades</h3><span class="pop pap">PAPER</span>'+
-        '<span class="uchip">× risk · by month</span>'+
-        '<span class="pf-sx">how the fib class has performed, month by month</span></div>'+
-        '<div class="fc-note" style="margin-bottom:9px">These are the <b>system’s</b> logged '+
-        'fib fires, measured in risk units — <b>not your money</b>, and not part of any rupee '+
-        'figure above. Split by month because the mechanics changed: a lifetime total spanning two '+
-        'ways of trading describes neither.</div>'+
-        (window.tlMonthRows?(window.tlMonthRows(_v)||''):'')+'</div>';
-    })();
-
     setFace('z-perf', html);
     try{ var _z=document.getElementById('zasof-perf'); if(_z) _z.textContent='as of '+fmtD(sc.as_of); }catch(e0){}
     if(window.__PC['sc-curve'] && document.getElementById('sc-curve')) pcRender('sc-curve');
@@ -5287,6 +5261,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               var fibCard='<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>Needs your fib read'+HT('Set-ups BLOCKED until you draw the level by hand. A swing never trades without a verified read (V-38).')+'<span class="age">'+_sq.length+' blocked</span></div>'+_sqRows+'</div>';
             }
             html+=fibCard;
+            // Built here (it needs `v`, `view` and the KPI row), rendered at the very end of the
+            // zone. Passed by variable rather than appended now, so the actionable cards above it
+            // keep the order the operator specified.
+            window.__labPerfTail=dtPerfCard;
     } else {
       var _sk=function(w){return '<span class="tlk-b" style="width:'+w+'"></span>';};
       var _trow=function(){return '<tr>'+['20%','12%','12%','12%','40px','40px','30%'].map(function(w){return '<td>'+_sk(w)+'</td>';}).join('')+'</tr>';};
@@ -5311,7 +5289,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // block still produced and shown nowhere). The long-horizon Conviction Book on the
     // RESEARCH tab is a DIFFERENT surface and deliberately stays: it is the second of the
     // desk's two books (rules-rebuild-two-books). Only the Radar's duplicate goes.
-    html = html + (_lk?'':_decHTML) + fibQualityHTML() + signalsBlockHTML();
+    // F260901 (2) — the Fib-fires performance card is back on the RADAR and sits LAST.
+    // Operator: "yeah just move it back, but put it at the end of the tab then." It briefly went
+    // to the Scorecard tab, which is fenced to REAL MONEY by test_scorecard_wiring after the
+    // 260728 incident (a paper ledger quoted as his record); these fires are 55 system-paper and
+    // 0 operator-real. Back here it needs no exception, and at the END it stops interrupting the
+    // "what do I do now" half of the zone with the "how has this gone" half.
+    html = html + (_lk?'':_decHTML) + fibQualityHTML() + signalsBlockHTML() + (window.__labPerfTail||'');
+    window.__labPerfTail='';
     setFace('z-lab', html);
     try{ window.bdRestoreTracks(); }catch(e4){}
     try{ window.orbMount(); }catch(e5){}
@@ -6107,19 +6092,41 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   .pl-fresh b{ color:inherit; font-weight:700; letter-spacing:.04em; }
   .pl-stamp{ font-family:var(--font-mono); font-size:9.5px; color:var(--faint,#48587d); }
 
-  /* ---- tiles ---------------------------------------------------------------------------- */
-  .pl-t{ min-width:134px; }
-  .pl-t.thin{ opacity:.62; border-style:dashed; }
-  .pl-t-now{ font-family:var(--font-mono); font-size:9.5px; color:var(--mut); margin-top:1px; }
-  .pl-t-now .up{ color:var(--cyan); font-weight:700; }
-  .pl-t-now .dn{ color:var(--faint,#48587d); }
-  .pl-t-peak{ font-family:var(--font-mono); font-size:9px; color:var(--faint,#48587d); }
-  .pl-t-loc{ font-family:var(--font-mono); font-size:9.5px; margin-top:2px; }
-  .pl-t-loc .pos{ color:var(--pos); } .pl-t-loc .neg{ color:var(--neg); }
-  .pl-ch{ display:inline-block; font-size:8.5px; letter-spacing:.05em; padding:0 4px;
-          border-radius:4px; border:1px solid var(--hair); color:var(--mut); margin-top:2px; }
-  .pl-ch.disp{ color:var(--cyan); border-color:rgba(66,219,230,.45); }
-  .pl-ch.abs{ color:var(--watch,#e6b34a); border-color:rgba(230,179,74,.45); }
+  /* ---- tiles ----------------------------------------------------------------------------
+     Five tight rows, and the horizontal space carries the day's shape instead of sitting
+     empty. Every row is a flex pair so the right half is used. */
+  .pl-t{ min-width:178px; padding:7px 9px 6px; line-height:1.3; }
+  .pl-t.thin{ opacity:.66; border-style:dashed; }
+  .pl-row{ display:flex; align-items:baseline; justify-content:space-between; gap:6px; }
+  .pl-t-tk{ font-weight:700; font-size:11.5px; letter-spacing:-.01em; }
+  .pl-t-mv{ font-family:var(--font-mono); font-size:10.5px; font-weight:700; }
+  .pl-t-mv.pos{ color:var(--pos); } .pl-t-mv.neg{ color:var(--neg); }
+  .pl-t-v{ font-family:var(--font-mono); font-size:17px; font-weight:700; margin:0; }
+  .pl-t-now{ font-family:var(--font-mono); font-size:10px; color:var(--mut); white-space:nowrap; }
+  .pl-t-now.up{ color:var(--cyan); font-weight:700; }
+  .pl-t-now.dn{ color:var(--faint,#48587d); }
+
+  /* the day, in half-hour buckets - log-scaled so one spike cannot flatten the rest */
+  .pl-spark{ display:flex; align-items:flex-end; gap:1.5px; height:23px; margin:5px 0 4px;
+             position:relative; border-bottom:1px solid var(--hair); }
+  .pl-spark .b{ flex:1 1 0; min-width:2px; border-radius:1.5px 1.5px 0 0;
+                background:rgba(66,219,230,.32); }
+  .pl-spark .b.low{ background:rgba(120,140,175,.20); }
+  .pl-spark .b.na{ background:rgba(120,140,175,.07); }
+  .pl-spark .b.hot{ background:var(--cyan); box-shadow:0 0 7px rgba(66,219,230,.7); }
+  .pl-spark .norm{ position:absolute; left:0; right:0; height:0;
+                   border-top:1px dashed rgba(150,165,195,.30); pointer-events:none; }
+
+  /* THE PEAK - the operator's most-used line. Accent colour and weight, never fine print. */
+  .pl-t-peak{ font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--cyan);
+              letter-spacing:.01em; white-space:nowrap; }
+  .pl-t-peak .lbl{ font-size:8.5px; letter-spacing:.11em; color:var(--mut); font-weight:600;
+                   margin-right:4px; }
+  .pl-t-peak.none{ color:var(--faint,#48587d); font-weight:400; }
+  .pl-t-meta{ font-size:9px; color:var(--faint,#48587d); letter-spacing:.02em; margin-top:3px;
+              white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pl-t-meta .has{ color:var(--cyan); }
+  .pl-t-meta .disp{ color:var(--cyan); } .pl-t-meta .abs{ color:var(--watch,#e6b34a); }
   .pl-note{ margin-top:9px; font-size:10.5px; color:var(--mut); line-height:1.6;
             border-top:1px solid var(--hair); padding-top:8px; }
   .pl-note b{ color:var(--ink); }
@@ -6283,6 +6290,28 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     document.querySelectorAll(".fc2-tk,.fcm-tk,.card.rdr-wrap .fire .tk").forEach(function(n){
       onCard[n.textContent.trim().split(/\s+/)[0].toUpperCase()] = 1; });
 
+    // The day in half-hour buckets. Log scale: a 55x opening bucket against 9x later would
+    // flatten every other bar to nothing on a linear one, and the SHAPE is the whole point.
+    function spark(prof, peakT){
+      if(!prof || !prof.length) return "";
+      var vals = prof.map(function(p){ return p.rv; }).filter(function(v){ return v != null; });
+      if(!vals.length) return "";
+      var mx = Math.max.apply(null, vals.concat([2]));
+      var lg = function(v){ return Math.log(1 + Math.max(v, 0)) / Math.log(1 + mx); };
+      var normPct = (1 - lg(1)) * 100;          // where "its own normal" sits, measured top-down
+      var hot = peakT ? String(peakT).slice(0, 5) : null;
+      var bars = prof.map(function(p){
+        if(p.rv == null) return '<div class="b na" style="height:3px"></div>';
+        var h = Math.max(2, Math.round(lg(p.rv) * 23));
+        var c = (hot && p.t === hot) ? "hot" : (p.rv < 1 ? "low" : "");
+        return '<div class="b ' + c + '" style="height:' + h + 'px" title="' +
+               p.t + ' · ' + Number(p.rv).toFixed(1) + '×"></div>';
+      }).join("");
+      return '<div class="pl-spark" title="every half hour of the session against this name&#39;s' +
+             ' own normal for that half hour">' + bars +
+             '<div class="norm" style="top:' + normPct.toFixed(1) + '%"></div></div>';
+    }
+
     var tiles = rows.map(function(r){
       var cum = (r.rvol_cum != null) ? r.rvol_cum : r.rvol;   // rvol is the deprecated alias
       var now = r.rvol_now;
@@ -6290,37 +6319,45 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       if(r.thin) cls += " thin";
 
       // "Still going" vs "was busy and died" — the whole reason rvol_now exists.
-      var nowTxt = (now == null) ? '<span class="dn">—</span>'
-        : (now >= 1.5 ? '<span class="up">now ' + num(now) + '&times;</span>'
-                      : '<span class="dn">now ' + num(now) + '&times; · fading</span>');
+      var nowTxt = (now == null)
+        ? '<span class="pl-t-now dn">—</span>'
+        : (now >= 1.5 ? '<span class="pl-t-now up">now ' + num(now) + '&times;</span>'
+                      : '<span class="pl-t-now dn">now ' + num(now) + '&times; fading</span>');
 
-      var ch = r.char === "DISPLACING" ? '<span class="pl-ch disp">MOVING PRICE</span>'
-             : r.char === "ABSORBING"  ? '<span class="pl-ch abs">GOING NOWHERE</span>' : "";
-
-      var mv = (r.move_pct == null) ? ""
-        : '<span class="' + (r.move_pct >= 0 ? "pos" : "neg") + '">'
+      var mv = (r.move_pct == null) ? '<span class="pl-t-mv"></span>'
+        : '<span class="pl-t-mv ' + (r.move_pct >= 0 ? "pos" : "neg") + '">'
           + (r.move_pct >= 0 ? "+" : "") + num(r.move_pct, 1) + '%</span>';
-      var loc = (r.pos_in_range == null) ? ""
-        : ' · ' + (r.pos_in_range >= 0.66 ? "top of day"
-                 : r.pos_in_range <= 0.33 ? "low of day" : "mid-range");
 
-      var lvl = r.level ? '<span class="has">● level</span>'
-              : (onCard[String(r.ticker).toUpperCase()] ? '<span class="has">● card</span>'
-                                                        : '<span>○ no level</span>');
+      var peak = (r.rvol_peak == null)
+        ? '<div class="pl-t-peak none">no peak yet</div>'
+        : '<div class="pl-t-peak"><span class="lbl">PEAK</span>' + num(r.rvol_peak) +
+          '&times; · ' + esc(String(r.peak_at || "").slice(0, 5)) + '</div>';
+
+      // One meta line: whether we have a level, where price sits, what the volume is doing.
+      var meta = [];
+      if(r.level) meta.push('<span class="has">● level</span>');
+      else if(onCard[String(r.ticker).toUpperCase()]) meta.push('<span class="has">● card</span>');
+      else meta.push('○ no level');
+      if(r.pos_in_range != null)
+        meta.push(r.pos_in_range >= 0.66 ? "top of day"
+                : r.pos_in_range <= 0.33 ? "low of day" : "mid-range");
+      if(r.char === "DISPLACING") meta.push('<span class="disp">MOVING PRICE</span>');
+      else if(r.char === "ABSORBING") meta.push('<span class="abs">GOING NOWHERE</span>');
+
       var tip = r.ticker + " — " + num(cum) + "x its own normal volume by this time of day"
               + (r.peak_at ? "; busiest half hour " + r.peak_at : "")
               + (r.thin ? "; THIN — normal turnover about Rs " + r.adv_cr + " cr/day" : "");
 
       return '<div class="pl-t ' + cls + '" title="' + esc(tip) + '">' +
-             '<div class="pl-t-tk">' + esc(r.ticker) + (r.catalyst_tier ? " ⚡" : "") +
-               (r.thin ? ' <span style="font-size:8px;opacity:.7">THIN</span>' : "") + '</div>' +
-             '<div class="pl-t-v">' + (cum >= 20 ? Math.round(cum) : num(cum)) + '&times;</div>' +
-             '<div class="pl-t-now">' + nowTxt + '</div>' +
-             (r.peak_at ? '<div class="pl-t-peak">peak ' + num(r.rvol_peak) + '&times; ' +
-                          esc(r.peak_at) + '</div>' : "") +
-             '<div class="pl-t-loc">' + mv + loc + '</div>' +
-             ch +
-             '<div class="pl-t-m">' + lvl + '</div></div>';
+             '<div class="pl-row"><span class="pl-t-tk">' + esc(r.ticker) +
+               (r.catalyst_tier ? " ⚡" : "") +
+               (r.thin ? ' <span style="font-size:8px;opacity:.7">THIN</span>' : "") +
+               '</span>' + mv + '</div>' +
+             '<div class="pl-row"><span class="pl-t-v">' +
+               (cum >= 20 ? Math.round(cum) : num(cum)) + '&times;</span>' + nowTxt + '</div>' +
+             spark(r.profile, r.peak_at) +
+             peak +
+             '<div class="pl-t-meta">' + meta.join(" · ") + '</div></div>';
     }).join("");
 
     // "Worth a level" — names in play with nothing banked. Ranked on the LOUDER of the two
@@ -6538,7 +6575,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1788266321&t="+Date.now())
+  fetch("data/pulse.json?t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
