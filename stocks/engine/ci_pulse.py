@@ -48,6 +48,7 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 # Never 09:15 — that bar reports volume 0 in 58 of 60 sessions (measured 2026-08-26), so an
 # opening-range feature built on it silently measures nothing.
 OPEN_FROM, OPEN_TO = "09:20", "09:45"
+SESSION_LAST_BAR = "15:30"      # NSE close; anything stamped later is another venue
 ALIVE_RVOL = 1.5
 BUY_SHOUT, SELL_SHOUT = 0.60, 0.40
 BASELINE_SESSIONS = 20
@@ -223,7 +224,11 @@ def last_real_bar(intr, today):
     function rather than an inline generator so it can be tested: this line was the one reader
     missed when the bar tuple grew, and it took a cloud run down.
     """
-    stamps = [b[0] for per in intr.values() for b in (per.get(today) or []) if b[5] > 0]
+    # NSE cannot print after 15:30. A later stamp means some symbol in the universe quotes on
+    # another venue's clock, and because this value drives the freshness banner it made a
+    # completed session read as a feed still running hours late. Ignore the impossible ones.
+    stamps = [b[0] for per in intr.values() for b in (per.get(today) or [])
+              if b[5] > 0 and b[0] <= SESSION_LAST_BAR]
     return max(stamps) if stamps else None
 
 

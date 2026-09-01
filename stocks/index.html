@@ -6127,6 +6127,58 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .pl-t-meta .has{ color:var(--cyan); }
   .pl-t-meta .disp{ color:var(--cyan); } .pl-t-meta .abs{ color:var(--watch,#e6b34a); }
+
+  /* ---- the live clock -------------------------------------------------------------------
+     Time-sensitive data has to LOOK time-sensitive. Ticks every second off the wall clock. */
+  .pl-clock{ display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono);
+             font-size:11px; padding:4px 11px; border-radius:99px; font-weight:700;
+             border:1px solid rgba(66,219,230,.35); background:rgba(66,219,230,.07);
+             color:var(--ink); letter-spacing:.02em; }
+  .pl-clock .age{ color:var(--cyan); }
+  .pl-clock .age.warn{ color:var(--watch,#e6b34a); }
+  .pl-clock .age.bad{ color:var(--neg); }
+  .pl-clock .sep{ opacity:.35; }
+  .pl-clock .nxt{ color:var(--mut); font-weight:600; }
+  .pl-clock .nxt b{ color:var(--ink); font-weight:700; }
+
+  /* ---- filter chips ---------------------------------------------------------------------
+     35 tiles in a horizontal scroll is a hunt. These make it a click. */
+  .pl-filters{ display:flex; gap:6px; flex-wrap:wrap; margin:0 0 8px; align-items:center; }
+  .pl-fchip{ cursor:pointer; user-select:none; font-family:var(--font-mono); font-size:9.5px;
+             letter-spacing:.06em; text-transform:uppercase; padding:3px 9px; border-radius:99px;
+             border:1px solid var(--hair); background:var(--bg2); color:var(--mut); }
+  .pl-fchip:hover{ border-color:var(--cyan); color:var(--cyan); }
+  .pl-fchip.on{ border-color:var(--cyan); color:var(--cyan); background:rgba(66,219,230,.13); }
+  .pl-fchip .n{ opacity:.6; margin-left:4px; }
+  .pl-fchip.none{ opacity:.4; cursor:default; }
+  .pl-fchip.none:hover{ border-color:var(--hair); color:var(--mut); }
+
+  /* the tiles worth finding: still running AND the volume is moving price */
+  .pl-t.live{ border-color:rgba(66,219,230,.55); background:rgba(66,219,230,.05); }
+  .pl-t-flag{ display:inline-block; font-size:7.5px; letter-spacing:.10em; font-weight:700;
+              padding:1px 4px; border-radius:3px; margin-left:5px; vertical-align:1px;
+              color:#04121a; background:var(--cyan); }
+
+  /* ---- sparkline labels ------------------------------------------------------------------ */
+  .pl-spark .b{ position:relative; }
+  .pl-blab{ position:absolute; bottom:calc(100% + 4px); left:50%; transform:translateX(-50%);
+            white-space:nowrap; font-family:var(--font-mono); font-size:9px; padding:2px 6px;
+            border-radius:4px; border:1px solid rgba(66,219,230,.45); background:#06131c;
+            color:var(--ink); opacity:0; pointer-events:none; transition:opacity .10s;
+            z-index:30; }
+  .pl-spark .b:hover .pl-blab{ opacity:1; }
+  .pl-axis{ display:flex; justify-content:space-between; font-family:var(--font-mono);
+            font-size:8px; color:var(--faint,#48587d); letter-spacing:.04em; margin:-2px 0 3px; }
+
+  /* ---- footer legend --------------------------------------------------------------------- */
+  .pl-legend{ display:flex; gap:22px; flex-wrap:wrap; margin-top:9px; padding-top:8px;
+              border-top:1px solid var(--hair); font-size:10px; line-height:1.65; }
+  .pl-legend .col{ flex:1 1 260px; min-width:240px; }
+  .pl-legend h5{ margin:0 0 3px; font-size:9px; letter-spacing:.12em; text-transform:uppercase;
+                 color:var(--mut); font-weight:700; }
+  .pl-legend .good{ color:var(--pos); } .pl-legend .bad{ color:var(--neg); }
+  .pl-legend .k{ font-family:var(--font-mono); color:var(--cyan); }
+  .pl-legend ul{ margin:0; padding-left:14px; color:var(--mut); }
   .pl-note{ margin-top:9px; font-size:10.5px; color:var(--mut); line-height:1.6;
             border-top:1px solid var(--hair); padding-top:8px; }
   .pl-note b{ color:var(--ink); }
@@ -6272,6 +6324,65 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     return {cls:cls, label:lab, note:"bars through " + bar + " · " + age + " min ago"};
   }
 
+  // Minutes-past-midnight IST, with seconds, so the countdown can actually tick.
+  function istParts(){
+    var d = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+    return {m: d.getHours() * 60 + d.getMinutes(), s: d.getSeconds()};
+  }
+  function hhmm(t){
+    return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + (t % 60)).slice(-2);
+  }
+  function mn(t){ return parseInt(t.slice(0,2),10) * 60 + parseInt(t.slice(3,5),10); }
+
+  // When does the next run land? The cadence ships WITH the payload rather than being
+  // hardcoded here, so the page and the cron cannot drift apart in silence.
+  function nextRun(P){
+    var sc = P.schedule;
+    if(!sc || !sc.minutes || !sc.minutes.length) return null;
+    var now = istParts(), first = mn(sc.first_ist), last = mn(sc.last_ist);
+    var mins = sc.minutes.slice().sort(function(a, b){ return a - b; });
+    for(var h = 0; h < 24; h++){
+      for(var i = 0; i < mins.length; i++){
+        var t = h * 60 + mins[i];
+        if(t < first || t > last || t <= now.m) continue;
+        return {secs: (t - now.m) * 60 - now.s, at: hhmm(t), today: true};
+      }
+    }
+    return {secs: null, at: sc.first_ist, today: false};
+  }
+
+  // The clock. Redrawn every second: an age that only updates when the page reloads is the
+  // exact thing the operator could not trust.
+  function clockText(P){
+    var iso = P.bars_through_iso;
+    var age = iso ? Math.floor((Date.now() - Date.parse(iso)) / 60000) : null;
+    var cls = age == null ? "" : age <= 25 ? "" : age <= 50 ? "warn" : "bad";
+    var ageTxt = (age == null) ? "age unknown"
+               : (age < 1 ? "just updated" : age + " min old");
+    var nr = nextRun(P);
+    var nxt;
+    if(!nr) nxt = "";
+    else if(!nr.today) nxt = 'next update <b>tomorrow ' + nr.at + '</b>';
+    else {
+      var m = Math.floor(nr.secs / 60), ss = ("0" + (nr.secs % 60)).slice(-2);
+      nxt = 'next update in <b>' + m + ":" + ss + '</b> <span style="opacity:.55">(' +
+            nr.at + ')</span>';
+    }
+    return '<span class="age ' + cls + '">' + ageTxt + '</span>' +
+           (nxt ? '<span class="sep">|</span><span class="nxt">' + nxt + '</span>' : "");
+  }
+
+  function startClock(P){
+    if(window.__plClock) clearInterval(window.__plClock);
+    var paint = function(){
+      var el = document.querySelector(".pl-clock");
+      if(!el){ clearInterval(window.__plClock); window.__plClock = null; return; }
+      el.innerHTML = clockText(P);
+    };
+    paint();
+    window.__plClock = setInterval(paint, 1000);
+  }
+
   function num(x, d){ return (x == null) ? null : Number(x).toFixed(d == null ? 1 : d); }
 
   function volumeStrip(){
@@ -6314,12 +6425,18 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         var b0 = mn(p.t), b1 = b0 + 30;
         var isHot = pk && b0 < pk[1] && b1 > pk[0];
         var c = isHot ? "hot" : (p.rv < 1 ? "low" : "");
-        return '<div class="b ' + c + '" style="height:' + h + 'px" title="' +
-               p.t + ' · ' + Number(p.rv).toFixed(1) + '×"></div>';
+        // Every bar says which half hour it is and how busy that half hour was. A bar with no
+        // label is a shape the reader has to guess at.
+        return '<div class="b ' + c + '" style="height:' + h + 'px">' +
+               '<span class="pl-blab">' + p.t + '–' + hhmm(b1) + ' · ' +
+               Number(p.rv).toFixed(1) + '× normal</span></div>';
       }).join("");
+      var ends = prof.length
+        ? '<div class="pl-axis"><span>' + prof[0].t + '</span><span>' +
+          hhmm(Math.min(mn(prof[prof.length - 1].t) + 30, 15 * 60 + 30)) + '</span></div>' : "";
       return '<div class="pl-spark" title="every half hour of the session against this name&#39;s' +
              ' own normal for that half hour">' + bars +
-             '<div class="norm" style="top:' + normPct.toFixed(1) + '%"></div></div>';
+             '<div class="norm" style="top:' + normPct.toFixed(1) + '%"></div></div>' + ends;
     }
 
     var tiles = rows.map(function(r){
@@ -6327,6 +6444,11 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var now = r.rvol_now;
       var cls = r.stance === "BUYING" ? "buying" : r.stance === "SELLING" ? "selling" : "mixed";
       if(r.thin) cls += " thin";
+      // The two conditions worth hunting for, together: it is STILL going, and the volume is
+      // actually moving price rather than being absorbed.
+      var running = (now != null && now >= 1.5);
+      var moving = (r.char === "DISPLACING");
+      if(running && moving) cls += " live";
 
       // "Still going" vs "was busy and died" — the whole reason rvol_now exists.
       var nowTxt = (now == null)
@@ -6358,9 +6480,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               + (r.peak_at ? "; busiest half hour " + r.peak_at : "")
               + (r.thin ? "; THIN — normal turnover about Rs " + r.adv_cr + " cr/day" : "");
 
-      return '<div class="pl-t ' + cls + '" title="' + esc(tip) + '">' +
+      return '<div class="pl-t ' + cls + '" title="' + esc(tip) + '"' +
+             ' data-run="' + (running ? 1 : 0) + '" data-move="' + (moving ? 1 : 0) + '"' +
+             ' data-level="' + (r.level ? 1 : 0) + '" data-thin="' + (r.thin ? 1 : 0) + '">' +
              '<div class="pl-row"><span class="pl-t-tk">' + esc(r.ticker) +
                (r.catalyst_tier ? " ⚡" : "") +
+               (running && moving ? '<span class="pl-t-flag">RUNNING</span>' : "") +
                (r.thin ? ' <span style="font-size:8px;opacity:.7">THIN</span>' : "") +
                '</span>' + mv + '</div>' +
              '<div class="pl-row"><span class="pl-t-v">' +
@@ -6394,6 +6519,23 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
             ' more alive but undefined</span>' : "") + '</div>'
       : "";
 
+    // Filters, with live counts. A chip that would show nothing is disabled rather than
+    // hidden, so the answer "none today" is visible instead of missing.
+    var cnt = function(fn){ return rows.filter(fn).length; };
+    var FILTERS = [
+      ["all", "All", function(){ return true; }],
+      ["run", "Still running", function(r){ return (r.rvol_now || 0) >= 1.5; }],
+      ["move", "Moving price", function(r){ return r.char === "DISPLACING"; }],
+      ["live", "Running + moving", function(r){
+        return (r.rvol_now || 0) >= 1.5 && r.char === "DISPLACING"; }],
+      ["level", "At a level", function(r){ return !!r.level; }]
+    ];
+    var filters = '<div class="pl-filters">' + FILTERS.map(function(f2){
+      var n = cnt(f2[2]);
+      return '<span class="pl-fchip' + (f2[0] === "all" ? " on" : "") + (n ? "" : " none") +
+             '" data-f="' + f2[0] + '">' + f2[1] + '<span class="n">' + n + '</span></span>';
+    }).join("") + '</div>';
+
     var f = freshOf(P);
     var bad = (P.errors || []).length;
     var el = document.createElement("div");
@@ -6406,12 +6548,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
           '</b> · ' + esc(f.note) + '</span>' +
         (bad ? '<span class="pl-fresh stale"><span class="dot"></span><b>DEGRADED</b> · ' +
                esc(String((P.errors || [])[0]).slice(0, 60)) + '</span>' : "") +
-        '<span class="pl-stamp" style="margin-left:auto">session ' +
-          esc(P.session_date || "—") + ' · ' + (P.n_alive || 0) + ' of ' +
+        '<span class="pl-clock"></span>' +
+        '<span class="pl-stamp" style="margin-left:auto">' + (P.n_alive || 0) + ' of ' +
           (P.n_measured || 0) + ' names past ' +
           ((P.thresholds && P.thresholds.alive_rvol) || P.alive_threshold || 1.5) +
           '&times; their own normal · built ' + esc(P.as_of_ist || "") + '</span>' +
-      '</div>' +
+      '</div>' + filters +
       (rows.length
         ? '<div class="pl-vol-row">' + tiles + '</div>'
         : '<div class="pl-vol-s">No name cleared the threshold — a real answer, not a dead feed.</div>') +
@@ -6422,7 +6564,21 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<b>It finds where the movement is — it does not tell you which way.</b> ' +
         'Graded on 3,291 rows against a matched control: direction is a coin flip (50.5%), ' +
         'but these names swing 1.5% against 1.0% for a name that is not on the list, wider in ' +
-        '68.5% of pairs. Use it to pick what to look at, never as a buy.</div>';
+        '68.5% of pairs. Use it to pick what to look at, never as a buy.</div>' +
+      '<div class="pl-legend">' +
+        '<div class="col"><h5 class="good">Look for</h5><ul>' +
+          '<li><span class="k">RUNNING</span> — still going AND moving price. Start here.</li>' +
+          '<li>Bars small on the left, tall on the right — it is happening <b>now</b>, you are early.</li>' +
+          '<li><span class="k">MOVING PRICE</span> at the <b>top of day</b> — what a break looks like.</li>' +
+          '<li><span class="k">● level</span> — we already have a read, so there is a trade to plan.</li>' +
+        '</ul></div>' +
+        '<div class="col"><h5 class="bad">Watch out for</h5><ul>' +
+          '<li><span class="k">fading</span> — the day number is big but it is over. This is how you buy the top.</li>' +
+          '<li>Bars tall on the left, small now — the move already happened.</li>' +
+          '<li><span class="k">GOING NOWHERE</span> — heavy volume, price stuck. Usually a wall, not a break.</li>' +
+          '<li><span class="k">THIN</span> — you cannot get size in or out. Ignore however loud it is.</li>' +
+        '</ul></div>' +
+      '</div>';
 
     // Anchor above THE FIRES, not the engine-scored card: during the session all the operator
     // does is refresh and check whether the fires moved, so volume has to share that screenful.
@@ -6432,6 +6588,28 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               || document.querySelector(".card.fc-wrap") || document.querySelector(".card");
     if(anchor && anchor.parentNode) anchor.parentNode.insertBefore(el, anchor);
     else document.body.insertBefore(el, document.body.firstChild);
+
+    // Chips filter in place — no re-render, so the horizontal scroll position survives.
+    el.querySelectorAll(".pl-fchip").forEach(function(chip){
+      chip.addEventListener("click", function(){
+        if(chip.classList.contains("none") && chip.dataset.f !== "all") return;
+        el.querySelectorAll(".pl-fchip").forEach(function(c){ c.classList.remove("on"); });
+        chip.classList.add("on");
+        var k = chip.dataset.f;
+        el.querySelectorAll(".pl-t").forEach(function(t){
+          var show = k === "all" ? true
+                   : k === "run" ? t.dataset.run === "1"
+                   : k === "move" ? t.dataset.move === "1"
+                   : k === "live" ? (t.dataset.run === "1" && t.dataset.move === "1")
+                   : k === "level" ? t.dataset.level === "1" : true;
+          t.style.display = show ? "" : "none";
+        });
+        var row = el.querySelector(".pl-vol-row");
+        if(row) row.scrollLeft = 0;
+      });
+    });
+
+    startClock(P);
   }
 
   // ---- FIX BUTTON on each pending decision ------------------------------------------------

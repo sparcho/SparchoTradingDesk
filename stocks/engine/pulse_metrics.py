@@ -56,6 +56,20 @@ COVER_TOLERANCE_MIN = 5         # a prior session may end one bar short and stil
 FRESH_LIVE_MIN = 25
 FRESH_DELAYED_MIN = 50
 
+# THE RUN CADENCE, published with the data.
+# The cloud job fires at :20 and :50 past the hour through the session (cron '20,50 4-10 UTC',
+# which lands on the same minutes in IST). The client needs this to say how long until the next
+# update -- and hardcoding it in the page would make two sources of truth that drift apart in
+# silence. FEED_LAG_MIN is the free feed's own delay: even a run that just finished is looking
+# at bars a quarter of an hour behind live, and pretending otherwise is its own small lie.
+SCHEDULE = {
+    "minutes": [20, 50],
+    "first_ist": "09:50",
+    "last_ist": "16:20",
+    "feed_lag_min": 15,
+    "note": "twice an hour through the session; outside that window nothing refreshes",
+}
+
 ALIVE_RVOL = 1.5                # a DEFAULT, not a finding
 
 # HOW FAR DOES VOLUME NORMALLY MOVE PRICE -- measured, not assumed.
@@ -357,6 +371,7 @@ def build_payload(rows, session_date, last_bar, now_dt, n_measured, universe,
         "bars_through_iso": iso,
         "freshness": fresh,
         "thresholds": dict(THRESHOLDS),
+        "schedule": dict(SCHEDULE),
         "measures": dict(MEASURES),
         "n_universe": universe,
         "n_measured": n_measured,
