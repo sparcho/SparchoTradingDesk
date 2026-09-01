@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1788236849">
-<meta name="x-built-at" content="2026-09-01T04:26:53+00:00">
+<meta name="x-build-id" content="1788266321">
+<meta name="x-built-at" content="2026-09-01T12:38:07+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1788236849",BUILT_AT="2026-09-01T04:26:53+00:00";
+  var BID="1788266321",BUILT_AT="2026-09-01T12:38:07+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1340,6 +1340,17 @@
 .op-note{color:var(--faint);font-size:9px;line-height:1.45;margin-top:6px}
 
 /* ledger rows — one line per trade, outcome as a bar so the eye ranks without reading digits */
+/* F260901 - the ledger's class switch. Two real classes now: the system's fib fires and the
+   operator's own marked trades. */
+.lgcls{display:flex;gap:4px;margin:2px 0 8px;flex-wrap:wrap}
+.lgcls button{flex:1 1 auto;background:rgba(255,255,255,.04);color:var(--mut);
+  border:1px solid var(--hair);border-radius:7px;padding:4px 7px;cursor:pointer;
+  font-family:'Space Mono',ui-monospace,monospace;font-size:8.5px;letter-spacing:.04em;
+  text-transform:uppercase;white-space:nowrap;transition:color .14s,border-color .14s}
+.lgcls button:hover{color:var(--ink2)}
+.lgcls button.on{color:var(--cyan);border-color:rgba(66,219,230,.34);background:rgba(66,219,230,.07)}
+.lgcls button i{font-style:normal;margin-left:5px;color:var(--faint)}
+.lgcls button.on i{color:var(--cyan);opacity:.75}
 .lgw{display:flex;flex-direction:column}
 .lg-day{font-family:'Space Mono',ui-monospace,monospace;font-size:9px;letter-spacing:.11em;
   text-transform:uppercase;color:var(--faint);padding:14px 2px 6px;border-bottom:1px solid var(--hair)}
@@ -1428,6 +1439,9 @@
 .orb-gl.stop{stroke:rgba(255,107,107,.42);stroke-dasharray:3 5}
 .orb-gl.tgt{stroke:rgba(63,207,122,.24);stroke-dasharray:3 5}
 .orb-ax{font-family:'Space Mono',ui-monospace,monospace;font-size:8px;fill:var(--faint);letter-spacing:.1em}
+.orb-dirlbl{font-family:'Space Mono',ui-monospace,monospace;font-size:9.5px;font-weight:700;
+  fill:rgba(130,190,230,.85);letter-spacing:.12em}
+.orb-dir{pointer-events:none}
 .orb-lbl{font-family:'Space Mono',ui-monospace,monospace;font-size:9px;pointer-events:none}
 .orb-plan{pointer-events:none}
 .orb-hit{fill:transparent;stroke:none;cursor:pointer}
@@ -1471,13 +1485,41 @@
 /* In a 320px column the seven-column row cannot be read. Same reduction the narrow-viewport rule
    already makes -- the constraint here is the COLUMN, so it hangs off the class, not the media
    query, and both can apply at once without fighting. */
-.tl-ledger-card.lgnarrow .lg-r{grid-template-columns:10px minmax(0,1fr) 52px 58px 10px;
-  gap:8px;padding:7px 0}
-.tl-ledger-card.lgnarrow .lg-tk{font-size:12px;overflow:hidden;text-overflow:ellipsis}
+/* F260901 - THE NARROW LEDGER ROW, SPACED PROPERLY. Operator: "note how the trade ledger is
+   spaced weirdly". Three things were wrong in a 330px column: "Never filled" wrapped to two lines
+   so rows were different heights; the R-bar was given 58px and its number sat ON TOP of the bar;
+   and every date group opened with 14px of padding, so four groups of two rows read as mostly
+   whitespace. The state now sits UNDER the ticker on its own line (one row height, always), and
+   the outcome column is a number with a hairline bar beneath it rather than a bar with a number
+   inside it. */
+.tl-ledger-card.lgnarrow .lg-r{grid-template-columns:9px minmax(0,1fr) 62px 9px;
+  gap:9px;padding:8px 4px;border-radius:0;align-items:center}
+.tl-ledger-card.lgnarrow .lg-tk{font-size:12.5px;line-height:1.25;display:block;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tl-ledger-card.lgnarrow .lg-st{display:block;grid-column:2;grid-row:2;font-size:8.5px;
+  line-height:1.2;margin-top:1px;white-space:nowrap}
+.tl-ledger-card.lgnarrow .lg-r{grid-template-rows:auto auto}
+.tl-ledger-card.lgnarrow .lgdot{grid-row:1/3}
+.tl-ledger-card.lgnarrow .lg-c{grid-row:1/3}
+.tl-ledger-card.lgnarrow .rbar{grid-row:1/3;height:auto;display:flex;
+  flex-direction:column;align-items:flex-end;justify-content:center}
+.tl-ledger-card.lgnarrow .rbar em{order:1}
+.tl-ledger-card.lgnarrow .rbar .b{order:2}
+.tl-ledger-card.lgnarrow .rbar .mid{display:none}
+.tl-ledger-card.lgnarrow .rbar em{position:static;display:block;font-size:11px;line-height:1.2}
+.tl-ledger-card.lgnarrow .rbar em.pos,
+.tl-ledger-card.lgnarrow .rbar em.neg,
+.tl-ledger-card.lgnarrow .rbar em.mut{text-align:right}
+.tl-ledger-card.lgnarrow .rbar .b{position:static;display:block;height:2px;margin:3px 0 0;
+  border-radius:1px;max-width:100%;min-width:3px}
 .tl-ledger-card.lgnarrow .lg-hold,
 .tl-ledger-card.lgnarrow .lg-say{display:none}
-.tl-ledger-card.lgnarrow .lg-d{padding:4px 0 16px 19px}
-.tl-ledger-card.lgnarrow .tlpg{font-size:9px;gap:6px}
+.tl-ledger-card.lgnarrow .lg-day{padding:11px 4px 4px;margin-top:2px}
+.tl-ledger-card.lgnarrow .lg-day:first-child{padding-top:2px;margin-top:0}
+.tl-ledger-card.lgnarrow .lg-d{padding:4px 4px 14px 22px}
+.tl-ledger-card.lgnarrow .lgstory{font-size:11.5px;line-height:1.55}
+.tl-ledger-card.lgnarrow .lgev{grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:6px}
+.tl-ledger-card.lgnarrow .tlpg{font-size:9px;gap:6px;padding:6px 4px}
 .tl-ledger-card.lgnarrow .tlpg button{padding:2px 8px;font-size:9px}
 .lay3{margin-left:auto;font-family:'Space Mono',ui-monospace,monospace;font-size:8.5px;
   letter-spacing:.06em;text-transform:uppercase;color:var(--faint);cursor:pointer;
@@ -1492,7 +1534,17 @@
   .orbwrap.orb3{grid-template-columns:minmax(0,1fr) minmax(232px,300px)}
   .orbwrap.orb3 > .card.tl-ledger-card{grid-column:1/-1;border-right:0;
     border-top:1px solid var(--hair);padding:14px 0 0}
-  .tl-ledger-card.lgnarrow .lg-r{grid-template-columns:11px 104px 84px 148px 76px 1fr 14px;gap:11px}
+  /* Below the ring's readable width the band stacks, so the ledger gets the full row back. */
+  .tl-ledger-card.lgnarrow .lg-r{grid-template-columns:11px 104px 84px 148px 76px 1fr 14px;
+    grid-template-rows:auto;gap:11px}
+  .tl-ledger-card.lgnarrow .lgdot,
+  .tl-ledger-card.lgnarrow .lg-c,
+  .tl-ledger-card.lgnarrow .rbar{grid-row:auto}
+  .tl-ledger-card.lgnarrow .lg-st{grid-column:auto;grid-row:auto;font-size:9px}
+  .tl-ledger-card.lgnarrow .rbar{height:16px;text-align:left}
+  .tl-ledger-card.lgnarrow .rbar .mid{display:block}
+  .tl-ledger-card.lgnarrow .rbar em{position:absolute;display:inline;font-size:10px;line-height:16px}
+  .tl-ledger-card.lgnarrow .rbar .b{position:absolute;top:4px;height:8px;margin:0;max-width:44%}
   .tl-ledger-card.lgnarrow .lg-hold,
   .tl-ledger-card.lgnarrow .lg-say{display:block}
 }
@@ -1946,6 +1998,13 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   const tkA=(t,inner)=>'<a class="tklink" href="'+tkHref(t)+'"'+(typeof tkExt==='function'?tkExt(t):'')+'>'+inner+'</a>';
   const tkExt =(t)=> hasPage(t) ? '' : ' target="_blank" rel="noopener"';
 
+  // F260901 - ONE list of trade classes, read by every surface that switches between them.
+  // There used to be two: renderLab's TLVIEWS and a hardcoded copy in signalsFace(). Adding
+  // `marked` to the first and missing the second meant the report card coerced __tlView back
+  // to 'fib' AFTER the ledger header had rendered - the header said "Your marked trades" and
+  // the rows underneath were fib fires. Moving a field breaks its readers; two lists is the
+  // defect, so there is now one.
+  window.TL_CLASSES=['fib','marked','swing','positional'];
   const esc=(s)=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   // F131 (260616) C — shared "?" explainer: hover popover with plain-English help. Use HT(text) in any header.
   const HT=(t)=>'<span class="ihelp" tabindex="0" data-tip="'+esc(t)+'">?</span>';  // F260622 body portal (escapes overflow clip)
@@ -2304,8 +2363,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(!DATA){ return ''; }
     var pa=DATA.positional_assessment||null, sp=DATA.signal_perf||null, tl=(DATA&&DATA.trade_lab)||null, tot=(DATA.book&&DATA.book.totals)||{};
     var LOCKED=!!(DATA.privacy&&DATA.privacy.locked&&DATA.sensitive_enc&&!DATA._unlocked);
-    var __pv=window.__tlView; if(['fib','swing','positional'].indexOf(__pv)<0){ try{__pv=localStorage.getItem('tlView');}catch(e){} } if(['fib','swing','positional'].indexOf(__pv)<0)__pv='fib'; window.__tlView=__pv;
-    var __PVLBL={fib:'Fib fires',swing:'Swing',positional:'Positional'};
+    var __pv=window.__tlView; if(window.TL_CLASSES.indexOf(__pv)<0){ try{__pv=localStorage.getItem('tlView');}catch(e){} } if(window.TL_CLASSES.indexOf(__pv)<0)__pv='fib'; window.__tlView=__pv;
+    var __PVLBL={fib:'Fib fires',marked:'Your marked trades',swing:'Swing',positional:'Positional'};
     var html='';
 
     // ---- verdict helpers (every number = an existing payload field; no new generator math) ----
@@ -2415,7 +2474,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     html+='<div class="pf-sec" id="pf-sec-3"><div class="pf-sh"><span class="pf-n">03</span><h3>Master Ledger</h3>'
       +'<span class="pop pap">PAPER</span><span class="pop real">REAL</span><span class="uchip">R · ₹ FY</span>'
       +'<span class="pf-sx">executed trades · system-paper + operator-real · realized R</span>'
-      +'<span class="pf-toggle-wrap"><span class="dtseg">'+['fib','swing','positional'].map(function(k){return '<button class="'+(k===__pv?'on':'')+'" onclick="perfSetView(\''+k+'\')">'+__PVLBL[k]+'</button>';}).join('')+'</span></span></div>';
+      +'<span class="pf-toggle-wrap"><span class="dtseg">'+window.TL_CLASSES.map(function(k){return '<button class="'+(k===__pv?'on':'')+'" onclick="perfSetView(\''+k+'\')">'+__PVLBL[k]+'</button>';}).join('')+'</span></span></div>';
     var fyVal=(tot.realized_fy!=null)?tot.realized_fy:null;
     var fyKpi='<div class="kpis pf-kpis"><div class="kpi"><div class="kl">Realized FY · real money</div><div class="kv sm sens '+(fyVal!=null?(fyVal>0?'pos':'neg'):'')+'">'+(LOCKED?'🔒':(fyVal!=null?fmtINR(fyVal,{compact:true}):'—'))+'</div><div class="ks">'+(tot.realized_fy_as_of?('cap-gains · as of '+fmtD(tot.realized_fy_as_of)):'broker cap-gains series')+'</div></div>'+
       (tl?('<div class="kpi"><div class="kl">Ledger trades</div><div class="kv sm">'+(tl.n_trades||0)+'</div><div class="ks">'+(tl.n_system||0)+' system-paper · '+(tl.n_operator||0)+' operator-real</div></div>'):'')+
@@ -2424,6 +2483,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var dtv=(tl.trade_lab_views&&tl.trade_lab_views[__pv])||{}, dtCurve=(dtv.curve||[]).map(function(p){ return {d:p.date,y:p.cum_r,tickers:p.tickers,n:p.n}; });
       var _cr=dtv.cum_r, _nn=dtv.n, _exp=(tl.metrics&&tl.metrics.expectancy);
       html+='<div class="pf-take '+(_cr>0?'good':(_cr<0?'bad':'unclear'))+'">Your '+esc(__PVLBL[__pv])+' book is <b class="'+(_cr>0?'pos':'neg')+'">'+(_cr!=null?((_cr>0?'+':'')+(+_cr).toFixed(1)+'R'):'—')+'</b> across '+(_nn||0)+' trade'+((_nn===1)?'':'s')+((_exp!=null)?(' · ledger expectancy '+((_exp>0?'+':'')+(+_exp).toFixed(2)+'R/trade')):'')+'.</div>';
+      // F260901 — the Fib-fires performance now renders on the SCORECARD tab (operator: "lets
+      // move the fib fires performance ot the scorecard tab where it should be"), in its own
+      // labelled PAPER section below the real-money ones. It is NOT duplicated here.
       html+='<div class="card full pf-kpi-card">'+fyKpi+'</div>';
       var hasMlCurve=(dtCurve.length>1);
       if(hasMlCurve){
@@ -2676,6 +2738,32 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '<div class="fc-note" style="margin-top:9px">'+esc(String(sc.basis||''))+'</div>'+
       '<div class="fc-note">'+esc(String(sc.excluded_by_design||''))+'</div></div>';
     html+='</div>';
+
+    /* SCORECARD:PAPER-FENCE ---------------------------------------------------------------
+       F260901. Operator: "lets move the fib fires performance ot the scorecard tab where it
+       should be." Everything ABOVE this line is real money and stays fenced against every
+       screener source (test_scorecard_wiring). This one section below it is the exception, and
+       it is allowed only on three conditions, each held by a test: it carries the PAPER chip, it
+       says in words that it is not his money, and it renders LAST so nothing above can be read
+       through it. Splitting the fence is safer than removing it — the 260728 error was a paper
+       ledger quoted as the operator's record, and that remains impossible here.
+
+       Months, not lifetime: of the fib book's -25.6x, -26.5 was booked by trades ENTERED in a
+       single month under mechanics since changed. */
+    (function(){
+      var _tl=DATA.trade_lab||null; if(!_tl) return;
+      var _v=(_tl.trade_lab_views&&_tl.trade_lab_views.fib)||null;
+      if(!_v||!_v.n) return;
+      html+='<div class="pf-sec" id="sc-sec-6"><div class="pf-sh"><span class="pf-n">07</span>'+
+        '<h3>Fib fires — the system’s own trades</h3><span class="pop pap">PAPER</span>'+
+        '<span class="uchip">× risk · by month</span>'+
+        '<span class="pf-sx">how the fib class has performed, month by month</span></div>'+
+        '<div class="fc-note" style="margin-bottom:9px">These are the <b>system’s</b> logged '+
+        'fib fires, measured in risk units — <b>not your money</b>, and not part of any rupee '+
+        'figure above. Split by month because the mechanics changed: a lifetime total spanning two '+
+        'ways of trading describes neither.</div>'+
+        (window.tlMonthRows?(window.tlMonthRows(_v)||''):'')+'</div>';
+    })();
 
     setFace('z-perf', html);
     try{ var _z=document.getElementById('zasof-perf'); if(_z) _z.textContent='as of '+fmtD(sc.as_of); }catch(e0){}
@@ -4084,7 +4172,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
        than by reading the code. Operator reads a pending decision first; a visitor should
        meet the fires first, and one order cannot be both. */
     var _lk=!!(DATA.privacy&&DATA.privacy.locked&&DATA.sensitive_enc&&!DATA._unlocked);
-    let html=(_lk?(fibRadarHTML()+decisionsHTML()):(decisionsHTML()+fibRadarHTML()))+fibConflHTML()+fibBoardHTML();
+    // F260901 — the decisions card is held back as its own string so the UNLOCKED zone can emit
+    // it LAST, after the positions+ledger band. That ordering used to be done by moving nodes
+    // after render (PULSE reflow), which is what made the page jump. A locked visitor still meets
+    // fires first, then decisions, exactly as before — one order cannot serve both readers.
+    var _decHTML=decisionsHTML();
+    let html=(_lk?(fibRadarHTML()+_decHTML):fibRadarHTML())+fibConflHTML()+fibBoardHTML();
     // F260617: confluence day-trade backtest (signal quality) relocated to the Screener panel (renderDTConf -> #f1-dtconf).
     if(tl){
       const open=tl.open||[], closed=tl.closed||[], dailyR=tl.daily_r||[], sc=tl.scorecard||{}, byO=tl.scorecard_by_origin||{};
@@ -4578,12 +4671,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       // next run. Default TRUE so a payload emitted before the field existed shows its trades
       // rather than silently emptying the ledger (`x!==false`, not `x`).
       window.tlIsSystem=function(t){ return (t&&t.system_logged)!==false; }; //@pure
-      window.tlViewOf=function(t){ if(!window.tlIsSystem(t)) return null;
-        var sc=String((t&&t.signal_class)||''), hz=String((t&&t.horizon)||'');
-        if(sc==='fib-confluence'||hz==='fib') return 'fib';
-        if(sc==='bubble-swing'||hz==='swing') return 'swing';
-        if(sc==='composite-positional'||hz==='positional') return 'positional';
-        return null; };
+      // F260901 - MARKED is the operator's own class and is checked BEFORE the system fence.
+      // "whenever you notice the long position tool on a chart showing the trade set up, take
+      // that as a paper trade if not a real trade that I have picked up on with my eye and
+      // judgement, so its a another 'type' of trade that the master ledger should also track."
+      // Every other class stays system-only: tlIsSystem is what keeps hand-logged one-offs out
+      // of a ledger that is measuring the SCREENER, and only the marked class is exempt because
+      // by definition it is not the screener's.
+      window.tlViewOf=function(t){ var sc=String((t&&t.signal_class)||''), hz=String((t&&t.horizon)||''); if(sc==='operator-marked'||hz==='marked') return 'marked'; if(!window.tlIsSystem(t)) return null; if(sc==='fib-confluence'||hz==='fib') return 'fib'; if(sc==='bubble-swing'||hz==='swing') return 'swing'; if(sc==='composite-positional'||hz==='positional') return 'positional'; return null; }; //@pure
       // ── F260831 — THE LEDGER, REBUILT AS ROWS (shipped from stocks/preview/ledger/) ──────
       // The old renderer was a 13-column table. A table is the right shape for data you LOOK UP
       // and the wrong shape for data you READ — and nobody looks a trade up by id, they scan for
@@ -4595,7 +4690,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       // Four human states, from eight machine ones. OPEN/FILLED/ACTIVE, PLANNED, CLOSED/REVIEWED,
       // and no-fill/expired were eight tokens for four situations, and the difference between
       // ACTIVE and REVIEWED is bookkeeping the reader should never have to hold.
-      window.tlWord=function(t){ var st=String((t&&t.status)||'').toUpperCase(), nf=(t&&(t.exit_kind==='no-fill'||t.exit_kind==='expired')); if(st==='PLANNED') return {w:'Waiting',dot:'wait'}; if(st==='OPEN'||st==='FILLED'||st==='ACTIVE') return {w:'Live',dot:'live'}; if(nf) return {w:'Never filled',dot:'wait'}; var r=(t&&t.realized_r!=null)?+t.realized_r:null; return {w:'Closed',dot:(r==null?'flat':(r>0?'won':(r<0?'lost':'flat')))}; }; //@pure
+      window.tlWord=function(t){ var st=String((t&&t.status)||'').toUpperCase(), nf=(t&&(t.exit_kind==='no-fill'||t.exit_kind==='expired')); if(st==='PLANNED') return {w:'Waiting',dot:'wait'}; if(st==='OPEN'||st==='FILLED'||st==='ACTIVE') return {w:'Live',dot:'live'}; if(nf) return {w:'No fill',dot:'wait'}; var r=(t&&t.realized_r!=null)?+t.realized_r:null; return {w:'Closed',dot:(r==null?'flat':(r>0?'won':(r<0?'lost':'flat')))}; }; //@pure
 
       // Outcome as a BAR. +2.4R is a number to parse; a bar is a length to see. Scaled to 3R so
       // the common range fills the cell and outliers clamp rather than squashing everything else.
@@ -4665,7 +4760,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         var fills=(t.fills||[]), bk=0; fills.forEach(function(f){ bk+=(f.frac||0); });
         var tm=window.tlTouch(t.ticker);
         var story;
-        if(W.w==='Never filled'){
+        if(W.w==='No fill'){
           story='The plan rested at <b>'+fmtNum(ent,1)+'</b> and price never returned, so it expired '+
                 'untouched. <b>This is not a loss</b> — no money was ever at risk. It is counted '+
                 'separately so it cannot drag the win rate around.';
@@ -4718,12 +4813,11 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       // 580px chart, so a 25-row page runs three ring-heights down the page and undoes the whole
       // point of moving it there. Stacked full-width it keeps the longer page -- the constraint is
       // the COLUMN, not a change of mind about how much history is worth showing.
-      window.tlLedgerPerPage=function(threeCol){ return threeCol?8:25; }; //@pure
-      window.tlLab3col=function(){ try{ var v=localStorage.getItem('lab3col'); return v==null?true:v==='1'; }catch(e){ return true; } };
+      window.tlLedgerPerPage=function(){ return 8; }; //@pure
       window.tlRenderLedger=function(){ var el=document.getElementById('tl-ledger'); if(!el) return;
         var view=window.__tlView||'fib';
         var all=(window.__tlOpen||[]).concat(window.__tlClosed||[]).filter(function(t){return window.tlViewOf(t)===view;}).slice().sort(function(a,b){ return String(window.tlActDate(b)||'').localeCompare(String(window.tlActDate(a)||'')); });
-        var PER=window.tlLedgerPerPage(window.tlLab3col()), total=all.length, pages=Math.max(1,Math.ceil(total/PER)), pg=window.__tlPage||0; if(pg<0)pg=0; if(pg>pages-1)pg=pages-1; window.__tlPage=pg;
+        var PER=window.tlLedgerPerPage(), total=all.length, pages=Math.max(1,Math.ceil(total/PER)), pg=window.__tlPage||0; if(pg<0)pg=0; if(pg>pages-1)pg=pages-1; window.__tlPage=pg;
         var slice=all.slice(pg*PER,(pg+1)*PER);
         var nav='<div class="tlpg"><button onclick="tlLedgerPage(-1)"'+(pg<=0?' disabled':'')+'>‹ prev</button><span>'+(total?(pg*PER+1):0)+'–'+Math.min((pg+1)*PER,total)+' of '+total+' · page '+(pg+1)+'/'+pages+'</span><button onclick="tlLedgerPage(1)"'+(pg>=pages-1?' disabled':'')+'>next ›</button></div>';
         // F260831 - rows, not a 13-column table. tlTableHtml is kept and still used
@@ -4731,13 +4825,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         el.innerHTML=nav+(total?window.tlLedgerRows(slice):'<div class="fc-note">No '+esc(view)+' trades yet.</div>')+(total?nav:'');
         (function(){ var ex=window.__tlExpandedIds||{}; for(var id in ex){ var d=document.getElementById(id); if(d) d.style.display='table-row'; } })(); };
       window.tlLedgerPage=function(delta){ window.__tlPage=(window.__tlPage||0)+delta; window.tlRenderLedger(); };
-      window.tlSetView=function(vw){ window.__tlView=vw; try{localStorage.setItem('tlView',vw);}catch(e){} window.__tlPage=0; window.__tlSpSeg=({fib:'fib-confluence',swing:'bubble-swing',positional:'composite-positional'})[vw]||'fib-confluence'; renderLab(); };
-      window.perfSetView=function(vw){ window.__tlView=vw; try{localStorage.setItem('tlView',vw);}catch(e){} window.__tlSpSeg=({fib:'fib-confluence',swing:'bubble-swing',positional:'composite-positional'})[vw]||'fib-confluence'; try{ renderLab(); }catch(e){} };
+      window.tlSetView=function(vw){ window.__tlView=vw; try{localStorage.setItem('tlView',vw);}catch(e){} window.__tlPage=0; window.__tlSpSeg=({fib:'fib-confluence',marked:'operator-marked',swing:'bubble-swing',positional:'composite-positional'})[vw]||'fib-confluence'; renderLab(); };
+      window.perfSetView=function(vw){ window.__tlView=vw; try{localStorage.setItem('tlView',vw);}catch(e){} window.__tlSpSeg=({fib:'fib-confluence',marked:'operator-marked',swing:'bubble-swing',positional:'composite-positional'})[vw]||'fib-confluence'; try{ renderLab(); }catch(e){} };
       // F260618 — Trade Lab toggled by trade type. Perf card: segmented toggle in the header,
       // graph LEFT + KPI 2×2 grid RIGHT, driven by tl.trade_lab_views[view]. Default Day-Trade,
       // persisted in localStorage. The toggle re-renders graph + KPIs + ledger for the selected type.
-      var TLVIEWS=['fib','swing','positional'], TLVLBL={fib:'Fib fires',swing:'Swing',positional:'Positional'};
-      var view=window.__tlView; if(TLVIEWS.indexOf(view)<0){ try{view=localStorage.getItem('tlView');}catch(e){} } if(TLVIEWS.indexOf(view)<0) view='fib'; window.__tlView=view; window.__tlSpSeg=({fib:'fib-confluence',swing:'bubble-swing',positional:'composite-positional'})[view]||'fib-confluence';
+      var TLVIEWS=window.TL_CLASSES,
+          TLVLBL={fib:'Fib fires',marked:'Your marked trades',swing:'Swing',positional:'Positional'};
+      var view=window.__tlView; if(TLVIEWS.indexOf(view)<0){ try{view=localStorage.getItem('tlView');}catch(e){} } if(TLVIEWS.indexOf(view)<0) view='fib'; window.__tlView=view; window.__tlSpSeg=({fib:'fib-confluence',marked:'operator-marked',swing:'bubble-swing',positional:'composite-positional'})[view]||'fib-confluence';
       var views=tl.trade_lab_views||{}, v=views[view]||{}, vCurve=v.curve||[];
       var vCnt={}; (window.__tlOpen||[]).concat(window.__tlClosed||[]).forEach(function(t){ var k=window.tlViewOf(t); if(k) vCnt[k]=(vCnt[k]||0)+1; });
       var dpKp=function(l,val,sub,c){ return '<div class="kpi"><div class="kl">'+l+'</div><div class="kv sm '+(c||'')+'">'+val+'</div><div class="ks">'+esc(sub)+'</div></div>'; };
@@ -4767,7 +4862,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       // three rows and `positional` was already n=0, so the control offered a choice between
       // one populated view and two empty ones. TLVIEWS stays defined, so reviving a second
       // class is restoring one line rather than rebuilding the mechanism.
-      var tlToggle='<span class="dtseg-note">system-logged fib fires · the only class the desk trades</span>';
+      var tlToggle='';   // F260901 - the class switch lives on the ledger card now, next to what it switches.
       var _glossHT=HT('What the numbers mean — “risk” is the amount you would lose if the trade hit its stop (the entry-to-stop distance). “% of risk” = profit as a percentage of that amount (+49% = made about half your risk). “× risk” = profit in multiples of it (+8.9× = banked about 9 trades’ worth of risk). “Win rate” = share of trades that closed in profit. “Breakeven” = closed without a loss.');
       // F260727 — hidden until something has actually CLOSED. Operator, 27-Jul: "I don't think this
       // is relevant firstly, cause its blank and we aren't technically making any trades as of now."
@@ -5000,8 +5095,24 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                 '<text class="orb-ax" x="290" y="-7" fill="var(--faint)">PLANS</text>',
                 '<text class="orb-ax" x="320" y="-7" fill="var(--watch)">NO LEVEL</text>',
                 '</g>',
-                '<text class="orb-ax" x="350" y="16" text-anchor="middle">NEWEST ENTRY ▲</text>',
-                '<text class="orb-ax" x="350" y="32" text-anchor="middle" fill="var(--mut)">older ↺ anticlockwise</text>');
+                // The sweep is drawn, not just described. It runs 250deg ANTICLOCKWISE from 12,
+                // so the guide arc is swept along the same path with an arrowhead on it -- the
+                // reader follows a line instead of decoding two 8px labels.
+                '<defs><marker id="orbArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" '+
+                  'markerHeight="5" orient="auto-start-reverse">'+
+                  '<path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(130,190,230,.55)"/></marker></defs>',
+                (function(){ var a0=(-90-6)*Math.PI/180, a1=(-90-ORB.SWEEP+6)*Math.PI/180, R=336;
+                  var p0=window.tlOrbXY(R,a0), p1=window.tlOrbXY(R,a1);
+                  return '<path class="orb-dir" d="M '+p0[0].toFixed(1)+' '+p0[1].toFixed(1)+
+                    ' A '+R+' '+R+' 0 1 0 '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+
+                    '" fill="none" stroke="rgba(130,190,230,.30)" stroke-width="1.2" '+
+                    'stroke-dasharray="5 7" marker-end="url(#orbArrow)"/>'; })(),
+                '<text class="orb-dirlbl" x="350" y="14" text-anchor="middle">▼ NEWEST TRADE</text>',
+                '<text class="orb-ax" x="350" y="30" text-anchor="middle" fill="var(--mut)">'+
+                  'time runs anticlockwise ↺</text>',
+                (function(){ var a=(-90-ORB.SWEEP+4)*Math.PI/180, q=window.tlOrbXY(352,a);
+                  return '<text class="orb-dirlbl" x="'+q[0].toFixed(1)+'" y="'+(q[1]+4).toFixed(1)+
+                    '" text-anchor="'+(q[0]<ORB.C?'end':'start')+'">OLDEST ↺</text>'; })());
               // rim: the closed record
               (closed||[]).slice(0,24).forEach(function(r,i,arr){
                 var a=(-90-(i/Math.max(1,arr.length))*ORB.SWEEP)*Math.PI/180;
@@ -5124,32 +5235,58 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               .map(function(t){ return t.realized_r; })
               .filter(function(v){ return v!=null && isFinite(+v); }).slice(0,24);
             window.__orbRows=_rows;
+            // F260901 — THE LEDGER IS BUILT INTO THE BAND, not moved into it afterwards.
+            // The first cut re-parented the ledger card on every PULSE pass. That is the page
+            // "jittering/bouncing around": the scroll container is #z-lab itself, so moving a
+            // card ABOVE the viewport changes what scrollTop points at, and setFace's restore has
+            // already given up by then. Emitting the final order means there is nothing to move.
+            // F260901 - the class switch is BACK, because there is now more than one populated
+            // class to switch between. It was retired on 31-Aug for the right reason: it offered
+            // a choice between one populated view and two empty ones. `marked` changes that -
+            // the operator's own long-position calls are a second real class - so the control
+            // earns its place again. It shows FIB and MARKED always (an empty class the operator
+            // is about to start using must be visible, or he cannot tell the plumbing is there);
+            // swing/positional appear only if they hold anything.
+            var _clsList=['fib','marked'].concat(['swing','positional'].filter(function(k){ return (vCnt[k]||0)>0; }));
+            var _clsSeg='<span class="lgcls">'+_clsList.map(function(k){
+              return '<button class="'+(k===view?'on':'')+'" onclick="tlSetView(&quot;'+k+'&quot;)">'+
+                     esc(TLVLBL[k])+'<i>'+(vCnt[k]||0)+'</i></button>'; }).join('')+'</span>';
+            var _ledgerCard='<div class="card tl-ledger-card lgnarrow"><div class="c-lbl"><span class="d"></span>'+
+              esc(TLVLBL[view])+HT('Your logged trades of this class, newest first, 8 per page. Expand a row for the full hero card. FIB FIRES are the system’s; YOUR MARKED TRADES are the ones you drew a long position on. Performance lives on the Scorecard tab.')+
+              '<span class="age">'+(vCnt[view]||0)+' trades</span></div>'+_clsSeg+
+              '<div id="tl-ledger"></div></div>';
             var _railBody=_rows.length
-              ? ('<div class="orbwrap"><div class="orbstage">'+
+              ? ('<div class="orbwrap orb3">'+_ledgerCard+'<div class="orbstage">'+
                    window.tlOrbitHTML(_rows,_closedR,_queue,_stats)+
                  '</div><div class="orbside" id="orbside"></div></div>'+
                  '<div class="opgrid orbfallback">'+_rows.map(function(x,_i){ return window.tlOpenCard(x.t,opMeth,_i); }).join('')+'</div>'+
                  '<div class="orblegend">'+
                    '<div><k>Distance out</k><span>room above your stop, in R. The centre disc <b>is</b> the stop.</span></div>'+
-                   '<div><k>Around</k><span>when you entered. Newest at 12, older anticlockwise.</span></div>'+
+                   '<div><k>Around</k><span>WHEN you entered. The newest trade sits at 12 o’clock and '+
+                     'time runs <b>anticlockwise</b> ↺ — keep going round and the trades get older, '+
+                     'ending at the OLDEST marker.</span></div>'+
                    '<div><k>Tail</k><span>where it sat 5 sessions ago. Outward = improving, inward = drifting to the stop. No tail = not open long enough to know.</span></div>'+
                    '<div><k>Outer band</k><span>in play with <b>no banked level</b> — they enter the ring once you draw one.</span></div>'+
                    '<div><k>Rim ticks</k><span>recent closed trades. Outward = won, inward = lost.</span></div>'+
                    '<div><k>Centre</k><span>THIS MONTH’s banked result; the arc is the month’s '+
                      'win rate. All-time sits in the panel on the right.</span></div>'+
                  '</div>')
-              : '<div class="tl-attn-empty">✓ No open positions logged.</div>';
+              : ('<div class="tl-attn-empty">✓ No open positions logged.</div>'+_ledgerCard);
             var _kd=window.tlKpiDelta(dailyR, window.tlTodayStr()); var _tR=_kd?(+(_kd.net_r||0)):0;
             var _todayLine=_kd?('<div class="tl-attn-today">Today: <b class="'+(_tR>0?'pos':(_tR<0?'neg':''))+'">'+(_tR>0?'+':'')+_tR.toFixed(2)+'R</b> · '+(_kd.n||0)+' close'+((_kd.n===1)?'':'s')+'</div>'):'';
             var _rail='<div class="card tl-attn"><div class="c-lbl"><span class="d"></span>Open positions'+HT('One card per position the desk currently has logged. The bar shows where price sits between the stop and the target. HOLD = the trailing stop is intact, so the rule is to wait and nothing is asked of you. DECIDE = the stop is breached or the time-cap is here — the only two states where waiting is not the move, and the only place amber appears on this page. WAITING = a resting plan that has not entered. These are the SYSTEM’s logged signals, not your broker book; the Scorecard tab is the real-money record.')+'<span class="age">'+(_dec.length?(_dec.length+' need a decision · '):'')+_rows.length+' open · system-logged</span></div>'+(_dec.length?'':'<div class="fc-note">Nothing needs you — every open position is inside its trailing stop.</div>')+_railBody+_todayLine+'</div>';
-            html=_rail+html;
+            // F260901 — operator-specified order, emitted rather than reflowed:
+            //   fires -> engine-scored -> board -> POSITIONS+LEDGER band -> needs-a-fib-read
+            //   -> decisions pending (desk admin, last).
+            // `html` already holds decisions+fires+confluence+board, so the decisions card is
+            // lifted out of the front and appended after the band. Nothing else moves, ever.
+            html=html+_rail;
             var _sq=(tl&&tl.level_study_queue)||[];
             if(_sq&&_sq.length){
               var _sqRows=_sq.slice(0,8).map(function(q){ return '<div class="fprow"><span class="fpl">'+esc(q.ticker||'')+'</span><span class="fpv">'+esc(q.signal_class||'')+' · '+esc(String(q.reason||'needs level read').slice(0,44))+'</span></div>'; }).join('');
               var fibCard='<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>Needs your fib read'+HT('Set-ups BLOCKED until you draw the level by hand. A swing never trades without a verified read (V-38).')+'<span class="age">'+_sq.length+' blocked</span></div>'+_sqRows+'</div>';
             }
             html+=fibCard;
-            html+=dtPerfCard+'<div class="card tl-ledger-card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>'+esc(TLVLBL[view])+' trade ledger'+HT('Your logged trades of the selected type, newest first, 25 per page. Switch type with the toggle above. Expand a row for the full hero card.')+'<span class="age">'+(vCnt[view]||0)+' '+esc(TLVLBL[view])+' trades</span></div><div id="tl-ledger"></div></div>';
     } else {
       var _sk=function(w){return '<span class="tlk-b" style="width:'+w+'"></span>';};
       var _trow=function(){return '<tr>'+['20%','12%','12%','12%','40px','40px','30%'].map(function(w){return '<td>'+_sk(w)+'</td>';}).join('')+'</tr>';};
@@ -5174,7 +5311,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // block still produced and shown nowhere). The long-horizon Conviction Book on the
     // RESEARCH tab is a DIFFERENT surface and deliberately stays: it is the second of the
     // desk's two books (rules-rebuild-two-books). Only the Radar's duplicate goes.
-    html = html + fibQualityHTML() + signalsBlockHTML();
+    html = html + (_lk?'':_decHTML) + fibQualityHTML() + signalsBlockHTML();
     setFace('z-lab', html);
     try{ window.bdRestoreTracks(); }catch(e4){}
     try{ window.orbMount(); }catch(e5){}
@@ -5951,6 +6088,41 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   .pl-o .t{ font-weight:700; }
   .pl-o .v{ font-family:var(--font-mono); font-size:10px; color:var(--cyan); }
   .pl-o.selling{ border-left-color:var(--neg); } .pl-o.selling .v{ color:var(--neg); }
+
+  /* ---- freshness banner -----------------------------------------------------------------
+     Recomputed in the browser on every render. The producer's own stamp cannot be trusted as
+     an AGE, because the page may be served -- and left open -- long after the emit. */
+  .pl-fresh{ display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono);
+             font-size:10px; padding:3px 9px; border-radius:99px; border:1px solid var(--hair);
+             background:var(--bg2); color:var(--mut); }
+  .pl-fresh .dot{ width:7px; height:7px; border-radius:50%; background:currentColor;
+                  box-shadow:0 0 7px currentColor; flex:0 0 auto; }
+  .pl-fresh.live{ color:var(--pos); border-color:rgba(63,207,122,.45); }
+  .pl-fresh.delayed{ color:var(--watch,#e6b34a); border-color:rgba(230,179,74,.45); }
+  .pl-fresh.stale,.pl-fresh.blind{ color:var(--neg); border-color:rgba(255,107,107,.5);
+                                   background:rgba(255,107,107,.08); }
+  .pl-fresh.prior{ color:var(--watch,#e6b34a); border-color:rgba(230,179,74,.45);
+                   background:rgba(230,179,74,.08); }
+  .pl-fresh.closed,.pl-fresh.preopen{ color:var(--mut); }
+  .pl-fresh b{ color:inherit; font-weight:700; letter-spacing:.04em; }
+  .pl-stamp{ font-family:var(--font-mono); font-size:9.5px; color:var(--faint,#48587d); }
+
+  /* ---- tiles ---------------------------------------------------------------------------- */
+  .pl-t{ min-width:134px; }
+  .pl-t.thin{ opacity:.62; border-style:dashed; }
+  .pl-t-now{ font-family:var(--font-mono); font-size:9.5px; color:var(--mut); margin-top:1px; }
+  .pl-t-now .up{ color:var(--cyan); font-weight:700; }
+  .pl-t-now .dn{ color:var(--faint,#48587d); }
+  .pl-t-peak{ font-family:var(--font-mono); font-size:9px; color:var(--faint,#48587d); }
+  .pl-t-loc{ font-family:var(--font-mono); font-size:9.5px; margin-top:2px; }
+  .pl-t-loc .pos{ color:var(--pos); } .pl-t-loc .neg{ color:var(--neg); }
+  .pl-ch{ display:inline-block; font-size:8.5px; letter-spacing:.05em; padding:0 4px;
+          border-radius:4px; border:1px solid var(--hair); color:var(--mut); margin-top:2px; }
+  .pl-ch.disp{ color:var(--cyan); border-color:rgba(66,219,230,.45); }
+  .pl-ch.abs{ color:var(--watch,#e6b34a); border-color:rgba(230,179,74,.45); }
+  .pl-note{ margin-top:9px; font-size:10.5px; color:var(--mut); line-height:1.6;
+            border-top:1px solid var(--hair); padding-top:8px; }
+  .pl-note b{ color:var(--ink); }
 </style>
 <script>
 (function(){
@@ -6006,7 +6178,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var flow = (r.stance==="BUYING") ? ("<b>"+pct+"% buying</b>")
              : (r.stance==="SELLING") ? ("<b>"+(100-pct)+"% selling</b>")
              : (pct!=null ? (pct+"% buy · mixed") : "flow n/a");
-    return '<div class="'+cls+'">🫀 <b>'+r.rvol.toFixed(1)+'×</b> vol · '+flow+cat
+    var _cum = (r.rvol_cum != null) ? r.rvol_cum : r.rvol;
+    var _now = (r.rvol_now != null)
+      ? (' · <b>' + Number(r.rvol_now).toFixed(1) + '×</b> in the last 30 min') : '';
+    return '<div class="'+cls+'">🫀 <b>'+Number(_cum).toFixed(1)+'×</b> vol today'+_now+' · '+flow+cat
          + '<span class="pl-read '+read.cls+'">'+esc(read.txt)+'</span></div>';
   }
 
@@ -6046,27 +6221,62 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     volumeStrip();
     header();
     reflow();
-    // AFTER reflow: reflow orders the ledger card inside the zone, lab3col then lifts it into the
-    // ring's grid. The other way round and every cycle would pull it back out again.
-    lab3col();
-    lab3colChip();
     fixButtons();
     applied++;
   }
 
   // THE VOLUME STRIP — independent of the fib layer entirely.
   //
-  // Why it exists: decorating fire cards makes a name's volume visible only if that name HAS
-  // a card, and only if that card is expanded. Measured 2026-08-27 — of 26 alive names, 17 sat
-  // on fib cards (mostly COLLAPSED minis) and 9 had no card at all; HINDZINC at 7.0x and
-  // ADANIGREEN at 5.7x were invisible on every surface. And because the whole layer anchored
-  // on the radar card, a locked or empty radar meant NOTHING rendered.
+  // WHAT IT IS, measured rather than asserted (2026-09-01, pulse_journal.py):
+  // 3,291 graded rows over 38 sessions, each against a matched control — a name that was NOT
+  // on the strip, same session, same minute.
+  //     DIRECTION: nothing. -0.08% median vs -0.07% for the control; the paired difference is
+  //                positive in 50.5% of cases, which is a coin flip.
+  //     RANGE:     real and large. 1.52% high-low after appearing vs 1.04% for the control,
+  //                wider in 68.5% of pairs.
+  // So this section finds WHERE THE MOVEMENT IS. It does not call direction, and any copy that
+  // implies it does is lying about what was measured.
   //
-  // This renders regardless, carries EVERY alive name, and is explicitly state, not calls.
+  // It renders regardless of the fib layer: decorating fire cards made a name's volume visible
+  // only if it HAD a card and that card was expanded, so a locked or empty radar rendered
+  // nothing at all.
+
+  // Freshness, recomputed HERE on every render. The producer stamps when IT ran; the page can
+  // sit open for hours afterwards, and a baked-in stamp is not an age.
+  function freshOf(P){
+    var istNow = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+    var istToday = new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"});
+    var sd = P.session_date, iso = P.bars_through_iso, bar = P.bars_through;
+    if(!sd || !bar) return {cls:"blind", label:"NO DATA",
+      note:"PULSE is blind — which is not the same as a quiet market"};
+    if(sd !== istToday) return {cls:"prior", label:"PRIOR SESSION",
+      note:"showing " + sd + " · not today"};
+    var age = iso ? Math.round((Date.now() - Date.parse(iso)) / 60000) : null;
+    var mins = istNow.getHours() * 60 + istNow.getMinutes();
+    var bm = parseInt(bar.slice(0, 2), 10) * 60 + parseInt(bar.slice(3, 5), 10);
+    if(mins < 555)  return {cls:"preopen", label:"PRE-OPEN", note:"the market has not opened"};
+    if(mins > 940)  return (bm >= 915)
+        ? {cls:"closed", label:"SESSION COMPLETE", note:"bars through " + bar}
+        : {cls:"stale", label:"FEED STOPPED EARLY",
+           note:"last bar " + bar + " — the session ran to 15:30"};
+    if(age == null) return {cls:"delayed", label:"AGE UNKNOWN", note:"bars through " + bar};
+    var cls = age <= 25 ? "live" : age <= 50 ? "delayed" : "stale";
+    var lab = age <= 25 ? "LIVE" : age <= 50 ? "RUNNING LATE" : "STALE — a run was missed";
+    return {cls:cls, label:lab, note:"bars through " + bar + " · " + age + " min ago"};
+  }
+
+  function num(x, d){ return (x == null) ? null : Number(x).toFixed(d == null ? 1 : d); }
+
   function volumeStrip(){
-    if(!P || document.querySelector(".pl-vol")) return;
-    var rows = (P.rows||[]).slice().sort(function(a,b){ return b.rvol - a.rvol; });
-    if(!rows.length && !(P.errors||[]).length) return;
+    if(!P) return;
+    // Re-render rather than bail out: the payload refreshes under a page that stays open all
+    // session, and a strip that renders once is a strip that quietly goes out of date.
+    var was = document.querySelector(".pl-vol");
+    if(was && was.dataset.stamp === String(P.generated_at || "")) return;
+    if(was) was.remove();
+
+    var rows = (P.rows || []).slice();
+    if(!rows.length && !(P.errors || []).length && !P.session_date) return;
 
     // Which names the fib layer already shows, so a tile can point at the card below.
     var onCard = {};
@@ -6074,65 +6284,103 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       onCard[n.textContent.trim().split(/\s+/)[0].toUpperCase()] = 1; });
 
     var tiles = rows.map(function(r){
+      var cum = (r.rvol_cum != null) ? r.rvol_cum : r.rvol;   // rvol is the deprecated alias
+      var now = r.rvol_now;
       var cls = r.stance === "BUYING" ? "buying" : r.stance === "SELLING" ? "selling" : "mixed";
-      var pct = (r.buy_frac != null) ? Math.round(r.buy_frac * 100) : null;
-      var flow = (r.stance === "BUYING") ? ("▲ " + pct + "% buy")
-               : (r.stance === "SELLING") ? ("▼ " + (100 - pct) + "% sell")
-               : (pct != null ? ("· " + pct + "% buy") : "· flow n/a");
+      if(r.thin) cls += " thin";
+
+      // "Still going" vs "was busy and died" — the whole reason rvol_now exists.
+      var nowTxt = (now == null) ? '<span class="dn">—</span>'
+        : (now >= 1.5 ? '<span class="up">now ' + num(now) + '&times;</span>'
+                      : '<span class="dn">now ' + num(now) + '&times; · fading</span>');
+
+      var ch = r.char === "DISPLACING" ? '<span class="pl-ch disp">MOVING PRICE</span>'
+             : r.char === "ABSORBING"  ? '<span class="pl-ch abs">GOING NOWHERE</span>' : "";
+
+      var mv = (r.move_pct == null) ? ""
+        : '<span class="' + (r.move_pct >= 0 ? "pos" : "neg") + '">'
+          + (r.move_pct >= 0 ? "+" : "") + num(r.move_pct, 1) + '%</span>';
+      var loc = (r.pos_in_range == null) ? ""
+        : ' · ' + (r.pos_in_range >= 0.66 ? "top of day"
+                 : r.pos_in_range <= 0.33 ? "low of day" : "mid-range");
+
       var lvl = r.level ? '<span class="has">● level</span>'
               : (onCard[String(r.ticker).toUpperCase()] ? '<span class="has">● card</span>'
                                                         : '<span>○ no level</span>');
-      return '<div class="pl-t ' + cls + '" title="' + esc(r.ticker) + ' — ' + r.rvol.toFixed(1) +
-             '× its own normal 09:20-09:45 volume">' +
-             '<div class="pl-t-tk">' + esc(r.ticker) + (r.catalyst_tier ? " ⚡" : "") + '</div>' +
-             '<div class="pl-t-v">' + (r.rvol >= 20 ? Math.round(r.rvol) : r.rvol.toFixed(1)) + '×</div>' +
-             '<div class="pl-t-f">' + flow + '</div>' +
+      var tip = r.ticker + " — " + num(cum) + "x its own normal volume by this time of day"
+              + (r.peak_at ? "; busiest half hour " + r.peak_at : "")
+              + (r.thin ? "; THIN — normal turnover about Rs " + r.adv_cr + " cr/day" : "");
+
+      return '<div class="pl-t ' + cls + '" title="' + esc(tip) + '">' +
+             '<div class="pl-t-tk">' + esc(r.ticker) + (r.catalyst_tier ? " ⚡" : "") +
+               (r.thin ? ' <span style="font-size:8px;opacity:.7">THIN</span>' : "") + '</div>' +
+             '<div class="pl-t-v">' + (cum >= 20 ? Math.round(cum) : num(cum)) + '&times;</div>' +
+             '<div class="pl-t-now">' + nowTxt + '</div>' +
+             (r.peak_at ? '<div class="pl-t-peak">peak ' + num(r.rvol_peak) + '&times; ' +
+                          esc(r.peak_at) + '</div>' : "") +
+             '<div class="pl-t-loc">' + mv + loc + '</div>' +
+             ch +
              '<div class="pl-t-m">' + lvl + '</div></div>';
     }).join("");
 
-    // "Worth a level" as ONE line — the same curated 3-5, without repeating tiles above.
+    // "Worth a level" — names in play with nothing banked. Ranked on the LOUDER of the two
+    // rvols, so a name that only woke up at 14:00 can still make the list.
+    var loud = function(r){ return Math.max(r.rvol_cum || r.rvol || 0, r.rvol_now || 0); };
     var noLvl = rows.filter(function(r){
-      return !r.level && !onCard[String(r.ticker).toUpperCase()]; });
+      return !r.level && !onCard[String(r.ticker).toUpperCase()] && !r.thin; });
     var qualified = noLvl.filter(function(r){
       return r.catalyst_tier === "T1" || r.catalyst_tier === "T2"
-          || r.stance === "BUYING" || r.stance === "SELLING"; });
+          || r.char === "DISPLACING" || loud(r) >= 3; });
     var rank = function(r){
       var v = 0;
       if(r.catalyst_tier === "T1") v += 400; else if(r.catalyst_tier === "T2") v += 180;
-      if(r.stance === "BUYING") v += 120; else if(r.stance === "SELLING") v += 60;
-      return v + Math.min(r.rvol || 0, 12) * 5; };
-    var best = qualified.sort(function(a,b){ return rank(b) - rank(a); }).slice(0, 5);
+      if(r.char === "DISPLACING") v += 120;
+      return v + Math.min(loud(r), 12) * 5; };
+    var best = qualified.sort(function(a, b){ return rank(b) - rank(a); }).slice(0, 5);
     var worth = best.length
       ? '<div class="pl-worth"><b>Worth drawing a level on:</b> ' +
         best.map(function(r){
-          return '<span class="nm">' + esc(r.ticker) + '</span> ' + r.rvol.toFixed(1) + '×' +
+          return '<span class="nm">' + esc(r.ticker) + '</span> ' + num(loud(r)) + '&times;' +
                  (r.catalyst_tier ? " ⚡" : ""); }).join(" · ") +
         (noLvl.length > best.length
           ? ' <span style="opacity:.55">· ' + (noLvl.length - best.length) +
             ' more alive but undefined</span>' : "") + '</div>'
       : "";
 
+    var f = freshOf(P);
     var bad = (P.errors || []).length;
     var el = document.createElement("div");
     el.className = "pl-vol";
+    el.dataset.stamp = String(P.generated_at || "");
     el.innerHTML =
-      '<div class="pl-vol-hd"><span class="pl-vol-t">🫀 Unusual volume today</span>' +
-      '<span class="pl-vol-s">' + (P.n_alive || 0) + " of " + (P.n_measured || 0) +
-        " tracked names past " + (P.alive_threshold || 1.5) + "× their OWN normal open · " +
-        esc(P.opening_range || "") + '</span>' +
-      '<span class="pl-vol-s" style="margin-left:auto">' + esc(P.session_date || "") +
-        " · bars to " + esc(P.bars_through || "—") +
-        (bad ? " · ⚠ DEGRADED" : "") + '</span></div>' +
-      (rows.length ? '<div class="pl-vol-row">' + tiles + '</div>'
-                   : '<div class="pl-vol-s">No name cleared the threshold — a real answer, not a dead feed.</div>') +
+      '<div class="pl-vol-hd">' +
+        '<span class="pl-vol-t">🫀 Where the movement is today</span>' +
+        '<span class="pl-fresh ' + f.cls + '"><span class="dot"></span><b>' + esc(f.label) +
+          '</b> · ' + esc(f.note) + '</span>' +
+        (bad ? '<span class="pl-fresh stale"><span class="dot"></span><b>DEGRADED</b> · ' +
+               esc(String((P.errors || [])[0]).slice(0, 60)) + '</span>' : "") +
+        '<span class="pl-stamp" style="margin-left:auto">session ' +
+          esc(P.session_date || "—") + ' · ' + (P.n_alive || 0) + ' of ' +
+          (P.n_measured || 0) + ' names past ' +
+          ((P.thresholds && P.thresholds.alive_rvol) || P.alive_threshold || 1.5) +
+          '&times; their own normal · built ' + esc(P.as_of_ist || "") + '</span>' +
+      '</div>' +
+      (rows.length
+        ? '<div class="pl-vol-row">' + tiles + '</div>'
+        : '<div class="pl-vol-s">No name cleared the threshold — a real answer, not a dead feed.</div>') +
       worth +
-      '<div class="pl-worth" style="opacity:.6;margin-top:7px">State, not calls. ● = this name has a fib card on the radar below · ○ = no banked level yet.</div>';
+      '<div class="pl-note"><b>What this is:</b> the big number is volume since the open ' +
+        'against what this name normally trades by this time of day; <b>now</b> is the last ' +
+        '30 minutes, so you can tell "still going" from "was busy at 09:20 and died". ' +
+        '<b>It finds where the movement is — it does not tell you which way.</b> ' +
+        'Graded on 3,291 rows against a matched control: direction is a coin flip (50.5%), ' +
+        'but these names swing 1.5% against 1.0% for a name that is not on the list, wider in ' +
+        '68.5% of pairs. Use it to pick what to look at, never as a buy.</div>';
 
-    // Anchor above THE FIRES (.rdr-wrap = "🎯 The Radar · fib-confluence fires"), not above the
-    // engine-scored card (.fc-wrap). Operator, 2026-08-29: during the session all they do is
-    // refresh and check whether the fires moved, so volume has to share that first screenful.
-    // Falls back to the engine card, then any card, then the page top — it must NEVER depend on
-    // one card existing, which was the original bug.
+    // Anchor above THE FIRES, not the engine-scored card: during the session all the operator
+    // does is refresh and check whether the fires moved, so volume has to share that screenful.
+    // Falls back through the engine card to the page top — it must NEVER depend on one card
+    // existing, which was the original bug.
     var anchor = document.querySelector(".card.rdr-wrap")
               || document.querySelector(".card.fc-wrap") || document.querySelector(".card");
     if(anchor && anchor.parentNode) anchor.parentNode.insertBefore(el, anchor);
@@ -6169,51 +6417,30 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  // ---- RADAR PAGE REFLOW (operator-specified 2026-08-29) --------------------------------
-  // The zone was built as: needs-attention, decisions, fires, engine-scored, board, ledger --
-  // because `html = _rail + html` prepends the attention rail to the WHOLE zone. So on every
-  // unlock the operator met two admin cards before the thing they came to look at.
+  // ---- RADAR PAGE TRIM ------------------------------------------------------------------
+  // F260901 - THIS NO LONGER MOVES ANYTHING. It used to re-parent tl-perf / tl-attn /
+  // tl-ledger-card / dec-wrap on every PULSE pass, and lab3col re-parented the ledger on top of
+  // that. The scroll container is #z-lab itself (body and html are overflow:hidden), so moving a
+  // card that sits ABOVE the viewport changes what scrollTop points at and the reader is thrown
+  // somewhere else. setFace restores the offset three times, the last at 320ms - and PULSE runs
+  // on a 250ms debounce triggered by ANY mutation, so the moves regularly landed after the
+  // restore had given up. That is the "jittering/bouncing around", and every button that
+  // re-renders (pager, class toggle, unlock, the 60s refresh) triggered another round of it.
   //
-  // New order: volume · FIRES · engine-scored · board · decisions · needs-attention · ledger.
-  // Nothing is deleted and nothing is re-rendered; nodes are moved. Reverting = delete this.
+  // renderLab now emits the operator's order directly. What is left here is the small stuff that
+  // genuinely depends on PULSE data and is idempotent: hide the watch sub-list, size the fires
+  // grid, and put the volume strip above the fires.
   function reflow(){
     var fires = document.querySelector(".card.rdr-wrap");
     if(!fires || !fires.parentNode) return;
     var zone = fires.parentNode;
 
-    // The board is a generic .card -- identify it by its own children, never by position.
-    var board = null;
-    Array.prototype.forEach.call(zone.children, function(c){
-      if(!board && c.classList && c.classList.contains("card") &&
-         (c.querySelector(".bd-t") || c.querySelector(".bd-nb"))) board = c; });
-
-    // F260831 -- ORDER AFTER THE BOARD, operator-specified:
-    //     fib fires performance -> open positions -> fib fires trade ledger
-    // "Needs attention" is gone as a section; `.card.tl-attn` is now the OPEN POSITIONS card,
-    // and the decision it used to nag about lives on the amber card inside it. Decisions
-    // pending sits after the ledger: it is desk admin, not a trade, and it was meeting the
-    // operator before the thing they came to look at.
-    var after = board || document.querySelector(".card.fc-wrap") || fires;
-    var ORDER = ["tl-perf", "tl-attn", "tl-ledger-card", "dec-wrap"];
-    ORDER.forEach(function(cls){
-      var el = zone.querySelector(".card." + cls);
-      if(!el || el === after || el.parentNode !== zone) return;
-      // F260831 -- MOVE ONLY IF IT IS NOT ALREADY THERE.
-      // insertBefore on a node that is already in the target position is a no-op visually and a
-      // MUTATION regardless: it fires removedNodes + addedNodes. The observer below does not
-      // recognise a moved card as "ours" (it only whitelists pl-* INSERTIONS), so every cycle
-      // re-ordered nodes that were already ordered, saw its own mutations, and scheduled another
-      // cycle 250ms later -- forever. That is the flicker on hover and the page jumping around.
-      if(after.nextSibling === el){ after = el; return; }
-      after.parentNode.insertBefore(el, after.nextSibling);
-      after = el;
-    });
-
-    // The volume strip belongs immediately above the fires.
+    // The volume strip belongs immediately above the fires. volumeStrip() INSERTS it once, so
+    // this is a one-time placement rather than a per-pass reorder.
     var vol = document.querySelector(".pl-vol");
     if(vol && vol.nextElementSibling !== fires && vol.parentNode) zone.insertBefore(vol, fires);
 
-    // Drop the "Watch · structurally sound, not actionable yet" list. Operator: it was never a
+    // Drop the "Watch - structurally sound, not actionable yet" list. Operator: it was never a
     // decision, and it pushed everything below it out of view. HIDDEN, not deleted, so the
     // payload stays falsifiable and this is one line to undo.
     var sub = fires.querySelector(".c-lbl.sub");
@@ -6223,67 +6450,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     }
 
     // Fire cards keep every field; the grid tightens past two so a busy day still fits one
-    // screenful instead of running off the bottom.
+    // screenful. Written only when it would actually change, so it cannot feed the observer.
     var grid = fires.querySelector(".rdr-grid");
     if(grid && grid.children.length){
-      grid.style.gridTemplateColumns = "repeat(auto-fit,minmax(" +
-        (grid.children.length <= 2 ? "330px" : "252px") + ",1fr))";
+      var want = "repeat(auto-fit,minmax(" + (grid.children.length <= 2 ? "330px" : "252px") + ",1fr))";
+      if(grid.style.gridTemplateColumns !== want) grid.style.gridTemplateColumns = want;
     }
-  }
-
-  // ── F260901 — THE LEDGER MOVES LEFT OF THE RING ─────────────────────────────────────────────
-  // Operator, 01-Sep: "the fib fires trade ledger after the ring ... can actually be accomodated
-  // to the left of the ring thereby making the entire trade ledger section more compact and
-  // efficient at navigating. basically it should be a 3 column style laytout."
-  //
-  // So: ledger | ring | selected-trade detail, in one band. Built as a node MOVE, the same
-  // mechanic reflow() already uses -- ONE ledger card, ONE renderer, one #tl-ledger in the DOM.
-  // Forking a second narrow ledger would have been quicker and would have drifted from the first
-  // one within a session.
-  //
-  // The layout is a TOGGLE, persisted per browser, because a layout cannot be judged from a
-  // description -- and the operator has been handed a live nav change with no way back before.
-  // Flipping the default is one line here; the old stacked page is one click for him.
-  function lab3col(on){
-    var wrap = document.querySelector(".orbwrap");
-    var card = document.querySelector(".card.tl-ledger-card");
-    var attn = document.querySelector(".card.tl-attn");
-    if(!wrap || !card || !attn) return;
-    var want = (on == null) ? tlLab3col() : !!on;
-    var inside = card.parentNode === wrap;
-    if(want === inside){ wrap.classList.toggle("orb3", want); card.classList.toggle("lgnarrow", want); return; }
-    if(want){
-      wrap.insertBefore(card, wrap.firstChild);           // column 1, left of the ring
-    } else {
-      // Back where reflow() puts it: straight after the open-positions card.
-      attn.parentNode.insertBefore(card, attn.nextSibling);
-    }
-    wrap.classList.toggle("orb3", want);
-    card.classList.toggle("lgnarrow", want);
-    // The page size changes with the column width, so the ledger has to be re-paged, not just
-    // re-parented -- otherwise page 3 of 3 becomes page 3 of 7 and silently shows the wrong slice.
-    window.__tlPage = 0;
-    try { window.tlRenderLedger(); } catch(e){}
-  }
-
-  // The toggle chip lives in the OPEN POSITIONS header, not inside the ledger card -- a control
-  // must never live inside the thing it moves (the F260831 lesson: the class toggle went missing
-  // whenever the card it sat in was gated away).
-  function lab3colChip(){
-    var attn = document.querySelector(".card.tl-attn .c-lbl");
-    if(!attn || attn.querySelector(".lay3")) return;
-    var b = document.createElement("span");
-    b.className = "lay3";
-    var paint = function(){ b.textContent = tlLab3col() ? "layout: 3-column" : "layout: stacked";
-                            b.classList.toggle("on", tlLab3col()); };
-    paint();
-    b.title = "Where the trade ledger sits: beside the ring, or full-width below it.";
-    b.addEventListener("click", function(){
-      var next = !tlLab3col();
-      try { localStorage.setItem("lab3col", next ? "1" : "0"); } catch(e){}
-      lab3col(next); paint();
-    });
-    attn.appendChild(b);
   }
 
   // A summary strip on the radar card, plus the names that are alive but have NO level --
@@ -6366,7 +6538,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1788236849&t="+Date.now())
+  fetch("data/pulse.json?v=1788266321&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
@@ -6387,13 +6559,13 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         // A mutation is "ours" if every node involved is one we inserted OR one we merely
         // MOVED. The original test looked only at addedNodes and only at pl-* classes, so a
         // re-ordered card read as someone else's change and re-armed the loop.
-        var MINE = ["pl-today","pl-strip","pl-orphan","pl-vol","pl-fix","lay3"];
-        var MOVED = ["tl-perf","tl-attn","tl-ledger-card","dec-wrap","fc2","pl-vol"];
+        // F260901 - the MOVED whitelist is gone with the moves. `fc2` stays because the sort
+        // toggle genuinely re-orders the fire cards on the operator's own click.
+        var MINE = ["pl-today","pl-strip","pl-orphan","pl-vol","pl-fix","fc2"];
         var mine = function(n){ return n.nodeType === 1 && MINE.some(function(c){ return n.classList.contains(c); }); };
-        var moved = function(n){ return n.nodeType === 1 && MOVED.some(function(c){ return n.classList.contains(c); }); };
         var ours = muts.every(function(m){
-          return Array.prototype.every.call(m.addedNodes, function(n){ return mine(n) || moved(n); })
-              && Array.prototype.every.call(m.removedNodes, function(n){ return mine(n) || moved(n); });
+          return Array.prototype.every.call(m.addedNodes, mine)
+              && Array.prototype.every.call(m.removedNodes, mine);
         });
         if(ours) return;
         clearTimeout(pending);
