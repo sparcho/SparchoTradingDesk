@@ -102,6 +102,9 @@ ALL_TICKERS = [
     'VEDPOWER',
     'VOLTAMP',
     'WABAG',
+    # 2026-09-01 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'ALLCARGO',
 ]
 
 # Special ticker -> Yahoo symbol mappings (default rule = ticker + '.NS')
