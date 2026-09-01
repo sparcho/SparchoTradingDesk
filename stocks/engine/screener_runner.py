@@ -80,6 +80,7 @@ SECTOR_MAP = {
     },
     # Other clusters (kept for context; not used by Fundamental-10G #1 but useful for future screeners)
     'MINERALS': {'GMDCLTD', 'MOIL', 'HINDZINC', 'GRAPHITE', 'VEDL', 'DECNGOLD', 'HINDCOPPER',
+                 'GRAVITA',   # +260901 lead/aluminium recycling; banked and tracked
                  'HINDALCO'},   # +HINDALCO 260820 (aluminium + copper integrated producer)   # +DECNGOLD 260619 (gold explorer); +HINDCOPPER 260630 (copper PSU onboard)
     'TELECOM': {'HFCL', 'STLTECH', 'TEJASNET', 'BHARTIARTL', 'POLYCAB', 'KEI', 'PACEDIGITK'},   # +PACEDIGITK 260619 (held; telecom-digital infra)
     'DEFENCE': {'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO', 'BHARATFORG', 'BDL', 'DATAPATTNS',
@@ -96,6 +97,10 @@ SECTOR_MAP = {
     # +260808 infrastructure EPC. No existing coarse tag fitted a diversified engineering
     # contractor; without ANY entry the name renders under UNCATEGORIZED (F260619 item 3).
     'INFRA': {'LT', 'WABAG'},
+    # +260901 ALLCARGO (held). Multimodal logistics / contract logistics -- no existing coarse
+    # tag fitted, and without ANY entry a held name renders UNCATEGORIZED on the desk
+    # (F260619 item 3), the second of the two hidden onboarding gates.
+    'LOGISTICS': {'ALLCARGO'},
     # +260808 F260727-BANKED-OUTSIDE onboarding. Power equipment / T&D joins POWER; defence
     # electronics joins DEFENCE; railways gets its own tag -- 8 names is a real sector, and
     # folding them into DEFENCE would have muddied a screen the operator reads by sector.

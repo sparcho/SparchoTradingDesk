@@ -105,6 +105,7 @@ ALL_TICKERS = [
     # 2026-09-01 auto-heal (system_doctor): these were tracked by the vault and
     # invisible to every cloud job. See check_cloud_engine_contracts.
     'ALLCARGO',
+    'GRAVITA',   # +260901 vault parity: banked fib read, tracked; the cloud jobs were blind to it
 ]
 
 # Special ticker -> Yahoo symbol mappings (default rule = ticker + '.NS')
