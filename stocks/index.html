@@ -6299,11 +6299,21 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var mx = Math.max.apply(null, vals.concat([2]));
       var lg = function(v){ return Math.log(1 + Math.max(v, 0)) / Math.log(1 + mx); };
       var normPct = (1 - lg(1)) * 100;          // where "its own normal" sits, measured top-down
-      var hot = peakT ? String(peakT).slice(0, 5) : null;
+      // The peak window is scanned at the 5-minute grid, so it lands ON a bucket boundary only
+      // by luck -- matching the start time exactly lit nothing on 34 of 35 live tiles. Light
+      // every bucket the window OVERLAPS, so the PEAK label and the chart point at each other.
+      var mn = function(t){ return parseInt(t.slice(0,2),10)*60 + parseInt(t.slice(3,5),10); };
+      var pk = null;
+      if(peakT && String(peakT).indexOf("-") > 0){
+        var pp = String(peakT).split("-");
+        pk = [mn(pp[0]), mn(pp[1])];
+      }
       var bars = prof.map(function(p){
         if(p.rv == null) return '<div class="b na" style="height:3px"></div>';
         var h = Math.max(2, Math.round(lg(p.rv) * 23));
-        var c = (hot && p.t === hot) ? "hot" : (p.rv < 1 ? "low" : "");
+        var b0 = mn(p.t), b1 = b0 + 30;
+        var isHot = pk && b0 < pk[1] && b1 > pk[0];
+        var c = isHot ? "hot" : (p.rv < 1 ? "low" : "");
         return '<div class="b ' + c + '" style="height:' + h + 'px" title="' +
                p.t + ' · ' + Number(p.rv).toFixed(1) + '×"></div>';
       }).join("");
