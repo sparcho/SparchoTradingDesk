@@ -1,8 +1,30 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-09-01T13:50:04+00:00",
+  "updated_at_utc": "2026-09-01T18:04:56+00:00",
   "events": [
+    {
+      "ts": "2026-09-01T23:34:53+05:30",
+      "ts_utc": "2026-09-01T18:04:53+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver-dashboard",
+      "spotted": "silver aggregate 175m stale",
+      "action_taken": "re-triggered silver 20-min refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-01T23:34:53+05:30",
+      "ts_utc": "2026-09-01T18:04:53+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 2 grayed item(s): block:current_price, block:sr_levels",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-09-01T19:20:01+05:30",
       "ts_utc": "2026-09-01T13:50:01+00:00",
@@ -528,28 +550,6 @@
       "subsystem": "equity-dashboard",
       "spotted": "equity aggregate 144m stale (tol 90m, off-hours)",
       "action_taken": "re-triggered live-refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-08-27T18:55:40+05:30",
-      "ts_utc": "2026-08-27T13:25:40+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 144m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-08-27T18:55:45+05:30",
-      "ts_utc": "2026-08-27T13:25:45+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver:silver_book",
-      "spotted": "(event redacted — would have exposed sensitive data)",
-      "action_taken": "(redacted)",
       "outcome": "pending",
       "source": "cloud-watchdog"
     }
