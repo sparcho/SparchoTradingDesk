@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1788196325">
-<meta name="x-built-at" content="2026-08-31T17:11:32+00:00">
+<meta name="x-build-id" content="1788236849">
+<meta name="x-built-at" content="2026-09-01T04:26:53+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1788196325",BUILT_AT="2026-08-31T17:11:32+00:00";
+  var BID="1788236849",BUILT_AT="2026-09-01T04:26:53+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1390,6 +1390,36 @@
 }
 .dtseg-note{font-family:'Space Mono',ui-monospace,monospace;font-size:9px;letter-spacing:.05em;
   color:var(--faint);margin-left:auto}
+/* F260901 — fib performance, month by month. Operator: last month's mechanics should not be
+   dragging today's number around. The bar is the SIZE of the month's result, coloured by sign;
+   colour on this page carries state and nothing else. */
+.mperf{margin:2px 0 13px}
+.mp-h,.mp-r{display:grid;grid-template-columns:78px 54px 76px 68px 74px minmax(60px,210px);
+  gap:10px;align-items:center;padding:7px 2px}
+.mp-h{font-family:'Space Mono',ui-monospace,monospace;font-size:8.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--faint);padding-bottom:4px;border-bottom:1px solid var(--hair)}
+.mp-r{border-bottom:1px solid var(--hair);font-size:12px}
+.mp-r:last-of-type{border-bottom:none}
+.mp-r.cur{background:rgba(255,255,255,.022)}
+.mp-m{font-weight:650;color:var(--ink)}
+.mp-m i{font-family:'Space Mono',ui-monospace,monospace;font-size:8px;font-style:normal;
+  letter-spacing:.08em;color:var(--cyan);margin-left:5px;text-transform:uppercase}
+.mp-n,.mp-a,.mp-c{font-family:'Space Mono',ui-monospace,monospace;font-size:12.5px;color:var(--ink2)}
+.mp-w{font-family:'Space Mono',ui-monospace,monospace;font-size:12px;color:var(--ink2)}
+.mp-w i{display:block;font-style:normal;font-size:8.5px;color:var(--faint);margin-top:1px}
+.mp-a.pos,.mp-c.pos{color:var(--pos)} .mp-a.neg,.mp-c.neg{color:var(--neg)}
+.mp-b{height:6px;border-radius:3px;background:rgba(255,255,255,.05);overflow:hidden}
+.mp-b i{display:block;height:100%;border-radius:3px;background:var(--mut)}
+.mp-b i.pos{background:var(--pos)} .mp-b i.neg{background:var(--neg)}
+.mp-all{margin-top:9px;font-size:11px;color:var(--mut)}
+.mp-all b.pos{color:var(--pos)} .mp-all b.neg{color:var(--neg)}
+.mp-lt{font-family:'Space Mono',ui-monospace,monospace;font-size:8.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--faint);margin:4px 0 7px;padding-top:10px;
+  border-top:1px solid var(--hair)}
+@media(max-width:640px){
+  .mp-h,.mp-r{grid-template-columns:60px 40px 58px 52px 62px;gap:7px;font-size:11px}
+  .mp-b{display:none}
+}
 /* F260831 — The Orbit. Colour carries state and nothing else. */
 .orbwrap{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:center;margin-top:6px}
 .orbstage{display:flex;justify-content:center}
@@ -1417,7 +1447,7 @@
 .orbk{border-left:2px solid var(--hair);padding:2px 0 2px 12px;margin-bottom:12px}
 .orbk b{display:block;font-family:'Space Mono',ui-monospace,monospace;font-size:21px;font-weight:700;
   letter-spacing:-.02em;color:var(--ink)}
-.orbk b.pos{color:var(--pos)} .orbk b.watch{color:var(--watch)}
+.orbk b.pos{color:var(--pos)} .orbk b.neg{color:var(--neg)} .orbk b.watch{color:var(--watch)}
 .orbk span{display:block;color:var(--mut);font-size:11px;margin-top:3px;line-height:1.45}
 .orbhint{color:var(--faint);font-size:10px;font-family:'Space Mono',ui-monospace,monospace;margin-top:2px}
 .orblegend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px 20px;
@@ -1427,11 +1457,54 @@
 .orblegend k{font-family:'Space Mono',ui-monospace,monospace;font-size:8.5px;color:var(--faint);
   letter-spacing:.06em;flex:0 0 72px;text-transform:uppercase;padding-top:1px}
 .orbfallback{display:none}
+/* F260901 — the three-column trade-ledger band: ledger | ring | selected trade.
+   Operator: "basically it should be a 3 column style laytout ... more compact and efficient at
+   navigating." The ledger card is MOVED into this grid (one card, one renderer), so it needs its
+   card chrome neutralised here rather than a second stylesheet for a second copy of it. */
+.orbwrap.orb3{grid-template-columns:minmax(262px,330px) minmax(0,1fr) minmax(232px,300px);
+  gap:18px;align-items:start}
+.orbwrap.orb3 .orbstage{align-items:center}
+.orbwrap.orb3 .orbside{min-height:0;align-self:center}
+.orbwrap.orb3 > .card.tl-ledger-card{background:none;border:0;border-right:1px solid var(--hair);
+  border-radius:0;padding:0 17px 0 0;margin:0;box-shadow:none;min-width:0}
+.orbwrap.orb3 > .card.tl-ledger-card:hover{transform:none}
+/* In a 320px column the seven-column row cannot be read. Same reduction the narrow-viewport rule
+   already makes -- the constraint here is the COLUMN, so it hangs off the class, not the media
+   query, and both can apply at once without fighting. */
+.tl-ledger-card.lgnarrow .lg-r{grid-template-columns:10px minmax(0,1fr) 52px 58px 10px;
+  gap:8px;padding:7px 0}
+.tl-ledger-card.lgnarrow .lg-tk{font-size:12px;overflow:hidden;text-overflow:ellipsis}
+.tl-ledger-card.lgnarrow .lg-hold,
+.tl-ledger-card.lgnarrow .lg-say{display:none}
+.tl-ledger-card.lgnarrow .lg-d{padding:4px 0 16px 19px}
+.tl-ledger-card.lgnarrow .tlpg{font-size:9px;gap:6px}
+.tl-ledger-card.lgnarrow .tlpg button{padding:2px 8px;font-size:9px}
+.lay3{margin-left:auto;font-family:'Space Mono',ui-monospace,monospace;font-size:8.5px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--faint);cursor:pointer;
+  border:1px solid var(--hair);border-radius:11px;padding:2px 9px;white-space:nowrap;
+  transition:color .15s,border-color .15s}
+.lay3:hover{color:var(--ink2);border-color:var(--border)}
+.lay3.on{color:var(--cyan);border-color:rgba(66,219,230,.32)}
+/* Below the ring's readable width the whole band collapses: the ring and its side panel give way
+   to the flat fallback cards, and the ledger goes back to full width rather than vanishing with
+   the grid it was sitting in. */
+@media(max-width:1180px){
+  .orbwrap.orb3{grid-template-columns:minmax(0,1fr) minmax(232px,300px)}
+  .orbwrap.orb3 > .card.tl-ledger-card{grid-column:1/-1;border-right:0;
+    border-top:1px solid var(--hair);padding:14px 0 0}
+  .tl-ledger-card.lgnarrow .lg-r{grid-template-columns:11px 104px 84px 148px 76px 1fr 14px;gap:11px}
+  .tl-ledger-card.lgnarrow .lg-hold,
+  .tl-ledger-card.lgnarrow .lg-say{display:block}
+}
 /* Below ~900px a 600px ring cannot be read. Fall back to the cards — same information, laid
    out flat — rather than shipping a chart nobody can use on a narrow screen. */
 @media(max-width:900px){
-  .orbwrap{display:none}
+  /* F260901 — hide the RING, not the band. The ledger now lives inside .orbwrap in 3-column mode,
+     so `display:none` on the wrapper took the trade ledger down with it on any narrow screen. */
+  .orbstage,.orbside{display:none}
+  .orbwrap{display:block}
   .orbfallback{display:grid}
+  .orbwrap.orb3 > .card.tl-ledger-card{border-right:0;padding:0;border-top:0}
 }
 .bd-trk-h{cursor:pointer;user-select:none}
 .bd-trk-h:hover{color:var(--ink)}
@@ -3557,10 +3630,20 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var unre=rows.reduce(function(a,x){ return a+((x.t.unrealized_r!=null)?+x.t.unrealized_r:0); },0);
       var k=function(b,c,t){ return '<div class="orbk"><b class="'+(c||'')+'">'+b+'</b><span>'+t+'</span></div>'; };
       side.innerHTML='<div class="orbidle"><div class="orbih">the book, right now</div>'+
-        k((v.cum_r!=null?((v.cum_r>=0?'+':'')+(+v.cum_r).toFixed(1)+'×'):'—'),'pos',
-          'banked in risk units — what the system has made, counted against what it risked')+
+        // F260901 — this figure was hardcoded to the WINNING colour, so the all-time −25.6× has
+        // been rendering green. orbit_render.test.mjs pins exactly this for the ring's hub ("a
+        // LOSING book never wears the winning colour"); the side panel is the same reading and
+        // was missed. Colour on this page carries state and nothing else.
+        //
+        // It is also labelled ALL TIME now. The hub beside it reads the CURRENT MONTH since the
+        // month split, and two figures in the same unit, a hand's width apart, must each say
+        // which question they answer.
+        k((v.cum_r!=null?((v.cum_r>=0?'+':'')+(+v.cum_r).toFixed(1)+'×'):'—'),
+          (v.cum_r==null?'':(v.cum_r>=0?'pos':'neg')),
+          'all time, banked in risk units — what the system has made, counted against what it '+
+          'risked. The ring shows this month.')+
         k((v.hit!=null?(Math.round(v.hit*100)+'%'):'—'),'',
-          'of '+(v.n||0)+' closed trades made money')+
+          'of '+(v.n||0)+' closed trades made money, all time')+
         k(dec,(dec?'watch':''),(dec?'need a decision':'need a decision')+' · '+
           rows.filter(function(x){return !x.d.act;}).length+' holding or waiting')+
         k(q,'', 'in play with no banked level — the outer band')+
@@ -4629,10 +4712,18 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
           (deep?('<details class="lgmore"><summary>▸ the level, the ladder, and what other stop rules would have done</summary>'+deep+'</details>'):'');
       };
 
+      // ── F260901 — HOW MANY TRADES FIT ON A PAGE ──────────────────────────────────────────
+      // Operator, 01-Sep: "dont include too many trades in th emasterledger otherwise theentire
+      // section will become really long." Beside the ring the ledger is a ~320px column next to a
+      // 580px chart, so a 25-row page runs three ring-heights down the page and undoes the whole
+      // point of moving it there. Stacked full-width it keeps the longer page -- the constraint is
+      // the COLUMN, not a change of mind about how much history is worth showing.
+      window.tlLedgerPerPage=function(threeCol){ return threeCol?8:25; }; //@pure
+      window.tlLab3col=function(){ try{ var v=localStorage.getItem('lab3col'); return v==null?true:v==='1'; }catch(e){ return true; } };
       window.tlRenderLedger=function(){ var el=document.getElementById('tl-ledger'); if(!el) return;
         var view=window.__tlView||'fib';
         var all=(window.__tlOpen||[]).concat(window.__tlClosed||[]).filter(function(t){return window.tlViewOf(t)===view;}).slice().sort(function(a,b){ return String(window.tlActDate(b)||'').localeCompare(String(window.tlActDate(a)||'')); });
-        var PER=25, total=all.length, pages=Math.max(1,Math.ceil(total/PER)), pg=window.__tlPage||0; if(pg<0)pg=0; if(pg>pages-1)pg=pages-1; window.__tlPage=pg;
+        var PER=window.tlLedgerPerPage(window.tlLab3col()), total=all.length, pages=Math.max(1,Math.ceil(total/PER)), pg=window.__tlPage||0; if(pg<0)pg=0; if(pg>pages-1)pg=pages-1; window.__tlPage=pg;
         var slice=all.slice(pg*PER,(pg+1)*PER);
         var nav='<div class="tlpg"><button onclick="tlLedgerPage(-1)"'+(pg<=0?' disabled':'')+'>‹ prev</button><span>'+(total?(pg*PER+1):0)+'–'+Math.min((pg+1)*PER,total)+' of '+total+' · page '+(pg+1)+'/'+pages+'</span><button onclick="tlLedgerPage(1)"'+(pg>=pages-1?' disabled':'')+'>next ›</button></div>';
         // F260831 - rows, not a 13-column table. tlTableHtml is kept and still used
@@ -4651,6 +4742,21 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var vCnt={}; (window.__tlOpen||[]).concat(window.__tlClosed||[]).forEach(function(t){ var k=window.tlViewOf(t); if(k) vCnt[k]=(vCnt[k]||0)+1; });
       var dpKp=function(l,val,sub,c){ return '<div class="kpi"><div class="kl">'+l+'</div><div class="kv sm '+(c||'')+'">'+val+'</div><div class="ks">'+esc(sub)+'</div></div>'; };
       var vHit=(v.hit!=null?Math.round(v.hit*100):null);
+      // ── F260901 — PERFORMANCE BY MONTH, NOT BY LIFETIME ───────────────────────────────────
+      // Operator, 01-Sep: "can we display every month's performance instead of total? i feel that
+      // the mistakes of last month's mechanics of how we traded affect todays unnecessarily. we
+      // have changed our way of applying our logic, not started to read things in a different way."
+      //
+      // He is right as a measurement, not only as a preference: of the lifetime -25.6x, -26.5 was
+      // booked by trades ENTERED in one month. A single figure spanning two sets of mechanics
+      // describes neither. The rows are cut by the PRODUCER from the same closed-trade set as the
+      // totals (trade_tracker_emit._months), so they always add back up -- and the all-time line
+      // at the bottom prints that sum rather than asserting it in a comment. Nothing is hidden by
+      // the split: the lifetime number is still there, it just stops being the headline.
+      //
+      // One line each, because the //@pure harness extracts by line (perf_logic.test.mjs).
+      window.tlMonthName=function(k){ var p=String(k||'').split('-'), M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return (M[(+p[1])-1]||k)+" '"+String(p[0]).slice(2); }; //@pure
+      window.tlMonthRows=function(v){ var ms=(v&&v.by_month)||[]; if(!ms.length) return ''; var mag=1; ms.forEach(function(m){ mag=Math.max(mag,Math.abs(+m.cum_r||0)); }); var sgn=function(x){ return x==null?'':(x>0?'pos':(x<0?'neg':'')); }; var num=function(x,d){ return (x==null||isNaN(x))?'—':((x>0?'+':'')+(+x).toFixed(d==null?1:d)); }; var rows=ms.map(function(m,i){ var w=Math.max(2,Math.abs(+m.cum_r||0)/mag*100); return '<div class="mp-r'+(i?'':' cur')+'"><span class="mp-m">'+window.tlMonthName(m.month)+(i?'':' <i>now</i>')+'</span><span class="mp-n">'+(m.n||0)+'</span><span class="mp-w">'+(m.hit!=null?Math.round(m.hit*100)+'%':'—')+'<i>'+(m.n_win||0)+' of '+(m.n||0)+'</i></span><span class="mp-a '+sgn(m.avg_r)+'">'+(m.avg_r==null?'—':((m.avg_r>0?'+':'')+Math.round(m.avg_r*100)+'%'))+'</span><span class="mp-c '+sgn(m.cum_r)+'">'+num(m.cum_r,1)+'×</span><span class="mp-b"><i class="'+sgn(m.cum_r)+'" style="width:'+w.toFixed(0)+'%"></i></span></div>'; }).join(''); return '<div class="mperf"><div class="mp-h"><span>Month</span><span>Trades</span><span>Won</span><span>Avg/trade</span><span>Banked</span><span></span></div>'+rows+'<div class="mp-all">All time, every month added together: <b class="'+sgn(v.cum_r)+'">'+num(v.cum_r,1)+'×</b> over '+(v.n||0)+' trades</div></div>'; }; //@pure
       var dtPerfKpis='<div class="kpis kpis4">'+
         dpKp('Trades'+HT('Number of trades in this view.'),v.n||0,(v.n_system||0)+' sys · '+(v.n_operator||0)+' op'+(v.n_open?(' · '+v.n_open+' open'):''))+
         dpKp('Win rate'+HT('Share of closed trades that finished in profit.'),vHit!=null?vHit+'%':'—',(v.n_win||0)+'W realized',vHit==null?'':(vHit>=50?'pos':(vHit>=40?'watch':'neg')))+
@@ -4677,7 +4783,14 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var dtPerfCard='<div class="card tl-perf" style="margin-bottom:13px">'+
         '<div class="tldv-bar"><div class="c-lbl" style="margin:0"><span class="d"></span>'+esc(TLVLBL[view])+' Performance'+_glossHT+'</div>'+tlToggle+'</div>'+
         ((v&&v.n)
-          ? ('<div class="sigbanner">▸ <b>Your executed '+esc(TLVLBL[view])+' trades</b> (system + operator) — not a signal backtest.'+(v.model_note?(' <i style="color:var(--faint);font-style:normal">'+esc(v.model_note)+'</i>'):'')+'</div>'+dtPerfKpis)
+          ? ('<div class="sigbanner">▸ <b>Your executed '+esc(TLVLBL[view])+' trades</b>, month by month (system + operator) — not a signal backtest.'+(v.model_note?(' <i style="color:var(--faint);font-style:normal">'+esc(v.model_note)+'</i>'):'')+'</div>'+
+             // F260901 — months lead, the lifetime total follows. The KPI row is KEPT and moved
+             // BELOW the months rather than deleted: it is the same four numbers the rest of the
+             // desk quotes, and a figure that vanishes from one surface while other cards still
+             // rank on it is how two surfaces start disagreeing. It is now labelled as the
+             // all-time cut, so nothing here is ever read as "this month".
+             (window.tlMonthRows(v)||'')+
+             '<div class="mp-lt">All time</div>'+dtPerfKpis)
           : ('<div class="fc-note">No '+esc(TLVLBL[view])+' trades logged yet — nothing has been taken in this class. '+
              'This is an honest empty, not a broken card. Switch class above.</div>'))+
         '</div>';
@@ -4970,8 +5083,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                   '" text-anchor="middle" fill="'+L.fill+'"'+(L.i!=null?(' data-i="'+L.i+'"'):'')+'>'+esc(L.tk)+'</text>');
               });
               // hub
-              var wr=(stats&&stats.hit!=null)?Math.round(stats.hit*100):null;
-              var cum=(stats&&stats.cum_r!=null)?(+stats.cum_r):null;
+              // F260901 -- THE HUB READS THE CURRENT MONTH. The Performance card above was split
+              // by month because a lifetime figure spanning two sets of mechanics describes
+              // neither; the hub was the biggest number on the same screen still showing the
+              // lifetime one. Changing one card and leaving its sibling on the same input is how
+              // a page starts saying two things at once. All-time is not hidden -- it keeps its
+              // labelled home in the side panel. Degrades to the lifetime figure when no monthly
+              // cut is shipped, so an older payload renders the old reading rather than a dash.
+              var _mo=(stats&&stats.by_month&&stats.by_month.length)?stats.by_month[0]:null;
+              var _sc=_mo||stats||{};
+              var wr=(_sc.hit!=null)?Math.round(_sc.hit*100):null;
+              var cum=(_sc.cum_r!=null)?(+_sc.cum_r):null;
               var dash=(wr!=null?(wr/100*540):0);
               // Colour BY SIGN. v1 drew -25.6x in the winning green, which is the one thing
               // colour on this page is not allowed to do.
@@ -4983,9 +5105,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                 '<text class="orb-hub" x="350" y="346" text-anchor="middle" fill="'+hcol+'">'+
                   (cum!=null?((cum>=0?'+':'')+cum.toFixed(1)):'—')+'</text>',
                 '<text class="orb-ax" x="350" y="367" text-anchor="middle">× RISK '+
-                  (cum!=null&&cum<0?'LOST':'BANKED')+'</text>',
+                  (cum!=null&&cum<0?'LOST':'BANKED')+(_mo?(' · '+window.tlMonthName(_mo.month).toUpperCase()):'')+'</text>',
                 '<text class="orb-ax" x="350" y="385" text-anchor="middle" fill="var(--mut)">'+
-                  (wr!=null?(wr+'% OF '+(stats.n||0)+' WON'):'no closed trades yet')+'</text>');
+                  (wr!=null?(wr+'% OF '+(_sc.n||0)+' WON'):'no closed trades yet')+'</text>');
               return '<svg class="orbsvg" viewBox="0 0 700 706"><defs>'+
                 '<radialGradient id="orbDanger"><stop offset="0%" stop-color="rgba(255,95,109,.18)"/>'+
                 '<stop offset="100%" stop-color="rgba(255,95,109,0)"/></radialGradient></defs>'+S.join('')+'</svg>';
@@ -5013,7 +5135,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
                    '<div><k>Tail</k><span>where it sat 5 sessions ago. Outward = improving, inward = drifting to the stop. No tail = not open long enough to know.</span></div>'+
                    '<div><k>Outer band</k><span>in play with <b>no banked level</b> — they enter the ring once you draw one.</span></div>'+
                    '<div><k>Rim ticks</k><span>recent closed trades. Outward = won, inward = lost.</span></div>'+
-                   '<div><k>Centre</k><span>banked result; the green arc is the win rate.</span></div>'+
+                   '<div><k>Centre</k><span>THIS MONTH’s banked result; the arc is the month’s '+
+                     'win rate. All-time sits in the panel on the right.</span></div>'+
                  '</div>')
               : '<div class="tl-attn-empty">✓ No open positions logged.</div>';
             var _kd=window.tlKpiDelta(dailyR, window.tlTodayStr()); var _tR=_kd?(+(_kd.net_r||0)):0;
@@ -5923,6 +6046,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     volumeStrip();
     header();
     reflow();
+    // AFTER reflow: reflow orders the ledger card inside the zone, lab3col then lifts it into the
+    // ring's grid. The other way round and every cycle would pull it back out again.
+    lab3col();
+    lab3colChip();
     fixButtons();
     applied++;
   }
@@ -6104,6 +6231,61 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     }
   }
 
+  // ── F260901 — THE LEDGER MOVES LEFT OF THE RING ─────────────────────────────────────────────
+  // Operator, 01-Sep: "the fib fires trade ledger after the ring ... can actually be accomodated
+  // to the left of the ring thereby making the entire trade ledger section more compact and
+  // efficient at navigating. basically it should be a 3 column style laytout."
+  //
+  // So: ledger | ring | selected-trade detail, in one band. Built as a node MOVE, the same
+  // mechanic reflow() already uses -- ONE ledger card, ONE renderer, one #tl-ledger in the DOM.
+  // Forking a second narrow ledger would have been quicker and would have drifted from the first
+  // one within a session.
+  //
+  // The layout is a TOGGLE, persisted per browser, because a layout cannot be judged from a
+  // description -- and the operator has been handed a live nav change with no way back before.
+  // Flipping the default is one line here; the old stacked page is one click for him.
+  function lab3col(on){
+    var wrap = document.querySelector(".orbwrap");
+    var card = document.querySelector(".card.tl-ledger-card");
+    var attn = document.querySelector(".card.tl-attn");
+    if(!wrap || !card || !attn) return;
+    var want = (on == null) ? tlLab3col() : !!on;
+    var inside = card.parentNode === wrap;
+    if(want === inside){ wrap.classList.toggle("orb3", want); card.classList.toggle("lgnarrow", want); return; }
+    if(want){
+      wrap.insertBefore(card, wrap.firstChild);           // column 1, left of the ring
+    } else {
+      // Back where reflow() puts it: straight after the open-positions card.
+      attn.parentNode.insertBefore(card, attn.nextSibling);
+    }
+    wrap.classList.toggle("orb3", want);
+    card.classList.toggle("lgnarrow", want);
+    // The page size changes with the column width, so the ledger has to be re-paged, not just
+    // re-parented -- otherwise page 3 of 3 becomes page 3 of 7 and silently shows the wrong slice.
+    window.__tlPage = 0;
+    try { window.tlRenderLedger(); } catch(e){}
+  }
+
+  // The toggle chip lives in the OPEN POSITIONS header, not inside the ledger card -- a control
+  // must never live inside the thing it moves (the F260831 lesson: the class toggle went missing
+  // whenever the card it sat in was gated away).
+  function lab3colChip(){
+    var attn = document.querySelector(".card.tl-attn .c-lbl");
+    if(!attn || attn.querySelector(".lay3")) return;
+    var b = document.createElement("span");
+    b.className = "lay3";
+    var paint = function(){ b.textContent = tlLab3col() ? "layout: 3-column" : "layout: stacked";
+                            b.classList.toggle("on", tlLab3col()); };
+    paint();
+    b.title = "Where the trade ledger sits: beside the ring, or full-width below it.";
+    b.addEventListener("click", function(){
+      var next = !tlLab3col();
+      try { localStorage.setItem("lab3col", next ? "1" : "0"); } catch(e){}
+      lab3col(next); paint();
+    });
+    attn.appendChild(b);
+  }
+
   // A summary strip on the radar card, plus the names that are alive but have NO level --
   // they are tomorrow's watchlist, not today's trade, and they would otherwise be invisible.
   function header(){
@@ -6184,7 +6366,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1788196325&t="+Date.now())
+  fetch("data/pulse.json?v=1788236849&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
@@ -6205,7 +6387,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         // A mutation is "ours" if every node involved is one we inserted OR one we merely
         // MOVED. The original test looked only at addedNodes and only at pl-* classes, so a
         // re-ordered card read as someone else's change and re-armed the loop.
-        var MINE = ["pl-today","pl-strip","pl-orphan","pl-vol","pl-fix"];
+        var MINE = ["pl-today","pl-strip","pl-orphan","pl-vol","pl-fix","lay3"];
         var MOVED = ["tl-perf","tl-attn","tl-ledger-card","dec-wrap","fc2","pl-vol"];
         var mine = function(n){ return n.nodeType === 1 && MINE.some(function(c){ return n.classList.contains(c); }); };
         var moved = function(n){ return n.nodeType === 1 && MOVED.some(function(c){ return n.classList.contains(c); }); };
