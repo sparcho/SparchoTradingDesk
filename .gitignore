@@ -17,3 +17,10 @@ __pycache__/
 .dashboard_pw
 .dashboard_pw*
 **/_inputs/.dashboard_pw*
+
+# Local render fixtures. The Playwright harness used to drop a PLAINTEXT copy of the operator's
+# trade ledger here so the unlocked shell could be driven without a password. It is scratch, it is
+# never published, and it must never be committed — it carries analyst names, entries and stops
+# that the whole desk encrypts everywhere else. Ignored so a stray `git add -A` cannot take it.
+stocks/data/_*preview*.json
+silver/data/_*preview*.json
