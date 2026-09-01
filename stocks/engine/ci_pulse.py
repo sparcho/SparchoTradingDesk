@@ -215,6 +215,18 @@ def is_frozen(bars):
     return len({round(b[4], 4) for b in bars}) <= 1
 
 
+def last_real_bar(intr, today):
+    """The latest bar of `today` that actually TRADED, across the whole universe.
+
+    Volume-zero bars are stamped by the feed for periods that never printed, so taking the
+    newest stamp once made the desk advertise a session that had not happened. Kept as a named
+    function rather than an inline generator so it can be tested: this line was the one reader
+    missed when the bar tuple grew, and it took a cloud run down.
+    """
+    stamps = [b[0] for per in intr.values() for b in (per.get(today) or []) if b[5] > 0]
+    return max(stamps) if stamps else None
+
+
 def session_bvc(bars):
     """Volume-weighted BUY fraction over whatever bars are handed in.
 
@@ -367,8 +379,7 @@ def main():
     if measured == 0 and not errors:
         errors.append("zero names measurable — no baseline could be built for any ticker")
 
-    last_bar = max((hm for tk, per in intr.items() for hm, _c, v in (per.get(today) or [])
-                    if v > 0), default=None)
+    last_bar = last_real_bar(intr, today)
 
     payload = PM.build_payload(
         rows=rows, session_date=today, last_bar=last_bar, now_dt=started,
