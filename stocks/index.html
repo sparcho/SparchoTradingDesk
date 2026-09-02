@@ -6359,36 +6359,93 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     return {secs: null, at: sc.first_ist, today: false};
   }
 
-  // The clock. Redrawn every second: an age that only updates when the page reloads is the
-  // exact thing the operator could not trust.
-  function clockText(P){
+  // The clock. Redrawn every second — but NEVER by rewriting innerHTML.
+  //
+  // Measured on the live desk 2026-09-02: an innerHTML repaint produced 5 DOM mutations in 5
+  // idle seconds, and the desk's own MutationObserver does not recognise those nodes as its
+  // own, so every tick scheduled a full re-scan of a 600KB page. Every re-scan is a chance to
+  // move a node under the reader, which is the stutter.
+  //
+  // So the structure is built ONCE and only text-node values change afterwards. Text values are
+  // characterData mutations; nothing on this page watches for those, so a ticking clock is now
+  // invisible to everything except the person reading it.
+  function buildClock(el){
+    el.textContent = "";
+    var mk = function(tag, cls){
+      var n = document.createElement(tag);
+      if(cls) n.className = cls;
+      n.appendChild(document.createTextNode(""));
+      el.appendChild(n);
+      return n.firstChild;
+    };
+    var age = mk("span", "age");
+    var sep = mk("span", "sep");
+    sep.nodeValue = "|";
+    var nxt = document.createElement("span");
+    nxt.className = "nxt";
+    var pre = nxt.appendChild(document.createTextNode(""));
+    var b = nxt.appendChild(document.createElement("b"));
+    var bt = b.appendChild(document.createTextNode(""));
+    var at = nxt.appendChild(document.createTextNode(""));
+    el.appendChild(nxt);
+    return {ageNode: age, ageEl: age.parentNode, sepEl: sep.parentNode,
+            nxtEl: nxt, pre: pre, bold: bt, at: at};
+  }
+
+  function paintClock(P, c){
     var iso = P.bars_through_iso;
     var age = iso ? Math.floor((Date.now() - Date.parse(iso)) / 60000) : null;
-    var cls = age == null ? "" : age <= 25 ? "" : age <= 50 ? "warn" : "bad";
-    var ageTxt = (age == null) ? "age unknown"
-               : (age < 1 ? "just updated" : age + " min old");
+    c.ageEl.className = "age " + (age == null ? "" : age <= 25 ? "" : age <= 50 ? "warn" : "bad");
+    c.ageNode.nodeValue = (age == null) ? "age unknown"
+                        : (age < 1 ? "just updated" : age + " min old");
     var nr = nextRun(P);
-    var nxt;
-    if(!nr) nxt = "";
-    else if(!nr.today) nxt = 'next update <b>tomorrow ' + nr.at + '</b>';
-    else {
-      var m = Math.floor(nr.secs / 60), ss = ("0" + (nr.secs % 60)).slice(-2);
-      nxt = 'next update in <b>' + m + ":" + ss + '</b> <span style="opacity:.55">(' +
-            nr.at + ')</span>';
+    if(!nr){
+      c.sepEl.style.display = "none";
+      c.nxtEl.style.display = "none";
+      return;
     }
-    return '<span class="age ' + cls + '">' + ageTxt + '</span>' +
-           (nxt ? '<span class="sep">|</span><span class="nxt">' + nxt + '</span>' : "");
+    c.sepEl.style.display = "";
+    c.nxtEl.style.display = "";
+    if(!nr.today){
+      c.pre.nodeValue = "next update ";
+      c.bold.nodeValue = "tomorrow " + nr.at;
+      c.at.nodeValue = "";
+    } else {
+      c.pre.nodeValue = "next update in ";
+      c.bold.nodeValue = Math.floor(nr.secs / 60) + ":" + ("0" + (nr.secs % 60)).slice(-2);
+      c.at.nodeValue = " (" + nr.at + ")";
+    }
   }
 
   function startClock(P){
     if(window.__plClock) clearInterval(window.__plClock);
-    var paint = function(){
-      var el = document.querySelector(".pl-clock");
-      if(!el){ clearInterval(window.__plClock); window.__plClock = null; return; }
-      el.innerHTML = clockText(P);
+    var el = document.querySelector(".pl-clock");
+    if(!el) return;
+    var c = buildClock(el);
+    var tick = function(){
+      if(!document.body.contains(el)){
+        clearInterval(window.__plClock); window.__plClock = null; return;
+      }
+      paintClock(P, c);
     };
-    paint();
-    window.__plClock = setInterval(paint, 1000);
+    tick();
+    window.__plClock = setInterval(tick, 1000);
+  }
+
+  // Keep the reader still when content lands above them.
+  //
+  // The desk scrolls on #z-lab, and PULSE inserts its strip ABOVE the fires AFTER the page has
+  // already painted. On a page the reader has scrolled, that pushes everything they were
+  // looking at downwards. setFace fights this by restoring the offset three times (sync, rAF,
+  // and once more at 320ms) -- and a restore that lands after paint is exactly the stutter the
+  // operator sees.
+  //
+  // This removes the reason for the fight: if the insert happened above the current offset, add
+  // its height to scrollTop in the same frame. Nothing appears to move, so nothing needs
+  // restoring. Pure arithmetic, kept separate so it can be tested without a layout engine.
+  function scrollAdjust(scrollTop, insertTop, insertedHeight){
+    if(!insertedHeight || scrollTop <= 0) return scrollTop;
+    return (insertTop <= scrollTop) ? scrollTop + insertedHeight : scrollTop;
   }
 
   function num(x, d){ return (x == null) ? null : Number(x).toFixed(d == null ? 1 : d); }
@@ -6594,8 +6651,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // existing, which was the original bug.
     var anchor = document.querySelector(".card.rdr-wrap")
               || document.querySelector(".card.fc-wrap") || document.querySelector(".card");
+    // Measure the reader BEFORE the insert, then put them back on the same content after it.
+    var scroller = document.querySelector("#z-lab") || document.scrollingElement;
+    var was = scroller ? (scroller.scrollTop || 0) : 0;
+    var insertTop = anchor ? anchor.offsetTop : 0;
     if(anchor && anchor.parentNode) anchor.parentNode.insertBefore(el, anchor);
     else document.body.insertBefore(el, document.body.firstChild);
+    if(scroller && was > 0){
+      var grew = el.offsetHeight || 0;
+      var want = scrollAdjust(was, insertTop, grew);
+      if(want !== was){ try { scroller.scrollTop = want; } catch(_){ } }
+    }
 
     // Chips filter in place — no re-render, so the horizontal scroll position survives.
     el.querySelectorAll(".pl-fchip").forEach(function(chip){
@@ -6794,9 +6860,18 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         // re-ordered card read as someone else's change and re-armed the loop.
         // F260901 - the MOVED whitelist is gone with the moves. `fc2` stays because the sort
         // toggle genuinely re-orders the fire cards on the operator's own click.
+        // F260902 - anything INSIDE our own strip is ours by definition, whatever it is.
+        // The old test only recognised nodes carrying one of our class names, so when the
+        // clock started repainting itself every second the desk read its own strip as a
+        // stranger's edit and scheduled a full re-scan once a second, forever. Ownership is a
+        // question about WHERE a mutation happened, not what the node is called.
         var MINE = ["pl-today","pl-strip","pl-orphan","pl-vol","pl-fix","fc2"];
         var mine = function(n){ return n.nodeType === 1 && MINE.some(function(c){ return n.classList.contains(c); }); };
+        var inOurs = function(n){
+          return !!(n && n.closest && n.closest(".pl-vol,.pl-today,.pl-strip,.pl-orphan"));
+        };
         var ours = muts.every(function(m){
+          if(inOurs(m.target)) return true;
           return Array.prototype.every.call(m.addedNodes, mine)
               && Array.prototype.every.call(m.removedNodes, mine);
         });
