@@ -6148,6 +6148,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   .pl-clock .sep{ opacity:.35; }
   .pl-clock .nxt{ color:var(--mut); font-weight:600; }
   .pl-clock .nxt b{ color:var(--ink); font-weight:700; }
+  .pl-clock .nxt.overdue{ color:var(--neg); }
+  .pl-clock .nxt.overdue b{ color:var(--neg); }
 
   /* ---- filter chips ---------------------------------------------------------------------
      35 tiles in a horizontal scroll is a hunt. These make it a click. */
@@ -6359,6 +6361,56 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     return {secs: null, at: sc.first_ist, today: false};
   }
 
+  // The biggest text on the card has to agree with the smallest. The banner was honestly
+  // reporting PRIOR SESSION while the heading above it still read "today", so the section
+  // contradicted itself and the honest half lost the argument.
+  function headline(P){
+    var istToday = new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"});
+    if(!P.session_date) return "Where the movement is";
+    if(P.session_date === istToday) return "Where the movement is today";
+    return "Where the movement was · " + P.session_date;
+  }
+
+  // Did a scheduled run actually happen, or did the slot pass in silence?
+  //
+  // GitHub's cron is best-effort: on 2026-09-01 a :20/:50 schedule produced runs at 08:34,
+  // 09:28 and 14:19 UTC, and on 2026-09-02 the 08:45 and 09:50 slots did not fire at all while
+  // the strip counted down cheerfully to the next one. A countdown is a PROMISE the
+  // infrastructure does not keep, and rolling silently to the next slot hides a missed run
+  // behind a reassuring number - the same class of lie as a stale payload under a fresh stamp.
+  //
+  // So: find the most recent slot that should already have produced data, and compare it with
+  // when this payload was actually built. Waiting BEFORE the first run of the day is normal and
+  // must never read as a fault, or the warning is worthless by the time it matters.
+  function runStatus(P){
+    var sc = P.schedule;
+    if(!sc || !sc.minutes || !sc.minutes.length) return null;
+    var now = istParts(), first = mn(sc.first_ist), last = mn(sc.last_ist);
+    var mins = sc.minutes.slice().sort(function(a, b){ return a - b; });
+    var lastSlot = null;
+    for(var h = 0; h < 24; h++){
+      for(var i = 0; i < mins.length; i++){
+        var t = h * 60 + mins[i];
+        if(t >= first && t <= last && t <= now.m) lastSlot = t;
+      }
+    }
+    if(lastSlot === null) return {state:"before_first", overdue:false, expected:sc.first_ist};
+
+    var g = P.generated_at ? new Date(P.generated_at) : null;
+    if(!g || isNaN(g.getTime())) return {state:"unknown", overdue:false, expected:hhmm(lastSlot)};
+    var gDay = g.toLocaleDateString("en-CA", {timeZone:"Asia/Kolkata"});
+    var today = new Date().toLocaleDateString("en-CA", {timeZone:"Asia/Kolkata"});
+    var gIst = new Date(g.toLocaleString("en-US", {timeZone:"Asia/Kolkata"}));
+    var gMin = gIst.getHours() * 60 + gIst.getMinutes();
+    var built = (gDay === today) ? gMin : -1;      // built on an earlier day counts as never
+    return {
+      state: built >= lastSlot ? "on_time" : "missed",
+      overdue: built < lastSlot,
+      expected: hhmm(lastSlot),
+      built_at: P.as_of_ist || ""
+    };
+  }
+
   // The clock. Redrawn every second — but NEVER by rewriting innerHTML.
   //
   // Measured on the live desk 2026-09-02: an innerHTML repaint produced 5 DOM mutations in 5
@@ -6398,6 +6450,21 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     c.ageEl.className = "age " + (age == null ? "" : age <= 25 ? "" : age <= 50 ? "warn" : "bad");
     c.ageNode.nodeValue = (age == null) ? "age unknown"
                         : (age < 1 ? "just updated" : age + " min old");
+    // A missed run must be NAMED, not rolled past. GitHub's cron is best-effort and has
+    // skipped whole slots; counting down to the next one hides that behind a reassuring
+    // number, which is the same lie as a stale payload under a fresh stamp.
+    var rs = runStatus(P);
+    if(rs && rs.overdue){
+      c.sepEl.style.display = "";
+      c.nxtEl.style.display = "";
+      c.nxtEl.className = "nxt overdue";
+      c.pre.nodeValue = "run missed — ";
+      c.bold.nodeValue = rs.expected + " never landed";
+      c.at.nodeValue = rs.built_at ? (" · last built " + rs.built_at) : "";
+      return;
+    }
+    c.nxtEl.className = "nxt";
+
     var nr = nextRun(P);
     if(!nr){
       c.sepEl.style.display = "none";
@@ -6406,7 +6473,11 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     }
     c.sepEl.style.display = "";
     c.nxtEl.style.display = "";
-    if(!nr.today){
+    if(rs && rs.state === "before_first"){
+      c.pre.nodeValue = "first update ";
+      c.bold.nodeValue = rs.expected;
+      c.at.nodeValue = " · nothing runs before then";
+    } else if(!nr.today){
       c.pre.nodeValue = "next update ";
       c.bold.nodeValue = "tomorrow " + nr.at;
       c.at.nodeValue = "";
@@ -6608,7 +6679,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     el.dataset.stamp = String(P.generated_at || "");
     el.innerHTML =
       '<div class="pl-vol-hd">' +
-        '<span class="pl-vol-t">🫀 Where the movement is today</span>' +
+        '<span class="pl-vol-t">🫀 ' + esc(headline(P)) + '</span>' +
         '<span class="pl-fresh ' + f.cls + '"><span class="dot"></span><b>' + esc(f.label) +
           '</b> · ' + esc(f.note) + '</span>' +
         (bad ? '<span class="pl-fresh stale"><span class="dot"></span><b>DEGRADED</b> · ' +
