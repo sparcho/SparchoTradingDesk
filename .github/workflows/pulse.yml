@@ -140,11 +140,12 @@ jobs:
                 echo "::warning::build failed on cycle $cycle — continuing"
               fi
             else
+              # Leave AT ONCE. Sleeping first wasted ten minutes and, worse, held the
+              # concurrency slot — which would delay a legitimate run arriving right at the
+              # window boundary. There is nothing to do outside the session and the next
+              # trigger is minutes away.
               echo "outside the session window ($(date -u +%H:%M) UTC) — nothing to do"
-              if [ "$cycle" -gt 1 ]; then
-                echo "session closed — ending this loop"
-                break
-              fi
+              break
             fi
 
             if [ $(( $(date +%s) + REBUILD_EVERY_MIN * 60 )) -ge "$deadline" ]; then
