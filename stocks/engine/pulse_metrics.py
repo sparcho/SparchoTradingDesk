@@ -63,11 +63,18 @@ FRESH_DELAYED_MIN = 50
 # silence. FEED_LAG_MIN is the free feed's own delay: even a run that just finished is looking
 # at bars a quarter of an hour behind live, and pretending otherwise is its own small lie.
 SCHEDULE = {
-    "minutes": [20, 50],
-    "first_ist": "09:50",
-    "last_ist": "16:20",
+    # An INTERVAL, not clock slots. The job used to wait for cron and cron measurably does not
+    # arrive: over 24h on 2026-09-01/02 this repo's workflows lost most of their scheduled runs
+    # (refresh-dashboard ran 7 times against 72). The job now drives its own loop, so what the
+    # page can honestly promise is "about every N minutes", never "at 09:50 exactly".
+    "every_min": 10,
+    "first_ist": "08:40",
+    "last_ist": "16:25",
     "feed_lag_min": 15,
-    "note": "twice an hour through the session; outside that window nothing refreshes",
+    # Two missed cycles plus the feed's own lag. Past this the page says a run was missed rather
+    # than counting down to one that may never come.
+    "overdue_after_min": 35,
+    "note": "the job loops and rebuilds on its own interval; cron only starts a loop",
 }
 
 ALIVE_RVOL = 1.5                # a DEFAULT, not a finding

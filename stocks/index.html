@@ -6348,17 +6348,15 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   // hardcoded here, so the page and the cron cannot drift apart in silence.
   function nextRun(P){
     var sc = P.schedule;
-    if(!sc || !sc.minutes || !sc.minutes.length) return null;
-    var now = istParts(), first = mn(sc.first_ist), last = mn(sc.last_ist);
-    var mins = sc.minutes.slice().sort(function(a, b){ return a - b; });
-    for(var h = 0; h < 24; h++){
-      for(var i = 0; i < mins.length; i++){
-        var t = h * 60 + mins[i];
-        if(t < first || t > last || t <= now.m) continue;
-        return {secs: (t - now.m) * 60 - now.s, at: hhmm(t), today: true};
-      }
-    }
-    return {secs: null, at: sc.first_ist, today: false};
+    if(!sc || !sc.every_min || !P.generated_at) return null;
+    var g = new Date(P.generated_at);
+    if(isNaN(g.getTime())) return null;
+    var now = istParts(), last = mn(sc.last_ist);
+    if(now.m > last) return {secs:null, at:sc.first_ist, today:false};
+    var due = g.getTime() + sc.every_min * 60000;
+    var secs = Math.round((due - Date.now()) / 1000);
+    var dIst = new Date(new Date(due).toLocaleString("en-US", {timeZone:"Asia/Kolkata"}));
+    return {secs: secs, at: hhmm(dIst.getHours() * 60 + dIst.getMinutes()), today: true};
   }
 
   // The biggest text on the card has to agree with the smallest. The banner was honestly
@@ -6384,29 +6382,32 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   // must never read as a fault, or the warning is worthless by the time it matters.
   function runStatus(P){
     var sc = P.schedule;
-    if(!sc || !sc.minutes || !sc.minutes.length) return null;
+    if(!sc || !sc.every_min) return null;
     var now = istParts(), first = mn(sc.first_ist), last = mn(sc.last_ist);
-    var mins = sc.minutes.slice().sort(function(a, b){ return a - b; });
-    var lastSlot = null;
-    for(var h = 0; h < 24; h++){
-      for(var i = 0; i < mins.length; i++){
-        var t = h * 60 + mins[i];
-        if(t >= first && t <= last && t <= now.m) lastSlot = t;
-      }
-    }
-    if(lastSlot === null) return {state:"before_first", overdue:false, expected:sc.first_ist};
+    if(now.m < first) return {state:"before_first", overdue:false, expected:sc.first_ist};
 
     var g = P.generated_at ? new Date(P.generated_at) : null;
-    if(!g || isNaN(g.getTime())) return {state:"unknown", overdue:false, expected:hhmm(lastSlot)};
-    var gDay = g.toLocaleDateString("en-CA", {timeZone:"Asia/Kolkata"});
-    var today = new Date().toLocaleDateString("en-CA", {timeZone:"Asia/Kolkata"});
-    var gIst = new Date(g.toLocaleString("en-US", {timeZone:"Asia/Kolkata"}));
-    var gMin = gIst.getHours() * 60 + gIst.getMinutes();
-    var built = (gDay === today) ? gMin : -1;      // built on an earlier day counts as never
+    if(!g || isNaN(g.getTime())) return {state:"unknown", overdue:false, expected:""};
+    var ageMin = Math.floor((Date.now() - g.getTime()) / 60000);
+    var limit = sc.overdue_after_min || (sc.every_min * 3);
+
+    // After the loop stops for the day, data built during the session is simply finished -- not
+    // overdue. A check that cries wolf every evening stops being read by morning.
+    if(now.m > last){
+      var gIst = new Date(g.toLocaleString("en-US", {timeZone:"Asia/Kolkata"}));
+      var gDay = g.toLocaleDateString("en-CA", {timeZone:"Asia/Kolkata"});
+      var today = new Date().toLocaleDateString("en-CA", {timeZone:"Asia/Kolkata"});
+      var builtInSession = (gDay === today) &&
+        (gIst.getHours() * 60 + gIst.getMinutes()) >= first;
+      return {state: builtInSession ? "closed" : "missed", overdue: !builtInSession,
+              expected: sc.last_ist, age_min: ageMin, built_at: P.as_of_ist || ""};
+    }
+
     return {
-      state: built >= lastSlot ? "on_time" : "missed",
-      overdue: built < lastSlot,
-      expected: hhmm(lastSlot),
+      state: ageMin > limit ? "missed" : "running",
+      overdue: ageMin > limit,
+      expected: "every " + sc.every_min + " min",
+      age_min: ageMin,
       built_at: P.as_of_ist || ""
     };
   }

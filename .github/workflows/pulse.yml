@@ -3,27 +3,43 @@ name: PULSE (unusual volume · who is alive today)
 # PULSE moved off the laptop 2026-08-31, on the operator's standing rule: "we should structure
 # our processes in a way that they can run without my specific system being on at any time."
 #
-# It was originally built on the laptop, which was the wrong call — and the desk already carried
-# a red caused by exactly that pattern (signal_perf stale, "produced on the laptop substrate").
+# 2026-09-02 — IT NO LONGER WAITS TO BE WOKEN.
+#
+# The operator watched the 08:45, 09:50 and 10:20 slots all pass with nothing published. That was
+# not our code failing: GitHub drops `schedule` events under load, and the higher the frequency
+# the worse it gets. Measured across this repo over 24 hours:
+#
+#     refresh-dashboard   cron */20     72 expected      7 ran
+#     pulse               cron 20,50    15 expected      3 ran
+#     watchdog            cron 0 */3     8 expected      5 ran
+#
+# So cron is not a clock here, and adding slots does not repair a scheduler that is already
+# dropping most of what it has. The job now RUNS A LOOP and rebuilds on its own interval; cron is
+# demoted from "the clock" to "one of several ways to get a loop started".
+#
+# Why this is affordable: the repo is public, so Actions minutes are free. A loop that lives for
+# LOOP_MINUTES and rebuilds every REBUILD_EVERY_MIN costs nothing but wall time.
+#
+# The concurrency group keeps at most one loop running and one queued — GitHub cancels older
+# pending runs in a group — so when a loop ends the queued one takes over and coverage continues
+# without any single cron having to fire on time.
+#
+# REBUILD_EVERY_MIN is asserted against pulse_metrics.SCHEDULE by test_pulse_cloud_engine: the
+# countdown the page shows the operator is only honest while it matches what this job does.
 #
 # Nothing PULSE needs is private:
 #   intraday bars    -> yfinance
 #   catalysts        -> NSE corporate-announcements API + Google News RSS
 #   level marker     -> fib_radar.fires/.watch, already PUBLIC in the equity aggregate
-# So this job reads no operator data and writes no position information.
-#
-# It writes ONLY stocks/data/pulse.json. It never touches the equity aggregate, which is
-# owned by the dashboard jobs — hand-editing a cron-owned artifact is how a partially stale
-# cache once got published under one fresh stamp.
+# It reads no operator data and writes no position information, and it writes ONLY
+# stocks/data/pulse.json — never the equity aggregate, which the dashboard jobs own.
 
 on:
   schedule:
-    # NSE session 09:15–15:30 IST = 03:45–10:00 UTC. The opening range closes 09:45 IST
-    # (04:15 UTC), so the first useful run is just after that. Twice an hour through the
-    # session is plenty — the numbers are an opening-range measure, not a tick feed.
-    - cron: '20,50 4-10 * * 1-5'
-    # Pre-open catalyst sweep — filings that landed overnight, before the session opens.
-    - cron: '15 3 * * 1-5'
+    # Many starting chances, deliberately on odd minutes — round minutes are the busiest and the
+    # likeliest to be dropped. Any ONE of these firing starts a loop that covers the next hour,
+    # so the schedule no longer has to be accurate, only occasionally lucky.
+    - cron: '3,23,43 3-10 * * 1-5'
   workflow_dispatch:
 
 permissions:
@@ -33,9 +49,16 @@ concurrency:
   group: sparcho-pulse
   cancel-in-progress: false
 
+env:
+  REBUILD_EVERY_MIN: 10        # must equal pulse_metrics.SCHEDULE["every_min"]
+  LOOP_MINUTES: 50             # how long one run keeps working before handing over
+  SESSION_FROM_UTC: "03:10"    # 08:40 IST — the pre-open catalyst sweep
+  SESSION_TO_UTC: "10:55"      # 16:25 IST — a little past the close
+
 jobs:
   pulse:
     runs-on: ubuntu-latest
+    timeout-minutes: 70        # LOOP_MINUTES plus headroom; nowhere near the 6h job ceiling
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -48,22 +71,27 @@ jobs:
       - name: Install deps
         run: pip install --quiet yfinance numpy pyyaml
 
-      - name: Build PULSE
-        run: python stocks/engine/ci_pulse.py
-
-      # A run that produced an unusable payload must FAIL here rather than push a
-      # healthy-looking empty file. Absence of names is a real answer; absence of
-      # measurement is not, and the two must not look the same on the desk.
-      - name: Gate — the payload has to be measurable
+      - name: Build PULSE on a loop
         run: |
-          python - <<'PY'
+          set -uo pipefail
+
+          in_window () {
+            now=$(date -u +%H:%M)
+            [[ "$now" > "$SESSION_FROM_UTC" && "$now" < "$SESSION_TO_UTC" ]]
+          }
+
+          # A run that produced an unusable payload must FAIL rather than push a healthy-looking
+          # empty file. Absence of NAMES is a real answer; absence of MEASUREMENT is not, and the
+          # two must never look the same on the desk.
+          gate () {
+            python - <<'PY'
           import json, sys
           d = json.load(open('stocks/data/pulse.json', encoding='utf-8'))
           if d.get('n_measured', 0) < 20:
               print('::error::PULSE measured only %s names — refusing to publish a blind run'
                     % d.get('n_measured'))
               sys.exit(1)
-          banned = {'held','qty','avg_cost','invested','pnl','shares'}
+          banned = {'held', 'qty', 'avg_cost', 'invested', 'pnl', 'shares'}
           leak = sorted({k for r in d.get('rows', []) for k in r if k in banned})
           if leak:
               print('::error::PULSE payload carries position fields %s — refusing to publish' % leak)
@@ -71,27 +99,57 @@ jobs:
           print('gate ok: measured %s · alive %s · errors %s'
                 % (d.get('n_measured'), d.get('n_alive'), len(d.get('errors') or [])))
           PY
+          }
 
-      - name: Commit + push if changed
-        run: |
+          publish () {
+            git add stocks/data/pulse.json
+            if git diff --cached --quiet; then echo "no change this cycle"; return 0; fi
+            git commit -q -m "auto: pulse $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push -q; then echo "pushed"; return 0; fi
+            # PULSE owns exactly one file, so a moved remote is safe to rebuild onto — unlike the
+            # aggregate, there is no encrypted block to preserve.
+            for i in 1 2 3; do
+              git fetch -q origin main || { sleep 4; continue; }
+              git reset -q --hard origin/main
+              python stocks/engine/ci_pulse.py || echo "WARN: rebuild failed (continuing)"
+              git add stocks/data/pulse.json
+              if git diff --cached --quiet; then echo "no net change after rebuild"; return 0; fi
+              git commit -q -m "auto: pulse (rebuilt) $(date -u +'%Y-%m-%d %H:%M UTC')"
+              if git push -q; then echo "pushed (rebuild $i)"; return 0; fi
+              sleep $((RANDOM % 6 + 4))
+            done
+            # Never abort the loop over one failed push — the next cycle is minutes away, and a
+            # dead loop is a silent desk, which is the failure this whole change exists to end.
+            echo "::warning::could not push this cycle — the next one will try again"
+            return 0
+          }
+
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add stocks/data/pulse.json
-          if git diff --cached --quiet; then
-            echo "No change — skipping commit"; exit 0
-          fi
-          git commit -m "auto: pulse $(date -u +'%Y-%m-%d %H:%M UTC')"
-          if git push; then echo "pushed (fast path)"; exit 0; fi
-          # PULSE owns exactly one file, so a moved remote is safe to rebuild onto —
-          # unlike the aggregate, there is no encrypted block to preserve.
-          for i in 1 2 3 4 5; do
-            git fetch origin main || { sleep 4; continue; }
-            git reset --hard origin/main
-            python stocks/engine/ci_pulse.py || echo "WARN: rebuild failed (continuing)"
-            git add stocks/data/pulse.json
-            if git diff --cached --quiet; then echo "no net change after rebuild — done"; exit 0; fi
-            git commit -m "auto: pulse (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
-            if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
-            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+
+          deadline=$(( $(date +%s) + LOOP_MINUTES * 60 ))
+          cycle=0
+          built=0
+          while :; do
+            cycle=$(( cycle + 1 ))
+            if in_window; then
+              echo "--- cycle $cycle at $(date -u +%H:%M) UTC ---"
+              if python stocks/engine/ci_pulse.py; then
+                if gate; then publish; built=$(( built + 1 )); fi
+              else
+                echo "::warning::build failed on cycle $cycle — continuing"
+              fi
+            else
+              echo "outside the session window ($(date -u +%H:%M) UTC) — nothing to do"
+              if [ "$cycle" -gt 1 ]; then
+                echo "session closed — ending this loop"
+                break
+              fi
+            fi
+
+            if [ $(( $(date +%s) + REBUILD_EVERY_MIN * 60 )) -ge "$deadline" ]; then
+              echo "loop finished after $cycle cycles ($built published)"
+              break
+            fi
+            sleep $(( REBUILD_EVERY_MIN * 60 ))
           done
-          echo "::error::could not push after rebuild retries"; exit 1
