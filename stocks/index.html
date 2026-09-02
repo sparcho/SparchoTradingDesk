@@ -2133,19 +2133,48 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       applySensitive(u); _eqUnlocked={ct:ct,u:u}; if(msg) msg.textContent=''; renderAll();
     }catch(e){ if(msg) msg.textContent='✗ wrong'; } }
 
+  // A cheap fingerprint of everything bootstrap fetched. Only used to answer one question:
+  // did ANY of it actually change? (32-bit rolling hash; collisions are irrelevant here because
+  // the worst case is one extra re-render, which is what we do today anyway.)
+  function payloadSig(texts){
+    var h = 0, s = texts.join(" ");
+    for(var i = 0; i < s.length; i++){ h = (h * 31 + s.charCodeAt(i)) | 0; }
+    return s.length + ":" + h;
+  }
+
   async function bootstrap(){
     try{
       const r=await fetch('data/equity_dashboard_aggregate.json?v=1782241583&t='+Date.now(),{cache:'no-store'});
       if(!r.ok) throw new Error('HTTP '+r.status);
-      DATA=await r.json();
+      const __aggText=await r.text();
+      DATA=JSON.parse(__aggText);
       try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
-      try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ const pj2=await px.json(); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
+      let __pxText='';
+      try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ __pxText=await px.text(); const pj2=JSON.parse(__pxText); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
       // F260622 — live JOURNALIST news feed (curated set, 5-min cloud refresh); candidates as fallback. Never throws.
-      try{ var _nu=await fetch('data/news_curated.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); var _nj=_nu.ok?await _nu.json():null;
+      let __newsText='';
+      try{ var _nu=await fetch('data/news_curated.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(_nu.ok) __newsText=await _nu.text(); var _nj=_nu.ok?JSON.parse(__newsText):null;
         if(!_nj||!(_nj.items&&_nj.items.length)){ var _nc=await fetch('data/news_candidates.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); _nj=_nc.ok?await _nc.json():_nj; }
         if(_nj){ window.NEWS=_nj.items||[]; window.NEWS_ASOF=_nj.curated_at_utc||_nj.fetched_at_utc||null; window.NEWS_STALE=!!_nj.stale; } }catch(_){ }
+      // DO NOT REBUILD THE PAGE WHEN NOTHING CHANGED.
+      //
+      // This timer fires every 60s and used to call renderAll() unconditionally. renderAll goes
+      // through setFace, which replaces the innerHTML of the very element that holds the scroll
+      // offset — so the reader's position was destroyed and restored 60 times an hour while the
+      // underlying data changes at most every 10 minutes. Measured 2026-09-02: two full zone
+      // rebuilds in 130 idle seconds, each one a ~400px jump. About nine of every ten rebuilds
+      // were rebuilding identical content.
+      //
+      // A re-render is now earned by an actual change. The unlock path and every explicit
+      // interaction still call renderAll() directly, so nothing that SHOULD redraw stops.
+      const __sig = payloadSig([__aggText, __pxText, __newsText]);
+      if(window.__bootOnce && __sig === window.__lastSig){
+        __clearErr('bootstrap');
+        return;                       // nothing changed — leave the reader exactly where they are
+      }
+      window.__lastSig = __sig;
       reapplyUnlock();
       renderAll();
       __clearErr('bootstrap'); window.__bootOnce=true;
@@ -6504,22 +6533,6 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     window.__plClock = setInterval(tick, 1000);
   }
 
-  // Keep the reader still when content lands above them.
-  //
-  // The desk scrolls on #z-lab, and PULSE inserts its strip ABOVE the fires AFTER the page has
-  // already painted. On a page the reader has scrolled, that pushes everything they were
-  // looking at downwards. setFace fights this by restoring the offset three times (sync, rAF,
-  // and once more at 320ms) -- and a restore that lands after paint is exactly the stutter the
-  // operator sees.
-  //
-  // This removes the reason for the fight: if the insert happened above the current offset, add
-  // its height to scrollTop in the same frame. Nothing appears to move, so nothing needs
-  // restoring. Pure arithmetic, kept separate so it can be tested without a layout engine.
-  function scrollAdjust(scrollTop, insertTop, insertedHeight){
-    if(!insertedHeight || scrollTop <= 0) return scrollTop;
-    return (insertTop <= scrollTop) ? scrollTop + insertedHeight : scrollTop;
-  }
-
   function num(x, d){ return (x == null) ? null : Number(x).toFixed(d == null ? 1 : d); }
 
   function volumeStrip(){
@@ -6723,17 +6736,13 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // existing, which was the original bug.
     var anchor = document.querySelector(".card.rdr-wrap")
               || document.querySelector(".card.fc-wrap") || document.querySelector(".card");
-    // Measure the reader BEFORE the insert, then put them back on the same content after it.
-    var scroller = document.querySelector("#z-lab") || document.scrollingElement;
-    var was = scroller ? (scroller.scrollTop || 0) : 0;
-    var insertTop = anchor ? anchor.offsetTop : 0;
+    // The strip does NOT touch the scroll position. setFace owns it across a re-render, and
+    // when both tried, they double-counted into a ~400px jump every 60 seconds (measured
+    // 2026-09-02: 700 -> 1099 -> 1495 with no interaction at all). Worse, writing scrollTop
+    // here tripped setFace's own "the reader has scrolled" detector, which then abandoned its
+    // final restore — so the wrong mechanism won. One owner for one thing.
     if(anchor && anchor.parentNode) anchor.parentNode.insertBefore(el, anchor);
     else document.body.insertBefore(el, document.body.firstChild);
-    if(scroller && was > 0){
-      var grew = el.offsetHeight || 0;
-      var want = scrollAdjust(was, insertTop, grew);
-      if(want !== was){ try { scroller.scrollTop = want; } catch(_){ } }
-    }
 
     // Chips filter in place — no re-render, so the horizontal scroll position survives.
     el.querySelectorAll(".pl-fchip").forEach(function(chip){
