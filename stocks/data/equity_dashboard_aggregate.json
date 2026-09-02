@@ -1,7 +1,7 @@
 {
   "schema_version": "v1.1",
   "doc_type": "equity_dashboard_aggregate",
-  "emitted_at_utc": "2026-09-02T14:58:39+00:00",
+  "emitted_at_utc": "2026-09-02T18:32:43+00:00",
   "meta": {
     "account": "SPARCHO-HDFC",
     "doctrine_refs": [
@@ -12,7 +12,7 @@
     "held_count": 4,
     "held_locked": true,
     "lens_run_date": "2026-09-02",
-    "last_price_refresh": "2026-09-02T14:58:39+00:00"
+    "last_price_refresh": "2026-09-02T18:32:43+00:00"
   },
   "book": {
     "as_of": "2026-09-01",
@@ -1134,7 +1134,8 @@
     "sessions_stale": 0,
     "status": "OK",
     "score_version": "F128",
-    "refreshed_at_utc": "2026-09-02T14:58:39+00:00"
+    "refreshed_at_utc": "2026-09-02T18:32:43+00:00",
+    "error": "live pull lagged (price_as_of 2026-09-01 < published 2026-09-02); kept the fresher stamp — no regression"
   },
   "flags": {
     "P0": [
@@ -1508,14 +1509,14 @@
       {
         "id": "TNX",
         "status": "FAIL",
-        "reading": "4.79%",
+        "reading": "4.80%",
         "threshold": "<4.45%",
         "note": "4.758 vs <4.45% -> FAIL (auto-refreshed 2026-09-02 16:29 IST) -- binding deploy gate (S5.2 new-tranche block)"
       },
       {
         "id": "DXY",
         "status": "OK",
-        "reading": "99.55",
+        "reading": "99.59",
         "threshold": "<102",
         "note": "99.855 vs <102 -> OK (auto-refreshed 2026-09-02 16:29 IST) -- >102 weekly close = reduce-50 (V-06)"
       },
@@ -1529,7 +1530,7 @@
       {
         "id": "HORMUZ",
         "status": "OK",
-        "reading": "oil $94.93",
+        "reading": "oil $95.91",
         "threshold": "oil <$105",
         "note": "95.08 vs oil <$105 -> OK (auto-refreshed 2026-09-02 16:29 IST) -- war-premium / S10.1 correlated-cascade gate (Brent proxy)"
       },
@@ -1550,7 +1551,7 @@
     ],
     "macro": {
       "TNX": {
-        "value": 4.793999671936035,
+        "value": 4.796000003814697,
         "as_of": "2026-09-01T08:35:01+0530",
         "gate_status": "FAIL",
         "gate_threshold": "<4.45%"
@@ -1562,13 +1563,13 @@
         "gate_threshold": "<94 / <96 wkly"
       },
       "DXY": {
-        "value": 99.55400085449219,
+        "value": 99.59400177001953,
         "as_of": "2026-09-02T16:27:56+0530",
         "gate_status": "OK",
         "gate_threshold": "<102"
       },
       "BRENT": {
-        "value": 94.93000030517578,
+        "value": 95.91000366210938,
         "as_of": "2026-09-02T16:27:56+0530",
         "gate_status": "OK",
         "gate_threshold": "oil <$105"
@@ -8920,7 +8921,7 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-09-02T14:58:39+00:00",
+    "computed_at_utc": "2026-09-02T18:32:43+00:00",
     "desk": "equity",
     "any_stale": false,
     "any_dim": false,
@@ -8966,7 +8967,7 @@
         "reason": "fresh — YELLOW (score 53, 2026-09-02)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": "regime_refresh",
         "ui_targets": [
           "regime-card"
@@ -8993,10 +8994,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-01 (1 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-01 (2 session(s) behind)",
         "since": "2026-09-01",
         "age_min": null,
-        "sessions_stale": 1,
+        "sessions_stale": 2,
         "heal": null,
         "ui_targets": []
       },
@@ -9021,10 +9022,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9035,10 +9036,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9049,10 +9050,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9063,10 +9064,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9077,10 +9078,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-08-31 (2 session(s) behind)",
+        "reason": "fresh — as-of 2026-08-31 (3 session(s) behind)",
         "since": "2026-08-31",
         "age_min": null,
-        "sessions_stale": 2,
+        "sessions_stale": 3,
         "heal": null,
         "ui_targets": []
       },
@@ -9091,10 +9092,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9105,10 +9106,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9119,10 +9120,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-06-30 (46 session(s) behind)",
+        "reason": "fresh — as-of 2026-06-30 (47 session(s) behind)",
         "since": "2026-06-30",
         "age_min": null,
-        "sessions_stale": 46,
+        "sessions_stale": 47,
         "heal": null,
         "ui_targets": []
       },
@@ -9133,10 +9134,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-08-31 (2 session(s) behind)",
+        "reason": "fresh — as-of 2026-08-31 (3 session(s) behind)",
         "since": "2026-08-31",
         "age_min": null,
-        "sessions_stale": 2,
+        "sessions_stale": 3,
         "heal": null,
         "ui_targets": []
       },
@@ -9147,10 +9148,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9161,10 +9162,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9175,10 +9176,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -9189,10 +9190,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-02 (0 session(s) behind)",
+        "reason": "fresh — as-of 2026-09-02 (1 session(s) behind)",
         "since": "2026-09-02",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       }
