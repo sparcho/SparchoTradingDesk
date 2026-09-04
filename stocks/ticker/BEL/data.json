@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "BEL",
-  "emitted_at_utc": "2026-09-04T03:31:36+00:00",
+  "emitted_at_utc": "2026-09-04T11:01:09+00:00",
   "public": {
     "ticker": "BEL",
     "name": "Bharat Electronics",
@@ -114,10 +114,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 408.6,
-      "day_chg_pct": 0.702,
-      "week_chg_pct": -0.5839416058394106,
-      "date": "2026-09-03"
+      "price": 405.35,
+      "day_chg_pct": -0.795,
+      "week_chg_pct": -1.5901917941247765,
+      "date": "2026-09-04"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5713,45 +5713,94 @@
         410.3,
         405.15,
         408.6
+      ],
+      [
+        "2026-09-04",
+        409.25,
+        413.1,
+        405.35,
+        405.35
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 407.93,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 410.52,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 415.68,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 418.27,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 402.77,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 400.18,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 395.02,
+        "as_of": "2026-09-04"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 384.9,
-        "as_of": "2026-09-03"
+        "as_of": "2026-09-04"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 407.07,
-        "as_of": "2026-09-03"
+        "price": 407.04,
+        "as_of": "2026-09-04"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 419.27,
-        "as_of": "2026-09-03"
+        "price": 419.2,
+        "as_of": "2026-09-04"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 468.45,
-        "as_of": "2026-09-03"
+        "as_of": "2026-09-04"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 363.85,
-        "as_of": "2026-09-03"
+        "price": 369.4,
+        "as_of": "2026-09-04"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
         "label": "INVALIDATION",
-        "price": 363.85,
+        "price": 369.4,
         "dir": "below",
         "kind": "inv",
         "why": "52-week low",
@@ -5759,18 +5808,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 407.07,
+        "price": 402.77,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "pivot S1",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 419.27,
+        "price": 407.04,
         "dir": "above",
         "kind": "trim",
-        "why": "200-day SMA",
+        "why": "50-day SMA",
         "auto": true
       },
       {
@@ -5785,45 +5834,45 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "SUPPORT",
-        "price": 407.07,
-        "dir": "below",
-        "kind": "watch",
-        "dist_pct": -0.3744493392070557
-      },
-      {
         "label": "RESISTANCE",
-        "price": 419.27,
+        "price": 407.04,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 2.6113558492413014
+        "dist_pct": 0.416923646231651
+      },
+      {
+        "label": "SUPPORT",
+        "price": 402.77,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.6364869865548393
       },
       {
         "label": "INVALIDATION",
-        "price": 363.85,
+        "price": 369.4,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -10.952031326480666
+        "dist_pct": -8.868878746762068
       },
       {
         "label": "UPSIDE",
         "price": 468.45,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 14.647577092511005
+        "dist_pct": 15.566794128530889
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 363.85,
-        "note": "daily close below Rs364 invalidates the structure"
+        "level": 369.4,
+        "note": "daily close below Rs369 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 408.6,
+        "level": 405.35,
         "note": "holds current band; reclaim Rs419 (200-SMA) to flip constructive"
       },
       {

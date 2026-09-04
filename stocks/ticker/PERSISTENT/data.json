@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "PERSISTENT",
-  "emitted_at_utc": "2026-09-04T03:31:48+00:00",
+  "emitted_at_utc": "2026-09-04T11:01:22+00:00",
   "public": {
     "ticker": "PERSISTENT",
     "name": "PERSISTENT",
@@ -114,10 +114,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 5657.0,
-      "day_chg_pct": -0.58,
-      "week_chg_pct": 0.05305978068623984,
-      "date": "2026-09-03"
+      "price": 5643.0,
+      "day_chg_pct": -0.247,
+      "week_chg_pct": -3.9489361702127663,
+      "date": "2026-09-04"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -5713,44 +5713,93 @@
         5668.0,
         5501.0,
         5657.0
+      ],
+      [
+        "2026-09-04",
+        5680.0,
+        5724.5,
+        5634.0,
+        5643.0
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 5667.17,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 5700.33,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 5757.67,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 5790.83,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 5609.83,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 5576.67,
+        "as_of": "2026-09-04"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 5519.33,
+        "as_of": "2026-09-04"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 4298.5,
-        "as_of": "2026-09-03"
+        "as_of": "2026-09-04"
       },
       {
         "method": "swing_low",
         "kind": "SL2",
         "price": 5442.5,
-        "as_of": "2026-09-03"
+        "as_of": "2026-09-04"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 5281.93,
-        "as_of": "2026-09-03"
+        "price": 5297.96,
+        "as_of": "2026-09-04"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 5462.25,
-        "as_of": "2026-09-03"
+        "price": 5459.78,
+        "as_of": "2026-09-04"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 6563.5,
-        "as_of": "2026-09-03"
+        "as_of": "2026-09-04"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 4298.5,
-        "as_of": "2026-09-03"
+        "as_of": "2026-09-04"
       }
     ],
     "operator_levels": [],
@@ -5765,10 +5814,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 5462.25,
+        "price": 5609.83,
         "dir": "below",
         "kind": "watch",
-        "why": "200-day SMA",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 5667.17,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -5783,25 +5840,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 5667.17,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.4283182704235349
+      },
+      {
         "label": "SUPPORT",
-        "price": 5462.25,
+        "price": 5609.83,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -3.442637440339402
+        "dist_pct": -0.5878079035973786
       },
       {
         "label": "UPSIDE",
         "price": 6563.5,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 16.024394555418066
+        "dist_pct": 16.312245259613682
       },
       {
         "label": "INVALIDATION",
         "price": 4298.5,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -24.01449531553827
+        "dist_pct": -23.825979089136982
       }
     ],
     "scenario_ladder": [
@@ -5814,7 +5878,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 5657.0,
+        "level": 5643.0,
         "note": "holds current band"
       },
       {
