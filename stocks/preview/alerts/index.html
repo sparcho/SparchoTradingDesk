@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your names, today — proposed top-of-desk band</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%94%94%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pos:#3fcf7a; --neg:#ff6b6b; --watch:#e6b34a; --cyan:#42dbe6; --violet:#9a8cff;
+  --deep:#05070f; --ink:#eaf3ff; --mut:#6f86b0; --faint:#48587d;
+  --bg2:rgba(26,40,68,.42); --hair:rgba(130,190,230,.14); --font-mono:"Space Mono",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--deep);color:var(--ink);font-family:Inter,system-ui,sans-serif;
+  /* 1120px, not 1100px: a share quantity in the book happened to be 1100 and a leak scan that
+     matches on digits cannot tell a gradient width from a position size. Cheaper to move the
+     decoration than to teach every future guard the difference. */
+  background-image:radial-gradient(1120px 520px at 12% -6%,rgba(66,219,230,.08),transparent 60%);
+  background-attachment:fixed;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 80px}
+.mono{font-family:var(--font-mono)}
+a{color:var(--cyan)}
+
+.banner{border:1px solid rgba(154,140,255,.45);background:rgba(154,140,255,.08);border-radius:12px;
+  padding:13px 16px;margin-bottom:18px}
+.banner h1{margin:0 0 6px;font-size:17px;letter-spacing:-.01em}
+.banner p{margin:0 0 7px;font-size:12.5px;color:var(--mut);line-height:1.65}
+.banner p:last-child{margin-bottom:0}
+.banner b{color:var(--ink)}
+
+.step{display:flex;align-items:center;gap:9px;margin:26px 0 10px}
+.step b{font-family:var(--font-mono);font-size:10px;color:var(--deep);background:var(--cyan);
+  padding:2px 7px;border-radius:5px}
+.step span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.step i{flex:1;height:1px;background:var(--hair)}
+
+.card{border:1px solid var(--hair);border-radius:13px;background:var(--bg2);padding:14px 16px;margin-bottom:13px}
+.c-lbl{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut);
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.c-lbl .age{margin-left:auto;font-family:var(--font-mono);font-size:10px;color:var(--faint);letter-spacing:0}
+.note{font-size:12px;color:var(--mut);line-height:1.65}
+.note b{color:var(--ink)}
+
+/* ── the band itself ───────────────────────────────────────────────── */
+.yn{border:1px solid var(--hair);border-radius:14px;background:linear-gradient(180deg,rgba(26,40,68,.5),rgba(26,40,68,.28));padding:12px 14px}
+.yn-hd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.yn-t{font-size:12.5px;letter-spacing:.10em;text-transform:uppercase;font-weight:700}
+.yn-s{font-family:var(--font-mono);font-size:10px;color:var(--mut)}
+.yn-s.stale{color:var(--watch)}
+.yn-row{display:flex;gap:9px;flex-wrap:wrap}
+
+.yn-c{flex:1 1 300px;min-width:280px;border:1px solid var(--hair);border-left:3px solid var(--faint);
+  border-radius:10px;background:rgba(255,255,255,.022);padding:9px 11px 10px;line-height:1.45}
+.yn-c.absorb{border-left-color:var(--watch);background:rgba(230,179,74,.06)}
+.yn-c.moving{border-left-color:var(--pos);background:rgba(63,207,122,.055)}
+.yn-c.busy{border-left-color:var(--cyan)}
+.yn-c.under{border-left-color:var(--neg);background:rgba(255,107,107,.055)}
+.yn-c.mixed{border-left-color:var(--violet);background:rgba(154,140,255,.05)}
+.yn-c.quiet{border-left-color:var(--faint);opacity:.72}
+.yn-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.yn-tk{font-weight:800;font-size:13.5px;letter-spacing:.01em}
+.yn-st{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.10em;text-transform:uppercase;
+  padding:2px 7px;border-radius:99px;border:1px solid var(--hair);color:var(--mut)}
+.yn-c.absorb .yn-st{border-color:var(--watch);color:var(--watch)}
+.yn-c.moving .yn-st{border-color:var(--pos);color:var(--pos)}
+.yn-c.busy .yn-st{border-color:var(--cyan);color:var(--cyan)}
+.yn-c.under .yn-st{border-color:var(--neg);color:var(--neg)}
+.yn-c.mixed .yn-st{border-color:var(--violet);color:var(--violet)}
+.yn-px{margin-left:auto;font-family:var(--font-mono);font-size:11.5px;color:var(--mut)}
+.yn-px .up{color:var(--pos)} .yn-px .dn{color:var(--neg)}
+.yn-say{font-size:12px;color:var(--ink);margin-top:6px;line-height:1.55}
+.yn-say .n{font-family:var(--font-mono);color:var(--cyan)}
+.yn-say .w{color:var(--watch)}
+.yn-sub{font-size:10.5px;color:var(--faint);margin-top:5px;line-height:1.5}
+.yn-quietline{font-size:11.5px;color:var(--mut);margin-top:9px;padding-top:8px;border-top:1px dashed var(--hair);line-height:1.6}
+.yn-quietline b{color:var(--ink)}
+
+/* spark of the day's shape */
+.spark{display:flex;align-items:flex-end;gap:1.5px;height:22px;margin-top:7px}
+.spark i{flex:1;background:rgba(130,190,230,.28);border-radius:1px;min-height:1px}
+.spark i.pk{background:var(--watch)}
+
+/* ── unlock ────────────────────────────────────────────────────────── */
+.lockcard{border:1px solid rgba(230,179,74,.35);background:rgba(230,179,74,.06);border-radius:13px;padding:15px 16px;margin-bottom:13px}
+.lockcard form{display:flex;gap:8px;margin-top:10px;max-width:420px}
+.lockcard input{flex:1;min-width:0;background:rgba(0,0,0,.34);border:1px solid var(--hair);border-radius:10px;
+  padding:10px 13px;color:var(--ink);font-size:13.5px;font-family:Inter,system-ui,sans-serif;outline:none}
+.lockcard input:focus{border-color:rgba(230,179,74,.6)}
+.lockcard button{background:linear-gradient(135deg,#f0d384,#b88f33);border:none;border-radius:10px;padding:0 16px;
+  color:#1a1408;font-weight:700;font-size:13px;cursor:pointer}
+.lockmsg{height:16px;margin-top:9px;font-family:var(--font-mono);font-size:11px;color:var(--neg)}
+
+/* ── placement mock ────────────────────────────────────────────────── */
+.mock{border:1px solid var(--hair);border-radius:12px;background:rgba(0,0,0,.28);padding:11px;font-family:var(--font-mono);font-size:10.5px;color:var(--faint);line-height:1.75}
+.mock .bar{border:1px dashed var(--hair);border-radius:7px;padding:6px 9px;margin-bottom:6px;color:var(--mut)}
+.mock .bar.hi{border:1px solid var(--cyan);color:var(--cyan);background:rgba(66,219,230,.06)}
+.mock .bar.dim{opacity:.5}
+
+table.rules{width:100%;border-collapse:collapse;font-size:12px}
+table.rules th,table.rules td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--hair);vertical-align:top}
+table.rules th{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600}
+table.rules td:first-child{white-space:nowrap;font-family:var(--font-mono);font-size:11px}
+.sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:baseline}
+
+.warn{border:1px solid rgba(255,107,107,.4);background:rgba(255,107,107,.07);border-radius:11px;padding:11px 14px;font-size:12px;color:var(--mut);line-height:1.65;margin-bottom:13px}
+.warn b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="banner">
+    <h1>Your names, today — proposed band for the top of the equity desk</h1>
+    <p><b>This is a preview at a second URL. Nothing on the live desk has changed.</b> It is also the real
+    thing: unlock it with the desk password and it reads your actual book out of the encrypted payload and
+    crosses it against the live volume feed. What you see below is what the band would look like on the desk.</p>
+    <p>It answers one question — <b>is anything I own doing something unusual right now, and which way is
+    the pressure going?</b> That is the question that was missing at 09:23 on 04-Sep.</p>
+  </div>
+
+  <div class="step"><b>01</b><span>where it sits</span><i></i></div>
+  <div class="card">
+    <div class="c-lbl">placement on the live desk</div>
+    <div class="mock">
+      <div class="bar dim">topbar &nbsp;·&nbsp; SPARCHO TRADING DESK &nbsp;·&nbsp; silver / equity / hub &nbsp;·&nbsp; refresh</div>
+      <div class="bar hi">&#9660; YOUR NAMES, TODAY &nbsp;— &nbsp;renders here, above everything, on every tab</div>
+      <div class="bar dim">nav pills &nbsp;·&nbsp; 06 Tickers &nbsp;/&nbsp; 05 Research &nbsp;/&nbsp; 03 Radar &nbsp;/&nbsp; 04 Portfolio &nbsp;/&nbsp; P Scorecard</div>
+      <div class="bar dim">&nbsp;<br>&nbsp; the deck &nbsp;(unchanged)<br>&nbsp;</div>
+    </div>
+    <div class="note" style="margin-top:11px">
+      It sits <b>above the deck, below the topbar</b>, so it is on screen whichever tab you are on — you do not
+      have to go looking for it. It is one row of cards and it collapses to a single line on a quiet day.
+      <b>When the desk is locked the band is not rendered at all</b> — no placeholder, no "unlock to see", nothing
+      that says a band exists. A stranger cannot tell it is there.
+    </div>
+  </div>
+
+  <div class="step"><b>02</b><span>the band, live</span><i></i></div>
+  <div id="gate"></div>
+  <div id="band"></div>
+
+  <div class="step"><b>03</b><span>what a loud day looks like</span><i></i></div>
+  <div class="card">
+    <div class="c-lbl">worked example <span class="age" id="ex-age"></span></div>
+    <div class="note" style="margin-bottom:11px">
+      Your three names are quiet today, so the band above is showing its ordinary state. This is the same
+      card, same code, rendered from <b>the loudest name in the public feed</b> — picked by a public rule
+      from public data, so it says nothing about what you own. It is here so you can see the shape of the
+      thing when it actually fires.
+    </div>
+    <div id="example"></div>
+  </div>
+
+  <div class="step"><b>04</b><span>how it reads</span><i></i></div>
+  <div class="card">
+    <div class="c-lbl">four states, and the sentence each one writes</div>
+    <table class="rules">
+      <tr><th>state</th><th>when</th><th>what it means, in words</th></tr>
+      <tr><td><span class="sw" style="background:var(--watch)"></span>heavy &middot; absorbing</td>
+          <td>5&times; volume or more, and <b>the feed itself</b> calls the travel absorbing (under its measured 0.81&times; line)</td>
+          <td>A lot of stock is changing hands and the price is <b>not going with it</b>. Someone is selling into the buying.</td></tr>
+      <tr><td><span class="sw" style="background:var(--pos)"></span>heavy &middot; moving</td>
+          <td>5&times; volume or more, and the feed calls the travel displacing (over its measured 1.24&times; line)</td>
+          <td>The volume is genuinely repricing it. A move with something behind it.</td></tr>
+      <tr><td><span class="sw" style="background:var(--neg)"></span>heavy &middot; under its average</td>
+          <td>5&times; volume or more, travel is mixed, but price is <b>below its own average price for the day</b></td>
+          <td>No clean travel verdict, but it is trading under its VWAP on heavy volume — the shape of selling into strength. This is what 04-Sep looked like.</td></tr>
+      <tr><td><span class="sw" style="background:var(--violet)"></span>heavy &middot; mixed</td>
+          <td>5&times; volume or more, travel mixed, price above its average</td>
+          <td>Big volume, no clean verdict either way. <b>Look, do not conclude.</b></td></tr>
+      <tr><td><span class="sw" style="background:var(--cyan)"></span>busy</td>
+          <td>above the feed&rsquo;s own alive line (1.5&times;) but under 5&times;</td>
+          <td>More active than usual. Worth a glance, not an alarm.</td></tr>
+      <tr><td><span class="sw" style="background:var(--faint)"></span>not alive</td>
+          <td>the feed did not flag it today</td>
+          <td>Nothing unusual. Collapsed to one muted line so the band stays short on ordinary days.</td></tr>
+    </table>
+    <div class="note" style="margin-top:12px">
+      <b>The absorbing / moving verdict is the feed&rsquo;s, not mine.</b> Those bands were measured on
+      3,969 name-sessions and this page quotes them rather than re-deriving them. The only judgement
+      added here is the 5&times; &ldquo;heavy&rdquo; cut, and that one is unmeasured &mdash; see below.
+    </div>
+    <div class="note" style="margin-top:12px">
+      Every card also carries the <b>pressure flip</b> when there is one: the split between how the whole
+      session has traded and how the <i>last half hour</i> has traded. A name that is 55% buyers all day but
+      38% buyers in the last thirty minutes is turning, and that is a different message from the headline
+      volume number.
+    </div>
+  </div>
+
+  <div class="warn">
+    <b>Two honest limits, stated up front.</b><br>
+    1. The 5&times; &ldquo;heavy&rdquo; line is <b>mine, and it is unmeasured</b> — I picked it to separate the 04-Sep
+    shape from an ordinary busy day. The feed says the same thing about its own 1.5&times; alive line in its own
+    payload: <i>&ldquo;alive_rvol and liquidity_floor are UNVALIDATED defaults — move them from the journal, never
+    from opinion.&rdquo;</i> Treat both as placeholders until they are measured against outcomes.<br>
+    2. The feed publishes <b>only the names it flagged as alive</b>. So for a held name that is absent, &ldquo;quiet
+    today&rdquo; and &ldquo;never measured&rdquo; look identical from here. The band says <i>not alive</i> rather
+    than <i>quiet</i> for that reason. Closing this properly means the producer publishing the list of names it
+    measured, not just the ones that fired.
+  </div>
+
+  <div class="step"><b>05</b><span>why it is built this way</span><i></i></div>
+  <div class="card">
+    <div class="note">
+      <b>The unlock gate is the privacy boundary, and that is not a preference.</b> The public volume feed ships
+      <span class="mono">book_disclosure: &ldquo;none&rdquo;</span> on purpose — which name you own is never published.
+      A cloud-side &ldquo;alert me when one of my names goes alive&rdquo; would have to filter public code on a private
+      list, and filtering on a private identifier publishes it. So the whole cross is done <b>in your browser,
+      after decryption</b>: the held list only exists there. Same pattern as the trade ledger.<br><br>
+      <b>No push notifications.</b> The desk stays the one place things are said. Nothing is emailed, nothing
+      buzzes.<br><br>
+      <b>No second password, no flicker.</b> The band reads the payload the desk has already decrypted for the
+      Portfolio and Radar tabs — it never asks again, and it renders in place on the normal 60-second refresh
+      rather than being inserted after the fact, so the page does not jump under you.
+    </div>
+  </div>
+
+  <div class="step"><b>06</b><span>what it does not do</span><i></i></div>
+  <div class="card">
+    <div class="note">
+      It does not tell you to buy or sell. It reports what the tape is doing on names you own, in words, and the
+      decision stays yours. It cannot see intraday order flow beyond half-hour buckets, it has no depth, and on a
+      thinly traded name a large relative number can be one order. It is a <b>look at this</b> signal, not a trade
+      signal — which is the same conclusion the volume study reached: volume finds range, not direction.
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var AGG='../../data/equity_dashboard_aggregate.json', PULSE='../../data/pulse.json';
+  var DATA=null, P=null, HELD=null;
+  var $=function(id){return document.getElementById(id);};
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+
+  // ── the same PBKDF2 + AES-GCM the desk uses ──────────────────────────
+  async function tryDecrypt(b,pw){
+    var dec=function(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0);});};
+    var km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+    var key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:dec(b.salt),iterations:b.iter,hash:'SHA-256'},
+      km,{name:'AES-GCM',length:256},false,['decrypt']);
+    var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:dec(b.iv)},key,dec(b.ct));
+    return JSON.parse(new TextDecoder().decode(pt));
+  }
+
+  // ── the read: one pulse row -> a state and a sentence ────────────────
+  // TWO KINDS OF NUMBER LIVE HERE AND THEY ARE NOT EQUAL.
+  //   MEASURED  - char / travel_absorb / travel_displace. The feed states in its own payload that
+  //               these bands were measured on 3,969 name-sessions. The absorb/displace verdict is
+  //               therefore the FEED'S, taken as-is; this page does not re-derive it.
+  //   UNMEASURED- HEAVY below. Mine, picked by eye to separate a 20x day from a 2x day. Named, so
+  //               it is a dial and not a number buried in a branch, and declared on the page.
+  // The first cut of this rule called anything with travel < 1.0 "absorbing", which labelled a
+  // name that closed +8.2% at 84% of its range as "going nowhere". travel 0.9 means "moved
+  // slightly less than this much volume usually moves it", not "did not move". Editorialising a
+  // mechanical measure into a verdict is exactly the failure mode to avoid.
+  var HEAVY=5;
+
+  function classify(r, aliveLine, th){
+    if(!r) return {k:'quiet', st:'not alive'};
+    var rv=+r.rvol||0;
+    if(rv>=HEAVY){
+      var ch=String(r.char||'').toUpperCase();
+      var under=(r.vs_vwap_pct!=null && +r.vs_vwap_pct<0);
+      if(ch==='ABSORBING')  return {k:'absorb', st:'heavy · absorbing'};
+      if(ch==='DISPLACING') return {k:'moving', st:'heavy · moving'};
+      if(under)             return {k:'under',  st:'heavy · under its average'};
+      return {k:'mixed', st:'heavy · mixed'};
+    }
+    if(rv>=(aliveLine||1.5)) return {k:'busy', st:'busy'};
+    return {k:'quiet', st:'not alive'};
+  }
+
+  // Space Mono carries no rupee glyph — the symbol fell back to a different currency mark in the
+  // mono spans. The vault's own text rule already says use "Rs." rather than the sign.
+  function fmtCr(v){ if(v==null) return '—'; var n=+v; return n>=1000?('Rs '+Math.round(n/100)/10+'k cr'):('Rs '+Math.round(n)+' cr'); }
+
+  function fmtX(v){ return v==null?'—':(Math.round(+v*10)/10)+'×'; }
+
+  function sentence(r,c,th){
+    if(c.k==='quiet') return '';
+    var out=[], rv=+r.rvol||0;
+    out.push('Trading <span class="n">'+fmtX(rv)+'</span> its normal volume for this time of day');
+    if(r.turnover_cr!=null && r.adv_cr) out.push(' — <span class="n">'+fmtCr(r.turnover_cr)+'</span> against a normal full day of <span class="n">'+fmtCr(r.adv_cr)+'</span>');
+    out.push('. ');
+    if(r.peak_at) out.push('The rush was <span class="n">'+esc(r.peak_at)+'</span>. ');
+
+    if(c.k==='busy'){ out.push('More active than usual, nothing extreme.'); return out.join(''); }
+
+    // where it is against its own average price for the day
+    if(r.vs_vwap_pct!=null){
+      var v=+r.vs_vwap_pct;
+      out.push(v<0
+        ? 'It is <span class="w">'+Math.abs(Math.round(v*100)/100)+'% below its own average price</span> for the day. '
+        : 'It is '+(Math.round(v*100)/100)+'% above its own average price for the day. ');
+    }
+    // the feed's own measured verdict, quoted rather than re-derived
+    var t=(r.travel==null)?null:(Math.round(+r.travel*100)/100);
+    if(c.k==='absorb'){
+      out.push('The feed calls this <b>absorbing</b>'+(t!=null?' — it moved <span class="n">'+t+'×</span> as far as this much volume normally carries it, under the measured '+((th&&th.travel_absorb)||0.81)+'× line':'')+'. <b>A lot of stock is changing hands and the price is not going with it.</b>');
+    } else if(c.k==='moving'){
+      out.push('The feed calls this <b>displacing</b>'+(t!=null?' — <span class="n">'+t+'×</span> the normal travel for this much volume':'')+'. <b>The volume is genuinely repricing it.</b>');
+    } else if(c.k==='under'){
+      out.push('The feed calls the travel <b>mixed</b>'+(t!=null?' ('+t+'×)':'')+', so the volume is neither clearly absorbed nor clearly repricing — but it is trading <b>under its own average price</b>, which is the shape of selling into strength.');
+    } else {
+      out.push('The feed calls the travel <b>mixed</b>'+(t!=null?' ('+t+'×)':'')+' — big volume, no clean verdict either way. Look, do not conclude.');
+    }
+    return out.join('');
+  }
+
+  function pressure(r){
+    if(r.buy_frac==null||r.buy_frac_now==null) return '';
+    var all=Math.round(+r.buy_frac*100), now=Math.round(+r.buy_frac_now*100), d=now-all;
+    var dir = d<=-8 ? 'turning to sellers' : (d>=8 ? 'turning to buyers' : 'holding steady');
+    return 'Buyers were <b>'+all+'%</b> of the session and <b>'+now+'%</b> of the last half hour — '+dir+'.';
+  }
+
+  function sparkHTML(r){
+    var p=r.profile||[]; if(!p.length) return '';
+    var mx=Math.max.apply(null,p.map(function(b){return +b.rv||0;}))||1;
+    var pk=p.reduce(function(a,b){return (+b.rv||0)>(+a.rv||0)?b:a;},p[0]);
+    return '<div class="spark">'+p.map(function(b){
+      var h=Math.max(1,Math.round((+b.rv||0)/mx*22));
+      return '<i class="'+(b===pk?'pk':'')+'" style="height:'+h+'px" title="'+esc(b.t)+' · '+fmtX(b.rv)+'"></i>';
+    }).join('')+'</div>';
+  }
+
+  // ONE card renderer. The band and the worked example share it on purpose: an example that
+  // renders through different code is a drawing of the feature, not the feature.
+  function cardHTML(tk,r,c){
+    var mv=(r.move_pct==null)?'':'<span class="'+(+r.move_pct>=0?'up':'dn')+'">'+(+r.move_pct>=0?'+':'')+r.move_pct+'%</span>';
+    return '<div class="yn-c '+c.k+'">'
+      +'<div class="yn-top"><span class="yn-tk">'+esc(tk)+'</span>'
+      +'<span class="yn-st">'+esc(c.st)+'</span>'
+      +'<span class="yn-px">'+(r.price!=null?r.price:'')+' '+mv+'</span></div>'
+      +'<div class="yn-say">'+sentence(r,c,(P&&P.thresholds)||{})+'</div>'
+      +(pressure(r)?'<div class="yn-say" style="margin-top:5px">'+pressure(r)+'</div>':'')
+      +sparkHTML(r)
+      +'<div class="yn-sub">day '+(r.day_low!=null?r.day_low:'—')+'–'+(r.day_high!=null?r.day_high:'—')
+      +' · sitting '+(r.pos_in_range!=null?Math.round(+r.pos_in_range*100)+'% up the day’s range':'—')
+      +(r.level&&r.level.banked?' · we have banked levels on this name':'')+'</div>'
+      +'</div>';
+  }
+
+  // The worked example. Chosen by a PUBLIC rule (loudest row) from a PUBLIC file, so it discloses
+  // nothing about the book whether the desk is locked or not — it renders before any unlock.
+  function renderExample(){
+    var el=$('example'); if(!el) return;
+    if(!P||!(P.rows||[]).length){ el.innerHTML='<div class="note">no rows in the feed to draw one from.</div>'; return; }
+    var top=(P.rows||[]).reduce(function(a,b){ return (+b.rvol||0)>(+a.rvol||0)?b:a; });
+    var c=classify(top,+P.alive_threshold||1.5,(P&&P.thresholds)||{});
+    el.innerHTML='<div class="yn-row">'+cardHTML(String(top.ticker||'').toUpperCase(),top,c)+'</div>';
+    var age=$('ex-age'); if(age) age.textContent=(P.session_date||'')+' · public feed · not from your book';
+  }
+
+  function renderBand(){
+    var el=$('band'); if(!el) return;
+    if(!HELD){ el.innerHTML=''; return; }              // locked -> the band does not exist
+    if(!P){ el.innerHTML='<div class="card"><div class="note">volume feed unavailable — the band renders nothing rather than guessing.</div></div>'; return; }
+
+    var map={}; (P.rows||[]).forEach(function(r){ if(r&&r.ticker) map[String(r.ticker).toUpperCase()]=r; });
+    var aliveLine=+P.alive_threshold||1.5, TH=(P&&P.thresholds)||{};
+    var loud=[], quiet=[];
+    HELD.forEach(function(h){
+      var t=String(h.ticker||'').toUpperCase(); if(!t) return;
+      var r=map[t], c=classify(r,aliveLine);
+      (c.k==='quiet'?quiet:loud).push({t:t,r:r,c:c});
+    });
+    loud.sort(function(a,b){ return (+b.r.rvol||0)-(+a.r.rvol||0); });
+
+    var fresh=(P.freshness&&P.freshness.state)||'';
+    var stale=/stale|overdue/i.test(fresh);
+    var head='<div class="yn-hd"><span class="yn-t">Your names, today</span>'
+      +'<span class="yn-s'+(stale?' stale':'')+'">'+esc(P.as_of_ist||'')+(fresh?' · '+esc(fresh):'')
+      +' · session '+esc(P.session_date||'')+' · bars through '+esc(P.bars_through||'')+'</span></div>';
+
+    var cards=loud.map(function(x){ return cardHTML(x.t,x.r,x.c); }).join('');
+
+    var qline = quiet.length
+      ? '<div class="yn-quietline"><b>Not alive today:</b> '+quiet.map(function(x){return esc(x.t);}).join(' · ')
+        +' — the feed did not flag them. It publishes only the names it flagged, so this cannot tell '
+        +'&ldquo;quiet&rdquo; apart from &ldquo;not measured&rdquo;.</div>'
+      : '';
+
+    var body = cards
+      ? '<div class="yn-row">'+cards+'</div>'+qline
+      : '<div class="yn-quietline" style="border-top:none;padding-top:0;margin-top:0"><b>Nothing you own is doing anything unusual.</b> '
+        +quiet.map(function(x){return esc(x.t);}).join(' · ')+' — all quiet.</div>';
+
+    el.innerHTML='<div class="yn">'+head+body+'</div>';
+  }
+
+  function renderGate(msg){
+    var el=$('gate');
+    if(HELD){ el.innerHTML='<div class="note mono" style="font-size:11px;color:var(--faint);margin-bottom:10px">'
+      +'unlocked · '+HELD.length+' name(s) read from the encrypted payload · nothing left this browser</div>'; return; }
+    el.innerHTML='<div class="lockcard">'
+      +'<div class="c-lbl" style="margin-bottom:4px">locked</div>'
+      +'<div class="note">On the live desk this is where <b>nothing</b> would be — the band simply does not render '
+      +'until the payload is decrypted. Here it asks, so you can see the band with your real names.</div>'
+      +'<form id="lf"><input id="lp" type="password" placeholder="desk password" autocomplete="off" spellcheck="false">'
+      +'<button type="submit">Unlock →</button></form>'
+      +'<div class="lockmsg" id="lm">'+(msg||'')+'</div></div>';
+    $('lf').addEventListener('submit',async function(e){
+      e.preventDefault();
+      var pw=$('lp').value||''; $('lm').textContent='';
+      try{
+        var u=await tryDecrypt(DATA.sensitive_enc,pw);
+        HELD=(u&&u.held)||[];
+        renderGate(); renderBand();
+      }catch(_){ $('lm').textContent='✗ wrong'; }
+    });
+  }
+
+  Promise.all([
+    fetch(AGG+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}),
+    fetch(PULSE+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;})
+  ]).then(function(a){
+    DATA=a[0]; P=a[1];
+    if(!DATA||!DATA.sensitive_enc){
+      $('gate').innerHTML='<div class="warn">The aggregate did not load, or carries no encrypted payload — '
+        +'the band has nothing to read and renders nothing rather than a guess.</div>';
+      return;
+    }
+    renderGate(); renderBand(); renderExample();
+  });
+})();
+</script>
+</body></html>
