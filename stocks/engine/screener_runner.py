@@ -114,8 +114,18 @@ SECTOR_MAP = {
     # a tracked name renders UNCATEGORIZED on the desk (F260619 item 3). BLUESTARCO sits in
     # 'DC' because the desk tracks it for data-centre cooling; Voltas is consumer/commercial
     # AC, so folding it in there would misdescribe it.
-    'CAPGOODS': {'VOLTAS'},
+    # +260905 AEROFLEX (Aeroflex Industries -- stainless-steel corrugated flexible flow
+    # solutions; export-led industrial products). Nearest honest coarse tag: it is not
+    # defence, not chemicals, and without ANY entry it renders UNCATEGORIZED
+    # (F260619 item 3), which is the second hidden onboarding gate.
+    'CAPGOODS': {'VOLTAS', 'AEROFLEX'},
     'ETF': {'HDFCSML250'},   # Broad Smallcap index ETF (260620); tracked + level-ID'd, NOT value-screened (see G1_NON_SCREENED)
+    # +260905 OIL_GAS is NEW. HINDPETRO (refining & marketing PSU) and CASTROLIND
+    # (lubricants) had no home: POWER is electricity, CHEMICALS is specialty-chem, and
+    # folding a refiner into either would misdescribe the screen the operator reads by
+    # sector. MGL stays in POWER as the gas utility it was tagged as -- re-sorting it is a
+    # separate decision, not a side effect of this onboarding.
+    'OIL_GAS': {'HINDPETRO', 'CASTROLIND'},
     'CHEMICALS': {'HSCL', 'PCBL', 'AETHER'},   # +260630 specialty-chem / carbon & battery materials (HSCL held; PCBL+AETHER already in ALL_TICKERS)
 }
 
