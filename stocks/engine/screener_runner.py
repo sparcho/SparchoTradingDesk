@@ -65,6 +65,8 @@ HIST_CSV = CACHE_DIR / "historical_closes.csv"
 SECTOR_MAP = {
     # Fundamental-10G #1 needs: Power, IT, NBFC
     'POWER': {
+        'TARIL',   # +260906 Transformers and Rectifiers India — transformer OEM,
+                   # beside SHILCHAR/VOLTAMP/SKIPPER. Held for weeks with NO sector tag.
         'NTPC', 'POWERGRID', 'ADANIGREEN', 'TATAPOWER',
         'IREDA', 'WAAREEENER', 'MGL', 'VEDPOWER',  # +VEDPOWER 260630 (Vedanta Power thermal demerger, held); MGL = gas utility, power-adjacent
         # +260808 power equipment / T&D (F260727-BANKED-OUTSIDE onboarding)
@@ -83,14 +85,16 @@ SECTOR_MAP = {
                  'GRAVITA',   # +260901 lead/aluminium recycling; banked and tracked
                  'HINDALCO'},   # +HINDALCO 260820 (aluminium + copper integrated producer)   # +DECNGOLD 260619 (gold explorer); +HINDCOPPER 260630 (copper PSU onboard)
     'TELECOM': {'HFCL', 'STLTECH', 'TEJASNET', 'BHARTIARTL', 'POLYCAB', 'KEI', 'PACEDIGITK'},   # +PACEDIGITK 260619 (held; telecom-digital infra)
-    'DEFENCE': {'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO', 'BHARATFORG', 'BDL', 'DATAPATTNS',
+    'DEFENCE': {'IDEAFORGE',   # +260906 ideaForge — drone OEM, promoted 260509, never tagged
+                'BEL', 'GRSE', 'MAZDOCK', 'SOLARINDS', 'MTARTECH', 'HAL', 'HBLENGINE', 'APOLLO', 'ASTRAMICRO', 'BHARATFORG', 'BDL', 'DATAPATTNS',
                  'PARAS', 'SOLARINDS'},   # +PARAS 260820 (Paras Defence & Space, optics/EW)   # +BDL +DATAPATTNS 260808   # +BHARATFORG 260730 (defence/auto-anc precision forging; onboarded with its banked 260729 level read)   # +APOLLO +ASTRAMICRO 260620 (full screener-verse onboard)
     'SEMI_EMS': {
-        'EXIDEIND',
+        'EXIDEIND', 'AREM',   # +260906 Amara Raja Energy & Mobility — EXIDE's sister-pair (CLAUDE 16.A)
         'OLAELEC','KAYNES', 'DIXON', 'SYRMA', 'AMBER'},
     'DC': {
         'DENTA','ANANTRAJ', 'BLUESTARCO'},
     'L5_APPS': {
+        'GENESYS',   # +260906 geospatial/mapping — sibling of MAPMYINDIA, already here
         'CEINSYS','KPIT', 'NAUKRI', 'TANLA', 'MAPMYINDIA', 'NEWGEN'},
     'DPI': {'PAYTM', 'PBFINTECH', 'CDSL', 'ANGELONE', 'NSDL'},   # +NSDL 260715 (depository, CDSL peer; held)
     'PHARMA': {'DRREDDY', 'SUNPHARMA', 'BIOCON', 'AARTIDRUGS'},   # +AARTIDRUGS 260808 (API / formulations)
@@ -119,7 +123,7 @@ SECTOR_MAP = {
     # defence, not chemicals, and without ANY entry it renders UNCATEGORIZED
     # (F260619 item 3), which is the second hidden onboarding gate.
     'CAPGOODS': {'VOLTAS', 'AEROFLEX'},
-    'ETF': {'HDFCSML250'},   # Broad Smallcap index ETF (260620); tracked + level-ID'd, NOT value-screened (see G1_NON_SCREENED)
+    'ETF': {'HDFCSML250', 'NIFTY', 'NIFTYBEES', 'BANKBEES', 'ITBEES', 'PHARMABEES', 'PSUBNKBEES'},   # +260906 index/ETF instruments: tracked + level-read, never value-screened   # Broad Smallcap index ETF (260620); tracked + level-ID'd, NOT value-screened (see G1_NON_SCREENED)
     # +260905 OIL_GAS is NEW. HINDPETRO (refining & marketing PSU) and CASTROLIND
     # (lubricants) had no home: POWER is electricity, CHEMICALS is specialty-chem, and
     # folding a refiner into either would misdescribe the screen the operator reads by
