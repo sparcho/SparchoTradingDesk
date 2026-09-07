@@ -272,7 +272,8 @@ def _sessions_between(d_str, today):
 
 
 def _blk(owner, substrate, max_sessions, asof=None, allow_empty=False,
-         severity="alert", label=None, note="", count=None, public_as=None):
+         severity="alert", label=None, note="", count=None, public_as=None,
+         asof_sibling=None):
     """One block's declared contract.
 
     owner      — the producer responsible for the block
@@ -281,10 +282,24 @@ def _blk(owner, substrate, max_sessions, asof=None, allow_empty=False,
     max_sessions — how many NSE sessions behind TODAY the block may fall (None = exempt)
     asof       — callable(block) -> 'YYYY-MM-DD'; falls back to the deep date scan
     allow_empty— emptiness is a legitimate state for this block
+    asof_sibling — name of ANOTHER top-level block that carries this one's date.
+
+      F260907-SIBLINGDATE. Some blocks are a bare number. `live_xagusd_used_for_ladders` is the
+      float 66.748, and no date scan will ever find a date inside it, so it reported "NO PROVENANCE
+      - can never be proven fresh OR stale" on every single run and could never clear. A check that
+      cannot pass is a check the operator learns to scroll past, and while he is travelling the
+      alarms he scrolls past are the only ones he gets.
+
+      Deleting the declaration is not the alternative: an unregistered block is itself a finding.
+      The honest description is that the number's date lives in a sibling written by the same
+      producer in the same pass. So the block says which sibling, the date is READ from there and
+      GRADED normally -- if the sibling stops being dated forward, both go stale together. It is a
+      statement about the payload's shape, not a suppression.
     """
     return dict(owner=owner, substrate=substrate, max_sessions=max_sessions,
                 asof=asof, allow_empty=allow_empty, severity=severity,
-                label=label, note=note, count=count, public_as=public_as)
+                label=label, note=note, count=count, public_as=public_as,
+                asof_sibling=asof_sibling)
 
 
 # substrate legend:
@@ -328,7 +343,11 @@ SILVER_BLOCKS = {
     "current_market":   _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1,
                              _key_date("fetched_at_utc")),
     "live_xagusd_used_for_ladders": _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1,
-                                         severity="info"),
+                                         severity="info",
+                                         asof_sibling="live_xagusd_basis",
+                                         note="a bare float, so its date lives in the basis block "
+                                              "written beside it in the same pass "
+                                              "(F260907-SIBLINGDATE)."),
 
     # F260907-LADDERBASIS. The block above is a bare float, so no as-of can be derived from it and
     # it reported NO PROVENANCE - "can never be proven fresh OR stale" - on the number every ladder
@@ -472,6 +491,9 @@ def _block_items(data, now, registry, desk):
                 continue
 
             asof = spec["asof"](blk) if spec["asof"] else _max_date(blk)
+            if asof is None and spec.get("asof_sibling"):
+                # The date is not in this block; it is in the sibling that was written beside it.
+                asof = _max_date((data or {}).get(spec["asof_sibling"]))
             if asof is None:
                 if spec["max_sessions"] is None:
                     continue
