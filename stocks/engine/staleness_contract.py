@@ -489,6 +489,47 @@ def _safe_public_name(name):
     return name
 
 
+def _freshness_sentence(asof, sess, spec, today=None):
+    """The words a NON-stale block reports about itself.
+
+    F260907-FUTUREFRESH. This used to be one string, "fresh - as-of %s (%s session(s) behind)",
+    said about every block that was not stale. It was wrong in two different ways at once, and the
+    live desk showed both on 2026-09-07:
+
+        block:catalysts | since 2026-09-16 | fresh - as-of 2026-09-16 (0 session(s) behind)
+
+    2026-09-16 was NINE DAYS AWAY. The scan takes the maximum date it finds inside a block and calls
+    it the as-of, so a forward-looking block reports the horizon it describes rather than the moment
+    it was last touched. A catalyst ledger nobody has opened in a month still reads "0 sessions
+    behind" while it holds one future event, and it reads BETTER the further ahead that event is.
+
+    And the registry already knew: catalysts is declared max_sessions=None with the note
+    "forward-dated by nature; not a freshness signal". So the declaration said do not read this as
+    freshness and the rendered sentence said "fresh". The note is invisible to the operator; the
+    word is not. Two more blocks are declared the same way, decisions and fib_coverage, each with a
+    stated reason for having no SLA, and each was reporting "fresh" too.
+
+    All three are `operator` substrate -- they move only when he touches them, which is exactly what
+    stops while he is travelling. They are the blocks most likely to rot and the ones structurally
+    unable to say so.
+
+    So a block with no SLA now says it has no SLA, and a future as-of is reported as being AHEAD of
+    today rather than behind it. Neither borrows the vocabulary of a check it was never given.
+    """
+    # Ahead-ness is decided by comparing the DATE, never by the session count. _sessions_between
+    # returns 0 for anything at or after today, so a date nine days out and a date from this morning
+    # arrive here as the same number -- which is how "2026-09-16" came to be published as "0
+    # session(s) behind". The count cannot express the difference, so it must not be asked to.
+    if today is not None and isinstance(asof, str) and asof[:10] > str(today)[:10]:
+        return ("as-of %s is AHEAD of today - this block is dated by what it DESCRIBES, not by when "
+                "it was last written, so its date is not a freshness signal" % asof)
+    if spec.get("max_sessions") is None:
+        note = (spec.get("note") or "").strip()
+        return ("no freshness SLA by declaration - as-of %s is the furthest date IN the block, not "
+                "when it was last updated%s" % (asof, ("; " + note) if note else ""))
+    return "fresh - as-of %s (%s session(s) behind)" % (asof, sess)
+
+
 def _block_items(data, now, registry, desk):
     """Generic per-block freshness, judged against TODAY — the D1 detector.
 
@@ -582,7 +623,8 @@ def _block_items(data, now, registry, desk):
                          "produced by %s on the %s substrate."
                          % (asof, sess, spec["max_sessions"], spec["owner"], spec["substrate"]))
                         if stale else
-                        "fresh — as-of %s (%s session(s) behind)" % (asof, sess)),
+                        _freshness_sentence(asof, sess, spec,
+                                            now.astimezone(_IST).date())),
             ))
         except Exception as e:
             items.append(_item(
