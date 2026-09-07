@@ -721,6 +721,47 @@ def _aggregate_account(key: str, data: dict, price: float | None) -> dict[str, A
     }
 
 
+def xag_basis(live: dict, cfg: dict) -> dict:
+    """Which XAGUSD the ladders are being computed from, and where it came from.
+
+    F260907-LADDERBASIS. The emit used to choose between a live fetch and a hand-typed YAML estimate
+    inline, and publish only the winning number:
+
+        xag_now = live_xag["price"] if ok else cfg["f98_redeployment"]["current_xagusd_estimate"]
+
+    Every ladder distance, every "+x.x% from <price>" label, the hero line and the S/R distances are
+    computed from that number, and nothing in the payload said which of the two it was. When the
+    XAGUSD fetch broke on 2026-08-26 the desk quietly switched to the typed 64.91 and rendered it as
+    a silver price for TWELVE DAYS while spot was 66.75. That is the reason the outage survived so
+    long: the page never looked wrong.
+
+    A fallback is legitimate. An UNMARKED fallback is not -- it does not degrade the system
+    gracefully, it hides the degradation. So the choice is made in one named place and returns its
+    own provenance, dated, for the freshness contract to grade and the card to mark.
+
+    Same lesson as [[typed-state-never-re-evaluates]]: a typed number standing in for a measured one
+    goes on being believed long after it stops being true.
+    """
+    x = (live or {}).get("xagusd") or {}
+    if x.get("status") == "ok" and x.get("price"):
+        return {"value": x["price"], "is_live": True,
+                "source": "live:%s" % (x.get("yahoo_symbol") or "XAGUSD"),
+                "as_of_utc": x.get("as_of_utc") or None}
+
+    typed = ((cfg or {}).get("f98_redeployment") or {}).get("current_xagusd_estimate") \
+        or ((cfg or {}).get("sr_levels") or {}).get("current_xagusd_estimate")
+    if typed:
+        return {"value": typed, "is_live": False,
+                "source": "typed estimate in silver_holdings.yaml (live fetch unavailable: %s)"
+                          % (x.get("status") or "no response"),
+                # Deliberately None. Stamping this with "now" would make a number somebody typed
+                # weeks ago look like it was measured this minute, which is the defect itself.
+                "as_of_utc": None}
+
+    return {"value": None, "is_live": False,
+            "source": "unavailable - no live fetch and no typed estimate", "as_of_utc": None}
+
+
 def _enrich_trim_ladder(ladder: list[dict], xag_now: float | None) -> list[dict]:
     """Add distance-to-trigger pct to each tier when XAG estimate present."""
     out = []
@@ -1386,12 +1427,8 @@ def emit() -> Path:
         primary_staleness = _staleness_days(price.get("date"))
         primary_day_chg = price.get("day_chg_pct")
     # XAGUSD: prefer live fetch, fall back to YAML estimates
-    live_xag = live.get("xagusd", {})
-    if live_xag.get("status") == "ok" and live_xag.get("price"):
-        xag_now = live_xag["price"]
-    else:
-        xag_now = (cfg.get("f98_redeployment") or {}).get("current_xagusd_estimate") \
-            or (cfg.get("sr_levels") or {}).get("current_xagusd_estimate")
+    _xag_basis = xag_basis(live, cfg)
+    xag_now = _xag_basis["value"]
 
     # Per-account roll-up
     accounts_in = cfg.get("accounts") or {}
@@ -1439,6 +1476,10 @@ def emit() -> Path:
         # Live market snapshot — fresh each emit
         "current_market": live,
         "live_xagusd_used_for_ladders": xag_now,
+        # F260907-LADDERBASIS: the number above is meaningless without this. It is
+        # either a live fetch or something the operator typed into the YAML, and for
+        # twelve days it was the second one with nothing saying so.
+        "live_xagusd_basis": _xag_basis,
 
         # Holdings layer
         "family_totals": {

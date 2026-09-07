@@ -330,6 +330,21 @@ SILVER_BLOCKS = {
     "live_xagusd_used_for_ladders": _blk("silver_dashboard_emit.py (live fetch)", "cloud", 1,
                                          severity="info"),
 
+    # F260907-LADDERBASIS. The block above is a bare float, so no as-of can be derived from it and
+    # it reported NO PROVENANCE - "can never be proven fresh OR stale" - on the number every ladder
+    # distance on the desk is computed from. This is that number's provenance, and it is graded at
+    # one session because a fetch that stops working must show up here rather than being absorbed
+    # by the typed YAML fallback, which is what hid the 2026-08-26 outage for twelve days.
+    #
+    # A TYPED fallback carries as_of_utc None on purpose, so it lands in NO PROVENANCE rather than
+    # being quietly re-dated to today. That is the correct verdict for it: a number a human typed
+    # at an unknown moment genuinely cannot be proven fresh.
+    "live_xagusd_basis": _blk("silver_dashboard_emit.py::xag_basis", "cloud", 1,
+                              _key_date("as_of_utc"), severity="warn",
+                              note="whether the ladder price is a live fetch or the typed "
+                                   "silver_holdings.yaml estimate. An unmarked fallback hides the "
+                                   "outage instead of degrading gracefully (F260907-LADDERBASIS)."),
+
     # --- computed from the price series on every emit (added 2026-08-25)
     "thesis_gates":     _blk("silver_dashboard_emit.py::_thesis_gates", "cloud", 1,
                              _key_date("computed_at"),
