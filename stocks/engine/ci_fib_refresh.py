@@ -463,7 +463,16 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Cloud fib-confluence radar refresh")
     ap.add_argument("--dry-run", action="store_true",
                     help="build + report, write nothing to the aggregate")
-    ap.add_argument("--range", default="1y", help="history window to fetch (default 1y)")
+    # F260907-WINDOW. Was 1y, and that made the cloud radar BLIND rather than merely
+    # shallower. The vault scores levels against historical_ohlc.csv, which holds 1,240
+    # daily bars back to 2021; the cloud saw 247. Re-running this build over the same bank
+    # with only the window changed: ALLCARGO support 12.45 at 1y, 9.32 at 5y -- and 9.32 is
+    # the one its own banked study calls THE SPINE. The cloud was picking the best level it
+    # could see inside twelve months and firing on it, which put a 10x reward:risk at the
+    # top of the live board. Matched to the vault so both desks derive one bank's levels
+    # against one history; the window is part of the level, not a fetch detail.
+    ap.add_argument("--range", default="5y",
+                    help="history window to fetch (default 5y, matching the vault cache)")
     ap.add_argument("--agg", default=None)
     a = ap.parse_args(argv)
 
