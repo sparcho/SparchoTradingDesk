@@ -32,8 +32,30 @@ def ensure_cache_dir():
 
 
 def yahoo_symbols(ticker):
-    """Return ordered list of Yahoo symbols to try for an internal ticker code."""
-    return YAHOO_SYMBOL.get(ticker, [f"{ticker}.NS"])
+    """Ordered Yahoo symbols to try for a silver-desk rail. Delegates to silver_rails.
+
+    F260907-SILVERSPOT. This read a module-level dict named YAHOO_SYMBOL. When the desks were
+    separated on 2026-08-26 this file was copied as "the FETCH HELPERS only: silver's universe lives
+    in silver_rails.py" -- and the universe did move, while this function stayed behind still naming
+    it. Every call has raised NameError since, for twelve days, on the live desk:
+
+        xagusd      error: name 'YAHOO_SYMBOL' is not defined     price=None
+        silverbees  error: name 'YAHOO_SYMBOL' is not defined     price=None
+        usdinr      error: name 'YAHOO_SYMBOL' is not defined     price=None
+        dxy         error: name 'YAHOO_SYMBOL' is not defined     price=None
+
+    That is silver spot, the instrument he holds, and two of the eleven deployment gates. The caller
+    wraps each rail in try/except and writes the exception text into a `status` field, so the failure
+    was captured, serialised, published and rendered as a dash. Nothing raised, no job went red, and
+    the payload was rewritten every ten minutes, on time, containing nothing.
+
+    Delegating rather than re-declaring the map is the point: the rails table stays in exactly one
+    place, so adding a rail there cannot leave this layer behind a second time. The import is local
+    to keep silver_rails free of any dependency on the fetch layer -- it imports nothing today, and
+    a cycle here would be the next way this breaks.
+    """
+    from silver_rails import yahoo_symbols as _rail_symbols
+    return _rail_symbols(ticker)
 
 
 def fetch_chart(sym, interval='1d', range_='14d', timeout=12):
