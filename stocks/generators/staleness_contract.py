@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+import datetime as _dt
 from datetime import datetime, timezone, timedelta
 
 SCHEMA = "v1"
@@ -214,7 +215,21 @@ def _looks_like_date(s):
 
 
 def _iter_dates(obj, budget=4000):
-    """Yield every YYYY-MM-DD-looking string prefix in a nested structure (bounded)."""
+    """Yield every date in a nested structure as YYYY-MM-DD (bounded).
+
+    F260907-DATETYPE: this used to yield STRINGS only, matched by regex. But blocks built from
+    `_index.md` frontmatter carry real `datetime.date` objects, because that is what YAML parses a
+    bare date into — and a date object is not a string, so the scanner walked straight past it.
+
+    `recent_closed` shipped "STALE — as-of 2026-05-05, 89 sessions behind" on a block whose newest
+    row was dated TODAY: twelve of its fourteen rows were date objects and invisible, so the
+    "newest date" came from the only parseable leftover string, `'2026-05-05/06'`. A staleness
+    signal that is loudly wrong on a fresh block is worse than none — it teaches the reader to
+    discount the whole layer, which is the desk's only defence when the operator is away.
+
+    `datetime` is checked before `date` because datetime IS a date subclass and isoformat() on a
+    datetime returns the full timestamp, not the 10-char day.
+    """
     stack = [obj]
     seen = 0
     while stack and seen < budget:
@@ -223,6 +238,12 @@ def _iter_dates(obj, budget=4000):
             stack.extend(x.values())
         elif isinstance(x, (list, tuple)):
             stack.extend(x[:400])
+        elif isinstance(x, _dt.datetime):
+            seen += 1
+            yield x.date().isoformat()
+        elif isinstance(x, _dt.date):
+            seen += 1
+            yield x.isoformat()
         elif isinstance(x, str):
             seen += 1
             s = x[:_DATE_LEN]
