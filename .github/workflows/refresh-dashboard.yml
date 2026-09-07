@@ -1,14 +1,30 @@
 name: Refresh silver dashboard
 
-# F123b: this cron now runs the FAMILY-DATA-FREE price overlay (silver_refresh_prices.py), NOT the
-# full silver_dashboard_emit.py. The full emit needs the family holdings input (silver_holdings.yaml)
-# + strategy logic, which must stay PRIVATE (in the vault). The cloud only refreshes live market
-# prices on the already-committed aggregate; it never reads holdings and never touches sensitive_enc.
-# The HOST runs the full emit (with the operator password + private inputs) and publishes the book.
+# F123b: this cron runs the FAMILY-DATA-FREE price overlay (silver_refresh_prices.py), NOT the full
+# silver_dashboard_emit.py. The full emit needs the family holdings input (silver_holdings.yaml) +
+# strategy logic, which must stay PRIVATE (in the vault). The cloud only refreshes live market
+# prices on the already-committed aggregate; it never reads holdings and never touches
+# sensitive_enc. The HOST runs the full emit (with the operator password + private inputs) and
+# publishes the book.
+#
+# 2026-09-07 — LOOPS INSTEAD OF WAITING TO BE WOKEN.
+#
+# The `*/20 * * * *` cron asks for ~72 runs a day. Measured over the six days to 2026-09-07 it ran
+# 8, 9, 10, 11, 8, 5 — around a seventh of what it asked for. GitHub delivers `schedule` events
+# best-effort and drops most of them under load. The equity live job had the same disease and PULSE
+# had already cured it: demote cron from "the clock" to "one of several ways to get a loop started",
+# put the starts on odd minutes because round minutes are the busiest and the likeliest to be
+# dropped, and let one run cover the next stretch itself.
+#
+# This desk is 24/7 by intent (XAG and the FX rails trade when NSE does not), so the loop has no
+# session window — but it MUST stay short. The concurrency group is shared with every other
+# main-branch pusher, and a long silver loop would hold that queue against the equity jobs. A
+# 40-minute loop with starts three times an hour leaves the slot free far more often than it holds
+# it, while still covering the day densely.
 on:
   schedule:
-    # Every 20 min, 24/7 — keeps XAG / SBees / Gold / DXY / USDINR feeling live for family viewing.
-    - cron: '*/20 * * * *'
+    # Odd minutes, three starting chances an hour, every hour. Any ONE covers the next ~40 minutes.
+    - cron: '11,31,51 * * * *'
   push:
     paths:
       - 'silver/generators/silver_refresh_prices.py'
@@ -22,9 +38,14 @@ concurrency:
 permissions:
   contents: write
 
+env:
+  REBUILD_EVERY_MIN: 10   # the overlay's intended cadence
+  LOOP_MINUTES: 40        # deliberately short: the concurrency group is shared with equity
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 55
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
@@ -39,30 +60,47 @@ jobs:
       - name: Install deps
         run: pip install requests
 
-      - name: Refresh live prices (no family data)
-        run: python silver/generators/silver_refresh_prices.py
-
-      - name: Commit + push if changed
-        # The overlay only re-lays public market prices; it never touches sensitive_enc, so a
-        # carry-forward is implicit. If the remote moved, reset to latest and re-overlay on top.
+      - name: Refresh live prices on a loop (no family data)
         run: |
+          set -uo pipefail
+
+          # The overlay only re-lays public market prices; it never touches sensitive_enc, so a
+          # carry-forward is implicit. If the remote moved, reset to latest and re-overlay on top.
+          publish () {
+            git add silver/data/silver_dashboard_aggregate.json
+            if git diff --cached --quiet; then echo "no price change this cycle"; return 0; fi
+            git commit -q -m "refresh silver prices $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push -q; then echo "pushed"; return 0; fi
+            echo "push rejected — remote moved; re-overlaying on latest and retrying"
+            for i in 1 2 3; do
+              git fetch -q origin main || { sleep 4; continue; }
+              git reset -q --hard origin/main
+              python silver/generators/silver_refresh_prices.py || echo "::warning::overlay failed (continuing)"
+              git add silver/data/silver_dashboard_aggregate.json
+              if git diff --cached --quiet; then echo "no net change after re-overlay"; return 0; fi
+              git commit -q -m "refresh silver prices (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+              if git push -q; then echo "pushed (rebuild $i)"; return 0; fi
+              sleep $((RANDOM % 6 + 4))
+            done
+            # A failed push never kills the loop — the next cycle is minutes away, and a dead loop
+            # is a frozen family dashboard.
+            echo "::warning::could not push this cycle — the next one will try again"
+            return 0
+          }
+
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add silver/data/silver_dashboard_aggregate.json
-          if git diff --cached --quiet; then
-            echo "No price changes — skipping commit"; exit 0
-          fi
-          git commit -m "refresh silver prices $(date -u +'%Y-%m-%d %H:%M UTC')"
-          if git push; then echo "pushed (fast path)"; exit 0; fi
-          echo "push rejected — remote moved; re-overlaying on latest remote and retrying"
-          for i in 1 2 3 4 5; do
-            git fetch origin main || { sleep 4; continue; }
-            git reset --hard origin/main
-            python silver/generators/silver_refresh_prices.py || echo "WARN: overlay failed (continuing)"
-            git add silver/data/silver_dashboard_aggregate.json
-            if git diff --cached --quiet; then echo "no net change after re-overlay — done"; exit 0; fi
-            git commit -m "refresh silver prices (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
-            if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
-            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+
+          deadline=$(( $(date +%s) + LOOP_MINUTES * 60 ))
+          cycle=0
+          while :; do
+            cycle=$(( cycle + 1 ))
+            echo "--- cycle $cycle at $(date -u +%H:%M) UTC ---"
+            python silver/generators/silver_refresh_prices.py || echo "::warning::overlay failed on cycle $cycle"
+            publish
+            if [ $(( $(date +%s) + REBUILD_EVERY_MIN * 60 )) -ge "$deadline" ]; then
+              echo "loop finished after $cycle cycle(s)"
+              break
+            fi
+            sleep $(( REBUILD_EVERY_MIN * 60 ))
           done
-          echo "::error::could not push after rebuild retries"; exit 1

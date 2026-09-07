@@ -10,7 +10,10 @@ name: Refresh silver family book (cloud)
 on:
   schedule:
     # Post-close daily, 11:00 UTC = 16:30 IST (bar settled after 15:45 IST).
-    - cron: '0 11 * * 1-5'
+    # 2026-09-07 — nine odd-minute chances instead of one round-hour fire. Measured
+    # against origin/main this job had not produced once in the observed window; a
+    # single daily cron on a round hour is the shape GitHub drops most often.
+    - cron: '8,28,48 11-13 * * 1-5'
   push:
     paths:
       - 'silver/generators/ci_silver_refresh.py'

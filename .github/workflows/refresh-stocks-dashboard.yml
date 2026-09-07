@@ -11,9 +11,24 @@ name: Refresh stocks dashboard
 # scorer and stamps daytrade_freshness; the page banner shows staleness if a pull
 # ever fails (fail-closed). NSE holidays just produce a no-op (no new bar).
 
+#
+# 2026-09-07 — MANY STARTING CHANCES, because one round-hour cron a day is the worst case.
+#
+# This job asked for one run per weekday at 11:00 UTC and, measured against origin/main, it last
+# produced on 2026-08-31 — SEVEN sessions with no post-close rebuild at all. GitHub delivers
+# `schedule` events best-effort and drops most of them under load; a job with exactly one chance a
+# day and a round-hour slot is the most exposed shape there is.
+#
+# A loop is wrong here (this is a once-a-day job, not a cadence), so the fix is CHANCES plus
+# IDEMPOTENCE: nine odd-minute starts across the post-close window, and a guard that exits
+# immediately if today's rebuild has already been published. The guard reads git history for this
+# job's own commit subject — no new state file, and it means exactly what it says.
+
 on:
   schedule:
-    - cron: '0 11 * * 1-5'      # 16:30 IST, Mon-Fri (after NSE close)
+    # Nine chances across 16:30-19:00 IST, on odd minutes (round minutes are the busiest and the
+    # likeliest to be dropped). The guard below makes extra fires free.
+    - cron: '6,26,46 11-13 * * 1-5'
   workflow_dispatch:
   push:
     paths:
@@ -36,16 +51,36 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # The skip-guard reads git history for today's own commit; the default depth-1
+          # checkout has none, which would make the guard blind. It fails SAFE either way
+          # (no history -> no match -> the job RUNS), but a guard that can never see is a
+          # guard that never works.
+          fetch-depth: 100
+
+      - name: Skip if today's post-close rebuild already published
+        id: guard
+        run: |
+          today=$(date -u +%Y-%m-%d)
+          if git log --since="${today}T00:00:00Z" --format=%s origin/main 2>/dev/null                | grep -q '^refresh equity prices + fires'; then
+            echo "already published today ($today) — nothing to do"
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=0" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Set up Python
+        if: steps.guard.outputs.skip != '1'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install yfinance
+        if: steps.guard.outputs.skip != '1'
         run: pip install yfinance cryptography     # cryptography: levels bundle + sensitive_enc
 
       - name: Refresh NSE live prices + re-score Day-Trade Fires
+        if: steps.guard.outputs.skip != '1'
         run: python stocks/generators/refresh_prices.py
 
       # F260721-LEVELSCLOUD — the fib-confluence radar, laptop-off.
@@ -59,6 +94,7 @@ jobs:
       # not cost the operator the day's price/fires commit, but it must still turn the run RED.
       # Swallowing it would recreate exactly the silent-orphan failure this job exists to end.
       - name: Refresh fib-confluence radar (banked levels, cloud-side)
+        if: steps.guard.outputs.skip != '1'
         id: fib
         continue-on-error: true
         env:
@@ -67,6 +103,7 @@ jobs:
         run: python stocks/engine/ci_fib_refresh.py
 
       - name: Commit + push if changed
+        if: steps.guard.outputs.skip != '1'
         # HARDENED (same pattern as the live job): the aggregate carries the operator's
         # encrypted book and is regenerated each run, so a moved remote must NOT be merged.
         # Fast-path push; if the remote moved, RESET to latest remote and re-run the price
@@ -102,7 +139,7 @@ jobs:
       # The gate for the continue-on-error step above: prices are committed by now, so a fib
       # failure is safe to surface — and MUST be surfaced, loudly, as a red run.
       - name: Fail the run if the fib radar refresh failed
-        if: steps.fib.outcome == 'failure'
+        if: steps.guard.outputs.skip != '1' && steps.fib.outcome == 'failure'
         run: |
           echo "::error::fib-confluence radar refresh FAILED — the Trade Lab confluence block is"
           echo "::error::still on its previous (now stale) build. See the step log above."
