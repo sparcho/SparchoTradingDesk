@@ -43,6 +43,8 @@ from __future__ import annotations
 import json
 import os
 import sys
+import urllib.error
+import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -99,11 +101,24 @@ def drop_forming_bar(rows, now_ist=None):
 
 
 def write_price_caches(series: dict, hist_csv: Path, daily_csv: Path) -> int:
-    """Materialise {ticker: [(date, close)]} into the two CSVs the ported engines read.
+    """Materialise {ticker: [(date, close, high, low)]} into the two CSVs the ported engines read.
 
-    Same narrow schema on purpose (ticker,date,close): box_engine's HIST_CSV reader and the feed's
-    ohlc_from_csv both DictRead exactly these columns, so the cloud can reuse them unmodified.
-    The daily cache holds ONLY the last settled bar per ticker — the feed reads its dates to stamp
+    F260907-NOFLOOR. This used to write ticker,date,close and nothing else, "same narrow schema on
+    purpose". The schema was narrower than its READER. `atr_pct_from_csv` measures one normal day
+    for a name as the median (high - low) / close over its last 60 sessions, and reads it from
+    exactly this file; with no high and no low column it returned {} for every ticker, all 98 names
+    arrived with `atr_pct: None`, and the stop noise floor, guarded by a bare `if atr_pct`, switched
+    itself off in silence. ALLCARGO went to the top of the live desk at a 10.14 R:R on a stop a
+    quarter of one average day wide. Measured: vault bank 98/98 carry atr_pct, published board 0/98.
+
+    A missing column reads exactly like a missing file to that reader, which is why a present,
+    fresh, correctly-dated cache still produced nothing ([[absence-of-evidence-is-not-health]]).
+    Both sides had agreed on the FILE and never on the FIELDS ([[a-mirrored-file-is-a-data-contract]]).
+
+    Nothing extra is fetched for this: Yahoo returns high and low in the same `quote` block as
+    close, and the old fetch simply dropped them. Readers are unaffected -- box_engine and
+    ohlc_from_csv both use csv.DictReader, so they take the columns they name and ignore the rest.
+    The daily cache stays last-settled-bar-only per ticker: the feed reads its dates to stamp
     `price_as_of`, so anything else in there would mis-date the whole payload.
     """
     import csv
@@ -113,14 +128,23 @@ def write_price_caches(series: dict, hist_csv: Path, daily_csv: Path) -> int:
     with hist_csv.open("w", encoding="utf-8", newline="") as fh, \
             daily_csv.open("w", encoding="utf-8", newline="") as fd:
         wh, wd = csv.writer(fh), csv.writer(fd)
-        wh.writerow(["ticker", "date", "close"])
+        wh.writerow(["ticker", "date", "close", "high", "low"])
         wd.writerow(["ticker", "date", "close"])
         for tkr, rows in sorted(series.items()):
             rows = sorted(rows, key=lambda r: r[0])
             if not rows:
                 continue
-            for d, c in rows:
-                wh.writerow([tkr, d, c])
+            for row in rows:
+                # Fail LOUD on a close-only row. Tolerating the old 2-tuple here is how the defect
+                # comes back: the writer keeps accepting it, the file keeps being written, and the
+                # floor goes quiet again with nothing anywhere to show for it.
+                if len(row) < 4:
+                    raise ValueError(
+                        "%s: price rows must carry (date, close, high, low) -- a close-only row "
+                        "cannot support the stop noise floor, and writing it silently is the "
+                        "F260907-NOFLOOR defect. Got: %r" % (tkr, row))
+                d, c, hi, lo = row[0], row[1], row[2], row[3]
+                wh.writerow([tkr, d, c, hi, lo])
             wd.writerow([tkr, rows[-1][0], rows[-1][1]])
             n += 1
     return n
@@ -295,26 +319,139 @@ def _sanity_radar(radar: dict, payload: dict) -> None:
             "different closes" % (radar["price_as_of"], payload.get("price_as_of")))
 
 
-def fetch_closes(tickers, range_="1y", now_ist=None, sleep_s=0.6) -> dict:
-    """Daily close series per ticker from Yahoo — SETTLED bars only.
+UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+      "Chrome/120.0 Safari/537.36")
+FETCH_TIMEOUT = 20
 
-    Reuses fetch_historical.fetch_one_ticker so the cloud inherits the repo's existing symbol
-    fallbacks (BLUESTAR -> BLUESTARCO.NS, PARAS -> PARASDEFEN.NS, ...) rather than assuming the
-    default '.NS' rule and silently losing every name that doesn't follow it.
+# The vault's phantom-bar predicate, carried over verbatim from cache_integrity (F260812).
+# Copied rather than imported: cache_integrity is an 821-line module rooted in vault-only data
+# (corporate_actions.csv, venue_exceptions.csv, the levels dir) and none of that exists in Actions.
+# What IS needed here is one predicate, and it is reproduced with its reasoning attached so the
+# next reader can see it is a decision and not a stub.
+VOLUMELESS_FRAC = 0.10        # zero volume only carries information where it is EXCEPTIONAL for
+VOLUMELESS_MIN_SAMPLE = 30    # the instrument; FX/yields/index levels are 100% zero-volume.
+
+
+def _is_phantom(row, prior):
+    """A carried-forward write: zero volume AND a close identical to the one before it.
+
+    The conjunction is the whole point. A genuinely illiquid name that did not print on a real
+    session has volume 0 and a DIFFERENT close; a name that closed unchanged on real volume traded.
+    Neither is a phantom, and deleting on either signal alone takes real bars with it.
+    """
+    if prior is None:
+        return False
+    return row[4] == 0 and abs(row[1] - prior[1]) < 1e-9
+
+
+def drop_phantom_bars(rows):
+    """Refuse the bars Yahoo invents for days NSE never traded.
+
+    F260812-PHANTOMBARS, ported. Yahoo emits a bar for Indian market holidays -- zero volume, close
+    repeating the previous session -- and does it for essentially the whole universe at once
+    (verified 2026-08-14 on 2026-05-01, 2026-05-28 and 2026-06-26). The vault has guarded its own
+    write boundary against this since August. stocks/engine/fetch_historical.py is a stale fork
+    that never received the guard, so the fetch running while the operator is away was the one
+    without it. A phantom bar has high == low == close: a zero-range day, dragging down the very
+    median that IS the stop noise floor this file now exists to feed.
+
+    Instruments whose volume field carries no information are exempt -- for them "zero volume and
+    unchanged" is an ordinary observation rather than a signature. The exemption is derived from the
+    fetched series itself, so there is no list to maintain and no list to go stale. Below the sample
+    floor the fraction is noise (two zero-volume rows out of three reads as 67%), so the guard
+    applies: a wrongly-dropped bar is refetchable, a wrongly-kept phantom silently corrupts every
+    window that spans it.
+    """
+    if not rows:
+        return rows
+    zero_frac = sum(1 for r in rows if r[4] == 0) / len(rows)
+    if len(rows) >= VOLUMELESS_MIN_SAMPLE and zero_frac >= VOLUMELESS_FRAC:
+        return list(rows)                      # volume is not a signal for this instrument
+    kept = []
+    for row in rows:
+        if _is_phantom(row, kept[-1] if kept else None):
+            continue
+        kept.append(row)
+    return kept
+
+
+def chart_ohlc(yahoo_sym: str, range_: str = "1y"):
+    """Daily bars for one Yahoo symbol as [(date, close, high, low, volume)], ascending.
+
+    F260907-NOFLOOR. The predecessor of this function read the same response and kept only the
+    close. Yahoo hands back high and low in the same quote block; discarding them is what left the
+    cloud unable to measure a single name's own daily range, which switched off every stop's noise
+    floor without a word. This is the same one request, parsed less wastefully.
+
+    A bar missing ANY of close/high/low is skipped rather than back-filled from its neighbours: a
+    fabricated range is worse than a shorter series, because the median it feeds cannot tell the
+    two apart.
+    """
+    url = ("https://query1.finance.yahoo.com/v8/finance/chart/%s?range=%s&interval=1d"
+           % (yahoo_sym, range_))
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=FETCH_TIMEOUT) as r:
+        data = json.loads(r.read().decode("utf-8"))
+    chart = data.get("chart") or {}
+    if chart.get("error"):
+        raise ValueError(chart["error"])
+    result = chart.get("result") or []
+    if not result:
+        return []
+    res = result[0]
+    stamps = res.get("timestamp") or []
+    quote = ((res.get("indicators") or {}).get("quote") or [{}])[0]
+    closes, highs = quote.get("close") or [], quote.get("high") or []
+    lows, vols = quote.get("low") or [], quote.get("volume") or []
+    out = []
+    for i, ts in enumerate(stamps):
+        c = closes[i] if i < len(closes) else None
+        h = highs[i] if i < len(highs) else None
+        lo = lows[i] if i < len(lows) else None
+        if c is None or h is None or lo is None:
+            continue
+        v = vols[i] if i < len(vols) and vols[i] is not None else 0
+        # fromtimestamp(..., utc) not utcfromtimestamp(): the latter is deprecated and
+        # scheduled for removal, and this job has to keep running with nobody watching.
+        # Same value either way -- an NSE daily bar is stamped at 03:45 UTC, so the UTC
+        # date and the IST date are the same day.
+        out.append((datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%d"),
+                    float(c), float(h), float(lo), int(v)))
+    return sorted(out, key=lambda x: x[0])
+
+
+def fetch_ohlc_series(tickers, range_="1y", now_ist=None, sleep_s=0.6) -> dict:
+    """Daily OHLC per ticker from Yahoo -- SETTLED bars only, phantom holidays removed.
+
+    Symbol resolution still goes through fetch_historical.yahoo_symbols, so the cloud keeps
+    inheriting the repo's existing fallbacks (BLUESTAR -> BLUESTARCO.NS, PARAS -> PARASDEFEN.NS,
+    ...) rather than assuming the default '.NS' rule and silently losing every name that does not
+    follow it. Only the PARSE changed: the range is kept, and the guard runs at this boundary --
+    the same place the vault runs it -- so nothing downstream has to know a phantom existed.
     """
     import time
     import fetch_historical as FH
     out, failed = {}, []
     for t in tickers:
-        try:
-            _sym, rows, status = FH.fetch_one_ticker(t, range_)
-        except Exception as e:                                   # noqa: BLE001 — one bad name
-            rows, status = [], f"{type(e).__name__}: {e}"
+        rows, status = [], "404 (all fallbacks exhausted)"
+        for sym in FH.yahoo_symbols(t):
+            try:
+                rows = chart_ohlc(sym, range_)
+            except urllib.error.HTTPError as e:
+                status = "http-%s" % e.code
+                continue
+            except Exception as e:                           # noqa: BLE001 -- one bad name
+                status = "%s: %s" % (type(e).__name__, e)
+                continue
+            if rows:
+                status = "ok"
+                break
         if rows:
-            out[t] = drop_forming_bar([(r[0], r[1]) for r in rows], now_ist)
+            out[t] = drop_forming_bar(drop_phantom_bars(rows), now_ist)
         else:
             failed.append((t, status))
-        time.sleep(sleep_s)
+        if sleep_s:
+            time.sleep(sleep_s)
     if failed:
         print("[fib-cloud] no history for %d name(s): %s" % (len(failed), failed), file=sys.stderr)
     return out
@@ -355,7 +492,7 @@ def main(argv=None) -> int:
         n = materialise_bank(bundle, bank)
         hist, daily = work / "historical_ohlc.csv", work / "daily_prices.csv"
         obs_json = work / "box_observations.json"
-        series = fetch_closes(sorted(p.stem for p in bank.glob("*.json")), a.range)
+        series = fetch_ohlc_series(sorted(p.stem for p in bank.glob("*.json")), a.range)
         print("[fib-cloud] materialised %d bank(s); fetched history for %d" % (n, len(series)))
         write_price_caches(series, hist, daily)
         try:

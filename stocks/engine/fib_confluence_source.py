@@ -99,10 +99,28 @@ def classify(name: dict) -> dict:
     # noise. Only ever widens -- a structural stop already outside the floor is left
     # exactly where the bank put it.
     atr_pct = _num(name.get("atr_pct"))
+    floored = False
     if stop is not None and entry is not None and atr_pct and atr_pct > 0:
         floor_px = entry * (1 - ATR_FLOOR * atr_pct)
         if floor_px < stop:
             stop = round(floor_px, 2)
+        floored = True
+    # F260907-NOFLOOR — an UNMEASURABLE noise floor is a finding, not a pass.
+    #
+    # `atr_pct` is measured from _cache/historical_ohlc.csv. In the cloud `stocks/engine/_cache/`
+    # is GITIGNORED, so that file is absent, `atr_pct_from_csv()` returns {} and every name arrives
+    # with atr_pct None. Guarded only by `if atr_pct`, the missing input did not raise, warn or
+    # appear anywhere — it silently switched the floor off for all 98 names. Vault bank: 98/98
+    # carry atr_pct. Published board: 0/98.
+    #
+    # The cost was on the live desk: ALLCARGO published as the top FIRE at "buy 12.45, stop 12.31,
+    # R:R 10.14" — a stop 1.12% below entry against a 4.91% average daily range, a quarter of one
+    # ordinary day's movement. With the floor applied the same name is stop 11.60 and R:R 1.67. The
+    # published number was six times too good, and it was the first thing on the page.
+    #
+    # Losing an input must never make a trade look better. A set-up whose stop cannot be checked
+    # against the name's own noise is structurally fine and simply unproven — which is WATCH.
+    _no_floor = (stop is not None and entry is not None and not floored)
     target = _num(kr.get("px"))
     rr = None
     if entry is not None and stop is not None and target is not None and entry > stop:
@@ -189,6 +207,14 @@ def classify(name: dict) -> dict:
                        "is %.1f%% away; a ratio off an unreachable price is not a trade that exists"
                        % (rr, entry, gap) if rr is not None else
                        "reward:risk withheld — the entry is %.1f%% away" % gap)
+    if _no_floor:
+        # F260907-NOFLOOR. Demoted, not dropped: the levels are real banked structure and the
+        # reason to watch the name. What cannot be stated is that the STOP is outside this name's
+        # own daily weather — and without that, the R:R is the number the missing check would have
+        # cut. Said out loud, because a silent skip is what put a 10.14 R:R on the desk.
+        why.append("noise floor UNMEASURED — this name has no atr_pct, so the stop at %s could not "
+                   "be checked against its own average daily range and the R:R below is unfloored. "
+                   "Structure stands; the trade is unproven until the range is known" % stop)
     if target is None:
         why.append("no banked level overhead to target — nothing to size a reward against")
     elif rr is not None and rr < RR_MIN:

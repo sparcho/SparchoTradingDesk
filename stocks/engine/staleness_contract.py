@@ -593,11 +593,81 @@ def _block_items(data, now, registry, desk):
     return items
 
 
-def build_staleness(data, desk, now_utc_iso=None):
+def _carry_sealed_items(data, items, registry, desk, now, prior):
+    """Re-age the prior verdict for every registered block this caller CANNOT SEE.
+
+    F260907-SEALEDSILENCE. `_block_items` iterates the payload's keys. Since F260729-VAULT the
+    analysis blocks ride inside `sensitive_enc`, so a caller working on the SEALED aggregate — every
+    cloud republish, every ten minutes — finds them absent and emits nothing for them. Measured on
+    the live desk: the vault's 30 items became 19, `any_stale` went True -> False, and `worst`
+    became "ok". Eleven blocks did not become fresh; they stopped being reported. The eleven are
+    almost exactly the LAPTOP-substrate blocks, i.e. precisely the ones that rot while the operator
+    is away and most need to be visible.
+
+    Absence from a sealed payload is not evidence ABOUT the block — it is evidence that this caller
+    cannot open the envelope. So the prior item is carried with its as-of intact (nothing new was
+    learned) and its age RECOMPUTED against today, which is the one part that legitimately moves.
+    A block therefore keeps telling the truth about its own age even from a caller that cannot see
+    it ([[absence-of-evidence-is-not-health]]).
+
+    Only applies when the payload is actually sealed. On an UNSEALED payload a missing block is a
+    real absence and must keep reporting as one.
+    """
+    if not isinstance(data, dict) or not data.get("sensitive_enc"):
+        return items
+    prior_items = ((prior or data.get("staleness") or {}).get("items")) or []
+    if not prior_items:
+        return items
+    have = {i.get("id") for i in items}
+    today = now.astimezone(_IST).date()
+    carried = []
+    for old in prior_items:
+        pid = old.get("id")
+        if not pid or pid in have or not str(pid).startswith("block:"):
+            continue
+        name = str(pid)[len("block:"):]
+        spec = registry.get(name) or next(
+            (s for k, s in registry.items() if (s.get("public_as") or k) == name), None)
+        if spec is None or spec.get("substrate") == "struct":
+            continue
+        new = dict(old)
+        since = old.get("since")
+        if not since:
+            # UNDATABLE, and it must not be re-worded into a verdict. The prior item already says
+            # exactly why it has no date — "empty by declaration", or "NO PROVENANCE — can never be
+            # proven fresh OR stale". Re-aging that into "fresh — as-of None (None sessions behind)"
+            # would turn an honest absence into a false all-clear, which is the whole failure this
+            # function exists to undo. Carry it verbatim; only mark that it came from a sealed read.
+            new["reason"] = "%s [carried: sealed, not re-read from here]" % old.get("reason", "")
+            carried.append(new)
+            continue
+        sess = _sessions_between(since, today)
+        max_sess = spec.get("max_sessions")
+        stale = (max_sess is not None and sess is not None and sess > max_sess)
+        new["sessions_stale"] = sess
+        new["is_stale"] = bool(stale)
+        new["severity"] = spec.get("severity", "warn") if stale else "info"
+        new["reason"] = (
+            ("STALE — as-of %s is %s session(s) behind today (tolerance %s); produced by %s on the "
+             "%s substrate. [carried: this block is sealed and cannot be re-read from here]"
+             % (since, sess, max_sess, spec.get("owner"), spec.get("substrate")))
+            if stale else
+            "fresh — as-of %s (%s session(s) behind) [carried: sealed, not re-read from here]"
+            % (since, sess))
+        carried.append(new)
+    return items + carried
+
+
+def build_staleness(data, desk, now_utc_iso=None, prior=None):
     """Build the canonical staleness contract block for an aggregate.
 
     desk: 'equity' | 'silver'. Returns a dict to assign to data['staleness'].
     Safe on partial/empty data — each detector self-guards.
+
+    `prior` is the previous contract, used to carry forward blocks this caller cannot see because
+    they are sealed inside `sensitive_enc` (F260907-SEALEDSILENCE). It defaults to the one already
+    in `data["staleness"]`, so every existing caller — including the cloud republish jobs, which is
+    where the deletion happened — gets the behaviour without being changed.
     """
     now = _now_utc(now_utc_iso)
     # Single-desk by directive (2026-08-26). The silver branch moved to
@@ -611,6 +681,9 @@ def build_staleness(data, desk, now_utc_iso=None):
     # + the generic per-block contract (D1 / F260721-BLOCKROT): judges EVERY block
     # against TODAY so a frozen block can no longer hide under a fresh envelope.
     items = items + _block_items(data, now, EQUITY_BLOCKS, "equity")
+    # A block sealed inside sensitive_enc is invisible to this caller, not absent from
+    # the desk. Carry its prior verdict, re-aged, rather than silently dropping it.
+    items = _carry_sealed_items(data, items, EQUITY_BLOCKS, "equity", now, prior)
 
     stale_items = [i for i in items if i.get("is_stale")]
     worst = "ok"
