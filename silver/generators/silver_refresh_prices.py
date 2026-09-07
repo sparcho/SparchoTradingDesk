@@ -84,6 +84,42 @@ def _quote_sym(symbol, ticker):
         return {"status": f"error: {e}", "ticker": ticker}
 
 
+def ladder_basis(xag: dict, prior=None) -> dict:
+    """Where the ladder price in THIS overlay came from.
+
+    F260907-LADDERBASIS part 2. The full emit publishes `live_xagusd_basis`, and then this overlay
+    runs every twenty minutes and used to do only this:
+
+        if xag.get("status") == "ok" and xag.get("price") is not None:
+            data["live_xagusd_used_for_ladders"] = xag["price"]
+
+    Updating on success and, on failure, leaving the previous number exactly where it was with
+    nothing recording that a fetch had even been attempted. So the more often the overlay ran, the
+    more completely it erased the provenance the emit had just written -- and during the twelve-day
+    XAGUSD outage this is the code that kept a carried 64.91 on the page looking current while spot
+    was 66.75.
+
+    Carrying the number is right; a blank ladder is worse than a slightly old one. What has to
+    change is the CLAIM made about it. A carried value says it is carried, and carries no timestamp,
+    because stamping it with the moment it was carried is what makes a stale number look measured.
+
+    A field is only as honest as the last writer to touch it, and this is the last writer.
+    """
+    if xag.get("status") == "ok" and xag.get("price") is not None:
+        return {"value": xag["price"], "is_live": True,
+                "source": "live:%s" % (xag.get("yahoo_symbol") or "XAGUSD"),
+                "as_of_utc": xag.get("as_of_utc") or _now_utc()}
+    if prior is not None:
+        return {"value": prior, "is_live": False,
+                "source": "carried from the previous overlay (live fetch unavailable: %s)"
+                          % (xag.get("status") or "no response"),
+                "as_of_utc": None}
+    return {"value": None, "is_live": False,
+            "source": "unavailable - live fetch failed (%s) and nothing to carry"
+                      % (xag.get("status") or "no response"),
+            "as_of_utc": None}
+
+
 def _atomic_write_json(path: Path, obj) -> None:
     text = json.dumps(obj, indent=2, ensure_ascii=False)
     fd, tmp = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=str(path.parent))
@@ -136,8 +172,12 @@ def main():
         cp["primary_staleness_days"] = 0
         data["current_price"] = cp
 
-    if xag.get("status") == "ok" and xag.get("price") is not None:
-        data["live_xagusd_used_for_ladders"] = xag["price"]
+    # One writer for the number AND for where it came from, in the same pass. Splitting them is
+    # how `live_xagusd_basis` came back null on the live payload minutes after it was added.
+    _basis = ladder_basis(xag, prior=data.get("live_xagusd_used_for_ladders"))
+    if _basis["value"] is not None:
+        data["live_xagusd_used_for_ladders"] = _basis["value"]
+    data["live_xagusd_basis"] = _basis
 
     data.setdefault("meta", {})["last_price_overlay_utc"] = _now_utc()
     data["emitted_at_utc"] = _now_utc()
