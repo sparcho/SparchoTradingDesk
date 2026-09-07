@@ -1,28 +1,47 @@
-name: Refresh stocks dashboard (live · 5min market hours)
+name: Refresh stocks dashboard (live · loop, market hours)
 
-# LIGHT 15-min refresh — the moving parts only, so nothing on the equity dashboard
-# stays stale more than ~15 min (F-260615 trade-lab "live"):
+# THE MOVING PARTS of the equity dashboard, kept fresh through the session:
 #   - held last-price + day-moves + universe moves   (refresh_prices.py)
 #   - regime live readings: TNX / DXY / USDINR / Brent / CCC OAS   (ci_regime_refresh.py)
 #
-# The HEAVY job (full screener: 1y history + 4 lenses) stays at 2x/weekday in
-# refresh-stocks-dashboard.yml — those sections are daily-by-nature and running them
-# every 20 min would hammer Yahoo for no benefit. Same concurrency group as the heavy
-# job so the two never push the aggregate at the same time.
+# 2026-09-07 — IT NO LONGER WAITS TO BE WOKEN.
 #
-# Weekday-only: NSE + the macro scalars are closed on weekends, so 15-min weekend runs
-# would just re-stamp identical data.
+# This job asked for `*/5` during market hours: about 123 runs on a weekday. Measured over the six
+# sessions to 2026-09-07 it actually ran:
+#
+#     2026-09-02   10        2026-09-05    1
+#     2026-09-03   10        2026-09-06    2
+#     2026-09-04    9        2026-09-07    4
+#
+# Five to ten per cent of what it asked for. GitHub delivers `schedule` events best-effort and drops
+# most of them under load — and the higher the requested frequency, the worse it gets. The
+# consequence was on the operator's screen: the watchdog kept logging "equity aggregate 222m stale
+# (tol 45m, intraday)" and self-healing, so the desk he trades from showed prices up to four hours
+# old in the middle of the session.
+#
+# PULSE hit exactly this wall on 2026-09-02 and solved it: stop treating cron as a clock and make the
+# job RUN A LOOP. Cron is demoted from "the clock" to "one of several ways to get a loop started",
+# and starts sit on odd minutes because round minutes are the busiest and the likeliest to be
+# dropped. Measured on the same six days, pulse ran 51-52 times a session against a nominal ~40. The
+# pattern works; this job never got it.
+#
+# Why it is affordable: the repo is public, so Actions minutes are free. A loop that lives for
+# LOOP_MINUTES and refreshes every REBUILD_EVERY_MIN costs nothing but wall time.
+#
+# CONCURRENCY. The group is shared with the heavy post-close job (16:30 IST / 11:00 UTC) so the two
+# can never push the aggregate at the same time. The loop's window closes at 10:10 UTC, well before
+# that — and it BREAKS OUT the moment it is outside the window rather than sleeping, because
+# sleeping would hold the shared slot against a job that has real work to do.
+#
+# The OFF-HOURS cadence stays a single pass: overnight there is one macro/regime reading to collect
+# and nothing to loop over, and an overnight loop would hold the shared slot all night.
 
 on:
   schedule:
-    # F260622 addendum — prices.json fresh every 5 min during NSE market hours. 09:15–15:35 IST =
-    # ~03:45–10:05 UTC; the 3–10 UTC window covers the session with margin. refresh_prices.py is
-    # NSE-session gated, so holiday runs no-op silently (weekends are excluded by the 1-5 DOW field).
-    # Off-hours keep the lighter 15-min cadence so overnight macro/regime readings stay current.
-    # NOTE: GitHub scheduled workflows are best-effort and can be delayed/dropped under load, so the
-    # effective intraday cadence is "~5 min" not a hard 5-min tick (acceptable for a live overlay).
-    - cron: '*/5 3-10 * * 1-5'        # every 5 min, NSE market hours (prices.json live)
-    - cron: '*/15 0-2,11-23 * * 1-5'  # every 15 min off-hours (overnight macro / regime)
+    # Many starting chances on odd minutes. Any ONE of them firing covers the next fifty minutes,
+    # so the schedule no longer has to be accurate — only occasionally lucky.
+    - cron: '7,27,47 3-10 * * 1-5'    # NSE market hours (~09:15-15:35 IST) — starts a loop
+    - cron: '9,39 0-2,11-23 * * 1-5'  # off-hours — single pass, overnight macro / regime
   workflow_dispatch:
 
 permissions:
@@ -32,9 +51,16 @@ concurrency:
   group: sparcho-desk-main-push        # shared with the heavy job — queue, never race
   cancel-in-progress: false
 
+env:
+  REBUILD_EVERY_MIN: 5       # the live overlay's intended intraday cadence
+  LOOP_MINUTES: 50           # how long one run keeps working before handing over
+  SESSION_FROM_UTC: "03:40"  # 09:10 IST — just before the open
+  SESSION_TO_UTC: "10:10"    # 15:40 IST — a little past the close
+
 jobs:
   live:
     runs-on: ubuntu-latest
+    timeout-minutes: 70      # LOOP_MINUTES plus headroom; nowhere near the 6h job ceiling
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -45,54 +71,86 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install --quiet yfinance numpy pyyaml
+        run: pip install --quiet yfinance numpy pyyaml cryptography
 
-      - name: Overlay held last-price + universe moves
-        # F260729-HELDLEAK: the held tickers moved inside sensitive_enc, so this step needs the
-        # desk password to READ them. It only decrypts — it never re-seals the block, so it
-        # cannot corrupt the ciphertext or change what the page unlocks with.
+      - name: Refresh live prices + regime on a loop
+        # F260729-HELDLEAK: the held tickers live inside sensitive_enc, so refresh_prices needs the
+        # desk password to READ them. It only decrypts — it never re-seals the block, so it cannot
+        # corrupt the ciphertext or change what the page unlocks with.
         env:
           DESK_UNLOCK_PW: ${{ secrets.DESK_UNLOCK_PW }}
-        run: python stocks/generators/refresh_prices.py
-
-      # Regime live readings (TNX/DXY/USDINR/Brent/CCC). Reading-numbers only — never
-      # touches the curated zone/score/headline/status. continue-on-error so a Yahoo/FRED
-      # hiccup can never block the price refresh above.
-      - name: Refresh regime live readings
-        continue-on-error: true
-        run: python stocks/engine/ci_regime_refresh.py
-
-      - name: Commit + push if changed
-        # HARDENED (same pattern as the heavy job): the aggregate carries the operator's encrypted
-        # book and is regenerated each run, so a moved remote must NOT be merged. Fast-path push;
-        # if the remote moved, RESET to latest remote and re-overlay (refresh_prices preserves the
-        # remote's sensitive_enc — locked mode touches only public price fields; regime readings are
-        # numbers-only). A failed re-overlay just yields no diff → clean exit (no false alarm).
         run: |
+          set -uo pipefail
+
+          in_window () {
+            now=$(date -u +%H:%M)
+            [[ "$now" > "$SESSION_FROM_UTC" && "$now" < "$SESSION_TO_UTC" ]]
+          }
+
+          # One refresh cycle. Regime failures are warnings by design: a Yahoo/FRED hiccup on the
+          # macro rails must never block the PRICE overlay, which is the part the operator reads.
+          rebuild () {
+            python stocks/generators/refresh_prices.py || echo "::warning::price overlay failed (continuing)"
+            python stocks/engine/ci_regime_refresh.py  || echo "::warning::regime readings failed (continuing)"
+          }
+
+          # Push hardening, carried over unchanged from the single-shot version and load-bearing:
+          # the aggregate carries the operator's ENCRYPTED book, so a moved remote must never be
+          # MERGED. Reset to the remote and re-overlay instead — refresh_prices preserves the
+          # remote's sensitive_enc because in locked mode it touches only public price fields.
+          publish () {
+            git add stocks/data/equity_dashboard_aggregate.json stocks/data/prices.json
+            if git diff --cached --quiet; then echo "no change this cycle"; return 0; fi
+            git commit -q -m "auto: live prices + regime readings $(date -u +'%Y-%m-%d %H:%M UTC')"
+            if git push -q; then echo "pushed"; return 0; fi
+            echo "push rejected — remote moved; re-overlaying on latest and retrying"
+            for i in 1 2 3; do
+              git fetch -q origin main || { sleep 4; continue; }
+              git reset -q --hard origin/main
+              rebuild
+              git add stocks/data/equity_dashboard_aggregate.json stocks/data/prices.json
+              if git diff --cached --quiet; then echo "no net change after re-overlay"; return 0; fi
+              git commit -q -m "auto: live prices + regime readings (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
+              if git push -q; then echo "pushed (rebuild $i)"; return 0; fi
+              sleep $((RANDOM % 6 + 4))
+            done
+            # Never abort the loop over one failed push. The next cycle is minutes away, and a dead
+            # loop is a stale desk — the exact failure this change exists to end.
+            echo "::warning::could not push this cycle — the next one will try again"
+            return 0
+          }
+
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          rebuild() {
-            python stocks/generators/refresh_prices.py || echo "WARN: price overlay failed (continuing)"
-            python stocks/engine/ci_regime_refresh.py || echo "WARN: regime readings failed (continuing)"
-          }
-          git add stocks/data/equity_dashboard_aggregate.json stocks/data/prices.json
-          if git diff --cached --quiet; then
-            echo "No changes — skipping commit"; exit 0
-          fi
-          git commit -m "auto: live prices + regime readings $(date -u +'%Y-%m-%d %H:%M UTC')"
-          if git push; then echo "pushed (fast path)"; exit 0; fi
-          echo "push rejected — remote moved; re-overlaying on latest remote and retrying"
-          for i in 1 2 3 4 5; do
-            git fetch origin main || { sleep 4; continue; }
-            git reset --hard origin/main
+
+          # OFF-HOURS: one pass and out. Nothing to loop over overnight, and looping would hold the
+          # shared concurrency slot all night against the heavy job.
+          if ! in_window; then
+            echo "outside the session window ($(date -u +%H:%M) UTC) — single off-hours pass"
             rebuild
-            git add stocks/data/equity_dashboard_aggregate.json stocks/data/prices.json
-            if git diff --cached --quiet; then echo "no net change after re-overlay on latest — done"; exit 0; fi
-            git commit -m "auto: live prices + regime readings (rebuilt on latest) $(date -u +'%Y-%m-%d %H:%M UTC')"
-            if git push; then echo "pushed (rebuild attempt $i)"; exit 0; fi
-            echo "attempt $i rejected — backing off"; sleep $((RANDOM % 6 + 4))
+            publish
+            exit 0
+          fi
+
+          deadline=$(( $(date +%s) + LOOP_MINUTES * 60 ))
+          cycle=0
+          while :; do
+            cycle=$(( cycle + 1 ))
+            if ! in_window; then
+              # Leave AT ONCE rather than sleeping: sleeping holds the shared slot, which would
+              # delay the heavy job or a legitimate run arriving at the window boundary.
+              echo "window closed at $(date -u +%H:%M) UTC after $cycle cycle(s)"
+              break
+            fi
+            echo "--- cycle $cycle at $(date -u +%H:%M) UTC ---"
+            rebuild
+            publish
+            if [ $(( $(date +%s) + REBUILD_EVERY_MIN * 60 )) -ge "$deadline" ]; then
+              echo "loop finished after $cycle cycle(s)"
+              break
+            fi
+            sleep $(( REBUILD_EVERY_MIN * 60 ))
           done
-          echo "::error::could not push after rebuild retries"; exit 1
 
       - name: Alert on failure
         if: failure()
@@ -101,5 +159,5 @@ jobs:
         run: |
           gh issue create \
             --title "⚠ Stocks live-refresh FAILED — $(date -u +'%Y-%m-%d %H:%M UTC')" \
-            --body "The 20-min live refresh (prices + regime readings) failed; the dashboard holds the last good build. Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --body "The looping live refresh (prices + regime readings) failed; the dashboard holds the last good build. Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             || echo "issue create failed (non-fatal)"
