@@ -37,7 +37,9 @@ concurrency:
 
 env:
   REBUILD_EVERY_MIN: 10      # headlines do not move fast enough to justify 5
-  LOOP_MINUTES: 50
+  LOOP_MINUTES: 8          # F260908-QUEUESTARVE: headlines do not move fast, and this job shares its lock with silver.
+                             # 8 min x 3 firings/hour = 24 lock-min/hour;
+                             # the two of them together fit inside the hour.
   SESSION_FROM_UTC: "03:00"  # 08:30 IST — pre-open headlines matter
   SESSION_TO_UTC: "11:00"    # 16:30 IST — a little past the close
 

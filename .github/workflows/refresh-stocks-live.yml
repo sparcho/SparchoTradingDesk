@@ -47,13 +47,40 @@ on:
 permissions:
   contents: write
 
+# F260908-QUEUESTARVE. Measured on 2026-09-08: the equity desk refreshed prices ONCE in a
+# six-hour NSE session (13:08-13:55 IST), with a 7h24m gap straight through the open, and five of
+# the day's twenty-one refresh runs cancelled outright.
+#
+# Two arithmetic errors, both introduced with the loop pattern on 2026-09-07:
+#
+#   1. LOOP_MINUTES was LONGER than the gap between the workflow's own triggers (50 vs 20). A run
+#      still holding the lock when its next two triggers arrive queues one and lets the third
+#      DELETE it -- GitHub keeps a single pending run per group. The loop starved itself before
+#      any other job was involved.
+#   2. All three loops shared one concurrency group, jointly demanding 420 lock-minutes per hour
+#      out of the 60 an hour contains. Permanently saturated, and the loser was whichever job
+#      queued behind a long-running sibling -- in practice the equity desk, while silver and news
+#      each held uninterrupted 30-67 minute loops.
+#
+# The loop pattern itself was right (scheduled triggers get dropped, so one surviving trigger should
+# cover a stretch). Converting many short runs into one long run holding a LOCK is what was wrong,
+# and that cost was never priced. Enforced now by TESTS/test_a_loop_cannot_outlive_its_own_cron.py.
+#
+# This job is on its OWN lock. It is the desk the operator trades, and it must not be able
+# to lose its slot to the silver or news refresh. F143's reason for one shared queue was
+# that no two cloud pushes should race the aggregate -- but the push path rebases and
+# retries on conflict, and today's log is full of "(rebuilt on latest)" commits, which is
+# that hardening working. The queue was belt-and-braces over a belt that holds, and it
+# cost the trading desk its intraday prices.
 concurrency:
-  group: sparcho-desk-main-push        # shared with the heavy job — queue, never race
+  group: sparcho-equity-live
   cancel-in-progress: false
 
 env:
   REBUILD_EVERY_MIN: 5       # the live overlay's intended intraday cadence
-  LOOP_MINUTES: 50           # how long one run keeps working before handing over
+  LOOP_MINUTES: 15           # MUST stay under the 20-minute cron gap, or a run is still
+                             # holding the lock when its own next trigger arrives and the
+                             # one after that deletes it (F260908-QUEUESTARVE).
   SESSION_FROM_UTC: "03:40"  # 09:10 IST — just before the open
   SESSION_TO_UTC: "10:10"    # 15:40 IST — a little past the close
 

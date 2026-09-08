@@ -40,7 +40,9 @@ permissions:
 
 env:
   REBUILD_EVERY_MIN: 10   # the overlay's intended cadence
-  LOOP_MINUTES: 40        # deliberately short: the concurrency group is shared with equity
+  LOOP_MINUTES: 8          # F260908-QUEUESTARVE: shares its lock with news; equity moved off this group entirely.
+                             # 8 min x 3 firings/hour = 24 lock-min/hour;
+                             # the two of them together fit inside the hour.
 
 jobs:
   refresh:
