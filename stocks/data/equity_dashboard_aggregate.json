@@ -1,7 +1,7 @@
 {
   "schema_version": "v1.1",
   "doc_type": "equity_dashboard_aggregate",
-  "emitted_at_utc": "2026-09-09T18:13:52+00:00",
+  "emitted_at_utc": "2026-09-09T18:31:23+00:00",
   "meta": {
     "doctrine_refs": [
       "V-31",
@@ -11,7 +11,7 @@
     "held_count": 3,
     "held_locked": true,
     "lens_run_date": "2026-09-09",
-    "last_price_refresh": "2026-09-09T18:13:52+00:00"
+    "last_price_refresh": "2026-09-09T18:31:23+00:00"
   },
   "book": {
     "as_of": "2026-09-08",
@@ -1188,7 +1188,8 @@
     "sessions_stale": 0,
     "status": "OK",
     "score_version": "F128",
-    "refreshed_at_utc": "2026-09-09T18:13:52+00:00"
+    "refreshed_at_utc": "2026-09-09T18:31:23+00:00",
+    "error": "live pull lagged (price_as_of 2026-09-08 < published 2026-09-09); kept the fresher stamp — no regression"
   },
   "flags": {
     "P0": [],
@@ -1489,14 +1490,14 @@
       {
         "id": "TNX",
         "status": "FAIL",
-        "reading": "4.82%",
+        "reading": "4.83%",
         "threshold": "<4.45%",
         "note": "4.806 vs <4.45% -> FAIL (auto-refreshed 2026-09-09 16:31 IST) -- binding deploy gate (S5.2 new-tranche block)"
       },
       {
         "id": "DXY",
         "status": "OK",
-        "reading": "98.74",
+        "reading": "98.76",
         "threshold": "<102",
         "note": "98.784 vs <102 -> OK (auto-refreshed 2026-09-09 16:31 IST) -- >102 weekly close = reduce-50 (V-06)"
       },
@@ -1510,7 +1511,7 @@
       {
         "id": "HORMUZ",
         "status": "OK",
-        "reading": "oil $101.12",
+        "reading": "oil $101.19",
         "threshold": "oil <$105",
         "note": "100.63 vs oil <$105 -> OK (auto-refreshed 2026-09-09 16:31 IST) -- war-premium / S10.1 correlated-cascade gate (Brent proxy)"
       },
@@ -1531,7 +1532,7 @@
     ],
     "macro": {
       "TNX": {
-        "value": 4.824000358581543,
+        "value": 4.833000183105469,
         "as_of": "2026-09-09T09:12:17+0530",
         "gate_status": "FAIL",
         "gate_threshold": "<4.45%"
@@ -1543,13 +1544,13 @@
         "gate_threshold": "<94 / <96 wkly"
       },
       "DXY": {
-        "value": 98.73999786376953,
+        "value": 98.76499938964844,
         "as_of": "2026-09-09T16:27:47+0530",
         "gate_status": "OK",
         "gate_threshold": "<102"
       },
       "BRENT": {
-        "value": 101.12000274658203,
+        "value": 101.19000244140625,
         "as_of": "2026-09-09T16:27:47+0530",
         "gate_status": "OK",
         "gate_threshold": "oil <$105"
@@ -10434,7 +10435,7 @@
   },
   "staleness": {
     "schema": "v1",
-    "computed_at_utc": "2026-09-09T18:13:52+00:00",
+    "computed_at_utc": "2026-09-09T18:31:23+00:00",
     "desk": "equity",
     "any_stale": true,
     "any_dim": false,
@@ -10480,7 +10481,7 @@
         "reason": "fresh — YELLOW (score 53, 2026-09-09)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": "regime_refresh",
         "ui_targets": [
           "regime-card"
@@ -10507,10 +10508,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-08 (1 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-08 (2 session(s) behind)",
         "since": "2026-09-08",
         "age_min": null,
-        "sessions_stale": 1,
+        "sessions_stale": 2,
         "heal": null,
         "ui_targets": []
       },
@@ -10535,10 +10536,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10549,10 +10550,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10566,7 +10567,7 @@
         "reason": "no freshness SLA by declaration - as-of 2026-09-09 is the furthest date IN the block, not when it was last updated; F260727 routing layer: open decisions with owners and deadlines, derived from FLAGS frontmatter. allow_empty is correct - zero open decisions is a real and good state. It has no freshness SLA because it moves only when a flag does; what matters is that OVERDUE items reach the desk.",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10577,10 +10578,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10591,10 +10592,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-08-31 (7 session(s) behind)",
+        "reason": "fresh - as-of 2026-08-31 (8 session(s) behind)",
         "since": "2026-08-31",
         "age_min": null,
-        "sessions_stale": 7,
+        "sessions_stale": 8,
         "heal": null,
         "ui_targets": []
       },
@@ -10605,10 +10606,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10619,10 +10620,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10633,10 +10634,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-06-30 (51 session(s) behind)",
+        "reason": "fresh - as-of 2026-06-30 (52 session(s) behind)",
         "since": "2026-06-30",
         "age_min": null,
-        "sessions_stale": 51,
+        "sessions_stale": 52,
         "heal": null,
         "ui_targets": []
       },
@@ -10647,10 +10648,10 @@
         "is_stale": true,
         "severity": "alert",
         "dim": false,
-        "reason": "STALE — as-of 2026-08-31 is 7 session(s) behind today (tolerance 5); produced by level_memory.py on the laptop substrate.",
+        "reason": "STALE — as-of 2026-08-31 is 8 session(s) behind today (tolerance 5); produced by level_memory.py on the laptop substrate.",
         "since": "2026-08-31",
         "age_min": null,
-        "sessions_stale": 7,
+        "sessions_stale": 8,
         "heal": null,
         "ui_targets": []
       },
@@ -10661,10 +10662,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10675,10 +10676,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10689,10 +10690,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10703,10 +10704,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh - as-of 2026-09-09 (0 session(s) behind)",
+        "reason": "fresh - as-of 2026-09-09 (1 session(s) behind)",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10717,10 +10718,10 @@
         "is_stale": true,
         "severity": "warn",
         "dim": false,
-        "reason": "STALE — as-of 2026-08-01 is 28 session(s) behind today (tolerance 20); produced by DR pipeline on the laptop substrate. [carried: this block is sealed and cannot be re-read from here]",
+        "reason": "STALE — as-of 2026-08-01 is 29 session(s) behind today (tolerance 20); produced by DR pipeline on the laptop substrate. [carried: this block is sealed and cannot be re-read from here]",
         "since": "2026-08-01",
         "age_min": null,
-        "sessions_stale": 28,
+        "sessions_stale": 29,
         "heal": null,
         "ui_targets": []
       },
@@ -10731,10 +10732,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-09 (0 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-09-09 (1 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10745,10 +10746,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-07-28 (31 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-07-28 (32 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-07-28",
         "age_min": null,
-        "sessions_stale": 31,
+        "sessions_stale": 32,
         "heal": null,
         "ui_targets": []
       },
@@ -10759,10 +10760,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-08 (1 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-09-08 (2 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-09-08",
         "age_min": null,
-        "sessions_stale": 1,
+        "sessions_stale": 2,
         "heal": null,
         "ui_targets": []
       },
@@ -10773,10 +10774,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-09 (0 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-09-09 (1 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10787,10 +10788,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-07 (2 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-09-07 (3 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-09-07",
         "age_min": null,
-        "sessions_stale": 2,
+        "sessions_stale": 3,
         "heal": null,
         "ui_targets": []
       },
@@ -10801,10 +10802,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-08 (1 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-09-08 (2 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-09-08",
         "age_min": null,
-        "sessions_stale": 1,
+        "sessions_stale": 2,
         "heal": null,
         "ui_targets": []
       },
@@ -10815,7 +10816,7 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "empty by declaration (allow_empty) — nothing to date; producer trade_tracker_emit.py liveness is judged by its dated sibling blocks [carried: sealed, not re-read from here] [carried: sealed, not re-read from here] [carried: sealed, not re-read from here] [carried: sealed, not re-read from here]",
+        "reason": "empty by declaration (allow_empty) — nothing to date; producer trade_tracker_emit.py liveness is judged by its dated sibling blocks [carried: sealed, not re-read from here] [carried: sealed, not re-read from here] [carried: sealed, not re-read from here] [carried: sealed, not re-read from here] [carried: sealed, not re-read from here]",
         "since": null,
         "age_min": null,
         "sessions_stale": null,
@@ -10829,10 +10830,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-09 (0 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-09-09 (1 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10843,10 +10844,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-09 (0 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-09-09 (1 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       },
@@ -10857,10 +10858,10 @@
         "is_stale": false,
         "severity": "info",
         "dim": false,
-        "reason": "fresh — as-of 2026-09-09 (0 session(s) behind) [carried: sealed, not re-read from here]",
+        "reason": "fresh — as-of 2026-09-09 (1 session(s) behind) [carried: sealed, not re-read from here]",
         "since": "2026-09-09",
         "age_min": null,
-        "sessions_stale": 0,
+        "sessions_stale": 1,
         "heal": null,
         "ui_targets": []
       }
