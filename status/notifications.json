@@ -1,8 +1,52 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-09-14T08:23:53+00:00",
+  "updated_at_utc": "2026-09-14T15:31:38+00:00",
   "events": [
+    {
+      "ts": "2026-09-14T21:01:30+05:30",
+      "ts_utc": "2026-09-14T15:31:30+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "equity-dashboard",
+      "spotted": "equity aggregate 4147m stale (tol 90m, off-hours)",
+      "action_taken": "re-triggered live-refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-14T21:01:33+05:30",
+      "ts_utc": "2026-09-14T15:31:33+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver-dashboard",
+      "spotted": "silver aggregate 127m stale",
+      "action_taken": "re-triggered silver 20-min refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-14T21:01:33+05:30",
+      "ts_utc": "2026-09-14T15:31:33+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "equity:live-parity",
+      "spotted": "LIVE site shows 1 grayed item(s): block:level_memory",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-14T21:01:33+05:30",
+      "ts_utc": "2026-09-14T15:31:33+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-09-14T13:53:49+05:30",
       "ts_utc": "2026-09-14T08:23:49+00:00",
@@ -501,50 +545,6 @@
     {
       "ts": "2026-09-11T07:49:05+05:30",
       "ts_utc": "2026-09-11T02:19:05+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "equity:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:level_memory",
-      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-11T07:49:06+05:30",
-      "ts_utc": "2026-09-11T02:19:06+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "silver:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
-      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-11T04:22:06+05:30",
-      "ts_utc": "2026-09-10T22:52:06+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity-dashboard",
-      "spotted": "equity aggregate 103m stale (tol 90m, off-hours)",
-      "action_taken": "re-triggered live-refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-11T04:22:08+05:30",
-      "ts_utc": "2026-09-10T22:52:08+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 98m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-11T04:22:08+05:30",
-      "ts_utc": "2026-09-10T22:52:08+00:00",
       "severity": "🔴",
       "level": "alert",
       "subsystem": "equity:live-parity",
