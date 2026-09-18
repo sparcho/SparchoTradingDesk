@@ -1,8 +1,30 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-09-18T17:59:29+00:00",
+  "updated_at_utc": "2026-09-18T20:36:20+00:00",
   "events": [
+    {
+      "ts": "2026-09-19T02:06:16+05:30",
+      "ts_utc": "2026-09-18T20:36:16+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "equity:live-parity",
+      "spotted": "LIVE site shows 12 grayed item(s): regime, block:daytrade_inputs, block:flags, block:level_memory, block:news, block:regime, block:regime_history, block:signal_perf, block:held, block:positional_assessment, block:risk_gates, block:screeners",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-19T02:06:17+05:30",
+      "ts_utc": "2026-09-18T20:36:17+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 2 grayed item(s): block:sr_levels, block:thesis_gates",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-09-18T23:29:03+05:30",
       "ts_utc": "2026-09-18T17:59:03+00:00",
@@ -528,28 +550,6 @@
       "subsystem": "silver:live-parity",
       "spotted": "LIVE site shows 2 grayed item(s): block:sr_levels, block:thesis_gates",
       "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-16T19:26:20+05:30",
-      "ts_utc": "2026-09-16T13:56:20+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 224m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-16T19:26:43+05:30",
-      "ts_utc": "2026-09-16T13:56:43+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity:regime",
-      "spotted": "Regime read stale — regime card 3 session(s) old (last 2026-09-11)",
-      "action_taken": "auto-probe: re-ran heal inline + re-triggered refresh-stocks-live.yml",
       "outcome": "pending",
       "source": "cloud-watchdog"
     }
