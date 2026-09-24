@@ -1,8 +1,74 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-09-24T13:56:38+00:00",
+  "updated_at_utc": "2026-09-24T18:46:15+00:00",
   "events": [
+    {
+      "ts": "2026-09-25T00:15:49+05:30",
+      "ts_utc": "2026-09-24T18:45:49+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "equity-dashboard",
+      "spotted": "equity aggregate 176m stale (tol 90m, off-hours)",
+      "action_taken": "re-triggered live-refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-25T00:16:15+05:30",
+      "ts_utc": "2026-09-24T18:46:15+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver-book",
+      "spotted": "(event redacted — would have exposed sensitive data)",
+      "action_taken": "(redacted)",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-25T00:16:10+05:30",
+      "ts_utc": "2026-09-24T18:46:10+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "equity:regime",
+      "spotted": "Regime read stale — regime card 9 session(s) old (last 2026-09-11)",
+      "action_taken": "auto-probe: re-ran heal inline + re-triggered refresh-stocks-live.yml",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-25T00:16:15+05:30",
+      "ts_utc": "2026-09-24T18:46:15+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver:silver_book",
+      "spotted": "(event redacted — would have exposed sensitive data)",
+      "action_taken": "(redacted)",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-25T00:16:11+05:30",
+      "ts_utc": "2026-09-24T18:46:11+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "equity:live-parity",
+      "spotted": "LIVE site shows 13 grayed item(s): regime, block:daytrade_inputs, block:fib_level_quality, block:flags, block:level_memory, block:news, block:regime, block:regime_history, block:signal_perf, block:held, block:positional_assessment, block:risk_gates, block:screeners",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-09-25T00:16:11+05:30",
+      "ts_utc": "2026-09-24T18:46:11+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 2 grayed item(s): block:sr_levels, block:thesis_gates",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-09-24T19:26:09+05:30",
       "ts_utc": "2026-09-24T13:56:09+00:00",
@@ -484,72 +550,6 @@
       "subsystem": "silver:live-parity",
       "spotted": "LIVE site shows 2 grayed item(s): block:sr_levels, block:thesis_gates",
       "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-22T19:18:12+05:30",
-      "ts_utc": "2026-09-22T13:48:12+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 103m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-22T19:18:35+05:30",
-      "ts_utc": "2026-09-22T13:48:35+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity:regime",
-      "spotted": "Regime read stale — regime card 7 session(s) old (last 2026-09-11)",
-      "action_taken": "auto-probe: re-ran heal inline + re-triggered refresh-stocks-live.yml",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-22T19:18:35+05:30",
-      "ts_utc": "2026-09-22T13:48:35+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "equity:live-parity",
-      "spotted": "LIVE site shows 13 grayed item(s): regime, block:daytrade_inputs, block:fib_level_quality, block:flags, block:level_memory, block:news, block:regime, block:regime_history, block:signal_perf, block:held, block:positional_assessment, block:risk_gates, block:screeners",
-      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-22T19:18:35+05:30",
-      "ts_utc": "2026-09-22T13:48:35+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "silver:live-parity",
-      "spotted": "LIVE site shows 2 grayed item(s): block:sr_levels, block:thesis_gates",
-      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-22T13:36:53+05:30",
-      "ts_utc": "2026-09-22T08:06:53+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity-dashboard",
-      "spotted": "equity aggregate 191m stale (tol 45m, intraday)",
-      "action_taken": "re-triggered live-refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-09-22T13:37:14+05:30",
-      "ts_utc": "2026-09-22T08:07:14+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity:regime",
-      "spotted": "Regime read stale — regime card 7 session(s) old (last 2026-09-11)",
-      "action_taken": "auto-probe: re-ran heal inline + re-triggered refresh-stocks-live.yml",
       "outcome": "pending",
       "source": "cloud-watchdog"
     }
