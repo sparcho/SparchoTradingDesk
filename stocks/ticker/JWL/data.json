@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "JWL",
-  "emitted_at_utc": "2026-09-29T03:30:53+00:00",
+  "emitted_at_utc": "2026-09-29T11:03:52+00:00",
   "public": {
     "ticker": "JWL",
     "name": "Jupiter Wagons",
@@ -108,10 +108,10 @@
     "dr_briefs": [],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 222.23,
-      "day_chg_pct": -7.242,
-      "week_chg_pct": -9.290175109188139,
-      "date": "2026-09-28"
+      "price": 219.82,
+      "day_chg_pct": -1.084,
+      "week_chg_pct": -9.318922486696096,
+      "date": "2026-09-29"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8969,54 +8969,111 @@
         226.73,
         221.85,
         222.23
+      ],
+      [
+        "2026-09-29",
+        223.71,
+        223.71,
+        218.45,
+        219.82
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 220.66,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 222.87,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 225.92,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 228.13,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 217.61,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 215.4,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 212.35,
+        "as_of": "2026-09-29"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 264.95,
-        "as_of": "2026-09-28"
+        "as_of": "2026-09-29"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 245.65,
-        "as_of": "2026-09-28"
+        "as_of": "2026-09-29"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 245.91,
-        "as_of": "2026-09-28"
+        "price": 245.27,
+        "as_of": "2026-09-29"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 274.09,
-        "as_of": "2026-09-28"
+        "price": 273.86,
+        "as_of": "2026-09-29"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 347.55,
-        "as_of": "2026-09-28"
+        "as_of": "2026-09-29"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 222.23,
-        "as_of": "2026-09-28"
+        "price": 219.82,
+        "as_of": "2026-09-29"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
+        "label": "SUPPORT",
+        "price": 217.61,
+        "dir": "below",
+        "kind": "watch",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 245.91,
+        "price": 220.66,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -9032,30 +9089,37 @@
     "gate_check": [
       {
         "label": "RESISTANCE",
-        "price": 245.91,
+        "price": 220.66,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 10.655627053053147
+        "dist_pct": 0.3821308343189898
+      },
+      {
+        "label": "SUPPORT",
+        "price": 217.61,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -1.0053680283868527
       },
       {
         "label": "UPSIDE",
         "price": 347.55,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 56.39202627908024
+        "dist_pct": 58.10663269948141
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 222.23,
-        "note": "daily close below Rs222 invalidates the structure"
+        "level": 219.82,
+        "note": "daily close below Rs220 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 222.23,
+        "level": 219.82,
         "note": "holds current band; reclaim Rs274 (200-SMA) to flip constructive"
       },
       {

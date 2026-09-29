@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "MGL",
-  "emitted_at_utc": "2026-09-29T03:30:56+00:00",
+  "emitted_at_utc": "2026-09-29T11:03:55+00:00",
   "public": {
     "ticker": "MGL",
     "name": "Mahanagar Gas",
@@ -128,10 +128,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 1048.8,
-      "day_chg_pct": -3.274,
-      "week_chg_pct": -3.9648383847632958,
-      "date": "2026-09-28"
+      "price": 1050.5,
+      "day_chg_pct": 0.162,
+      "week_chg_pct": -4.777012327773753,
+      "date": "2026-09-29"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8835,50 +8835,99 @@
         1071.9,
         1041.0,
         1048.8
+      ],
+      [
+        "2026-09-29",
+        1048.8,
+        1063.5,
+        1035.0,
+        1050.5
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 1049.67,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 1064.33,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 1078.17,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 1092.83,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 1035.83,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 1021.17,
+        "as_of": "2026-09-29"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 1007.33,
+        "as_of": "2026-09-29"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 1139.6,
-        "as_of": "2026-09-28"
+        "as_of": "2026-09-29"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 1065.2,
-        "as_of": "2026-09-28"
+        "as_of": "2026-09-29"
       },
       {
         "method": "swing_low",
         "kind": "SL2",
         "price": 1067.4,
-        "as_of": "2026-09-28"
+        "as_of": "2026-09-29"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 1097.97,
-        "as_of": "2026-09-28"
+        "price": 1097.16,
+        "as_of": "2026-09-29"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 1098.69,
-        "as_of": "2026-09-28"
+        "price": 1098.09,
+        "as_of": "2026-09-29"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
-        "price": 1344.7,
-        "as_of": "2026-09-28"
+        "price": 1313.6,
+        "as_of": "2026-09-29"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 908.4,
-        "as_of": "2026-09-28"
+        "as_of": "2026-09-29"
       }
     ],
     "operator_levels": [],
@@ -8892,16 +8941,24 @@
         "auto": true
       },
       {
+        "label": "SUPPORT",
+        "price": 1049.67,
+        "dir": "below",
+        "kind": "watch",
+        "why": "classical pivot",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 1097.97,
+        "price": 1064.33,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "pivot R1",
         "auto": true
       },
       {
         "label": "UPSIDE",
-        "price": 1344.7,
+        "price": 1313.6,
         "dir": "above",
         "kind": "trim",
         "why": "52-week high",
@@ -8911,25 +8968,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "SUPPORT",
+        "price": 1049.67,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.0790099952403548
+      },
+      {
         "label": "RESISTANCE",
-        "price": 1097.97,
+        "price": 1064.33,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 4.688215102974835
+        "dist_pct": 1.3165159447881891
       },
       {
         "label": "INVALIDATION",
         "price": 908.4,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -13.386727688787184
+        "dist_pct": -13.52689195621133
       },
       {
         "label": "UPSIDE",
-        "price": 1344.7,
+        "price": 1313.6,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 28.213196033562177
+        "dist_pct": 25.04521656354116
       }
     ],
     "scenario_ladder": [
@@ -8942,14 +9006,14 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 1048.8,
-        "note": "holds current band; reclaim Rs1099 (200-SMA) to flip constructive"
+        "level": 1050.5,
+        "note": "holds current band; reclaim Rs1098 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
         "label": "Bull: Trend resumption",
-        "level": 1344.7,
-        "note": "sustained move toward Rs1345"
+        "level": 1313.6,
+        "note": "sustained move toward Rs1314"
       }
     ],
     "catalysts": [],
