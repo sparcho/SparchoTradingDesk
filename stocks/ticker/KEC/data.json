@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "KEC",
-  "emitted_at_utc": "2026-10-05T03:30:31+00:00",
+  "emitted_at_utc": "2026-10-05T11:05:23+00:00",
   "public": {
     "ticker": "KEC",
     "name": "KEC International",
@@ -115,10 +115,10 @@
     "dr_briefs": [],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 372.35,
-      "day_chg_pct": -1.299,
-      "week_chg_pct": -9.940742532349732,
-      "date": "2026-10-01"
+      "price": 370.55,
+      "day_chg_pct": -0.483,
+      "week_chg_pct": -8.821358267716528,
+      "date": "2026-10-05"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8997,59 +8997,116 @@
         381.45,
         367.5,
         372.35
+      ],
+      [
+        "2026-10-05",
+        374.9,
+        380.7,
+        369.0,
+        370.55
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 373.42,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 377.83,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 385.12,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 389.53,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 366.13,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 361.72,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 354.43,
+        "as_of": "2026-10-05"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 478.85,
-        "as_of": "2026-10-01"
+        "as_of": "2026-10-05"
       },
       {
         "method": "swing_low",
         "kind": "SL1",
         "price": 464.6,
-        "as_of": "2026-10-01"
+        "as_of": "2026-10-05"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 428.11,
-        "as_of": "2026-10-01"
+        "price": 426.06,
+        "as_of": "2026-10-05"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 542.32,
-        "as_of": "2026-10-01"
+        "price": 540.77,
+        "as_of": "2026-10-05"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
-        "price": 882.85,
-        "as_of": "2026-10-01"
+        "price": 872.95,
+        "as_of": "2026-10-05"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 372.35,
-        "as_of": "2026-10-01"
+        "price": 370.55,
+        "as_of": "2026-10-05"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
+        "label": "SUPPORT",
+        "price": 366.13,
+        "dir": "below",
+        "kind": "watch",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 428.11,
+        "price": 373.42,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "UPSIDE",
-        "price": 882.85,
+        "price": 872.95,
         "dir": "above",
         "kind": "trim",
         "why": "52-week high",
@@ -9060,37 +9117,44 @@
     "gate_check": [
       {
         "label": "RESISTANCE",
-        "price": 428.11,
+        "price": 373.42,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 14.975157781657039
+        "dist_pct": 0.7745243556874928
+      },
+      {
+        "label": "SUPPORT",
+        "price": 366.13,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -1.1928214815814373
       },
       {
         "label": "UPSIDE",
-        "price": 882.85,
+        "price": 872.95,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 137.1021888008594
+        "dist_pct": 135.58224261233303
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 372.35,
-        "note": "daily close below Rs372 invalidates the structure"
+        "level": 370.55,
+        "note": "daily close below Rs371 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 372.35,
-        "note": "holds current band; reclaim Rs542 (200-SMA) to flip constructive"
+        "level": 370.55,
+        "note": "holds current band; reclaim Rs541 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
         "label": "Bull: Trend resumption",
-        "level": 882.85,
-        "note": "sustained move toward Rs883"
+        "level": 872.95,
+        "note": "sustained move toward Rs873"
       }
     ],
     "catalysts": [],
@@ -9237,7 +9301,7 @@
           "label": "Has the market changed its mind? (the MULTIPLE, not the price)",
           "lens": "rerating",
           "reading": "de-rated",
-          "figure": "PE 66.6 at 2023-03-31 -> 16.7 now, -75% over 3 fiscal year ends. The price moved -18% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
+          "figure": "PE 66.6 at 2023-03-31 -> 16.7 now, -75% over 3 fiscal year ends. The price moved -19% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
           "source": "tracking.rerating.verdict",
           "not_measurable": null,
           "measured": "MEASURED INVERTED",

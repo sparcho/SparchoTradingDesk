@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "KPIT",
-  "emitted_at_utc": "2026-10-05T03:30:32+00:00",
+  "emitted_at_utc": "2026-10-05T11:05:24+00:00",
   "public": {
     "ticker": "KPIT",
     "name": "KPIT",
@@ -114,10 +114,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 492.0,
-      "day_chg_pct": -1.423,
-      "week_chg_pct": -10.699700517288328,
-      "date": "2026-10-01"
+      "price": 489.5,
+      "day_chg_pct": -0.508,
+      "week_chg_pct": -11.602708803611739,
+      "date": "2026-10-05"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8849,48 +8849,105 @@
         509.4,
         484.5,
         492.0
+      ],
+      [
+        "2026-10-05",
+        499.85,
+        508.95,
+        489.0,
+        489.5
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 495.82,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 502.63,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 515.77,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 522.58,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 482.68,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 475.87,
+        "as_of": "2026-10-05"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 462.73,
+        "as_of": "2026-10-05"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 638.75,
-        "as_of": "2026-10-01"
+        "as_of": "2026-10-05"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 577.39,
-        "as_of": "2026-10-01"
+        "price": 576.16,
+        "as_of": "2026-10-05"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 768.36,
-        "as_of": "2026-10-01"
+        "price": 764.81,
+        "as_of": "2026-10-05"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 1269.8,
-        "as_of": "2026-10-01"
+        "as_of": "2026-10-05"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 492.0,
-        "as_of": "2026-10-01"
+        "price": 489.5,
+        "as_of": "2026-10-05"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
+        "label": "SUPPORT",
+        "price": 482.68,
+        "dir": "below",
+        "kind": "watch",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 577.39,
+        "price": 495.82,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -8906,31 +8963,38 @@
     "gate_check": [
       {
         "label": "RESISTANCE",
-        "price": 577.39,
+        "price": 495.82,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 17.355691056910565
+        "dist_pct": 1.29111338100102
+      },
+      {
+        "label": "SUPPORT",
+        "price": 482.68,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -1.3932584269662909
       },
       {
         "label": "UPSIDE",
         "price": 1269.8,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 158.08943089430895
+        "dist_pct": 159.40755873340143
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 492.0,
-        "note": "daily close below Rs492 invalidates the structure"
+        "level": 489.5,
+        "note": "daily close below Rs490 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 492.0,
-        "note": "holds current band; reclaim Rs768 (200-SMA) to flip constructive"
+        "level": 489.5,
+        "note": "holds current band; reclaim Rs765 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
