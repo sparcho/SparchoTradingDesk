@@ -13,6 +13,20 @@ with real entry / stop / target levels. system_autotrade_logger consumes the FIR
 trades; the existing resolver then forward-scores them — which is exactly the scorer the bank
 lacked.
 
+F261003-TIMING (equity-desk style-lock T3.3/T3.4, PLANS/EQUITY-DESK-STYLE-LOCK.md). Two ADDITIVE
+changes, neither of which touches RR_MIN / MIN_SOURCES / the A2 verified-only gate:
+  * Timing factors -> the FIRE gate. `entry_timing.pullback_in_uptrend` / `oversold_bounce` are the
+    only two entry conditions measured WORKS. Either present -> `score` +10 (cap 100, `score_base`
+    keeps the unboosted number). Neither present (False OR unmeasured) -> a FIRE is demoted to WATCH
+    ("neither measured timing factor present"); losing an input never makes a trade look better.
+    `above_200d` (measured NO_EDGE) contributes NOTHING to score or verdict; it stays in the
+    entry_timing dict for display only.
+  * STYLE lens (a fourth class beside FIRE/WATCH/EXCLUDE, never replacing it): row field
+    `style` is True when price is within 2% of ANY verified level (support or resistance, any
+    direction, >= 2 sources) AND 28 <= rsi14 < 45 AND 0.5 < pct_above_20d_low < 5 AND not a falling-knife. NO trend filter. `style_why`
+    is the one-line reason. build_radar() exposes `styles` + `counts.style`; the snapshot step logs
+    the STYLE rows to the signal ledger as the `Radar-STYLE` lens so the class earns a hit-rate.
+
 READ-ONLY. This module never writes; it classifies. Levels come from the bank, never from price
 action (no fire-day-low, no AUTO_SR — both retired 2026-07-13).
 """
@@ -70,6 +84,16 @@ FIRE_SETUPS = ("buy-support", "at-support")     # price is AT a support confluen
 WATCH_SETUPS = ("approaching", "in-zone")       # structurally sound, not actionable yet
 OK_TRENDS = ("up", "mixed")                     # never buy support into a downtrend
 
+# F261003-TIMING — STYLE lens thresholds (operator spec, PLANS/EQUITY-DESK-STYLE-LOCK.md T3.3).
+STYLE_TOL_PCT = 2.0          # price within this % of a verified level (either side)
+STYLE_MIN_SOURCES = 2        # the level needs >= 2 sources
+STYLE_RSI_MAX = 45.0         # rsi14 strictly below
+STYLE_RSI_MIN = 28.0         # ...and at/above this: a crash (RSI 2-25) is not the operator's style (261003 calibration: 37/98 names flagged in the Oct-1 selloff)
+STYLE_LOW_MAX_PCT = 5.0      # pct_above_20d_low strictly below
+STYLE_LOW_MIN_PCT = 0.5      # ...and above this: price has already lifted off the 20d low, not sitting on it
+STYLE_SKIP_SETUPS = ("falling-knife",)
+TIMING_BONUS = 10            # score points when a measured timing factor is present
+
 
 def _num(x):
     try:
@@ -78,7 +102,7 @@ def _num(x):
         return None
 
 
-def classify(name: dict) -> dict:
+def _classify_gate(name: dict) -> dict:
     """FIRE / WATCH / EXCLUDE for one fib-bank name, with the levels and the WHY (V-03).
 
     FIRE  = at_confluence & grade STRONG & key_support verified with 3+ sources & setup is
@@ -235,6 +259,67 @@ def classify(name: dict) -> dict:
             "target": target, "rr": rr, "why_verdict": why}
 
 
+def _fmt_px(x):
+    return ("%.2f" % x).rstrip("0").rstrip(".")
+
+
+def style_of(name: dict) -> tuple:
+    """F261003-TIMING STYLE lens -> (bool, one-line why). Pure; None-safe (missing input -> False).
+
+    Within 2% of ANY verified level with >= 2 sources (support or resistance, any direction, from
+    the bank's `points`), rsi14 < 45 and pct_above_20d_low < 5. No trend filter by design."""
+    et = name.get("entry_timing") or {}
+    rsi, low, cur = _num(et.get("rsi14")), _num(et.get("pct_above_20d_low")), _num(name.get("current_px"))
+    if rsi is None or low is None or not cur:
+        return False, ""
+    pts = [p for p in (name.get("points") or []) if isinstance(p, dict)]
+    if not pts:
+        pts = [p for p in (name.get("key_support"), name.get("key_resistance")) if isinstance(p, dict)]
+    best = None
+    for p in pts:
+        px = _num(p.get("px"))
+        if px is None or px <= 0 or not p.get("verified") or (p.get("sources") or 0) < STYLE_MIN_SOURCES:
+            continue
+        d = abs(cur - px) / cur * 100
+        if best is None or d < best[0]:
+            best = (d, px)
+    if best is None or best[0] > STYLE_TOL_PCT:
+        return False, ""
+    if not (STYLE_RSI_MIN <= rsi < STYLE_RSI_MAX) or not (STYLE_LOW_MIN_PCT < low < STYLE_LOW_MAX_PCT):
+        return False, ""
+    if (name.get("setup") or "") in STYLE_SKIP_SETUPS:
+        return False, ""
+    return True, "%.1f%% off %s \u00b7 RSI %d \u00b7 %.1f%% above 20d low" % (best[0], _fmt_px(best[1]), round(rsi), low), best[1]
+
+
+def classify(name: dict) -> dict:
+    """FIRE / WATCH / EXCLUDE (`_classify_gate`) + F261003-TIMING: timing score/demotion and the
+    additive STYLE flag. Every row carries `score`, `score_base`, `style`, `style_why`."""
+    r = _classify_gate(name)
+    et = name.get("entry_timing") or {}
+    pb, ob = et.get("pullback_in_uptrend"), et.get("oversold_bounce")
+    timing = bool(pb is True or ob is True)
+    base = _num(name.get("score"))
+    r["score_base"] = base
+    r["score"] = (min(100, base + (TIMING_BONUS if timing else 0)) if base is not None else None)
+    if isinstance(r["score"], float) and r["score"].is_integer():
+        r["score"] = int(r["score"])
+    # a FIRE needs a measured timing factor; the structural gate above is untouched
+    if r.get("verdict") == "FIRE" and not timing:
+        r["verdict"] = "WATCH"
+        r["why_verdict"] = ["neither measured timing factor present"
+                            + (" (unmeasured)" if pb is None and ob is None else "")]
+    try:
+        _st = style_of(name)
+        r["style"], r["style_why"] = _st[0], _st[1]
+        r["style_level"] = _st[2] if len(_st) > 2 else None
+    except Exception as e:   # additive lens: never break the radar build
+        import sys
+        print("[fib_confluence_source] !!! STYLE failed for %s: %r" % (name.get("ticker"), e), file=sys.stderr)
+        r["style"], r["style_why"], r["style_level"] = False, "", None
+    return r
+
+
 def stop_atr_days(entry, stop, atr_pct):
     """How many of this name's own normal days sit between entry and the stop.
 
@@ -295,7 +380,7 @@ def select_fib_confluence(payload) -> dict:
         r["setup"] = name.get("setup")
         r["trend"] = name.get("trend")
         r["grade"] = name.get("grade")
-        r["score"] = name.get("score")
+        # r["score"] / score_base / style / style_why come from classify() (F261003-TIMING)
         r["current_px"] = name.get("current_px")
         r["flags"] = list(name.get("flags") or [])
         r["why"] = list(name.get("why") or [])          # the bank's own reasoning, carried through
@@ -317,13 +402,15 @@ def select_fib_confluence(payload) -> dict:
 
     for b in buckets.values():
         b.sort(key=order_key)
+    styles = [r for b in (buckets["FIRE"], buckets["WATCH"], buckets["EXCLUDE"]) for r in b if r.get("style")]
 
     return {
         "fires": buckets["FIRE"],
         "watch": buckets["WATCH"],
         "excluded": buckets["EXCLUDE"],
         "counts": {"fire": len(buckets["FIRE"]), "watch": len(buckets["WATCH"]),
-                   "exclude": len(buckets["EXCLUDE"])},
+                   "exclude": len(buckets["EXCLUDE"]), "style": len(styles)},
+        "styles": styles,
         "price_as_of": payload.get("price_as_of"),
         "generated_at_utc": payload.get("generated_at_utc"),
         "basis": payload.get("basis"),
@@ -357,7 +444,9 @@ RADAR_KEYS = ("ticker", "verdict", "entry", "stop", "target", "rr", "setup", "tr
               # rather than computed in the shell so the cloud Action and this emit ship the
               # same block -- an allowlist that silently drops a new field renders the card
               # as though it was never computed ([[moving-a-field-breaks-its-readers]]).
-              "stop_atr_days", "entry_timing")
+              "stop_atr_days", "entry_timing",
+              # F261003-TIMING: score_base = score before the +10 timing bonus; style = STYLE lens.
+              "score_base", "style", "style_why", "style_level")
 
 
 def radar_row(r: dict) -> dict:
@@ -388,10 +477,17 @@ def build_radar(bank=None) -> dict:
     was not published.
     """
     sel = select_fib_confluence(bank if bank is not None else load_bank())
+    try:                                    # T4: ticket sizing constant, one source of truth
+        import tradebook_fifo as _tf
+        _risk = float(_tf.RISK_INR)
+    except Exception:
+        _risk = 10000.0
     return {
+        "risk_inr": _risk,
         "fires": [radar_row(r) for r in sel["fires"]],
         "watch": [radar_row(r) for r in sel["watch"]],
         "board": [radar_row(r) for r in (sel["fires"] + sel["watch"] + sel["excluded"])],
+        "styles": [radar_row(r) for r in sel.get("styles", [])],
         "counts": sel["counts"],
         "price_as_of": sel.get("price_as_of"),
         "generated_at_utc": sel.get("generated_at_utc"),

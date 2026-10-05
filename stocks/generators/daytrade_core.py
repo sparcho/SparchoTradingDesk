@@ -175,6 +175,32 @@ def _ist_today():
     return _ist_now().date()
 
 
+def _nse_holidays():
+    """F261003-HOLIDAY: the session calendar at DATA/nse_holidays.csv (derive_nse_holidays.py).
+    Returns a set of ISO dates. Missing/unreadable file -> empty set (old weekday-only behaviour)."""
+    from pathlib import Path
+    out = set()
+    try:
+        here = Path(__file__).resolve().parent
+        cands = [here.parent / "DATA" / "nse_holidays.csv",        # vault: 00_SYSTEM/DATA
+                 here.parent / "data" / "nse_holidays.csv",        # repo:  stocks/data (cloud copy)
+                 here / "data" / "nse_holidays.csv"]
+        p = next((c for c in cands if c.exists()), None)
+        if p is None:
+            return out
+        for line in p.read_text(encoding="utf-8").splitlines():
+            d = line.strip().split(",")[0]
+            if len(d) == 10 and d[4] == "-" and d[0].isdigit():
+                out.add(d)
+    except Exception:
+        pass
+    return out
+
+
+def _is_session(d, holidays=None):
+    return d.weekday() < 5 and d.isoformat() not in (holidays if holidays is not None else _nse_holidays())
+
+
 # NSE rings the close at 15:30 IST; a settle margin lets the daily bar land before
 # we expect to have pulled it.
 _NSE_CLOSE_HH, _NSE_CLOSE_MM = 15, 40
@@ -191,12 +217,13 @@ def _latest_expected_session(now_ist=None):
     the prior contract; no holiday calendar is consulted."""
     from datetime import timedelta
     now = now_ist or _ist_now()
+    hol = _nse_holidays()
     d = now.date()
     closed_today = (now.hour, now.minute) >= (_NSE_CLOSE_HH, _NSE_CLOSE_MM)
-    if d.weekday() < 5 and closed_today:
+    if _is_session(d, hol) and closed_today:
         return d
     d = d - timedelta(days=1)
-    while d.weekday() >= 5:          # walk back over Sat/Sun to the prior weekday
+    while not _is_session(d, hol):   # walk back over Sat/Sun AND NSE holidays (F261003-HOLIDAY)
         d = d - timedelta(days=1)
     return d
 
@@ -225,9 +252,10 @@ def daytrade_freshness(price_as_of, refreshed_at_utc=None):
     if paf:
         sessions_stale = 0
         d = paf
+        hol = _nse_holidays()
         while d < expected:
             d = d + timedelta(days=1)
-            if d.weekday() < 5:   # Mon-Fri
+            if _is_session(d, hol):   # Mon-Fri, not an NSE holiday (F261003-HOLIDAY)
                 sessions_stale += 1
     if sessions_stale is None:
         status = "UNKNOWN"
