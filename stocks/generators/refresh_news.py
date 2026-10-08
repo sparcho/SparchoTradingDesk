@@ -32,7 +32,8 @@ OUT = DATA / "news_candidates.json"
 # ── CONFIG (tunable) ──────────────────────────────────────────────────────────
 MAX_PER_TICKER = 4
 RECENCY_HOURS = 72
-RSS_UNIVERSE_CAP = 30          # held + watchlist + top screener names; caps per-company RSS fetches/run
+RSS_UNIVERSE_CAP = 30          # per-run RSS fetch budget; the FULL tracked list is covered by rotation (F261008-NEWSALL)
+PRIORITY_CAP = 10              # radar fires / watch / your-kind-of-setup names: scanned EVERY run
 MARKETAUX_URL = "https://api.marketaux.com/v1/news/all"
 HTTP_TIMEOUT = 12
 UA = {"User-Agent": "Mozilla/5.0 (SparchoTradingDesk news bot)"}
@@ -76,29 +77,57 @@ def _read_json(p, default):
 
 
 def universe():
-    """{ticker: name} for held + screener candidates + watchlist (held first, RSS-capped).
-    Names (held only) sharpen the RSS query; ticker-only names fall back to a symbol query."""
+    """[(ticker, name)] to fetch THIS run. F261008-NEWSALL (operator: "obviously the news scan should
+    be scanning for the entire list of names we track"): the list is ticker/pages.json - every
+    tracked name - not held + retired day-trade candidates + watchlist capped at 30, which left
+    ~90 tracked names never scanned. Budget per run stays RSS_UNIVERSE_CAP: the radar's live names
+    (fires, watch, style) go every run, the rest rotate in a window that moves each run, so the whole
+    list is covered every few runs (~4 runs = ~80 min in session). Held names are NOT read: the
+    public aggregate does not carry them, and they are tracked names anyway."""
     d = _read_json(AGG, {})
-    name_of, order = {}, []
-    for h in (d.get("held") or []):
-        t = h.get("ticker")
-        if t and t not in name_of:
-            name_of[t] = h.get("name") or h.get("company") or ""
-            order.append(t)
-    di = d.get("daytrade_inputs") or {}
-    cands = di.get("candidates") or {}
-    cand_tickers = sorted(cands.keys()) if isinstance(cands, dict) else [c for c in cands]
-    for t in (di.get("held") or []) + cand_tickers:
-        if t and t not in name_of:
-            name_of[t] = ""
-            order.append(t)
-    for w in (d.get("watchlist_rundown") or []):
-        t = w.get("ticker")
-        if t and t not in name_of:
-            name_of[t] = ""
-            order.append(t)
-    order = order[:RSS_UNIVERSE_CAP]
-    return [(t, name_of.get(t, "")) for t in order]
+    pages = _read_json(HERE.parent / "ticker" / "pages.json", {})
+    tracked = sorted({str(t).upper() for t in (pages.get("tickers") or []) if t})
+    if not tracked:   # fall back to everything the aggregate names, never to nothing
+        tracked = sorted({str(w.get("ticker")).upper() for w in (d.get("watchlist_rundown") or []) if w.get("ticker")})
+    rad = d.get("fib_radar") or {}
+    pri = []
+    for k in ("fires", "watch"):
+        for r in (rad.get(k) or []):
+            t = str((r or {}).get("ticker") or "").upper()
+            if t and t not in pri:
+                pri.append(t)
+    for r in (rad.get("board") or []):
+        t = str((r or {}).get("ticker") or "").upper()
+        if (r or {}).get("style") and t and t not in pri:
+            pri.append(t)
+    pri = [t for t in pri if t in tracked or not tracked][:PRIORITY_CAP]
+    rest = [t for t in tracked if t not in pri]
+    room = max(0, RSS_UNIVERSE_CAP - len(pri))
+    if rest and room:
+        slot = int(_now_utc().timestamp() // (20 * 60))           # the workflow runs ~every 20 min
+        start = (slot * room) % len(rest)
+        window = (rest + rest)[start:start + min(room, len(rest))]
+    else:
+        window = []
+    return [(t, "") for t in pri + window]
+
+
+def _carry_forward(items, fetched):
+    """Rotation means a name is fetched every few runs, not every run. Keep last-good items for names
+    NOT fetched this run (still inside RECENCY_HOURS) so the feed never forgets a name between visits."""
+    prev = _read_json(OUT, {}) or {}
+    now = _now_utc()
+    have = {canon_url(i.get("url") or "") for i in items}
+    out = list(items)
+    for it in (prev.get("items") or []):
+        tk = it.get("ticker")
+        if not tk or tk in fetched or canon_url(it.get("url") or "") in have:
+            continue
+        dt = _parse_dt(it.get("published_at") or "")
+        if dt is not None and (now - dt.astimezone(timezone.utc)).total_seconds() / 3600.0 > RECENCY_HOURS:
+            continue
+        out.append(it)
+    return out
 
 
 def canon_url(u):
@@ -246,6 +275,7 @@ def main():
         time.sleep(0.05)   # be gentle
 
     items = vet(raw)
+    items = _carry_forward(items, {t for t, _ in uni})
     now_iso = _now_utc().isoformat(timespec="seconds")
     if not items:
         # NEVER blank a good file — keep last-good, stamp stale

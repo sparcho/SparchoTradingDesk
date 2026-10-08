@@ -137,6 +137,11 @@ def build_panel(candidates: dict, ohlc: dict, held_tickers=None, top_n: int = 12
             "held": tk in held, "score": round(score, 1),
         })
     rows.sort(key=lambda r: -r["score"])
+    # F261008-PXASOF: the as-of is a fact about the PRICE DATA, not about which names survived
+    # the filters. On a day where every candidate is filtered out it came back None, the
+    # freshness stamp read UNKNOWN and the staleness contract greyed the desk.
+    if not price_dates:
+        price_dates = [b[-1][0] for b in ohlc.values() if b]
     price_as_of = max(price_dates) if price_dates else None
     return rows[:top_n], price_as_of
 
