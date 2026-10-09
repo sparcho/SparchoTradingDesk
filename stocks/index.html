@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1791461785">
-<meta name="x-built-at" content="2026-10-08T12:15:42+00:00">
+<meta name="x-build-id" content="1791557185">
+<meta name="x-built-at" content="2026-10-09T14:45:42+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1791461785",BUILT_AT="2026-10-08T12:15:42+00:00";
+  var BID="1791557185",BUILT_AT="2026-10-09T14:45:42+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -1807,7 +1807,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     <!-- "Your names, today" - renders ONLY when the payload is decrypted.
          Empty and display:none for anyone else; a placeholder would itself
          disclose that a band exists. -->
-    <div id="ynband"></div>
+    <div id="ynband" class="mini"></div>
     <div class="deck">
     <div class="prism" id="prism">
     <!-- RETIRED 2026-08-20 (operator, roadmap step 5): the Screener TAB is gone from the nav
@@ -1909,6 +1909,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       var u=new URL(location); u.searchParams.set('v',id); history.replaceState(null,'',u);
       if(id==='z-screen') drawBubble();
       if(id==='z-lab'){ drawLab(); if(window.__rdr2Soon) window.__rdr2Soon(); }
+      if(id==='z-research'){ setTimeout(function(){ try{ rsFit(); }catch(e){} },60); }
       if(id==='z-perf' && window.drawPerf) window.drawPerf();
       if(mode!=='none' && !document.body.classList.contains('solo')){ var ty=document.querySelector('.zones').offsetTop; requestAnimationFrame(function(){ window.scrollTo({top:ty, behavior: mode==='instant'?'auto':'smooth'}); }); setTimeout(function(){ if(window.scrollY < ty-140) window.scrollTo(0, ty); }, 720); }
     }
@@ -2167,12 +2168,32 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   // which pushes content down after the first two restores have run. The late restore is
   // abandoned the moment the reader scrolls themselves, so it can never fight the user for
   // control of the page.
+  // F261009-DECLUTTER #1 — the grey text on the right of every card title ("2 fire · 5 watch ·
+  // 91 excluded", "98 names · 780 points") goes. What survives: an OLD date (amber, so stale data
+  // is never silent) and anything that asks for action (needs a decision, locked, stale, missing).
+  window.declutterAges=function(root){
+    var MON={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+    (root||document).querySelectorAll('.c-lbl .age').forEach(function(a){
+      if(a.dataset.dc) return; a.dataset.dc='1';
+      if(a.querySelector('button,a,[onclick]')) return;
+      var t=a.textContent||'';
+      if(/\u{1F512}|locked/iu.test(t)){ a.textContent='\u{1F512} locked'; return; }
+      if(/need|stale|\u26a0|overdue|missing|not run|failed/i.test(t)) return;
+      if(/since|retired|from \d/i.test(t)){ a.style.display='none'; return; }   // a range start is not an as-of
+      var m=/(\d{1,2}) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{2})/.exec(t), d=null;
+      if(m) d=new Date(2000+(+m[3]), MON[m[2]], +m[1]);
+      else { var m2=/(20\d{2})-(\d{2})-(\d{2})/.exec(t); if(m2) d=new Date(+m2[1], +m2[2]-1, +m2[3]); }
+      if(d && (Date.now()-d.getTime())/864e5>4){ a.textContent='as of '+m[0]; a.classList.add('old'); return; }
+      a.style.display='none';
+    });
+  };
   function setFace(id,bodyHTML){
     const f=$(id); if(!f) return;
     const zh=f.querySelector('.zone-h');
     const isRerender = f.classList.contains('active') && f.children.length>(zh?1:0);
     const top = isRerender ? (f.scrollTop||0) : 0;
     f.innerHTML=(zh?zh.outerHTML:'')+bodyHTML;
+    try{ window.declutterAges(f); }catch(_){ }
     if(!isRerender || top<=0) return;
     const put=function(){ try{ if(f.scrollHeight>f.clientHeight) f.scrollTop=top; }catch(_){ } };
     put();
@@ -2279,7 +2300,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       if(!r.ok) throw new Error('HTTP '+r.status);
       const __aggText=await r.text();
       DATA=JSON.parse(__aggText);
-      try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); } }catch(_){ }
+      try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); window.TK_NAME={}; (pj.groups||[]).forEach(function(g){ (g.names||[]).forEach(function(n){ window.TK_NAME[n.ticker]=n.name||''; }); }); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
       let __pxText='';
@@ -2768,7 +2789,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       averaging_down:'Rule: never buy more below your cost',loss_cut:'Rule: sell at −5% or 2 weeks in the red'})[key]||'';
     return '<div class="bh-tile '+c+'" title="'+esc(thr)+'"><div class="bh-top"><span class="bh-n">'+esc(label)+'</span><span class="bh-chip '+c+'">'+chip+'</span></div>'+
       '<div class="bh-v '+c+'">'+esc(val)+'</div><div class="bh-d">'+bhDetail(key,r)+'</div>'+
-      '<div class="bh-foot"><span class="bh-th">'+esc(thr)+'</span>'+bhSpark(st,key)+'</div></div>';
+      '<div class="bh-foot">'+bhSpark(st,key)+'</div></div>';
   }
   function bhPayoff(st){
     var p=st.payoff; if(!p) return '';
@@ -3659,6 +3680,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var fresh = (P.freshness && P.freshness.state) || '';
     var stale = /stale|overdue/i.test(fresh);
     var html = '<div class="yn"><div class="yn-hd"><span class="yn-t">Your names, today</span>'
+      + '<button class="yn-x" onclick="ynCollapse(event)" title="Minimise">\u25b4 minimise</button>'
       + '<span class="yn-s'+(stale?' stale':'')+'">'+esc(P.as_of_ist||'')+(fresh?(' \u00b7 '+esc(fresh)):'')
       + ' \u00b7 session '+esc(window.fmtDate(P.session_date||''))+' \u00b7 bars through '+esc(P.bars_through||'')+'</span></div>';
 
@@ -3683,25 +3705,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       : 'all quiet';
     html = '<div class="yn-mini" onclick="ynExpand(event)"><span class="yn-t">Your names</span>'
       + '<span class="yn-mtx">'+miniTxt+(quiet.length&&loud.length?(' \u00b7 '+quiet.length+' quiet'):'')+'</span>'
-      + '<span class="yn-car">\u25be</span></div>' + html;
+      + '<span class="yn-car">\u25be expand</span></div>' + html;
     /* Write only on a real change: an unconditional innerHTML on every 60s render would replace
        live nodes under the operator's cursor for no reason. */
     if(el.innerHTML !== html) el.innerHTML = html;
   }
 
-  // F261008-YNMINI — collapse "Your names, today" to the slim band once the active tab is
-  // scrolled; back to full at the top. A click opens it until the next real scroll down.
-  window.ynExpand=function(ev){ if(ev) ev.stopPropagation(); var b=document.getElementById('ynband'); if(!b) return;
-    b.classList.remove('mini'); window.__ynOpenAt=window.__ynLastY||0; };
-  (function(){
-    function onSc(e){ var t=e.target; var y=(t&&t.nodeType===1)?t.scrollTop:(window.scrollY||0);
-      if(t&&t.nodeType===1&&!(t.classList&&t.classList.contains('face'))) return;
-      window.__ynLastY=y; var b=document.getElementById('ynband'); if(!b) return;
-      if(y<24){ b.classList.remove('mini'); window.__ynOpenAt=null; return; }
-      if(window.__ynOpenAt!=null && Math.abs(y-window.__ynOpenAt)<140) return;
-      window.__ynOpenAt=null; b.classList.add('mini'); }
-    document.addEventListener('scroll', onSc, true);
-  })();
+  // F261009-YNMIN — "by default lets have it minimized. it should have an expand and contract
+  // button." The band starts slim; the slim bar expands it, the full band's button minimises it.
+  // No scroll automation any more: it only changes when the reader asks.
+  window.ynExpand=function(ev){ if(ev) ev.stopPropagation(); var b=document.getElementById('ynband'); if(b) b.classList.remove('mini'); };
+  window.ynCollapse=function(ev){ if(ev) ev.stopPropagation(); var b=document.getElementById('ynband'); if(b) b.classList.add('mini'); };
 
   function renderAll(){
     if(!DATA) return;
@@ -4156,7 +4170,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var _qual=function(n){ var p0=(n.points||[])[0]||{}; var q=[]; if(p0.n_ladders) q.push(p0.n_ladders+' fib ladder'+(p0.n_ladders>1?'s':'')); if(p0.ma_hits&&p0.ma_hits.length) q.push(esc(p0.ma_hits.join(' + '))); return 'Confluence: '+(q.join(' + ')||'single ladder')+(p0.tf_max?(' · up to '+p0.tf_max+'M'):'')+(n.grade?(' · '+esc(n.grade)):''); };
     var _bk=function(n){ return _isBook(n.ticker)?'<span class="fc-book" title="held">●</span>':''; };
     var _gate=function(n,c){ var kr=n.key_resistance, ks=n.key_support; if((c.kind==='buy'||c.kind==='watchbuy'||c.kind==='avoid')&&kr&&kr.px!=null&&kr.px>n.current_px) return '<div class="fc2-gate">↑ reclaim <b>'+_rup(kr.px)+'</b> to turn up</div>'; if(c.kind==='resist'&&ks&&ks.px!=null&&ks.px<n.current_px) return '<div class="fc2-gate">↓ support <b>'+_rup(ks.px)+'</b></div>'; return ''; };
-    var _body=function(n,c){ return '<div class="fc2-situ">'+esc(c.situ)+'</div><div class="fc2-act"><span class="fc2-lbl">'+esc(c.lbl)+'</span><span class="fc2-px">'+_rup(c.px)+'</span></div><div class="fc2-live">Close <b>'+_rup(n.current_px)+'</b> · '+esc(n.trend||'—')+'</div>'+_gate(n,c)+'<div class="fc2-q">'+_qual(n)+'</div>'; };
+    var _body=function(n,c){ return '<div class="fc2-situ">'+esc(c.situ)+'</div><div class="fc2-act"><span class="fc2-lbl">'+esc(c.lbl)+'</span><span class="fc2-px">'+_rup(c.px)+'</span></div>'+_gate(n,c)+'<div class="fc2-q" title="Close '+_rup(n.current_px)+' · '+esc(n.trend||'—')+'">'+_qual(n)+'</div>'; };
     var heroHTML=_heroes.map(function(n){ var c=_classify(n); return '<div class="rhero fc2 '+c.kind+'"><div class="fc2-hd"><span class="fc2-tk">'+esc(n.ticker)+'</span>'+_bk(n)+'<span class="fc2-sc">'+(n.score!=null?n.score:'')+'</span></div>'+_body(n,c)+'</div>'; }).join('');
     var _SV={buy:'BUY',watchbuy:'WATCH',resist:'@RES',avoid:'KNIFE',watch:'WATCH'};
     var miniHTML=_minis.length?('<div class="fc-mini-wrap">'+_minis.map(function(n){ var c=_classify(n); return '<details class="fc-mini '+c.kind+'"><summary><span class="fcm-tk">'+esc(n.ticker)+'</span>'+_bk(n)+'<span class="fcm-v '+c.kind+'">'+_SV[c.kind]+'</span></summary><div class="fcm-body">'+_body(n,c)+'</div></details>'; }).join('')+'</div>'):'';
@@ -4243,7 +4257,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '<span class="stl-tk">'+tkA(r.ticker,esc(r.ticker))+'</span>'+
       '<span class="stl-n">'+(r.current_px!=null?('px '+esc(String(r.current_px))):'')+'</span>'+
       '<span class="stl-n">'+(lvl!=null?('lvl '+esc(String(lvl))):'')+'</span>'+
-      '<span class="stl-vd '+vc+'" title="the strict radar call">'+esc(vd==='EXCLUDE'?'radar: no':(vd==='WATCH'?'radar: watch':(vd==='FIRE'?'radar: buy':'—')))+(why?(' · '+esc(why)):'')+'</span>'+
+      '<span class="stl-vd '+vc+'" title="strict radar call: '+esc(vd==='EXCLUDE'?'no':(vd==='WATCH'?'watch':(vd==='FIRE'?'buy':'—')))+(why?(' · '+esc(why)):'')+'"></span>'+
       '<span class="stl-sc">'+Math.round(r.score||0)+'</span></div>'+
       '<div class="stl-why">'+esc(clip(String(r.style_why||'').replace(/% off /,'% from level ').replace(/20d low/,'1-month low'),80))+'</div>'+eqTicketHTML(eqStyleTicket(r)||r,'STYLE')+'</div>';
   }
@@ -4426,8 +4440,10 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
           '<span class="rdr-tk">'+tkA(f.ticker,esc(f.ticker))+'</span>'+_takenBadge+
           '<span class="rdr-vd">FIRE '+Math.round(f.score||0)+'</span>'+
           '<span class="rdr-px">'+(f.current_px!=null?('now '+esc(String(f.current_px))):'')+'</span></div>'+
-        lvl(f)+eqTicketHTML(f,'FIRE')+whyBand(f)+agreeLineHTML(f)+co.html+
-        '<div class="rdr-bl '+bl[2]+'"><b>'+esc(bl[0])+'</b>'+esc(bl[1])+'</div>'+
+        lvl(f)+eqTicketHTML(f,'FIRE')+whyBand(f)+
+        // F261009-DECLUTTER #7: the company read and its verdict line open from the fold
+        '<details class="rdr-more"><summary>the company behind it · <span class="'+bl[2]+'">'+esc(bl[0])+'</span></summary>'+co.html+
+        '<div class="rdr-bl '+bl[2]+'"><b>'+esc(bl[0])+'</b>'+esc(bl[1])+'</div>'+agreeLineHTML(f)+'</details>'+
         fold(f)+'</div>';
     };
     var watchRow=function(w){
@@ -4521,7 +4537,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     _BROWS.forEach(function(row){
       var inRow=board.filter(function(b){ return _bRow(b.setup)===row.key; });
       if(!inRow.length) return;
-      g+='<div class="bd-r"><span class="bd-rl"><b>'+esc(row.name)+'</b><i>'+esc(row.desc)+' · '+inRow.length+'</i></span>';
+      g+='<div class="bd-r"><span class="bd-rl" title="'+esc(row.desc)+' · '+inRow.length+'"><b>'+esc(row.name)+'</b></span>';
       _BTRENDS.forEach(function(t){
         var cs=inRow.filter(function(b){ return b.trend===t.k; });
         g+='<span class="bd-c">'+(cs.length?cs.map(function(b){
@@ -4628,6 +4644,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // after render (PULSE reflow), which is what made the page jump. A locked visitor still meets
     // fires first, then decisions, exactly as before — one order cannot serve both readers.
     var _decHTML=decisionsHTML();
+    window.__labFibCard='';
     let html=radarPairHTML()+fibBoardHTML();  // F261008: Decisions pending retired from the Radar
     // F260617: confluence day-trade backtest (signal quality) relocated to the Screener panel (renderDTConf -> #f1-dtconf).
     if(tl){
@@ -5727,7 +5744,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
               var _sqRows=_sq.slice(0,8).map(function(q){ return '<div class="fprow"><span class="fpl">'+esc(q.ticker||'')+'</span><span class="fpv">'+esc(q.signal_class||'')+' · '+esc(String(q.reason||'needs level read').slice(0,44))+'</span></div>'; }).join('');
               var fibCard='<div class="card" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>Needs your fib read'+HT('Set-ups blocked until you draw the level by hand.')+'<span class="age">'+_sq.length+' blocked</span></div>'+_sqRows+'</div>';
             }
-            html+=fibCard;
+            window.__labFibCard=(typeof fibCard==='string')?fibCard:'';   // F261009: rendered inside the Track record fold
             // Built here (it needs `v`, `view` and the KPI row), rendered at the very end of the
             // zone. Passed by variable rather than appended now, so the actionable cards above it
             // keep the order the operator specified.
@@ -5762,7 +5779,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // 260728 incident (a paper ledger quoted as his record); these fires are 55 system-paper and
     // 0 operator-real. Back here it needs no exception, and at the END it stops interrupting the
     // "what do I do now" half of the zone with the "how has this gone" half.
-    html = html + signalsBlockHTML() + (window.__labPerfTail||'');  // F261008: Decisions pending + Fib level quality retired
+    // F261009-DECLUTTER #11: how the fires have done is a second question - one fold, closed.
+    html = html + '<details class="rs-more" id="lab-track" ontoggle="if(this.open){try{window.__signalsMount();}catch(e){} try{window.tlRenderHist&&window.tlRenderHist();}catch(e){}}"><summary>Track record<span>fib fires · blocked set-ups · forward returns</span></summary>'+
+      (window.__labFibCard||'') + signalsBlockHTML() + (window.__labPerfTail||'') + '</details>';  // F261008: Decisions pending + Fib level quality retired
     window.__labPerfTail='';
     setFace('z-lab', html);
     try{ window.rdr2Fit(); }catch(e6){}
@@ -5829,6 +5848,85 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '<div class="card"><div class="c-lbl"><span class="d"></span>Closed trades · realized P&amp;L</div>'+(function(){ var cl=(DATA.recent_closed||[]); if(!cl.length) return pending('Closed trades','no positions closed in this window.'); return '<table class="tbl"><thead><tr><th>Ticker</th><th>Cluster</th><th>Exit</th><th>Realized</th><th>Reason</th></tr></thead><tbody>'+cl.map(function(c){ return '<tr><td>'+esc(c.ticker)+'</td><td style="text-align:left;color:var(--mut)">'+esc(c.cluster||'')+'</td><td>'+fmtD(c.exit_date)+'</td><td class="sens '+cls(c.realised_pnl)+'">'+(c.realised_pnl!=null?fmtINR(c.realised_pnl,{compact:true}):'—')+'</td><td style="text-align:left;color:var(--faint)">'+esc(c.exit_reason||'')+'</td></tr>'; }).join('')+'</tbody></table>'; })()+'</div>');
     window.__portBind=function(){ const row=$('hc-row'); if(row){ const scc=function(d){ row.scrollBy({left:d*250,behavior:'smooth'}); }; const p=$('hc-prev'),nn=$('hc-next'); if(p)p.onclick=function(){scc(-1);}; if(nn)nn.onclick=function(){scc(1);}; } };
   }catch(e){__reportErr('port',e);} }
+
+  // ---- F261009-RESEARCH tile renderers ---------------------------------------------------
+  function rsAgo(s){ try{ var d=new Date(s); if(isNaN(d)) return ''; var m=(Date.now()-d.getTime())/60000;
+    if(m<60) return Math.max(1,Math.round(m))+'m'; if(m<1440) return Math.round(m/60)+'h'; return Math.round(m/1440)+'d'; }catch(e){ return ''; } }
+  function rsSeg(id, opts, cur, fn){ var el=document.getElementById(id); if(!el) return;
+    el.innerHTML=opts.map(function(o){ return '<button class="'+(o[0]===cur?'on':'')+'" onclick="'+fn+'(\''+o[0]+'\')">'+esc(o[1])+(o[2]!=null?(' <i>'+o[2]+'</i>'):'')+'</button>'; }).join(''); }
+  function rsHeldSet(){ var h={}; try{ if(DATA&&DATA._unlocked) (DATA.held||[]).forEach(function(x){ var t=(x&&x.ticker)||x; if(t) h[String(t).toUpperCase()]=1; }); }catch(e){} return h; }
+  function rsClean(h){ return String(h||'').replace(/\s+-\s+[^-]{2,60}$/,'').trim(); }
+  function rsNewsItem(n){
+    var sent=(n.sentiment==='positive'||n.sentiment==='good')?'pos':((n.sentiment==='negative'||n.sentiment==='bad')?'neg':'neu');
+    var why=(n.why&&!/^General coverage|^Positive headline|^Negative headline/.test(n.why))?('<span class="ni-why">'+esc(n.why)+'</span>'):'';
+    return '<details class="ni '+sent+'"><summary><span class="ni-d"></span><span class="ni-h">'+esc(rsClean(n.headline||n.title))+'</span><span class="ni-t">'+esc(rsAgo(n.published_at||n.time||n.date))+'</span></summary>'+
+      '<div class="ni-more">'+esc(n.source||n.publisher||'')+' · '+esc(window.fmtDate(String(n.published_at||'').slice(0,10))||'')+why+
+      (n.url?(' <a href="'+esc(n.url)+'" target="_blank" rel="noopener">open ↗</a>'):'')+'</div></details>';
+  }
+  window.rsNewsView=function(v){ window.__rsNV=v; rsNewsDraw(); };
+  function rsNewsDraw(){
+    var all=window.__rsNews||[], H=rsHeldSet(), hasHeld=Object.keys(H).length>0;
+    var tkOf=function(n){ return String(n.ticker||((n.tickers||[])[0])||'').toUpperCase(); };
+    var isMkt=function(n){ return n.kind==='market'||tkOf(n)==='MARKET'; };
+    var held=all.filter(function(n){ return !isMkt(n) && H[tkOf(n)]; });
+    var trk=all.filter(function(n){ return !isMkt(n); });
+    var mkt=all.filter(isMkt);
+    var v=window.__rsNV||(hasHeld?'held':'tracked'); if(v==='held'&&!hasHeld) v='tracked';
+    var opts=(hasHeld?[['held','Your names',held.length]]:[]).concat([['tracked','Tracked',trk.length],['market','Market',mkt.length]]);
+    rsSeg('rs-news-seg',opts,v,'rsNewsView');
+    var body=document.getElementById('rs-news-body'); if(!body) return;
+    var list=v==='held'?held:(v==='market'?mkt:trk);
+    if(!list.length){ body.innerHTML='<div class="rb-empty">'+(v==='held'?'Nothing new on your names in the last 3 days.':(v==='market'?'No market news in this pull yet.':'No news yet.'))+'</div>'; return; }
+    if(v==='market'){ body.innerHTML=list.map(rsNewsItem).join(''); return; }
+    var g={}, order=[]; list.forEach(function(n){ var t=tkOf(n); if(!g[t]){ g[t]=[]; order.push(t); } g[t].push(n); });
+    body.innerHTML=order.map(function(t){ var it=g[t], top=it.slice(0,2), rest=it.slice(2);
+      return '<div class="ng'+(H[t]?' held':'')+'"><div class="ng-h"><span class="ng-tk">'+tkA(t,esc(t))+'</span><span class="ng-nm">'+(((window.TK_NAME||{})[t]||'')!==t?esc((window.TK_NAME||{})[t]||''):'')+'</span>'+(H[t]?'<span class="ng-own">yours</span>':'')+'</div>'+
+        top.map(rsNewsItem).join('')+(rest.length?('<details class="ng-more"><summary>+'+rest.length+' more</summary>'+rest.map(rsNewsItem).join('')+'</details>'):'')+'</div>'; }).join('');
+  }
+  window.rsConvView=function(v){ window.__rsCV=v; rsConvDraw(); };
+  function rsConvDraw(){
+    var body=document.getElementById('rs-conv-body'); if(!body) return;
+    var cv=(DATA&&DATA.conviction)||null;
+    if(!(DATA&&DATA._unlocked)){ rsSeg('rs-conv-seg',[],'',''); body.innerHTML='<div class="rb-empty">🔒 Unlock to read the conviction book.</div>'; return; }
+    var u=(cv&&cv.universe)||[];
+    if(!u.length){ body.innerHTML='<div class="rb-empty">No scores yet. The nightly run fills this.</div>'; return; }
+    var cnt=function(t){ return u.filter(function(r){ return r.tier===t; }).length; };
+    var v=window.__rsCV||'conviction';
+    rsSeg('rs-conv-seg',[['conviction','Conviction',cnt('conviction')],['narrative','Narrative',cnt('narrative')],['held','Yours',u.filter(function(r){return r.held;}).length],['all','All',u.length]],v,'rsConvView');
+    var rows=u.filter(function(r){ return v==='all'?true:(v==='held'?r.held:r.tier===v); });
+    var TC={conviction:'var(--pos)',narrative:'var(--watch)',reject:'var(--neg)',unscored:'var(--mut)','n/a':'var(--mut)'};
+    var PL=[['moat','Moat',30],['sector','Sector',20],['fund','Growth',25],['trend','Trend',15],['gov','Governance',10]];
+    body.innerHTML=rows.map(function(r){ var sc=r.score==null?null:Math.max(0,Math.min(100,+r.score)); var c=TC[r.tier]||'var(--mut)';
+      var parts=PL.map(function(p){ var x=(r.parts||{})[p[0]]; return '<div class="cv-p"><span>'+p[1]+'</span><span class="cv-pb"><i style="width:'+(x==null?0:Math.round(x/p[2]*100))+'%"></i></span><b>'+(x==null?'—':x+'/'+p[2])+'</b></div>'; }).join('');
+      return '<details class="cv-r"><summary><span class="cv-tk">'+tkA(r.ticker,esc(r.ticker))+'</span>'+(r.held?'<span class="ng-own">yours</span>':'')+(r.source==='thesis'?'<span class="cv-th">thesis</span>':'')+
+        '<span class="cv-bar"><i style="width:'+(sc||0)+'%;background:'+c+'"></i></span><span class="cv-sc" style="color:'+c+'">'+(sc==null?'—':sc)+'</span></summary>'+
+        '<div class="cv-more"><div class="cv-nm">'+esc(r.name||'')+(r.sector?(' · '+esc(r.sector)):'')+'</div>'+parts+
+        ((r.gaps||[]).length?('<div class="cv-gap">Missing: '+esc(r.gaps.join(', '))+'</div>'):'')+'</div></details>'; }).join('')||'<div class="rb-empty">None in this group.</div>';
+  }
+  window.rsCatView=function(v){ window.__rsKV=v; rsCatDraw(); };
+  function rsCatDraw(){
+    var body=document.getElementById('rs-cat-body'); if(!body) return;
+    var cats=window.__rsCats||[], fil=window.__rsFil||[], H=rsHeldSet();
+    var v=window.__rsKV||'up';
+    rsSeg('rs-cat-seg',[['up','Upcoming',cats.length],['filed','Filed this week',fil.length]],v,'rsCatView');
+    if(v==='filed'){
+      body.innerHTML=fil.length?fil.map(function(f){ var t=String(f.ticker||'');
+        return '<div class="fl-r'+(f.tier==='T1'?' t1':'')+(H[t]?' held':'')+'"><span class="fl-tk">'+tkA(t,esc(t))+'</span><span class="fl-h">'+(f.url?('<a href="'+esc(f.url)+'" target="_blank" rel="noopener">'+esc(f.title||'')+'</a>'):esc(f.title||''))+'</span><span class="ni-t">'+esc(window.fmtDate(f.date||'')||'')+'</span></div>'; }).join('')
+        :'<div class="rb-empty">No filings pulled yet. The nightly run fetches them from NSE.</div>';
+      return; }
+    if(!cats.length){ body.innerHTML='<div class="rb-empty">Nothing scheduled.</div>'; return; }
+    var _seen={}; cats=cats.filter(function(c){ var k=c.date+'|'+(c.ticker||'')+'|'+String(c.event||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,24); if(_seen[k]) return false; _seen[k]=1; return true; });
+    var g={}, order=[]; cats.forEach(function(c){ var d=String(c.date||''); if(!g[d]){ g[d]=[]; order.push(d); } g[d].push(c); });
+    body.innerHTML=order.map(function(d){ return '<div class="ct-d"><div class="ct-dl">'+esc(window.fmtDate(d)||d)+'</div><div class="ct-is">'+
+      g[d].map(function(c){ var t=String(c.ticker||''); var lbl=String(c.event||'').replace(new RegExp('^'+t+'\\s*·\\s*'),'');
+        return '<div class="ct-i k-'+esc(c.kind||'event')+(H[t]?' held':'')+'">'+(t?('<span class="fl-tk">'+tkA(t,esc(t))+'</span>'):'<span class="ct-k">'+esc(String(c.kind||'').toUpperCase())+'</span>')+'<span>'+esc(lbl)+'</span></div>'; }).join('')+'</div></div>'; }).join('');
+  }
+  // the bento is sized to the screen: whatever is above it, the three tiles end at the fold
+  window.rsFit=rsFit;
+  function rsFit(){ try{ var b=document.querySelector('#z-research .rb'); var f=document.getElementById('z-research'); if(!b||!f) return;
+    var top=b.getBoundingClientRect().top-f.getBoundingClientRect().top+f.scrollTop;
+    b.style.height=Math.max(560, f.clientHeight-top-14)+'px'; }catch(e){} }
+  window.addEventListener('resize', function(){ rsFit(); });
 
   function renderResearch(D,dr){ try{
     function md(ds){ var p=String(ds||'').split('-'); if(p.length<3) return ds||''; var mm=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][(+p[1])-1]||p[1]; return window.fmtDate(ds); }
@@ -5917,37 +6015,39 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var obm=((D.order_book||{}).momentum_summary)||[];
     var obHTML=obm.length?('<div class="obtiles">'+obm.map(function(m){ var b2b=parseFloat(m.book_to_bill); var bc=isNaN(b2b)?'':(b2b>=1.2?'pos':(b2b>=1?'watch':'neg')); return '<div class="obtile"><div class="obt-h">'+tkA(m.company,esc(m.company))+'<span class="obt-b2b '+bc+'">B2B '+esc(m.book_to_bill!=null?m.book_to_bill:'—')+'</span></div><div class="obt-m"><span><b>'+esc(m.ob_cover!=null?m.ob_cover:'—')+'</b> OB cover</span><span><b>'+esc(m.execution_rate!=null?m.execution_rate:'—')+'</b> exec</span></div>'+(m.note?('<div class="obt-n">'+esc(m.note)+'</div>'):'')+'</div>'; }).join('')+'</div>'):'';
 
-    // F261008-RESEARCH — four blocks up front (operator's keep list): news, conviction book,
-    // catalyst timeline, open flags. Everything else folds under one collapsed 'More research'.
-    // Data-fidelity rule holds: nothing is dropped, only folded.
+    // F261009-RESEARCH — a fixed bento that fits one screen (operator: "lock the proportions and
+    // sizes of each section ... we shouldnt have to scroll to see the bottom of each section").
+    // Russian-doll rule: each tile shows the big picture; detail opens INSIDE the tile on tap.
+    // Open flags left the front end entirely: nothing here could act on them, and the doctor
+    // already tracks them (system_doctor 'Open flags' row).
+    window.__rsNews=news; window.__rsCats=(D.catalysts||[]); window.__rsFil=((D.company_filings||{}).items)||[];
     setFace('z-research',
-      '<div class="rs-grid">'+
-        '<div class="rs-col">'+
-          '<div class="card"><div class="c-lbl"><span class="d"></span>Company news'+HT('Live headlines per stock; left bar = sentiment, line below = why it matters.')+'<span class="age">'+news.length+' items'+(window.NEWS_ASOF?(' · as of '+esc(window.fmtDate(window.NEWS_ASOF)+' '+String(window.NEWS_ASOF).slice(11,16))):'')+(window.NEWS_STALE?' · ⚠ stale':'')+'</span></div>'+newsV+'</div>'+
-        '</div>'+
-        '<div class="rs-col">'+
-          renderConvictionBook()+
-          '<div class="card"><div class="c-lbl"><span class="d"></span>Catalyst timeline'+HT('Upcoming events that could move the book. Held-name earnings ringed.')+'<span class="age">'+cats.length+' events</span></div>'+tlHTML+'</div>'+
-          '<div class="card"><div class="c-lbl"><span class="d"></span>Open flags'+HT('Tracked open issues (P0 / P1) surfaced in this aggregate.')+'</div>'+flHTML+'</div>'+
-        '</div>'+
+      '<div class="rb">'+
+        '<div class="card rb-news"><div class="c-lbl"><span class="d"></span>News'+HT('Headlines by company. Tap one for source, time and why it matters.')+
+          '<span class="rb-seg" id="rs-news-seg"></span></div><div class="rb-body" id="rs-news-body"></div></div>'+
+        '<div class="card rb-conv"><div class="c-lbl"><span class="d"></span>Conviction book'+HT('Every tracked name, 0-100: moat, sector, growth, trend, governance.')+
+          '<span class="rb-seg" id="rs-conv-seg"></span></div><div class="rb-body" id="rs-conv-body"></div></div>'+
+        '<div class="card rb-cat"><div class="c-lbl"><span class="d"></span>Catalysts'+HT('Company events and policy dates ahead; filings by tracked names this week.')+
+          '<span class="rb-seg" id="rs-cat-seg"></span></div><div class="rb-body" id="rs-cat-body"></div></div>'+
       '</div>'+
       '<details class="rs-more"><summary>More research<span>themes · triggers · briefs · coverage</span></summary>'+
-        '<div class="card rr-health"><div class="c-lbl"><span class="d"></span>Thesis health'+HT('Research counts: briefs, triggers, gaps, flags.')+'<span class="age">'+(asOf?('as of '+esc(window.fmtDate(asOf))):'derived')+'</span></div>'+healthHTML+'</div>'+
+        '<div class="card rr-health"><div class="c-lbl"><span class="d"></span>Thesis health'+HT('Research counts: briefs, triggers, gaps, flags.')+'</div>'+healthHTML+'</div>'+
         '<div class="rr-room">'+
           '<div class="rr-lane">'+
-            '<div class="card rr-cross"><div class="c-lbl"><span class="d"></span>Cross-thesis convergence'+HT('Names in 2+ live research briefs. ★ = held.')+'<span class="age">'+cross.length+' names</span></div>'+xHTML+'</div>'+
+            '<div class="card rr-cross"><div class="c-lbl"><span class="d"></span>Cross-thesis convergence'+HT('Names in 2+ live research briefs. ★ = held.')+'</div>'+xHTML+'</div>'+
           '</div>'+
           '<div class="rr-lane">'+
-            '<div class="card res-kb"><div class="c-lbl"><span class="d"></span>Deep-research streams'+HT('Research briefs by type. Age: green <30d, amber 30-60d, red >60d.')+'<span class="age">'+streams.length+' briefs</span></div>'+'<div class="rr-kbscroll">'+drBody+'</div></div>'+
+            '<div class="card res-kb"><div class="c-lbl"><span class="d"></span>Deep-research streams'+HT('Research briefs by type. Age: green <30d, amber 30-60d, red >60d.')+'</div>'+'<div class="rr-kbscroll">'+drBody+'</div></div>'+
           '</div>'+
           '<div class="rr-lane">'+
-            '<div class="card"><div class="c-lbl"><span class="d"></span>Falsifiable triggers'+HT('Checkable conditions that prove a thesis right or wrong. Red = armed.')+'<span class="age">'+nArmed+' armed</span></div>'+trHTML+'</div>'+
+            '<div class="card"><div class="c-lbl"><span class="d"></span>Falsifiable triggers'+HT('Checkable conditions that prove a thesis right or wrong. Red = armed.')+'</div>'+trHTML+'</div>'+
             '<div class="card"><div class="c-lbl"><span class="d"></span>Active themes'+HT('Active macro and sector themes, with key dates.')+'</div>'+thHTML+'</div>'+
             '<div class="card"><div class="c-lbl"><span class="d"></span>Coverage gaps'+HT('Sectors and names with no research brief yet.')+'</div>'+covHTML+'</div>'+
             '<div class="card resref"><div class="c-lbl"><span class="d"></span>Stop-policy glossary'+HT('Stop terms and policies used in the Trade Lab.')+'</div><a class="drbrief" href="stop-policy-glossary.html" target="_blank" rel="noopener"><span class="drttl">Stop &amp; Policy Glossary</span><span class="drpdf">DOC</span></a></div>'+
           '</div>'+
         '</div>'+
       '</details>');
+    rsNewsDraw(); rsConvDraw(); rsCatDraw(); rsFit();
   }catch(e){__reportErr('research',e);} }
 
   // F260619 item 3 — one defined sector palette (true-black premium hue family; NOT inline-invented).
@@ -6164,7 +6264,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var shown=secNames.filter(function(s){ return sel==='ALL'||sel===s; });
     var body=shown.map(function(s){
       var items=groups[s].slice().sort(function(a,b){ if(!!a.held!==!!b.held) return a.held?-1:1; return b.composite-a.composite; });
-      var cards=items.map(function(b){ return '<a class="tcard fibst-'+fibSt(b.ticker)+'" style="--sx:'+colOf[s]+'" href="'+tkHref(b.ticker)+'"'+tkExt(b.ticker)+'><div class="th"><span class="sym">'+(b.held?'<span class="star">★</span> ':'')+esc(b.ticker)+'</span><span class="sec">'+esc(secOf(b))+'</span></div><div class="tb">'+lensDots(b.lens)+'<span class="cb"><span class="cf" style="width:'+Math.max(2,Math.min(100,b.composite))+'%"></span></span></div><div class="tfib '+fibSt(b.ticker)+'">'+fibLbl(b.ticker)+'</div></a>'; }).join('');
+      var cards=items.map(function(b){ return '<a class="tcard fibst-'+fibSt(b.ticker)+'" style="--sx:'+colOf[s]+'" href="'+tkHref(b.ticker)+'"'+tkExt(b.ticker)+'><div class="th"><span class="sym">'+(b.held?'<span class="star">★</span> ':'')+esc(b.ticker)+'</span><span class="sec">'+esc(secOf(b))+'</span></div><div class="tfib '+fibSt(b.ticker)+'">'+fibLbl(b.ticker)+'</div></a>'; }).join('');
       return '<div class="tsec"><div class="tsec-h" style="--sx:'+colOf[s]+'"><span class="nm">'+esc(s)+'</span><span class="ct">'+items.length+' name'+(items.length===1?'':'s')+'</span></div><div class="tgrid">'+cards+'</div></div>';
     }).join('');
     setFace('z-tickers',
@@ -6309,6 +6409,65 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
    Appended override layer (the vault's reskin discipline). Every value resolves from an EXISTING
    token - no new palette, no new face, no :root variable touched. */
 .rdr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:10px}
+/* F261009-DECLUTTER: one copy of each status, no internal labels on the front */
+#hdr-reg,#hdr-age{display:none!important}
+.pl-today.quiet{display:none!important}   /* #9: a null state takes no room at all */
+.zone-h .zx,.zone-h .zasof,.zone-h .lkpill{display:none!important}
+.pop.real,.sc-src,.pf-sh .pf-sx{display:none!important}
+.pf-kpis .ks{display:none}
+.tk-gtt code{display:none}
+.stl-vd:empty{display:none}
+.c-lbl .age.old{display:inline!important;color:var(--watch)}
+.rb{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:14px;height:640px;margin-bottom:13px}
+.rb>.card{display:flex;flex-direction:column;min-height:0;margin:0!important;overflow:hidden}
+.rb-news{grid-row:1/3}
+.rb-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding-right:4px;margin-top:4px}
+.rb-seg{margin-left:auto;display:flex;gap:3px;flex-wrap:wrap}
+.rb-seg button{background:none;border:1px solid var(--border);border-radius:999px;color:var(--mut);font-size:10.5px;padding:3px 10px;cursor:pointer;font-family:inherit;letter-spacing:.02em;text-transform:none}
+.rb-seg button i{font-style:normal;opacity:.6}
+.rb-seg button.on{color:var(--ink);border-color:var(--cyan);background:rgba(66,219,230,.10)}
+.rb-empty{color:var(--mut);font-size:12px;padding:18px 4px}
+.ng{padding:9px 0 7px;border-bottom:1px solid var(--hair)}
+.ng-h{display:flex;align-items:baseline;gap:9px;margin-bottom:4px}
+.ng-tk,.ng-tk a{font-weight:800;font-size:14px;letter-spacing:.02em;color:var(--ink);text-decoration:none}
+.ng-nm{font-size:11px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ng-own{font-size:9.5px;color:var(--cyan);border:1px solid var(--cyan);border-radius:999px;padding:0 7px;letter-spacing:.06em}
+.ng.held .ng-tk a{color:var(--cyan)}
+.ni>summary{list-style:none;display:flex;align-items:baseline;gap:8px;cursor:pointer;padding:3px 0}
+.ni>summary::-webkit-details-marker{display:none}
+.ni-d{width:6px;height:6px;border-radius:50%;flex:0 0 6px;background:var(--mut);transform:translateY(-1px)}
+.ni.pos .ni-d{background:var(--pos)} .ni.neg .ni-d{background:var(--neg)}
+.ni-h{flex:1;font-size:12.5px;color:var(--ink2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ni[open] .ni-h{-webkit-line-clamp:unset}
+.ni-t{font-size:10.5px;color:var(--faint);white-space:nowrap;font-family:var(--font-mono)}
+.ni-more{font-size:11px;color:var(--mut);padding:2px 0 6px 14px;line-height:1.5}
+.ni-more a{color:var(--cyan)} .ni-why{display:block;color:var(--ink2)}
+.ng-more>summary{list-style:none;cursor:pointer;font-size:10.5px;color:var(--faint);padding:2px 0 0 14px}
+.ng-more>summary::-webkit-details-marker{display:none}
+.cv-r>summary{list-style:none;display:grid;grid-template-columns:auto auto auto 1fr 34px;align-items:center;gap:8px;cursor:pointer;padding:6px 0;border-bottom:1px solid var(--hair)}
+.cv-r>summary::-webkit-details-marker{display:none}
+.cv-tk,.cv-tk a{font-weight:700;font-size:12.5px;color:var(--ink);text-decoration:none}
+.cv-th{font-size:9px;color:var(--violet,#9a8cff);border:1px solid currentColor;border-radius:999px;padding:0 6px}
+.cv-bar{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;grid-column:4}
+.cv-bar i{display:block;height:100%;border-radius:3px}
+.cv-sc{font-family:var(--font-mono);font-size:12px;text-align:right}
+.cv-more{padding:6px 0 10px}
+.cv-nm{font-size:11px;color:var(--mut);margin-bottom:6px}
+.cv-p{display:grid;grid-template-columns:78px 1fr 44px;gap:8px;align-items:center;font-size:10.5px;color:var(--mut);margin:2px 0}
+.cv-pb{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden} .cv-pb i{display:block;height:100%;background:var(--cyan)}
+.cv-p b{font-weight:500;color:var(--ink2);text-align:right;font-family:var(--font-mono)}
+.cv-gap{font-size:10px;color:var(--watch);margin-top:4px}
+.ct-d{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid var(--hair)}
+.ct-dl{font-size:11.5px;font-weight:700;color:var(--ink)}
+.ct-i{display:flex;gap:8px;align-items:baseline;font-size:12px;color:var(--ink2);padding:1px 0}
+.ct-i.held .fl-tk a{color:var(--cyan)}
+.ct-k{font-size:9px;letter-spacing:.08em;color:var(--violet,#9a8cff);min-width:44px}
+.ct-i.k-results span:last-child{color:var(--ink)}
+.fl-tk,.fl-tk a{font-weight:700;font-size:12px;color:var(--ink);text-decoration:none;min-width:84px;display:inline-block}
+.fl-r{display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--hair);font-size:12px}
+.fl-h{flex:1;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .fl-h a{color:inherit;text-decoration:none}
+.fl-r.t1 .fl-h{color:var(--ink);font-weight:600} .fl-r.held .fl-tk a{color:var(--cyan)}
+@media(max-width:1000px){.rb{grid-template-columns:1fr;grid-template-rows:auto;height:auto!important}.rb-news{grid-row:auto}.rb>.card{height:520px}}
 .rs-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start;margin-bottom:13px}
 .rs-col{min-width:0;display:flex;flex-direction:column;gap:13px}
 .rs-col>.card{margin-bottom:0!important}
@@ -6756,6 +6915,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .yn-mini .yn-mtx{overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
 .yn-mini .yn-mtx b{color:var(--ink);font-weight:700} .yn-mini .yn-mtx i{font-style:normal;color:var(--watch)}
 .yn-mini .yn-car{color:var(--cyan);font-size:12px}
+.yn-x{margin-left:auto;background:none;border:1px solid var(--border);border-radius:999px;color:var(--cyan);font-size:10.5px;padding:3px 10px;cursor:pointer}
+.yn-x:hover{border-color:var(--cyan)}
 .yn-mini:hover{border-color:var(--cyan)}
 #ynband .yn{transition:opacity .2s ease}
 #ynband.mini .yn{display:none}
@@ -7476,7 +7637,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1791461785&t="+Date.now())
+  fetch("data/pulse.json?v=1791557185&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);

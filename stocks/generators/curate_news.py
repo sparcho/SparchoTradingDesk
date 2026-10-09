@@ -26,7 +26,8 @@ HERE = Path(__file__).resolve().parent
 DATA = HERE.parent / "data"
 CAND = DATA / "news_candidates.json"
 OUT = DATA / "news_curated.json"
-TOP_N = 24
+TOP_N = 80          # F261009: tracked-name items (was 24 — too few to filter by held names in the browser)
+TOP_MARKET = 16     # F261009-MARKETNEWS: general market items, kept in their own bucket
 
 TIER1 = ("reuters", "bloomberg", "economic times", "etmarkets", "livemint", "mint",
          "business standard", "businessline", "hindu businessline", "financial express", "the hindu")
@@ -130,6 +131,8 @@ def _curate(cand):
         except Exception:
             continue
     scored.sort(key=lambda x: x.get("score", 0), reverse=True)
+    market = [it for it in scored if it.get("ticker") == "MARKET"][:TOP_MARKET]
+    scored = [it for it in scored if it.get("ticker") != "MARKET"]
     # guarantee every held/lead ticker with news keeps at least its top item, then fill by score
     top, seen_tk, seen_url = [], set(), set()
     for it in scored:                                  # one best item per ticker first (breadth)
@@ -148,7 +151,9 @@ def _curate(cand):
             continue
         seen_url.add(u); top.append(it)
     top.sort(key=lambda x: x.get("score", 0), reverse=True)
-    return top[:TOP_N]
+    for it in market:
+        it["kind"] = "market"
+    return top[:TOP_N] + market
 
 
 def main():
@@ -172,7 +177,7 @@ def main():
         items = _curate(cand)
     except Exception as e:                              # never crash the panel; degrade to raw candidates
         print("curate_news: curation error (%s) — degrading to raw candidates" % str(e)[:90], file=sys.stderr)
-        items = cand.get("items", [])[:TOP_N]
+        items = cand.get("items", [])[:TOP_N + TOP_MARKET]
     payload = {"schema": "news-curated/v1",
                "fetched_at_utc": cand.get("fetched_at_utc", now_iso),
                "curated_at_utc": now_iso,

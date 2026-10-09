@@ -33,6 +33,13 @@ OUT = DATA / "news_candidates.json"
 MAX_PER_TICKER = 4
 RECENCY_HOURS = 72
 RSS_UNIVERSE_CAP = 30          # per-run RSS fetch budget; the FULL tracked list is covered by rotation (F261008-NEWSALL)
+# F261009-MARKETNEWS — news that is not about one tracked company but still moves the book:
+# index, policy, flows, currency, crude, regulator. Tagged ticker "MARKET"; the desk shows it
+# under its own toggle. Queries are fixed and few, so the per-run cost stays small.
+MARKET_QUERIES = ["Nifty Sensex stock market today", "RBI monetary policy rates India",
+                  "FII DII flows Indian equities", "rupee dollar outlook", "crude oil price impact India stocks",
+                  "SEBI new rules market"]
+MARKET_CAP = 16
 PRIORITY_CAP = 10              # radar fires / watch / your-kind-of-setup names: scanned EVERY run
 MARKETAUX_URL = "https://api.marketaux.com/v1/news/all"
 HTTP_TIMEOUT = 12
@@ -152,9 +159,9 @@ def _parse_dt(s):
         return None
 
 
-def fetch_rss(ticker, name):
+def fetch_rss(ticker, name, query=None):
     """Google News RSS for one company (free, no key). Returns a list of raw items. Never raises."""
-    q = ('"%s" stock' % name) if name else ("%s share price NSE" % ticker)
+    q = query or (('"%s" stock' % name) if name else ("%s share price NSE" % ticker))
     url = ("https://news.google.com/rss/search?q=" + urllib.parse.quote(q)
            + "&hl=en-IN&gl=IN&ceid=IN:en")
     out = []
@@ -239,7 +246,7 @@ def vet(items):
             if cu in seen_url or (nt and nt in seen_title):
                 continue
             tk = it.get("ticker") or "?"
-            if per_tk.get(tk, 0) >= MAX_PER_TICKER:
+            if per_tk.get(tk, 0) >= (MARKET_CAP if tk == "MARKET" else MAX_PER_TICKER):
                 continue
             seen_url.add(cu)
             if nt:
@@ -273,9 +280,12 @@ def main():
     for t, nm in uni:
         raw += fetch_rss(t, nm)
         time.sleep(0.05)   # be gentle
+    for q in MARKET_QUERIES:
+        raw += fetch_rss("MARKET", "", query=q)
+        time.sleep(0.05)
 
     items = vet(raw)
-    items = _carry_forward(items, {t for t, _ in uni})
+    items = _carry_forward(items, {t for t, _ in uni} | {"MARKET"})
     now_iso = _now_utc().isoformat(timespec="seconds")
     if not items:
         # NEVER blank a good file — keep last-good, stamp stale
