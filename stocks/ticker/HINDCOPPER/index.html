@@ -211,10 +211,10 @@ applyThemeLabel();
 // ─── back link — return to the exact desk view the user came from (?from=z-...) ───
 (function(){ try{
   var pp=new URLSearchParams(location.search), from=pp.get('from'), t=pp.get('t');
-  var names={'z-screen':'Screener','z-lab':'Trade Lab','z-port':'Portfolio','z-research':'Research','z-tickers':'Tickers'};
+  var names={'z-screen':'Screener','z-lab':'Trade Lab','z-port':'Scorecard','z-research':'Research','z-tickers':'Tickers','z-perf':'Scorecard'};
   var bl=document.getElementById('backlink'); if(!bl) return;
   var q=[];
-  if(from && names[from]){ q.push('solo=1'); q.push('v='+encodeURIComponent(from)); bl.textContent='◂ Back to '+names[from]; }
+  if(from==='z-port') from='z-perf'; if(from && names[from]){ q.push('solo=1'); q.push('v='+encodeURIComponent(from)); bl.textContent='◂ Back to '+names[from]; }
   else { bl.textContent='◂ Back to desk'; }
   if(t==='dark'||t==='light'){ q.push('t='+t); }
   bl.setAttribute('href','../../index.html'+(q.length?('?'+q.join('&')):''));
