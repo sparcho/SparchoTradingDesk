@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1791557185">
-<meta name="x-built-at" content="2026-10-09T14:45:42+00:00">
+<meta name="x-build-id" content="1791610559">
+<meta name="x-built-at" content="2026-10-10T05:35:14+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1791557185",BUILT_AT="2026-10-09T14:45:42+00:00";
+  var BID="1791610559",BUILT_AT="2026-10-10T05:35:14+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2246,6 +2246,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(u.real_scorecard!=null) DATA.real_scorecard=u.real_scorecard;
     if(u.performance!=null) DATA.performance=u.performance;
     if(u.conviction!=null) DATA.conviction=u.conviction;
+    if(u.switch_desk!=null) DATA.switch_desk=u.switch_desk;   // F261009-SWITCH
     // F260721-FIBLOCK: the fib ANALYSIS (names/points) rides inside the ciphertext; the public
     // aggregate carries only a level-free provenance stub. Merge so as-of/counts survive both states.
     if(u.fib_confluences) DATA.fib_confluences=Object.assign({},DATA.fib_confluences||{},u.fib_confluences);
@@ -2303,6 +2304,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); window.TK_NAME={}; (pj.groups||[]).forEach(function(g){ (g.names||[]).forEach(function(n){ window.TK_NAME[n.ticker]=n.name||''; }); }); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
+      try{ const gf=await fetch('data/gift_nifty.json?v=1791610559&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
       let __pxText='';
       try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ __pxText=await px.text(); const pj2=JSON.parse(__pxText); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
       // F260622 — live JOURNALIST news feed (curated set, 5-min cloud refresh); candidates as fallback. Never throws.
@@ -4528,6 +4530,75 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     window.addEventListener('resize', soon);
     document.addEventListener('toggle', function(e){ if(e.target&&e.target.closest&&e.target.closest('.rdr2')) soon(); }, true);
     window.__rdr2Soon=soon; })();
+  // ---- F261009-SWITCH: the switch desk ---------------------------------------------------------
+  // "Is my money in the best place right now?" - every day, under the rule for that day type.
+  // Big picture: the day type and one call per holding. Detail (evidence, the two-leg order, the
+  // "I took it" button) opens in place.
+  var SW_TONE={trend_up:'pos',sideways:'mut',grind_down:'watch',event:'watch',panic:'neg',bounce:'pos'};
+  function swLiveType(inp, gap, base){
+    // same order as switch_engine.day_type: panic > bounce > event > the base read
+    if(gap==null) return base;
+    if(gap<=-1.0) return 'panic';
+    if(inp&&inp.recent_panic&&gap>=0.5) return 'bounce';
+    if(Math.abs(gap)>=0.7) return 'event';
+    return base;
+  }
+  var SW_LBL={trend_up:'Trending up, calm',sideways:'Sideways, calm',grind_down:'Grinding down',event:'Event / jumpy',panic:'Panic',bounce:'Bounce back'};
+  function swGiftHTML(){
+    var g=window.GIFT; if(!g||!(g.readings||[]).length) return '';
+    var today=new Date(Date.now()+330*60000).toISOString().slice(0,10);
+    if(g.date!==today) return '';
+    return '<div class="sw-gift"><span class="sw-gk">GIFT Nifty</span>'+g.readings.filter(function(r){return r.gap_pct!=null;}).map(function(r){
+      var c=r.gap_pct>0?'pos':(r.gap_pct<0?'neg':'mut'); return '<span class="sw-gr"><i>'+esc(r.at_ist)+'</i><b class="'+c+'">'+(r.gap_pct>0?'+':'')+r.gap_pct.toFixed(2)+'%</b></span>'; }).join('')+'</div>';
+  }
+  window.swTook=function(btn){
+    try{ var it=JSON.parse(btn.getAttribute('data-intent')||'{}'), d=new Date(), p=function(n){return (n<10?'0':'')+n;};
+      it.date=d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); it.source='switch_desk';
+      var a=document.createElement('a'), u=URL.createObjectURL(new Blob([JSON.stringify(it,null,1)],{type:'application/json'}));
+      a.href=u; a.download='switch_'+it.sell+'_to_'+it.buy+'_'+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+'.json';
+      document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(u); if(a.remove) a.remove(); },600);
+      btn.textContent='Saved'; btn.className+=' on'; }catch(e){ btn.textContent='Failed'; }
+  };
+  function switchDeskHTML(){
+    var pub=(DATA&&DATA.switch_day)||null, sd=(DATA&&DATA.switch_desk)||null;
+    var base=(sd&&sd.day_type)||(pub&&pub.day_type); if(!base) return '';
+    var inp=(sd&&sd.inputs)||(pub&&pub.inputs)||{};
+    var g=window.GIFT, today=new Date(Date.now()+330*60000).toISOString().slice(0,10), gap=null;
+    if(g&&g.date===today&&(g.readings||[]).length){ var lr=g.readings.filter(function(r){return r.gap_pct!=null;}).pop(); if(lr) gap=lr.gap_pct; }
+    var t=swLiveType(inp,gap,base), changed=(t!==base);
+    var ev=(sd&&sd.evidence)||(pub&&pub.evidence)||{}, say=(sd&&sd.day_say)||(pub&&pub.day_say)||'', res=(sd&&sd.reserve)||(pub&&pub.reserve)||'';
+    var evLine=ev.days?('Since 2021 on '+esc((SW_LBL[base]||base).toLowerCase())+' days: swapping a bottom-10% name for a top-10% name made '+
+      '<b class="'+(ev.switch_gain10>0?'pos':'neg')+'">'+(ev.switch_gain10>0?'+':'')+ev.switch_gain10+'%</b> over 10 sessions after costs ('+ev.years_positive+' of '+ev.years+' years positive). '+
+      'The average name moved <b class="'+(ev.mkt_fwd10>0?'pos':'neg')+'">'+(ev.mkt_fwd10>0?'+':'')+ev.mkt_fwd10+'%</b>.'):'';
+    var head='<div class="c-lbl"><span class="d"></span>Switch desk'+HT('One call per holding, judged over 10 sessions for this type of day.')+
+      '<span class="sw-pill '+(SW_TONE[t]||'mut')+'">'+esc(SW_LBL[t]||t)+(changed?' · from GIFT':'')+'</span></div>';
+    var sub='<div class="sw-say">'+esc(changed?('GIFT Nifty now reads as: '+(SW_LBL[t]||t)+'. Calls below were set on '+(SW_LBL[base]||base).toLowerCase()+'; the 08:50 run updates them.'):say)+
+      (res?(' <span class="sw-res">'+esc(res)+'</span>'):'')+'</div>'+swGiftHTML();
+    if(!(DATA&&DATA._unlocked)||!sd){
+      return '<div class="card sw-wrap">'+head+sub+'<div class="sw-ev">'+evLine+'</div><div class="fc-note">\u{1F512} Unlock for your calls.</div></div>';
+    }
+    var rows=(sd.calls||[]).map(function(c){
+      var chip=c.call==='SWITCH'?('SWITCH → '+esc(c.to||'')):esc(c.call||'');
+      var cc=c.call==='SWITCH'?'sw':(c.call==='HOLD'?'hold':'wait');
+      var rk=c.rank_pct==null?'':('<span class="sw-rk" title="rank among tracked names today (100 = best)"><i style="width:'+c.rank_pct+'%"></i></span><span class="sw-rn">'+c.rank_pct+'</span>');
+      var pnl=c.pnl_pct==null?'':('<span class="'+(c.pnl_pct>=0?'pos':'neg')+'">'+(c.pnl_pct>0?'+':'')+c.pnl_pct+'%</span>');
+      var more='<div class="sw-more">'+esc(c.say||'')+
+        (c.rule?('<div class="sw-rule">'+esc(c.rule)+'</div>'):'')+(c.event?('<div class="sw-rule">Coming up: '+esc(c.event)+'</div>'):'')+
+        (c.call==='SWITCH'?('<div class="tk-box"><span class="tk-k">ORDER</span><span>Sell <b>'+esc(String(c.qty||''))+'</b> '+esc(c.ticker)+' ~'+esc(String(c.close||''))+'</span>'+
+          '<span>Buy <b class="tk-sh">'+esc(String(c.to_qty||''))+'</b> '+esc(c.to||'')+' ~'+esc(String(c.to_close||''))+'</span>'+
+          (c.to_why?('<span class="mut">'+esc(c.to_why)+'</span>'):'')+
+          '<div class="tk-gtt"><button type="button" class="tk-btn" data-intent="'+esc(JSON.stringify({type:'switch',sell:c.ticker,sell_qty:c.qty,sell_px:c.close,buy:c.to,buy_qty:c.to_qty,buy_px:c.to_close,day_type:base}))+'" onclick="swTook(this)">I took it</button></div></div>'):'')+
+        '</div>';
+      return '<details class="sw-r"><summary><span class="sw-tk">'+tkA(c.ticker,esc(c.ticker))+'</span><span class="sw-c '+cc+'">'+chip+'</span>'+rk+'<span class="sw-pl">'+pnl+'</span>'+
+        (c.rule?'<span class="sw-flag" title="'+esc(c.rule)+'">rule</span>':'')+'</summary>'+more+'</details>';
+    }).join('');
+    var cand=(sd.candidates||[]).slice(0,6).map(function(x){ return '<span class="sw-cd" title="'+esc(x.why||'')+'">'+tkA(x.ticker,esc(x.ticker))+' <i>'+x.rank_pct+'</i></span>'; }).join('');
+    var tr=sd.track||{}, trl=tr.n?('Desk record: '+tr.n+' switches scored · avg <b class="'+(tr.avg_gain_pct>0?'pos':'neg')+'">'+(tr.avg_gain_pct>0?'+':'')+tr.avg_gain_pct+'%</b> · '+tr.win_pct+'% won'):
+      ('Desk record starts scoring 10 sessions after its first switch'+(tr.pending?(' ('+tr.pending+' waiting)'):'')+'.');
+    return '<div class="card sw-wrap">'+head+sub+'<div class="sw-rows">'+rows+'</div>'+
+      '<details class="sw-foot"><summary>Why these calls · top-ranked today · record</summary><div class="sw-ev">'+evLine+'</div>'+
+      (cand?('<div class="sw-cands"><span class="sw-gk">Top ranked</span>'+cand+'</div>'):'')+'<div class="sw-ev">'+trl+'</div></details></div>';
+  }
   function fibBoardHTML(){
     var rad=(DATA&&DATA.fib_radar)||null; if(!rad) return '';
     var board=rad.board||[];
@@ -4623,7 +4694,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       internal health-automation flag. Fires lead; Decisions keeps its place directly under
       them so it stays one glance away. The UNLOCKED order below is deliberately untouched -
       "a normal person (not me)" is the whole scope of the ask. */
-      radarPairHTML()+fibBoardHTML()+
+      switchDeskHTML()+radarPairHTML()+fibBoardHTML()+
       '<div class="card empty-face"><div class="ef-ic">🧪</div><div class="ef-t">Radar</div>'+
       '<div class="ef-m">🔒 Unlock to view the deliberate-trade ledger.</div>'+
       '<div class="ef-tag">operator-private · AES-GCM</div></div>'+signalsBlockHTML()); try{ window.__signalsMount(); }catch(e2){} return; }
@@ -4645,7 +4716,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     // fires first, then decisions, exactly as before — one order cannot serve both readers.
     var _decHTML=decisionsHTML();
     window.__labFibCard='';
-    let html=radarPairHTML()+fibBoardHTML();  // F261008: Decisions pending retired from the Radar
+    let html=switchDeskHTML()+radarPairHTML()+fibBoardHTML();  // F261008: Decisions pending retired from the Radar
     // F260617: confluence day-trade backtest (signal quality) relocated to the Screener panel (renderDTConf -> #f1-dtconf).
     if(tl){
       const open=tl.open||[], closed=tl.closed||[], dailyR=tl.daily_r||[], sc=tl.scorecard||{}, byO=tl.scorecard_by_origin||{};
@@ -6409,6 +6480,32 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
    Appended override layer (the vault's reskin discipline). Every value resolves from an EXISTING
    token - no new palette, no new face, no :root variable touched. */
 .rdr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:10px}
+/* F261009-SWITCH desk */
+.sw-wrap{margin-bottom:13px;border-color:rgba(66,219,230,.35)}
+.sw-pill{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 11px;border-radius:999px;border:1px solid currentColor}
+.sw-pill.pos{color:var(--pos)} .sw-pill.neg{color:var(--neg)} .sw-pill.watch{color:var(--watch)} .sw-pill.mut{color:var(--mut)}
+.sw-say{font-size:12.5px;color:var(--ink2);margin:4px 0 6px;line-height:1.5}
+.sw-res{color:var(--mut);font-size:11.5px}
+.sw-gift{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;font-size:11px;margin:2px 0 8px}
+.sw-gk{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.sw-gr i{font-style:normal;color:var(--faint);margin-right:4px;font-family:var(--font-mono)} .sw-gr b{font-family:var(--font-mono);font-weight:600}
+.sw-r>summary{list-style:none;display:grid;grid-template-columns:110px 150px 1fr 34px 64px 40px;align-items:center;gap:10px;cursor:pointer;padding:7px 0;border-top:1px solid var(--hair)}
+.sw-r>summary::-webkit-details-marker{display:none}
+.sw-tk,.sw-tk a{font-weight:800;font-size:13px;color:var(--ink);text-decoration:none}
+.sw-c{font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:2px 9px;border-radius:999px;border:1px solid var(--border);justify-self:start}
+.sw-c.sw{color:var(--cyan);border-color:var(--cyan);background:rgba(66,219,230,.1)} .sw-c.hold{color:var(--mut)} .sw-c.wait{color:var(--watch);border-color:var(--watch)}
+.sw-rk{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden} .sw-rk i{display:block;height:100%;background:var(--cyan);opacity:.7}
+.sw-rn{font-family:var(--font-mono);font-size:11px;color:var(--mut);text-align:right}
+.sw-pl{font-family:var(--font-mono);font-size:11.5px;text-align:right}
+.sw-flag{font-size:9.5px;color:var(--neg);border:1px solid var(--neg);border-radius:999px;padding:0 6px;justify-self:end}
+.sw-more{font-size:12px;color:var(--ink2);padding:2px 0 10px 4px;line-height:1.5}
+.sw-rule{color:var(--watch);font-size:11px;margin-top:3px}
+.sw-foot{margin-top:6px} .sw-foot>summary{list-style:none;cursor:pointer;font-size:11px;color:var(--faint);padding:6px 0 0;border-top:1px solid var(--hair)}
+.sw-foot>summary::-webkit-details-marker{display:none}
+.sw-ev{font-size:11.5px;color:var(--mut);margin:6px 0;line-height:1.5}
+.sw-cands{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;font-size:12px;margin:6px 0}
+.sw-cd a{font-weight:700;color:var(--ink);text-decoration:none} .sw-cd i{font-style:normal;color:var(--cyan);font-family:var(--font-mono);font-size:10.5px}
+@media(max-width:700px){.sw-r>summary{grid-template-columns:90px 1fr 40px 54px}.sw-rk,.sw-flag{display:none}}
 /* F261009-DECLUTTER: one copy of each status, no internal labels on the front */
 #hdr-reg,#hdr-age{display:none!important}
 .pl-today.quiet{display:none!important}   /* #9: a null state takes no room at all */
@@ -7637,7 +7734,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1791557185&t="+Date.now())
+  fetch("data/pulse.json?v=1791610559&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);

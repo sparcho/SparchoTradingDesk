@@ -1,0 +1,64 @@
+name: GIFT Nifty pre-open log
+
+# F261009-SWITCH. Logs GIFT Nifty every 30 min from 05:15 to 09:15 IST on weekdays, plus one
+# reference reading at 15:30 IST, into stocks/data/gift_nifty.json. The switch desk reads it to set
+# the day type before the open. Same pattern as pulse.yml: GitHub drops scheduled runs, so several
+# cron slots each START a loop and the loop keeps the time; concurrency keeps it to one at a time.
+# Source of truth for this file: TRADER/00_SYSTEM/GENERATORS/gift_nifty_workflow.yml (synced on publish).
+
+on:
+  schedule:
+    - cron: '41 23 * * 0-4'     # 05:11 IST Mon-Fri - starts the pre-open loop
+    - cron: '7,37 0-2 * * 1-5'  # backups if the first start was dropped
+    - cron: '23,43 9 * * 1-5'   # 14:53 / 15:13 IST - waits for the 15:30 reference
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sparcho-gift
+  cancel-in-progress: false
+
+jobs:
+  gift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 280
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Log GIFT Nifty
+        run: |
+          set -uo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          publish () {
+            git add stocks/data/gift_nifty.json
+            if git diff --cached --quiet; then return 0; fi
+            git commit -q -m "auto: gift nifty $(date -u +'%Y-%m-%d %H:%M UTC')"
+            for i in 1 2 3; do
+              git push -q && return 0
+              git fetch -q origin main && git rebase -q origin/main || { git rebase --abort; git reset -q --hard origin/main; python stocks/generators/gift_nifty.py "$@"; git add stocks/data/gift_nifty.json; git commit -q -m "auto: gift nifty (rebuilt)"; }
+              sleep $((RANDOM % 6 + 4))
+            done
+            echo "::warning::push failed this cycle"
+          }
+          hm () { date -u +%H%M; }
+          # afternoon slot: wait for 10:00 UTC (15:30 IST), take the reference, leave
+          if [ "$(hm)" -ge 0900 ] && [ "$(hm)" -lt 1100 ]; then
+            while [ "$(hm)" -lt 1000 ]; do sleep 60; done
+            python stocks/generators/gift_nifty.py --ref || true
+            publish; exit 0
+          fi
+          # pre-open loop: 23:45 UTC (05:15 IST) .. 03:45 UTC (09:15 IST), every 30 min
+          in_win () { h=$(hm); [ "$h" -ge 2345 ] || [ "$h" -le 0345 ]; }
+          while [ "$(hm)" -ge 2300 ] && [ "$(hm)" -lt 2345 ]; do sleep 30; done   # early start: wait for 05:15 IST
+          while in_win; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            python stocks/generators/gift_nifty.py || echo "::warning::reading failed"
+            publish
+            [ "$(hm)" -ge 0330 ] && [ "$(hm)" -le 0345 ] && break
+            sleep 1800
+          done
