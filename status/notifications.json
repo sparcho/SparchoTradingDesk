@@ -1,8 +1,30 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-10-10T03:39:17+00:00",
+  "updated_at_utc": "2026-10-10T11:40:26+00:00",
   "events": [
+    {
+      "ts": "2026-10-10T17:10:26+05:30",
+      "ts_utc": "2026-10-10T11:40:26+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver:silver_book",
+      "spotted": "(event redacted — would have exposed sensitive data)",
+      "action_taken": "(redacted)",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-10-10T17:10:23+05:30",
+      "ts_utc": "2026-10-10T11:40:23+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-10-10T09:09:13+05:30",
       "ts_utc": "2026-10-10T03:39:13+00:00",
@@ -528,28 +550,6 @@
       "subsystem": "equity:live-parity",
       "spotted": "LIVE site shows 2 grayed item(s): block:fib_level_quality, block:level_memory",
       "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-10-05T18:41:25+05:30",
-      "ts_utc": "2026-10-05T13:11:25+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "silver:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
-      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-10-05T08:50:29+05:30",
-      "ts_utc": "2026-10-05T03:20:29+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity-dashboard",
-      "spotted": "equity aggregate 214m stale (tol 90m, off-hours)",
-      "action_taken": "re-triggered live-refresh Action",
       "outcome": "pending",
       "source": "cloud-watchdog"
     }
