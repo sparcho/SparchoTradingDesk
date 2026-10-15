@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1791630206">
-<meta name="x-built-at" content="2026-10-10T11:02:36+00:00">
+<meta name="x-build-id" content="1792053928">
+<meta name="x-built-at" content="2026-10-15T08:44:38+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1791630206",BUILT_AT="2026-10-10T11:02:36+00:00";
+  var BID="1792053928",BUILT_AT="2026-10-15T08:44:38+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2304,7 +2304,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); window.TK_NAME={}; (pj.groups||[]).forEach(function(g){ (g.names||[]).forEach(function(n){ window.TK_NAME[n.ticker]=n.name||''; }); }); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
-      try{ const gf=await fetch('data/gift_nifty.json?v=1791630206&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
+      try{ const gf=await fetch('data/gift_nifty.json?v=1792053928&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
       let __pxText='';
       try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ __pxText=await px.text(); const pj2=JSON.parse(__pxText); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
       // F260622 — live JOURNALIST news feed (curated set, 5-min cloud refresh); candidates as fallback. Never throws.
@@ -4559,6 +4559,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(u); if(a.remove) a.remove(); },600);
       btn.textContent='Saved'; btn.className+=' on'; }catch(e){ btn.textContent='Failed'; }
   };
+  // F261015-SWFOLD (operator 15-Oct): "include the switch analysis within the drop down from the held
+  // positions section ... i dont want to constantly be seeing the switch analysis when its only
+  // needed at some points." The card is now ONE collapsed line -- held count, any live SWITCH call,
+  // day type -- and the analysis opens in place. Volume, fires and banks get the top of the tab.
+  // Open state survives the 60s re-render (window var + sessionStorage, both guarded).
+  window.swFoldToggle=function(el){ window.__swOpen=!!el.open; try{ sessionStorage.setItem('swOpen',el.open?'1':'0'); }catch(e){} };
+  function swFoldOpen(){ if(window.__swOpen!=null) return window.__swOpen; try{ return sessionStorage.getItem('swOpen')==='1'; }catch(e){ return false; } }
+  function swFold(sumInner, body){
+    return '<details class="card sw-wrap sw-fold"'+(swFoldOpen()?' open':'')+' ontoggle="swFoldToggle(this)"><summary class="sw-fs">'+sumInner+
+      '<span class="sw-chev" aria-hidden="true">\u25BE</span></summary><div class="sw-body">'+body+'</div></details>';
+  }
   function switchDeskHTML(){
     var pub=(DATA&&DATA.switch_day)||null, sd=(DATA&&DATA.switch_desk)||null;
     var base=(sd&&sd.day_type)||(pub&&pub.day_type); if(!base) return '';
@@ -4570,12 +4581,13 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var evLine=ev.days?('Since 2021 on '+esc((SW_LBL[base]||base).toLowerCase())+' days: swapping a bottom-10% name for a top-10% name made '+
       '<b class="'+(ev.switch_gain10>0?'pos':'neg')+'">'+(ev.switch_gain10>0?'+':'')+ev.switch_gain10+'%</b> over 10 sessions after costs ('+ev.years_positive+' of '+ev.years+' years positive). '+
       'The average name moved <b class="'+(ev.mkt_fwd10>0?'pos':'neg')+'">'+(ev.mkt_fwd10>0?'+':'')+ev.mkt_fwd10+'%</b>.'):'';
-    var head='<div class="c-lbl"><span class="d"></span>Switch desk'+HT('One call per holding, judged over 10 sessions for this type of day.')+
-      '<span class="sw-pill '+(SW_TONE[t]||'mut')+'">'+esc(SW_LBL[t]||t)+(changed?' · from GIFT':'')+'</span></div>';
+    var pill='<span class="sw-pill '+(SW_TONE[t]||'mut')+'">'+esc(SW_LBL[t]||t)+(changed?' · from GIFT':'')+'</span>';
+    var head='<div class="c-lbl"><span class="d"></span>Switch analysis'+HT('One call per holding, judged over 10 sessions for this type of day.')+'</div>';
     var sub='<div class="sw-say">'+esc(changed?('GIFT Nifty now reads as: '+(SW_LBL[t]||t)+'. Calls below were set on '+(SW_LBL[base]||base).toLowerCase()+'; the 08:50 run updates them.'):say)+
       (res?(' <span class="sw-res">'+esc(res)+'</span>'):'')+'</div>'+swGiftHTML();
     if(!(DATA&&DATA._unlocked)||!sd){
-      return '<div class="card sw-wrap">'+head+sub+'<div class="sw-ev">'+evLine+'</div><div class="fc-note">\u{1F512} Unlock for your calls.</div></div>';
+      return swFold('<span class="d"></span><span class="sw-ft">Held positions</span><span class="sw-fm">switch analysis \u00b7 unlock for your calls</span>'+pill,
+        sub+'<div class="sw-ev">'+evLine+'</div><div class="fc-note">\u{1F512} Unlock for your calls.</div>');
     }
     var rows=(sd.calls||[]).map(function(c){
       var chip=c.call==='SWITCH'?('SWITCH → '+esc(c.to||'')):esc(c.call||'');
@@ -4595,9 +4607,12 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var cand=(sd.candidates||[]).slice(0,6).map(function(x){ return '<span class="sw-cd" title="'+esc(x.why||'')+'">'+tkA(x.ticker,esc(x.ticker))+' <i>'+x.rank_pct+'</i></span>'; }).join('');
     var tr=sd.track||{}, trl=tr.n?('Desk record: '+tr.n+' switches scored · avg <b class="'+(tr.avg_gain_pct>0?'pos':'neg')+'">'+(tr.avg_gain_pct>0?'+':'')+tr.avg_gain_pct+'%</b> · '+tr.win_pct+'% won'):
       ('Desk record starts scoring 10 sessions after its first switch'+(tr.pending?(' ('+tr.pending+' waiting)'):'')+'.');
-    return '<div class="card sw-wrap">'+head+sub+'<div class="sw-rows">'+rows+'</div>'+
+    var _calls=sd.calls||[], _nsw=_calls.filter(function(c){return c.call==='SWITCH';}).length;
+    var _fsum='<span class="d"></span><span class="sw-ft">Held positions</span><span class="sw-fm">'+_calls.length+' held'+HT('Tap to open the switch analysis: one call per holding for today\'s day type.')+'</span>'+
+      (_nsw?('<span class="sw-c sw sw-fbadge">'+_nsw+' switch call'+(_nsw>1?'s':'')+'</span>'):'<span class="sw-fm mut">no switch today</span>')+pill;
+    return swFold(_fsum, head+sub+'<div class="sw-rows">'+rows+'</div>'+
       '<details class="sw-foot"><summary>Why these calls · top-ranked today · record</summary><div class="sw-ev">'+evLine+'</div>'+
-      (cand?('<div class="sw-cands"><span class="sw-gk">Top ranked</span>'+cand+'</div>'):'')+'<div class="sw-ev">'+trl+'</div></details></div>';
+      (cand?('<div class="sw-cands"><span class="sw-gk">Top ranked</span>'+cand+'</div>'):'')+'<div class="sw-ev">'+trl+'</div></details>');
   }
   function fibBoardHTML(){
     var rad=(DATA&&DATA.fib_radar)||null; if(!rad) return '';
@@ -6488,6 +6503,18 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
 .rdr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:10px}
 /* F261009-SWITCH desk */
 .sw-wrap{margin-bottom:13px;border-color:rgba(66,219,230,.35)}
+/* F261015-SWFOLD: held positions as one collapsed line */
+.sw-fold{padding-top:12px;padding-bottom:12px}
+.sw-fs{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;flex-wrap:wrap}
+.sw-fs::-webkit-details-marker{display:none}
+.sw-fs .d{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.sw-ft{font-weight:800;font-size:12.5px;letter-spacing:.02em;color:var(--ink)}
+.sw-fm{font-size:11.5px;color:var(--mut)}
+.sw-fs .sw-pill{margin-left:auto}
+.sw-chev{color:var(--faint);font-size:12px;transition:transform .2s}
+.sw-fold[open] .sw-chev{transform:rotate(180deg)}
+.sw-fold:not([open]) .sw-fs .sw-pill{opacity:.75}
+.sw-body{margin-top:10px;border-top:1px solid var(--hair);padding-top:8px}
 .sw-pill{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 11px;border-radius:999px;border:1px solid currentColor}
 .sw-pill.pos{color:var(--pos)} .sw-pill.neg{color:var(--neg)} .sw-pill.watch{color:var(--watch)} .sw-pill.mut{color:var(--mut)}
 .sw-say{font-size:12.5px;color:var(--ink2);margin:4px 0 6px;line-height:1.5}
@@ -7740,7 +7767,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     });
   }
 
-  fetch("data/pulse.json?v=1791630206&t="+Date.now())
+  fetch("data/pulse.json?v=1792053928&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
