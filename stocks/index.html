@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1792145130">
-<meta name="x-built-at" content="2026-10-16T10:04:35+00:00">
+<meta name="x-build-id" content="1792148348">
+<meta name="x-built-at" content="2026-10-16T10:58:23+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1792145130",BUILT_AT="2026-10-16T10:04:35+00:00";
+  var BID="1792148348",BUILT_AT="2026-10-16T10:58:23+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2304,7 +2304,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); window.TK_NAME={}; (pj.groups||[]).forEach(function(g){ (g.names||[]).forEach(function(n){ window.TK_NAME[n.ticker]=n.name||''; }); }); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
-      try{ const gf=await fetch('data/gift_nifty.json?v=1792145130&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
+      try{ const gf=await fetch('data/gift_nifty.json?v=1792148348&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
       let __pxText='';
       try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ __pxText=await px.text(); const pj2=JSON.parse(__pxText); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
       // F260622 — live JOURNALIST news feed (curated set, 5-min cloud refresh); candidates as fallback. Never throws.
@@ -7858,7 +7858,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     });
   }
 
-  fetch("data/pulse.json?v=1792145130&t="+Date.now())
+  fetch("data/pulse.json?v=1792148348&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
@@ -8400,6 +8400,132 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     var g=document.createElement('div'); g.className='mono-sk3'; g.innerHTML='<div class="hd"><span>score</span><span>name</span><span>sources</span><span>to level</span></div>'+h+'<div class="ft">unlock to load the engine board</div>'; c.appendChild(g); }
   var pending=false; new MutationObserver(function(){ if(pending) return; pending=true; setTimeout(function(){ pending=false; try{ decorate2(); }catch(e){} },160); }).observe(document.body,{childList:true,subtree:true});
   try{ decorate2(); }catch(e){}
+})();
+</script>
+
+<style id="mono-skin-3">
+  /* ── mono pass 3 (261016b): sector hues · simple base view · scorecard cockpit ── */
+  /* sector hue: colour carries ONE meaning on this desk — which sector a name belongs to */
+  .mono-sec::before{ content:""; display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--sec,#9aa3b8); box-shadow:0 0 6px var(--sec,#9aa3b8); margin-right:5px; vertical-align:middle; position:relative; top:-1px; }
+  .mono-sec-card{ border-left:3px solid var(--sec,#9aa3b8) !important; }
+  .mh-sec{ margin-top:7px; } .mh-sec-h{ display:flex; align-items:center; gap:6px; font:700 9.5px var(--font-mono); letter-spacing:.12em; text-transform:uppercase; color:var(--mut); margin:7px 0 3px; }
+  .mh-sec-h i{ width:7px; height:7px; border-radius:50%; background:var(--sec); box-shadow:0 0 6px var(--sec); } .mh-sec-h b{ color:var(--ink2); font-weight:700; }
+  .mono-leg{ display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:8px; font:600 9.5px var(--font-mono); color:var(--mut); letter-spacing:.06em; }
+  .mono-leg span{ display:inline-flex; align-items:center; gap:5px; white-space:nowrap; } .mono-leg i{ width:6px; height:6px; border-radius:50%; background:var(--sec); box-shadow:0 0 5px var(--sec); }
+  .tkpub-cats button.mono-sec::before{ top:0; }
+  .mono-leg .xtra{ display:none; } .mono-leg.all .xtra{ display:inline-flex; } .mono-leg .more{ border:0; background:none; color:var(--faint); font:inherit; cursor:pointer; padding:0; } .mono-leg .more:hover{ color:var(--ink); }
+  /* the simple base view: summaries on the desk, the rest behind ⤢ or "more" */
+  .mono-simple{ margin-left:auto; display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border); background:var(--glass); color:var(--mut); border-radius:999px; padding:3px 10px; font:600 9.5px var(--font-mono); letter-spacing:.1em; text-transform:uppercase; cursor:pointer; }
+  .mono-simple i{ width:22px; height:12px; border-radius:7px; background:rgba(255,255,255,.14); position:relative; transition:background .25s; } .mono-simple i::after{ content:""; position:absolute; top:2px; left:2px; width:8px; height:8px; border-radius:50%; background:var(--ink); transition:left .25s var(--ease); }
+  body.mono-lite .mono-simple{ color:var(--ink); border-color:rgba(255,255,255,.3); } body.mono-lite .mono-simple i{ background:var(--ink); } body.mono-lite .mono-simple i::after{ left:12px; background:var(--bg1); }
+  .zone-h .mono-simple{ margin-left:8px; }
+  body.mono-lite #z-lab .pl-stamp, body.mono-lite #z-lab .pl-note, body.mono-lite #z-lab .rdr-wrap > .fc-note, body.mono-lite #z-lab .rdr-wrap > .fund-tally,
+  body.mono-lite #z-lab .fc-wrap > .fc-note, body.mono-lite #z-lab .fc-wrap .pl-strip .pl-chip:not(.pl-sort):not(.on){ display:none !important; }
+  body.mono-lite #z-lab .fc2 > .fc2-live, body.mono-lite #z-lab .fc2 > .pl-today, body.mono-lite #z-lab .fc2 > .fc2-gate, body.mono-lite #z-lab .fc2 > .fc2-q{ display:none; }
+  body.mono-lite #z-lab .fc2.mopen > .fc2-live, body.mono-lite #z-lab .fc2.mopen > .pl-today, body.mono-lite #z-lab .fc2.mopen > .fc2-gate, body.mono-lite #z-lab .fc2.mopen > .fc2-q{ display:block; }
+  .fc2 .mex-b{ display:none; margin-top:8px; border:0; background:none; color:var(--faint); font:700 10px var(--font-mono); letter-spacing:.12em; text-transform:uppercase; cursor:pointer; padding:2px 0; }
+  body.mono-lite #z-lab .fc2 .mex-b{ display:inline-block; } .fc2 .mex-b:hover{ color:var(--ink); } .fc2.mopen .mex-b::before{ content:"− "; } .fc2 .mex-b::before{ content:"+ "; }
+  body.mono-lite #z-lab .tl-attn .tl-ledger-card, body.mono-lite #z-lab .tl-attn .orbstage, body.mono-lite #z-lab .tl-attn .opgrid, body.mono-lite #z-lab .tl-attn .orblegend, body.mono-lite #z-lab .tl-attn .tl-attn-row:not(.v-decide){ display:none !important; }
+  body.mono-lite #z-lab .tl-attn .orbwrap{ display:block !important; } body.mono-lite #z-lab .tl-attn .orbside{ display:block !important; width:auto !important; }
+  body.mono-lite #z-lab .tl-attn .orbidle{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px 14px; } body.mono-lite #z-lab .tl-attn .orbidle .orbih{ grid-column:1/-1; }
+  body.mono-lite #z-lab .tl-attn .mono-open-hint{ display:block; } .mono-open-hint{ display:none; margin-top:8px; font:600 9.5px var(--font-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--faint); }
+  /* scorecard cockpit: five tiles, each a door */
+  @media(min-width:1100px){
+    #z-perf.mono-cock{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-areas:"h h h" "src src src" "money curve hold" "habits habits names" "more more more"; gap:12px; align-content:start; }
+    #z-perf.mono-cock > *{ grid-column:1/-1; min-width:0; }
+    #z-perf.mono-cock > .zone-h{ grid-area:h; } #z-perf.mono-cock > .sc-src{ grid-area:src; margin:0; }
+    #z-perf.mono-cock > #sc-sec-1{ display:contents; } #z-perf.mono-cock > #sc-sec-1 > .pf-kpi-card{ grid-area:money; } #z-perf.mono-cock > #sc-sec-1 > .pf-grid{ grid-area:curve; display:block; }
+    #z-perf.mono-cock > #sc-sec-hold{ grid-area:hold; } #z-perf.mono-cock > #sc-sec-bstrip{ grid-area:habits; } #z-perf.mono-cock > #sc-sec-3{ grid-area:names; } #z-perf.mono-cock > .sc-more{ grid-area:more; }
+  }
+  #z-perf.mono-cock > #sc-sec-1 > .pf-sh, #z-perf.mono-cock > #sc-sec-1 > .pf-take, #z-perf.mono-cock .mono-tile > .pf-sh, #z-perf.mono-cock .sc-more > summary{ display:none; }
+  #z-perf.mono-cock .mono-tile{ position:relative; border:1px solid var(--border); border-radius:13px; background:var(--glass); padding:14px 16px; margin:0 !important; max-height:340px; overflow:hidden; cursor:pointer; }
+  #z-perf.mono-cock .mono-tile::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:56px; background:linear-gradient(transparent,var(--bg2)); pointer-events:none; }
+  #z-perf.mono-cock .mono-tile.pf-grid > .card{ border:0; background:none; padding:0; box-shadow:none; }
+  #z-perf.mono-cock .mono-tile .pf-kpis{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #z-perf.mono-cock .mono-tile{ --perf-card-h:210px; } #z-perf.mono-cock #sc-sec-hold .kpis{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+  #z-perf.mono-cock #sc-sec-bstrip .bh-det, #z-perf.mono-cock #sc-sec-bstrip .bh-int, #z-perf.mono-cock #sc-sec-bstrip .bh-ctl{ display:none; }
+  #z-perf.mono-cock #sc-sec-bstrip .bh-tiles{ grid-template-columns:repeat(5,minmax(0,1fr)); } #z-perf.mono-cock #sc-sec-bstrip .bh-foot{ display:none; }
+  #z-perf.mono-cock .sc-more .pf-verdict{ grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:0; }
+  #z-perf.mono-cock .sc-more > .pf-sec{ display:none; }
+  #z-perf.mono-cock .mono-tile > .c-lbl.mono-lbl{ margin-bottom:10px; }
+  /* a section moved into the focus layer: full depth again */
+  .mono-focus .mono-full{ max-height:none !important; overflow:visible !important; cursor:default; } .mono-focus .mono-full::after{ display:none; }
+  .mono-focus .mono-full > .c-lbl.mono-lbl{ display:none; } .mono-focus .mono-full > .pf-sh{ display:flex; } .mono-focus .mono-full.sc-more > summary{ display:none; } .mono-focus .mono-full.sc-more > .pf-sec{ display:block; }
+  .mono-focus .mono-full .bh-det, .mono-focus .mono-full .bh-int, .mono-focus .mono-full .bh-ctl{ display:block; } .mono-focus .mono-full .bh-foot{ display:block; }
+  .mono-focus .mono-full.tl-attn .tl-ledger-card, .mono-focus .mono-full.tl-attn .orbstage, .mono-focus .mono-full.tl-attn .opgrid, .mono-focus .mono-full.tl-attn .orblegend, .mono-focus .mono-full.tl-attn .tl-attn-row{ display:flex; }
+  .mono-focus .mono-full.tl-attn .tl-ledger-card{ display:block; } .mono-focus .mono-full.tl-attn .orbstage{ display:block; } .mono-focus .mono-full.tl-attn .opgrid{ display:grid; }
+  .mono-focus .mono-full.tl-attn .mono-open-hint{ display:none; }
+</style>
+
+<script id="mono-layer-3">
+(function(){
+  var RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var F=document.getElementById('mono-focus'), S=document.getElementById('mono-scrim');
+  var LS={ get:function(k){ try{ return JSON.parse(localStorage.getItem('mono2.'+k)); }catch(e){ return null; } }, set:function(k,v){ try{ localStorage.setItem('mono2.'+k,JSON.stringify(v)); }catch(e){} } };
+  var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+
+  /* ── 1. sector hues ── */
+  var HUES=[[/defen/i,'#e0a458'],[/rail|logist/i,'#c8b560'],[/power|renew|t&d|grid/i,'#7fcf9a'],[/oil|gas|mineral|mining|material|chemic|metal|steel/i,'#e08d78'],[/capital|ems|electron|data cent/i,'#7ab6ea'],[/telecom|it\b|software|tech/i,'#b49ae6'],[/financ|bank|insur|nbfc/i,'#6ec9c2'],[/pharma|agri|food|health/i,'#e58fae'],[/auto|ev\b/i,'#9aa0f2'],[/etf|commodit|index/i,'#b8bcc6']];
+  var SEC={}, HUE={};
+  function hueFor(sec){ if(!sec) return '#9aa3b8'; if(HUE[sec]) return HUE[sec]; var h='#9aa3b8'; for(var i=0;i<HUES.length;i++){ if(HUES[i][0].test(sec)){ h=HUES[i][1]; break; } } HUE[sec]=h; return h; }
+  function learnSec(){ document.querySelectorAll('#z-tickers .tsec').forEach(function(s){ var h=s.querySelector('.tsec-h .nm'); if(!h) return; var sec=h.textContent.trim(), hue=hueFor(sec); var th=s.querySelector('.tsec-h'); if(th&&!th.dataset.msec){ th.dataset.msec='1'; th.style.setProperty('--sx',hue); }
+    s.querySelectorAll('a.tcard').forEach(function(a){ var m=/^ticker\/([A-Z0-9&\-]+)\//.exec(a.getAttribute('href')||''); if(!m) return; SEC[m[1]]=sec; if(!a.dataset.msec){ a.dataset.msec='1'; a.style.setProperty('--sx',hue); } }); });
+    document.querySelectorAll('#z-tickers .tkpub-cats button[data-c]:not(.mono-sec)').forEach(function(b){ b.classList.add('mono-sec'); b.style.setProperty('--sec',hueFor(b.getAttribute('data-c'))); }); }
+  function tkOf(el){ var t=el.getAttribute('data-tk'); if(t) return t; var m=/^ticker\/([A-Z0-9&\-]+)\//.exec(el.getAttribute('href')||''); if(m) return m[1]; var x=/^\s*([A-Z0-9&\-]{2,})/.exec(el.textContent||''); return x?x[1]:null; }
+  var CARD_SEL=['#z-lab .fc2','#z-lab .pl-t','#z-lab .stl-row','#z-lab .rdr-card','#z-research .htl-i','#z-research .ng'].join(', ');
+  var NAME_SEL='a.tklink, .mono-tk, .fc2-tk, .fcm-tk, .rdr-tk, .stl-tk, .pl-t-tk, .ng-tk, .fl-tk';
+  function tagSectors(){ if(!Object.keys(SEC).length) return;
+    document.querySelectorAll(NAME_SEL).forEach(function(el){ if(el.dataset.msec||el.closest('#z-tickers .tcard')) return; if(el.querySelector(NAME_SEL)||(el.parentElement&&el.parentElement.closest('.mono-sec'))){ el.dataset.msec='1'; return; } var t=tkOf(el), sec=t&&SEC[t]; if(!sec){ if(t&&t.length>1) el.dataset.msec='1'; return; } el.dataset.msec='1'; el.classList.add('mono-sec'); el.style.setProperty('--sec',hueFor(sec)); el.title=el.title||sec; });
+    document.querySelectorAll(CARD_SEL).forEach(function(c){ if(c.dataset.msec) return; var n=c.querySelector(NAME_SEL); var t=n&&tkOf(n), sec=t&&SEC[t]; if(!sec) return; c.dataset.msec='1'; c.classList.add('mono-sec-card'); c.style.setProperty('--sec',hueFor(sec)); }); }
+  function groupNames(){ document.querySelectorAll('.mh-names').forEach(function(n){ var c=n.querySelector(':scope > .bd-c'); if(!c||n.dataset.grouped===c.innerHTML.length+'') return; n.dataset.grouped=c.innerHTML.length+'';
+    var old=n.querySelectorAll(':scope > .mh-sec'); old.forEach(function(x){ x.remove(); }); var chips=[].slice.call(c.querySelectorAll('.bd-k')); if(chips.length<4||!Object.keys(SEC).length) return; var by={};
+    chips.forEach(function(k){ var t=tkOf(k.querySelector('.mono-tk')||k), sec=(t&&SEC[t])||'Other'; (by[sec]=by[sec]||[]).push(k); });
+    var secs=Object.keys(by).sort(function(a,b){ return by[b].length-by[a].length||a.localeCompare(b); }); if(secs.length<2) return; c.style.display='none';
+    secs.forEach(function(sec){ var g=document.createElement('div'); g.className='mh-sec'; g.style.setProperty('--sec',hueFor(sec)); g.innerHTML='<div class="mh-sec-h"><i></i>'+esc(sec)+' <b>'+by[sec].length+'</b></div><span class="bd-c"></span>'; var wrap=g.querySelector('.bd-c'); by[sec].forEach(function(k){ wrap.appendChild(k.cloneNode(true)); }); n.appendChild(g); }); }); }
+  function legend(){ var b=document.querySelector('#z-lab .card.mono-board'); if(!b||b.querySelector('.mono-leg')||!Object.keys(SEC).length) return; var seen={}, html='';
+    b.querySelectorAll('.bd-k').forEach(function(k){ var t=tkOf(k.querySelector('.mono-tk')||k), sec=t&&SEC[t]; if(sec) seen[sec]=(seen[sec]||0)+1; });
+    var keys=Object.keys(seen).sort(function(a,b){ return seen[b]-seen[a]; }); keys.forEach(function(sec,i){ html+='<span'+(i>=8?' class="xtra"':'')+' style="--sec:'+hueFor(sec)+'"><i></i>'+esc(sec)+' '+seen[sec]+'</span>'; }); if(!html) return;
+    var l=document.createElement('div'); l.className='mono-leg'; l.innerHTML=html; if(keys.length>8){ var m=document.createElement('button'); m.type='button'; m.className='more'; m.textContent='+'+(keys.length-8)+' more'; m.addEventListener('click',function(){ l.classList.toggle('all'); m.textContent=l.classList.contains('all')?'fewer':'+'+(keys.length-8)+' more'; }); l.appendChild(m); } var note=b.querySelector('.mh-note'); if(note) note.parentNode.insertBefore(l,note); else b.appendChild(l); }
+
+  /* ── 2. the simple base view (on by default, remembered) ── */
+  var lite=LS.get('lite'); if(lite==null) lite=true; document.body.classList.toggle('mono-lite',!!lite);
+  function simpleToggle(){ var zh=document.querySelector('#z-lab .zone-h'); if(!zh||zh.querySelector('.mono-simple')) return; var b=document.createElement('button'); b.type='button'; b.className='mono-simple'; b.innerHTML='simple <i></i>'; b.title='Simple shows summaries; detail opens on tap either way.';
+    b.addEventListener('click',function(){ lite=!document.body.classList.contains('mono-lite'); document.body.classList.toggle('mono-lite',lite); LS.set('lite',lite); }); var zx=zh.querySelector('.zx'); if(zx) zh.insertBefore(b,zx); else zh.appendChild(b); }
+  function engineMore(){ document.querySelectorAll('#z-lab .fc2:not([data-mex])').forEach(function(c){ c.dataset.mex='1'; if(!c.querySelector(':scope > .fc2-q, :scope > .fc2-gate, :scope > .fc2-live')) return; var b=document.createElement('button'); b.type='button'; b.className='mex-b'; b.textContent='more'; b.addEventListener('click',function(e){ e.stopPropagation(); c.classList.toggle('mopen'); }); c.appendChild(b); }); }
+  function attnHint(){ var a=document.querySelector('#z-lab .tl-attn'); if(!a||a.querySelector('.mono-open-hint')) return; var h=document.createElement('div'); h.className='mono-open-hint'; h.textContent='⤢ ring · ledger · every position'; a.appendChild(h); var z=a.querySelector(':scope > .c-lbl .mono-zoom'); if(z&&!z.dataset.mv){ z.dataset.mv='1'; z.addEventListener('click',function(e){ e.stopImmediatePropagation(); e.stopPropagation(); openMoved(a,'Open positions','RADAR'); },true); } }
+
+  /* ── 3. move a live section into the focus layer and back (charts and rings stay alive) ── */
+  var mv=null;
+  function openMoved(el,title,crumb){ if(!F||mv) return; var ph=document.createComment('mono-ph'); el.parentNode.insertBefore(ph,el); var r=el.getBoundingClientRect();
+    if(document.body.classList.contains('mono-focused')&&F.firstChild){ F.innerHTML=''; }
+    F.innerHTML='<div class="mfh"><span class="crumb">'+esc(crumb||'SCORECARD')+' › </span><h2>'+esc(title)+'</h2><button type="button" class="mfx">close · esc</button></div>';
+    F.appendChild(el); el.classList.add('mono-full'); var opened=[].slice.call(el.querySelectorAll('details:not([open])')); opened.forEach(function(d){ d.open=true; }); mv={ el:el, ph:ph, r:r, opened:opened }; window.__mtkOpen=true; F.querySelector('.mfx').addEventListener('click',closeMoved);
+    F.classList.add('mtk-open'); F.hidden=false; document.body.classList.add('mono-focused');
+    if(!RM&&r.width){ var cx=innerWidth/2, cy=innerHeight/2, fw=Math.min(1300,innerWidth-32); F.style.transition='none'; F.style.transform='translate(calc(-50% + '+(r.left+r.width/2-cx)+'px), calc(-50% + '+(r.top+r.height/2-cy)+'px)) scale('+Math.max(.06,r.width/fw).toFixed(3)+')'; F.style.opacity='.3';
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ F.style.transition=''; F.style.transform='translate(-50%,-50%)'; F.style.opacity='1'; }); }); } else { F.style.transform='translate(-50%,-50%)'; F.style.opacity='1'; }
+    F.scrollTop=0; setTimeout(function(){ try{ window.dispatchEvent(new Event('resize')); }catch(e){} },80); }
+  function closeMoved(){ if(!mv) return; var m=mv; mv=null; window.__mtkOpen=false; m.el.classList.remove('mono-full'); (m.opened||[]).forEach(function(d){ d.open=false; }); if(m.ph.parentNode) m.ph.parentNode.insertBefore(m.el,m.ph); m.ph.remove();
+    F.classList.remove('mtk-open'); var r=m.el.getBoundingClientRect(); if(r.width&&!RM){ var cx=innerWidth/2, cy=innerHeight/2; F.style.transform='translate(calc(-50% + '+(r.left+r.width/2-cx)+'px), calc(-50% + '+(r.top+r.height/2-cy)+'px)) scale('+Math.max(.06,r.width/F.offsetWidth).toFixed(3)+')'; }
+    F.style.opacity='0'; document.body.classList.remove('mono-focused'); setTimeout(function(){ if(!mv&&!window.__mtkOpen&&!(window.monoCur&&window.monoCur())){ F.hidden=true; F.innerHTML=''; F.style.transform=''; F.style.opacity=''; } },420);
+    setTimeout(function(){ try{ window.dispatchEvent(new Event('resize')); }catch(e){} },80); }
+  window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&mv){ e.stopImmediatePropagation(); closeMoved(); } },true);
+  if(S) S.addEventListener('click',function(){ if(mv) closeMoved(); });
+  window.monoMove=openMoved;
+
+  /* ── 4. the scorecard as a cockpit: five tiles, each opens in full ── */
+  function tile(el,title,sub){ if(!el) return; el.classList.add('mono-tile'); if(el.querySelector(':scope > .c-lbl.mono-lbl')) return;
+    var old=el.querySelector(':scope > .c-lbl'); if(old){ old.classList.add('mono-lbl'); var oz=old.querySelector('.mono-zoom'); if(oz&&!oz.dataset.mv){ oz.dataset.mv='1'; oz.addEventListener('click',function(e){ e.stopImmediatePropagation(); e.stopPropagation(); openMoved(el,title); },true); } }
+    else { var l=document.createElement('div'); l.className='c-lbl mono-lbl'; l.innerHTML='<span class="d"></span>'+esc(title)+(sub?'<span class="age">'+esc(sub)+'</span>':'')+'<button type="button" class="mono-zoom" title="Open">⤢</button>'; l.querySelector('.mono-zoom').addEventListener('click',function(e){ e.stopPropagation(); openMoved(el,title); }); el.insertBefore(l,el.firstChild); }
+    if(el.dataset.mtile) return; el.dataset.mtile='1';
+    el.addEventListener('click',function(e){ if(el.classList.contains('mono-full')) return; if(e.target.closest('a,button,input,select,summary,.pc-seg,.bh-tile,.vcard,.kpi')) return; openMoved(el,title); }); }
+  function scCockpit(){ var f=document.getElementById('z-perf'); if(!f) return; var money=f.querySelector(':scope > #sc-sec-1 > .pf-kpi-card'); if(!money){ f.classList.remove('mono-cock'); return; } f.classList.add('mono-cock');
+    tile(money,'The money','₹ · net of charges'); var curve=f.querySelector(':scope > #sc-sec-1 > .pf-grid'); if(curve){ tile(curve,'Booked P&L across the year'); var inner=curve.querySelector('.card > .c-lbl'); if(inner) inner.style.display='none'; }
+    tile(f.querySelector(':scope > #sc-sec-hold'),'What you hold'); tile(f.querySelector(':scope > #sc-sec-bstrip'),'Your trading habits'); tile(f.querySelector(':scope > #sc-sec-3'),'Where the money went','₹ booked per name');
+    var more=f.querySelector(':scope > details.sc-more'); if(more){ more.open=true; tile(more,'Detail','wins and losses · how you traded · still open · closed trades'); } }
+
+  function decorate3(){ learnSec(); tagSectors(); groupNames(); legend(); simpleToggle(); engineMore(); attnHint(); scCockpit(); }
+  var pending=false; new MutationObserver(function(){ if(pending) return; pending=true; setTimeout(function(){ pending=false; try{ decorate3(); }catch(e){} },200); }).observe(document.body,{childList:true,subtree:true});
+  try{ decorate3(); }catch(e){}
 })();
 </script>
 </body></html>
