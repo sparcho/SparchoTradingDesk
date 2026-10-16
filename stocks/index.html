@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1792148348">
-<meta name="x-built-at" content="2026-10-16T10:58:23+00:00">
+<meta name="x-build-id" content="1792157629">
+<meta name="x-built-at" content="2026-10-16T13:32:57+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1792148348",BUILT_AT="2026-10-16T10:58:23+00:00";
+  var BID="1792157629",BUILT_AT="2026-10-16T13:32:57+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2304,7 +2304,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); window.TK_NAME={}; (pj.groups||[]).forEach(function(g){ (g.names||[]).forEach(function(n){ window.TK_NAME[n.ticker]=n.name||''; }); }); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
-      try{ const gf=await fetch('data/gift_nifty.json?v=1792148348&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
+      try{ const gf=await fetch('data/gift_nifty.json?v=1792157629&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
       let __pxText='';
       try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ __pxText=await px.text(); const pj2=JSON.parse(__pxText); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
       // F260622 — live JOURNALIST news feed (curated set, 5-min cloud refresh); candidates as fallback. Never throws.
@@ -7858,7 +7858,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     });
   }
 
-  fetch("data/pulse.json?v=1792148348&t="+Date.now())
+  fetch("data/pulse.json?v=1792157629&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
@@ -8296,7 +8296,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&tkOpen){ e.stopImmediatePropagation(); closeTicker(); } },true);
   if(S) S.addEventListener('click',function(){ if(tkOpen) closeTicker(); });
   /* bare names in the strip become doors too */
-  function nameLinks(){ document.querySelectorAll('.pl-t-tk:not([data-mtk]), .pl-worth .nm:not([data-mtk]), .bd-k:not([data-mtk])').forEach(function(el){ var tn=null; for(var n=el.firstChild;n;n=n.nextSibling){ if(n.nodeType===3&&/[A-Z]/.test(n.nodeValue)){ tn=n; break; } } if(!tn) return;
+  function nameLinks(){ document.querySelectorAll(['.pl-t-tk','.pl-worth .nm','.bd-k','.fc2-tk','.fcm-tk'].map(function(q){ return q+':not([data-mtk])'; }).join(', ')).forEach(function(el){ var tn=null; for(var n=el.firstChild;n;n=n.nextSibling){ if(n.nodeType===3&&/[A-Z]/.test(n.nodeValue)){ tn=n; break; } } if(!tn) return;
     var m=/^\s*([A-Z0-9&\-]{2,})/.exec(tn.nodeValue); if(!m) return; if(!PAGES[m[1]]){ if(Object.keys(PAGES).length) el.dataset.mtk='1'; return; } el.dataset.mtk='1';
     var a=document.createElement('a'); a.className='mono-tk'; a.setAttribute('data-tk',m[1]); a.href=PAGES[m[1]]; a.textContent=m[1]; tn.nodeValue=tn.nodeValue.slice(m[0].length); el.insertBefore(a,tn); }); }
 
@@ -8307,11 +8307,12 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     var o=document.createElement('canvas'); o.width=W; o.height=H; var ox=o.getContext('2d',{willReadFrequently:true}); ox.font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily; try{ ox.letterSpacing=cs.letterSpacing; }catch(e){} ox.textBaseline='alphabetic'; ox.fillStyle='#fff';
     var mt=ox.measureText(txt), fs=parseFloat(cs.fontSize)||16, asc=mt.fontBoundingBoxAscent||fs*.8, dsc=mt.fontBoundingBoxDescent||fs*.2, by=pad+(r.height-(asc+dsc))/2+asc, tx=pad+(cs.textAlign==='center'?(r.width-mt.width)/2:0); ox.fillText(txt,tx,by);
     var id=ox.getImageData(0,0,W,H).data, P=[], st=2; for(var y=0;y<H;y+=st) for(var x=0;x<W;x+=st){ if(id[(y*W+x)*4+3]>110) P.push({x:x,y:y,dx:(Math.random()-.5)*170,dy:-24-Math.random()*110,s:.25+Math.random()*.75}); }
-    if(!P.length) return; var c=document.createElement('canvas'); c.className='mono-vap'; c.width=W*dpr; c.height=H*dpr; c.style.width=W+'px'; c.style.height=H+'px'; c.style.left=(el.offsetLeft-pad)+'px'; c.style.top=(el.offsetTop-pad)+'px'; host.appendChild(c);
+    if(!P.length) return; var c=document.createElement('canvas'); c.className='mono-vap'; c.width=W*dpr; c.height=H*dpr; c.style.width=W+'px'; c.style.height=H+'px'; c.style.left=(el.offsetLeft-pad)+'px'; c.style.top=(el.offsetTop-pad)+'px'; c.__live=true; host.appendChild(c);
     el.classList.add('mono-vap-hide'); var ctx=c.getContext('2d'); ctx.scale(dpr,dpr); var col=cs.color, t0=performance.now(), D=950;
     (function tick(now){ var k=Math.min(1,(now-t0)/D), e=1-Math.pow(1-k,3); ctx.clearRect(0,0,W,H); ctx.fillStyle=col;
       for(var i=0;i<P.length;i++){ var p=P[i], q=Math.min(1,Math.max(0,(e-(1-p.s)*.4)/.6)), u=(1-q)*(1-q); ctx.globalAlpha=q*.95; ctx.fillRect(p.x+p.dx*u,p.y+p.dy*u,st*.85+u*1.4,st*.85+u*1.4); }
       if(k<1) requestAnimationFrame(tick); else { el.classList.remove('mono-vap-hide'); c.style.transition='opacity .22s'; c.style.opacity='0'; setTimeout(function(){ c.remove(); },260); } })(t0); }
+  window.monoVapour=vapour;
   document.querySelectorAll('.face').forEach(function(f){ new MutationObserver(function(){ if(f.classList.contains('active')){ if(f.dataset.vap) return; f.dataset.vap='1'; var h=f.querySelector('.zone-h h2'); setTimeout(function(){ vapour(h); },60); } else delete f.dataset.vap; }).observe(f,{attributes:true,attributeFilter:['class']}); });
 
   /* ── 3. ascii field: the gate's hero and the locked scorecard ── */
@@ -8325,6 +8326,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
       for(var y=0;y<rows;y++) for(var x=0;x<cols;x++){ var v=field(x,y,t); if(v<.16) continue; var ch=RAMP[Math.min(RAMP.length-1,Math.floor(v*(RAMP.length-1)))]; if(ch===' ') continue; ctx.fillStyle='rgba('+k+','+(Math.round(v*alpha*20)/20)+')'; ctx.fillText(ch,x*cell,y*cell); } }
     host.addEventListener('pointermove',function(e){ var r=c.getBoundingClientRect(); mx=(e.clientX-r.left)/cell; my=(e.clientY-r.top)/cell; },{passive:true}); host.addEventListener('pointerleave',function(){ mx=my=-1e4; },{passive:true});
     size(); window.addEventListener('resize',size); requestAnimationFrame(frame); return { stop:function(){ run=false; c.remove(); } }; }
+  window.monoAscii=ascii;
   (function(){ var g=document.getElementById('peakgate'); if(!g) return; var A=null;
     function sync(){ var hidden=g.classList.contains('hide')||getComputedStyle(g).display==='none'; if(!hidden&&!A) A=ascii(g,{cell:16,fps:16,alpha:.42}); if(hidden&&A){ var a=A; A=null; setTimeout(a.stop,700); }
       if(!g.classList.contains('wait')&&!g.dataset.vap&&!hidden){ g.dataset.vap='1'; setTimeout(function(){ vapour(g.querySelector('.pg-h')); },80); }
@@ -8467,7 +8469,8 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   /* ── 1. sector hues ── */
   var HUES=[[/defen/i,'#e0a458'],[/rail|logist/i,'#c8b560'],[/power|renew|t&d|grid/i,'#7fcf9a'],[/oil|gas|mineral|mining|material|chemic|metal|steel/i,'#e08d78'],[/capital|ems|electron|data cent/i,'#7ab6ea'],[/telecom|it\b|software|tech/i,'#b49ae6'],[/financ|bank|insur|nbfc/i,'#6ec9c2'],[/pharma|agri|food|health/i,'#e58fae'],[/auto|ev\b/i,'#9aa0f2'],[/etf|commodit|index/i,'#b8bcc6']];
   var SEC={}, HUE={};
-  function hueFor(sec){ if(!sec) return '#9aa3b8'; if(HUE[sec]) return HUE[sec]; var h='#9aa3b8'; for(var i=0;i<HUES.length;i++){ if(HUES[i][0].test(sec)){ h=HUES[i][1]; break; } } HUE[sec]=h; return h; }
+  window.monoHue=function(sec){ return hueFor(sec); };
+  function hueFor(sec){ if(!sec) return '#9aa3b8'; sec=String(sec).replace(/_/g,' '); if(HUE[sec]) return HUE[sec]; var h='#9aa3b8'; for(var i=0;i<HUES.length;i++){ if(HUES[i][0].test(sec)){ h=HUES[i][1]; break; } } HUE[sec]=h; return h; }
   function learnSec(){ document.querySelectorAll('#z-tickers .tsec').forEach(function(s){ var h=s.querySelector('.tsec-h .nm'); if(!h) return; var sec=h.textContent.trim(), hue=hueFor(sec); var th=s.querySelector('.tsec-h'); if(th&&!th.dataset.msec){ th.dataset.msec='1'; th.style.setProperty('--sx',hue); }
     s.querySelectorAll('a.tcard').forEach(function(a){ var m=/^ticker\/([A-Z0-9&\-]+)\//.exec(a.getAttribute('href')||''); if(!m) return; SEC[m[1]]=sec; if(!a.dataset.msec){ a.dataset.msec='1'; a.style.setProperty('--sx',hue); } }); });
     document.querySelectorAll('#z-tickers .tkpub-cats button[data-c]:not(.mono-sec)').forEach(function(b){ b.classList.add('mono-sec'); b.style.setProperty('--sec',hueFor(b.getAttribute('data-c'))); }); }
@@ -8496,7 +8499,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
 
   /* ── 3. move a live section into the focus layer and back (charts and rings stay alive) ── */
   var mv=null;
-  function openMoved(el,title,crumb){ if(!F||mv) return; var ph=document.createComment('mono-ph'); el.parentNode.insertBefore(ph,el); var r=el.getBoundingClientRect();
+  function openMoved(el,title,crumb){ if(!F||mv) return; var r=el.getBoundingClientRect(); var ph=document.createElement('div'); ph.className='mono-ph'; ph.style.height=r.height+'px'; var ga=getComputedStyle(el).gridArea; if(ga&&!/auto/.test(ga)) ph.style.gridArea=ga; el.parentNode.insertBefore(ph,el);
     if(document.body.classList.contains('mono-focused')&&F.firstChild){ F.innerHTML=''; }
     F.innerHTML='<div class="mfh"><span class="crumb">'+esc(crumb||'SCORECARD')+' › </span><h2>'+esc(title)+'</h2><button type="button" class="mfx">close · esc</button></div>';
     F.appendChild(el); el.classList.add('mono-full'); var opened=[].slice.call(el.querySelectorAll('details:not([open])')); opened.forEach(function(d){ d.open=true; }); mv={ el:el, ph:ph, r:r, opened:opened }; window.__mtkOpen=true; F.querySelector('.mfx').addEventListener('click',closeMoved);
@@ -8504,10 +8507,10 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     if(!RM&&r.width){ var cx=innerWidth/2, cy=innerHeight/2, fw=Math.min(1300,innerWidth-32); F.style.transition='none'; F.style.transform='translate(calc(-50% + '+(r.left+r.width/2-cx)+'px), calc(-50% + '+(r.top+r.height/2-cy)+'px)) scale('+Math.max(.06,r.width/fw).toFixed(3)+')'; F.style.opacity='.3';
       requestAnimationFrame(function(){ requestAnimationFrame(function(){ F.style.transition=''; F.style.transform='translate(-50%,-50%)'; F.style.opacity='1'; }); }); } else { F.style.transform='translate(-50%,-50%)'; F.style.opacity='1'; }
     F.scrollTop=0; setTimeout(function(){ try{ window.dispatchEvent(new Event('resize')); }catch(e){} },80); }
-  function closeMoved(){ if(!mv) return; var m=mv; mv=null; window.__mtkOpen=false; m.el.classList.remove('mono-full'); (m.opened||[]).forEach(function(d){ d.open=false; }); if(m.ph.parentNode) m.ph.parentNode.insertBefore(m.el,m.ph); m.ph.remove();
-    F.classList.remove('mtk-open'); var r=m.el.getBoundingClientRect(); if(r.width&&!RM){ var cx=innerWidth/2, cy=innerHeight/2; F.style.transform='translate(calc(-50% + '+(r.left+r.width/2-cx)+'px), calc(-50% + '+(r.top+r.height/2-cy)+'px)) scale('+Math.max(.06,r.width/F.offsetWidth).toFixed(3)+')'; }
-    F.style.opacity='0'; document.body.classList.remove('mono-focused'); setTimeout(function(){ if(!mv&&!window.__mtkOpen&&!(window.monoCur&&window.monoCur())){ F.hidden=true; F.innerHTML=''; F.style.transform=''; F.style.opacity=''; } },420);
-    setTimeout(function(){ try{ window.dispatchEvent(new Event('resize')); }catch(e){} },80); }
+  function closeMoved(){ if(!mv) return; var m=mv; mv=null; window.__mtkOpen=false; (m.opened||[]).forEach(function(d){ d.open=false; });
+    var r=m.ph.getBoundingClientRect(); setTimeout(function(){ m.el.classList.remove('mono-full'); if(m.ph.parentNode) m.ph.parentNode.insertBefore(m.el,m.ph); m.ph.remove(); F.classList.remove('mtk-open'); },400); if(r.width&&!RM){ var cx=innerWidth/2, cy=innerHeight/2; F.style.transform='translate(calc(-50% + '+(r.left+r.width/2-cx)+'px), calc(-50% + '+(r.top+r.height/2-cy)+'px)) scale('+Math.max(.06,r.width/F.offsetWidth).toFixed(3)+')'; }
+    F.style.opacity='0'; document.body.classList.remove('mono-focused'); setTimeout(function(){ if(!mv&&!window.__mtkOpen&&!(window.monoCur&&window.monoCur())){ F.hidden=true; F.innerHTML=''; F.style.transform=''; F.style.opacity=''; } },440);
+    setTimeout(function(){ try{ window.dispatchEvent(new Event('resize')); }catch(e){} },480); }
   window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&mv){ e.stopImmediatePropagation(); closeMoved(); } },true);
   if(S) S.addEventListener('click',function(){ if(mv) closeMoved(); });
   window.monoMove=openMoved;
@@ -8520,12 +8523,93 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     el.addEventListener('click',function(e){ if(el.classList.contains('mono-full')) return; if(e.target.closest('a,button,input,select,summary,.pc-seg,.bh-tile,.vcard,.kpi')) return; openMoved(el,title); }); }
   function scCockpit(){ var f=document.getElementById('z-perf'); if(!f) return; var money=f.querySelector(':scope > #sc-sec-1 > .pf-kpi-card'); if(!money){ f.classList.remove('mono-cock'); return; } f.classList.add('mono-cock');
     tile(money,'The money','₹ · net of charges'); var curve=f.querySelector(':scope > #sc-sec-1 > .pf-grid'); if(curve){ tile(curve,'Booked P&L across the year'); var inner=curve.querySelector('.card > .c-lbl'); if(inner) inner.style.display='none'; }
-    tile(f.querySelector(':scope > #sc-sec-hold'),'What you hold'); tile(f.querySelector(':scope > #sc-sec-bstrip'),'Your trading habits'); tile(f.querySelector(':scope > #sc-sec-3'),'Where the money went','₹ booked per name');
+    tile(f.querySelector(':scope > #sc-sec-hold'),'What you hold'); tile(f.querySelector(':scope > #sc-sec-bstrip'),'Your trading habits'); var nm=f.querySelector(':scope > #sc-sec-3'); if(nm){ tile(nm,'Where the money went','₹ booked per name'); var il=nm.querySelector('.card > .c-lbl:not(.mono-lbl)'); if(il) il.style.display='none'; }
     var more=f.querySelector(':scope > details.sc-more'); if(more){ more.open=true; tile(more,'Detail','wins and losses · how you traded · still open · closed trades'); } }
 
   function decorate3(){ learnSec(); tagSectors(); groupNames(); legend(); simpleToggle(); engineMore(); attnHint(); scCockpit(); }
   var pending=false; new MutationObserver(function(){ if(pending) return; pending=true; setTimeout(function(){ pending=false; try{ decorate3(); }catch(e){} },200); }).observe(document.body,{childList:true,subtree:true});
   try{ decorate3(); }catch(e){}
+})();
+</script>
+
+<style id="mono-skin-4">
+  /* ── mono pass 4 (261016c): the clip fixes ── */
+  .mono-ph{ border:1px dashed rgba(255,255,255,.08); border-radius:13px; }
+  .mh-sec .bd-c{ display:flex !important; flex-wrap:wrap; gap:4px 6px; }
+  /* the "New brief" strip on Research (its rules were lost in the build stamp) */
+  .rs-nb{ display:flex; align-items:baseline; gap:10px; padding:9px 14px; margin:0 0 10px; border:1px solid var(--border); border-left:3px solid var(--cyan); border-radius:10px; text-decoration:none; color:inherit; background:var(--glass); }
+  .rs-nb:hover{ border-color:rgba(255,255,255,.3); } .rs-nb-k{ font:700 10px var(--font-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--cyan); white-space:nowrap; }
+  .rs-nb-t{ flex:1; font-weight:600; font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .rs-nb-d{ font:11px var(--font-mono); color:var(--faint); white-space:nowrap; }
+  /* catalysts: the card grows to its items instead of cropping them */
+  @media(min-width:1001px){ .rb{ grid-template-rows:auto minmax(0,1fr); height:max(640px, calc(100vh - 250px)); } .rb > .rb-cat{ height:auto; min-height:190px; } }
+  .htl-is{ max-height:150px; } .rb-cat .rb-body{ overflow:visible; }
+  /* the bare unlock input is retired; the lock button opens the gate */
+  #unlock-input, #unlock-msg{ display:none !important; }
+  .mono-gate{ position:fixed; inset:0; z-index:99998; display:flex; align-items:center; justify-content:center; padding:24px; background:radial-gradient(62% 52% at 50% 34%,rgba(11,15,28,.9),rgba(6,7,12,.94) 72%,rgba(4,5,8,.96)); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); opacity:0; pointer-events:none; transition:opacity .35s; }
+  .mono-gate.on{ opacity:1; pointer-events:auto; } .mono-gate[hidden]{ display:none; }
+  .mono-gate .mg-card{ position:relative; z-index:1; width:min(92vw,394px); padding:38px 34px 24px; border-radius:18px; text-align:center; background:linear-gradient(158deg,rgba(255,255,255,.06),rgba(255,255,255,.01) 42%),rgba(8,10,16,.8); border:1px solid rgba(255,255,255,.12); box-shadow:0 34px 90px rgba(0,0,0,.62), inset 0 1px 0 rgba(255,255,255,.08); transform:translateY(8px) scale(.98); transition:transform .4s var(--ease); }
+  .mono-gate.on .mg-card{ transform:none; }
+  .mono-gate .mg-disc{ width:34px; height:34px; border-radius:50%; margin:0 auto 16px; background:radial-gradient(circle at 32% 28%,#ffffff,#dbe6ff 50%,#4d5a7a 120%); box-shadow:0 0 26px rgba(219,230,255,.35); }
+  .mono-gate .mg-eye{ font:600 9.5px var(--font-mono); letter-spacing:.22em; color:rgba(243,245,249,.4); text-transform:uppercase; }
+  .mono-gate h3{ font:800 21px var(--font-sans); color:#f3f5f9; margin:11px 0 4px; letter-spacing:-.02em; } .mono-gate p{ font:12.5px var(--font-sans); color:rgba(243,245,249,.55); margin:0 0 20px; }
+  .mono-gate form{ display:flex; gap:8px; } .mono-gate input{ flex:1; min-width:0; background:rgba(0,0,0,.34); border:1px solid rgba(255,255,255,.13); border-radius:11px; padding:11px 14px; color:#f3f5f9; font:14px var(--font-sans); outline:none; }
+  .mono-gate input:focus{ border-color:rgba(219,230,255,.6); box-shadow:0 0 0 3px rgba(219,230,255,.14); }
+  .mono-gate form button{ background:#f3f5f9; color:#070910; border:0; border-radius:11px; padding:0 16px; font:700 13px var(--font-sans); cursor:pointer; white-space:nowrap; }
+  .mono-gate .mg-msg{ height:15px; margin-top:12px; font:11px var(--font-mono); color:#c9d6f5; }
+  .mono-gate .mg-guest{ margin-top:14px; background:none; border:1px solid rgba(255,255,255,.14); border-radius:11px; padding:9px 16px; width:100%; color:rgba(243,245,249,.7); font:12.5px var(--font-sans); cursor:pointer; } .mono-gate .mg-guest:hover{ border-color:rgba(219,230,255,.55); color:#f3f5f9; }
+  .mono-gate .mg-foot{ margin-top:13px; font:600 8.5px var(--font-mono); letter-spacing:.14em; color:rgba(243,245,249,.3); text-transform:uppercase; }
+  .mono-gate.bad .mg-card{ animation:pg-shake .4s; }
+  /* the unlocked Tickers library: the same card as the public one, plus its fib status */
+  #z-tickers .tcard:not(.tkpub){ gap:6px; padding:10px 11px; } #z-tickers .tcard:not(.tkpub) .th{ align-items:baseline; } #z-tickers .tcard:not(.tkpub) .th .sym{ font-size:13px; }
+  #z-tickers .tcard:not(.tkpub) .th .sec{ display:none; }
+  .tcard .mlib-r{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; } .tcard .mlib .tpx{ font:700 15px var(--font-mono); } .tcard .mlib .dm{ font:700 11px var(--font-mono); }
+  .tcard .mlib .dm.up{ color:var(--pos); } .tcard .mlib .dm.dn{ color:var(--neg); } .tcard .mlib .dm.flat{ color:var(--mut); }
+  .tcard .mlib .tk-secline{ font:10px var(--font-mono); color:var(--mut); text-transform:uppercase; letter-spacing:.04em; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #z-tickers .tcard:not(.tkpub) .tfib{ margin-top:2px; display:inline-block; padding:2px 7px; border-radius:999px; border:1px solid var(--hair); font-size:8.5px; }
+  #z-tickers .tk-secchip .sw{ background:var(--sx) !important; box-shadow:0 0 6px var(--sx); }
+  .mono-leg span{ text-transform:capitalize; }
+</style>
+
+<script id="mono-layer-4">
+(function(){
+  var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+  var TKRE=/^ticker\/([A-Z0-9&\-]+)\//;
+  /* ── 1. the gate, reachable again: the lock button opens it when the desk is locked ── */
+  var G=document.createElement('div'); G.className='mono-gate'; G.hidden=true;
+  G.innerHTML='<div class="mg-card"><div class="mg-disc"></div><div class="mg-eye">Sparcho · Trading Desk</div><h3>Unlock the desk</h3><p>Your book, ledger and levels stay sealed until you do.</p>'+
+    '<form><input type="password" placeholder="password" autocomplete="current-password" spellcheck="false"><button type="submit">Unlock →</button></form><div class="mg-msg"></div>'+
+    '<button type="button" class="mg-guest">Stay as guest</button><div class="mg-foot">remembered on this device for 14 days</div></div>';
+  document.body.appendChild(G); var gi=G.querySelector('input'), gm=G.querySelector('.mg-msg'), A=null;
+  function gateOpen(){ G.hidden=false; requestAnimationFrame(function(){ G.classList.add('on'); }); if(window.monoAscii&&!A) A=window.monoAscii(G,{cell:16,fps:16,alpha:.42}); gi.value=''; gm.textContent=''; setTimeout(function(){ gi.focus(); if(window.monoVapour) window.monoVapour(G.querySelector('h3')); },80); }
+  function gateClose(){ G.classList.remove('on'); setTimeout(function(){ G.hidden=true; if(A){ A.stop(); A=null; } },380); }
+  G.querySelector('.mg-guest').addEventListener('click',gateClose); G.addEventListener('click',function(e){ if(e.target===G) gateClose(); });
+  G.querySelector('form').addEventListener('submit',function(e){ e.preventDefault(); var pw=gi.value||''; if(!pw) return; gm.textContent='checking…';
+    (window.__eqReady||Promise.resolve()).then(function(){ return window.__eqTryPw?window.__eqTryPw(pw):false; }).then(function(ok){
+      if(ok){ gm.textContent=''; try{ window.__gateRemember&&window.__gateRemember(pw); }catch(e){} window.__autoPw=pw; window.__manualLock=false; document.body.classList.remove('locked'); gateClose(); }
+      else { gm.textContent='incorrect — try again'; G.classList.add('bad'); gi.select(); setTimeout(function(){ G.classList.remove('bad'); },420); } }); });
+  var lockBtn=document.getElementById('lock'); if(lockBtn) lockBtn.addEventListener('click',function(e){ if(document.body.classList.contains('locked')){ e.stopImmediatePropagation(); e.preventDefault(); gateOpen(); } },true);
+  window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&G.classList.contains('on')){ e.stopImmediatePropagation(); gateClose(); } },true);
+  window.monoGate=gateOpen;
+
+  /* ── 2. one truth about the lock: if a pane rendered locked while the desk is unlocked, render again ── */
+  var lastRec=0;
+  var recN=0;
+  function reconcile(){ var D=window.DATA; if(!D||typeof renderAll!=='function') return; if(!D._unlocked||recN>=4||document.body.classList.contains('mono-focused')) return;
+    var conv=document.getElementById('rs-conv-body'), convLocked=!!(conv&&/unlock to read/i.test(conv.textContent||'')), perfLocked=!!document.querySelector('#z-perf .pf-state-locked'), bodyLocked=document.body.classList.contains('locked');
+    if((convLocked||perfLocked||bodyLocked)&&Date.now()-lastRec>8000){ lastRec=Date.now(); recN++; document.body.classList.remove('locked'); setTimeout(function(){ try{ renderAll(); }catch(e){} },60); } }
+
+  /* ── 3. the unlocked Tickers library wears the same card as the public one ── */
+  function libCards(){ var P=window.PRICES||{}, N=window.TK_NAME||{};
+    document.querySelectorAll('#z-tickers a.tcard:not(.tkpub):not([data-mlib])').forEach(function(a){ var m=TKRE.exec(a.getAttribute('href')||''); var t=m?m[1]:null; var th=a.querySelector('.th'); if(!t||!th) return; a.dataset.mlib='1'; var p=P[t]; if(!p&&!N[t]) return;
+      var ch=(p&&p.day_chg_pct!=null)?+p.day_chg_pct:null, mv=ch==null?'':'<span class="dm '+(ch>0?'up':(ch<0?'dn':'flat'))+'">'+(ch>0?'▲ +':(ch<0?'▼ ':''))+ch.toFixed(2)+'%</span>';
+      var px=(p&&p.last!=null)?'₹'+Number(p.last).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
+      var d=document.createElement('div'); d.className='mlib'; d.innerHTML='<div class="mlib-r"><span class="tpx">'+px+'</span>'+mv+'</div>'+(N[t]?'<div class="tk-secline">'+esc(N[t])+'</div>':''); a.insertBefore(d,a.querySelector('.tfib')); });
+    document.querySelectorAll('#z-tickers .tk-secchip:not([data-msec])').forEach(function(c){ c.dataset.msec='1'; var nm=(c.textContent||'').split('·')[0].trim(); if(!nm||/^all/i.test(nm)) return; if(window.monoHue) c.style.setProperty('--sx',window.monoHue(nm)); }); }
+
+  function unstick(){ document.querySelectorAll('.mono-vap').forEach(function(c){ if(!c.__live) c.remove(); }); document.querySelectorAll('.mono-vap-hide').forEach(function(h){ var par=h.parentElement; if(!par||!par.querySelector(':scope > .mono-vap')) h.classList.remove('mono-vap-hide'); }); }
+  function decorate4(){ reconcile(); libCards(); unstick(); }
+  var pending=false; new MutationObserver(function(){ if(pending) return; pending=true; setTimeout(function(){ pending=false; try{ decorate4(); }catch(e){} },240); }).observe(document.body,{childList:true,subtree:true});
+  try{ decorate4(); }catch(e){}
 })();
 </script>
 </body></html>
