@@ -1,0 +1,357 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DR — VA Tech Wabag (WABAG) Deep-Dive, with the Indian water map · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">DR — VA Tech Wabag (WABAG) Deep-Dive, with the Indian water map</h1>
+    <div class="hmeta"><b>2026-10-10</b> &middot; ticker <b>WABAG</b> &middot; status <b>active</b></div>
+    
+  </div>
+  <div class="body"><p><strong>Date:</strong> 10 Oct 2026 · <strong>Price used:</strong> ₹1,936.80 (NSE close 09 Oct 2026) · <strong>Mcap:</strong> ~₹12,100 Cr · <strong>Next hard catalyst:</strong> Q2 FY27 results, est. ~6 Nov (not yet announced; last year 7–8 Nov)</p>
+<hr>
+<h3>§1 Executive summary</h3>
+<p>&quot;Water should do well&quot; is true — but in India in 2026 the market is paying for <strong>who signs the cheque</strong>, not for water.</p>
+<p>Wabag and Denta sit on the same theme and opposite sides of that line:</p>
+<ul>
+<li><strong>Wabag</strong> is paid by multilateral lenders (JICA, ADB, EIB, World Bank), Gulf sovereign utilities (Saudi SWA/NWC,</li>
+</ul>
+<p>  Kuwait MEWRE), central schemes and private industry (Reliance, BPCL, GAIL). It has publicly stopped bidding for</p>
+<p>  state-paid JJM work. Result: record <strong>₹19,394 Cr order book (~4.7x revenue)</strong>, revenue +20%, **net cash ₹965 Cr for</p>
+<p>  14 straight quarters<strong>, AA-/Stable rating, every covering broker at Buy. Stock </strong>+48% YTD** in a market that is down ~14%.</p>
+<ul>
+<li><strong>Denta</strong> is paid by one state government whose finance department says it is out of borrowing room. Result: two</li>
+</ul>
+<p>  years of negative operating cash flow, 380 working-capital days, Q1 profit −40%, stock −23% YTD.</p>
+<p><strong>But Wabag is not a clean &quot;buy the quality&quot; call at ₹1,937.</strong> Three things the headline hides:</p>
+<ol>
+<li><strong>Q1&#x27;s margin was flattered by the rupee.</strong> Reported EBITDA margin 13.1% <em>includes</em> a ₹36.8 Cr forex gain. Strip it</li>
+</ol>
+<p>   out and core EBITDA was ~₹80 Cr, <strong>~9% margin vs ~15% a year earlier</strong>. Forex + other income + associates were ~49% of</p>
+<p>   Q1 pre-tax profit. A weak rupee (≈95–97/$) helps; a rebound would reverse it.</p>
+<ol>
+<li><strong>Cash conversion has slipped:</strong> FY26 operating cash flow ₹207 Cr = 0.56x PAT (FY25: ₹355 Cr, 1.2x). Debtor days</li>
+</ol>
+<p>   ~234; non-current receivables rising (₹595 → ₹725 Cr in six months to Sep-25).</p>
+<ol>
+<li><strong>~35–40% of the order book is Middle East</strong>, during an active US–Iran conflict with Hormuz disrupted. Management</li>
+</ol>
+<p>   says no material impact and has issued force-majeure letters; the stock has fallen 16.5% from its 11 Sep high as</p>
+<p>   that escalated.</p>
+<p><strong>Verdict line.</strong> Wabag is the best-quality listed water name in India and the one most likely to still be compounding in</p>
+<ol>
+<li>At ~30x trailing / ~25x forward it is priced for that, and it is in the middle of a pullback with momentum not yet</li>
+</ol>
+<p>turned. <strong>The better entry is lower (₹1,850–1,900 first, ₹1,680–1,775 if the market breaks), not a chase.</strong></p>
+<p>As a destination for money coming out of a state-paid water EPC, it is the right <em>kind</em> of water exposure; the question</p>
+<p>is only price and timing.</p>
+<hr>
+<h3>§2 Head-to-head: Wabag vs Denta</h3>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span><strong>VA Tech Wabag</strong></span><span><strong>Denta Water</strong></span></div>
+<div class="mdtr"><span>Mcap</span><span>~₹12,100 Cr</span><span>~₹694 Cr</span></div>
+<div class="mdtr"><span>Who pays</span><span>Multilateral-funded, Gulf sovereigns, central schemes, private industry</span><span>Govt of Karnataka ~84%</span></div>
+<div class="mdtr"><span>Geography</span><span>India ~51% / overseas ~49% of book; 25+ countries</span><span>100% Karnataka</span></div>
+<div class="mdtr"><span>Order book</span><span>₹19,394 Cr (~4.7x revenue), +33% YoY</span><span>~₹793 Cr (~3x revenue), shrank through Q4 FY26</span></div>
+<div class="mdtr"><span>Order inflow FY26</span><span>₹7,471 Cr (book-to-bill ~1.9x)</span><span>Minimal in Q4; July&#x27;s ₹65.6 Cr incl. a ₹44.7 Cr related-party sub-contract</span></div>
+<div class="mdtr"><span>Revenue FY26 / Q1 FY27</span><span>₹3,944 Cr (+20%) / ₹887 Cr (+21%)</span><span>₹250 Cr (+23%) / ₹59 Cr (−13%)</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>12–13% reported; <strong>~9% ex-forex in Q1</strong></span><span>30% FY26 → 22% Q1 (normalising down from very high)</span></div>
+<div class="mdtr"><span>PAT FY26 / Q1</span><span>₹371 Cr / ₹90 Cr (+37%)</span><span>₹61 Cr / ₹11 Cr (−40%)</span></div>
+<div class="mdtr"><span>Operating cash flow FY25 / FY26</span><span><strong>+₹355 / +₹207 Cr</strong></span><span><strong>−₹72 / −₹34 Cr</strong></span></div>
+<div class="mdtr"><span>Working capital</span><span>~108 net WC days (guide 100–110); debtor days ~234</span><span>~380 WC days (guided 95–120)</span></div>
+<div class="mdtr"><span>Net cash</span><span>₹965 Cr (ex-HAM), 14 quarters running</span><span>~₹150 Cr incl. investments, falling (₹200 Cr cash at FY25 → ₹91 Cr)</span></div>
+<div class="mdtr"><span>Credit rating</span><span>IND AA- / Stable, A1+</span><span>CARE BBB / Stable, A3+</span></div>
+<div class="mdtr"><span>Promoter</span><span>19.1% (Fundamental 10G Mittal 15.6%); no pledge; no open-market selling</span><span>71.9%; no pledge; lock-in ended Aug 2026</span></div>
+<div class="mdtr"><span>Institutions</span><span>FII ~18%, DII ~6% (MFs rising 2.8 → 5.5% in a year); Rekha Jhunjhunwala 8%</span><span>FII 0%, DII 0.3% — all exited</span></div>
+<div class="mdtr"><span>Coverage</span><span>9 brokers, all Buy, avg target ~₹2,324</span><span>None</span></div>
+<div class="mdtr"><span>Guidance record</span><span>Revenue: missed FY22–24, met FY25–26; net cash met 6 years</span><span>Missed three times running</span></div>
+<div class="mdtr"><span>Governance</span><span>No controversy found; ₹87 Cr customs demand contested</span><span>Chairman&#x27;s past DA case, family CFO, related-party orders</span></div>
+<div class="mdtr"><span>P/E (trailing)</span><span>~30x</span><span>~13x</span></div>
+<div class="mdtr"><span>P/B</span><span>4.7x</span><span>1.5x</span></div>
+<div class="mdtr"><span>YTD / 1Y</span><span>+48% / +36%</span><span>−23% / −42%</span></div>
+<div class="mdtr"><span>Daily volatility (1Y)</span><span>2.65%</span><span>3.01%</span></div>
+</div>
+<p><strong>Correlation of daily returns (last 250 sessions): 0.44.</strong> They share a theme, not a driver — Wabag trades on</p>
+<p>orders, the rupee and the Gulf; Denta trades on Karnataka&#x27;s cash and its own working capital.</p>
+<p><strong>What the gap in multiples is paying for.</strong> Denta&#x27;s 13x is cheap only if its receivables turn into cash at face value.</p>
+<p>Wabag&#x27;s 30x is expensive only if its ex-forex margin stays at 9%. The first is a question about a state budget;</p>
+<p>the second is a question about one quarter&#x27;s mix (EP→EPC shift, expected-credit-loss provisions that reverse on</p>
+<p>collection). The second is the easier problem to have.</p>
+<hr>
+<h3>§3 Business</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>What</span><span>Water-treatment technology + EPC/O&amp;M: seawater &amp; brackish desalination, sewage treatment, tertiary reuse (TTRO), industrial effluent &amp; ZLD, drinking water, sludge-to-energy. Newer: compressed biogas, ultra-pure water (semis, data centres), green hydrogen water</span></div>
+<div class="mdtr"><span>Models</span><span>EP, EPC, DBO, O&amp;M, BOOT, HAM</span></div>
+<div class="mdtr"><span>Footprint</span><span>25+ countries; 1,500+ plants; 125+ IP rights. Clusters: India (+ Nepal, Sri Lanka, Malaysia, Vietnam), Europe (Austria, Turkey, Germany, Romania), Middle East &amp; Africa (Saudi, Oman, UAE, Egypt, Libya, Nigeria, Zambia; Kuwait from 2026)</span></div>
+<div class="mdtr"><span>Mix Q1 FY27</span><span>EPC 82% / O&amp;M 18% · municipal 75% / industrial 25% · India 48% / overseas 52% (overseas revenue +48% YoY; India +1%)</span></div>
+<div class="mdtr"><span>Order book mix</span><span>EPC 66% / O&amp;M 34% · municipal 88% / industrial 12% · Middle East ~35–40%</span></div>
+</div>
+<p><strong>Largest projects:</strong> Perur 400 MLD desal, Chennai (JICA; JV ~₹4,400 Cr, &gt;75% complete, due ~Mar 2027) · Yanbu 300 MLD</p>
+<p>desal, Saudi (₹2,332 Cr) · Al Haer 200 MLD STP, Saudi (₹1,233 Cr) · Kuwait Doha SWRO-II 272 MLD (Jun 2026, ~₹1,000–1,415 Cr</p>
+<p>Wabag share) · Indosol 100 MLD desal, AP (₹960 Cr) · Lusaka wastewater, Zambia (₹853 Cr) · Chennai TTRO PPP and ADB-funded</p>
+<p>looped water grid (both &quot;Mega&quot;, Mar 2026).</p>
+<p><strong>2026 wins:</strong> Saudi Aljouf BWRO (≤₹700 Cr), BPCL Bina ZLD, CMWSSB TTRO PPP (18.5 yrs O&amp;M), Chennai looped grid (ADB),</p>
+<p>Kutaisi Georgia (EIB), Delhi Jal Board DBO, Ghaziabad CBG JV, Ajman Phase 3, Kuwait Doha SWRO-II, Vienna Donauinsel,</p>
+<p>BWSSB two STPs, Reliance Jamnagar repeat. Preferred bidder on Saudi Hadda ISTP; ~₹600 Cr of Libya framework orders</p>
+<p>removed from the book pending letters of credit.</p>
+<p><strong>Pipeline:</strong> ~$2–3 bn across India, Middle East and Africa (~$1–1.5 bn India). Saudi has declared 2027 its</p>
+<p>&quot;Year of Water&quot;; the NWC long-term O&amp;M tender is still to come.</p>
+<hr>
+<h3>§4 Financials (consolidated, ₹ Cr)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>FY22</span><span>FY23</span><span>FY24</span><span>FY25</span><span>FY26</span></div>
+<div class="mdtr"><span>Revenue</span><span>2,979</span><span>2,960</span><span>2,856</span><span>3,294</span><span>3,944</span></div>
+<div class="mdtr"><span>Operating profit (ex-forex)</span><span>234</span><span>318</span><span>366</span><span>422</span><span>478</span></div>
+<div class="mdtr"><span>OPM (ex-forex)</span><span>8%</span><span>11%</span><span>13%</span><span>13%</span><span>12.1%</span></div>
+<div class="mdtr"><span>Reported EBITDA (incl. forex)</span><span>–</span><span>–</span><span>–</span><span>430</span><span>524 (13.3%)</span></div>
+<div class="mdtr"><span>PAT</span><span>132</span><span>11*</span><span>250</span><span>295</span><span>371</span></div>
+<div class="mdtr"><span>Cash from operations</span><span>12</span><span>85</span><span>134</span><span>355</span><span>207</span></div>
+<div class="mdtr"><span>Debtor days</span><span>162</span><span>186</span><span>254</span><span>223</span><span>234</span></div>
+<div class="mdtr"><span>ROCE</span><span>13%</span><span>20%</span><span>20%</span><span>20%</span><span>21%</span></div>
+</div>
+<p>*FY23 includes a ~₹226 Cr one-off charge (believed to be a receivables provision; project not verified).</p>
+<p><strong>Last six quarters:</strong></p>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>Q4 FY25</span><span>Q1 FY26</span><span>Q2 FY26</span><span>Q3 FY26</span><span>Q4 FY26</span><span>Q1 FY27</span></div>
+<div class="mdtr"><span>Revenue</span><span>1,156</span><span>734</span><span>834</span><span>961</span><span>1,414</span><span>887</span></div>
+<div class="mdtr"><span>Reported EBITDA margin</span><span>12.2%</span><span>13.0%</span><span>~14.5%</span><span>13.6%</span><span>12.5%</span><span>13.1%</span></div>
+<div class="mdtr"><span>OPM ex-forex</span><span>12%</span><span>13%</span><span>11%</span><span>13%</span><span>11%</span><span><strong>9%</strong></span></div>
+<div class="mdtr"><span>PAT</span><span>100</span><span>66</span><span>85</span><span>91</span><span>128</span><span>90</span></div>
+</div>
+<p><strong>Q1 FY27 (12 Aug filing):</strong> revenue ₹886.8 Cr (+21%); forex gain ₹36.8 Cr (vs −₹13.6 Cr); other income ₹15.2 Cr;</p>
+<p>other expenses ₹51.8 Cr (vs ₹35.2 Cr — management cites expected-credit-loss provisions that reverse on collection);</p>
+<p>PBT ₹118 Cr; PAT ₹90 Cr (+37%). Net cash ex-HAM ₹965 Cr; gross cash ₹1,082 Cr; net WC days 108 (≈130 three years ago).</p>
+<p>Management treats forex as operational because it invoices in foreign currency.</p>
+<p><strong>Guidance (3–5 yr):</strong> revenue CAGR 15–20% · EBITDA 13–15% (13–14% realistic for FY27) · order book ≥3x revenue ·</p>
+<p>ROCE &gt;20%, ROE &gt;15% · O&amp;M ~20% of revenue · net WC 100–110 days · industrial mix to 20–25% · net cash positive.</p>
+<p>&quot;Vridhi 2.0&quot; five-year plan due at the May 2027 investor meet. <strong>Read:</strong> revenue and orders are running ahead of</p>
+<p>guidance; core (ex-forex) margin is not.</p>
+<hr>
+<h3>§5 Valuation (at ₹1,936.80)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Trailing P/E</span><span>~30.4x (TTM EPS ₹63.4)</span></div>
+<div class="mdtr"><span>Forward P/E</span><span>~24.6x on FY27E EPS ~₹79</span></div>
+<div class="mdtr"><span>EV / EBITDA</span><span>~20x reported TTM; <strong>~25x ex-forex</strong> (EV ~₹11,140 Cr)</span></div>
+<div class="mdtr"><span>P/B</span><span>4.7x (book ₹412)</span></div>
+<div class="mdtr"><span>Consensus</span><span>9 analysts, all Buy; average target ~₹2,324 (+20%)</span></div>
+</div>
+<p><strong>Broker targets:</strong> Motilal Oswal ₹2,529 (Aug-26, 28x FY28E) · ICICI Sec ₹2,410 (Aug-26) · Axis ₹2,105 (Aug-26) ·</p>
+<p>Geojit ₹1,870 · Sharekhan ₹1,800 (Feb-26) · Ventura ₹1,739 (Jan-26).</p>
+<p>The bull case needs FY28E earnings to arrive <em>and</em> a ~28x multiple to hold. On ex-forex earnings the stock is less cheap</p>
+<p>than the forward P/E suggests.</p>
+<hr>
+<h3>§6 The Indian water map — who else is worth playing</h3>
+<p><strong>The sorting rule:</strong> paid by multilateral / Gulf / central / private industry / retail → getting paid.</p>
+<p>Paid by state JJM or state nodal agencies → stuck. Contractors including Wabag, Ion Exchange, NCC and L&amp;T are all</p>
+<p>pivoting away from state-paid JJM bids.</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Name</span><span>What</span><span>Payer</span><span>Mcap ₹Cr</span><span>P/E</span><span>Growth FY26 / Q1</span><span>Net cash (debt) ₹Cr</span><span>YTD</span><span>Read</span></div>
+<div class="mdtr"><span><strong>Wabag</strong></span><span>Treatment EPC/O&amp;M</span><span>Multilateral, Gulf, central, private</span><span>12,100</span><span>30</span><span>+19% / +21%</span><span>965</span><span>+48%</span><span><strong>Best quality; buy on weakness</strong></span></div>
+<div class="mdtr"><span><strong>Kirloskar Brothers</strong></span><span>Pumps (EPC only 3%)</span><span>Mixed; 36% overseas</span><span>13,220</span><span>35</span><span>+1% / +13%</span><span>633</span><span>+4%</span><span><strong>Clean: net cash, positive OCF, 65 WC days</strong></span></div>
+<div class="mdtr"><span><strong>Finolex Inds</strong></span><span>PVC pipes (agri)</span><span>Retail</span><span>9,350</span><span>15</span><span>−1% / −15%</span><span>2,018</span><span>−13%</span><span><strong>Value: cheap + cash pile; agri volumes weak</strong></span></div>
+<div class="mdtr"><span>Supreme / Astral</span><span>Pipes (plumbing)</span><span>Retail</span><span>44,090 / 37,840</span><span>43 / 66</span><span>+8% / +13%</span><span>558 / 695</span><span>+3% / +1%</span><span>Clean but expensive, partly water</span></div>
+<div class="mdtr"><span>KSB</span><span>Pumps (industrial, nuclear)</span><span>Industrial/power</span><span>13,650</span><span>~55</span><span>+6%</span><span>268</span><span>+4%</span><span>Clean, pricey</span></div>
+<div class="mdtr"><span>Enviro Infra (EIEL)</span><span>Treatment EPC, HAM</span><span>UP Jal Nigam, Namami Gange, private RE</span><span>3,160</span><span>17.5</span><span>+6% / +49%</span><span>(181)</span><span>−13%</span><span>Watch: OCF negative 3 yrs; drifting to batteries</span></div>
+<div class="mdtr"><span>Electrosteel</span><span>DI pipes</span><span>State JJM, 20% export</span><span>4,645</span><span>39</span><span>−19% / −9%</span><span>(723)</span><span>−4%</span><span>Watch: purest JJM-recovery bet, H2-loaded</span></div>
+<div class="mdtr"><span>WPIL</span><span>Pumps/EPC</span><span>77% overseas; JJM dues</span><span>4,120</span><span>24</span><span>+2% / +32%</span><span>~0</span><span>+3%</span><span>Watch: MP Jal Nigam 3-yr debarment</span></div>
+<div class="mdtr"><span>Ion Exchange</span><span>Treatment, resins</span><span>Private industrial, Gulf</span><span>4,820</span><span>49</span><span>+7% / +20%</span><span>(263)</span><span>+3%</span><span>Avoid until margin recovers (4.5% Q1)</span></div>
+<div class="mdtr"><span>EMS</span><span>Treatment EPC</span><span>UP, DJB, Namami Gange</span><span>1,790</span><span>26</span><span>−25% / −34%</span><span>(124)</span><span>−26%</span><span>Avoid: revenue collapse, 287 WC days</span></div>
+<div class="mdtr"><span>Shakti / Oswal Pumps</span><span>Solar pumps (KUSUM)</span><span>State nodal agencies</span><span>5,170 / 2,910</span><span>24 / 9</span><span>—</span><span>—</span><span>−42% / −52%</span><span>Avoid: 175–229 receivable days</span></div>
+<div class="mdtr"><span>Concord Enviro</span><span>ZLD</span><span>Private, export</span><span>527</span><span>n.m.</span><span>−6% / −17%</span><span>(106)</span><span>−43%</span><span>Avoid: losses, CFO exit Jul-26</span></div>
+<div class="mdtr"><span>VPRPL</span><span>JJM EPC</span><span>Rajasthan PHED</span><span>~340</span><span>loss</span><span>−32% / −50%</span><span>(649)</span><span>−48%</span><span>Avoid: what state-JJM failure looks like</span></div>
+<div class="mdtr"><span><strong>Denta</strong></span><span>JJM/irrigation EPC</span><span>Karnataka</span><span>694</span><span>13</span><span>+23% / −13%</span><span>~150</span><span>−23%</span><span>Prove-it: H1 cash flow (mid-Nov) decides</span></div>
+</div>
+<p>Not water plays despite the label: Welspun Corp (US line pipe), Ratnamani (oil &amp; gas), Jindal Saw (export/seamless-led</p>
+<p>rally; domestic DI weak), Thermax (water is small; Q1 cost overrun), Triveni (sugar/ethanol). No listed Indian pure play</p>
+<p>in water meters or membranes.</p>
+<p><strong>Structural tailwinds not yet in revenue:</strong> draft Liquid Waste Management Rules (20% wastewater reuse by FY28, 50% by</p>
+<p>FY31 for industry and bulk users — final notification not confirmed); data-centre water demand (~150 bn L in 2025 →</p>
+<p>~358 bn L by 2030); Gulf desalination (Saudi &quot;Year of Water&quot; 2027). These favour Wabag, Ion Exchange (once margins mend)</p>
+<p>and Kirloskar — not state EPCs.</p>
+<p><strong>Shortlist by payer quality and cash conversion:</strong> Wabag → Kirloskar Brothers → Finolex Industries (value) →</p>
+<p>Supreme/Astral (quality at a price) → KSB.</p>
+<hr>
+<h3>§7 Technical read</h3>
+<p><strong>Banked ladders (level-ID read 08 Aug 2026):</strong> A: 0 = 408.45 → 1 = 972.45 · B: 0 = 1,205.22 → 1 = 1,422.32</p>
+<p>(B hinged on A-1.414). Zones from that read:</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Band</span><span>Role</span></div>
+<div class="mdtr"><span>2,098.6 – 2,207.8</span><span>Overhead shelf (B-4.115, A-3.115, B-4.618, Supertrend then)</span></div>
+<div class="mdtr"><span>1,917.6 – 2,019.5</span><span>The August decision band — <strong>price is now at its bottom edge</strong></span></div>
+<div class="mdtr"><span><strong>1,851.9 – 1,896.4</strong></span><span><strong>First support — B-3.115 1,881.5 + A-2.618 1,885.0 (cross-anchor twin)</strong></span></div>
+<div class="mdtr"><span><strong>1,677.7 – 1,773.6</strong></span><span><strong>Bull-market floor</strong> (20W SMA / 21W EMA band + B-2.618)</span></div>
+<div class="mdtr"><span>1,601 – 1,664</span><span>Next strong band</span></div>
+</div>
+<p><strong>Tape now (09 Oct close 1,936.8):</strong> RSI(14) 41.2 · 20-day avg 2,056 · 50-day avg 2,020 (price −4% below) · 200-day avg</p>
+<p>1,607 (price +20% above, 200-day rising) · ATR 3.6%/day · 10-day volume 0.68x the 50-day · new 30-day low on 09 Oct</p>
+<p>(1,921) · 16.5% off the 11 Sep all-time high (2,319). Daily trend is down inside a weekly/monthly uptrend — a pullback,</p>
+<p>not (yet) a breakdown. Note the 29 Sep spike (+5.9% on 703k, ~2.5x normal) failed within a week.</p>
+<p><strong>How this setup has resolved before</strong> — every case across our 90 tracked names since 2021 with RSI 37–46, 0–8% below the</p>
+<p>50-day, &gt;10% above a rising 200-day, 12–22% off the 60-day high (2,466 cases):</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Touch within…</span><span>5 sessions</span><span>10 sessions</span><span>20 sessions</span></div>
+<div class="mdtr"><span>2,020 — 50-day (+4.3%)</span><span>44%</span><span>56%</span><span>69%</span></div>
+<div class="mdtr"><span>2,056 — 20-day (+6.2%)</span><span>29%</span><span>43%</span><span>58%</span></div>
+<div class="mdtr"><span>2,100 — shelf base (+8.4%)</span><span>17%</span><span>31%</span><span>47%</span></div>
+<div class="mdtr"><span>2,208 — shelf top (+14%)</span><span>5%</span><span>13%</span><span>27%</span></div>
+<div class="mdtr"><span>2,319 — ATH (+19.7%)</span><span>1%</span><span>6%</span><span>16%</span></div>
+<div class="mdtr"><span><strong>1,885 — cross-anchor twin (−2.7%)</strong></span><span>54%</span><span>67%</span><span>77%</span></div>
+<div class="mdtr"><span>1,852 — bottom of first support (−4.4%)</span><span>39%</span><span>55%</span><span>69%</span></div>
+<div class="mdtr"><span>1,774 — top of bull floor (−8.4%)</span><span>14%</span><span>28%</span><span>45%</span></div>
+<div class="mdtr"><span>1,678 — bottom of bull floor (−13.4%)</span><span>4%</span><span>11%</span><span>23%</span></div>
+</div>
+<p>Median close-to-close is ~flat at 5/10/20 sessions; 51% are higher after 20. **A dip into ₹1,850–1,885 is more likely than not</p>
+<p>before any recovery** — which is where a patient entry sits.</p>
+<hr>
+<h3>§8 Scenarios</h3>
+<p><strong>Next 2–4 weeks (into Q2 results)</strong></p>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>Path</span><span>Prob.</span><span>Tells</span></div>
+<div class="mdtr"><span><strong>W1 Test and hold</strong></span><span>Dips into <strong>1,852–1,896</strong>, holds the cross-anchor twin, rebuilds toward 2,020–2,056</span><span><strong>40%</strong></span><span>Long lower wick near 1,880 on rising volume; RSI higher low</span></div>
+<div class="mdtr"><span><strong>W2 Straight reclaim</strong></span><span>Back above the 50-day (2,020) without a lower low; tests 2,100</span><span><strong>25%</strong></span><span>Close &gt;2,020 on volume; a large order (Saudi Hadda/NWC)</span></div>
+<div class="mdtr"><span><strong>W3 Market-led flush</strong></span><span>Breaks 1,850 → <strong>1,678–1,774</strong> bull floor</span><span><strong>25%</strong></span><span>Nifty new lows, rupee/Hormuz shock, Gulf payment headlines</span></div>
+<div class="mdtr"><span><strong>W4 Breakdown</strong></span><span>Weekly close below 1,678 — trend change</span><span><strong>10%</strong></span><span>Ex-forex margin disappoints again + order slowdown</span></div>
+</div>
+<p><strong>Q2 FY27 (~6 Nov):</strong> revenue and orders likely fine (Perur, Yanbu and Kuwait executing). The swing factor is the</p>
+<p><strong>ex-forex EBITDA margin</strong> — back above ~12% re-rates; another ~9% with forex filling the gap is the bear trigger.</p>
+<p>Also watch other expenses/ECL, receivables and Q2 inflow.</p>
+<hr>
+<h3>§9 Catalysts</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>When</span><span>What</span><span>Direction</span></div>
+<div class="mdtr"><span>~by 21 Oct</span><span>Sep-quarter shareholding (MF/FII trend)</span><span>±</span></div>
+<div class="mdtr"><span>21 Oct / 27–28 Oct</span><span>RBI minutes / US FOMC</span><span>macro</span></div>
+<div class="mdtr"><span>Any time</span><span>Saudi Hadda ISTP conversion, NWC O&amp;M tender, Saudi 2027 awards, refinery/data-centre UPW orders</span><span>positive</span></div>
+<div class="mdtr"><span>Any time</span><span>Libya framework orders becoming effective (~₹600 Cr)</span><span>positive</span></div>
+<div class="mdtr"><span>Ongoing</span><span>Rupee: a rebound shrinks forex gains; further weakness flatters them</span><span>±</span></div>
+<div class="mdtr"><span>Ongoing</span><span>Iran/Hormuz escalation — Gulf execution, shipping, payments</span><span>negative tail</span></div>
+<div class="mdtr"><span>~6 Nov (est.)</span><span><strong>Q2 FY27 results</strong></span><span>ex-forex margin decides</span></div>
+<div class="mdtr"><span>~Mar 2027</span><span>Perur desal completion</span><span>positive (cash release)</span></div>
+</div>
+<hr>
+<h3>§10 Risks</h3>
+<ol>
+<li><strong>Earnings quality:</strong> ~49% of Q1 PBT from forex, other income and associates; ex-forex EBITDA fell ~27% YoY.</li>
+<li><strong>Gulf concentration</strong> (~35–40% of book) during an active conflict — force majeure, shipping, insurance, payment delays.</li>
+<li><strong>Currency:</strong> reported margins depend on a weak rupee.</li>
+<li><strong>Working capital:</strong> debtor days ~234, rising non-current receivables, OCF down 42% in FY26.</li>
+<li><strong>Fixed-price EPC desal</strong> (Perur, Yanbu, Kuwait) — execution and cost-overrun risk; EP→EPC shift lowers gross margin.</li>
+<li><strong>Valuation:</strong> ~30x trailing after +48% YTD; every broker already at Buy.</li>
+<li>Competition in Gulf desal (Acciona, Veolia/Suez, Chinese and Korean EPCs); Ion Exchange&#x27;s margin collapse hints at</li>
+</ol>
+<p>   industrial-water price pressure.</p>
+<ol>
+<li>Low promoter holding (19%); ₹87 Cr customs demand contested.</li>
+</ol>
+<hr>
+<h3>Sources</h3>
+<p>Wabag: <a href="https://nsearchives.nseindia.com/corporate/VATECH_12082026155944_SIBMOutcomeQ1FY27.pdf">NSE Q1 FY27 board outcome</a> ·</p>
+<p><a href="https://www.wabag.com/wp-content/uploads/2025/11/VA-Tech-Wabag_Investor-Presentation.pdf">Investor presentation Nov 2025</a> ·</p>
+<p><a href="https://www.multibagg.ai/market-pulse/articles/wabag-q1fy27-98040">Q1 FY27 (Multibagg)</a> ·</p>
+<p><a href="https://scanx.trade/stock-market-news/companies/va-tech-wabag-q1-results-net-profit-rises-37-yoy-to-901-mn/48084812">Q1 FY27 (ScanX)</a> ·</p>
+<p><a href="https://www.multibagg.ai/market-pulse/articles/wabag-fy26-94641">FY26 (Multibagg)</a> ·</p>
+<p><a href="https://scanx.trade/stock-market-news/companies/va-tech-wabag-fy26-results-net-profit-up-25-3-705-crore/48111347">FY26 (ScanX)</a> ·</p>
+<p><a href="https://www.business-standard.com/amp/markets/capital-market-news/va-tech-wabag-rises-after-q4-pat-jumps-28-yoy-to-rs-128-cr-126052200285_1.html">Q4 FY26 (Business Standard)</a> ·</p>
+<p><a href="https://www.investorstack.in/earnings-calls/wabag">Earnings-call notes (Investorstack)</a> ·</p>
+<p><a href="https://www.sahi.com/news/va-tech-wabag-hits-record-19-400-crore-order-book-providing-4x-revenue-visibility-3882-PE1_COR">Record order book (Sahi)</a> ·</p>
+<p><a href="https://www.businessoutreach.in/wabag-kuwait-desalination-project-1415-crore-contract/">Kuwait Doha SWRO-II (Business Outreach)</a> ·</p>
+<p><a href="https://indianinfrastructure.com/2026/03/13/wabag-bags-mega-ppp-order-from-cmwssb-towards-45-mld-ttro-plant-in-chennai-reinforcing-water-reuse-leadership/">CMWSSB TTRO PPP</a> ·</p>
+<p><a href="https://www.nbmcw.com/news/wabag-jv-secures-adb-funded-mega-order-from-cmwssb-to-build-chennais-city-wide-looped-water-grid.html">Chennai looped grid (NBM&amp;CW)</a> ·</p>
+<p><a href="https://hdfcsky.com/news/va-tech-wabag-secures-272-million-dollar-yanbu-inr-2332-cr-desalination-project">Yanbu (HDFC Sky)</a> ·</p>
+<p><a href="https://www.business-standard.com/markets/capital-market-news/va-tech-wabag-declared-as-preferred-epc-partner-for-saudi-based-istp-project-125122400215_1.html">Hadda ISTP (Business Standard)</a> ·</p>
+<p><a href="https://investmentguruindia.com/newsdetail/buy-va-tech-wabag-ltd-for-the-target-rs-2-529-by-motilal-oswal-financial-services-ltd157084">Motilal Oswal Aug-26</a> ·</p>
+<p><a href="https://www.tradingview.com/news/moneycontrol:bb040364a094b:0-buy-va-tech-wabag-target-of-rs-2410-icici-securities/">ICICI Sec</a> ·</p>
+<p><a href="https://www.tradingview.com/news/moodys:25b6f514ef68f:0-rekha-jhunjhunwala-portfolio-stock-va-tech-wabag-jumps-5-axis-securities-raises-target-price-after-q1-results/">Axis</a> ·</p>
+<p><a href="https://www.sharekhan.com/MediaGalary/docs/VaTech-Feb13_2026-202602131908528938286.pdf">Sharekhan Q3</a> ·</p>
+<p><a href="https://scanx.trade/stock-market-news/stocks/india-ratings-affirms-va-tech-wabag-s-credit-ratings-at-ind-aa-stable-with-reduced-facility-sizes/31719828">India Ratings affirmation (ScanX)</a> ·</p>
+<p><a href="https://www.icicidirect.com/research/equity/trending-news/va-tech-wabag-has-been-charged-with-fines-amounting-to-87-crore">Customs demand (ICICI Direct)</a> ·</p>
+<p><a href="https://www.valueresearchonline.com/stocks/45426/va-tech-wabag-ltd/shareholding/">Shareholding (ValueResearch)</a> ·</p>
+<p><a href="https://stockanalysis.com/quote/nse/WABAG/">Consensus (StockAnalysis)</a> ·</p>
+<p><a href="https://www.business-standard.com/company/va-tech-wabag-36019.html">Quote (Business Standard)</a> ·</p>
+<p><a href="https://www.business-standard.com/markets/news/va-tech-wabag-soars-25-in-6-days-nears-record-high-what-s-driving-stock-126061900371_1.html">June rally (Business Standard)</a> ·</p>
+<p><a href="https://www.businesstoday.in/amp/markets/stocks/story/this-jhunjhunwala-stock-nears-52-week-low-can-bulls-make-a-comeback-511721-2026-01-20">Jan drawdown (BusinessToday)</a></p>
+<p>Water map and sector: <a href="https://www.thecore.in/opinion/the-plinth/businessinfrastructurejal-jeevan-mission-2-payment-delays-contractors-state-funding-869745">JJM 2.0 payment delays (The Core)</a> ·</p>
+<p><a href="https://thenewsmill.com/2026/08/centre-releases-over-rs-6150-crore-to-states-under-jal-jeevan-mission-2-0-in-2026-27/">JJM FY27 releases</a> ·</p>
+<p><a href="https://www.constructionworld.in/urban-infrastructure/wastewater-and-sewage-treatment/cabinet-approves-jal-jeevan-mission-two-point-zero-and-releases-funds/89423">JJM 2.0 approval</a> ·</p>
+<p><a href="https://ommcomnews.com/india-news/maha-govt-allocates-rs-22898-crore-from-states-own-funds-to-complete-jal-jeevan-mission-projects/">Maharashtra JJM funding</a> ·</p>
+<p><a href="https://indianinfrastructure.com/2026/03/10/significant-progress-gets-mapped-under-amrut/">AMRUT progress</a> ·</p>
+<p><a href="https://www.freepressjournal.in/business/enviro-infra-bags-25692-crore-up-orders-secures-two-sewage-plant-projects-under-namami-gange">EIEL Namami Gange HAM</a> ·</p>
+<p><a href="https://indianinfrastructure.com/?p=265961">Perur progress</a> ·</p>
+<p><a href="https://certificationsbay.com/liquid-waste-management-rules-2025/">Liquid Waste Management Rules draft</a> ·</p>
+<p><a href="https://www.outlookbusiness.com/magazine/indias-new-age-industries-are-colliding-with-water-crisis">Data-centre water (Outlook Business)</a> ·</p>
+<p><a href="https://www.multibagg.ai/market-pulse/articles/ion-q1fy27-97629">Ion Exchange Q1</a> ·</p>
+<p><a href="https://www.indianchemicalnews.com/general/enviro-infra-engineers-q1-revenue-jumps-49-as-order-book-crosses-rs-67208-million-31487">EIEL Q1</a> ·</p>
+<p><a href="https://www.arthneeti.com/insights/ems-q1-fy27-earnings">EMS Q1</a> ·</p>
+<p><a href="https://www.gurufocus.com/stock/BOM:543974/transcripts/3217619">VPRPL call</a> ·</p>
+<p><a href="https://nsearchives.nseindia.com/corporate/DENTA_14082026174824_Press_Release_Q1FY27.pdf">Denta Q1 press release</a> ·</p>
+<p><a href="https://chemindigest.com/thermax-q1-fy27-revenue-rises-7-order-book-hits-rs14045-crore-despite-project-cost-overrun/">Thermax Q1</a> ·</p>
+<p><a href="https://www.multibagg.ai/market-pulse/articles/electrosteel-castings-q1fy27-results-cmsk3oh3200020zp9t0bgrog4">Electrosteel Q1</a> ·</p>
+<p><a href="https://www.multibagg.ai/market-pulse/articles/supreme-q1-96664">Supreme Q1</a> ·</p>
+<p><a href="https://www.multibagg.ai/market-pulse/articles/kbl-q1fy27-97688">Kirloskar Brothers Q1</a> ·</p>
+<p><a href="https://mailcontent.icicidirect.com/mailcontent/idirect_ksb_q2cy26.pdf">KSB (ICICI Direct)</a> ·</p>
+<p><a href="https://valoremadvisors.com/assets/admin/conference_file/1787637852_Q1_FY27_Concall_Highlights_of_WPIL_Limited_v1.pdf">WPIL call</a> ·</p>
+<p><a href="https://solarquarter.com/2026/07/27/shakti-pumps-reports-record-q1-fy27-revenue-solar-pump-installations-jump-58/">Shakti Q1</a> ·</p>
+<p><a href="https://www.sahi.com/news/concord-enviro-systems-reports-q1-revenue-of-85-3-crore-net-loss-expands-to-17-5-crore-1396427-PE1_">Concord Q1</a></p>
+<p>Measured: tape and base rates computed on Yahoo daily OHLC (90 tracked names, 2021 – 09 Oct 2026; 2,466 matching setups);</p>
+<p>peer P/E, working-capital days and returns computed from Yahoo fundamentals and closes to 8–9 Oct; fib ladders from the</p>
+<p>banked level-ID read of 08 Aug 2026.</p>
+<p><em>Unverified:</em> Q2 FY27 date; Sep-2026 shareholding; Q2/Q3 FY26 EBITDA (derived); Wabag share of the Kuwait order</p>
+<p>(₹1,000–1,415 Cr by source); current L1 list; Bihar/HAM receivable amounts; FY23 provision cause; peer market caps are</p>
+<p>estimates.</p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 261010_WABAG_DEEP-RESEARCH</div>
+</div></body></html>

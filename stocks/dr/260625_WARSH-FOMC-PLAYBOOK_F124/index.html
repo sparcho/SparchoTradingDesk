@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>F124 — Warsh FOMC Playbook (INR book) · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Thematic</span>
+    <h1 class="htitle">F124 — Warsh FOMC Playbook (INR book)</h1>
+    <div class="hmeta"><b>2026-06-25</b> &middot; status <b>active</b></div>
+    
+  </div>
+  <div class="body"><p><strong>Advisory only.</strong> Built on the verified core of the 260624 digest (hard numbers cross-checked vs primary sources 2026-06-25 — see Verification table). Operator places all trades.</p>
+<h3>L1 — 2-sentence summary</h3>
+<p>The Warsh Fed is running &quot;hawkish now, dovish later&quot;: it banks anti-inflation credibility by holding rates and dropping forward guidance, while assembling the conditions (oil down + a trimmed-mean-PCE framing + freed bank balance-sheet capacity) to justify later cuts/QE that debase the dollar. For the INR book the only question that matters is which branch we are on — orderly (deal -&gt; soft data -&gt; cut -&gt; QE; dollar down/gold up) vs disorderly (new-chair drawdown; dollar up/stocks down/yields up/gold down) — and the US curve shape plus a 5-asset scorecard tell us in real time.</p>
+<h3>L2 — The verified thesis (what is actually real)</h3>
+<p><strong>FOMC 2026-06-17 (Warsh&#x27;s first, verified):</strong> unanimous 12-0 hold at 3.50-3.75% (4th straight hold); 9 of 18 dots now pencil &gt;=1 hike in 2026 (6 see multiple); 17 of 18 judge inflation risk tilted up; the median flipped to a hike; Warsh abstained from his own dot; communications overhaul + task forces announced; statement cut to ~130 words.</p>
+<p><strong>The mechanism stack (the &quot;data machine&quot;):</strong></p>
+<ol>
+<li><strong>Credibility bank</strong> — look tough on inflation now so later cuts read as data-driven, not political (Trump &quot;I love inflation&quot;). Independence theatre.</li>
+<li><strong>Trimmed-mean PCE</strong> — real Dallas Fed gauge (asymmetric trim, 24% top / 31% bottom) that strips volatile outliers; verified as Warsh&#x27;s preferred measure (CNN, Brookings, Jun-2026). The lever to reframe a CPI-worst-in-3-years print as &quot;underlying inflation is fine.&quot;</li>
+<li><strong>eSLR buffer cut (CORRECTED — not a Treasury &quot;exemption&quot;)</strong> — the 2025 enhanced-SLR reform RECALIBRATES the GSIB buffer (from 5%/6% down to ~3.5-4.25%), final rule effective 2026-04-01. Regulators explicitly declined to adopt the outright Treasury exemption. Net effect still frees bank balance sheet to absorb issuance = &quot;QE laundered through commercial banks&quot; without money-printing optics — but the mechanism is a buffer cut, not a carve-out.</li>
+<li><strong>Fragile marginal buyer</strong> — Cayman basis-trade hedge funds absorbed 37% of net Treasury issuance Jan-2022-&gt;Dec-2024 (verified, Fed/Finadium); holdings +$1T to $1.85T, now the largest foreign holder via repo-financed basis trades = margin-call fragility if repo/vol spikes.</li>
+</ol>
+<p><strong>Why it is fragile:</strong> the plan needs a STEEPENER (banks profit from a steep curve on the SLR trade); the decision printed a FLATTENER. New-chair drawdown bias is real (Barclays: 1mo -5%, <strong>3mo -12%, 6mo -16%</strong>; Greenspan -33% on Black Monday). The old stocks-down/bonds-up hedge is broken (decision day: stocks down AND yields up).</p>
+<h3>L3 — The two-branch scenario tree</h3>
+<p><strong>Branch A — ORDERLY (plan works).</strong> Iran deal holds -&gt; oil falls -&gt; trimmed-mean PCE softens -&gt; Warsh cuts + restores QE-via-banks -&gt; dollar down, gold up, curve STEEPENS. INR read: USDINR eases, imported-inflation relief, risk-on for rate-sensitives/financials.</p>
+<p><strong>Branch B — DISORDERLY (plan fails).</strong> Deal breaks / Hormuz oil spike OR bond-market disbelief -&gt; yields up + stocks down + dollar up + gold down -&gt; new-chair drawdown into Oct-Nov (the -16%/6mo window). INR read: USDINR pressure, FII outflow — the YELLOW / QUICK_EXIT regime already running.</p>
+<p><strong>Current lean: Branch B-leaning.</strong> A flattener printed, the deal has not held, the FOMC was hawkish. This is precisely why TNX is the binding regime gate and we sit YELLOW 58 (see REGIME_SCORING.md). <strong>(Reaffirmed 2026-07-09 — see update below.)</strong></p>
+<h3>2026-07-09 UPDATE — minutes public + war-shock/relief whipsaw</h3>
+<p><strong>Trigger:</strong> the June 16-17 FOMC MINUTES were released 07-09; a 07-08 Hormuz war-shock then a 07-09 relief bounce bracketed it. Watch constellation scored against the now-public minutes + live tape:</p>
+<ol>
+<li><strong>2s30s</strong> — FLATTENER intact (minutes: yields rose &quot;most notable at shorter maturities… higher real rates&quot;) → <strong>failing / Branch B</strong>.</li>
+<li><strong>Groman 5-asset</strong> — 07-08 spasm printed the full failing card (DXY up, stocks down, US10Y ~4.60, gold + silver down); 07-09 relief flipped it for ONE day (DXY 100.96, Nasdaq +1%/semis +4%, 10Y 4.579, gold +0.9% ~$4,113, silver +3.4% ~$60.2). Net <strong>B-leaning with A-flavored relief noise</strong>.</li>
+<li><strong>Trimmed-mean pivot</strong> — <strong>NOT in the minutes.</strong> No trimmed-mean PCE, no real-time/AI data, no measurement swap. The 5 task forces are confirmed but the data-machine is still unevidenced. Hold the narrative loosely.</li>
+<li><strong>Brent/Hormuz</strong> — 07-08 spike then unwind; Brent ~$78.7, gate OK (&lt;$105). Oil remains the master swing.</li>
+<li><strong>TNX</strong> — <strong>4.569, back ABOVE the 4.55 decisive-abort line</strong> (was ~4.41 at the 260625 sign) → <strong>Branch B confirming</strong>; binding regime gate FAIL.</li>
+</ol>
+<p><strong>Lean unchanged: Branch B-leaning</strong>, now with the minutes on the record and the curve/TNX tells firming the call. What the minutes DID validate from the video: the fragile, price-sensitive private Treasury buyer base + term-premium risk (the Groman structural point, in the Fed&#x27;s own words — &quot;ownership… shifted from relatively price-insensitive official-sector holders to more price-sensitive private investors… implications for the term premium&quot;). The debasement/silver endgame is intact but UNTRIGGERED — Branch B is the PATH to it, not its negation. Embedded into <code>regime_state.yaml → warsh_lens_overlay</code> + regime_history 2026-07-09.</p>
+<h3>L4 — Watch constellation (the actionable core: which branch are we on?)</h3>
+<p>Each trigger has a working (Branch A) vs failing (Branch B) reading:</p>
+<ol>
+<li><strong>US 2s30s curve shape</strong> — STEEPENER = working; FLATTENER = failing. The single best tell; wire it first.</li>
+<li><strong>Groman 5-asset scorecard</strong> — working = dollar down / gold up; failing = DXY up, S&amp;P down, US10Y up, gold down, BTC down.</li>
+<li><strong>Trimmed-mean PCE vs headline CPI divergence</strong> — if official commentary pivots to trimmed-mean while CPI stays hot, the cut-justification machine is being built (watch the data-machine in action).</li>
+<li><strong>Brent + Hormuz headlines</strong> — oil is the master variable; Brent &gt;$105 trips our HORMUZ gate AND signals Branch B.</li>
+<li><strong>SPR weeks-of-cover</strong> — the ceiling on how long the US can suppress oil (claim ~4 weeks, UNVERIFIED — track, do not anchor).</li>
+<li><strong>TNX vs 4.45 / 4.55</strong> — our binding gate; sustained daily close &lt;4.45 = Branch A nascent; decisive &gt;4.55 = abort / Branch B.</li>
+</ol>
+<h3>L5 — INR book implications</h3>
+<ul>
+<li><strong>Oil -&gt; USDINR -&gt; imported-inflation channel:</strong> oil up = USDINR pressure (currently ~94.4) + headwind for oil-sensitive importers, tailwind for energy producers / defensives.</li>
+<li><strong>Drawdown + Hormuz risk validates the current stance:</strong> new-chair drawdown bias (-16%/6mo into Oct-Nov) + Hormuz spike risk = the YELLOW / QUICK_EXIT posture + Profit-Lock mechanics already shipped. Less justification to add than a month ago.</li>
+<li><strong>Sector tilt:</strong> Branch B -&gt; favour energy producers, defensives, weak-INR exporters; avoid oil-sensitive importers + high-beta. Branch A -&gt; rate-sensitives / financials re-rate.</li>
+<li><strong>Regime wiring:</strong> add an oil/Hormuz + US 2s30s watch line to the regime card (digest suggestion; relocatable into the macro module).</li>
+</ul>
+<h3>Kill switches / falsification</h3>
+<ul>
+<li>Thesis is DEAD if Warsh delivers a cut with NO data-machine setup (pure political cave) -&gt; different regime, re-spec.</li>
+<li>Benign-disinflation override: oil collapses AND curve steepens AND the Fed simply holds (no cut needed) -&gt; upgrade bias, not debasement.</li>
+<li>Branch B is INVALIDATED if 2s30s decisively steepens + DXY rolls over + gold breaks out together.</li>
+</ul>
+<h3>Verification table (cross-checked 2026-06-25)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Claim</span><span>Status</span><span>Note</span></div>
+<div class="mdtr"><span>FOMC 12-0 hold 3.50-3.75%, 06-17</span><span>VERIFIED</span><span>CNBC / Chase / PIMCO</span></div>
+<div class="mdtr"><span>9/18 dots &gt;=1 hike (6 multiple); median flips to hike</span><span>VERIFIED</span><span>Yahoo / Stocktitan</span></div>
+<div class="mdtr"><span>Warsh abstained from his dot; comms overhaul + task forces</span><span>VERIFIED</span><span>CNBC</span></div>
+<div class="mdtr"><span>Cayman funds = 37% of net issuance 2022-24</span><span>VERIFIED</span><span>Fed / Finadium (+$1T to $1.85T)</span></div>
+<div class="mdtr"><span>New-chair drawdown: 3mo -12%, 6mo -16%, Greenspan -33%</span><span>VERIFIED</span><span>Barclays via Bloomberg/Seeking Alpha</span></div>
+<div class="mdtr"><span>Trimmed-mean PCE real + Warsh-preferred; CPI 3yr-high</span><span>VERIFIED</span><span>CNN / Brookings / Dallas Fed</span></div>
+<div class="mdtr"><span>&quot;Restore SLR Treasury exemption&quot;</span><span>CORRECTED</span><span>It is an eSLR BUFFER CUT (5/6% -&gt; 3.5-4.25%), eff 2026-04-01; outright exemption was NOT adopted</span></div>
+<div class="mdtr"><span>Drawdown framed as -12% into Oct-Nov</span><span>CORRECTED</span><span>Oct-Nov ~= 5-6mo -&gt; use -16%/6mo, not -12%/3mo</span></div>
+<div class="mdtr"><span>$8T refi wall</span><span>UNVERIFIED</span><span>Concept real; specific magnitude unsourced</span></div>
+<div class="mdtr"><span>S&amp;P -1.2% on the day</span><span>AMBIGUOUS</span><span>Sources split -0.6% intraday vs -1.21% close</span></div>
+<div class="mdtr"><span>Oil -40% from highs; SPR ~4wk cover</span><span>UNVERIFIED</span><span>Oil roughly consistent w/ our Brent cache; SPR = Trump on-camera claim</span></div>
+</div>
+<h3>Calendar</h3>
+<ul>
+<li><strong>2026-06-26 — US PCE deflator (May):</strong> first read on the data-machine narrative (watch headline vs trimmed-mean framing).</li>
+<li><strong>2026-07-28/29 — FOMC:</strong> next Fed binary; dot-plot follow-through.</li>
+<li><strong>Oct-Nov 2026 — new-chair drawdown window</strong> (Barclays 6mo -16%).</li>
+</ul>
+<h3>Cross-references</h3>
+<ul>
+<li>Input digest: 260624_WARSH-FED-DATA-MACHINE_andrei-jikh-video-digest.md</li>
+<li>Prior: 260501_DEEP-RESEARCH_warsh-steepener-india-implications.md (this playbook resolves its open tension — Warsh NEEDS a steepener but the market handed a flattener)</li>
+<li>Regime: REGIME_SCORING.md (TNX binding gate), regime_state.yaml (HORMUZ/USDINR rails)</li>
+<li>Silver: dollar-debasement thesis (the QE-via-banks endgame is the silver structural bull)</li>
+</ul>
+<h3>Source tier (web, verified 2026-06-25)</h3>
+<ul>
+<li>FOMC: cnbc.com/2026/06/17/fed-interest-rate-decision-june-2026.html; finance.yahoo.com (dot plot); pimco.com (Warsh first meeting)</li>
+<li>Cayman 37%: federalreserve.gov (cross-border basis-trade note); finadium.com</li>
+<li>Drawdown: bloomberg.com (Barclays new-chair); seekingalpha.com</li>
+<li>Trimmed-mean PCE: dallasfed.org/research/pce; brookings.edu; cnn.com/2026/06/11/economy</li>
+<li>eSLR: federalregister.gov (2025-21626 final rule); fdic.gov; think.ing.com</li>
+</ul></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260625_WARSH-FOMC-PLAYBOOK_F124</div>
+</div></body></html>

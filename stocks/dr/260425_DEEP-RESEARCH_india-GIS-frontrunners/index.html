@@ -1,0 +1,913 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>india-GIS-frontrunners — Deep-Research Brief (2026-04-25) · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Thematic</span>
+    <h1 class="htitle">india-GIS-frontrunners — Deep-Research Brief (2026-04-25)</h1>
+    <div class="hmeta"><b>2026-04-25</b></div>
+    
+  </div>
+  <div class="body"><blockquote><strong>Readable copy.</strong> Converted from <code>260425_DEEP-RESEARCH_india-GIS-frontrunners.pdf</code> so it opens in Obsidian on mobile.</blockquote>
+<blockquote>The PDF is unchanged and remains the visual record.</blockquote>
+<p>25 April 2026</p>
+<p>INDIA GIS BOOM</p>
+<p>Front-Runners by Value-Chain Layer</p>
+<p>A Deep-Research Thematic Brief</p>
+<p>Mapping the listed pure-plays, the dilution traps, and the pre-IPO consortium that just</p>
+<p>won the national Earth-Observation contract.</p>
+<p>PREPARED FOR</p>
+<p>WORKSTREAM</p>
+<p>DATE</p>
+<p>Sparcho</p>
+<p>Deep-Research</p>
+<p>25 April 2026</p>
+<p>Mode: STUDY — research-only, not a trade recommendation.</p>
+<p>Anchor protocols: PROCESSES.md §5.22 · research-discipline.md v1 · fundamental analysis filter (light filter</p>
+<p>applied)</p>
+<p>Builds on: 260423_DEEP-RESEARCH_mapmyindia-governance-GIS-AI</p>
+<p>Theme: B&amp;W Canvas · per CLAUDE.md §11.5 bento theme stack</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Plain-English Glossary</p>
+<p>Geospatial briefs accumulate jargon — regulators, sensor types, programs. This page expands every</p>
+<p>abbreviation and technical term used in the document so the reader can follow the argument without</p>
+<p>specialist context. Terms are grouped by category. The page is dense by design; everything else is written</p>
+<p>in plain English on top of these definitions.</p>
+<p>Geospatial Domain Terms</p>
+<p>GIS</p>
+<p>Geographic Information System. Software + data + analytics for anything spatial — maps,</p>
+<p>satellite imagery, location intelligence, terrain, infrastructure layouts.</p>
+<p>EO</p>
+<p>Earth Observation. Imagery and measurements collected from satellites or aerial platforms.</p>
+<p>Includes optical, hyperspectral, SAR, multispectral data.</p>
+<p>Hyperspectral</p>
+<p>Imaging across hundreds of narrow wavelength bands (vs. RGB / 3-band optical). Lets you</p>
+<p>identify materials — minerals, crops, pollutants — by their spectral signature. Pixxel&#x27;s</p>
+<p>speciality.</p>
+<p>SAR</p>
+<p>Synthetic Aperture Radar. Active-sensor satellite imagery using microwaves. Works through</p>
+<p>clouds and at night. Critical for monitoring (defence, maritime, disaster). PierSight&#x27;s speciality.</p>
+<p>Multispectral</p>
+<p>Imaging across a handful of broad wavelength bands (e.g. visible + near-infrared +</p>
+<p>short-wave infrared). Standard for vegetation / land-use monitoring.</p>
+<p>Optical (satellite)</p>
+<p>Visible-light satellite imagery, like Google-Earth-grade pictures. Standard reference layer.</p>
+<p>UAV</p>
+<p>Unmanned Aerial Vehicle. Drone. Class includes tactical (military), industrial (surveying /</p>
+<p>inspection), and consumer.</p>
+<p>ADAS</p>
+<p>Advanced Driver-Assistance Systems. Auto-industry term for sensor + software stacks</p>
+<p>providing adaptive cruise, lane-keep, automated braking, etc. Demands HD-quality maps.</p>
+<p>HD-ADAS / HD maps</p>
+<p>High-definition mapping data tuned to ADAS requirements — centimetre-grade road</p>
+<p>geometry, lane-line locations, sign positions. Genesys International&#x27;s recent India launch</p>
+<p>covers 1 lakh km of national corridors.</p>
+<p>ISR</p>
+<p>Intelligence, Surveillance, Reconnaissance. Defence-domain category for imagery and</p>
+<p>signal-collection systems.</p>
+<p>EW</p>
+<p>Electronic Warfare. Defence-domain sub-category covering jamming, spoofing, RF detection.</p>
+<p>CVTMS</p>
+<p>Commercial Vehicle Tracking and Monitoring System. Telematics for fleet operators. IOCL&#x27;s Rs.</p>
+<p>110 cr CVTMS contract with MAPMYINDIA covers ~23,000 LPG trucks.</p>
+<p>Regulators, Programs &amp; Policy</p>
+<p>IN-SPACe</p>
+<p>Indian National Space Promotion and Authorisation Centre. The autonomous body created to</p>
+<p>permit and promote private-sector space activities. Issued the Rs. 1,200 cr private national EO</p>
+<p>contract to the Pixxel-led consortium in January 2026.</p>
+<p>NGP-2022</p>
+<p>National Geospatial Policy 2022. Liberalised private-sector participation in geospatial data</p>
+<p>and restricted full-resolution Indian-territory map data to Indian-controlled entities. The</p>
+<p>structural moat behind MAPMYINDIA / Genesys.</p>
+<p>SoI</p>
+<p>Survey of India. The official national mapping agency. Awarded MAPMYINDIA the National</p>
+<p>Geo-Spatial Platform contract — the first national platform for geospatial-data cataloging +</p>
+<p>role-based access.</p>
+<p>PIB</p>
+<p>Press Information Bureau. The Government of India&#x27;s official communications channel for</p>
+<p>policy releases. Used here as a primary-source citation for NGP / Budget claims.</p>
+<p>PM Gati Shakti</p>
+<p>National master-plan for multi-modal infrastructure connectivity, launched 2021. Pulls</p>
+<p>GIS-grade integration data across 16 ministries.</p>
+<p>BharatNet</p>
+<p>National rural broadband project. Pulls fibre + GIS + tower mapping at scale.</p>
+<p>Smart Cities Mission</p>
+<p>Programme to develop 100 cities with city-data + IoT integration. Pulls GIS at municipal scale.</p>
+<p>DGCA</p>
+<p>Directorate General of Civil Aviation. The drone-licensing and operations regulator in India.</p>
+<p>PPP</p>
+<p>Public-Private Partnership. The contracting structure of the IN-SPACe national EO award.</p>
+<p>MeitY</p>
+<p>Ministry of Electronics and Information Technology. India&#x27;s central tech-policy department;</p>
+<p>owns the data-centre tax-holiday eligibility scheme.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Plain-English Glossary (continued)</p>
+<p>Companies, Tickers &amp; Markets</p>
+<p>NSE / BSE</p>
+<p>National Stock Exchange / Bombay Stock Exchange. India&#x27;s two main equity exchanges.</p>
+<p>&quot;NSE/BSE&quot; means the stock is listed on both.</p>
+<p>LTP</p>
+<p>Last Traded Price. The most recent quoted market price for a stock.</p>
+<p>DMA</p>
+<p>Daily Moving Average. &quot;50-DMA&quot; = 50-day moving average. A common technical reference.</p>
+<p>OPM</p>
+<p>Operating Profit Margin. Operating profit / revenue. Used as a quality-of-earnings indicator.</p>
+<p>PE</p>
+<p>Price / Earnings ratio. Market cap divided by net profit. Higher PE = market is paying more for</p>
+<p>each rupee of profit.</p>
+<p>EBITDA</p>
+<p>Earnings Before Interest, Tax, Depreciation, and Amortisation. A cash-profit proxy.</p>
+<p>RPT</p>
+<p>Related-Party Transaction. Money flow between the listed company and entities controlled by</p>
+<p>promoters / directors / their families. Subject to disclosure rules.</p>
+<p>Promoter</p>
+<p>Indian-securities term for the founding owner / controlling shareholder group. Disclosed on a</p>
+<p>per-stock basis.</p>
+<p>Q3 FY26</p>
+<p>Third quarter of fiscal year 2025-26 (Oct-Dec 2025). India&#x27;s fiscal year runs April to March.</p>
+<p>9MFY26</p>
+<p>First nine months of fiscal year 2025-26 (Apr-Dec 2025).</p>
+<p>OEM</p>
+<p>Original Equipment Manufacturer. In auto context = the carmaker (Maruti, Tata Motors,</p>
+<p>Mahindra, Hyundai etc.) buying embedded maps from MAPMYINDIA.</p>
+<p>CAGR</p>
+<p>Compound Annual Growth Rate. Annualised growth rate over multiple years.</p>
+<p>PSU / Maharatna</p>
+<p>Public Sector Undertaking. Government-owned listed company. Maharatna = top tier</p>
+<p>(financial size + autonomy). BEL is a Maharatna PSU.</p>
+<p>DRHP</p>
+<p>Draft Red Herring Prospectus. The first formal IPO filing with SEBI. &quot;No DRHP visible&quot; means the</p>
+<p>company has not started a public listing process.</p>
+<p>SEBI</p>
+<p>Securities and Exchange Board of India. The market regulator.</p>
+<p>SME-graduated</p>
+<p>A company that listed first on the SME (small-and-medium-enterprise) board with lighter</p>
+<p>disclosure rules, then graduated to the main NSE/BSE board. Governance scrutiny is harder</p>
+<p>during the SME period.</p>
+<p>TRADER Protocol Anchors</p>
+<p>TRADER-60</p>
+<p>The 60-name Indian-equity universe currently monitored by the TRADER system (canonical</p>
+<p>list in CLAUDE.md §16). &quot;TRADER-60 L3&quot; = name is in the universe and classified Layer 3 in the</p>
+<p>5-Layer Cake.</p>
+<p>GAP</p>
+<p>Name not currently in TRADER-60. Tag in tables = absent from the watchlist.</p>
+<p>IPO-WATCH</p>
+<p>Maintained file (<code>/TRADER/03_SCREENERS/IPO-WATCH.md</code>) of pre-IPO names actively</p>
+<p>monitored for filing / pricing / listing.</p>
+<p>§5.20 / §5.22 / §5.24</p>
+<p>PROCESSES.md sections. §5.20 = DEEP_RESEARCH_MINI_PROJECT (this brief&#x27;s process spec).</p>
+<p>§5.22 = CRITICAL_ANALYSIS_INTAKE (input rigor). §5.24 = STRESS_TEST_GATE (output rigor for</p>
+<p>actionable decisions; not invoked here because brief is study-mode).</p>
+<p>research-discipline.</p>
+<p>md</p>
+<p>TRADER&#x27;s standing 10-rule research-methodology standard: frame-check, 80/20 scope, first</p>
+<p>principles, source discipline, 3-alternative rebuild, current-behaviour map, falsification test,</p>
+<p>cheat-sheet output, skeptic pass, L1-L5 layering.</p>
+<p>V-01 / V-02</p>
+<p>Validation-log anchors. V-01: charts authoritative for price. V-02: zero numerical-error</p>
+<p>tolerance.</p>
+<p>Fundamental</p>
+<p>analysis filter</p>
+<p>A light filter applied to listed candidates: PE × OPM coherence, governance check,</p>
+<p>no-peak-price rule, mean-reversion bias, clean-quarter requirement. Kept light here because</p>
+<p>this is a study brief, not a trade recommendation.</p>
+<p>Mechanism vs.</p>
+<p>analogy</p>
+<p>Distinction codified in Paul-Graham research-discipline. &quot;Mechanism&quot; = a concrete revenue</p>
+<p>line linking the company to the theme. &quot;Analogy&quot; = thematic resemblance with no P&amp;L;</p>
+<p>evidence. Owning a $200B IT-services company for a $50M GIS practice is the canonical</p>
+<p>analogy-not-mechanism failure mode.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Executive Summary</p>
+<p>The Indian geospatial opportunity is structurally real and policy-anchored. The geospatial</p>
+<p>economy is projected at Rs. 63,100 crore by 2025 with ~14% CAGR onwards, the National Geospatial</p>
+<p>Policy 2022 has formally unlocked private participation, and IN-SPACe has just (January 2026)</p>
+<p>awarded a Rs. 1,200 crore private national Earth-Observation constellation to a consortium of</p>
+<p>pre-IPO companies. The thesis is not in question. What is in question is whether the listed surface</p>
+<p>of this theme is investable at scale today. The honest answer is: thinly.</p>
+<p>CORE FINDING</p>
+<p>Most of the cleanest mechanism plays are pre-IPO.</p>
+<p>Most of the “famous-name” exposures (TCS, INFY, L&amp;T, Delhivery) are dilution-grade and flunk the</p>
+<p>mechanism-not-analogy test. The two listed names that survive a fundamental light-filter are</p>
+<p>MAPMYINDIA and GENESYS at the data layer, with IDEAFORGE as the single listed UAV pure-play.</p>
+<p>Everything else either dilutes the thesis, fails the peak-price gate, or is more honestly held for the</p>
+<p>defense thesis.</p>
+<p>Bottom-line picks per layer</p>
+<p>•  Mapping data: GENESYS INTERNATIONAL is the obvious peer-replication play (faster grower than MMI,</p>
+<p>smaller base) — but Q3 FY26 fired exceptional charges and a revenue decline; multi-quarter watch.</p>
+<p>•  Earth Observation: No clean listed pure-play exists today. IPO-WATCH high priority for Pixxel, Dhruva</p>
+<p>Space, SatSure. Listed BEL / Astra / MTAR are diluted.</p>
+<p>•  Drones &amp; aerial imagery: IDEAFORGE is the only listed pure-play with a sector tailwind — chart healed</p>
+<p>favourably for mean-reversion, but profitability still emerging; watchlist not buy-now.</p>
+<p>•  Infrastructure cross-stack: HFCL and STLTECH (already in book) capture the fiber-backbone overlap</p>
+<p>with the data-centre thesis — additive, not a fresh entry.</p>
+<p>•  Logistics, insurance, climate, surveying, IT services: honest empty-or-diluted-set. Skip as a thesis</p>
+<p>driver.</p>
+<p>How to read this document</p>
+<p>Part I lays out the strategic context — market sizing, the NGP-2022 unlock, and the IN-SPACe anchor fact.</p>
+<p>Part II is the value-chain map: ten layers (A through J) walked end-to-end with named candidates,</p>
+<p>mechanism notes, and fundamental light-filter verdicts. Part III distils the cleanest entry points and audits</p>
+<p>the existing TRADER-60 universe for gaps. Part IV runs falsification tests and surfaces three common</p>
+<p>misconceptions a casual reader of the theme is likely to hold. The closing section covers source tiers, scope</p>
+<p>limits, and the IPO-WATCH additions.</p>
+<p>Readers primarily interested in the picks may proceed directly to Part III.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Part I / The Strategic Context</p>
+<p>1.1 Market sizing and the NGP-2022 unlock</p>
+<p>The Indian geospatial economy is among the most policy-leveraged thematic exposures available in the</p>
+<p>Indian listed market today. Three forces are operating in the same direction simultaneously:</p>
+<p>data-sovereignty regulation that restricts foreign entities from holding full-resolution Indian map data,</p>
+<p>private-participation liberalisation via the National Geospatial Policy 2022, and structural demand from PM</p>
+<p>Gati Shakti, BharatNet, Smart Cities, defense modernisation, and the auto-OEM ADAS transition. Each force</p>
+<p>on its own would be material; the combination creates a rare regulatory wedge favouring domestic</p>
+<p>incumbents.</p>
+<p>Market sizing reads as follows: the geospatial economy is projected at Rs. 63,100 crore by 2025 [Secondary,</p>
+<p>Mordor / Allied / Business Standard], with subsequent CAGR estimates clustering around 13–15% through</p>
+<ol>
+<li>Growth is uneven across the value chain — foundational mapping data is mature and concentrated,</li>
+</ol>
+<p>downstream analytics and EO-as-a-service are nascent and fragmented, and the satellite layer was</p>
+<p>effectively closed to private capital until NGP-2022.</p>
+<p>ANCHOR FACT · PRIMARY</p>
+<p>January 2026: IN-SPACe awarded the national private EO contract.</p>
+<p>Pixxel-led consortium — with Dhruva Space, PierSight, and SatSure as partners — won the</p>
+<p>IN-SPACe national EO PPP. Rs. 1,200 crore allocated; 12 satellites over 5 years; hyperspectral +</p>
+<p>optical + SAR + multispectral. Losing bids: Astra Microwave + BEL, and GalaxEye + CoreEL (~Rs. 97</p>
+<p>crore). This is the single most important data point in the theme — it confirms that the EO private</p>
+<p>layer is now real, contracted, and concentrated in four pre-IPO names.</p>
+<p>1.2 Why the listed surface is thin</p>
+<p>There are two reasons the listed surface looks thin relative to the size of the theme. First, the most</p>
+<p>concentrated capability is still pre-IPO — Pixxel, Dhruva Space, SatSure, PierSight, GalaxEye, Cropin, Garuda</p>
+<p>Aerospace, and IG Drones have no public DRHP visible as of this write-up. Second, several “obvious” listed</p>
+<p>exposures are mechanism-free: TCS, Infosys, HCL, Wipro, LTIMindtree, and Persistent all maintain</p>
+<p>“geospatial / location-intelligence” service practices, but combined revenue from those practices is</p>
+<p>plausibly under 2% of total revenue at any of them [Secondary, no public segment break-out]. Owning a</p>
+<p>$200B IT-services company for a $50M GIS practice is the canonical analogy-not-mechanism failure</p>
+<p>mode that PROCESSES.md §5.22 was written to catch.</p>
+<p>The same applies to logistics (Delhivery, Blue Dart) and insurance (ICICI Lombard and general insurers).</p>
+<p>These are GIS consumers — mapping-cost reductions show up as opex savings or product features, not as</p>
+<p>a revenue line on the income statement. There is no GIS-specific P&amp;L at any of them. Treating them as GIS</p>
+<p>exposure is the same failure mode in a different costume.</p>
+<p>1.3 Scope and source-tier note</p>
+<p>This brief builds on the prior MAPMYINDIA governance + GIS×AI deep-research file</p>
+<p>(/TRADER/03_SCREENERS/260423_DEEP-RESEARCH_mapmyindia-governance-GIS-AI.md) rather than</p>
+<p>redoing it. It extends the frame outward to the rest of the value chain. The fundamental analysis filter is</p>
+<p>applied as a light filter, not a hard gate — per operator instruction this is informational/thematic with no</p>
+<p>actionable picks. §5.24 STRESS_TEST_GATE is therefore not invoked. Web-search coverage was partial: four</p>
+<p>of approximately six planned searches completed before rate-limiting. Claims downstream of those</p>
+<p>searches are tier-tagged Secondary or training-knowledge and explicitly flagged.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Part II / The Value-Chain Map</p>
+<p>The Indian GIS value chain decomposes into ten layers. For each, the brief asks the same three questions:</p>
+<p>(1) what is the concrete revenue mechanism that links the layer to the GIS thesis, (2) which listed names —</p>
+<p>if any — capture that mechanism, and (3) does the cleanest candidate survive a fundamental light-filter</p>
+<p>today.</p>
+<p>Layer A / Mapping-Data Operators</p>
+<p>The core of the value chain. Two listed candidates, one structural moat (data sovereignty), and the cleanest</p>
+<p>mechanism in the theme.</p>
+<p>Name</p>
+<p>Listing /</p>
+<p>TRADER-60</p>
+<p>Mechanism (concrete revenue line)</p>
+<p>Fundamental filter</p>
+<p>MAPMYINDIA</p>
+<p>(C.E. Info</p>
+<p>Systems)</p>
+<p>NSE/BSE ·</p>
+<p>TRADER-60 L5</p>
+<p>~80% share Indian auto-OEM embedded</p>
+<p>maps; Rs. 1,770cr orderbook (Dec 2025); SoI</p>
+<p>National Geospatial Platform contract; IOCL Rs.</p>
+<p>110cr CVTMS [Primary]</p>
+<p>PARTIAL PASS / WAIT —</p>
+<p>chart broken (917&lt;1004</p>
+<p>prior swing low); Q3 FY26</p>
+<p>fired every fundamental</p>
+<p>bad-quarter signal</p>
+<p>GENESYS</p>
+<p>INTERNATIONA</p>
+<p>L</p>
+<p>NSE/BSE · GAP</p>
+<p>FY26 revenue ~Rs. 318cr (PAT Rs. 39.1cr); Q2</p>
+<p>FY26 +10.6% YoY; launched India&#x27;s first HD ADAS</p>
+<p>maps covering 1 lakh km of national</p>
+<p>highways/corridors [Secondary]; smaller but</p>
+<p>faster-growing peer to MMI; Q3 FY26 had</p>
+<p>revenue decline + exceptional charges [flag]</p>
+<p>WAIT — trajectory right</p>
+<p>but Q3 exceptional</p>
+<p>charges impaired the</p>
+<p>quarter; PE will be</p>
+<p>elevated post-rerating</p>
+<p>CLEANEST ENTRY · LAYER A</p>
+<p>Watch GENESYS for clean-quarter re-acceleration.</p>
+<p>GENESYS is the harder-to-find peer-replication play; MAPMYINDIA is the bigger moat but already</p>
+<p>in book at L5. Both fail the fundamental filter&#x27;s “clean quarter + price not at peak” test right now —</p>
+<p>this layer is a structural watch, not an immediate buy.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Layer B / Satellite / Earth Observation</p>
+<p>ANCHOR FACT · PRIMARY (IN-SPACe + company releases, January 2026)</p>
+<p>Pixxel consortium won; BEL+Astra and GalaxEye+CoreEL lost.</p>
+<p>Pixxel + Dhruva Space + PierSight + SatSure won the IN-SPACe national EO PPP. Rs. 1,200cr to</p>
+<p>deploy 12 sats over 5 years, hyperspectral + optical + SAR + multispectral. Astra Microwave + BEL</p>
+<p>bid lost; GalaxEye + CoreEL bid lost (Rs. 97cr).</p>
+<p>Name</p>
+<p>Listing /</p>
+<p>TRADER-60</p>
+<p>Mechanism</p>
+<p>Notes</p>
+<p>Pixxel</p>
+<p>Pvt</p>
+<p>Hyperspectral leader; consortium prime;</p>
+<p>Firefly satellites operational</p>
+<p>No DRHP visible [tertiary</p>
+<p>timeline]; IPO-WATCH</p>
+<p>HIGH</p>
+<p>Dhruva Space</p>
+<p>Pvt</p>
+<p>Smallsat manufacturing + ground stations +</p>
+<p>integration; consortium partner</p>
+<p>No DRHP [flag];</p>
+<p>IPO-WATCH</p>
+<p>PierSight</p>
+<p>Pvt</p>
+<p>SAR-focused; consortium partner</p>
+<p>No DRHP [flag]; very</p>
+<p>early-stage</p>
+<p>SatSure</p>
+<p>Pvt</p>
+<p>Earth-observation analytics layer (ag, infra,</p>
+<p>climate); consortium analytics partner</p>
+<p>No DRHP [flag];</p>
+<p>IPO-WATCH</p>
+<p>GalaxEye</p>
+<p>Pvt</p>
+<p>Multi-sensor fusion (SAR+optical); LOST</p>
+<p>EO-PPP bid — no anchor contract</p>
+<p>No DRHP [flag]; thesis</p>
+<p>dented by losing the bid</p>
+<p>BEL</p>
+<p>NSE/BSE · L3</p>
+<p>Onboard electronics for ISRO + defense ISR;</p>
+<p>lost EO-PPP so NGP-private upside</p>
+<p>contingent on next contract</p>
+<p>WAIT per fundamental</p>
+<p>discipline — chart</p>
+<p>elevated, PE 40s; clean</p>
+<p>governance</p>
+<p>Astra Microwave</p>
+<p>NSE/BSE · GAP</p>
+<p>T/R modules + RF subsystems for satellites +</p>
+<p>radar; lost EO-PPP but has steady ISRO/MoD</p>
+<p>revenue [Secondary — flag]</p>
+<p>WAIT — likely above</p>
+<p>DMAs; smallcap PE risk</p>
+<p>HAL</p>
+<p>TRADER-60 L3</p>
+<p>SSLV joint, satellite assembly; tiny share of</p>
+<p>revenue from sats</p>
+<p>DILUTED — own for aero,</p>
+<p>not for GIS</p>
+<p>MTAR</p>
+<p>Technologies</p>
+<p>TRADER-60 L3</p>
+<p>Cryo-engine subassemblies + satellite</p>
+<p>precision components for ISRO</p>
+<p>DILUTED but chart broken</p>
+<p>from peak</p>
+<p>(mean-reversion zone)</p>
+<p>Paras Defence</p>
+<p>GAP</p>
+<p>Optics for satellites + defense; small</p>
+<p>pure-play feel</p>
+<p>DILUTED + smallcap-PE</p>
+<p>risk</p>
+<p>L&amp;T</p>
+<p>GAP</p>
+<p>Built launch-vehicle hardware + cryo stages</p>
+<p>for ISRO; tiny share</p>
+<p>DILUTED — too big to own</p>
+<p>for GIS</p>
+<p>CLEANEST ENTRY · LAYER B</p>
+<p>No clean listed pure-play exists today.</p>
+<p>The mechanism is captured by the four pre-IPO consortium members. Listed “exposure” via BEL /</p>
+<p>Astra / HAL / MTAR is genuinely diluted — flag explicitly so the analogy-as-mechanism failure</p>
+<p>mode is avoided. The IPO-WATCH file should be updated with Pixxel, Dhruva, and SatSure as</p>
+<p>priority names.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Layer C / Drones / Aerial Imagery</p>
+<p>Name</p>
+<p>Listing /</p>
+<p>TRADER-60</p>
+<p>Mechanism</p>
+<p>Fundamental filter</p>
+<p>IDEAFORGE</p>
+<p>Technology</p>
+<p>NSE/BSE · GAP</p>
+<p>India UAV market leader (~50% share); ZOLT</p>
+<ul>
+<li>SWITCH V2 next-gen tactical UAVs;</li>
+</ul>
+<p>~340–450 unit Q4 FY26 deliveries; ~Rs. 200B</p>
+<p>sector pipeline cited [Secondary]</p>
+<p>WAIT — post-listing brutal</p>
+<p>drawdown (chart healing</p>
+<p>for mean-reversion);</p>
+<p>profitability still emerging;</p>
+<p>founder-led smallcap,</p>
+<p>monitor RPTs</p>
+<p>DroneAcharya</p>
+<p>Aerial</p>
+<p>Innovations</p>
+<p>NSE · GAP</p>
+<p>Drone-as-a-Service for surveys + GIS data +</p>
+<p>DGCA training; smaller cap</p>
+<p>CAUTION —</p>
+<p>SME-graduated,</p>
+<p>governance scrutiny</p>
+<p>harder; OPM volatile;</p>
+<p>Fundamental-discipline</p>
+<p>default = skip</p>
+<p>Zen Technologies</p>
+<p>GAP</p>
+<p>Defense simulators + UAV systems incl.</p>
+<p>anti-drone; loose GIS adjacency</p>
+<p>DILUTED thematic-fit; not a</p>
+<p>GIS play</p>
+<p>Garuda</p>
+<p>Aerospace</p>
+<p>Pvt</p>
+<p>Ag-drones, Make-in-India supplier,</p>
+<p>Kisan-drone program</p>
+<p>IPO timeline murky — no</p>
+<p>public DRHP confirmed</p>
+<p>[flag]</p>
+<p>IG Drones</p>
+<p>Pvt</p>
+<p>Surveying + aerial mapping services</p>
+<p>No public DRHP [flag]</p>
+<p>CLEANEST ENTRY · LAYER C</p>
+<p>IDEAFORGE — the only listed pure-play with sector tailwind.</p>
+<p>The healing chart helps the fundamental filter&#x27;s mean-reversion bias; the unprofitability flunks</p>
+<p>PE-discipline. It belongs on TRADER-60 as a watchlist name, not as an immediate add.</p>
+<p>Layers D, E, F / Logistics, Agriculture, Insurance / Climate</p>
+<p>Three layers in sequence each warrant an honest empty-or-diluted-set call. Owning them for the GIS</p>
+<p>thesis is the same analogy-not-mechanism failure mode flagged throughout this brief, in three different</p>
+<p>costumes.</p>
+<p>Layer</p>
+<p>Names</p>
+<p>Honest call</p>
+<p>D — Logistics</p>
+<p>Delhivery, Blue Dart</p>
+<p>GIS consumers — route-optimization, last-mile geocoding</p>
+<p>capture operating leverage from mapping-cost reductions.</p>
+<p>No GIS revenue line in the P&amp;L. Skip the layer for the thesis</p>
+<p>frame.</p>
+<p>E — Agriculture</p>
+<p>Cropin (Pvt), SatSure (Pvt —</p>
+<p>covered Layer B), Skymet</p>
+<p>(status unclear)</p>
+<p>All meaningful pure-plays are pre-IPO. Listed “ag-tech” (UPL,</p>
+<p>Bayer CropScience, Dhanuka, Insecticides India) is input</p>
+<p>chemicals, not GIS. Park the layer until a SatSure or Cropin</p>
+<p>DRHP appears.</p>
+<p>F — Insurance /</p>
+<p>Climate</p>
+<p>ICICI Lombard, general</p>
+<p>insurers</p>
+<p>Use satellite-flood / crop indices for parametric products but</p>
+<p>the GIS share of revenue is invisible. Not a thesis driver.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Layer G / Surveying / Construction-Tech</p>
+<p>Name</p>
+<p>Listing /</p>
+<p>TRADER-60</p>
+<p>Mechanism</p>
+<p>Verdict</p>
+<p>L&amp;T</p>
+<p>GAP</p>
+<p>Won SoI digital-mapping + smart-city</p>
+<p>work via L&amp;T Smart World</p>
+<p>DILUTED — single-digit %</p>
+<p>of consolidated revenue;</p>
+<p>not a GIS thesis</p>
+<p>Ashoka Buildcon, NCC,</p>
+<p>KEC, KPIL</p>
+<p>GAP</p>
+<p>Use GIS for road BOT + transmission</p>
+<p>projects</p>
+<p>DILUTED — thematic only</p>
+<p>Honest call: dilute layer. Avoid as GIS-thesis play.</p>
+<p>Layer H / IT Services GIS Practices</p>
+<p>TCS, INFY, HCLTECH, Wipro, LTIMindtree, and Persistent each maintain a “geospatial / location-intelligence”</p>
+<p>service line. Combined revenue from those practices is plausibly under 2% of total revenue at any of them</p>
+<p>[Secondary / training-knowledge — flag, no public segment break-out].</p>
+<p>VERDICT · LAYER H</p>
+<p>Dilution-grade for the GIS thesis.</p>
+<p>This is exactly the failure mode §5.22 flagged on the prior PDT-on-ANGELONE and</p>
+<p>DC-on-IT-services analogies — owning a $200B IT-services co for a $50M GIS practice is</p>
+<p>mechanism-free. Hold these names for AI-services theses if at all, not for GIS exposure.</p>
+<p>Layer I / Infrastructure Enablers (cross-stack with DC)</p>
+<p>Name</p>
+<p>TRADER-60</p>
+<p>Mechanism</p>
+<p>Cross-stack note</p>
+<p>HFCL</p>
+<p>L1</p>
+<p>(book wt</p>
+<p>16.84%)</p>
+<p>Optical fiber + telecom equipment + defense</p>
+<p>optoelectronics (incl. ISR-adjacent products);</p>
+<p>fiber backbone enables GIS data transport</p>
+<p>Cleanest DC + GIS crossover</p>
+<p>— already overweight; thesis</p>
+<p>confirms holding, doesn&#x27;t add</p>
+<p>STLTECH</p>
+<p>TRADER-60 L3</p>
+<p>Optical solutions + fiber; same logic as HFCL</p>
+<p>DC + GIS crossover; smaller /</p>
+<p>cleaner exposure than HFCL</p>
+<p>on optical</p>
+<p>TEJASNET</p>
+<p>TRADER-60 L3</p>
+<p>Networking gear; benefits from BharatNet +</p>
+<p>Smart Cities GIS rollouts</p>
+<p>Diluted — broad-telecom</p>
+<p>thematic; chart was broken</p>
+<p>(-6.9% week)</p>
+<p>POLYCAB /</p>
+<p>KEI</p>
+<p>TRADER-60 L3</p>
+<p>Cables — DC adjacency, no GIS-specific</p>
+<p>revenue</p>
+<p>Skip for GIS frame</p>
+<p>ANANTRAJ</p>
+<p>TRADER-60 L3</p>
+<p>DC-pivot story; GIS compute does run on DC</p>
+<p>infra but GIS-specific revenue absent</p>
+<p>DC thesis, not GIS thesis</p>
+<p>CLEANEST CROSS-STACK ENTRY · LAYER I</p>
+<p>HFCL and STLTECH already capture this.</p>
+<p>The GIS angle is additive to their existing DC + 5G + defense theses, not a fresh entry point. The</p>
+<p>thesis confirms current weights rather than asking for incremental positioning.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Layer J / Defense-GIS</p>
+<p>Name</p>
+<p>TRADER-60</p>
+<p>Mechanism</p>
+<p>Fundamental filter</p>
+<p>BEL</p>
+<p>TRADER-60</p>
+<p>L3</p>
+<p>ISR systems, satellite payload electronics, EW,</p>
+<p>mission electronics</p>
+<p>Governance clean (PSU);</p>
+<p>chart elevated; PE 40s; WAIT</p>
+<p>Astra</p>
+<p>Microwave</p>
+<p>GAP</p>
+<p>Sat RF / microwave (T/R modules, satcom</p>
+<p>subsystems)</p>
+<p>Smallcap, PE elevated; WAIT</p>
+<p>Data Patterns</p>
+<p>GAP</p>
+<p>Defense electronics incl. embedded systems</p>
+<p>for UAVs + surveillance + sat ground</p>
+<p>[Secondary — training-knowledge, flag]</p>
+<p>High PE (50+), chart had run;</p>
+<p>CAUTION per the peak-price</p>
+<p>rule</p>
+<p>Paras Defence</p>
+<p>GAP</p>
+<p>Optics for satellites + defense + space; small</p>
+<p>pure-play feel</p>
+<p>Smallcap-PE + governance</p>
+<p>still building track-record;</p>
+<p>CAUTION</p>
+<p>HAL</p>
+<p>TRADER-60</p>
+<p>L3</p>
+<p>Sat assembly + launch vehicles; small GIS slice</p>
+<p>Diluted</p>
+<p>Bharat Forge</p>
+<p>GAP</p>
+<p>Kalyani Strategic Systems has defense</p>
+<p>exposure; very thin to GIS</p>
+<p>Diluted — skip</p>
+<p>Astra Microwave and Data Patterns are the closest gap-fillers if defense-GIS becomes a discrete cluster in</p>
+<p>the TRADER-60 frame — both flunk the fundamental filter&#x27;s peak-price gates today, but both deserve to be</p>
+<p>on a watchlist for a future re-screen.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>Part III / Cleanest Entry Points &amp; TRADER-60 Gap Audit</p>
+<p>3.1 Cleanest entry per layer</p>
+<p>Layer</p>
+<p>Cleanest candidate</p>
+<p>Why it stands out</p>
+<p>Action</p>
+<p>A — Mapping data</p>
+<p>GENESYS</p>
+<p>INTERNATIONAL</p>
+<p>TRADER-60 gap;</p>
+<p>faster-grower than MMI</p>
+<p>Wait for Q4 FY26 print after</p>
+<p>Q3 exceptional charges</p>
+<p>B — EO satellite</p>
+<p>No clean listed</p>
+<p>pure-play</p>
+<p>BEL / Astra / MTAR are</p>
+<p>diluted</p>
+<p>IPO-WATCH for Pixxel +</p>
+<p>Dhruva + SatSure</p>
+<p>C — Drones</p>
+<p>IDEAFORGE</p>
+<p>Only listed pure-play with</p>
+<p>sector tailwind</p>
+<p>Chart healed but</p>
+<p>profitability emerging —</p>
+<p>watchlist not buy-now</p>
+<p>D, E, F — Logistics / Insurance</p>
+<p>/ Climate</p>
+<p>Honest</p>
+<p>empty-or-diluted-set</p>
+<p>GIS consumers, not</p>
+<p>producers</p>
+<p>Skip as a thesis driver</p>
+<p>G — Surveying / construction</p>
+<p>L&amp;T (Smart World),</p>
+<p>Buildcon names</p>
+<p>Diluted — single-digit %</p>
+<p>revenue</p>
+<p>Skip as a thesis driver</p>
+<p>H — IT services</p>
+<p>TCS / INFY / HCL /</p>
+<p>Wipro / LTIM /</p>
+<p>Persistent</p>
+<p>&lt;2% of revenue from GIS</p>
+<p>practice</p>
+<p>Hold for AI-services thesis</p>
+<p>if at all, not for GIS</p>
+<p>I — Infrastructure enabler</p>
+<p>HFCL + STLTECH</p>
+<p>Already in book</p>
+<p>GIS angle is additive, not a</p>
+<p>fresh entry</p>
+<p>J — Defense-GIS</p>
+<p>Astra Microwave +</p>
+<p>Data Patterns</p>
+<p>Closest gap-fillers if</p>
+<p>defense-GIS becomes a</p>
+<p>discrete cluster</p>
+<p>Both flunk the peak-price</p>
+<p>gate today</p>
+<p>3.2 TRADER-60 GIS-relevant exposure (current)</p>
+<p>#</p>
+<p>Name</p>
+<p>TRADER level</p>
+<p>Mechanism note</p>
+<p>1</p>
+<p>MAPMYINDIA</p>
+<p>L5</p>
+<p>Core mapping operator</p>
+<p>2</p>
+<p>HFCL</p>
+<p>L1</p>
+<p>Fiber + defense optoelectronics</p>
+<p>3</p>
+<p>STLTECH</p>
+<p>L3</p>
+<p>Fiber crossover</p>
+<p>4</p>
+<p>BEL</p>
+<p>L3</p>
+<p>Defense-ISR adjacency</p>
+<p>5</p>
+<p>TEJASNET</p>
+<p>L3</p>
+<p>Networking enabler</p>
+<p>6</p>
+<p>KPIT</p>
+<p>L5</p>
+<p>Auto ADAS HD-maps consumer (indirect)</p>
+<p>7</p>
+<p>HAL / MTARTECH</p>
+<p>L3</p>
+<p>Sat manufacturing/precision (diluted)</p>
+<p>8</p>
+<p>ANANTRAJ</p>
+<p>L3</p>
+<p>DC compute substrate (indirect)</p>
+<p>9</p>
+<p>TCS / INFY / HCLTECH / PERSISTENT</p>
+<p>L4</p>
+<p>Diluted IT-services GIS practices</p>
+<p>3.3 Notable gaps to consider for next screener-map</p>
+<p>•  GENESYS INTERNATIONAL — obvious peer to MAPMYINDIA at L5; absent today.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>•  IDEAFORGE — only listed UAV pure-play; absent.</p>
+<p>•  Astra Microwave — sat RF; absent (BEL is the only sat-electronics name today).</p>
+<p>•  Data Patterns — defense electronics incl. UAV / sat ground systems; absent.</p>
+<p>•  Paras Defence — sat optics pure-play; absent.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>3.4 IPO-WATCH additions (priority order)</p>
+<p>#</p>
+<p>Name</p>
+<p>Layer / mechanism</p>
+<p>Priority &amp; rationale</p>
+<p>1</p>
+<p>Pixxel</p>
+<p>Hyperspectral; consortium prime</p>
+<p>Highest — anchor of national EO</p>
+<p>consortium</p>
+<p>2</p>
+<p>Dhruva Space</p>
+<p>Smallsat manufacturing + ground</p>
+<p>stations</p>
+<p>High — consortium partner with hardware</p>
+<p>exposure</p>
+<p>3</p>
+<p>SatSure</p>
+<p>EO analytics (ag, infra, climate)</p>
+<p>High — analytics layer of consortium</p>
+<p>4</p>
+<p>PierSight</p>
+<p>SAR-focused EO</p>
+<p>Medium — SAR niche, very early-stage</p>
+<p>5</p>
+<p>GalaxEye</p>
+<p>Multi-sensor fusion (SAR+optical)</p>
+<p>Lower — lost the EO-PPP bid</p>
+<p>6</p>
+<p>Cropin</p>
+<p>Ag analytics SaaS + EO</p>
+<p>Medium — agri layer pure-play</p>
+<p>7</p>
+<p>Garuda Aerospace</p>
+<p>Ag-drones, Make-in-India</p>
+<p>Medium — timeline murky</p>
+<p>CAVEAT</p>
+<p>All seven names lack public DRHPs as of this session.</p>
+<p>Timeline = unverified. Treat as multi-quarter watchlist not near-term IPO bets.</p>
+<p>Part IV / Falsification &amp; Misconceptions</p>
+<p>4.1 Falsification tests (load-bearing claims that could be wrong)</p>
+<p>Per research-discipline.md Rule 7, every load-bearing claim in this brief should have a stated falsification</p>
+<p>condition. The five below are the load-bearing ones — if any were to flip, the corresponding section of the</p>
+<p>report would need re-writing.</p>
+<p>#</p>
+<p>Claim</p>
+<p>Falsification condition</p>
+<p>1</p>
+<p>GENESYS is the cleanest</p>
+<p>mapping-data peer to MMI</p>
+<p>If Q4 FY26 + Q1 FY27 prints continue revenue decline / exceptional</p>
+<p>charges, it becomes a value trap, not a peer-grow story.</p>
+<p>2</p>
+<p>IDEAFORGE is the only listed drone</p>
+<p>pure-play</p>
+<p>If a new drone IPO (Garuda / IG Drones) lists in the next 12 months</p>
+<p>with comparable scale and capital efficiency.</p>
+<p>3</p>
+<p>Rs. 200B drone procurement pipeline</p>
+<p>materialises</p>
+<p>If Q4 FY26 + FY27 actual drone tender awards stay below ~Rs.</p>
+<p>40B/year run-rate, exposing the Construction-World framing as</p>
+<p>PR-grade.</p>
+<p>4</p>
+<p>BEL / Astra are diluted GIS exposure</p>
+<p>If either wins a sole-source NGP-private contract worth &gt;5% of</p>
+<p>revenue, in which case the GIS share becomes material.</p>
+<p>5</p>
+<p>Pre-IPO consortium will dominate EO</p>
+<p>economics</p>
+<p>If the 5-year Rs. 1,200cr deployment slips, contracting Pixxel-led</p>
+<p>equity value before they list.</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>4.2 Three common misconceptions</p>
+<p>“India&#x27;s GIS boom is a TCS /</p>
+<p>INFY play.”</p>
+<p>False. IT services have &lt;2% GIS-related revenue and no</p>
+<p>segment break-out. Mechanism-free thematic exposure.</p>
+<p>“Owning Delhivery</p>
+<p>captures GIS upside.”</p>
+<p>False. Delhivery is a GIS consumer; mapping-cost reduction</p>
+<p>shows up as opex savings, not as a revenue line.</p>
+<p>“BEL won the EO-PPP.”</p>
+<p>False. BEL + Astra lost the bid. Pixxel-led consortium won.</p>
+<p>Listed defense names get diluted upside, not the EO-PPP</p>
+<p>economics.</p>
+<p>Closing / Source Tier &amp; Notes</p>
+<p>5.1 Source-tier summary (research-discipline.md Rule 4)</p>
+<p>Tier</p>
+<p>What it covers in this brief</p>
+<p>Primary</p>
+<p>IN-SPACe January 2026 announcement (Pixxel consortium); company IR /</p>
+<p>Q-results pages where directly cited; Union Budget NGP allocation; SoI NGP</p>
+<p>platform release.</p>
+<p>Secondary</p>
+<p>Mordor Intelligence + Allied Market Research market sizing; Business Standard /</p>
+<p>Construction World / BusinessToday on IdeaForge orders; Genesys investor</p>
+<p>presentation digests via ackodrive / kotaksecurities / scanx.</p>
+<p>Tertiary / training-knowledge</p>
+<p>(flagged)</p>
+<p>Pre-IPO timelines, Astra / Data Patterns ISR revenue mix, IT-services GIS practice</p>
+<p>share, Q3 FY26 Genesys exceptional-charge specifics.</p>
+<p>5.2 Scope limits and analogy caveats</p>
+<p>•  Pre-IPO DRHP visibility is shallow — for Pixxel, Dhruva, PierSight, SatSure, GalaxEye, Cropin, Garuda</p>
+<p>Aerospace, IG Drones, no public DRHP confirmed via web search this session. All flagged tertiary /</p>
+<p>opinion-grade timeline.</p>
+<p>•  The fundamental analysis filter is applied lightly per operator instruction; no per-name governance</p>
+<p>deep-dive.</p>
+<p>•  DC-overlap claim (HFCL / STLTECH live in both stacks) is an extension of the prior DC-beneficiaries</p>
+<p>write-up, not a fresh primary mechanism — labelled as such.</p>
+<p>•  §5.24 STRESS_TEST_GATE is not invoked per operator instruction (informational / thematic, no</p>
+<p>actionable picks).</p>
+<p>•  Web-search coverage was partial (rate-limited mid-session): claims dependent on the rate-limited</p>
+<p>searches are tier-tagged Secondary or training-knowledge and flagged in the body text.</p>
+<p>5.3 Sources (selected)</p>
+<p>·  India Geospatial Analytics Market Size — Mordor Intelligence</p>
+<p>·  Indian geospatial market can grow at 12.8% to Rs. 63,100 cr by 2025 — Business Standard</p>
+<p>·  Genesys International — Screener.in</p>
+<p>·  Genesys Q2 FY26 Results — ackodrive.com</p>
+<p>·  Genesys Q3 FY26 — scanx.trade</p>
+<p>·  Mapping stock jumps 13% after launching India&#x27;s first HD ADAS maps — TradeBrains</p>
+<h3>INDIA GIS BOOM</h3>
+<p>Deep-Research Thematic Brief  |  Confidential</p>
+<p>·  IdeaForge Q3 FY26 — univest.in</p>
+<p>·  IdeaForge defence ministry order — Business Standard</p>
+<p>·  ideaForge Secures Strong Drone Orders — Construction World</p>
+<p>·  Pixxel-led consortium signs pact with IN-SPACe — BusinessToday</p>
+<p>·  Pixxel-Led Consortium with Dhruva, PierSight, SatSure — Pixxel.space</p>
+<p>·  India&#x27;s First Private 12-Satellite System Bid Awarded — ElectronicsForU</p>
+<p>·  How private Indian companies are leading the space charge — The Week</p>
+<p>Mode reminder: STUDY (research-only). This brief is informational and thematic. No BUY / ADD / TRIM / EXIT / HEDGE /</p>
+<p>tranche / stop-loss recommendation is made. Re-screening any candidate herein into actionability requires running</p>
+<p>PROCESSES.md §5.24 STRESS_TEST_GATE at that stage.</p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260425_DEEP-RESEARCH_india-GIS-frontrunners</div>
+</div></body></html>

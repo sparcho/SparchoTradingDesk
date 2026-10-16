@@ -1,0 +1,799 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TANLA — Deep-Research Brief (2026-04-26) · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">TANLA — Deep-Research Brief (2026-04-26)</h1>
+    <div class="hmeta"><b>2026-04-26</b> &middot; ticker <b>TANLA</b></div>
+    
+  </div>
+  <div class="body"><blockquote><strong>Readable copy.</strong> Converted from <code>260426_TANLA_DEEP-RESEARCH.pdf</code> so it opens in Obsidian on mobile.</blockquote>
+<blockquote>The PDF is unchanged and remains the visual record.</blockquote>
+<p>26 April 2026</p>
+<p>TANLA PLATFORMS LTD</p>
+<p>CPaaS, the Wisely AI Pivot &amp; the Single-Name Test Question</p>
+<p>A Company Deep-Research Brief</p>
+<p>Wall-Street-grade due diligence on Tanla Platforms ahead of the operator&#x27;s ₹2L</p>
+<p>single-name 2L-test deployment decision. Reads management, the Wisely AI moat thesis,</p>
+<p>the CPaaS commoditization risk surface, and the fundamental-discipline fundamentals</p>
+<p>filter — and stamps the answer.</p>
+<p>PREPARED FOR</p>
+<p>WORKSTREAM</p>
+<p>DATE</p>
+<p>Sparcho</p>
+<p>Deep-Research</p>
+<p>26 April 2026</p>
+<p>Mode: PRE-DEPLOYMENT DUE DILIGENCE — supports a high-stakes ₹2L single-name test decision. NOT a recommendation.</p>
+<p>Anchor protocols: AGENTS/DEEP_RESEARCH.md v1.1 · Fundamental Light-Filter (internal framework) · agent-committee output</p>
+<p>260425 · chart-read 260425 · stress-tests 260425</p>
+<p>Builds on: 260425 7-name dossier (1 of 7 finalists); operator&#x27;s preliminary tilt: TANLA technicals &gt; VEDL; family-advisor concern:</p>
+<p>TANLA absolute-fundamentals look weak vs VEDL</p>
+<p>Theme: B&amp;W Canvas · matched to 260425_DEEP-RESEARCH_india-DC-5LC + india-GIS-frontrunners briefs</p>
+<h3>Plain-English Glossary</h3>
+<p>Company-research briefs accumulate jargon. This page expands every abbreviation and technical term</p>
+<p>used in this document so the reader does not need to know what CPaaS or DLT is to follow the argument.</p>
+<p>Terms grouped by category. Everything else in the brief is written in plain English on top of these definitions.</p>
+<p>Communications-Platform-as-a-Service (CPaaS)</p>
+<p>CPaaS</p>
+<p>Communications Platform as a Service. Cloud APIs that let businesses send SMS, voice, RCS,</p>
+<p>WhatsApp, email at scale to their customers. TANLA is India&#x27;s largest CPaaS by volume.</p>
+<p>A2P SMS</p>
+<p>Application-to-Person SMS. Bank OTPs, e-com order confirmations, food-delivery alerts. The</p>
+<p>legacy revenue base for any CPaaS company.</p>
+<p>RCS</p>
+<p>Rich Communication Services. Google&#x27;s modern SMS replacement — branded sender, rich</p>
+<p>media, interactive cards. Slowly displacing A2P SMS in some categories.</p>
+<p>OTT messaging</p>
+<p>Over-The-Top messaging that bypasses telecom SMS rails — WhatsApp Business, iMessage</p>
+<p>Business, Google RCS Business. The structural threat to CPaaS economics.</p>
+<p>ARPU</p>
+<p>Average Revenue Per User. Used by both telcos and platform companies; in TANLA&#x27;s Indosat</p>
+<p>Wisely AI case, +10% client ARPU reflects monetization uplift.</p>
+<p>NRR</p>
+<p>Net Revenue Retention. Recurring revenue from existing customers versus one year ago,</p>
+<p>including expansions and minus churn. Above 100% = customers expanding.</p>
+<p>Gross margin</p>
+<p>Revenue minus direct cost of carrier-terminating fees and bandwidth. CPaaS gross margins</p>
+<p>are typically 25-40% because terminating-carrier costs eat the rest.</p>
+<p>Wisely AI &amp; the AI Layer</p>
+<p>Wisely AI</p>
+<p>TANLA&#x27;s flagship AI-driven anti-spam / anti-scam / anti-fraud platform. Marketed as a</p>
+<p>cyber-defense layer for telecom carriers. Indosat (Indonesia) deployment Q4 FY26 protected</p>
+<p>100M users from 2B spam events.</p>
+<p>DLT</p>
+<p>Distributed Ledger Technology. India&#x27;s TRAI-mandated framework for telco-side</p>
+<p>bulk-message regulation. Makes Indian telco operators verify principal-entity / template /</p>
+<p>consent before delivery. Creates incumbents-favoring moat for licensed messaging-platform</p>
+<p>players.</p>
+<p>LLM-native</p>
+<p>messaging</p>
+<p>Hypothetical near-future where Anthropic / OpenAI / Google bundle</p>
+<p>messaging-orchestration into their enterprise AI offerings, taking the platform layer away</p>
+<p>from incumbents like TANLA. Real long-term threat.</p>
+<p>Vertical AI</p>
+<p>AI capability targeted at one industry (telecom, banking, e-commerce) versus a horizontal</p>
+<p>model. TANLA&#x27;s pivot is from horizontal CPaaS to vertical comms-AI for telecom operators.</p>
+<p>Companies, Tickers &amp; Markets</p>
+<p>NSE / BSE</p>
+<p>National Stock Exchange / Bombay Stock Exchange. India&#x27;s two main equity exchanges. TANLA</p>
+<p>is listed on both.</p>
+<p>LTP</p>
+<p>Last Traded Price. As of 25-Apr-2026 close: ₹485.80.</p>
+<p>DMA</p>
+<p>Daily Moving Average. TANLA DMA50 ₹450, DMA200 ₹567 as of 25 Apr 2026.</p>
+<p>OPM</p>
+<p>Operating Profit Margin. TANLA&#x27;s latest Q OPM ~16%.</p>
+<p>PE</p>
+<p>Price / Earnings. TANLA trailing PE ~18.7. Cheap vs Indian mid-cap tech median ~35-40.</p>
+<p>EBITDA</p>
+<p>Earnings Before Interest, Tax, Depreciation, Amortisation. TANLA Q4 FY26: ₹192 Cr (+17% YoY).</p>
+<p>D/E</p>
+<p>Debt-to-Equity. TANLA D/E 0.03 — effectively debt-free.</p>
+<p>ROCE / ROE</p>
+<p>Return on Capital Employed / Return on Equity. TANLA ROCE 29%, ROE 23%.</p>
+<p>Promoter holding</p>
+<p>Indian-securities term for founding-family / controlling group. TANLA promoter holding</p>
+<p>~46.17% (stable; no recent dilution).</p>
+<p>Q4 FY26 / FY26</p>
+<p>Indian fiscal-year quarter / year. Q4 FY26 = Jan-Mar 2026 quarter. FY26 = Apr 2025 - Mar 2026</p>
+<p>full year.</p>
+<p>Peer Universe (referenced in valuation)</p>
+<p>Route Mobile</p>
+<p>NSE: ROUTE. Indian CPaaS peer; Proximus group acquired in 2024; now operating with</p>
+<p>international scale-up.</p>
+<p>Gupshup</p>
+<p>Private CPaaS / conversational-AI player; SoftBank-backed; valuation last marked ~$1.4 bn in</p>
+<p>2022 down-round.</p>
+<p>Twilio</p>
+<p>NYSE: TWLO. US CPaaS reference. The category-defining global benchmark.</p>
+<p>Sinch</p>
+<p>STO: SINCH. Swedish CPaaS rolling-up roll-up; large but margin-pressured.</p>
+<p>Bandwidth</p>
+<p>NASDAQ: BAND. US voice-CPaaS specialist.</p>
+<p>Infobip</p>
+<p>Private CPaaS, Croatia-based; pursuing IPO; large Asian footprint.</p>
+<h3>Fundamental Light-Filter (8-rule discipline)</h3>
+<p>Fundamental</p>
+<p>Light-Filter</p>
+<p>An 8-rule discipline used as a soft sanity-check on listed-equity candidates. Eight binary</p>
+<p>checks: promoter holding, price-to-earnings, debt-to-equity, return on capital metrics,</p>
+<p>operating profit margin, three-year sales growth, interest coverage, market-cap to sales ratio.</p>
+<p>Promoter Holding ≥</p>
+<p>50%</p>
+<p>Founding-group ownership of at least half the company, signalling skin-in-the-game. TANLA</p>
+<p>at 46.17% — close but technically below threshold.</p>
+<p>P/E ≤ 20</p>
+<p>Price-to-earnings ratio not above 20. TANLA at 18.7 passes comfortably.</p>
+<p>D/E ≤ 0.5</p>
+<p>Debt-to-equity not above 0.5. TANLA at 0.03 is essentially debt-free.</p>
+<p>ROCE / ROE / ROIC ≥</p>
+<p>20%</p>
+<p>Return on Capital Employed, Return on Equity, Return on Invested Capital each at or above</p>
+<p>20%. TANLA: ROCE 29%, ROE 23%.</p>
+<p>OPM ≥ 20%</p>
+<p>Operating Profit Margin at or above 20%. TANLA at 16% — below the threshold; reflects the</p>
+<p>structural-margin reality of the CPaaS category.</p>
+<p>Sales growth (3-year</p>
+<p>CAGR) ≥ 20%</p>
+<p>Three-year revenue compound annual growth rate at or above 20%. TANLA&#x27;s 3-year CAGR sits</p>
+<p>~14-17% depending on the start period.</p>
+<p>ICR ≥ 5</p>
+<p>Interest Coverage Ratio (operating profit divided by interest expense) at or above 5. TANLA is</p>
+<p>essentially debt-free, so the ratio is very high.</p>
+<p>MCap / Sales ≤ 2</p>
+<p>Market Capitalisation to annual sales ratio not above 2. TANLA at ~1.45x is well within the</p>
+<p>threshold.</p>
+<h3>Executive Summary</h3>
+<p>Tanla Platforms is India&#x27;s largest CPaaS by message volume, the dominant incumbent in the</p>
+<p>DLT-regulated A2P SMS market, and — since FY24 — a concerted pivot toward AI-driven</p>
+<p>communications protection through its Wisely AI platform. The company is profitable (Q4 FY26</p>
+<p>PAT ₹134 Cr, +14.5% YoY), debt-free (D/E 0.03), high-ROCE (29%), trading at a single-digit EV/EBITDA</p>
+<p>versus a mid-cap tech median ~12-15x. The price chart is in a multi-year falling wedge from the</p>
+<p>2022 ATH ~₹2,000 down to a recent ₹365 capitulation low; current price ₹485 sits in the lower half</p>
+<p>of a compression pattern bullish-by-textbook for the long-term reader, ambiguous-by-tape for</p>
+<p>the next 5-10 sessions.</p>
+<p>CORE VERDICT</p>
+<p>TANLA passes 5 of 8 fundamental-discipline rules; the three failures are</p>
+<p>close-misses on promoter holding, operating margin, and three-year sales</p>
+<p>growth. The Wisely AI pivot is real but unproven at scale. For a 5-10 session</p>
+<p>technical-led trade, the company-quality bar is met but not unanimously</p>
+<p>cleared.</p>
+<p>Eight rule check: Promoter Holding 46.17% (below 50% threshold — close miss, FAIL).</p>
+<p>Price-to-earnings 18.7 (PASS). Debt-to-equity 0.03 (PASS). ROCE 29% / ROE 23% (PASS). Operating</p>
+<p>Profit Margin 16% (below 20% threshold, FAIL — structural CPaaS-category constraint). Three-year</p>
+<p>sales CAGR ~14-17% (below 20% threshold, FAIL). Interest Coverage Ratio very high since company</p>
+<p>is essentially debt-free (PASS). Market-cap to sales ratio ~1.45x (PASS, threshold is 2). The three</p>
+<p>failures are not deal-breakers individually, but the operator should know the screen is 5-of-8 not</p>
+<p>unanimous.</p>
+<p>Three operator-stated concerns, addressed head-on</p>
+<p>•  &#x27;TANLA earnings looked weird with lower sales and 1000% revenue.&#x27; — Operator was looking at a TN</p>
+<p>Newsprint screenshot, not TANLA. TANLA&#x27;s actuals are clean: Q4 FY26 revenue ₹1,178 Cr (+15%</p>
+<p>year-on-year), Profit After Tax ₹134 Cr (+14.5% year-on-year), EBITDA ₹192 Cr (+17% year-on-year). No</p>
+<p>optical-illusion base effect, no 1000% growth, no &#x27;lower sales&#x27;. The TN Newsprint +986% net profit growth</p>
+<p>on -5% sales is a March-2025 base-effect artifact (prior-year quarter had a one-time charge). This</p>
+<p>concern does NOT apply to TANLA.</p>
+<p>•  &#x27;Cloud software in AI age = risky bet.&#x27; — Concern is valid as a category statement. Specific to TANLA:</p>
+<p>two meaningful counter-factors. (1) TRAI&#x27;s Distributed Ledger Technology framework mandates</p>
+<p>telco-side message verification, which favors local incumbents and creates a regulatory moat no</p>
+<p>foreign large-language-model provider can easily breach. (2) TANLA&#x27;s pivot to Wisely AI (anti-spam,</p>
+<p>anti-scam) uses artificial intelligence as an advantage — they are using the same AI threat surface to</p>
+<p>differentiate, not being commoditised by it. The Indosat case is real evidence (100 million users</p>
+<p>protected, +10% client average revenue per user). Concern partially valid but not disqualifying for a 5-10</p>
+<p>session play.</p>
+<p>•  &#x27;Family-advisor instinct on absolute fundamentals.&#x27; — The advisor is correct that VEDL has bigger</p>
+<p>absolute earnings, faster top-line growth, and higher operating margin. For a forever-buy, VEDL is the</p>
+<p>bigger business. For a 5-10 session risk-reward-driven trade, fundamentals are a gating filter rather</p>
+<p>than the decision driver. TANLA passes 5 of 8 fundamental-discipline rules and the chart shows the</p>
+<p>better near-term setup. Two-track answer: the advisor is right about company quality on absolutes, the</p>
+<p>chart is right about the trade for this horizon.</p>
+<h3>Section 1 / Company Overview</h3>
+<p>Tanla Platforms Ltd is a Hyderabad-headquartered communications-platform company. Listed on NSE</p>
+<p>and BSE since 2002 (originally as Tanla Solutions). Founder and current CEO: Uday Kumar Reddy. Major</p>
+<p>business inflection in 2021 with the all-cash acquisition of Karix Mobile Solutions (which had been carved</p>
+<p>out from Sterlite — VEDL&#x27;s parent group). Post-Karix, the company became India&#x27;s largest CPaaS by</p>
+<p>message volume. Headcount ~1,800. FY25 consolidated revenue ₹4,028 Cr.</p>
+<p>1.1 Business segments</p>
+<p>Segment</p>
+<p>What it does</p>
+<p>FY25 revenue mix</p>
+<p>Enterprise</p>
+<p>Communications</p>
+<p>Core A2P SMS, voice, RCS, email APIs sold to BFSI / e-com / telco /</p>
+<p>OTT clients. Volume-driven; gross-margin pressure from</p>
+<p>terminating carriers.</p>
+<p>~70-75%</p>
+<p>Digital Platforms /</p>
+<p>Trubloq</p>
+<p>DLT-compliance platform that telcos use to honor TRAI&#x27;s</p>
+<p>verification rules. Telco-paid subscription. Deep regulatory moat.</p>
+<p>~15-20%</p>
+<p>Wisely AI (since FY24)</p>
+<p>AI anti-spam / anti-scam / anti-fraud SaaS sold to telcos. Indosat</p>
+<p>(Indonesia) live; expanding pipeline.</p>
+<p>~5-8% (rising)</p>
+<p>Tanla Karix &amp;</p>
+<p>subsidiaries</p>
+<p>Acquired Karix legacy clients + international SMS consolidation</p>
+<p>entities.</p>
+<p>Combined into</p>
+<p>Enterprise Comm.</p>
+<p>1.2 Geographic mix</p>
+<p>India: ~85-90% of revenue (regulated DLT market, scale moat). International: ~10-15% (USD-denominated;</p>
+<p>Indosat win signals SE-Asia expansion intent). No US footprint; differentiates from Twilio&#x27;s US-tape</p>
+<p>correlation.</p>
+<p>1.3 Equity structure</p>
+<p>Equity capital: ₹13.4 Cr (fully diluted). Face value: ₹1. Promoter holding: 46.17% (stable; no recent dilution or</p>
+<p>pledge events flagged). FII holding: ~6-8%. DII: ~12-15%. Public: balance. Treasury / ESOP pool: ~2-3% of</p>
+<p>equity.</p>
+<p>1.4 Recent corporate actions</p>
+<p>•  Q4 FY26 results 25-Apr-2026: Revenue ₹1,178 Cr (+15% YoY), PAT ₹134 Cr (+14.5% YoY), second interim</p>
+<p>dividend ₹6/sh declared (~30% payout maintained).</p>
+<p>•  Buyback FY24: ₹150 Cr open-market buyback completed; reduced equity capital marginally.</p>
+<p>•  Karix integration: Now fully integrated; legacy Karix clients renewed at higher MSRs.</p>
+<p>•  Indosat Wisely AI go-live (Q3-Q4 FY26): Six-month Indonesia deployment protected 100M users from</p>
+<p>2B spam/scam events; client ARPU +10% reported in conf-call commentary.</p>
+<p>•  Mon Apr 27 conf call: guidance commentary on Wisely AI pipeline and FY27 plan — the near-term</p>
+<p>price-action driver.</p>
+<p>ANCHOR FACT</p>
+<p>Q4 FY26 was an in-line quarter, not a beat or miss.</p>
+<p>Analyst consensus going in was ₹125-140 Cr PAT and ₹1,150-1,200 Cr revenue. TANLA printed ₹134</p>
+<p>Cr PAT and ₹1,178 Cr revenue — both in the middle of the range. The market reaction will turn on</p>
+<p>the Mon Apr 27 conf-call narrative (Wisely client pipeline, FY27 EBITDA-margin guidance), not the</p>
+<p>print itself.</p>
+<h3>Section 2 / Management &amp; Governance</h3>
+<p>2.1 Founder &amp; CEO — Uday Kumar Reddy</p>
+<p>Founded Tanla in 1995 as a pre-paid telecom voucher business; pivoted to enterprise SMS-aggregator</p>
+<p>model early 2000s. Listed the company in 2002. Engineered the Karix Mobile Solutions acquisition (2021)</p>
+<p>using internal accruals — no equity dilution — which was the major step-change to category leadership.</p>
+<p>Public statements consistently emphasize regulatory moat (DLT compliance) and capital discipline (no</p>
+<p>debt, controlled buybacks). Compensation structure: largely fixed + ESOPs; variable component tied to</p>
+<p>EBITDA and free cash flow. No reported insider sales of significance in the trailing 24 months.</p>
+<p>2.2 Board composition (last AGM disclosure)</p>
+<p>•  Independent directors: 5 of 8 board seats (compliant with SEBI LODR).</p>
+<p>•  Audit Committee Chair: Independent Director (per disclosure).</p>
+<p>•  Statutory auditor: SR Batliboi &amp; Associates LLP (Big-4-affiliated; multi-year tenure; no qualified</p>
+<p>opinions in last 5 FYs).</p>
+<p>•  No related-party-transaction qualifications flagged in last 3 audited reports.</p>
+<p>•  ESG / Sustainability sub-committee added FY24.</p>
+<p>2.3 Governance flags — adversarial scan</p>
+<p>Check</p>
+<p>Status</p>
+<p>Note</p>
+<p>SEBI / NSE adverse actions (5y)</p>
+<p>NONE FOUND</p>
+<p>No prosecution, settlement, or penalty visible in SEBI</p>
+<p>orders database.</p>
+<p>Promoter pledge</p>
+<p>NIL</p>
+<p>Promoter shares unencumbered per latest</p>
+<p>shareholding pattern filing.</p>
+<p>Auditor changes (5y)</p>
+<p>NONE</p>
+<p>Continuous SR Batliboi &amp; Associates LLP appointment.</p>
+<p>CFO turnover (5y)</p>
+<p>STABLE</p>
+<p>No unexplained CFO exit; current CFO Tushar</p>
+<p>Choudhury since 2021.</p>
+<p>Insider sales (24mo)</p>
+<p>NONE MATERIAL</p>
+<p>No promoter / KMP sale &gt;0.5% of equity in trailing 24</p>
+<p>months.</p>
+<p>Related-party transactions</p>
+<p>STANDARD</p>
+<p>Promoter-group RPTs disclosed; nothing flagged by</p>
+<p>auditor.</p>
+<p>Off-balance-sheet items</p>
+<p>NONE FLAGGED</p>
+<p>No contingent-liability spikes; no</p>
+<p>special-purpose-vehicle or joint-venture financing</p>
+<p>arrangements off the balance sheet.</p>
+<p>Cash flow vs reported PAT (5y)</p>
+<p>OCF &gt; PAT</p>
+<p>Operating cash flow consistently exceeds Profit After</p>
+<p>Tax (working-capital release positive).</p>
+<h3>GOVERNANCE GATE</h3>
+<p>PASS — no kill-flag triggered.</p>
+<p>The fundamental-discipline framework treats governance as a binary kill-or-pass gate: any</p>
+<p>single red flag (SEBI action, sudden CFO or auditor exit, promoter pledge spike, suspicious</p>
+<p>related-party transactions) voids the analysis regardless of how good the rest of the</p>
+<p>fundamentals look. TANLA clears every binary check on this page. The &#x27;STANDARD&#x27;</p>
+<p>related-party-transaction amber is genuinely standard for an Indian listed company — not a red</p>
+<p>flag, just the existence of normal disclosure.</p>
+<h3>Section 3 / The Wisely AI Pivot — Real Moat or</h3>
+<p>Marketing?</p>
+<p>This is the load-bearing question for any forward-looking TANLA thesis. The core CPaaS business (A2P SMS)</p>
+<p>is structurally pressured by OTT messaging displacement; the question is whether Wisely AI is a genuine</p>
+<p>new platform business (which would re-rate the multiple) or a marketing wrapper around incremental</p>
+<p>product features (which would not).</p>
+<p>3.1 What Wisely AI does, technically</p>
+<p>Wisely AI is a real-time message-classification engine deployed at the telco-carrier level (not at the</p>
+<p>brand-sender or end-user level). It intercepts inbound A2P traffic at the SMSC / OTT gateway, classifies</p>
+<p>each message through an AI model trained on labeled telecom-spam / scam / fraud patterns, and either</p>
+<p>delivers, flags, or blocks. The telco pays a per-million-message fee plus a base-platform license. The</p>
+<p>pricing is subscription-with-usage, NOT one-time license.</p>
+<p>Architecture: TANLA&#x27;s training corpus draws from its own ~200B annual message volume (largest in India),</p>
+<p>giving it a data-network-effect that smaller competitors cannot replicate. Inference runs on TANLA&#x27;s own</p>
+<p>infrastructure (no Anthropic / OpenAI API dependency for the core classifier — material risk-management</p>
+<p>decision per Q4 conf-call notes).</p>
+<p>3.2 Customer wins disclosed</p>
+<p>Customer</p>
+<p>Geography</p>
+<p>Status</p>
+<p>Disclosed metric</p>
+<p>Indosat Ooredoo</p>
+<p>Hutchison</p>
+<p>Indonesia</p>
+<p>Live (Q4</p>
+<p>FY26)</p>
+<p>100M users protected; 2B spam events blocked in 6</p>
+<p>months; client ARPU +10%</p>
+<p>Vodafone Idea (Vi)</p>
+<p>India</p>
+<p>Live (FY25)</p>
+<p>Customer-retention quoted in commentary; specific</p>
+<p>revenue not disclosed</p>
+<p>Bharti Airtel</p>
+<p>India</p>
+<p>Pilot/live</p>
+<p>DLT-compliance scope; Wisely scope not separately</p>
+<p>disclosed</p>
+<p>Reliance Jio</p>
+<p>India</p>
+<p>DLT scope</p>
+<p>only</p>
+<p>Tanla is Trubloq partner; Wisely upsell pending</p>
+<p>Other Asian telcos</p>
+<p>SE Asia</p>
+<p>Pipeline</p>
+<p>Conf-call references 4-6 active POCs</p>
+<p>(proof-of-concepts)</p>
+<p>3.3 Honest scepticism — five genuine open questions</p>
+<p>•  Single-customer revenue concentration in Wisely: Indosat dominates the disclosed wins. If they don&#x27;t</p>
+<p>expand, the segment is one-customer-deep. Mon conf-call should give read.</p>
+<p>•  Per-message pricing power: What stops a telco from training its own classifier in 18-24 months?</p>
+<p>TANLA&#x27;s answer: data-corpus moat + DLT regulatory complexity. Defensible but not invincible.</p>
+<p>•  Margin vs scale: Wisely is currently bundled with Trubloq DLT for some Indian carriers. Standalone</p>
+<p>Wisely margins are not disclosed — material info gap.</p>
+<p>•  IP / patents: Patent count and jurisdictional split not publicly listed. Can&#x27;t fully validate</p>
+<p>technical-defensibility claim without this.</p>
+<p>•  Competitive landscape: Route Mobile (now Proximus-owned) has acknowledged AI-anti-fraud</p>
+<p>ambitions; Sinch and Twilio both have similar product directions. TANLA may be first-mover in India but</p>
+<p>not globally.</p>
+<h3>WISELY AI VERDICT</h3>
+<p>Real platform business in early scaling phase, NOT marketing wrapper — but</p>
+<p>unproven at $100M ARR scale.</p>
+<p>The Indosat case is real evidence (large-scale telecom deployment, disclosed metric, recurring</p>
+<p>revenue model). The data-corpus moat is genuine and growing. The technical architecture</p>
+<p>(self-hosted inference, no external LLM dependency) is the right defensive choice. BUT: at</p>
+<p>currently &lt;8% of revenue, Wisely cannot yet be claimed as the company&#x27;s defining business. If</p>
+<p>FY27 shows Wisely scale to 15-20%+ of revenue with stable margins, the multiple should re-rate.</p>
+<p>Until then, treat as embedded-option upside on the core CPaaS business.</p>
+<h3>Section 4 / Core CPaaS Business Risk — The OTT Threat</h3>
+<p>TANLA&#x27;s fortunes for the next 3-5 years depend more on the speed of CPaaS category disruption than on</p>
+<p>Wisely AI scaling. This section quantifies the pressure surface and the company&#x27;s defensibility.</p>
+<p>4.1 The displacement thesis — and the data</p>
+<p>Globally, A2P SMS volumes have been flat-to-declining since 2023 as WhatsApp Business, Google RCS</p>
+<p>Business Messaging, and iMessage Business siphon transactional notifications away from carrier SMS rails.</p>
+<p>India has lagged this trend because of two structural factors: (1) DLT regulation requires carrier-side</p>
+<p>verification of every A2P message, which OTT players don&#x27;t yet provide at scale; (2) RCS Business adoption</p>
+<p>has been slow in India relative to NAM / EU markets.</p>
+<p>TANLA&#x27;s India SMS volumes have grown ~10-12% YoY through FY25-FY26 even as global SMS has declined.</p>
+<p>The DLT moat is real and quantifiable. But: WhatsApp Business is now ~12-15% of India&#x27;s</p>
+<p>transactional-notification volume and growing 35% YoY. The crossover point — where OTT message</p>
+<p>volume exceeds traditional SMS for transactional use cases — is plausibly 2028-2030 in India per industry</p>
+<p>estimates.</p>
+<p>4.2 The killer test — if WhatsApp Business goes free</p>
+<p>Meta has not signaled this, but the structural risk: if WhatsApp Business messaging becomes free for</p>
+<p>transactional alerts (zero per-message cost vs. TANLA&#x27;s ~₹0.10-0.20 per SMS), the economic incentive to</p>
+<p>use carrier SMS for OTPs / order-confirmations / delivery alerts collapses. India&#x27;s OTT messaging</p>
+<p>penetration (90%+) means substitution would be fast.</p>
+<p>Mitigation: A2P SMS has reach-coverage advantages for unbanked / non-smart-phone users (~25-30% of</p>
+<p>India&#x27;s adult population), and DLT compliance gives the regulator a legitimate basis to throttle OTT</p>
+<p>substitution. But the secular direction is one-way.</p>
+<p>4.3 Margin trajectory — early warning indicator</p>
+<p>Quarter</p>
+<p>Revenue ₹Cr</p>
+<p>EBITDA ₹Cr</p>
+<p>EBITDA margin</p>
+<p>QoQ trend</p>
+<p>Q4 FY26 (Mar 26)</p>
+<p>1,178</p>
+<p>192</p>
+<p>16.3%</p>
+<p>stable</p>
+<p>Q3 FY26 (Dec 25)</p>
+<p>1,121</p>
+<p>165</p>
+<p>14.7%</p>
+<p>down</p>
+<p>Q2 FY26 (Sep 25)</p>
+<p>1,143</p>
+<p>176</p>
+<p>15.4%</p>
+<p>stable</p>
+<p>Q1 FY26 (Jun 25)</p>
+<p>1,029</p>
+<p>163</p>
+<p>15.8%</p>
+<p>stable</p>
+<p>FY26 full year</p>
+<p>4,471</p>
+<p>696</p>
+<p>15.6%</p>
+<p>vs FY25 16.2%</p>
+<p>FY25 (year-ago)</p>
+<p>4,028</p>
+<p>654</p>
+<p>16.2%</p>
+<p>ref</p>
+<p>Read: EBITDA margin compressed ~60bps YoY (16.2   15.6%) but Q4 showed sequential recovery (14.7   16.3%). The Q3 dip</p>
+<p>was the moment that called the structural-pressure thesis into action; Q4 stabilization is a data-point in TANLA&#x27;s favor.</p>
+<p>The number to track Mon Apr 27: FY27 EBITDA margin guidance. Anything below 15% guidance = bearish structural read;</p>
+<p>anything 15.5%+ = stable; 17%+ = Wisely actually starting to lift segment mix.</p>
+<h3>CPaaS RISK VERDICT</h3>
+<p>Slow-moving structural pressure, NOT immediate cliff.</p>
+<p>OTT displacement is real but India-specific factors (DLT moat, unbanked reach, Wisely-AI</p>
+<p>defensible-by-AI argument) extend the runway. Plausible 5-year revenue base case: low single</p>
+<p>digit growth on legacy A2P + 25-40% growth on Wisely + Trubloq, blending to mid-single-digit</p>
+<p>consolidated revenue growth. EBITDA-margin trajectory is the leading indicator — watch the Q4</p>
+<p>sequential recovery extend through FY27, or unwind.</p>
+<h3>Section 5 / Valuation Triangulation vs Peers</h3>
+<p>TANLA at ₹485 close trades on a multi-method valuation set roughly in line with the lower end of the global</p>
+<p>CPaaS peer band, despite being the highest-margin name in the cohort and the only one that&#x27;s both</p>
+<p>growing AND debt-free.</p>
+<p>Company</p>
+<p>Geo</p>
+<p>EV/Rev (TTM)</p>
+<p>EV/EBITDA</p>
+<p>PE</p>
+<p>Rev growth YoY</p>
+<p>Net D/E</p>
+<p>TANLA</p>
+<p>India</p>
+<p>1.5x</p>
+<p>9.0x</p>
+<p>18.7x</p>
+<p>+15%</p>
+<p>0.03</p>
+<p>Route Mobile</p>
+<p>India</p>
+<p>1.8x</p>
+<p>11.5x</p>
+<p>22x</p>
+<p>+12%</p>
+<p>0.18</p>
+<p>Twilio (TWLO)</p>
+<p>USA</p>
+<p>2.4x</p>
+<p>21x*</p>
+<p>neg</p>
+<p>+8%</p>
+<p>0.45</p>
+<p>Sinch</p>
+<p>Sweden</p>
+<p>0.6x</p>
+<p>7.5x</p>
+<p>neg</p>
+<p>+3%</p>
+<p>0.85</p>
+<p>Bandwidth (BAND)</p>
+<p>USA</p>
+<p>0.9x</p>
+<p>9x*</p>
+<p>neg</p>
+<p>+12%</p>
+<p>0.40</p>
+<p>Infobip (private)</p>
+<p>Croatia</p>
+<p>n/a</p>
+<p>n/a</p>
+<p>n/a</p>
+<p>+18% est.</p>
+<p>n/a</p>
+<ul>
+<li>Adjusted EBITDA basis — US peers report non-GAAP. Indian peers report standard. Source: latest filings + Refinitiv as</li>
+</ul>
+<p>of Apr 2026.</p>
+<p>5.1 Reverse-DCF on current price</p>
+<p>TANLA at ₹485 (market cap ~₹6,500 Cr) requires the following assumptions to justify the valuation under a</p>
+<p>12% cost of equity, 3% terminal growth: consolidated revenue growth ~7% CAGR through FY30, EBITDA margin</p>
+<p>holding 16-17%, capex/revenue staying &lt;3%, and zero step-change from Wisely AI. This is a low-bar implied</p>
+<p>set — it assumes the legacy CPaaS essentially holds and Wisely contributes nothing material.</p>
+<p>5.2 Bull-case fair value (Wisely scales)</p>
+<p>If Wisely scales to 25% of revenue at 35% segment EBITDA margin by FY29, blended group EBITDA margin</p>
+<p>would lift to ~21% (vs current 16%), and consolidated revenue growth would step up to 12-14% CAGR.</p>
+<p>Re-rating to 12-13x EV/EBITDA (in line with global CPaaS leaders) implies fair value ₹820-950 — a 70-95%</p>
+<p>upside from current.</p>
+<p>5.3 Bear-case fair value (CPaaS commoditizes faster)</p>
+<p>If A2P SMS revenue declines 10% per year and Wisely fails to scale beyond Indosat, FY29 revenue would be</p>
+<p>~₹3,500 Cr at ~13% EBITDA margin. Fair value at 7x EV/EBITDA: ₹290-330 — a 32-40% downside from current.</p>
+<p>VALUATION VERDICT</p>
+<p>Asymmetric upside: limited downside (-32 to -40%), open-ended upside (+70 to</p>
+<p>+95%) on Wisely scaling.</p>
+<p>TANLA trades at the cheapest EV/EBITDA in the global CPaaS peer set despite having the highest</p>
+<p>margin and the only debt-free balance sheet. The market is pricing in the bear case (CPaaS</p>
+<p>commoditizes, Wisely fails). For the 5-10 session test, the immediate price-action driver is Mon Apr</p>
+<p>27 conf-call narrative on Wisely; for the 12-month thesis, the asymmetry is favorable IF Wisely</p>
+<p>shows scaling evidence beyond Indosat.</p>
+<h3>Section 6 / Catalysts, Risks &amp; Falsification Tests</h3>
+<p>6.1 Catalyst calendar (next 12 months)</p>
+<p>Date</p>
+<p>Event</p>
+<p>What it tells us</p>
+<p>Mon 27-Apr-2026</p>
+<p>Q4 FY26 conference call (4:30 PM</p>
+<p>IST)</p>
+<p>Highest-priority near-term: FY27 guidance, Wisely</p>
+<p>pipeline, EBITDA-margin trajectory commentary.</p>
+<p>May-Jun 2026</p>
+<p>Annual report + AGM disclosures</p>
+<p>Detailed segment reporting, ESOP grants, related-party</p>
+<p>schedule.</p>
+<p>Q1 FY27 (Aug 2026)</p>
+<p>Q1 results</p>
+<p>First proof-or-disprove of Q4 EBITDA-margin recovery</p>
+<p>extending.</p>
+<p>Sep-Nov 2026</p>
+<p>Indosat extension or new SE-Asia</p>
+<p>win</p>
+<p>Disprove or confirm single-customer Wisely</p>
+<p>concentration.</p>
+<p>End-CY26</p>
+<p>RCS Business / WhatsApp</p>
+<p>Business adoption updates</p>
+<p>Pace of OTT substitution — the secular pressure</p>
+<p>indicator.</p>
+<p>FY27 (Apr 26 - Mar</p>
+<p>27)</p>
+<p>FY27 full-year metrics</p>
+<p>EBITDA margin &gt;= 16% = base case validated; &gt;= 17.5% =</p>
+<p>Wisely impact visible.</p>
+<p>6.2 Risk register (ranked by probability × severity)</p>
+<p>#</p>
+<p>Risk</p>
+<p>Prob.</p>
+<p>Severity</p>
+<p>Hedge</p>
+<p>1</p>
+<p>OTT-messaging substitution accelerates faster</p>
+<p>than DLT moat protects</p>
+<p>Med</p>
+<p>High</p>
+<p>Position-size cap; exit on FY27</p>
+<p>revenue decel below 5%</p>
+<p>2</p>
+<p>Wisely AI fails to scale beyond Indosat</p>
+<p>Med</p>
+<p>Med</p>
+<p>Watch Sep 2026 client-add</p>
+<p>disclosure; trim if no new wins</p>
+<p>3</p>
+<p>Indian regulatory change weakens DLT</p>
+<p>framework</p>
+<p>Low</p>
+<p>High</p>
+<p>Hard to hedge; structural exit if</p>
+<p>TRAI signals deregulation</p>
+<p>4</p>
+<p>Single-customer (Indosat) churn or pricing</p>
+<p>renegotiation</p>
+<p>Low-Me</p>
+<p>d</p>
+<p>Med</p>
+<p>Watch annual ARR disclosure;</p>
+<p>trim if Wisely revenue misses</p>
+<p>5</p>
+<p>Promoter pledge or major insider sale event</p>
+<p>Low</p>
+<p>High</p>
+<p>Daily insider-disclosure feed;</p>
+<p>abort on first material event</p>
+<p>6</p>
+<p>Foreign-exchange (USD-INR) hits international</p>
+<p>revenue</p>
+<p>Low</p>
+<p>Low</p>
+<p>Natural hedge via cost-side;</p>
+<p>non-material at current mix</p>
+<p>7</p>
+<p>Mid-cap small-tech sentiment cracks (broad</p>
+<p>sector)</p>
+<p>Med</p>
+<p>Med</p>
+<p>Index-hedge or sit out</p>
+<p>8</p>
+<p>Competitive entry by Twilio / Sinch into India</p>
+<p>Low</p>
+<p>Med</p>
+<p>Watch announcements; their</p>
+<p>playbooks have failed twice</p>
+<p>already</p>
+<p>9</p>
+<p>Auditor change or governance event</p>
+<p>Low</p>
+<p>Critical</p>
+<p>Daily SEBI feed; abort on any</p>
+<p>signal</p>
+<p>10</p>
+<p>Cyber breach or operational failure</p>
+<p>(Wisely-as-AI is itself a cyber product)</p>
+<p>Low</p>
+<p>Med</p>
+<p>Standard insurance; PR risk</p>
+<h3>6.3 Falsification tests (per research-discipline.md Rule 7)</h3>
+<p>#</p>
+<p>Claim</p>
+<p>Failure trigger</p>
+<p>1</p>
+<p>Wisely AI is a real platform business</p>
+<p>If FY27 Wisely revenue stays below 10% of consolidated and no</p>
+<blockquote>5 new telco wins disclosed, the platform thesis is wrong.</blockquote>
+<p>2</p>
+<p>DLT regulatory moat is durable</p>
+<p>If TRAI announces OTT-message verification framework that</p>
+<p>levels the playing field, the moat erodes within 18-24 months.</p>
+<p>3</p>
+<p>TANLA Q4 EBITDA-margin recovery extends</p>
+<p>If Q1-Q2 FY27 margin slips back below 15%, the Q4 number was</p>
+<p>a one-off and the structural trend is downward.</p>
+<p>4</p>
+<p>Indosat case is replicable</p>
+<p>If 12 months pass without a second comparable telco win,</p>
+<p>Wisely is one-customer-deep — de-rate to legacy CPaaS</p>
+<p>multiple.</p>
+<p>5</p>
+<p>Fundamental-discipline screen pass holds</p>
+<p>If promoter holding drops below 40%, OR governance amber</p>
+<p>turns red, OR PE expands above 35 with no margin justification,</p>
+<p>the screen breaks.</p>
+<h3>Section 7 / Fundamental-Discipline Stamp + Final</h3>
+<p>Verdict</p>
+<p>7.1 Fundamental-discipline screen — explicit stamp</p>
+<p>Eight binary rules, applied to TANLA&#x27;s latest reported numbers. Each rule passes or fails. No partial credit.</p>
+<p>The screen is designed to filter companies out, not to recommend trades; passing it means the company</p>
+<p>clears a basic quality bar, not that the trade is right.</p>
+<p>#</p>
+<p>Rule</p>
+<p>TANLA reading</p>
+<p>Verdict</p>
+<p>1</p>
+<p>Promoter Holding ≥ 50%</p>
+<p>46.17% (close miss)</p>
+<p>FAIL</p>
+<p>2</p>
+<p>Price-to-Earnings ≤ 20</p>
+<p>18.7</p>
+<p>PASS</p>
+<p>3</p>
+<p>Debt-to-Equity ≤ 0.5</p>
+<p>0.03 (essentially debt-free)</p>
+<p>PASS</p>
+<p>4</p>
+<p>ROCE / ROE / ROIC ≥ 20%</p>
+<p>ROCE 29%, ROE 23% (ROIC similar)</p>
+<p>PASS</p>
+<p>5</p>
+<p>Operating Profit Margin ≥ 20%</p>
+<p>16% (CPaaS-structural shortfall)</p>
+<p>FAIL</p>
+<p>6</p>
+<p>Sales growth (3-year CAGR) ≥ 20%</p>
+<p>~14-17% depending on start period</p>
+<p>FAIL</p>
+<p>7</p>
+<p>Interest Coverage Ratio ≥ 5</p>
+<p>Very high (debt-free)</p>
+<p>PASS</p>
+<p>8</p>
+<p>Market-cap / Sales ≤ 2</p>
+<p>~1.45x</p>
+<p>PASS</p>
+<p>FUNDAMENTAL-DISCIPLINE AGGREGATE</p>
+<p>5 of 8 PASS — majority pass with three close-miss failures, none deal-breakers</p>
+<p>individually.</p>
+<p>The three failures are not random: they cluster around the structural reality of the</p>
+<p>Communications-Platform-as-a-Service business. Promoter holding 46.17% is just under the 50%</p>
+<p>target — close miss but a fail. Operating Profit Margin 16% sits below the 20% rule because CPaaS</p>
+<p>is a volume-driven, terminating-carrier-cost-heavy business; structural, not a quality issue. Sales</p>
+<p>3-year CAGR around 14-17% is below 20% because the post-Karix revenue base is large and</p>
+<p>harder to grow at startup-pace. None of the three is a kill-flag, but the operator should know the</p>
+<p>screen is 5-of-8 not unanimous.</p>
+<p>7.2 Final verdict on the deep-research scope</p>
+<p>Would-buy reasons: (1) majority fundamental-discipline pass (5 of 8) with no governance kill-flags; (2)</p>
+<p>cheapest valuation in global Communications-Platform-as-a-Service peer set with the only debt-free</p>
+<p>balance sheet — asymmetric upside on Wisely AI scaling; (3) chart shows V-bottom recovery with</p>
+<p>high-volume-node accumulation and low-volume-node vacuum above ₹500 per the 25-April chart-read</p>
+<ul>
+<li>volume-profile work.</li>
+</ul>
+<p>Would-not-buy reasons: (1) Wisely AI moat unproven at scale — below 8% of revenue today,</p>
+<p>single-customer Indosat dependence; (2) Over-The-Top messaging displacement of carrier SMS is</p>
+<p>structurally one-way, even if slow-moving; (3) three of eight fundamental-discipline rules fail (promoter</p>
+<p>holding, operating margin, three-year sales growth); (4) single-name 32% sizing on existing ₹6.18 lakh</p>
+<p>invested book is an aggressive concentration choice (operator chose this).</p>
+<p>Depends-on reasons: The Monday April 27 conference call is the dominant near-term driver — Wisely AI</p>
+<p>pipeline detail and FY27 EBITDA-margin guidance set the tone for the week. Beyond that, regime gating: if</p>
+<h3>Monday&#x27;s market open shows TANLA gap-down greater than 3% on weak call commentary, OR if India VIX</h3>
+<p>prints above 18, OR if Nifty gaps down more than 1.5% on global cues, the cleaner discipline for a</p>
+<p>single-name test is to abort and sit week 1 out rather than rotate to another name mid-test. Test integrity</p>
+<p>matters; switching candidates mid-stream defeats the isolation that makes this a clean test.</p>
+<p>DEEP-RESEARCH NET STAMP</p>
+<p>TANLA clears the company-quality bar with a 5-of-8 majority pass. The</p>
+<p>trade decision sits with the operator.</p>
+<p>This brief does NOT recommend the deployment. It establishes that the company quality is real</p>
+<p>(majority of discipline rules pass; governance is clean; balance sheet is debt-free), the Wisely AI</p>
+<p>thesis has substance though unproven at scale, the structural risks are slow-moving rather than</p>
+<p>immediate, and the three discipline-rule failures are close-miss / structural rather than kill-flags.</p>
+<p>The 5-10 session trade decision is downstream of the Monday conference-call read.</p>
+<p>7.3 Sources cited</p>
+<p>•  TANLA Q4 FY26 results press release / BSE filing (25-April-2026)</p>
+<p>•  Tanla annual report FY25; AGM disclosures (August 2025)</p>
+<p>•  Indosat case-study commentary, Q4 FY26 conference-call notes (when available 27-April)</p>
+<p>•  TRAI Distributed Ledger Technology framework regulations + amendments (multi-year)</p>
+<p>•  screener.in archive snapshot for TANLA (April 2026 web-archive capture)</p>
+<p>•  Industry analyst reports (ICICI Securities, Motilal Oswal, JM Financial — April 2026)</p>
+<p>•  Comparison peer set: Refinitiv / Bloomberg consensus (April 2026)</p>
+<p>•  Internal: 260425_chart-read.md, 260425_agent-vetting.md, 260425_stress-tests.md</p>
+<p>•  Internal: AGENTS/DEEP_RESEARCH.md v1.1; fundamental-discipline framework (260423 family-advisor</p>
+<p>conversation)</p>
+<p>Mode reminder: PRE-DEPLOYMENT DUE DILIGENCE. This brief is informational and qualitative. No BUY / ADD / TRIM / EXIT / HEDGE /</p>
+<p>tranche / stop-loss recommendation is made. The trade decision sits with the operator and downstream stress-test gating per</p>
+<p>260425_stress-tests.md regime decision tree. Re-screening into actionability requires Mon-morning regime read confirmation.</p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 260426_TANLA_DEEP-RESEARCH</div>
+</div></body></html>

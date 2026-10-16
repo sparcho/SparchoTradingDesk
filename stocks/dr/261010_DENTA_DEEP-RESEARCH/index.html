@@ -1,0 +1,332 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DR — Denta Water &amp; Infra Solutions (DENTA) Deep-Dive · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">DR — Denta Water &amp; Infra Solutions (DENTA) Deep-Dive</h1>
+    <div class="hmeta"><b>2026-10-10</b> &middot; ticker <b>DENTA</b> &middot; status <b>active</b></div>
+    
+  </div>
+  <div class="body"><p><strong>Date:</strong> 10 Oct 2026 · <strong>Price used:</strong> ₹259.80 (NSE close 09 Oct 2026) · <strong>Mcap:</strong> ~₹694 Cr · <strong>Next hard catalyst:</strong> Q2 FY27 results, likely mid-Nov (last year 11 Nov; trading window shut 28 Sep)</p>
+<hr>
+<h3>§1 Executive summary</h3>
+<p>Denta is a Bengaluru water-EPC contractor whose entire order book sits in Karnataka and whose paymaster is,</p>
+<p>for ~84% of revenue, the Government of Karnataka. On the surface it is the cheapest profitable listed water-EPC</p>
+<p>name in India — ~13x trailing earnings, 1.5x book, almost no debt. Underneath, the thing the market is pricing</p>
+<p>is not the P/E. It is that <strong>₹114 Cr of profit over FY25–FY26 produced −₹106 Cr of operating cash flow</strong>:</p>
+<p>the ₹150 Cr of IPO working-capital money has been absorbed into inventory, unbilled work and receivables, and</p>
+<p>working-capital days have gone from 87 (FY24) to 380 (FY26) against a guided 95–120.</p>
+<p>That would be a timing problem in a healthy state budget. It is a structural one in <strong>this</strong> budget:</p>
+<p>Karnataka&#x27;s own finance department flagged <strong>₹36,136 Cr of pending contractor bills</strong> on 22 Sep 2026 and called</p>
+<p>borrowing headroom &quot;virtually exhausted&quot;; the contractors&#x27; association puts dues at <strong>~₹38,000 Cr</strong>, of which</p>
+<p><strong>~₹14,000 Cr is Water Resources and ~₹3,600 Cr Minor Irrigation — Denta&#x27;s two core client departments.</strong></p>
+<p>Central JJM money barely moved in FY26 (RE cut 75% vs BE) and FY27 releases are under 10% of budget so far.</p>
+<p>Profitability is also normalising, not just cash: EBITDA margin has gone 38% → 33% → 34% → 30% (FY23–FY26) and</p>
+<p><strong>22.4% in Q1 FY27</strong>, with PAT −40% YoY. Management has missed its own guidance three times in a row</p>
+<p>(FY26 ₹300 Cr target dropped, Q4 revenue ₹55 Cr vs ~₹65 Cr guided, working-capital days 380 vs 95–120), and FY27&#x27;s</p>
+<p>&quot;20%+ growth&quot; now needs Q2–Q4 revenue up ~32% YoY after a −13% Q1.</p>
+<p><strong>Verdict line.</strong> Not a stock to build in, and not one where a quick round-trip back above the high-270s should be</p>
+<p>assumed. The near-term tape is oversold and supply has dried up, so a relief bounce into <strong>268–273</strong> is the</p>
+<p>higher-probability move within two weeks; a clean run back through <strong>278–286</strong> needs a catalyst the calendar</p>
+<p>does not currently show. The Q2 print (mid-Nov) is a negative-skew event: seasonally the weakest execution</p>
+<p>quarter, against a margin and cash trend that has not turned.</p>
+<hr>
+<h3>§2 Business</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>What</span><span>Water EPC: large-scale groundwater recharge with treated water (tank/lake filling), lift irrigation, JJM/AMRUT drinking-water schemes, STPs; 3–5 yr O&amp;M on DBOT contracts (~7–8% of contract value)</span></div>
+<div class="mdtr"><span>Where</span><span><strong>100% Karnataka</strong> order book (CARE, Apr 2026)</span></div>
+<div class="mdtr"><span>Who pays</span><span>GoK ~84% of revenue (H1 FY25): Minor Irrigation Dept, Karnataka Neeravari Nigam (KNNL), BWSSB, KUIDFC, ULBs; a small Railways book</span></div>
+<div class="mdtr"><span>How it wins</span><span>Competitive state tenders (claims ~75% bid success), JV at 51% for larger bids, sub-contracts; individual bid capacity ₹150–200 Cr</span></div>
+<div class="mdtr"><span>How it executes</span><span>Asset-light, outsourced equipment; ~80 permanent staff (FY26 AR); proprietary NEBR/CAMUS treatment partly subcontracted</span></div>
+<div class="mdtr"><span>Order book</span><span>₹727.8 Cr at 31 Mar 2026 (water 73%, irrigation 22%, rail/road 4%); ~₹793 Cr after July orders → ~2.9x FY26 revenue</span></div>
+<div class="mdtr"><span>Flagship jobs</span><span>K C Valley I &amp; II (₹446 Cr), Kerehalli/Koppal (₹235 Cr), Kukanur–Yelburga AMRUT 2 (₹205 Cr), five STPs (₹140.5 Cr)</span></div>
+</div>
+<p><strong>Order book trajectory:</strong> ₹841.5 Cr (Dec 2025) → ₹749.7 Cr (Mar 11) → ₹727.8 Cr (Mar 31) → ~₹793 Cr (Jul). It shrank</p>
+<p>through Q4 FY26 — almost no inflow — and the July ₹65.6 Cr includes a **₹44.67 Cr sub-contract from JNS Infra</p>
+<p>Projects, which Denta&#x27;s own filing declares a related party**. Organic third-party inflow in FY27 to date is</p>
+<p>therefore small. Pipeline cited on the June call: ~₹600 Cr of bids, plus a possible ~₹400 Cr Karnataka Mining</p>
+<p>Environment Restoration Fund order (awaiting committee clearance since Feb 2026) — the single largest upside</p>
+<p>catalyst on the board, with no date.</p>
+<hr>
+<h3>§3 Financials (consolidated, ₹ Cr)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>FY23</span><span>FY24</span><span>FY25</span><span>FY26</span><span>Q1 FY27</span></div>
+<div class="mdtr"><span>Revenue</span><span>174.3</span><span>~239</span><span>203.3</span><span>250.4</span><span>58.7 (−12.8% YoY)</span></div>
+<div class="mdtr"><span>Operating EBITDA</span><span>67</span><span>~80</span><span>68.5</span><span>75</span><span>~13</span></div>
+<div class="mdtr"><span>EBITDA margin</span><span>38%</span><span>33%</span><span>34%</span><span>30%</span><span><strong>22.4%</strong></span></div>
+<div class="mdtr"><span>PAT</span><span>50.1</span><span>~60</span><span>52.9</span><span>60.9</span><span>11.2 (−39.8% YoY)</span></div>
+<div class="mdtr"><span><strong>Cash from operations</strong></span><span>+51</span><span>+27</span><span><strong>−72</strong></span><span><strong>−34</strong></span><span>n/a</span></div>
+</div>
+<p>Quarterly FY26: revenue 67.3 / 74.0 / 53.5 / 55.3; PAT 18.6 / 19.0 / 14.3 / 9.1. Q4 margin pressure was put on</p>
+<p>PVC/HDPE pipe costs.</p>
+<p><strong>Balance sheet (31 Mar 2026):</strong> net worth ~₹459 Cr (book ₹172/share), borrowings ₹12 Cr, cash ₹91 Cr + investments</p>
+<p>₹71 Cr (cash was ₹200 Cr at FY25). Working capital tied up ~₹293 Cr: inventory ₹119 Cr (unusual for EPC —</p>
+<p>completed-but-unbilled work), receivables ₹50 Cr, other current/contract assets ₹124 Cr. Management says it aims to</p>
+<p>liquidate &quot;much of&quot; ~₹295 Cr by about Jan 2027.</p>
+<p><strong>What FY27 guidance needs (computed):</strong> &quot;20%+&quot; on ₹250 Cr ≈ ₹300 Cr. After Q1&#x27;s ₹58.7 Cr, Q2–Q4 must do ~₹242 Cr vs</p>
+<p>₹183 Cr a year ago — <strong>+32%</strong> in a year when the payer is rationing cash. Margin guidance of 25–30% sits above Q1&#x27;s 22%.</p>
+<hr>
+<h3>§4 The core issue — cash conversion</h3>
+<ol>
+<li><strong>Profit is not cash.</strong> FY25–26 cumulative PAT ~₹114 Cr vs CFO ~−₹106 Cr. The IPO&#x27;s ₹150 Cr working-capital</li>
+</ol>
+<p>   allocation was spent exactly as stated — and is now sitting in unbilled work and inventory.</p>
+<ol>
+<li><strong>The monitoring agency flagged ₹169.5 Cr outstanding on four projects</strong> with completed work held in inventory</li>
+</ol>
+<p>   because billing/collection was slow (Feb 2026 call).</p>
+<ol>
+<li><strong>Rating guard-rails:</strong> CARE BBB (Stable) / A3+, reaffirmed 06 Apr 2026. Negative triggers: receivables &gt;90% of</li>
+</ol>
+<p>   revenue, or liquidity &lt;₹50 Cr. Receivables incl. unbilled were 31% (FY24) → 57% (FY25) → 65% (Dec 2025);</p>
+<p>   liquidity ~₹86.5 Cr (Dec 2025). Neither trigger is hit, but both are moving the wrong way.</p>
+<ol>
+<li><strong>What would flip it:</strong> a quarter with positive CFO and inventory/unbilled falling. The Q2 (H1) balance sheet in</li>
+</ol>
+<p>   mid-Nov is where this shows — it matters more than the P&amp;L line.</p>
+<hr>
+<h3>§5 Governance — the discount the market will not drop</h3>
+<ul>
+<li><strong>Chairman &amp; ED C Mruthyunjaya Swamy</strong> is a retired senior Karnataka PWD official. A Lokayukta disproportionate-</li>
+</ul>
+<p>  assets case (2011 FIR) was quashed, reinstated by the Supreme Court (2018), and prosecution sanction refused (2019);</p>
+<p>  ED closed its case in 2022 (DRHP addendum). The IPO papers said he had &quot;never been part of management&quot;; he became</p>
+<p>  Chairman &amp; ED four months after listing. His wife is an ED; his son-in-law is Whole-time Director <strong>and CFO</strong>.</p>
+<ul>
+<li>Pre-IPO anonymous complaints to SEBI/MCA (alleging benami directors, inflated costs) — denied; complainants untraceable.</li>
+<li><strong>Related parties:</strong> R P Shetty Engineers, JNS Infra Projects / JNS Constructions, the Chairman&#x27;s HUF consultancy,</li>
+</ul>
+<p>  Uva Sands, rent to promoters. The MD is described as the former head of Shri JN Shetty Class-I Contractors; the</p>
+<p>  July JNS sub-contract (₹44.67 Cr) is a related-party order (filing says arm&#x27;s length).</p>
+<ul>
+<li>Two CFO resignations pre-IPO. An independent director is a former Minor Irrigation executive engineer — i.e.</li>
+</ul>
+<p>  the client department.</p>
+<p>None of this is proof of wrongdoing. All of it is why a 13x multiple has not attracted a single institution back.</p>
+<hr>
+<h3>§6 Sector backdrop — the payer is the problem</h3>
+<p><strong>Jal Jeevan Mission.</strong> Extended (JJM 2.0, Mar 2026, to Dec 2028), total outlay ₹8.69 lakh Cr. But FY26 RE was</p>
+<p>₹17,000 Cr vs ~₹67,000 Cr BE (−75%), PRS notes no central JJM funds released to states in FY26, and FY27</p>
+<p>releases by early Aug were ~₹6,150 Cr (&lt;10% of BE). Contractors sector-wide are owed ₹30–35k Cr (Electrosteel est.).</p>
+<p>Listed casualties: Ion Exchange stopped taking JJM work (Q4 margin 2.3%); VPRPL loss-making, −85% in a year,</p>
+<p>87.7% promoter pledge; Afcons Q1 profit ₹30 Cr from ₹137 Cr.</p>
+<p><strong>Karnataka.</strong> Capex outlay FY27 BE ₹71,924 Cr, but FY26 was cut 8% at RE and the water-supply line was cut 43% at RE.</p>
+<p>Guarantee schemes ₹51,286 Cr (12% of spend); committed spending 59% of revenue receipts. On 22 Sep 2026 the finance</p>
+<p>department flagged ₹36,136 Cr of pending bills across PWD/WRD/MI/RDPR, liabilities at 24.94% of GSDP vs a 25% cap, and</p>
+<p>advised holding new projects. The contractors&#x27; association (3 Oct) claims ~₹38,000 Cr due — **WRD ~₹14,000 Cr,</p>
+<p>MI ~₹3,600 Cr** — has a November deadline and has threatened district protests. The state released ₹2,400 Cr to</p>
+<p>irrigation in early October by pulling forward next-quarter allocation — a small, real positive for collections.</p>
+<p><strong>Read-across.</strong> The market has separated water EPC by payer: Wabag (multilateral/central, ₹950 Cr net cash)</p>
+<p>+39% in a year; the state-JJM cohort (VPRPL, Enviro Infra, EMS, Denta) de-rated hard. Denta is −23% YTD, −42% 1Y,</p>
+<p>well below the small-cap index — this is a sector/payer de-rating, not just market beta.</p>
+<hr>
+<h3>§7 Shareholding and supply</h3>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>Mar-25</span><span>Sep-25</span><span>Dec-25</span><span>Mar-26</span><span>Jun-26</span></div>
+<div class="mdtr"><span>Promoters</span><span>71.91</span><span>71.91</span><span>71.91</span><span>71.91</span><span>71.91</span></div>
+<div class="mdtr"><span>FII</span><span>1.88</span><span>0.25</span><span>0.00</span><span>0.01</span><span>0.00</span></div>
+<div class="mdtr"><span>DII</span><span>5.12</span><span>1.90</span><span>0.63</span><span>0.32</span><span>0.32</span></div>
+<div class="mdtr"><span>Public</span><span>21.08</span><span>25.94</span><span>27.46</span><span>27.76</span><span>27.77</span></div>
+<div class="mdtr"><span>Holders</span><span>38,311</span><span>39,462</span><span>40,566</span><span>40,910</span><span>42,455</span></div>
+</div>
+<ul>
+<li>Every IPO lock-in has expired; the last (5.34 Mn minimum-promoter-contribution shares) on <strong>05 Aug 2026</strong>. No lock-in</li>
+</ul>
+<p>  falls due in Sep–Dec 2026. Promoter pledge is nil.</p>
+<ul>
+<li>Institutions — including all anchors — have exited. The float is retail-held and thin (10-day average volume is</li>
+</ul>
+<p>  ~35% of its 50-day average).</p>
+<ul>
+<li><strong>The Sep-2026 shareholding pattern is due by ~21 Oct.</strong> It is the first quarter after the promoter lock-in expired:</li>
+</ul>
+<p>  any promoter reduction would be a clear negative; an unchanged 71.91% removes one overhang.</p>
+<hr>
+<h3>§8 Valuation (at ₹259.80)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>Denta</span><span>Enviro Infra</span><span>EMS</span><span>VA Tech Wabag</span><span>Ion Exchange</span></div>
+<div class="mdtr"><span>Mcap (₹ Cr)</span><span>694</span><span>3,159</span><span>1,777</span><span>12,108</span><span>5,731</span></div>
+<div class="mdtr"><span>P/E (trailing)</span><span><strong>13.0</strong></span><span>17.2</span><span>26.1</span><span>30.4</span><span>52.1</span></div>
+<div class="mdtr"><span>P/B</span><span><strong>1.5</strong></span><span>2.6</span><span>1.7</span><span>4.7</span><span>4.3</span></div>
+<div class="mdtr"><span>Trailing OPM</span><span>27%</span><span>23%</span><span>17%</span><span>11%</span><span>6%</span></div>
+<div class="mdtr"><span>Working-capital days (FY26)</span><span><strong>380</strong></span><span>137</span><span>297</span><span>97</span><span>53</span></div>
+</div>
+<p>EV ~₹544 Cr if investments are liquid → ~7–8x EBITDA. Book ₹172/share is a floor only if receivables and unbilled work</p>
+<p>convert at face value; the market is discounting that they will not, or not soon. No institutional broker coverage.</p>
+<hr>
+<h3>§9 Technical read (banked ladders + measured base rates)</h3>
+<p><strong>Banked fib ladders (level-ID read 08 Aug 2026, 17/17 rungs verified):</strong></p>
+<ul>
+<li>Ladder A: 0 = <strong>239.01</strong> → 1 = 318.85 — upside rungs 340.55 / 351.90 / 368.15</li>
+<li>Ladder B: 0 = <strong>222.91</strong> → 1 = <strong>272.90</strong> — 278.65 / 286.50 / 293.60 / 303.80 / 317.15</li>
+</ul>
+<p><strong>Zones on the operator&#x27;s chart (10 Oct):</strong> support box <strong>239–250</strong> (purple; ladder-A zero + May–Jun lows), the</p>
+<p><strong>270–278</strong> band (green; ladder-B 1.0 at 272.90 and 1.115 at 278.65), and <strong>286.5–293.6</strong> (yellow; B 1.272/1.414).</p>
+<p>Structure: a falling wedge from the 01 Aug 372 high, with a steep red down-trendline pressing from above (~265–268</p>
+<p>next week) and the rising long-term green trendline underneath at the current price (~258–262).</p>
+<p><strong>What the tape says now (09 Oct close 259.80):</strong></p>
+<ul>
+<li>RSI(14) <strong>34.7</strong>; 20-day avg 271.4; 50-day avg 290.8 (price 10.7% below); ATR 8.6 (3.3%/day).</li>
+<li><strong>Supply has dried up:</strong> last 25 sessions, down-day volume averaged ~76k vs ~170k in the 35 sessions before;</li>
+</ul>
+<p>  10-day volume is 0.35x the 50-day. Up-days carry more volume than down-days (~125k vs ~76k). Delivery ~50–52%.</p>
+<p>  This is consistent with seller exhaustion — but also with absent buyers; it says the next move can be sharp,</p>
+<p>  not which way.</p>
+<p><strong>How has this exact setup resolved before?</strong> Every time any of our 88 tracked names sat in the same state —</p>
+<p>RSI 30–40, 5–15% below the 50-day, volume under 0.6x normal, 18–35% off the 60-day high — 2,396 cases since 2021:</p>
+<div class="mdtbl">
+<div class="mdtr"><span>Touch within…</span><span>5 sessions</span><span>10 sessions</span><span>20 sessions</span></div>
+<div class="mdtr"><span>265 (+2%)</span><span>71%</span><span>81%</span><span>—</span></div>
+<div class="mdtr"><span>268 (+3.2%)</span><span>57%</span><span>71%</span><span>—</span></div>
+<div class="mdtr"><span><strong>272.9 — ladder-B 1.0 (+5%)</strong></span><span>39%</span><span>55%</span><span>—</span></div>
+<div class="mdtr"><span>278.65 area (+7%)</span><span>~27%</span><span>~42%</span><span>~57%</span></div>
+<div class="mdtr"><span>286.5 — B 1.272 (+10%)</span><span>12%</span><span>24%</span><span>—</span></div>
+<div class="mdtr"><span><strong>250 — top of the purple box (−3.8%)</strong></span><span>46%</span><span>60%</span><span>71%</span></div>
+<div class="mdtr"><span><strong>239 — ladder-A zero (−8%)</strong></span><span>18%</span><span>32%</span><span>48%</span></div>
+<div class="mdtr"><span>Dip to 250 <strong>then</strong> recover to the high-270s</span><span>3%</span><span>10%</span><span>21%</span></div>
+</div>
+<p>Median path: max +3.8% / −3.3% inside 5 sessions; +5.8% / −5.2% inside 10; close-to-close ≈ flat. **The setup is a</p>
+<p>coin-flip on direction with a wide range** — which is exactly why the exit levels matter more than the forecast.</p>
+<p><strong>Denta&#x27;s own history in this state</strong> is worse than the peer base: 38 such days, and in the Nov-25, Dec-25, Jan-26,</p>
+<p>Feb-26 and Aug-26 episodes it kept falling (10-day lows −8% to −19%); only the Jun-26 episode (the 239 retest)</p>
+<p>produced the +40% squeeze. <strong>The 239–250 box has been tested twice:</strong> Mar-26 broke through to 222.5 (ladder-B zero);</p>
+<p>May–Jun-26 held 239.0 to the rupee and ran +42% in 20 sessions.</p>
+<hr>
+<h3>§10 Scenarios</h3>
+<p><strong>Next 5–10 sessions</strong></p>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>Path</span><span>Prob.</span><span>Tells</span></div>
+<div class="mdtr"><span><strong>S1 Relief first</strong></span><span>Bounce from the green trendline to <strong>265–273</strong> (20-day avg 271.4, ladder-B 1.0 272.9), stalls under the red down-trendline / 278.65</span><span><strong>35%</strong></span><span>A close above ~266 on volume &gt;60k</span></div>
+<div class="mdtr"><span><strong>S2 Wedge flush, then bounce</strong> (operator&#x27;s read)</span><span>Tags <strong>250–239</strong>, holds, bounces to 255–268</span><span><strong>30%</strong></span><span>Long lower wick into 245–250 on rising volume; RSI higher low</span></div>
+<div class="mdtr"><span><strong>S3 Breakdown</strong></span><span>Daily close below <strong>239</strong> → toward <strong>222.9</strong> (ladder-B zero / Mar low)</span><span><strong>25%</strong></span><span>Close &lt;239 on volume; Smallcap 250 making new lows</span></div>
+<div class="mdtr"><span><strong>S4 Wedge breakout</strong></span><span>Through 278.65 to <strong>286–294</strong></span><span><strong>10%</strong></span><span>Needs news: an order (the ~₹400 Cr mining-fund order), a GoK payment release, or a clean Sep shareholding</span></div>
+</div>
+<p>Base rates alone would put S3 near 20%; it is lifted to 25% for the backdrop — a grind-down market (Nifty at a 2026</p>
+<p>low, RBI hiked 7 Oct, FII selling), the Karnataka arrears headlines, and Denta&#x27;s own record in this state.</p>
+<p><strong>Into Q2 results (mid-Nov):</strong> the print is skewed negative — seasonally the weakest execution quarter, Q1 already −40%</p>
+<p>PAT, guidance needing +32%. Two things could still make it a relief event: positive H1 operating cash flow, and an</p>
+<p>order announcement before results.</p>
+<hr>
+<h3>§11 Catalyst calendar</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>When</span><span>What</span><span>Direction</span></div>
+<div class="mdtr"><span>~by 21 Oct</span><span>Sep-quarter shareholding (first after promoter lock-in expiry)</span><span>± — any promoter sale is a clear negative</span></div>
+<div class="mdtr"><span>20 Oct</span><span>Dussehra market holiday</span><span>—</span></div>
+<div class="mdtr"><span>21 Oct</span><span>RBI minutes</span><span>macro</span></div>
+<div class="mdtr"><span>27–28 Oct</span><span>US FOMC</span><span>macro</span></div>
+<div class="mdtr"><span>Late Oct–early Nov</span><span>Board-meeting notice for Q2 results</span><span>—</span></div>
+<div class="mdtr"><span>November</span><span>Karnataka contractors&#x27; deadline / threatened protests over ₹38k Cr dues</span><span>headline risk; any GoK release is a positive</span></div>
+<div class="mdtr"><span>~mid-Nov (likely)</span><span><strong>Q2 FY27 results</strong> — watch CFO, inventory + unbilled, order book</span><span>negative skew</span></div>
+<div class="mdtr"><span>08 Nov</span><span>Diwali Muhurat session</span><span>—</span></div>
+<div class="mdtr"><span>Any time</span><span>Mining Environment Restoration Fund order (~₹400 Cr, undated)</span><span>strong positive</span></div>
+</div>
+<hr>
+<h3>§12 What would change the view</h3>
+<p><strong>Better:</strong> positive H1 CFO with inventory/unbilled falling; GoK clearing WRD/MI arrears; the ~₹400 Cr order; a</p>
+<p>non-Karnataka win (Madhya Pradesh / Odisha were named); promoter holding unchanged or rising.</p>
+<p><strong>Worse:</strong> promoter selling in the Sep pattern; CARE outlook change; receivables approaching 90% of revenue; liquidity</p>
+<p>&lt;₹50 Cr; another related-party order; a daily close below 239.</p>
+<hr>
+<h3>§13 Risks (Denta-specific)</h3>
+<ol>
+<li>Single state, single payer — revenue follows GoK&#x27;s cash, not Denta&#x27;s execution.</li>
+<li>Working capital at 380 days; IPO cash largely consumed; CFO negative two years running.</li>
+<li>Governance and related-party concentration (Chairman history, family CFO, JN Shetty-linked entities).</li>
+<li>Repeated guidance misses; margins normalising from an unusually high base.</li>
+<li>Execution delays (10 of 17 projects delayed at IPO) → liquidated damages / bank-guarantee risk.</li>
+<li>Thin, retail-only float — moves are sharp both ways; no institutional bid underneath.</li>
+</ol>
+<hr>
+<h3>Sources</h3>
+<p>Company and filings: <a href="https://www.screener.in/company/DENTA/consolidated/">Screener</a> ·</p>
+<p><a href="https://www.careratings.com/upload/CompanyFiles/PR/202604120445_Denta_Water_and_Infra_Solutions_Limited.pdf">CARE rating, Apr 2026</a> ·</p>
+<p><a href="https://nsearchives.nseindia.com/corporate/DENTA_02092026230632_Annual_Report_2025-26.pdf">FY26 Annual Report</a> ·</p>
+<p><a href="https://nsearchives.nseindia.com/corporate/DENTA_20022026194901_Transcript_of_Concall_Denta_19022026.pdf">Feb 2026 call transcript</a> ·</p>
+<p><a href="https://nsearchives.nseindia.com/corporate/DENTA_19022026211029_Denta_Investor_Presentation_Q3_and_9MFY26.pdf">Q3 FY26 investor presentation</a> ·</p>
+<p><a href="https://nsearchives.nseindia.com/corporate/DENTA_21072026110146_General_Update_July_21_2026.pdf">NSE filing, 21 Jul 2026 orders</a> ·</p>
+<p><a href="https://www.business-standard.com/markets/capital-market-news/denta-water-infra-solutions-consolidated-net-profit-declines-39-78-in-the-june-2026-quarter-126081400483_1.html">Q1 FY27 results (Business Standard)</a> ·</p>
+<p><a href="https://www.business-standard.com/companies/news/denta-water-and-infra-solutions-order-book-crosses-rs-841-crore-in-dec-126021600618_1.html">Order book Dec 2025 (Business Standard)</a> ·</p>
+<p><a href="https://www.whalesbook.com/corporate-news/English/industrial-goodsservices/Denta-Water-FY26-Revenue-at-indian-rupee250-Cr-FY27-Growth-Guidance-20percent/6a4254957465030c38bc6ce7">FY27 guidance (Whalesbook)</a> ·</p>
+<p><a href="https://tradebrains.in/denta-water-wins-65-crore-irrigation-orders-in-karnataka-order-book-reaches-793-crore/">July orders (TradeBrains)</a> ·</p>
+<p><a href="https://www.multibagg.ai/market-pulse/articles/denta-fy26-growth-95678">Order mix (Multibagg)</a> ·</p>
+<p><a href="https://www.chittorgarh.com/ipo/denta-water-ipo/1970/">IPO (Chittorgarh)</a> ·</p>
+<p><a href="https://www.chittorgarh.net/reports/ipo_notes/dentawaterandinfrasolutionslimitediponote.pdf">IPO note</a> ·</p>
+<p><a href="https://denta.co.in/wp-content/uploads/2025/09/Denta-Water-and-Infra-Solutions-Ltd-Addendum-to-DRHP1.pdf">DRHP addendum</a> ·</p>
+<p><a href="https://denta.co.in/wp-content/uploads/2025/09/Out-come-of-BoardMeeting1.pdf">Board outcome 28 May 2025</a> ·</p>
+<p><a href="https://www.marketscreener.com/news/13-859-999-equity-shares-of-denta-water-and-infra-solutions-limited-are-subject-to-a-lock-up-agreeme-ce7c5edbd881ff23">Lock-up (MarketScreener)</a> ·</p>
+<p><a href="https://www.equitymaster.com/stock-research/shareholding-pattern/DENTA/DENTA-WATER-AND-INFRA-SOLUTIONS-LTD-Shareholding-Pattern">Shareholding (Equitymaster)</a> ·</p>
+<p><a href="https://www.fintechbiznews.com/exchanges-ipos/denta-water-infra-solutions-raises-rs6615-cr-from-anchor-investors">Anchors (FintechBizNews)</a></p>
+<p>Sector and macro: <a href="https://prsindia.org/budgets/parliament/demand-for-grants-2026-27-analysis-jal-shakti">PRS — Jal Shakti DFG 2026-27</a> ·</p>
+<p><a href="https://prsindia.org/budgets/states/karnataka-budget-analysis-2026-27">PRS — Karnataka Budget 2026-27</a> ·</p>
+<p><a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2290048&amp;reg=3&amp;lang=1">PIB — JJM 2.0</a> ·</p>
+<p><a href="https://www.thecore.in/opinion/the-plinth/businessinfrastructurejal-jeevan-mission-2-payment-delays-contractors-state-funding-869745">The Core — JJM payment delays</a> ·</p>
+<p><a href="https://www.deccanchronicle.com/nation/centre-reimburses-rs-5289-crore-to-10-states-under-jjm-includes-karnatka-kerala-tn-andhra-1977383">Deccan Chronicle — JJM reimbursements</a> ·</p>
+<p><a href="https://www.theweek.in/news/biz-tech/2026/09/22/finance-department-flags-fiscal-squeeze-as-karnataka-weighs-new-projects.html">The Week — Karnataka finance dept, 22 Sep 2026</a> ·</p>
+<p><a href="https://newskarnataka.com/bengaluru/karnataka-releases-rs-2400-crore-amid-rs-38000-crore-dues/03102026">NewsKarnataka — ₹2,400 Cr release vs ₹38k Cr dues</a> ·</p>
+<p><a href="https://english.publictv.in/contractors-seek-release-of-rs-38000-crore-dues-write-to-cm/">Public TV — contractors&#x27; letter</a> ·</p>
+<p><a href="https://www.valueresearchonline.com/stocks/357412/denta-water-and-infra-solutions-ltd">ValueResearch — DENTA returns</a> ·</p>
+<p><a href="https://www.scconline.com/blog/post/2026/10/09/rbi-hikes-repo-rate-to-5-50-percent-october-2026/">RBI hike, 7 Oct 2026 (SCC Online)</a> ·</p>
+<p><a href="https://www.outlookbusiness.com/markets/nifty-hits-2026-low-what-triggered-the-market-bloodbath">Market on 8 Oct (Outlook Business)</a> ·</p>
+<p><a href="https://www.business-standard.com/markets/news/weak-execution-order-momentum-for-infrastructure-players-in-q2fy27-126100801128_1.html">Q2 infra preview (Business Standard)</a></p>
+<p>Measured: base rates computed on Yahoo daily OHLC for 88 tracked names, Jan 2021 – 09 Oct 2026 (2,396 matching</p>
+<p>setups; 38 for DENTA). Fib ladders from the banked level-ID read of 08 Aug 2026.</p>
+<p><em>Unverified / not found:</em> Q1 FY27 call commentary and order book; Sep-2026 shareholding (due ~21 Oct); FY26 audit/CARO</p>
+<p>text; related-party amounts; Q2 board date; 2026 bulk/block deals.</p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 261010_DENTA_DEEP-RESEARCH</div>
+</div></body></html>
