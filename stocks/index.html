@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1792157629">
-<meta name="x-built-at" content="2026-10-16T13:32:57+00:00">
+<meta name="x-build-id" content="1792216135">
+<meta name="x-built-at" content="2026-10-17T05:48:14+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1792157629",BUILT_AT="2026-10-16T13:32:57+00:00";
+  var BID="1792216135",BUILT_AT="2026-10-17T05:48:14+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2304,7 +2304,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); window.TK_NAME={}; (pj.groups||[]).forEach(function(g){ (g.names||[]).forEach(function(n){ window.TK_NAME[n.ticker]=n.name||''; }); }); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
-      try{ const gf=await fetch('data/gift_nifty.json?v=1792157629&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
+      try{ const gf=await fetch('data/gift_nifty.json?v=1792216135&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
       let __pxText='';
       try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ __pxText=await px.text(); const pj2=JSON.parse(__pxText); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
       // F260622 — live JOURNALIST news feed (curated set, 5-min cloud refresh); candidates as fallback. Never throws.
@@ -7858,7 +7858,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     });
   }
 
-  fetch("data/pulse.json?v=1792157629&t="+Date.now())
+  fetch("data/pulse.json?v=1792216135&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
@@ -8269,6 +8269,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   function learn(){ document.querySelectorAll('a.tklink[href^="ticker/"],a.tcard[href^="ticker/"]').forEach(function(a){ var m=TKRE.exec(a.getAttribute('href')||''); if(m) PAGES[m[1]]=m[0]+'index.html'; });
     document.querySelectorAll('#z-tickers a.tcard').forEach(function(a){ var m=TKRE.exec(a.getAttribute('href')||''); if(!m) return; var nm=a.querySelector('.tk-secline'), mv=a.querySelector('.dm'), px=a.querySelector('.tpx'), sec=a.closest('.tsec'), sh=sec&&sec.querySelector('.tsec-h .nm');
       META[m[1]]={ name:nm?nm.textContent.trim():'', mv:mv?mv.textContent.trim():'', px:px?px.textContent.trim():'', sec:sh?sh.textContent.trim():'' }; }); }
+  window.monoPages=PAGES;
   var stash=null, tkOpen=null, tkFrom=null;
   function flipFrom(r){ if(!r||RM||!r.width){ F.style.transform='translate(-50%,-50%)'; F.style.opacity='1'; return; }
     var cx=innerWidth/2, cy=innerHeight/2, fw=Math.min(1300,innerWidth-32), sx=Math.max(.06,r.width/fw), sy=Math.max(.06,Math.min(1,r.height/Math.max(1,Math.min(F.offsetHeight,innerHeight-48))));
@@ -8433,15 +8434,15 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   body.mono-lite #z-lab .tl-attn .mono-open-hint{ display:block; } .mono-open-hint{ display:none; margin-top:8px; font:600 9.5px var(--font-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--faint); }
   /* scorecard cockpit: five tiles, each a door */
   @media(min-width:1100px){
-    #z-perf.mono-cock{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-areas:"h h h" "src src src" "money curve hold" "habits habits names" "more more more"; gap:12px; align-content:start; }
+    #z-perf.mono-cock{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-areas:"h h h" "src src src" "money curve curve" "hold curve curve" "habits habits names" "more more more"; gap:12px; align-content:start; }
     #z-perf.mono-cock > *{ grid-column:1/-1; min-width:0; }
     #z-perf.mono-cock > .zone-h{ grid-area:h; } #z-perf.mono-cock > .sc-src{ grid-area:src; margin:0; }
     #z-perf.mono-cock > #sc-sec-1{ display:contents; } #z-perf.mono-cock > #sc-sec-1 > .pf-kpi-card{ grid-area:money; } #z-perf.mono-cock > #sc-sec-1 > .pf-grid{ grid-area:curve; display:block; }
     #z-perf.mono-cock > #sc-sec-hold{ grid-area:hold; } #z-perf.mono-cock > #sc-sec-bstrip{ grid-area:habits; } #z-perf.mono-cock > #sc-sec-3{ grid-area:names; } #z-perf.mono-cock > .sc-more{ grid-area:more; }
   }
-  #z-perf.mono-cock > #sc-sec-1 > .pf-sh, #z-perf.mono-cock > #sc-sec-1 > .pf-take, #z-perf.mono-cock .mono-tile > .pf-sh, #z-perf.mono-cock .sc-more > summary{ display:none; }
-  #z-perf.mono-cock .mono-tile{ position:relative; border:1px solid var(--border); border-radius:13px; background:var(--glass); padding:14px 16px; margin:0 !important; max-height:340px; overflow:hidden; cursor:pointer; }
-  #z-perf.mono-cock .mono-tile::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:56px; background:linear-gradient(transparent,var(--bg2)); pointer-events:none; }
+  #z-perf.mono-cock > #sc-sec-1 > .pf-sh, #z-perf.mono-cock > #sc-sec-1 > .pf-take, #z-perf.mono-cock > .pf-sec > .pf-sh, #z-perf.mono-cock .sc-more > summary{ display:none; }
+  #z-perf.mono-cock .mono-tile, #z-perf.mono-cock > #sc-sec-hold, #z-perf.mono-cock > #sc-sec-3, #z-perf.mono-cock > #sc-sec-bstrip, #z-perf.mono-cock > .sc-more, #z-perf.mono-cock > #sc-sec-1 > .pf-kpi-card, #z-perf.mono-cock > #sc-sec-1 > .pf-grid{ position:relative; border:1px solid var(--border); border-radius:13px; background:var(--glass); padding:14px 16px; margin:0 !important; max-height:340px; overflow:hidden; cursor:pointer; }
+  #z-perf.mono-cock .mono-tile::after, #z-perf.mono-cock > #sc-sec-hold::after, #z-perf.mono-cock > #sc-sec-3::after, #z-perf.mono-cock > #sc-sec-bstrip::after, #z-perf.mono-cock > .sc-more::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:56px; background:linear-gradient(transparent,var(--bg2)); pointer-events:none; }
   #z-perf.mono-cock .mono-tile.pf-grid > .card{ border:0; background:none; padding:0; box-shadow:none; }
   #z-perf.mono-cock .mono-tile .pf-kpis{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   #z-perf.mono-cock .mono-tile{ --perf-card-h:210px; } #z-perf.mono-cock #sc-sec-hold .kpis{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
@@ -8452,7 +8453,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   #z-perf.mono-cock .mono-tile > .c-lbl.mono-lbl{ margin-bottom:10px; }
   /* a section moved into the focus layer: full depth again */
   .mono-focus .mono-full{ max-height:none !important; overflow:visible !important; cursor:default; } .mono-focus .mono-full::after{ display:none; }
-  .mono-focus .mono-full > .c-lbl.mono-lbl{ display:none; } .mono-focus .mono-full > .pf-sh{ display:flex; } .mono-focus .mono-full.sc-more > summary{ display:none; } .mono-focus .mono-full.sc-more > .pf-sec{ display:block; }
+  .mono-focus .mono-full > .c-lbl.mono-lbl{ display:none; } .mono-focus .mono-full > .pf-sh{ display:none; } .mono-focus .mono-full.sc-more > summary{ display:none; } .mono-focus .mono-full.sc-more > .pf-sec{ display:block; }
   .mono-focus .mono-full .bh-det, .mono-focus .mono-full .bh-int, .mono-focus .mono-full .bh-ctl{ display:block; } .mono-focus .mono-full .bh-foot{ display:block; }
   .mono-focus .mono-full.tl-attn .tl-ledger-card, .mono-focus .mono-full.tl-attn .orbstage, .mono-focus .mono-full.tl-attn .opgrid, .mono-focus .mono-full.tl-attn .orblegend, .mono-focus .mono-full.tl-attn .tl-attn-row{ display:flex; }
   .mono-focus .mono-full.tl-attn .tl-ledger-card{ display:block; } .mono-focus .mono-full.tl-attn .orbstage{ display:block; } .mono-focus .mono-full.tl-attn .opgrid{ display:grid; }
@@ -8594,7 +8595,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   /* ── 2. one truth about the lock: if a pane rendered locked while the desk is unlocked, render again ── */
   var lastRec=0;
   var recN=0;
-  function reconcile(){ var D=window.DATA; if(!D||typeof renderAll!=='function') return; if(!D._unlocked||recN>=4||document.body.classList.contains('mono-focused')) return;
+  function reconcile(){ var D=(typeof DATA!=='undefined')?DATA:null; if(!D||typeof renderAll!=='function') return; if(!D._unlocked||recN>=4||document.body.classList.contains('mono-focused')) return;
     var conv=document.getElementById('rs-conv-body'), convLocked=!!(conv&&/unlock to read/i.test(conv.textContent||'')), perfLocked=!!document.querySelector('#z-perf .pf-state-locked'), bodyLocked=document.body.classList.contains('locked');
     if((convLocked||perfLocked||bodyLocked)&&Date.now()-lastRec>8000){ lastRec=Date.now(); recN++; document.body.classList.remove('locked'); setTimeout(function(){ try{ renderAll(); }catch(e){} },60); } }
 
@@ -8610,6 +8611,109 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   function decorate4(){ reconcile(); libCards(); unstick(); }
   var pending=false; new MutationObserver(function(){ if(pending) return; pending=true; setTimeout(function(){ pending=false; try{ decorate4(); }catch(e){} },240); }).observe(document.body,{childList:true,subtree:true});
   try{ decorate4(); }catch(e){}
+})();
+</script>
+
+<style id="mono-skin-5">
+  /* ── mono pass 5 (261017): the year ring, week against week, doors, the orbit's finish ── */
+  #z-perf.mono-cock > #sc-sec-1 > .pf-grid{ border:0 !important; background:radial-gradient(55% 60% at 38% 50%,rgba(40,70,150,.16),transparent 70%) !important; box-shadow:none !important; max-height:none !important; padding:10px 14px !important; }
+  #z-perf.mono-cock > #sc-sec-1 > .pf-grid::after{ display:none; }
+  #z-perf.mono-cock > #sc-sec-1 > .pf-grid > .card{ display:none; }
+  .mono-focus .mono-full.pf-grid > .card{ display:block !important; margin-top:14px; }
+  .mono-focus .mono-full.pf-grid .mono-ring{ height:540px; flex:none; }
+  #z-perf.mono-cock > #sc-sec-1 > .pf-grid{ height:500px; display:flex; flex-direction:column; }
+  #z-perf.mono-cock > #sc-sec-1 > .pf-grid > .c-lbl.mono-lbl{ flex:none; }
+  .mono-ring{ position:relative; width:100%; flex:1 1 0; min-height:0; display:flex; flex-direction:column; }
+  .mono-ring svg{ width:100%; height:100%; flex:1 1 0; min-height:0; display:block; overflow:visible; font-family:var(--font-mono); }
+  .mono-ring .zero{ fill:none; stroke:rgba(255,255,255,.22); stroke-dasharray:2 4; }
+  .mono-ring .gl{ fill:none; stroke:rgba(255,255,255,.06); } .mono-ring .gl.out{ stroke:rgba(255,255,255,.04); }
+  .mono-ring .area{ fill:rgba(243,245,249,.14); stroke:none; } .mono-ring .curve{ fill:none; stroke:var(--ink); stroke-width:1.6; stroke-linejoin:round; }
+  .mono-ring .future{ fill:none; stroke:rgba(255,255,255,.1); stroke-dasharray:1 5; }
+  .mono-ring .nd{ fill:var(--bg1); stroke:var(--ink); stroke-width:1.2; cursor:pointer; } .mono-ring .nd.last{ fill:var(--cyan); stroke:var(--cyan); filter:drop-shadow(0 0 8px rgba(219,230,255,.7)); }
+  .mono-ring .nd:hover{ stroke:var(--cyan); stroke-width:2; }
+  .mono-ring .wk{ fill:rgba(219,230,255,.09); stroke:none; } .mono-ring .wk.prev{ fill:rgba(255,255,255,.035); }
+  .mono-ring .tick{ stroke:rgba(255,255,255,.2); } .mono-ring .mo{ font-size:9px; fill:var(--faint); letter-spacing:.14em; text-anchor:middle; } .mono-ring .mo.on{ fill:var(--ink2); }
+  .mono-ring .today{ stroke:var(--cyan); stroke-width:1.2; } .mono-ring .todayl{ font-size:8.5px; fill:var(--cyan); letter-spacing:.14em; text-anchor:middle; }
+  .mono-ring .hubk{ font-size:9px; fill:var(--faint); letter-spacing:.18em; text-anchor:middle; } .mono-ring .hubv{ font-size:32px; font-weight:700; fill:var(--ink); text-anchor:middle; }
+  .mono-ring .hubv.dn{ fill:var(--neg); } .mono-ring .hubs{ font-size:11px; fill:var(--ink2); text-anchor:middle; } .mono-ring .hubs.dn{ fill:var(--neg); } .mono-ring .hubn{ font-size:9px; fill:var(--faint); text-anchor:middle; letter-spacing:.06em; }
+  .mono-ring .bar{ fill:rgba(255,255,255,.26); } .mono-ring .bar.dn{ fill:rgba(141,150,171,.5); } .mono-ring .bar.cur{ fill:var(--cyan); } .mono-ring .bar.prev{ fill:rgba(243,245,249,.7); } .mono-ring .bar.cur.dn{ fill:var(--neg); }
+  .mono-ring .bzero{ stroke:rgba(255,255,255,.22); } .mono-ring .bk{ font-size:8.5px; fill:var(--faint); letter-spacing:.16em; } .mono-ring .bl{ font-size:8px; fill:var(--mut); text-anchor:middle; } .mono-ring .bv{ font-size:9px; fill:var(--ink2); text-anchor:middle; font-weight:700; }
+  .mono-ring .cap{ font:600 9.5px var(--font-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--faint); padding:2px 4px 0; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .mono-ring .tip{ position:absolute; pointer-events:none; background:rgba(9,12,20,.96); border:1px solid rgba(255,255,255,.2); border-radius:9px; padding:6px 9px; font:11px var(--font-mono); color:var(--ink); white-space:nowrap; opacity:0; transition:opacity .15s; z-index:5; }
+  .mono-ring .tip b{ color:var(--cyan); } .mono-ring .tip.on{ opacity:1; }
+  body.light .mono-ring .zero{ stroke:rgba(0,0,0,.25); } body.light .mono-ring .area{ fill:rgba(11,13,18,.12); } body.light .mono-ring .gl{ stroke:rgba(0,0,0,.07); } body.light .mono-ring .wk{ fill:rgba(30,58,138,.1); } body.light .mono-ring .bar{ fill:rgba(0,0,0,.28); } body.light .mono-ring .tip{ background:rgba(255,255,255,.97); }
+  /* closed trades: hide the two columns the tradebook never fills */
+  #z-perf table.tbl.mono-slim th:nth-child(2), #z-perf table.tbl.mono-slim td:nth-child(2), #z-perf table.tbl.mono-slim th:nth-child(5), #z-perf table.tbl.mono-slim td:nth-child(5){ display:none; }
+  /* the orbit, finished: ink lines, mono labels with a halo so they stay legible where they meet */
+  .orb-ax, .orb-lbl, .orbhint{ font-family:var(--font-mono) !important; }
+  .orb-lbl{ font-size:9.5px; paint-order:stroke; stroke:rgba(7,9,16,.9); stroke-width:3px; stroke-linejoin:round; }
+  .orb-ax{ font-size:8.5px; fill:rgba(243,245,249,.42); }
+  .orb-gl{ stroke:rgba(255,255,255,.09) !important; } .orb-gl.stop, .orb-gl.tgt{ stroke:rgba(255,255,255,.18) !important; }
+  .orb-nd{ filter:drop-shadow(0 0 5px rgba(219,230,255,.45)); }
+  .orbk b{ font-family:var(--font-mono); letter-spacing:-.01em; } .orbk span{ color:var(--mut); }
+</style>
+
+<script id="mono-layer-5">
+(function(){
+  var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function money(v,sign){ if(v==null||isNaN(v)) return '—'; var a=Math.abs(v), t=a>=1e5?(a/1e5).toFixed(a>=1e6?1:2)+'L':(a>=1e3?(a/1e3).toFixed(a>=1e4?0:1)+'k':Math.round(a)+''); return (v<0?'−':(sign&&v>0?'+':''))+'₹'+t; }
+  function dmy(iso){ if(!iso) return ''; var p=iso.split('-'); return (+p[2])+' '+MON[+p[1]-1]+' '+p[0].slice(2); }
+  function dayN(iso){ return Math.round(Date.UTC(+iso.slice(0,4),+iso.slice(5,7)-1,+iso.slice(8,10))/864e5); }
+
+  /* ── 1. the year as a ring: booked P&L around the financial year; this week against last ── */
+  function ring(){ var f=document.getElementById('z-perf'); if(!f||!f.classList.contains('mono-cock')) return; var host=f.querySelector(':scope > #sc-sec-1 > .pf-grid'); var D=(typeof DATA!=='undefined')?DATA:null, sc=D&&D.real_scorecard; if(!host||!sc||!(sc.realized_curve||[]).length) return;
+    var curve=sc.realized_curve.filter(function(c){ return c.cum!=null&&c.date; }), wk=(sc.weekly&&sc.weekly.weeks)||[], sig=JSON.stringify([curve.length,curve[curve.length-1],wk.slice(0,2)]).length+':'+(curve[curve.length-1]||{}).cum+':'+((wk[0]||{}).total_est);
+    var old=host.querySelector(':scope > .mono-ring'); if(old&&old.dataset.sig===sig) return; if(old) old.remove();
+    var first=curve[0].date, fy=+first.slice(0,4)-(+first.slice(5,7)<4?1:0), start=fy+'-04-01', days=365, d0=dayN(start);
+    var todayIso=(sc.weekly&&sc.weekly.as_of)||sc.as_of||curve[curve.length-1].date; var ang=function(iso){ return -Math.PI/2+2*Math.PI*Math.max(0,Math.min(1,(dayN(iso)-d0)/days)); };
+    var CX=300, CY=270, R0=168, AMP=72, maxAbs=Math.max(1000,Math.max.apply(null,curve.map(function(c){ return Math.abs(c.cum); })));
+    var rOf=function(v){ return R0+AMP*(v/maxAbs); }, pt=function(a,r){ return [CX+r*Math.cos(a),CY+r*Math.sin(a)]; }, P=function(a,r){ var q=pt(a,r); return q[0].toFixed(1)+' '+q[1].toFixed(1); };
+    var pts=[{a:ang(start),r:R0,c:null}].concat(curve.map(function(c){ return {a:ang(c.date),r:rOf(c.cum),c:c}; }));
+    var line='M '+pts.map(function(p){ return P(p.a,p.r); }).join(' L '); var back=pts.slice().reverse().map(function(p){ return P(p.a,R0); }).join(' L ');
+    var h='<svg viewBox="0 0 800 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Booked P&L around the financial year, this week against last">';
+    [R0-AMP,R0+AMP].forEach(function(r){ h+='<circle class="gl out" cx="'+CX+'" cy="'+CY+'" r="'+r+'"/>'; });
+    h+='<circle class="gl" cx="'+CX+'" cy="'+CY+'" r="'+(R0+AMP+22)+'"/>';
+    /* the last two weeks as wedges */
+    wk.slice(0,2).forEach(function(w,i){ var a0=ang(w.week_start), a1=ang(w.week_end)+2*Math.PI/days; var ri=R0-AMP+4, ro=R0+AMP+8;
+      h+='<path class="wk'+(i?' prev':'')+'" d="M '+P(a0,ri)+' L '+P(a0,ro)+' A '+ro+' '+ro+' 0 0 1 '+P(a1,ro)+' L '+P(a1,ri)+' A '+ri+' '+ri+' 0 0 0 '+P(a0,ri)+' Z"></path>'; });
+    h+='<circle class="zero" cx="'+CX+'" cy="'+CY+'" r="'+R0+'"/>';
+    /* months */
+    for(var m=0;m<12;m++){ var mm=((3+m)%12)+1, yy=fy+(mm<4?1:0), iso=yy+'-'+(mm<10?'0':'')+mm+'-01', a=ang(iso), past=dayN(iso)<=dayN(todayIso); var t0=pt(a,R0+AMP+16), t1=pt(a,R0+AMP+22), tl=pt(a,R0+AMP+36);
+      h+='<line class="tick" x1="'+t0[0].toFixed(1)+'" y1="'+t0[1].toFixed(1)+'" x2="'+t1[0].toFixed(1)+'" y2="'+t1[1].toFixed(1)+'"/><text class="mo'+(past?' on':'')+'" x="'+tl[0].toFixed(1)+'" y="'+(tl[1]+3).toFixed(1)+'">'+MON[mm-1][0]+'</text>'; }
+    /* the rest of the year, faint */
+    var aT=ang(todayIso), aE=-Math.PI/2+2*Math.PI; if(aE-aT>0.05){ var big=(aE-aT)>Math.PI?1:0; h+='<path class="future" d="M '+P(aT,R0)+' A '+R0+' '+R0+' 0 '+big+' 1 '+P(aE-0.001,R0)+'"/>'; }
+    h+='<path class="area" d="'+line+' L '+back+' Z"/><path class="curve" d="'+line+'"/>';
+    var tt=pt(aT,R0-AMP-14), tt2=pt(aT,R0+AMP+10), tl2=pt(aT,R0+AMP+48); h+='<line class="today" x1="'+tt[0].toFixed(1)+'" y1="'+tt[1].toFixed(1)+'" x2="'+tt2[0].toFixed(1)+'" y2="'+tt2[1].toFixed(1)+'"/><text class="todayl" x="'+tl2[0].toFixed(1)+'" y="'+(tl2[1]+3).toFixed(1)+'">TODAY</text>';
+    curve.forEach(function(c,i){ var q=pt(ang(c.date),rOf(c.cum)), last=i===curve.length-1; h+='<circle class="nd'+(last?' last':'')+'" cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="'+(last?4.5:3)+'" data-i="'+i+'"><title>'+esc(dmy(c.date))+' · booked '+esc(money(c.cum,true))+(c.delta!=null?' · '+esc(money(c.delta,true))+' since the last report':'')+'</title></circle>'; });
+    /* the hub: this week against last */
+    var w0=wk[0], w1=wk[1]; var v0=w0?w0.total_est:null, v1=w1?w1.total_est:null;
+    h+='<text class="hubk" x="'+CX+'" y="'+(CY-34)+'">THIS WEEK · EST</text><text class="hubv'+(v0<0?' dn':'')+'" x="'+CX+'" y="'+(CY-2)+'">'+esc(money(v0,true))+'</text>';
+    if(w0) h+='<text class="hubn" x="'+CX+'" y="'+(CY+16)+'">booked '+esc(money(w0.booked_fifo,true))+' · open move '+esc(money(w0.unreal_change,true))+(w0.n_closed?' · '+w0.n_closed+' closed':'')+'</text>';
+    if(w1) h+='<text class="hubs'+(v1<0?' dn':'')+'" x="'+CX+'" y="'+(CY+36)+'">last week '+esc(money(v1,true))+'</text>';
+    if(w0&&w1&&v0!=null&&v1!=null) h+='<text class="hubn" x="'+CX+'" y="'+(CY+52)+'">'+(v0>=v1?'▲ ':'▼ ')+esc(money(Math.abs(v0-v1)))+' vs the week before</text>';
+    h+='<text class="hubk" x="'+CX+'" y="'+(CY+74)+'">FY'+String(fy).slice(2)+'–'+String(fy+1).slice(2)+' · BOOKED '+esc(money(curve[curve.length-1].cum,true))+'</text>';
+    /* weekly bars, newest on the right */
+    var W=wk.slice(0,12).reverse(), bx=600, bw=14, gap=5, by0=300, bh=125, bmax=Math.max(1000,Math.max.apply(null,W.map(function(w){ return Math.abs(w.total_est||0); })));
+    h+='<text class="bk" x="'+bx+'" y="'+(by0-bh-28)+'">WEEKS · EST</text><line class="bzero" x1="'+bx+'" y1="'+by0+'" x2="'+(bx+W.length*(bw+gap))+'" y2="'+by0+'"/>';
+    W.forEach(function(w,i){ var v=w.total_est||0, hh=Math.max(1,Math.abs(v)/bmax*bh), x=bx+i*(bw+gap), y=v>=0?by0-hh:by0, cur=i===W.length-1, prev=i===W.length-2;
+      h+='<rect class="bar'+(v<0?' dn':'')+(cur?' cur':(prev?' prev':''))+'" x="'+x+'" y="'+y.toFixed(1)+'" width="'+bw+'" height="'+hh.toFixed(1)+'" rx="2"><title>week of '+esc(dmy(w.week_start))+' · '+esc(money(v,true))+' · booked '+esc(money(w.booked_fifo,true))+' · open move '+esc(money(w.unreal_change,true))+(w.names&&w.names.length?' · '+esc(w.names.join(', ')):'')+'</title></rect>';
+      });
+    h+='<text class="bl" x="'+(bx+W.length*(bw+gap)/2)+'" y="'+(by0+bh+32)+'">'+W.length+' weeks · newest right · ice = this week</text>';
+    if(w0) h+='<text class="bv" x="'+(bx+W.length*(bw+gap)/2)+'" y="'+(by0+bh+50)+'">this '+esc(money(v0,true))+(w1?' · last '+esc(money(v1,true)):'')+'</text>';
+    h+='</svg><div class="cap"><span>booked ₹ per capital-gains report · outside the ring is profit, inside is loss</span><span>week figures: fills + marked moves, an estimate</span></div><div class="tip"></div>';
+    var el=document.createElement('div'); el.className='mono-ring'; el.dataset.sig=sig; el.innerHTML=h; var lb=host.querySelector(':scope > .c-lbl.mono-lbl'); host.insertBefore(el,lb?lb.nextSibling:host.firstChild);
+    var tip=el.querySelector('.tip'); el.addEventListener('mousemove',function(e){ var t=e.target.closest&&e.target.closest('circle.nd,rect.bar'); if(!t){ tip.classList.remove('on'); return; } var tt=t.querySelector('title'); tip.innerHTML=esc(tt?tt.textContent:'').replace(/·/g,'<b>·</b>'); var r=el.getBoundingClientRect(); tip.style.left=(e.clientX-r.left+14)+'px'; tip.style.top=(e.clientY-r.top-10)+'px'; tip.classList.add('on'); }); el.addEventListener('mouseleave',function(){ tip.classList.remove('on'); }); }
+
+  /* ── 2. every name on the scorecard is a door ── */
+  var SEL=['#z-perf .bh-d','#z-perf .bh-v','#z-perf .pf-take','#z-perf .sc-nm','#z-perf .scs','#z-perf .vs','#z-perf table.tbl td:first-child','#z-lab .tl-attn-row','#z-lab .orbk span','#z-lab .pl-worth'].join(', '), TOK=/\b([A-Z][A-Z0-9&]{2,14})\b/g;
+  function doors(){ var PG=window.monoPages||{}; if(!Object.keys(PG).length) return; document.querySelectorAll(SEL).forEach(function(el){ if(el.dataset.mlk) return; el.dataset.mlk='1'; var tn=[], w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT); while(w.nextNode()){ var n=w.currentNode; if(n.parentElement.closest('a,button')) continue; if(TOK.test(n.nodeValue)) tn.push(n); TOK.lastIndex=0; }
+    tn.forEach(function(n){ var parts=n.nodeValue.split(TOK), frag=document.createDocumentFragment(), any=false; parts.forEach(function(seg,i){ if(i%2===1&&PG[seg]){ var a=document.createElement('a'); a.className='mono-tk'; a.setAttribute('data-tk',seg); a.href=PG[seg]; a.textContent=seg; frag.appendChild(a); any=true; } else if(seg) frag.appendChild(document.createTextNode(seg)); }); if(any) n.parentNode.replaceChild(frag,n); }); }); }
+  function slimTables(){ document.querySelectorAll('#z-perf table.tbl:not([data-slim])').forEach(function(t){ var rows=[].slice.call(t.querySelectorAll('tbody tr')); if(!rows.length) return; t.dataset.slim='1'; var blank=rows.every(function(r){ var c=r.children; return c.length>=5&&!(c[1].textContent||'').trim()&&!(c[4].textContent||'').trim(); }); if(blank) t.classList.add('mono-slim'); }); }
+
+  function decorate5(){ ring(); doors(); slimTables(); }
+  var pending=false; new MutationObserver(function(){ if(pending) return; pending=true; setTimeout(function(){ pending=false; try{ decorate5(); }catch(e){} },260); }).observe(document.body,{childList:true,subtree:true});
+  try{ decorate5(); }catch(e){}
 })();
 </script>
 </body></html>
