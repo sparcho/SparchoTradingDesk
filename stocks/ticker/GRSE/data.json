@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "GRSE",
-  "emitted_at_utc": "2026-10-19T03:34:26+00:00",
+  "emitted_at_utc": "2026-10-19T11:03:04+00:00",
   "public": {
     "ticker": "GRSE",
     "name": "Garden Reach Shipbuilders",
@@ -100,10 +100,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 2120.2,
-      "day_chg_pct": 0.847,
-      "week_chg_pct": 3.626588465298134,
-      "date": "2026-10-16"
+      "price": 2085.8,
+      "day_chg_pct": -1.622,
+      "week_chg_pct": 0.18733369457389829,
+      "date": "2026-10-19"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8905,38 +8905,87 @@
         2134.0,
         2103.3999,
         2120.2
+      ],
+      [
+        "2026-10-19",
+        2118.0,
+        2119.3999,
+        2082.8999,
+        2085.8
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 2096.03,
+        "as_of": "2026-10-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 2109.17,
+        "as_of": "2026-10-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 2132.53,
+        "as_of": "2026-10-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 2145.67,
+        "as_of": "2026-10-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 2072.67,
+        "as_of": "2026-10-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 2059.53,
+        "as_of": "2026-10-19"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 2036.17,
+        "as_of": "2026-10-19"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 2677.0,
-        "as_of": "2026-10-16"
+        "as_of": "2026-10-19"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 2408.32,
-        "as_of": "2026-10-16"
+        "price": 2398.04,
+        "as_of": "2026-10-19"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 2526.55,
-        "as_of": "2026-10-16"
+        "price": 2524.71,
+        "as_of": "2026-10-19"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 3093.8,
-        "as_of": "2026-10-16"
+        "as_of": "2026-10-19"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 1972.8,
-        "as_of": "2026-10-16"
+        "as_of": "2026-10-19"
       }
     ],
     "operator_levels": [],
@@ -8950,11 +8999,19 @@
         "auto": true
       },
       {
+        "label": "SUPPORT",
+        "price": 2072.67,
+        "dir": "below",
+        "kind": "watch",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 2408.32,
+        "price": 2096.03,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -8969,25 +9026,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 2096.03,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.4904592961933079
+      },
+      {
+        "label": "SUPPORT",
+        "price": 2072.67,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.6294946783008969
+      },
+      {
         "label": "INVALIDATION",
         "price": 1972.8,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -6.952174323177053
-      },
-      {
-        "label": "RESISTANCE",
-        "price": 2408.32,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 13.589284029808526
+        "dist_pct": -5.417585578674859
       },
       {
         "label": "UPSIDE",
         "price": 3093.8,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 45.92019620790494
+        "dist_pct": 48.32678109118803
       }
     ],
     "scenario_ladder": [
@@ -9000,8 +9064,8 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 2120.2,
-        "note": "holds current band; reclaim Rs2527 (200-SMA) to flip constructive"
+        "level": 2085.8,
+        "note": "holds current band; reclaim Rs2525 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
@@ -9292,7 +9356,7 @@
           "label": "Has the market changed its mind? (the MULTIPLE, not the price)",
           "lens": "rerating",
           "reading": "re-rated up",
-          "figure": "PE 22.9 at 2023-03-31 -> 30.8 now, +35% over 3 fiscal year ends. The price moved +366% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
+          "figure": "PE 22.9 at 2023-03-31 -> 30.8 now, +35% over 3 fiscal year ends. The price moved +358% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
           "source": "tracking.rerating.verdict",
           "not_measurable": null,
           "measured": "MEASURED INVERTED",
