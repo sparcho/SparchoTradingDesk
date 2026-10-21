@@ -130,7 +130,7 @@ SECTOR_MAP = {
     # sector. MGL stays in POWER as the gas utility it was tagged as -- re-sorting it is a
     # separate decision, not a side effect of this onboarding.
     'OIL_GAS': {'HINDPETRO', 'CASTROLIND'},
-    'CHEMICALS': {'HSCL', 'PCBL', 'AETHER'},   # +260630 specialty-chem / carbon & battery materials (HSCL held; PCBL+AETHER already in ALL_TICKERS)
+    'CHEMICALS': {'JGCHEM', 'HSCL', 'PCBL', 'AETHER'},   # +260630 specialty-chem / carbon & battery materials (HSCL held; PCBL+AETHER already in ALL_TICKERS)
 }
 
 # Indian-market cap thresholds (₹ Cr)
