@@ -85,7 +85,7 @@ WATCH_SETUPS = ("approaching", "in-zone")       # structurally sound, not action
 OK_TRENDS = ("up", "mixed")                     # never buy support into a downtrend
 
 # F261003-TIMING — STYLE lens thresholds (operator spec, PLANS/EQUITY-DESK-STYLE-LOCK.md T3.3).
-STYLE_TOL_PCT = 2.0          # price within this % of a verified level (either side)
+STYLE_TOL_PCT = 2.0          # price within this % of a verified level (above price only in an up/mixed trend, F261021)
 STYLE_MIN_SOURCES = 2        # the level needs >= 2 sources
 STYLE_RSI_MAX = 45.0         # rsi14 strictly below
 STYLE_RSI_MIN = 28.0         # ...and at/above this: a crash (RSI 2-25) is not the operator's style (261003 calibration: 37/98 names flagged in the Oct-1 selloff)
@@ -195,6 +195,12 @@ def _classify_gate(name: dict) -> dict:
                    % (ks.get("sources") or 0, MIN_SOURCES))
     if stop is None:
         why.append("key support has no banked zone — no invalidation level to stop against")
+    # F261021-REACH: WATCH means "price may tag this soon". A buy level beyond 2.5 normal days' range
+    # (floor 4%) is not a watch -- WABAG sat on the list at "at-support" with its entry 18% below.
+    _reach = _num(name.get("reach_pct")) or 4.0
+    if _gap_raw is not None and _gap_raw > _reach:
+        why.append("the level it would buy (%s) is %.1f%% away — beyond reach (%.1f%%)"
+                   % (_fmt_px(entry), _gap_raw, _reach))
 
     if why:
         return {"ticker": name.get("ticker"), "verdict": "EXCLUDE", "entry": entry, "stop": stop,
@@ -281,6 +287,13 @@ def style_of(name: dict) -> tuple:
         if px is None or px <= 0 or not p.get("verified") or (p.get("sources") or 0) < STYLE_MIN_SOURCES:
             continue
         d = abs(cur - px) / cur * 100
+        # F261021-STYLESIDE: a level ABOVE price is overhead supply. Operator 21-Oct: "some of them
+        # def dont [make sense]" -- 4 of 5 STYLE rows (IRFC, RVNL, POWERGRID, TATAPOWER) were price
+        # sitting just UNDER a level in a downtrend, i.e. a buy into resistance. THE EDGE (level-id
+        # SKILL): resistance only counts as a pass-through when momentum runs INTO it. So a level
+        # above price qualifies only in an up/mixed trend.
+        if px > cur and str(name.get("trend") or "") not in OK_TRENDS:
+            continue
         if best is None or d < best[0]:
             best = (d, px)
     if best is None or best[0] > STYLE_TOL_PCT:
@@ -289,7 +302,8 @@ def style_of(name: dict) -> tuple:
         return False, ""
     if (name.get("setup") or "") in STYLE_SKIP_SETUPS:
         return False, ""
-    return True, "%.1f%% off %s \u00b7 RSI %d \u00b7 %.1f%% above 20d low" % (best[0], _fmt_px(best[1]), round(rsi), low), best[1]
+    _side = "under" if best[1] > cur * 1.005 else ("at" if best[1] > cur * 0.995 else "on")
+    return True, "%s %s (%.1f%%) \u00b7 RSI %d \u00b7 %.1f%% above 20d low" % (_side, _fmt_px(best[1]), best[0], round(rsi), low), best[1]
 
 
 def classify(name: dict) -> dict:

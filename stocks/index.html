@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1792581572">
-<meta name="x-built-at" content="2026-10-21T11:18:38+00:00">
+<meta name="x-build-id" content="1792590985">
+<meta name="x-built-at" content="2026-10-21T13:55:31+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1792581572",BUILT_AT="2026-10-21T11:18:38+00:00";
+  var BID="1792590985",BUILT_AT="2026-10-21T13:55:31+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2305,7 +2305,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); window.TK_NAME={}; (pj.groups||[]).forEach(function(g){ (g.names||[]).forEach(function(n){ window.TK_NAME[n.ticker]=n.name||''; }); }); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
-      try{ const gf=await fetch('data/gift_nifty.json?v=1792581572&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
+      try{ const gf=await fetch('data/gift_nifty.json?v=1792590985&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
       let __pxText='';
       try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ __pxText=await px.text(); const pj2=JSON.parse(__pxText); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
       // F260622 — live JOURNALIST news feed (curated set, 5-min cloud refresh); candidates as fallback. Never throws.
@@ -2368,26 +2368,27 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       .sort(function(a,b){ var g={live:0,waiting:1,confirmed:2,killed:2,context:3}; var ga=g[a[1].latest.status], gb=g[b[1].latest.status];
         if(ga!==gb) return ga-gb; return String(b[1].latest.date).localeCompare(String(a[1].latest.date)); });
     var hr=(sc.hit_rate!=null)?(Math.round(sc.hit_rate*100)+'% right'):'none resolved yet';
-    return '<details class="rs-more dk-fold"><summary>Desk takes<span>'+(sc.open||0)+' open · '+(sc.confirmed||0)+' played out · '+(sc.killed||0)+' failed · '+hr+'</span>'+
+    return '<details class="rs-more dk-fold" data-keep><summary>Desk takes<span>'+(sc.open||0)+' open · '+(sc.confirmed||0)+' played out · '+(sc.killed||0)+' failed · '+hr+'</span>'+
       HT('Every call made on a name. Scored on price only: no timer.')+'</summary>'+
       '<div class="dk-list">'+rows.map(function(r){ var x=r[1], L=x.latest, st=DK_ST[L.status]||L.status, open=(L.status==='live'||L.status==='waiting');
-        return '<details class="dk-row"><summary><span class="dk-dot '+(DK_TONE[L.status]||'mut')+'"></span><b>'+esc(r[0])+'</b><span class="dk-dd">'+esc(dkD(L.date))+'</span>'+
+        return '<details class="dk-row" data-keep><summary><span class="dk-dot '+(DK_TONE[L.status]||'mut')+'"></span><b>'+esc(r[0])+'</b><span class="dk-dd">'+esc(dkD(L.date))+'</span>'+
           '<span class="dk-h">'+esc(L.headline)+'</span><span class="dk-s '+(DK_TONE[L.status]||'mut')+'">'+esc(st)+(open&&x.age_days?(' · '+x.age_days+'d'):'')+'</span></summary>'+dkBody(L,x)+'</details>'; }).join('')+
       '</div></details>'; }catch(e){ return ''; } };
-  window.dkDrops=function(){ try{ var cr=(DATA&&DATA.chart_reads)||null; var rs=(cr&&cr.reads)||[]; if(!rs.length) return '';
+  window.dkDrops=function(){ try{ /* F261021-DROPS2 */ var cr=(DATA&&DATA.chart_reads)||null; var rs=(cr&&cr.reads)||[]; if(!rs.length) return '';
     var tn={pos:'pos',neg:'neg',watch:'watch',mut:'mut'};
-    return '<details class="dk-fold dk-drops"><summary><span class="dk-k">Latest chart drops</span><span>'+rs.length+' read'+(rs.length===1?'':'s')+' · tap one</span></summary><div class="dk-list">'+
-      rs.map(function(r){ var h=r.habit||{};
-        return '<details class="dk-row"><summary><span class="dk-dot '+(tn[r.tone]||'mut')+'"></span><b>'+esc(r.ticker)+'</b><span class="dk-dd">'+esc(dkD(String(r.read_at||'').slice(0,10)))+'</span>'+
-          '<span class="dk-h">'+esc(r.signal||'')+'</span><span class="dk-s '+(tn[r.tone]||'mut')+'">'+esc(r.verdict||'')+'</span></summary>'+
-          '<div class="dk-body">'+(r.signal?('<div class="dk-kv"><span>Signal</span><b>'+esc(r.signal)+'</b></div>'):'')+(r.red_team?('<div class="dk-kv"><span>Against</span><b>'+esc(r.red_team)+'</b></div>'):'')+
-          (r.next_check?('<div class="dk-kv"><span>Watch</span><b>'+esc(r.next_check)+'</b></div>'):'')+
-          (h.sharpen?('<div class="dk-kv"><span>Coach</span><b>'+esc(h.sharpen)+(h.drill?(' — '+esc(h.drill)):'')+'</b></div>'):'')+'</div></details>'; }).join('')+
+    var VD={'CONFIRMED':'confirms','LIVE BUT UNPROVEN':'unproven','CONFLICT':'conflicts','WEAK':'weak','NOISE':'noise'};
+    function sh(s,n){ s=String(s||'').replace(/\s+/g,' ').trim(); var m=s.split(/(?<=[.!?])\s+(?=[A-Z(])|\s+(?:—|--)\s+/)[0]||s; if(m.length>n){ m=m.slice(0,n); m=m.slice(0,Math.max(m.lastIndexOf(' '),n-12)).replace(/[,;:\s]+$/,'')+'…'; } return m; }
+    function ln(k,v,n){ return v?('<div class="dk-kv"><span>'+k+'</span><b>'+esc(sh(v,n||130))+'</b></div>'):''; }
+    return '<details class="dk-fold dk-drops" data-keep><summary><span class="dk-k">Your chart drops</span><span>'+rs.length+' read'+(rs.length===1?'':'s')+'</span></summary><div class="dk-list">'+
+      rs.map(function(r){ var h=r.habit||{}, t=tn[r.tone]||'mut', v=VD[String(r.verdict||'').toUpperCase()]||String(r.verdict||'').toLowerCase();
+        return '<details class="dk-row" data-keep><summary><span class="dk-dot '+t+'"></span><b>'+esc(r.ticker)+'</b><span class="dk-dd">'+esc(dkD(String(r.read_at||'').slice(0,10)))+'</span>'+
+          '<span class="dk-h">'+esc(sh(r.signal,70))+'</span><span class="dk-s '+t+'">'+esc(v)+'</span></summary>'+
+          '<div class="dk-body">'+ln('The bet',r.signal)+ln('Settles it',r.next_check)+ln('Against',r.red_team)+ln('Sharpen',h.sharpen,110)+'</div></details>'; }).join('')+
       '</div></details>'; }catch(e){ return ''; } };
   function dkBacklogHTML(cov){ try{ var bl=cov&&cov.backlog; if(!bl) return '';
     var cls=bl.status==='red'?'neg':(bl.status==='amber'?'watch':'pos');
     var kl={study:'never studied',frames:'unread charts',review:'review due'};
-    return '<details class="dk-fold dk-bl"><summary><span class="dk-dot '+cls+'"></span><span class="dk-k '+cls+'">'+esc(bl.headline||'')+'</span></summary><div class="dk-list">'+
+    return '<details class="dk-fold dk-bl" data-keep><summary><span class="dk-dot '+cls+'"></span><span class="dk-k '+cls+'">'+esc(bl.headline||'')+'</span></summary><div class="dk-list">'+
       (bl.top||[]).map(function(r){ return '<div class="dk-blrow"><b>'+esc(r.ticker)+'</b><span>'+esc(kl[r.kind]||r.kind)+(r.deep_dive?' · deep dive':'')+'</span><span class="dk-s '+(r.breach?'neg':'mut')+'">'+r.age_days+'d</span></div>'; }).join('')+
       '<div class="dk-src">Worked twice daily, deep dives first. Past SLA: '+((bl.sla||{}).deep_dive_days||1)+'d deep dive, '+((bl.sla||{}).any_item_days||7)+'d any.</div></div></details>'; }catch(e){ return ''; } }
 
@@ -4244,7 +4245,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       ((typeof HT!=="undefined")?HT('Stacked fib sources, scaled by distance. Out-of-reach levels sit below.'):'')+
       '<span class="age">'+fc.n_names+' names · '+fc.n_points+' points · '+(fc.n_at||0)+' at price</span></div>'+
       '<div class="fc-note"><b>'+fmtD(fc.price_as_of)+'</b> close · observations, not calls</div>'+
-      '<div class="readheroes fc-grid fc-heroes">'+heroHTML+'</div>'+(_far.length?('<details class="dk-fold dk-bl"><summary><span class="dk-dot"></span><span class="dk-k">'+_far.length+' names · nearest level out of reach</span></summary><div class="dk-list">'+_far.map(function(n){ var p0=(n.points||[])[0]||{}; return '<div class="dk-blrow"><b>'+esc(n.ticker)+'</b>'+_bk(n)+'<span>nearest '+_rup(p0.px)+' '+(p0.side==='above'?'above':'below')+'</span><span class="dk-s">'+Math.abs(+p0.dist_pct||0).toFixed(1)+'%</span></div>'; }).join('')+'</div></details>'):'')+'</div>';  // F261008: the 'N more · tap to expand' chips are retired (operator: noise)
+      '<div class="readheroes fc-grid fc-heroes">'+heroHTML+'</div>'+(_far.length?('<details class="dk-fold dk-bl" data-keep><summary><span class="dk-dot"></span><span class="dk-k">'+_far.length+' names · nearest level out of reach</span></summary><div class="dk-list">'+_far.map(function(n){ var p0=(n.points||[])[0]||{}; return '<div class="dk-blrow"><b>'+esc(n.ticker)+'</b>'+_bk(n)+'<span>nearest '+_rup(p0.px)+' '+(p0.side==='above'?'above':'below')+'</span><span class="dk-s">'+Math.abs(+p0.dist_pct||0).toFixed(1)+'%</span></div>'; }).join('')+'</div></details>'):'')+'</div>';  // F261008: the 'N more · tap to expand' chips are retired (operator: noise)
   }
   /* T4-BEGIN order ticket + STYLE rows (render) */
   function eqInr(n){ return (n==null||!isFinite(n))?'—':('₹'+Math.round(n).toLocaleString('en-IN')); }
@@ -4523,16 +4524,16 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var fires=(rad.fires||[]), watch=(rad.watch||[]);
     var body=fires.length
       ? fundTallyHTML(fires)+'<div class="rdr-grid">'+fires.map(hero).join('')+'</div>'
-      : '<div class="fc-note rdr-nofire">No fire today.'+(watch.length?(' '+watch.length+' watch below.'):'')+'</div>';
+      : '<div class="fc-note rdr-nofire">No fire today.'+(watch.length?(' '+watch.length+' names on watch, not yet at their level.'):'')+'</div>';
 
     return '<div class="card rdr-wrap" style="margin-bottom:13px">'+
       '<div class="c-lbl"><span class="d"></span>&#127919; The Radar &middot; fib-confluence fires'+
       ((typeof HT!=="undefined")?HT('FIRE: on a fib support, STRONG, 3+ sources, R:R 1.5+. Last close.'):'')+
       '<span class="age">'+(rc.fire||0)+' fire &middot; '+(rc.watch||0)+' watch &middot; '+(rc.exclude||0)+' excluded'+(rc.style!=null?(' &middot; '+rc.style+' style'):'')+'</span></div>'+
-      '<div class="fc-note">gated on the <b>'+fmtD(rad.price_as_of)+'</b> close &middot; ✓ banks only</div>'+window.dkDrops()+
+      '<div class="fc-note">gated on the <b>'+fmtD(rad.price_as_of)+'</b> close &middot; ✓ banks only</div>'+
       body+
       (watch.length?('<div class="c-lbl sub" style="margin-top:11px"><span class="d"></span>Watch<span class="age">'+watch.length+' names</span></div>'+watch.map(watchRow).join('')):'')+
-      eqStyleHTML(rad)+
+      eqStyleHTML(rad)+window.dkDrops()+
       '</div>';
   }
 
@@ -7922,7 +7923,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     });
   }
 
-  fetch("data/pulse.json?v=1792581572&t="+Date.now())
+  fetch("data/pulse.json?v=1792590985&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
@@ -8161,7 +8162,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   function zoneName(card){ var f=card.closest('.face'); var h=f&&f.querySelector('.zone-h h2'); return h?h.textContent.trim():'Desk'; }
   function title(card){ var tk=card.querySelector('.rdr-tk, .tk-tk, .ng-tk, .cv-tk'); if(tk&&!card.querySelector('.c-lbl')){ var vd=card.querySelector('.rdr-vd'); return tk.textContent.trim()+(vd?(' · '+vd.textContent.trim()):''); }
     var l=card.querySelector('.c-lbl'); if(!l) return 'Detail'; var c=l.cloneNode(true); c.querySelectorAll('.help,.age,.mono-zoom,.rb-seg,.tabs,button,.lgcls,.lkpill,.sw-pill').forEach(function(x){x.remove();}); return c.textContent.replace(/\?/g,'').trim().slice(0,60)||'Detail'; }
-  function openFocus(card){ cur=card; var clone=card.cloneNode(true); clone.querySelectorAll('details').forEach(function(d){ d.open=true; });
+  function openFocus(card){ cur=card; var clone=card.cloneNode(true); clone.querySelectorAll('details:not([data-keep])').forEach(function(d){ d.open=true; });
     clone.querySelectorAll('.mh-grid,.mh-names,.mh-note').forEach(function(x){ x.remove(); }); clone.querySelectorAll('.bd-grid').forEach(function(g){ delete g.dataset.mh; g.classList.remove('mh-hidden'); heat(g); });
     F.innerHTML='<div class="mfh"><span class="crumb">'+zoneName(card).toUpperCase()+' › </span><h2></h2><button type="button" class="mfx">close · esc</button></div>';
     F.querySelector('h2').textContent=title(card); F.appendChild(clone); F.querySelector('.mfx').addEventListener('click',closeFocus);
@@ -8809,5 +8810,12 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
 .dk-hist{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--faint);border-top:1px solid var(--hair);padding-top:5px} .dk-hist i{font-style:normal;text-transform:uppercase;font-size:9px;letter-spacing:.05em}
 .dk-blrow{display:flex;align-items:center;gap:10px;padding:3px 4px;font-size:11.5px} .dk-blrow b{font-family:var(--font-mono);min-width:92px} .dk-blrow span:nth-child(2){flex:1;color:var(--ink2)}
 @media(max-width:640px){.dk-row>summary .dk-dd{display:none}}
+</style>
+<style>/* F261021-DROPS2 */
+.dk-fold,.dk-row{max-width:100%;overflow:hidden}
+.dk-row>summary{overflow:hidden}
+.dk-drops{margin-top:12px}
+.dk-kv b{overflow-wrap:anywhere}
+#mono-focus .rdr-wrap > .fc-note{padding-top:4px;line-height:1.6}
 </style>
 </body></html>
