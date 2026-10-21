@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DR — eClerx Services (ECLERX) · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">DR — eClerx Services (ECLERX)</h1>
+    <div class="hmeta"><b>2026-10-21</b> &middot; ticker <b>ECLERX</b> &middot; status <b>active</b></div>
+    
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> eClerx is a data-ops / KPO company, not logistics. It has 34% ROCE at 25x earnings, and rupee weakness adds about 8pp to INR growth. The stock is coiling between about 1,905 (rising line plus EMA21) and about 2,020 (falling highs) into Q2 results, which are expected late Oct. It&#x27;s the best risk-reward of the three.</p>
+<p><strong>Price used:</strong> ₹1,920 (NSE close 19 Oct) · <strong>Mcap:</strong> ₹18,058 Cr · <strong>P/E:</strong> 24.8 · <strong>ROCE / ROE:</strong> 34.4% / 28.4% · <strong>Promoter:</strong> 54.5% · <strong>Next:</strong> Q2 FY27 results not yet announced. Last year&#x27;s board meeting was 24 Oct, alongside a buyback.</p>
+<h3>§1 Business and execution</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>Q1 FY27</span><span>YoY</span></div>
+<div class="mdtr"><span>Revenue USD</span><span>$125.9 mn</span><span>+15.2% (+2.8% QoQ)</span></div>
+<div class="mdtr"><span>Revenue INR</span><span>₹1,170 Cr</span><span>+23.8% (the rupee adds ~8.6pp)</span></div>
+<div class="mdtr"><span>EBITDA</span><span>₹283 Cr, ~24.2% margin</span><span>+20.6% (margin −0.6pp)</span></div>
+<div class="mdtr"><span>PAT</span><span>₹164 Cr</span><span>+16%</span></div>
+<div class="mdtr"><span>Headcount</span><span>22,376</span><span>+10.4%</span></div>
+</div>
+<p>Quarterly PAT run: 142 → 183 → 192 → 190 → 164. Q1 is the seasonally weakest quarter (wage cycle). FY26 sales were up 22% and profit up 30%.</p>
+<p><strong>Execution read:</strong> USD growth of 15% with headcount at 10% means revenue per head is rising. Over five years, sales and profit have both compounded at about 21%. There&#x27;s no formal guidance. The thing to watch in Q2 is whether margin recovers to 25%+ after the Q1 wage dip.</p>
+<p><strong>Peers:</strong> FSL (P/E 24.4, ROCE 17%, results 29 Oct, 3m RS +9pp) and LATENTVIEW (−54% from high, broken). eClerx has the best return profile of the three at the same multiple.</p>
+<p><strong>Rupee / war:</strong> It&#x27;s a pure USD/GBP earner, so rupee weakness is a tailwind. There&#x27;s no Gulf exposure. A peace headline that firms the rupee is a mild headwind. This is the cleanest name of the three on the user&#x27;s criteria.</p>
+<h3>§2 Tape</h3>
+<ul>
+<li><strong>ATH zone:</strong> 2,025 (17 Jul), 2,062 (31 Aug), 2,017 (17 Sep), 2,022.6 (14 Oct). This is a ceiling tested four times.</li>
+<li><strong>Falling resistance:</strong> 2,062 → 2,022.6, now about <strong>2,019</strong>. The user&#x27;s steeper line sits around 1,960.</li>
+<li><strong>Fast rising support:</strong> 1,762 (29 Sep) → 1,854.6 (12 Oct), now about <strong>1,912</strong>. Price is at it.</li>
+<li><strong>Moving averages:</strong> EMA21 1,908, SMA50 1,890. These sit with the rising line as a <strong>1,890–1,912</strong> support cluster.</li>
+<li><strong>Slow rising support:</strong> 1,733 → 1,762, now about <strong>1,773</strong>. The 200-DMA is at 1,797.</li>
+<li><strong>Volume:</strong></li>
+<li>13 Oct gained +5.4% on 2.4x and 14 Oct followed on 1.6x. That&#x27;s demand on the push toward the high.</li>
+<li>The pullback since has been light (0.84x, then 0.49x).</li>
+<li>The 20-day up/down volume ratio is 1.40, and OBV is rising.</li>
+<li><strong>RSI:</strong> 52. ATR is 3.7%.</li>
+</ul>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>Level</span><span>Logic</span></div>
+<div class="mdtr"><span>Buy zone</span><span>1,890–1,915</span><span>Rising line plus the EMA21/SMA50 cluster</span></div>
+<div class="mdtr"><span>Stop</span><span>daily close &lt; 1,845</span><span>Under the 12–13 Oct lows (1,848)</span></div>
+<div class="mdtr"><span>Target</span><span>2,019, then 2,062</span><span>Falling highs, then the ATH; a breakout above 2,062 is in blue sky</span></div>
+<div class="mdtr"><span>R:R from 1,905</span><span>~1.9R / ~2.6R</span><span>₹10k risk = ~165 sh ≈ ₹3.1 L, so capped to ~105 sh at ₹2 L</span></div>
+<div class="mdtr"><span>Event risk</span><span>Results late Oct</span><span>Either buy half before and half on the print, or wait for the print</span></div>
+</div>
+<p><strong>Verdict:</strong> It&#x27;s the best risk-reward of the three. It meets the user&#x27;s filters (rupee beneficiary, war-neutral, reasonable valuation) except &quot;no pending results&quot;.</p>
+<p>Sources: eClerx Q1 FY27 release (5 Aug 2026, via City AM); Screener.in 19 Oct 2026; Yahoo Finance OHLCV. Advisory only.</p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 261021_ECLERX_DEEP-RESEARCH</div>
+</div></body></html>

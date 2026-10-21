@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DR — Allcargo Logistics (ALLCARGO) · Deep Research · Sparcho</title>
+<link rel="stylesheet" href="../../../assets/design/styles.css">
+<script>(function(){var p=new URLSearchParams(location.search).get('t');document.documentElement.classList.add(p==='light'?'theme-equity-light':'theme-equity-dark');})();</script>
+<style>
+:root.theme-equity-dark{--paper:#070b16;--card:rgba(26,40,68,0.42);--border:rgba(120,200,230,0.28);--accent:#42dbe6;--accent-2:#9a8cff;--ink:#eaf3ff;--ink-soft:#a9c2e6;--ink-mute:#6f86b0;--ink-faint:#48587d;--pos:#3fcf7a;--neg:#ff6b6b;--warn:#ffb44d;}
+:root.theme-equity-light{--paper:#eaf0f9;--card:rgba(255,255,255,0.7);--border:rgba(30,50,80,0.14);--accent:#1f9fb5;--accent-2:#6f5fe0;--ink:#0e1b30;--ink-soft:#33486b;--ink-mute:#5b6e90;--ink-faint:#8d9db9;--pos:#1f9d57;--neg:#d9434e;--warn:#c98a1e;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-2}
+:root.theme-equity-dark .scene{background:radial-gradient(60% 50% at 76% 4%,rgba(66,219,230,.16),transparent 60%),radial-gradient(54% 48% at 14% 12%,rgba(154,140,255,.16),transparent 62%),radial-gradient(80% 70% at 50% 36%,#122443,#0a1020 60%,#05070f 100%)}
+:root.theme-equity-light .scene{background:radial-gradient(56% 48% at 80% 0%,rgba(31,159,181,.16),transparent 60%),radial-gradient(80% 70% at 50% 30%,#fdfefe,#e8eef8 54%,#dbe4f2 100%)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 22px 90px}
+.topbar{display:flex;align-items:center;gap:12px;padding:6px 0 20px}
+.brand{display:flex;align-items:center;gap:10px}
+.disc{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 26%,#d6fbff,var(--accent) 44%,var(--accent-2) 130%);box-shadow:0 0 16px rgba(66,219,230,.5)}
+.wm{font-family:var(--font-display,inherit);font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wm i{font-style:normal;color:var(--ink-soft);font-weight:400}
+.crumb{font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-mute);margin-left:auto}
+.crumb a:hover{color:var(--accent)}
+.hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 42px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 24px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.cat{display:inline-block;font-family:var(--font-mono,monospace);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:5px 13px;margin-bottom:18px}
+.htitle{font-family:var(--font-display,inherit);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.03em;background:linear-gradient(110deg,var(--accent),var(--accent-2) 72%);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 12px}
+.hmeta{font-family:var(--font-mono,monospace);font-size:11.5px;color:var(--ink-mute);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.hmeta b{color:var(--ink-soft)}
+.obs{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.body{margin-top:26px;font-size:14.5px;line-height:1.72;color:var(--ink-soft)}
+.body h2{font-family:var(--font-display,inherit);font-size:21px;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.body h3{font-size:16px;color:var(--accent);margin:24px 0 8px;font-weight:600}
+.body h4{font-size:13px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 6px}
+.body p{margin:0 0 13px}
+.body strong{color:var(--ink)}
+.body code{font-family:var(--font-mono,monospace);font-size:.86em;background:rgba(120,200,230,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.body a{color:var(--accent);text-decoration:none;border-bottom:1px dotted currentColor}
+.body ul,.body ol{margin:0 0 14px;padding-left:22px}
+.body li{margin:5px 0}
+.body hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.body blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent-2);background:rgba(154,140,255,.07);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+.mdtbl{display:flex;flex-direction:column;gap:1px;margin:14px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--font-mono,monospace);font-size:12px}
+.mdtr{display:flex;gap:14px;padding:8px 12px;background:var(--card)}
+.mdtr span{flex:1}
+.mdtr:first-child{color:var(--accent);font-weight:600}
+.foot{margin-top:30px;font-family:var(--font-mono,monospace);font-size:10px;color:var(--ink-faint);text-align:center}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vo .4s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vi .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vo{to{opacity:0;transform:scale(1.04);filter:blur(3px)}}
+@keyframes vi{from{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+</style></head><body>
+<div class="scene"></div><div class="grain"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="../../index.html"><span class="disc"></span><span class="wm">Equity <i>Desk</i></span></a>
+    <span class="crumb"><a href="../../index.html">&#9666; Research</a></span>
+  </div>
+  <div class="hero">
+    <span class="cat">Company</span>
+    <h1 class="htitle">DR — Allcargo Logistics (ALLCARGO)</h1>
+    <div class="hmeta"><b>2026-10-21</b> &middot; ticker <b>ALLCARGO</b> &middot; status <b>active</b></div>
+    
+  </div>
+  <div class="body"><p><strong>One-line scope:</strong> After the demerger, Allcargo is a ₹1,500 Cr domestic express and contract-logistics business. The turnaround is real but tiny (Q1 PAT ₹14 Cr), the founder-chairman resigned in August and the promoter stake is now 40%. The stock is −26% from its August high, below its 200-DMA, with volume dried up. Wait for the 9.30 cluster.</p>
+<p><strong>Price used:</strong> ₹10.12 (NSE close 19 Oct) · <strong>Mcap:</strong> ~₹1,516 Cr · <strong>P/E:</strong> 33 · <strong>ROE:</strong> 0.9% · <strong>Next:</strong> Q2 FY27 results <strong>3 Nov 2026</strong>.</p>
+<h3>§1 Business and execution (Q1 FY27)</h3>
+<div class="mdtbl">
+<div class="mdtr"><span>Metric</span><span>Q1 FY27</span><span>YoY</span></div>
+<div class="mdtr"><span>Revenue</span><span>₹546 Cr</span><span>+11.2%</span></div>
+<div class="mdtr"><span>EBITDA (ex-OI)</span><span>₹71 Cr, 13% margin</span><span>+39% (margin 10% → 13%)</span></div>
+<div class="mdtr"><span>PAT</span><span>₹14 Cr</span><span>vs −₹10 Cr</span></div>
+<div class="mdtr"><span>Express revenue / volume</span><span>₹385 Cr / 312k t</span><span>+13.5% / +6.7%; realisation index 106.4</span></div>
+<div class="mdtr"><span>Express EBITDA margin</span><span>6.2%</span><span>guide ~7.5% this year, 10% in 3 years</span></div>
+<div class="mdtr"><span>Consultative logistics revenue</span><span>₹161 Cr</span><span>+6.1%; space 7.5 mn sq ft (down from 8.1)</span></div>
+</div>
+<p><strong>Red flags:</strong></p>
+<ul>
+<li>PAT included a ₹8 Cr one-off lease-closure gain. Without it, PAT was about ₹6 Cr.</li>
+<li>The auditor flagged that the scheme&#x27;s accounting overrides Ind AS, though its conclusion was unmodified.</li>
+<li>Founder Shashi Kiran Shetty resigned as chairman on 5 Aug.</li>
+<li>The promoter stake fell from 63.3% to 40.3%, mostly from the scheme.</li>
+<li>FII (8.2 → 6.6%) and DII (3.2 → 1.8%) holdings are both falling.</li>
+<li>There is a ₹5.6 Cr tax demand tied to the demerged business.</li>
+</ul>
+<p><strong>Guidance read:</strong> The express margin path (6.2 → 7.5 → 10%) is the only guidance. It is very sensitive to diesel. A peace-driven crude fall helps Allcargo more than almost any name in the book.</p>
+<h3>§2 Tape</h3>
+<ul>
+<li><strong>Trend:</strong> down. EMA21 10.64, SMA50 11.13, close 10.12, just under the TradingView 200-DMA at 10.21.</li>
+<li><strong>Falling resistance:</strong> 13.30 (9 Sep) → 11.00 (14 Oct), now about <strong>10.70</strong>.</li>
+<li><strong>Falling line of lows:</strong> 11.57 → 9.87, now about <strong>9.48</strong>.</li>
+<li><strong>Volume:</strong></li>
+<li>The 20-day median of 4.9 mn is <strong>31%</strong> of the Aug–Sep median of 15.8 mn, and the last six sessions ran 0.1–0.2x of the 50-day average.</li>
+<li>The Aug breakout days were +19.9% (6.7x), +15.8% (4.3x) and +9.5% (4.6x).</li>
+<li>The decline since then has come on no volume. That means no panic selling, but no demand either.</li>
+<li><strong>RSI:</strong> 42. ATR is 4.4%.</li>
+<li><strong>Desk-verified fib clusters</strong> (EDGE/fib_confluences):</li>
+<li>Support at <strong>9.32</strong>, a 3-source cluster built from 8.79 / 9.15 / 9.32.</li>
+<li>Resistance at <strong>11.00</strong>, a 2-source cluster from 11.00 / 11.33.</li>
+<li>Next resistance above that at 12.37.</li>
+</ul>
+<div class="mdtbl">
+<div class="mdtr"><span></span><span>Level</span><span>Logic</span></div>
+<div class="mdtr"><span>Buy zone</span><span>9.30–9.50</span><span>3-source fib cluster plus the falling-lows line</span></div>
+<div class="mdtr"><span>Stop</span><span>daily close &lt; 8.75</span><span>Under the 8.79 anchor low</span></div>
+<div class="mdtr"><span>Target</span><span>11.00, then 12.37</span><span>Verified clusters</span></div>
+<div class="mdtr"><span>R:R from 9.40</span><span>~2.5R to 11.00</span><span>₹10k risk = ~15,000 sh ≈ ₹1.4 L</span></div>
+<div class="mdtr"><span>At today&#x27;s 10.12</span><span>&lt;1R</span><span>Not a buy here</span></div>
+</div>
+<p><strong>Verdict:</strong> It&#x27;s a peace-leg candidate (diesel), but too small, too thin on earnings and with too much governance noise to be a core position. Only at 9.3–9.5, and ideally after the 3 Nov print.</p>
+<p>Sources: Allcargo Q1 FY27 (Multibagg, 5 Aug 2026); Screener.in 19 Oct 2026; EDGE/fib_confluences.json; Yahoo Finance OHLCV. Advisory only.</p></div>
+  <div class="foot">SPARCHO TRADING DESK &middot; DEEP RESEARCH &middot; rendered from 09_DEEP_RESEARCH &middot; 261021_ALLCARGO_DEEP-RESEARCH</div>
+</div></body></html>
