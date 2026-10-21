@@ -3,11 +3,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="x-build-id" content="1792555443">
-<meta name="x-built-at" content="2026-10-21T04:03:18+00:00">
+<meta name="x-build-id" content="1792581572">
+<meta name="x-built-at" content="2026-10-21T11:18:38+00:00">
 <style>#__buildbadge{position:fixed;right:8px;bottom:8px;z-index:2147483647;font:11px/1.3 'Space Mono',ui-monospace,monospace;background:rgba(15,23,42,.80);color:#cbd5e1;padding:4px 9px;border-radius:7px;opacity:.55;pointer-events:none;backdrop-filter:blur(4px);transition:opacity .2s}#__buildbadge.upd{background:rgba(176,122,18,.95);color:#fff;opacity:.97}</style>
 <script>(function(){
-  var BID="1792555443",BUILT_AT="2026-10-21T04:03:18+00:00";
+  var BID="1792581572",BUILT_AT="2026-10-21T11:18:38+00:00";
   window.__BUILD={id:BID,built_at:BUILT_AT};
   function badge(t,u){try{var e=document.getElementById('__buildbadge');if(!e){e=document.createElement('div');e.id='__buildbadge';(document.body||document.documentElement).appendChild(e);}e.textContent=t;e.className=u?'upd':'';}catch(_){}}
   function show(){var em=(window.__BUILD&&window.__BUILD.emitted)?(' · Emitted '+window.__BUILD.emitted):'';badge('Build '+BUILT_AT.replace('T',' ').replace('+00:00','')+'Z'+em);}
@@ -2246,7 +2246,8 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     if(u.real_scorecard!=null) DATA.real_scorecard=u.real_scorecard;
     if(u.performance!=null) DATA.performance=u.performance;
     if(u.conviction!=null) DATA.conviction=u.conviction;
-    if(u.switch_desk!=null) DATA.switch_desk=u.switch_desk;   // F261009-SWITCH
+    if(u.switch_desk!=null) DATA.switch_desk=u.switch_desk;
+    if(u.desk_notes!=null) DATA.desk_notes=u.desk_notes; if(u.chart_reads!=null) DATA.chart_reads=u.chart_reads;   // F261021-DESKNOTES   // F261009-SWITCH
     // F260721-FIBLOCK: the fib ANALYSIS (names/points) rides inside the ciphertext; the public
     // aggregate carries only a level-free provenance stub. Merge so as-of/counts survive both states.
     if(u.fib_confluences) DATA.fib_confluences=Object.assign({},DATA.fib_confluences||{},u.fib_confluences);
@@ -2304,7 +2305,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       try{ const pr=await fetch('ticker/pages.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(pr.ok){ const pj=await pr.json(); PAGE_SET=new Set(pj.tickers||[]); window.TK_NAME={}; (pj.groups||[]).forEach(function(g){ (g.names||[]).forEach(function(n){ window.TK_NAME[n.ticker]=n.name||''; }); }); } }catch(_){ }
       // F131 single-source price store — overlay live prices client-side (every 60s via bootstrap),
       // incl. the AES-encrypted Trade Lab (marks computed in-browser, no host re-emit).
-      try{ const gf=await fetch('data/gift_nifty.json?v=1792555443&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
+      try{ const gf=await fetch('data/gift_nifty.json?v=1792581572&t='+Date.now(),{cache:'no-store'}); if(gf.ok) window.GIFT=await gf.json(); }catch(_){ }   // F261009-SWITCH
       let __pxText='';
       try{ const px=await fetch('data/prices.json?v=1782241583&t='+Date.now(),{cache:'no-store'}); if(px.ok){ __pxText=await px.text(); const pj2=JSON.parse(__pxText); window.PRICES=(pj2&&pj2.tickers)||{}; window.PRICES_ASOF=(pj2&&pj2.asof_utc)||null; } }catch(_){ }
       // F260622 — live JOURNALIST news feed (curated set, 5-min cloud refresh); candidates as fallback. Never throws.
@@ -2340,6 +2341,56 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
   // fib COVERAGE tracker: how much of the traded universe carries a hand-verified read. That is the
   // constraint that actually matters, because fires are restricted to verified banks (A2) until it
   // widens. Its verdict role moved to the honest Scorecard on the Performance tab.
+
+  // F261021-DESKNOTES -- the desk's memory on the desk. Every call made on a name (chat or study) is
+  // a note in EDGE/DESK_NOTES.jsonl (desk_notes.py), scored against price with NO timer: it resolves
+  // only when its confirm or kill level prints. Notes and chart reads ride in the ciphertext.
+  var DK_ST={waiting:'waiting',live:'live',confirmed:'played out',killed:'failed',context:'note'};
+  var DK_TONE={waiting:'mut',live:'watch',confirmed:'pos',killed:'neg',context:'mut'};
+  function dkNotes(){ return (DATA&&DATA.desk_notes&&DATA.desk_notes.tickers)?DATA.desk_notes:null; }
+  function dkD(s){ return window.fmtDate?window.fmtDate(s):String(s||''); }
+  function dkCond(c){ if(!c) return null; var m={close_ge:'close ≥ ',close_le:'close ≤ ',touch_ge:'trades ≥ ',touch_le:'trades ≤ '}; return (m[c.op]||c.op)+c.px; }
+  window.dkTake=function(tk){ try{ var dn=dkNotes(); var x=dn&&dn.tickers[tk]; if(!x||!x.latest) return '';
+    var L=x.latest, st=DK_ST[L.status]||L.status, open=(L.status==='live'||L.status==='waiting');
+    return '<div class="dk-take '+(DK_TONE[L.status]||'mut')+'" data-tip="'+esc(L.headline)+'" data-tipsub="'+
+      esc(dkD(L.date)+' · '+st+(open&&x.age_days!=null?(' · open '+x.age_days+'d'):''))+'">'+
+      '<span class="dk-dot"></span><span class="dk-h">'+esc(L.headline)+'</span><span class="dk-s">'+esc(st)+'</span></div>'; }catch(e){ return ''; } };
+  function dkBody(L,x){
+    var lv=[['Trigger',dkCond(L.trigger)],['Confirms',dkCond(L.confirm)],['Fails',dkCond(L.kill)]].filter(function(p){return p[1];});
+    var px=(L.last_px!=null)?('<div class="dk-kv"><span>Price</span><b>'+(L.ref_px!=null?(esc(String(L.ref_px))+' → '):'now ')+esc(String(L.last_px))+'</b></div>'):'';
+    var hist=(x&&x.history&&x.history.length)?('<div class="dk-hist">'+x.history.map(function(h){ return '<div><span class="dk-dot '+(DK_TONE[h.status]||'mut')+'"></span>'+esc(dkD(h.date))+' · '+esc(h.headline)+' <i>'+esc(DK_ST[h.status]||h.status)+'</i></div>'; }).join('')+'</div>'):'';
+    return '<div class="dk-body">'+(L.detail?('<div class="dk-detail">'+esc(L.detail)+'</div>'):'')+
+      (lv.length?('<div class="dk-lv">'+lv.map(function(p){ return '<div class="dk-kv"><span>'+p[0]+'</span><b>'+esc(p[1])+'</b></div>'; }).join('')+px+'</div>'):px)+
+      (L.resolved_at?('<div class="dk-src">resolved '+esc(dkD(L.resolved_at))+'</div>'):'')+
+      (L.source?('<div class="dk-src">'+esc(L.source)+'</div>'):'')+hist+'</div>'; }
+  window.dkPanel=function(){ try{ var dn=dkNotes(); if(!dn) return ''; var sc=dn.scorecard||{};
+    var rows=Object.keys(dn.tickers).map(function(t){ return [t,dn.tickers[t]]; })
+      .sort(function(a,b){ var g={live:0,waiting:1,confirmed:2,killed:2,context:3}; var ga=g[a[1].latest.status], gb=g[b[1].latest.status];
+        if(ga!==gb) return ga-gb; return String(b[1].latest.date).localeCompare(String(a[1].latest.date)); });
+    var hr=(sc.hit_rate!=null)?(Math.round(sc.hit_rate*100)+'% right'):'none resolved yet';
+    return '<details class="rs-more dk-fold"><summary>Desk takes<span>'+(sc.open||0)+' open · '+(sc.confirmed||0)+' played out · '+(sc.killed||0)+' failed · '+hr+'</span>'+
+      HT('Every call made on a name. Scored on price only: no timer.')+'</summary>'+
+      '<div class="dk-list">'+rows.map(function(r){ var x=r[1], L=x.latest, st=DK_ST[L.status]||L.status, open=(L.status==='live'||L.status==='waiting');
+        return '<details class="dk-row"><summary><span class="dk-dot '+(DK_TONE[L.status]||'mut')+'"></span><b>'+esc(r[0])+'</b><span class="dk-dd">'+esc(dkD(L.date))+'</span>'+
+          '<span class="dk-h">'+esc(L.headline)+'</span><span class="dk-s '+(DK_TONE[L.status]||'mut')+'">'+esc(st)+(open&&x.age_days?(' · '+x.age_days+'d'):'')+'</span></summary>'+dkBody(L,x)+'</details>'; }).join('')+
+      '</div></details>'; }catch(e){ return ''; } };
+  window.dkDrops=function(){ try{ var cr=(DATA&&DATA.chart_reads)||null; var rs=(cr&&cr.reads)||[]; if(!rs.length) return '';
+    var tn={pos:'pos',neg:'neg',watch:'watch',mut:'mut'};
+    return '<details class="dk-fold dk-drops"><summary><span class="dk-k">Latest chart drops</span><span>'+rs.length+' read'+(rs.length===1?'':'s')+' · tap one</span></summary><div class="dk-list">'+
+      rs.map(function(r){ var h=r.habit||{};
+        return '<details class="dk-row"><summary><span class="dk-dot '+(tn[r.tone]||'mut')+'"></span><b>'+esc(r.ticker)+'</b><span class="dk-dd">'+esc(dkD(String(r.read_at||'').slice(0,10)))+'</span>'+
+          '<span class="dk-h">'+esc(r.signal||'')+'</span><span class="dk-s '+(tn[r.tone]||'mut')+'">'+esc(r.verdict||'')+'</span></summary>'+
+          '<div class="dk-body">'+(r.signal?('<div class="dk-kv"><span>Signal</span><b>'+esc(r.signal)+'</b></div>'):'')+(r.red_team?('<div class="dk-kv"><span>Against</span><b>'+esc(r.red_team)+'</b></div>'):'')+
+          (r.next_check?('<div class="dk-kv"><span>Watch</span><b>'+esc(r.next_check)+'</b></div>'):'')+
+          (h.sharpen?('<div class="dk-kv"><span>Coach</span><b>'+esc(h.sharpen)+(h.drill?(' — '+esc(h.drill)):'')+'</b></div>'):'')+'</div></details>'; }).join('')+
+      '</div></details>'; }catch(e){ return ''; } };
+  function dkBacklogHTML(cov){ try{ var bl=cov&&cov.backlog; if(!bl) return '';
+    var cls=bl.status==='red'?'neg':(bl.status==='amber'?'watch':'pos');
+    var kl={study:'never studied',frames:'unread charts',review:'review due'};
+    return '<details class="dk-fold dk-bl"><summary><span class="dk-dot '+cls+'"></span><span class="dk-k '+cls+'">'+esc(bl.headline||'')+'</span></summary><div class="dk-list">'+
+      (bl.top||[]).map(function(r){ return '<div class="dk-blrow"><b>'+esc(r.ticker)+'</b><span>'+esc(kl[r.kind]||r.kind)+(r.deep_dive?' · deep dive':'')+'</span><span class="dk-s '+(r.breach?'neg':'mut')+'">'+r.age_days+'d</span></div>'; }).join('')+
+      '<div class="dk-src">Worked twice daily, deep dives first. Past SLA: '+((bl.sla||{}).deep_dive_days||1)+'d deep dive, '+((bl.sla||{}).any_item_days||7)+'d any.</div></div></details>'; }catch(e){ return ''; } }
+
   function renderDTConf(){
     var el=document.getElementById("f1-dtconf"); if(!el) return;
     var cov=(DATA&&DATA.fib_coverage)||null;
@@ -2350,7 +2401,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '<span class="age">'+(cov.verified||0)+' / '+(cov.universe||0)+' names</span></div>'+
       '<div class="cvbar"><span class="cvf" style="width:'+pct+'%"></span></div>'+
       '<div class="fc-note"><b>'+pct+'%</b> ✓ &middot; '+(cov.to_study||0)+' to study'+
-      (((cov.banked_off_universe||[]).length)?(' &middot; '+cov.banked_off_universe.length+' banked off-universe'):'')+'</div>';
+      (((cov.banked_off_universe||[]).length)?(' &middot; '+cov.banked_off_universe.length+' banked off-universe'):'')+'</div>'+dkBacklogHTML(cov);
   }
 
   // ===================================================================================
@@ -4162,7 +4213,9 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     try{ (DATA.held||[]).forEach(function(h){ var t=(h&&h.ticker)||h; if(t) _held[String(t).toUpperCase()]=1; }); }catch(e){}
     var _isBook=function(t){ return !!_held[String(t||'').toUpperCase()]; };
     var _dist=function(n){ var d=(n.nearest_dist_pct!=null)?n.nearest_dist_pct:((n.points&&n.points[0]&&n.points[0].dist_pct!=null)?n.points[0].dist_pct:9999); return Math.abs(d); };
-    var _ranked=fc.names.slice().sort(function(a,b){ var ba=_isBook(a.ticker)?0:1, bb=_isBook(b.ticker)?0:1; if(ba!==bb) return ba-bb; return _dist(a)-_dist(b); });
+    var _isFar=function(n){ return n.setup==='no-level-near'||n.in_reach===false; };   // F261021-REACH
+    var _far=fc.names.filter(_isFar).sort(function(a,b){ return _dist(a)-_dist(b); });
+    var _ranked=fc.names.filter(function(n){ return !_isFar(n); }).sort(function(a,b){ var ba=_isBook(a.ticker)?0:1, bb=_isBook(b.ticker)?0:1; if(ba!==bb) return ba-bb; return _dist(a)-_dist(b); });
     var _HERO=10, _heroes=_ranked.slice(0,_HERO), _minis=_ranked.slice(_HERO);
     var _rup=function(v){ return (v==null||isNaN(+v))?'—':'₹'+Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}); };
     // F260717f classify: ONLY at-and-holding support (dist<=0.75%) is a potential buy. A zone price
@@ -4181,16 +4234,17 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var _qual=function(n){ var p0=(n.points||[])[0]||{}; var q=[]; if(p0.n_ladders) q.push(p0.n_ladders+' fib ladder'+(p0.n_ladders>1?'s':'')); if(p0.ma_hits&&p0.ma_hits.length) q.push(esc(p0.ma_hits.join(' + '))); return 'Confluence: '+(q.join(' + ')||'single ladder')+(p0.tf_max?(' · up to '+p0.tf_max+'M'):'')+(n.grade?(' · '+esc(n.grade)):''); };
     var _bk=function(n){ return _isBook(n.ticker)?'<span class="fc-book" title="held">●</span>':''; };
     var _gate=function(n,c){ var kr=n.key_resistance, ks=n.key_support; if((c.kind==='buy'||c.kind==='watchbuy'||c.kind==='avoid')&&kr&&kr.px!=null&&kr.px>n.current_px) return '<div class="fc2-gate">↑ reclaim <b>'+_rup(kr.px)+'</b> to turn up</div>'; if(c.kind==='resist'&&ks&&ks.px!=null&&ks.px<n.current_px) return '<div class="fc2-gate">↓ support <b>'+_rup(ks.px)+'</b></div>'; return ''; };
-    var _body=function(n,c){ return '<div class="fc2-situ">'+esc(c.situ)+'</div><div class="fc2-act"><span class="fc2-lbl">'+esc(c.lbl)+'</span><span class="fc2-px">'+_rup(c.px)+'</span></div>'+_gate(n,c)+'<div class="fc2-q" title="Close '+_rup(n.current_px)+' · '+esc(n.trend||'—')+'">'+_qual(n)+'</div>'; };
+    var _away=function(n){ var p0=(n.points||[])[0]||{}; var d=Math.abs(+p0.dist_pct); return (isFinite(d)&&d>0.75)?(' · '+d.toFixed(1)+'% away'):''; };
+    var _body=function(n,c){ return '<div class="fc2-situ">'+esc(c.situ)+_away(n)+'</div><div class="fc2-act"><span class="fc2-lbl">'+esc(c.lbl)+'</span><span class="fc2-px">'+_rup(c.px)+'</span></div>'+_gate(n,c)+'<div class="fc2-q" title="Close '+_rup(n.current_px)+' · '+esc(n.trend||'—')+'">'+_qual(n)+'</div>'; };
     var heroHTML=_heroes.map(function(n){ var c=_classify(n); return '<div class="rhero fc2 '+c.kind+'"><div class="fc2-hd"><span class="fc2-tk">'+esc(n.ticker)+'</span>'+_bk(n)+'<span class="fc2-sc">'+(n.score!=null?n.score:'')+'</span></div>'+_body(n,c)+'</div>'; }).join('');
     var _SV={buy:'BUY',watchbuy:'WATCH',resist:'@RES',avoid:'KNIFE',watch:'WATCH'};
     var miniHTML=_minis.length?('<div class="fc-mini-wrap">'+_minis.map(function(n){ var c=_classify(n); return '<details class="fc-mini '+c.kind+'"><summary><span class="fcm-tk">'+esc(n.ticker)+'</span>'+_bk(n)+'<span class="fcm-v '+c.kind+'">'+_SV[c.kind]+'</span></summary><div class="fcm-body">'+_body(n,c)+'</div></details>'; }).join('')+'</div>'):'';
     var miniLbl=_minis.length?('<div class="fc-mini-lbl">'+_minis.length+' more · nearest-price order · tap to expand</div>'):'';
     return '<div class="card fc-wrap" style="margin-bottom:13px"><div class="c-lbl"><span class="d"></span>Fib confluence radar · engine-scored'+
-      ((typeof HT!=="undefined")?HT('Fib-box confluences scored 0-100 from stacked sources. Observations, not calls.'):'')+
+      ((typeof HT!=="undefined")?HT('Stacked fib sources, scaled by distance. Out-of-reach levels sit below.'):'')+
       '<span class="age">'+fc.n_names+' names · '+fc.n_points+' points · '+(fc.n_at||0)+' at price</span></div>'+
       '<div class="fc-note"><b>'+fmtD(fc.price_as_of)+'</b> close · observations, not calls</div>'+
-      '<div class="readheroes fc-grid fc-heroes">'+heroHTML+'</div></div>';  // F261008: the 'N more · tap to expand' chips are retired (operator: noise)
+      '<div class="readheroes fc-grid fc-heroes">'+heroHTML+'</div>'+(_far.length?('<details class="dk-fold dk-bl"><summary><span class="dk-dot"></span><span class="dk-k">'+_far.length+' names · nearest level out of reach</span></summary><div class="dk-list">'+_far.map(function(n){ var p0=(n.points||[])[0]||{}; return '<div class="dk-blrow"><b>'+esc(n.ticker)+'</b>'+_bk(n)+'<span>nearest '+_rup(p0.px)+' '+(p0.side==='above'?'above':'below')+'</span><span class="dk-s">'+Math.abs(+p0.dist_pct||0).toFixed(1)+'%</span></div>'; }).join('')+'</div></details>'):'')+'</div>';  // F261008: the 'N more · tap to expand' chips are retired (operator: noise)
   }
   /* T4-BEGIN order ticket + STYLE rows (render) */
   function eqInr(n){ return (n==null||!isFinite(n))?'—':('₹'+Math.round(n).toLocaleString('en-IN')); }
@@ -4450,7 +4504,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<div class="rdr-h"><span class="rdr-rk">&#127919;</span>'+
           '<span class="rdr-tk">'+tkA(f.ticker,esc(f.ticker))+'</span>'+_takenBadge+
           '<span class="rdr-vd">FIRE '+Math.round(f.score||0)+'</span>'+
-          '<span class="rdr-px">'+(f.current_px!=null?('now '+esc(String(f.current_px))):'')+'</span></div>'+
+          '<span class="rdr-px">'+(f.current_px!=null?('now '+esc(String(f.current_px))):'')+'</span></div>'+window.dkTake(f.ticker)+
         lvl(f)+eqTicketHTML(f,'FIRE')+whyBand(f)+
         // F261009-DECLUTTER #7: the company read and its verdict line open from the fold
         '<details class="rdr-more"><summary>the company behind it · <span class="'+bl[2]+'">'+esc(bl[0])+'</span></summary>'+co.html+
@@ -4463,7 +4517,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
         '<span class="sc">WATCH '+Math.round(w.score||0)+'</span>'+
         '<span class="mv '+((w.rr!=null&&w.rr>=1.5)?'pos':'mut')+'">'+(w.rr!=null?((+w.rr).toFixed(2)+'R:R'):'no target')+'</span></div>'+
         '<div class="note" title="'+esc(clip((w.why||[]).join(' \u00b7 '),160))+'">'+esc(why1((w.why||[])[0]||''))+
-        (w.entry!=null?(' &middot; enter <b>'+esc(String(w.entry))+'</b>'):'')+'</div></div>';
+        (w.entry!=null?(' &middot; enter <b>'+esc(String(w.entry))+'</b>'):'')+'</div>'+window.dkTake(w.ticker)+'</div>';
     };
 
     var fires=(rad.fires||[]), watch=(rad.watch||[]);
@@ -4475,7 +4529,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       '<div class="c-lbl"><span class="d"></span>&#127919; The Radar &middot; fib-confluence fires'+
       ((typeof HT!=="undefined")?HT('FIRE: on a fib support, STRONG, 3+ sources, R:R 1.5+. Last close.'):'')+
       '<span class="age">'+(rc.fire||0)+' fire &middot; '+(rc.watch||0)+' watch &middot; '+(rc.exclude||0)+' excluded'+(rc.style!=null?(' &middot; '+rc.style+' style'):'')+'</span></div>'+
-      '<div class="fc-note">gated on the <b>'+fmtD(rad.price_as_of)+'</b> close &middot; ✓ banks only</div>'+
+      '<div class="fc-note">gated on the <b>'+fmtD(rad.price_as_of)+'</b> close &middot; ✓ banks only</div>'+window.dkDrops()+
       body+
       (watch.length?('<div class="c-lbl sub" style="margin-top:11px"><span class="d"></span>Watch<span class="age">'+watch.length+' names</span></div>'+watch.map(watchRow).join('')):'')+
       eqStyleHTML(rad)+
@@ -6157,7 +6211,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
       .sort(function(x,y){ return x.age_days-y.age_days; }).slice(0,2);
     var nbHTML=_nb.map(function(s){ return '<a class="rs-nb" href="'+esc(s.link)+'"><span class="rs-nb-k">New brief</span>'+
       '<span class="rs-nb-t">'+esc(s.title)+'</span><span class="rs-nb-d">'+esc(window.fmtDate?window.fmtDate(s.date):s.date)+' · read →</span></a>'; }).join('');
-    setFace('z-research', nbHTML+
+    setFace('z-research', nbHTML+window.dkPanel()+
       '<div class="rb">'+
         '<div class="card rb-cat"><div class="c-lbl"><span class="d"></span>Catalysts'+HT('Company events and policy dates ahead, left to right. Cyan = a name you hold.')+
           '<span class="rb-seg" id="rs-cat-seg"></span></div><div class="rb-body" id="rs-cat-body"></div></div>'+
@@ -6400,7 +6454,7 @@ body.light .ihpop{background:#fff;color:#2a2f3a;box-shadow:0 10px 30px rgba(0,0,
     var shown=secNames.filter(function(s){ return sel==='ALL'||sel===s; });
     var body=shown.map(function(s){
       var items=groups[s].slice().sort(function(a,b){ if(!!a.held!==!!b.held) return a.held?-1:1; return b.composite-a.composite; });
-      var cards=items.map(function(b){ return '<a class="tcard fibst-'+fibSt(b.ticker)+'" style="--sx:'+colOf[s]+'" href="'+tkHref(b.ticker)+'"'+tkExt(b.ticker)+'><div class="th"><span class="sym">'+(b.held?'<span class="star">★</span> ':'')+esc(b.ticker)+'</span><span class="sec">'+esc(secOf(b))+'</span></div><div class="tfib '+fibSt(b.ticker)+'">'+fibLbl(b.ticker)+'</div></a>'; }).join('');
+      var cards=items.map(function(b){ return '<a class="tcard fibst-'+fibSt(b.ticker)+'" style="--sx:'+colOf[s]+'" href="'+tkHref(b.ticker)+'"'+tkExt(b.ticker)+'><div class="th"><span class="sym">'+(b.held?'<span class="star">★</span> ':'')+esc(b.ticker)+'</span><span class="sec">'+esc(secOf(b))+'</span></div><div class="tfib '+fibSt(b.ticker)+'">'+fibLbl(b.ticker)+'</div>'+window.dkTake(b.ticker)+'</a>'; }).join('');
       return '<div class="tsec"><div class="tsec-h" style="--sx:'+colOf[s]+'"><span class="nm">'+esc(s)+'</span><span class="ct">'+items.length+' name'+(items.length===1?'':'s')+'</span></div><div class="tgrid">'+cards+'</div></div>';
     }).join('');
     setFace('z-tickers',
@@ -7868,7 +7922,7 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
     });
   }
 
-  fetch("data/pulse.json?v=1792555443&t="+Date.now())
+  fetch("data/pulse.json?v=1792581572&t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
     .then(function(d){
       P = d; P.map = byTicker(d);
@@ -8726,4 +8780,34 @@ body.light .cvd-trk{stroke:rgba(0,0,0,.08)}
   try{ decorate5(); }catch(e){}
 })();
 </script>
+
+<style>/* F261021-DESKNOTES */
+.dk-take{display:flex;align-items:center;gap:7px;margin-top:6px;padding:5px 8px;border-radius:8px;background:var(--glass);border:1px solid var(--hair);font:10.5px/1.35 var(--font-mono);color:var(--ink2);min-width:0}
+.dk-take .dk-h,.dk-row .dk-h{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dk-s{font:700 9px var(--font-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--faint);white-space:nowrap}
+.dk-dot{width:6px;height:6px;border-radius:50%;background:var(--mut);flex-shrink:0;display:inline-block}
+.dk-take.pos .dk-dot,.dk-dot.pos{background:var(--pos)} .dk-take.neg .dk-dot,.dk-dot.neg{background:var(--neg)} .dk-take.watch .dk-dot,.dk-dot.watch{background:var(--watch)}
+.dk-take.pos .dk-s,.dk-s.pos,.dk-k.pos{color:var(--pos)} .dk-take.neg .dk-s,.dk-s.neg,.dk-k.neg{color:var(--neg)} .dk-take.watch .dk-s,.dk-s.watch,.dk-k.watch{color:var(--watch)}
+.dk-fold>summary{cursor:pointer;list-style:none} .dk-fold>summary::-webkit-details-marker{display:none}
+.dk-drops,.dk-bl{margin:8px 0 10px;border:1px solid var(--hair);border-radius:10px;background:var(--glass)}
+.dk-drops>summary,.dk-bl>summary{display:flex;align-items:center;gap:8px;padding:8px 11px;font:11px var(--font-mono);color:var(--faint)}
+.dk-drops>summary::after,.dk-bl>summary::after{content:'\203A';margin-left:auto;color:var(--faint);transition:transform .16s}
+.dk-drops[open]>summary::after,.dk-bl[open]>summary::after{transform:rotate(90deg)}
+.dk-k{font:700 10px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--cyan)}
+.dk-bl .dk-k{letter-spacing:.02em;text-transform:none;font-weight:600}
+.dk-list{display:flex;flex-direction:column;gap:4px;padding:0 8px 8px}
+.dk-row{border:1px solid var(--hair);border-radius:9px;background:var(--glass)}
+.dk-row>summary{display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:12px;color:var(--ink);min-width:0}
+.dk-row>summary b{font-family:var(--font-mono);font-size:11.5px}
+.dk-dd{font:10px var(--font-mono);color:var(--faint);white-space:nowrap}
+.dk-bl .dk-list{max-height:240px;overflow:auto}
+.dk-body{padding:2px 12px 10px 24px;display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--ink2)}
+.dk-detail{line-height:1.45}
+.dk-lv{display:flex;flex-wrap:wrap;gap:6px 16px}
+.dk-kv{display:flex;gap:7px;align-items:baseline} .dk-kv span{font:9px var(--font-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--faint);min-width:52px} .dk-kv b{font-weight:500;color:var(--ink)}
+.dk-src{font:10px var(--font-mono);color:var(--faint)}
+.dk-hist{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--faint);border-top:1px solid var(--hair);padding-top:5px} .dk-hist i{font-style:normal;text-transform:uppercase;font-size:9px;letter-spacing:.05em}
+.dk-blrow{display:flex;align-items:center;gap:10px;padding:3px 4px;font-size:11.5px} .dk-blrow b{font-family:var(--font-mono);min-width:92px} .dk-blrow span:nth-child(2){flex:1;color:var(--ink2)}
+@media(max-width:640px){.dk-row>summary .dk-dd{display:none}}
+</style>
 </body></html>

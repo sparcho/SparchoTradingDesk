@@ -437,6 +437,33 @@ def extension_penalty(current_px, ma):
             "penalty": round(penalty)}
 
 
+# F261021-REACH — a confluence only counts for a name if price can plausibly get there. Operator 21-Oct:
+# "the fib confluence card hits are all soo far off from their price ... i hope we are not populating
+# the fib confluence tiles just for the fuck of it". 34 of 99 names were headlining a cluster beyond
+# reach (KEC 96% away, POWERINDIA 20%) as STRONG / "approaching" with scores of 72-81, because
+# proximity was an ADDITIVE 3-25 pts against up to 87 pts of structure. Reach = 2.5 normal days'
+# range, floor 4%. Beyond it a level is history, not a set-up: it can never be the headline while
+# anything nearer exists, and a name whose nearest level is out of reach says so and sinks.
+REACH_MIN = 0.04
+REACH_ATR = 2.5
+
+
+def reach_of(atr_pct):
+    return max(REACH_MIN, REACH_ATR * (atr_pct or 0.025))
+
+
+def proximity_factor(dist_pct, reach):
+    """1.0 within 2%, easing to 0.6 at the edge of reach, then decaying with distance beyond it."""
+    if dist_pct is None:
+        return 0.3
+    d = dist_pct / 100.0
+    if d <= 0.02:
+        return 1.0
+    if d <= reach:
+        return 1.0 - 0.4 * (d - 0.02) / max(reach - 0.02, 1e-9)
+    return 0.6 * reach / d
+
+
 def _setup_of(top, trend):
     """Terse actionable read for a name, from its top-ranked confluence point + trend.
 
@@ -445,6 +472,8 @@ def _setup_of(top, trend):
     above it. `side` alone no longer decides."""
     if not top:
         return "watch"
+    if top.get("in_reach") is False:
+        return "no-level-near"                     # F261021-REACH: nothing price can get to
     side, at = top.get("side"), top.get("at")
     unflipped_supply = bool(top.get("supply")) and not top.get("accepted_above")
     if side == "in-zone":                          # price INSIDE the band the cluster describes
@@ -476,6 +505,9 @@ def _why_of(cur, top, trend, ext, base_score, score):
     elif top.get("dist_pct") is not None:
         w.append("top cluster px %.2f sits %s spot, %.2f%% away"
                  % (top.get("px"), side or "at", top["dist_pct"]))
+    if top.get("in_reach") is False:
+        w.append("nearest mapped level is beyond reach (%.1f%% = 2.5 normal days' range) — nothing "
+                 "to act on; score scaled by distance" % (top.get("reach_pct") or 0))
     if top.get("supply"):
         if top.get("accepted_above"):
             w.append("supply/ATH wording, but price ACCEPTED above %.2f (%d+ closes %.0f%% clear, not "
@@ -490,7 +522,8 @@ def _why_of(cur, top, trend, ext, base_score, score):
     elif ext["exempt"]:
         w.append("sitting on its EMA21 (%+.1f%%) — breakout-retest exemption, no extension penalty"
                  % (ext["ext21_pct"] or 0.0))
-    w.append("score %d = %d cluster strength - %d extension" % (score, base_score, ext["penalty"]))
+    _pf = proximity_factor(top.get("dist_pct"), (top.get("reach_pct") or 4.0) / 100.0)
+    w.append("score %d = (%d cluster strength - %d extension) x %.2f distance" % (score, base_score, ext["penalty"], _pf))
     return w
 
 
@@ -594,12 +627,21 @@ def build(obs=None, ohlc=None, write=True):
             classify_point(pt, cur, closes)
         # rank AT-first (verdict reflects where price IS), then strength, then nearest. Strength-based
         # key_support/key_resistance below surface the strongest ZONES for the actionable level.
-        pts.sort(key=lambda p: (not p["at"], -p["score"], p["dist_pct"] if p["dist_pct"] is not None else 1e9))
+        reach = reach_of(atr.get(o.get("ticker")))
+        for pt in pts:
+            pt["in_reach"] = bool(pt["at"]) or (pt["dist_pct"] is not None and pt["dist_pct"] / 100.0 <= reach)
+            pt["reach_pct"] = round(reach * 100, 1)
+        # F261021-REACH: AT first, then within reach, then strength, then nearest. A cluster beyond
+        # reach is only the headline when nothing nearer exists.
+        pts.sort(key=lambda p: (not p["at"], not p["in_reach"],
+                                -p["score"] if p["in_reach"] else 0,   # out of reach: nearest wins
+                                p["dist_pct"] if p["dist_pct"] is not None else 1e9))
         top = pts[0]
         total_points += len(pts)
         ext = extension_penalty(cur, ma)
         base_score = top["score"]
-        score = max(0, base_score - ext["penalty"])
+        prox = proximity_factor(top.get("dist_pct"), reach)
+        score = max(0, round((base_score - ext["penalty"]) * prox))
         names.append({
             "ticker": o.get("ticker"),
             "current_px": round(cur, 2),
@@ -612,6 +654,9 @@ def build(obs=None, ohlc=None, write=True):
             "px_asof": o.get("current_px_asof"),
             "px_stale_days": o.get("current_px_stale_days"),
             "n_points": len(pts),
+            "reach_pct": round(reach * 100, 1),
+            "in_reach": bool(top.get("in_reach")),
+            "proximity_factor": round(prox, 2),
             "at_confluence": any(p["at"] for p in pts),
             "nearest_dist_pct": min(p["dist_pct"] for p in pts if p["dist_pct"] is not None),
             "trend": trend,
