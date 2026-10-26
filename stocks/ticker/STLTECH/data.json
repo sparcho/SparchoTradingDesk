@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "STLTECH",
-  "emitted_at_utc": "2026-10-26T03:33:05+00:00",
+  "emitted_at_utc": "2026-10-26T11:06:13+00:00",
   "public": {
     "ticker": "STLTECH",
     "name": "Sterlite Technologies",
@@ -170,10 +170,10 @@
     ],
     "last_stock_ta": "[[260503_STLTECH_STOCK-TA]]",
     "live": {
-      "price": 826.65,
-      "day_chg_pct": 3.222,
-      "week_chg_pct": -5.89674995731118,
-      "date": "2026-10-23"
+      "price": 867.55,
+      "day_chg_pct": 4.948,
+      "week_chg_pct": 0.19055318166069724,
+      "date": "2026-10-26"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -9003,44 +9003,93 @@
         840.0,
         760.85,
         826.65
+      ],
+      [
+        "2026-10-26",
+        800.0,
+        867.95,
+        785.35,
+        867.55
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 840.28,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 895.22,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 922.88,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 977.82,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 812.62,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 757.68,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 730.02,
+        "as_of": "2026-10-26"
+      },
+      {
         "method": "swing_high",
         "kind": "SH1",
         "price": 1016.8,
-        "as_of": "2026-10-23"
+        "as_of": "2026-10-26"
       },
       {
         "method": "swing_high",
         "kind": "SH2",
         "price": 897.4,
-        "as_of": "2026-10-23"
+        "as_of": "2026-10-26"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 809.17,
-        "as_of": "2026-10-23"
+        "price": 813.5,
+        "as_of": "2026-10-26"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 457.14,
-        "as_of": "2026-10-23"
+        "price": 460.96,
+        "as_of": "2026-10-26"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 1016.8,
-        "as_of": "2026-10-23"
+        "as_of": "2026-10-26"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
         "price": 86.24,
-        "as_of": "2026-10-23"
+        "as_of": "2026-10-26"
       }
     ],
     "operator_levels": [],
@@ -9055,18 +9104,26 @@
       },
       {
         "label": "SUPPORT",
-        "price": 809.17,
+        "price": 840.28,
         "dir": "below",
         "kind": "watch",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
+        "price": 895.22,
+        "dir": "above",
+        "kind": "trim",
+        "why": "pivot R1",
+        "auto": true
+      },
+      {
+        "label": "UPSIDE",
         "price": 1016.8,
         "dir": "above",
         "kind": "trim",
-        "why": "60-day swing high",
+        "why": "52-week high",
         "auto": true
       }
     ],
@@ -9074,24 +9131,31 @@
     "gate_check": [
       {
         "label": "SUPPORT",
-        "price": 809.17,
+        "price": 840.28,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -2.1145587612653505
+        "dist_pct": -3.1433346781165334
       },
       {
         "label": "RESISTANCE",
+        "price": 895.22,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 3.1894415307475157
+      },
+      {
+        "label": "UPSIDE",
         "price": 1016.8,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 23.00247988870743
+        "dist_pct": 17.203619387931532
       },
       {
         "label": "INVALIDATION",
         "price": 86.24,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -89.56753160345976
+        "dist_pct": -90.05936257276238
       }
     ],
     "scenario_ladder": [
@@ -9104,7 +9168,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 826.65,
+        "level": 867.55,
         "note": "holds current band"
       },
       {
@@ -9409,7 +9473,7 @@
           "label": "Has the market changed its mind? (the MULTIPLE, not the price)",
           "lens": "rerating",
           "reading": "re-rated up",
-          "figure": "PE 111.2 at 2022-03-31 -> 184.0 now, +66% over 2 fiscal year ends. The price moved +392% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind. The window is shorter than the three years asked for, and says so",
+          "figure": "PE 111.2 at 2022-03-31 -> 184.0 now, +66% over 2 fiscal year ends. The price moved +417% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind. The window is shorter than the three years asked for, and says so",
           "source": "tracking.rerating.verdict",
           "not_measurable": null,
           "measured": "MEASURED INVERTED",

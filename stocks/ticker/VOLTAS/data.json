@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "VOLTAS",
-  "emitted_at_utc": "2026-10-26T03:33:10+00:00",
+  "emitted_at_utc": "2026-10-26T11:06:17+00:00",
   "public": {
     "ticker": "VOLTAS",
     "name": "VOLTAS",
@@ -135,10 +135,10 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 950.0,
-      "day_chg_pct": -3.953,
-      "week_chg_pct": -9.695817490494296,
-      "date": "2026-10-23"
+      "price": 947.6,
+      "day_chg_pct": -0.253,
+      "week_chg_pct": -7.919541346807881,
+      "date": "2026-10-26"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8968,42 +8968,99 @@
         993.9,
         939.2,
         950.0
+      ],
+      [
+        "2026-10-26",
+        950.0,
+        950.1,
+        931.5,
+        947.6
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 943.07,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 954.63,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 961.67,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 973.23,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 936.03,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 924.47,
+        "as_of": "2026-10-26"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 917.43,
+        "as_of": "2026-10-26"
+      },
+      {
         "method": "sma",
         "kind": "SMA50",
-        "price": 1135.07,
-        "as_of": "2026-10-23"
+        "price": 1128.22,
+        "as_of": "2026-10-26"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 1307.98,
-        "as_of": "2026-10-23"
+        "price": 1305.91,
+        "as_of": "2026-10-26"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 1561.3,
-        "as_of": "2026-10-23"
+        "as_of": "2026-10-26"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 950.0,
-        "as_of": "2026-10-23"
+        "price": 947.6,
+        "as_of": "2026-10-26"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
+        "label": "SUPPORT",
+        "price": 943.07,
+        "dir": "below",
+        "kind": "watch",
+        "why": "classical pivot",
+        "auto": true
+      },
+      {
         "label": "RESISTANCE",
-        "price": 1135.07,
+        "price": 954.63,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "pivot R1",
         "auto": true
       },
       {
@@ -9018,32 +9075,39 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "SUPPORT",
+        "price": 943.07,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -0.4780498100464302
+      },
+      {
         "label": "RESISTANCE",
-        "price": 1135.07,
+        "price": 954.63,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 19.48105263157894
+        "dist_pct": 0.7418742085268016
       },
       {
         "label": "UPSIDE",
         "price": 1561.3,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 64.34736842105264
+        "dist_pct": 64.76361333896158
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 950.0,
-        "note": "daily close below Rs950 invalidates the structure"
+        "level": 947.6,
+        "note": "daily close below Rs948 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 950.0,
-        "note": "holds current band; reclaim Rs1308 (200-SMA) to flip constructive"
+        "level": 947.6,
+        "note": "holds current band; reclaim Rs1306 (200-SMA) to flip constructive"
       },
       {
         "case": "bull",
