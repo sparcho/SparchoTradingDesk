@@ -243,6 +243,10 @@ ALL_TICKERS = [
 
     'GRAVITA',   # +260901 vault parity: banked fib read, tracked; the cloud jobs were blind to it
 
+    # 2026-10-28 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'AEGISLOG',
+    'ECLERX',
 ]
 
 
