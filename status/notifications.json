@@ -1,8 +1,41 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-10-29T12:02:02+00:00",
+  "updated_at_utc": "2026-10-29T19:59:45+00:00",
   "events": [
+    {
+      "ts": "2026-10-30T01:29:40+05:30",
+      "ts_utc": "2026-10-29T19:59:40+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "equity-dashboard",
+      "spotted": "equity aggregate 154m stale (tol 90m, off-hours)",
+      "action_taken": "re-triggered live-refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-10-30T01:29:41+05:30",
+      "ts_utc": "2026-10-29T19:59:41+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver-dashboard",
+      "spotted": "silver aggregate 143m stale",
+      "action_taken": "re-triggered silver 20-min refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-10-30T01:29:42+05:30",
+      "ts_utc": "2026-10-29T19:59:42+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-10-29T17:31:59+05:30",
       "ts_utc": "2026-10-29T12:01:59+00:00",
@@ -517,39 +550,6 @@
       "subsystem": "silver:live-parity",
       "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
       "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-10-23T19:28:48+05:30",
-      "ts_utc": "2026-10-23T13:58:48+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 107m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-10-23T19:28:48+05:30",
-      "ts_utc": "2026-10-23T13:58:48+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "silver:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
-      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-10-23T13:38:21+05:30",
-      "ts_utc": "2026-10-23T08:08:21+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 94m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
       "outcome": "pending",
       "source": "cloud-watchdog"
     }
