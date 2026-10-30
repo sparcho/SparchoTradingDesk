@@ -247,6 +247,9 @@ ALL_TICKERS = [
     # invisible to every cloud job. See check_cloud_engine_contracts.
     'AEGISLOG',
     'ECLERX',
+    # 2026-10-29 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'JAYNECOIND',
 ]
 
 
