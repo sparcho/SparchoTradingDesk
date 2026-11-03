@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "MOIL",
-  "emitted_at_utc": "2026-11-03T03:34:54+00:00",
+  "emitted_at_utc": "2026-11-03T11:05:41+00:00",
   "public": {
     "ticker": "MOIL",
     "name": "MOIL Limited (Manganese Ore India)",
@@ -128,10 +128,10 @@
     ],
     "last_stock_ta": null,
     "live": {
-      "price": 222.09,
-      "day_chg_pct": 3.771,
-      "week_chg_pct": 2.5156942392909976,
-      "date": "2026-11-02"
+      "price": 203.22,
+      "day_chg_pct": -8.497,
+      "week_chg_pct": -6.492430865504079,
+      "date": "2026-11-03"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -9003,56 +9003,105 @@
         223.56,
         215.2,
         222.09
+      ],
+      [
+        "2026-11-03",
+        219.85,
+        219.95,
+        202.0,
+        203.22
       ]
     ],
     "sr_levels": [
       {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 208.39,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 214.78,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 226.34,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 232.73,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 196.83,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 190.44,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 178.88,
+        "as_of": "2026-11-03"
+      },
+      {
         "method": "swing_low",
         "kind": "SL1",
         "price": 237.36,
-        "as_of": "2026-11-02"
+        "as_of": "2026-11-03"
       },
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 239.64,
-        "as_of": "2026-11-02"
+        "price": 238.65,
+        "as_of": "2026-11-03"
       },
       {
         "method": "sma",
         "kind": "SMA200",
-        "price": 284.29,
-        "as_of": "2026-11-02"
+        "price": 283.56,
+        "as_of": "2026-11-03"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_HIGH",
         "price": 380.55,
-        "as_of": "2026-11-02"
+        "as_of": "2026-11-03"
       },
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 214.02,
-        "as_of": "2026-11-02"
+        "price": 203.22,
+        "as_of": "2026-11-03"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
-        "label": "INVALIDATION",
-        "price": 214.02,
+        "label": "SUPPORT",
+        "price": 196.83,
         "dir": "below",
-        "kind": "inv",
-        "why": "52-week low",
+        "kind": "watch",
+        "why": "pivot S1",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 239.64,
+        "price": 208.39,
         "dir": "above",
         "kind": "trim",
-        "why": "50-day SMA",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -9067,38 +9116,38 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "INVALIDATION",
-        "price": 214.02,
-        "dir": "below",
-        "kind": "inv",
-        "dist_pct": -3.633662028907197
-      },
-      {
         "label": "RESISTANCE",
-        "price": 239.64,
+        "price": 208.39,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 7.9022018100769875
+        "dist_pct": 2.5440409408522724
+      },
+      {
+        "label": "SUPPORT",
+        "price": 196.83,
+        "dir": "below",
+        "kind": "watch",
+        "dist_pct": -3.1443755535872384
       },
       {
         "label": "UPSIDE",
         "price": 380.55,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 71.34945292449008
+        "dist_pct": 87.26011219368172
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 214.02,
-        "note": "daily close below Rs214 invalidates the structure"
+        "level": 203.22,
+        "note": "daily close below Rs203 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 222.09,
+        "level": 203.22,
         "note": "holds current band; reclaim Rs284 (200-SMA) to flip constructive"
       },
       {
@@ -9400,7 +9449,7 @@
           "label": "Has the market changed its mind? (the MULTIPLE, not the price)",
           "lens": "rerating",
           "reading": "re-rated up",
-          "figure": "PE 11.6 at 2023-03-31 -> 14.7 now, +27% over 3 fiscal year ends. The price moved +56% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
+          "figure": "PE 11.6 at 2023-03-31 -> 14.7 now, +27% over 3 fiscal year ends. The price moved +43% over the same window and has NO vote here - a price that rose as much as earnings is not the market changing its mind",
           "source": "tracking.rerating.verdict",
           "not_measurable": null,
           "measured": "MEASURED INVERTED",

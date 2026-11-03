@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "ITBEES",
-  "emitted_at_utc": "2026-11-03T03:34:50+00:00",
+  "emitted_at_utc": "2026-11-03T11:05:37+00:00",
   "public": {
     "ticker": "ITBEES",
     "name": "Nippon India ETF Nifty IT",
@@ -45,10 +45,10 @@
     "dr_briefs": [],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 36.06,
-      "day_chg_pct": -0.469,
-      "week_chg_pct": 0.19449847179772237,
-      "date": "2026-11-02"
+      "price": 36.07,
+      "day_chg_pct": 0.028,
+      "week_chg_pct": 1.1497476163769034,
+      "date": "2026-11-03"
     },
     "chart_kind": "candles",
     "ohlc": [
@@ -8913,9 +8913,58 @@
         36.99,
         35.22,
         36.06
+      ],
+      [
+        "2026-11-03",
+        36.28,
+        36.73,
+        35.95,
+        36.07
       ]
     ],
     "sr_levels": [
+      {
+        "method": "classical_pivot",
+        "kind": "PIVOT",
+        "price": 36.25,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R1",
+        "price": 36.55,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R2",
+        "price": 37.03,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "R3",
+        "price": 37.33,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S1",
+        "price": 35.77,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S2",
+        "price": 35.47,
+        "as_of": "2026-11-03"
+      },
+      {
+        "method": "classical_pivot",
+        "kind": "S3",
+        "price": 34.99,
+        "as_of": "2026-11-03"
+      },
       {
         "method": "swing_high",
         "kind": "SH1",
@@ -8965,10 +9014,18 @@
       },
       {
         "label": "SUPPORT",
-        "price": 35.65,
+        "price": 35.77,
         "dir": "below",
         "kind": "watch",
-        "why": "200-day SMA",
+        "why": "pivot S1",
+        "auto": true
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 36.25,
+        "dir": "above",
+        "kind": "trim",
+        "why": "classical pivot",
         "auto": true
       },
       {
@@ -8983,25 +9040,32 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
+        "label": "RESISTANCE",
+        "price": 36.25,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.4990296645411692
+      },
+      {
         "label": "SUPPORT",
-        "price": 35.65,
+        "price": 35.77,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -1.136993899057137
+        "dist_pct": -0.8317161075686088
       },
       {
         "label": "UPSIDE",
         "price": 43.29,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 20.04991680532445
+        "dist_pct": 20.01663432215137
       },
       {
         "label": "INVALIDATION",
         "price": 28.63,
         "dir": "below",
         "kind": "inv",
-        "dist_pct": -20.604547975596237
+        "dist_pct": -20.626559467701693
       }
     ],
     "scenario_ladder": [
@@ -9014,7 +9078,7 @@
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 36.06,
+        "level": 36.07,
         "note": "holds current band"
       },
       {
