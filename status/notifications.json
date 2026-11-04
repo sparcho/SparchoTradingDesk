@@ -1,8 +1,30 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-11-04T00:58:56+00:00",
+  "updated_at_utc": "2026-11-04T10:14:42+00:00",
   "events": [
+    {
+      "ts": "2026-11-04T15:44:38+05:30",
+      "ts_utc": "2026-11-04T10:14:38+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "equity-dashboard",
+      "spotted": "equity aggregate 420m stale (tol 90m, off-hours)",
+      "action_taken": "re-triggered live-refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-11-04T15:44:39+05:30",
+      "ts_utc": "2026-11-04T10:14:39+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-11-04T06:28:53+05:30",
       "ts_utc": "2026-11-04T00:58:53+00:00",
@@ -528,28 +550,6 @@
       "subsystem": "silver:silver_book",
       "spotted": "(event redacted — would have exposed sensitive data)",
       "action_taken": "(redacted)",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-10-28T17:24:16+05:30",
-      "ts_utc": "2026-10-28T11:54:16+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "silver:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
-      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-10-28T08:51:08+05:30",
-      "ts_utc": "2026-10-28T03:21:08+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity-dashboard",
-      "spotted": "equity aggregate 174m stale (tol 90m, off-hours)",
-      "action_taken": "re-triggered live-refresh Action",
       "outcome": "pending",
       "source": "cloud-watchdog"
     }
