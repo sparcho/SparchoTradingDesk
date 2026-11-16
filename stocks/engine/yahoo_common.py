@@ -253,6 +253,14 @@ ALL_TICKERS = [
     # 2026-11-12 auto-heal (system_doctor): these were tracked by the vault and
     # invisible to every cloud job. See check_cloud_engine_contracts.
     'COFORGE',
+    # 2026-11-15 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'CLEAN',
+    'GROWW',
+    'NUCLEUS',
+    # 2026-11-16 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'CSBBANK',
 ]
 
 
