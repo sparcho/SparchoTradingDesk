@@ -271,6 +271,15 @@ ALL_TICKERS = [
     'MOSCHIP',
     'MUTHOOTFIN',
     'NH',
+    # 2026-11-17 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'PGEL',
+    'SBIFUNDS',
+    # 2026-11-18 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'SBIN',
+    'UJJIVANSFB',
+    'UNIMECH',
 ]
 
 
