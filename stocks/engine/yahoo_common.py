@@ -280,6 +280,11 @@ ALL_TICKERS = [
     'SBIN',
     'UJJIVANSFB',
     'UNIMECH',
+    # 2026-11-18 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'URBANCO',
+    'VAML',
+    'VISL',
 ]
 
 
