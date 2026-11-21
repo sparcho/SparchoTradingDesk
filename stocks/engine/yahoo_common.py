@@ -285,6 +285,9 @@ ALL_TICKERS = [
     'URBANCO',
     'VAML',
     'VISL',
+    # 2026-11-20 auto-heal (system_doctor): these were tracked by the vault and
+    # invisible to every cloud job. See check_cloud_engine_contracts.
+    'VOGL',
 ]
 
 
