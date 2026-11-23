@@ -1,8 +1,41 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-11-23T11:34:52+00:00",
+  "updated_at_utc": "2026-11-23T23:09:13+00:00",
   "events": [
+    {
+      "ts": "2026-11-24T04:39:06+05:30",
+      "ts_utc": "2026-11-23T23:09:06+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "equity-dashboard",
+      "spotted": "equity aggregate 655m stale (tol 90m, off-hours)",
+      "action_taken": "re-triggered live-refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-11-24T04:39:08+05:30",
+      "ts_utc": "2026-11-23T23:09:08+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver-dashboard",
+      "spotted": "silver aggregate 647m stale",
+      "action_taken": "re-triggered silver 20-min refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-11-24T04:39:09+05:30",
+      "ts_utc": "2026-11-23T23:09:09+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-11-23T17:04:52+05:30",
       "ts_utc": "2026-11-23T11:34:52+00:00",
@@ -512,39 +545,6 @@
     {
       "ts": "2026-11-17T20:47:14+05:30",
       "ts_utc": "2026-11-17T15:17:14+00:00",
-      "severity": "🔴",
-      "level": "alert",
-      "subsystem": "silver:live-parity",
-      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
-      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-11-17T11:24:42+05:30",
-      "ts_utc": "2026-11-17T05:54:42+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity-dashboard",
-      "spotted": "equity aggregate 110m stale (tol 45m, intraday)",
-      "action_taken": "re-triggered live-refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-11-17T11:24:44+05:30",
-      "ts_utc": "2026-11-17T05:54:44+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 331m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-11-17T11:24:45+05:30",
-      "ts_utc": "2026-11-17T05:54:45+00:00",
       "severity": "🔴",
       "level": "alert",
       "subsystem": "silver:live-parity",
