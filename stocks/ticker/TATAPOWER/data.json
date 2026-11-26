@@ -2,7 +2,7 @@
   "schema_version": "v1.0",
   "doc_type": "stock_page",
   "ticker": "TATAPOWER",
-  "emitted_at_utc": "2026-11-26T04:55:10+00:00",
+  "emitted_at_utc": "2026-11-26T11:06:04+00:00",
   "public": {
     "ticker": "TATAPOWER",
     "name": "Tata Power",
@@ -128,9 +128,9 @@
     ],
     "last_stock_ta": "PENDING",
     "live": {
-      "price": 322.55,
-      "day_chg_pct": -0.139,
-      "week_chg_pct": -6.371552975326557,
+      "price": 323.5,
+      "day_chg_pct": 0.155,
+      "week_chg_pct": -6.095791001451379,
       "date": "2026-11-26"
     },
     "chart_kind": "candles",
@@ -9107,50 +9107,50 @@
         323.65,
         325.0,
         321.0,
-        322.55
+        323.5
       ]
     ],
     "sr_levels": [
       {
         "method": "classical_pivot",
         "kind": "PIVOT",
-        "price": 322.85,
+        "price": 323.17,
         "as_of": "2026-11-26"
       },
       {
         "method": "classical_pivot",
         "kind": "R1",
-        "price": 324.7,
+        "price": 325.33,
         "as_of": "2026-11-26"
       },
       {
         "method": "classical_pivot",
         "kind": "R2",
-        "price": 326.85,
+        "price": 327.17,
         "as_of": "2026-11-26"
       },
       {
         "method": "classical_pivot",
         "kind": "R3",
-        "price": 328.7,
+        "price": 329.33,
         "as_of": "2026-11-26"
       },
       {
         "method": "classical_pivot",
         "kind": "S1",
-        "price": 320.7,
+        "price": 321.33,
         "as_of": "2026-11-26"
       },
       {
         "method": "classical_pivot",
         "kind": "S2",
-        "price": 318.85,
+        "price": 319.17,
         "as_of": "2026-11-26"
       },
       {
         "method": "classical_pivot",
         "kind": "S3",
-        "price": 316.7,
+        "price": 317.33,
         "as_of": "2026-11-26"
       },
       {
@@ -9180,7 +9180,7 @@
       {
         "method": "sma",
         "kind": "SMA50",
-        "price": 351.21,
+        "price": 351.22,
         "as_of": "2026-11-26"
       },
       {
@@ -9198,26 +9198,34 @@
       {
         "method": "annual_hilo",
         "kind": "52W_LOW",
-        "price": 322.9,
+        "price": 323.0,
         "as_of": "2026-11-26"
       }
     ],
     "operator_levels": [],
     "gate_levels": [
       {
+        "label": "INVALIDATION",
+        "price": 323.0,
+        "dir": "below",
+        "kind": "inv",
+        "why": "52-week low",
+        "auto": true
+      },
+      {
         "label": "SUPPORT",
-        "price": 320.7,
+        "price": 323.17,
         "dir": "below",
         "kind": "watch",
-        "why": "pivot S1",
+        "why": "classical pivot",
         "auto": true
       },
       {
         "label": "RESISTANCE",
-        "price": 322.85,
+        "price": 325.33,
         "dir": "above",
         "kind": "trim",
-        "why": "classical pivot",
+        "why": "pivot R1",
         "auto": true
       },
       {
@@ -9232,38 +9240,45 @@
     "gate_levels_auto": true,
     "gate_check": [
       {
-        "label": "RESISTANCE",
-        "price": 322.85,
-        "dir": "above",
-        "kind": "trim",
-        "dist_pct": 0.09300883583940826
-      },
-      {
         "label": "SUPPORT",
-        "price": 320.7,
+        "price": 323.17,
         "dir": "below",
         "kind": "watch",
-        "dist_pct": -0.5735544876763363
+        "dist_pct": -0.10200927357031965
+      },
+      {
+        "label": "INVALIDATION",
+        "price": 323.0,
+        "dir": "below",
+        "kind": "inv",
+        "dist_pct": -0.1545595054095827
+      },
+      {
+        "label": "RESISTANCE",
+        "price": 325.33,
+        "dir": "above",
+        "kind": "trim",
+        "dist_pct": 0.5656877897990676
       },
       {
         "label": "UPSIDE",
         "price": 461.8,
         "dir": "above",
         "kind": "trim",
-        "dist_pct": 43.171601302123705
+        "dist_pct": 42.75115919629058
       }
     ],
     "scenario_ladder": [
       {
         "case": "bear",
         "label": "Bear: Thesis-break",
-        "level": 322.9,
+        "level": 323.0,
         "note": "daily close below Rs323 invalidates the structure"
       },
       {
         "case": "base",
         "label": "Base: Range / accumulate",
-        "level": 322.55,
+        "level": 323.5,
         "note": "holds current band; reclaim Rs382 (200-SMA) to flip constructive"
       },
       {
