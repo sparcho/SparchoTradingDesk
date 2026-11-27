@@ -1,8 +1,30 @@
 {
   "schema_version": "v1",
   "doc_type": "notifications_feed",
-  "updated_at_utc": "2026-11-26T20:45:37+00:00",
+  "updated_at_utc": "2026-11-27T03:24:30+00:00",
   "events": [
+    {
+      "ts": "2026-11-27T08:54:26+05:30",
+      "ts_utc": "2026-11-27T03:24:26+00:00",
+      "severity": "🟡",
+      "level": "warn",
+      "subsystem": "silver-dashboard",
+      "spotted": "silver aggregate 242m stale",
+      "action_taken": "re-triggered silver 20-min refresh Action",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
+    {
+      "ts": "2026-11-27T08:54:27+05:30",
+      "ts_utc": "2026-11-27T03:24:27+00:00",
+      "severity": "🔴",
+      "level": "alert",
+      "subsystem": "silver:live-parity",
+      "spotted": "LIVE site shows 1 grayed item(s): block:sr_levels",
+      "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
+      "outcome": "pending",
+      "source": "cloud-watchdog"
+    },
     {
       "ts": "2026-11-27T02:15:32+05:30",
       "ts_utc": "2026-11-26T20:45:32+00:00",
@@ -528,28 +550,6 @@
       "subsystem": "silver:live-parity",
       "spotted": "LIVE site shows 2 grayed item(s): block:sr_levels, block:thesis_gates",
       "action_taken": "logged - refresh re-triggered. No producer is recorded on these blocks, so ownership cannot be attributed - that is itself the finding.. If a block stays grayed across runs, check whether its PRODUCER is failing before suspecting the build or CDN.",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-11-20T07:28:02+05:30",
-      "ts_utc": "2026-11-20T01:58:02+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "silver-dashboard",
-      "spotted": "silver aggregate 246m stale",
-      "action_taken": "re-triggered silver 20-min refresh Action",
-      "outcome": "pending",
-      "source": "cloud-watchdog"
-    },
-    {
-      "ts": "2026-11-20T07:28:25+05:30",
-      "ts_utc": "2026-11-20T01:58:25+00:00",
-      "severity": "🟡",
-      "level": "warn",
-      "subsystem": "equity:regime",
-      "spotted": "Regime read stale — regime card 2 session(s) old (last 2026-11-18)",
-      "action_taken": "auto-probe: re-ran heal inline + re-triggered refresh-stocks-live.yml",
       "outcome": "pending",
       "source": "cloud-watchdog"
     }
